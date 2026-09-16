@@ -1,0 +1,63 @@
+# Project Overview (PDR)
+
+## What atk is
+
+`atk` (AI Team Kit) is a plugin of 12 skills that cover the software delivery lifecycle of a
+**company project team**. It is distributed to Claude Code, Cursor, and OpenAI Codex CLI from one
+content tree.
+
+Each skill produces a Markdown artifact that a team can review, approve, and hand to someone who was
+not in the conversation: a requirement document, an estimate sheet, a technical design, a task
+breakdown, a conventions document, a review, a test plan, a release, an incident postmortem, a
+retrospective, an onboarding guide, or a handover.
+
+## The problem it addresses
+
+Most AI coding assistance is built for one developer working alone. A company project team has
+different failure modes, and they are process failures, not coding failures:
+
+- A request arrives as three sentences in a chat and reaches a developer without acceptance criteria.
+- An estimate is a number with no basis, so it cannot be argued with and is never learned from.
+- A design decision is made in a thread and is unrecoverable six months later.
+- A review mixes a data-loss bug and a naming preference in the same list of comments.
+- A release goes out without anyone writing down how to undo it.
+- An incident is analysed into a story about a person rather than a gap in the system.
+- A person leaves and takes the only knowledge of a fragile deploy step with them.
+
+`atk` writes these steps down in a repeatable form, with the evidence attached and the owner named.
+
+## Goals
+
+1. **Team-shaped by default.** Author and approver are separate. Artifacts carry an approval state.
+   Open questions name the person who must answer them.
+2. **Evidence over assertion.** Skills read the repository, git history, CI, and the tracker before
+   asking, and cite what they find.
+3. **Decisions stay with the people who own them.** A skill drafts and compares; scope, priority,
+   deadline, pricing, compliance, and go or no-go belong to a role.
+4. **Tool-agnostic.** Markdown is the source of truth. A tracker holds a pointer to it.
+5. **Readable by the absent reader.** Every artifact assumes its reader missed the meeting.
+6. **Multilingual triggers.** English, Vietnamese, and Japanese phrases invoke the same skill.
+
+## Non-goals
+
+- **Writing application code.** `atk` covers the process around the code. Implementation, debugging,
+  and pipeline work stay with whichever general kit the team already uses.
+- **Replacing a tracker or a test management tool.** `atk` produces the content; the tool stores it.
+- **Deciding for the team.** No skill approves its own output, commits the team, or declares a
+  release ready.
+- **Performance evaluation.** No skill produces a judgement about an individual, and the
+  retrospective explicitly forbids it.
+- **Enforcing one methodology.** The vocabulary leans Scrum-like (sprint, story, points) but every
+  skill accepts person-days, milestones, and phases instead.
+
+## Audience
+
+Project teams at a software company, typically five to fifteen people, often working with an
+external client, frequently across Vietnamese, Japanese, and English. Roles are listed in
+`shared/team-roles.md`.
+
+## Success criteria
+
+- A new joiner can execute any skill's output without asking its author what it meant.
+- Every artifact answers who owns the open questions.
+- A team can adopt one skill at a time without adopting the other eleven.

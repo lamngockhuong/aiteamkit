@@ -1,0 +1,213 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## What this repo is
+
+`atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
+OpenAI Codex CLI. It packages 12 skills covering the delivery lifecycle of a company project team
+(`intake`, `estimate`, `design-doc`, `breakdown`, `convention`, `review`, `qa`, `release`,
+`incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
+(`/atk:intake`, `/atk:estimate`, and so on).
+
+This is content plus manifests, not a runtime application: there is no build step, no bundler, no
+test suite, and `package.json` is `private: true` with no `scripts` block. "Validation" means JSON
+parses, YAML frontmatter parses, `docs/` and `docs/vi/` stay mirrored, and the cross-file lists stay
+in sync. See "Common verification commands" at the bottom.
+
+## The team premise (why this kit exists)
+
+Every skill assumes a team, not a solo developer. This is the one thing to preserve when editing:
+
+- Author and approver are different people, and artifacts carry an approval state.
+- A skill drafts and gathers evidence; it never makes a decision that a role owns (scope, priority,
+  deadline, pricing, compliance, go or no-go).
+- Artifacts are written for a reader who was not in the conversation.
+- Open questions carry the name of the person who must answer them, never "the team".
+
+A change that makes a skill act like a solo assistant, deciding on the team's behalf or leaving an
+artifact with no owner, is a regression even if it reads more helpfully.
+
+## Multi-manifest layout (non-obvious)
+
+Three sibling manifest folders point to the SAME content at repo root:
+
+```
+.claude-plugin/     plugin.json + marketplace.json
+.cursor-plugin/     plugin.json
+.codex-plugin/      plugin.json (with `interface{}` block for marketplace listing)
+skills/, shared/, assets/    shared content, NOT duplicated per harness
+```
+
+Edit `skills/<name>/SKILL.md` ONCE; all three manifests pick it up. Do not create per-harness copies.
+
+| Manifest | `skills` key | Extra |
+|----------|--------------|-------|
+| `.claude-plugin/plugin.json` | absent (Claude auto-discovers `skills/`) | paired with `marketplace.json` |
+| `.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
+| `.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with `defaultPrompt`, icons, `brandColor` |
+
+There is no `commands/` directory and no `commands` key in any manifest. A skill is its own slash
+command: `skills/qa/SKILL.md` is what `/atk:qa` invokes, on all three harnesses. Do not add a
+`commands/<name>.md` wrapper beside a same-named skill. Claude Code counts `commands/` entries and
+`SKILL.md` skills in one inventory, so a wrapper registers the name a second time and every entry
+shows up duplicated in the `/` menu, at a real always-on token cost for no behavior.
+
+## Skill folder layout
+
+```
+skills/<name>/
+  SKILL.md                    required; frontmatter + workflow, kept under 300 lines
+  references/*.md             optional, lazily loaded detail (templates, checklists, schemas)
+  evals/trigger_evals.json    optional; array of {query, should_trigger} for description testing
+```
+
+Current skills are skeletons: `SKILL.md` only, around 95 to 105 lines each, with no `references/`
+or `evals/` yet. Deepening a skill means adding `references/` files and pointing at them from the
+relevant workflow step, not growing `SKILL.md` past 300 lines.
+
+Every `SKILL.md` follows the same section order, and a new skill must match it:
+frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
+`## Invocation`, `## Workflow` (ASCII pipeline then numbered steps), `## Output`, `## Ticket`,
+`## Definition of done`.
+
+## `shared/` is the DRY layer (repo-root, outside `skills/`)
+
+Four files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+`skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
+skill discovery.
+
+| File | Owns |
+|------|------|
+| `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows |
+| `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, and the shared YAML front matter block |
+| `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map |
+| `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project |
+
+Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
+Both spellings appear in each shared file's header so an agent can resolve the path either way.
+
+The first three are cited by all 12 skills; `review-checklist.md` is cited by `convention` and
+`review` only, because it is a contract between exactly those two: `convention` writes the rule rows
+and `review` cites their IDs.
+
+When adding a rule that two or more skills need, put it in `shared/` and reference it. Do not paste
+it into each `SKILL.md`.
+
+## Adding or changing a skill touches several files
+
+Nothing generates these, so they drift silently. When adding, renaming, or removing a **skill**:
+
+1. `skills/<name>/SKILL.md`
+2. `README.md` (the skills table AND the invocation block)
+3. `docs/skills-overview.md` and `docs/vi/skills-overview.md`
+4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
+5. `shared/artifact-paths.md` (the default output path row)
+6. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
+7. All three manifest descriptions, if the count of 12 changes
+
+When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
+frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
+
+`SKILL.md` is the single implementation. Its `description:` is what the harness matches on and what
+the `/` menu shows, so a trigger phrase belongs there and nowhere else.
+
+## SKILL.md `name` field convention (catches lint)
+
+Each `skills/<folder>/SKILL.md` frontmatter `name:` MUST be:
+
+- Lowercase letters, numbers, hyphens only (NO colons)
+- Match the folder name exactly
+
+Example: `skills/design-doc/SKILL.md` -> `name: design-doc` (NOT `atk:design-doc`).
+
+The `atk:` namespace is added automatically by the harness from `plugin.json`. The fully-qualified
+invocation identifier is `atk:design-doc`, but it is constructed at load time, not stored in the
+skill file.
+
+## Trigger phrases are multilingual on purpose
+
+Every `description:` lists triggers in English, Vietnamese, and Japanese, because the target teams
+work across those languages. When editing a description, keep all three; dropping the Vietnamese or
+Japanese triggers silently breaks invocation for part of the audience.
+
+## Em-dash policy
+
+Do NOT use em-dashes (`—`, U+2014) anywhere in user-authored content (READMEs, manifests, skill
+prose, shared references, docs). Use hyphen `-`, comma, semicolon, or colon based on context.
+
+After edits, verify (the `--exclude=CLAUDE.md` matters, since this very section quotes the character):
+
+```bash
+grep -rn "—" . --exclude-dir=.git --exclude=CLAUDE.md | grep -v -E '(plans|docs)/'
+```
+
+Should print nothing (`grep` exits 1).
+
+## Docs are bilingual
+
+`docs/` is the English source of truth; `docs/vi/` mirrors it file-for-file with the same filenames.
+Every `docs/*.md` must have a `docs/vi/*.md` counterpart; adding or renaming one means doing the
+same on the other side.
+
+| File | Purpose |
+|------|---------|
+| `skills-overview.md` | Reader-facing explanation of every skill: what it produces, when to use, when not to |
+| `project-overview-pdr.md` | What atk is, goals, non-goals |
+| `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
+| `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
+| `project-roadmap.md` | Phase plan and status |
+
+## Release flow (release-please, pre-1.0 mode)
+
+Versions are bumped automatically by release-please on push to `main`. Five files share the version,
+all driven by `release-please-config.json` `extra-files`:
+
+| File | jsonpath |
+|------|----------|
+| `package.json` | `$.version` |
+| `.claude-plugin/plugin.json` | `$.version` |
+| `.claude-plugin/marketplace.json` | `$.plugins[0].version` |
+| `.cursor-plugin/plugin.json` | `$.version` |
+| `.codex-plugin/plugin.json` | `$.version` |
+
+A sixth file, `.release-please-manifest.json`, also holds the version but is NOT an `extra-file`:
+release-please owns it natively as its state file. Never hand-edit it.
+
+Pre-1.0 config keeps experimental versioning:
+
+- `bump-patch-for-minor-pre-major: true` means `feat:` commits bump patch (0.0.x).
+- `bump-minor-pre-major: true` means `feat!:` and breaking-change commits bump minor (0.x.0).
+
+To force a specific version, append a `Release-As: X.Y.Z` footer to a commit. To graduate to 1.0 and
+above, drop the two `bump-*-pre-major` flags.
+
+## Commits
+
+- Conventional Commits required (`feat:`, `fix:`, `chore:`, `ci:`, `docs:`, `refactor:`, `style:`,
+  `test:`). Type drives release-please's CHANGELOG grouping and version logic.
+- `feat:` and `fix:` appear in CHANGELOG; the others are silent by default.
+
+## Common verification commands
+
+```bash
+# All 5 manifests parse
+for f in package.json .claude-plugin/plugin.json .claude-plugin/marketplace.json \
+         .cursor-plugin/plugin.json .codex-plugin/plugin.json; do
+  python3 -c "import json,sys; json.load(open('$f'))" && echo "OK $f"
+done
+
+# Every skill folder has a SKILL.md, and the name matches the folder
+for d in skills/*/; do
+  n=$(basename "$d")
+  grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"
+done
+
+# docs/ and docs/vi/ are mirrored
+diff <(ls docs/*.md | xargs -n1 basename) <(ls docs/vi/*.md | xargs -n1 basename)
+
+# Version agreement across the 6 version-bearing files
+grep -h '"version"' package.json .claude-plugin/plugin.json .cursor-plugin/plugin.json \
+     .codex-plugin/plugin.json; grep -h '"version"' .claude-plugin/marketplace.json; \
+     cat .release-please-manifest.json
+```
