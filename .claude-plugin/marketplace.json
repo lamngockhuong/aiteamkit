@@ -1,0 +1,20 @@
+{
+  "name": "atk",
+  "description": "AI Team Kit marketplace",
+  "owner": {
+    "name": "Lam Ngoc Khuong",
+    "email": "hi@khuong.dev"
+  },
+  "plugins": [
+    {
+      "name": "atk",
+      "description": "AI Team Kit - 12 skills covering the software delivery lifecycle of a company project team: requirement intake, estimation, technical design, task breakdown, conventions, code review, QA, release, incident response, retrospective, onboarding, and handover",
+      "version": "0.0.1",
+      "source": "./",
+      "author": {
+        "name": "Lam Ngoc Khuong",
+        "email": "hi@khuong.dev"
+      }
+    }
+  ]
+}

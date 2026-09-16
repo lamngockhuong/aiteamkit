@@ -1,0 +1,46 @@
+name: Feature request
+description: Suggest a new skill, a new flag, or a change to an existing atk workflow
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the team situation you are trying to cover. Concrete situations produce better skills than abstract capabilities.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of request
+      options:
+        - New skill
+        - New flag or mode on an existing skill
+        - Change to an existing workflow
+        - New ticket-tracker adapter
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: situation
+    attributes:
+      label: Team situation
+      description: What does the team do today, who is involved, and where does it break down?
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: What artifact or decision should exist when the skill finishes?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Existing atk skills, ak skills, or manual processes you have already tried.
+    validations:
+      required: false

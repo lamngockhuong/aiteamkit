@@ -1,0 +1,54 @@
+{
+  "name": "atk",
+  "version": "0.0.1",
+  "description": "AI Team Kit - 12 skills covering the software delivery lifecycle of a company project team: requirement intake, estimation, technical design, task breakdown, conventions, code review, QA, release, incident response, retrospective, onboarding, and handover",
+  "author": {
+    "name": "Lam Ngoc Khuong",
+    "email": "hi@khuong.dev",
+    "url": "https://github.com/lamngockhuong"
+  },
+  "homepage": "https://github.com/lamngockhuong/aiteamkit",
+  "repository": "https://github.com/lamngockhuong/aiteamkit",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "team",
+    "sdlc",
+    "delivery",
+    "requirements",
+    "estimation",
+    "design-doc",
+    "adr",
+    "code-review",
+    "qa",
+    "release",
+    "incident",
+    "postmortem",
+    "retrospective",
+    "onboarding",
+    "handover"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Team Kit",
+    "shortDescription": "Run the delivery lifecycle of a project team: intake, estimate, design, breakdown, review, QA, release, incident, retro",
+    "longDescription": "AI Team Kit turns the habits of a company project team into 12 repeatable skills. It clarifies a stakeholder request into user stories with acceptance criteria, estimates and fills a sprint against real capacity, writes the technical design document and the ADR behind it, breaks an epic into owned tasks, records the team coding conventions, reviews a pull request against them, plans and writes the test cases, ships the release with a checklist and a rollback path, runs an incident to a blameless postmortem, holds a retrospective with follow-up actions that have owners, onboards a new member, and hands work over when a member or a phase changes. Every artifact is Markdown first, so it works whether the team tracks work in GitHub Issues, Jira, Backlog, or Redmine.",
+    "developerName": "Lam Ngoc Khuong",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Turn this customer request into user stories with acceptance criteria.",
+      "Break this epic into tasks and assign owners.",
+      "Write the technical design document for this feature.",
+      "Review this pull request against our team conventions.",
+      "Run a blameless postmortem for last night's incident."
+    ],
+    "brandColor": "#2563EB",
+    "composerIcon": "./assets/atk-icon.svg",
+    "logo": "./assets/atk-logo.svg",
+    "screenshots": []
+  }
+}

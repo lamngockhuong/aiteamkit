@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: General questions / discussions
+    url: https://github.com/lamngockhuong/aiteamkit/discussions
+    about: Ask a question, share usage tips, or discuss ideas before opening an issue.

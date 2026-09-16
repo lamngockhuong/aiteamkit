@@ -1,0 +1,75 @@
+name: Bug report
+description: Report a problem with an atk skill, slash command, or plugin manifest
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please fill in every section so the issue can be triaged quickly.
+
+  - type: dropdown
+    id: harness
+    attributes:
+      label: Harness
+      description: Which AI harness were you using when the bug appeared?
+      options:
+        - Claude Code
+        - Cursor
+        - OpenAI Codex CLI
+        - Multiple (please specify in description)
+        - Other / unsure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of atk is affected?
+      options:
+        - Skill - atk:intake
+        - Skill - atk:estimate
+        - Skill - atk:design-doc
+        - Skill - atk:breakdown
+        - Skill - atk:convention
+        - Skill - atk:review
+        - Skill - atk:qa
+        - Skill - atk:release
+        - Skill - atk:incident
+        - Skill - atk:retro
+        - Skill - atk:onboard
+        - Skill - atk:handover
+        - Shared references (shared/)
+        - Plugin manifest / installation
+        - Documentation
+        - Other / unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did the skill do, and what did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: The exact invocation, the repository shape, and anything the skill needed to read.
+      placeholder: |
+        1. Run /atk:intake ...
+        2. Answer the interview with ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: version
+    attributes:
+      label: Version
+      description: The atk version from .claude-plugin/plugin.json, plus your harness version.
+    validations:
+      required: false

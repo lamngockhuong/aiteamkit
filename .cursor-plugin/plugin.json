@@ -1,0 +1,30 @@
+{
+  "name": "atk",
+  "displayName": "AI Team Kit",
+  "description": "Requirement intake, estimation, technical design, task breakdown, conventions, code review, QA, release, incident response, retrospective, onboarding, and handover for a company project team",
+  "version": "0.0.1",
+  "author": {
+    "name": "Lam Ngoc Khuong",
+    "email": "hi@khuong.dev"
+  },
+  "homepage": "https://github.com/lamngockhuong/aiteamkit",
+  "repository": "https://github.com/lamngockhuong/aiteamkit",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "team",
+    "sdlc",
+    "delivery",
+    "requirements",
+    "estimation",
+    "design-doc",
+    "code-review",
+    "qa",
+    "release",
+    "incident",
+    "retrospective",
+    "onboarding",
+    "handover"
+  ],
+  "skills": "./skills/"
+}

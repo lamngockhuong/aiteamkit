@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" width="280" height="64" role="img" aria-label="AI Team Kit logo">
+  <rect width="64" height="64" rx="14" fill="#2563EB"/>
+  <circle cx="22" cy="24" r="7" fill="#FFFFFF"/>
+  <circle cx="42" cy="24" r="7" fill="#BFDBFE"/>
+  <path d="M10 48c0-7.2 5.4-12 12-12s12 4.8 12 12z" fill="#FFFFFF"/>
+  <path d="M30 48c0-7.2 5.4-12 12-12s12 4.8 12 12z" fill="#BFDBFE"/>
+  <text x="80" y="31" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" font-weight="700" fill="#0F172A">AI Team Kit</text>
+  <text x="80" y="50" font-family="Inter, Helvetica, Arial, sans-serif" font-size="14" fill="#475569">atk</text>
+</svg>
