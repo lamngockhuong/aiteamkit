@@ -4,11 +4,14 @@
   { "query": "lập kế hoạch thực thi cho ticket này", "should_trigger": true },
   { "query": "vạch các bước để làm tính năng xuất CSV", "should_trigger": true },
   { "query": "ticket này nên làm theo thứ tự nào, đụng những file nào", "should_trigger": true },
-  { "query": "この チケット の実装計画を立てて", "should_trigger": true },
+  { "query": "このチケットの実装計画を立てて", "should_trigger": true },
   { "query": "作業計画をまとめてほしい", "should_trigger": true },
   { "query": "what files do I need to touch for this and in what order", "should_trigger": true },
   { "query": "break this ticket into steps I can check one at a time", "should_trigger": true },
   { "query": "write the implementation plan from this approved design doc", "should_trigger": true },
+  { "query": "this feature is about three weeks of work, plan it out in stages for me", "should_trigger": true },
+  { "query": "chia việc này thành các giai đoạn, mỗi giai đoạn merge được riêng", "should_trigger": true },
+  { "query": "段階に分けて実装計画を立てて", "should_trigger": true },
 
   { "query": "split this epic into tasks and assign them across the team", "should_trigger": false },
   { "query": "chia epic này cho bốn người làm song song", "should_trigger": false },
@@ -21,5 +24,6 @@
   { "query": "code xong tính năng này giúp tôi", "should_trigger": false },
   { "query": "fix the bug where the export drops the last row", "should_trigger": false },
   { "query": "estimate how many days this ticket takes", "should_trigger": false },
-  { "query": "write test cases for this ticket", "should_trigger": false }
+  { "query": "write test cases for this ticket", "should_trigger": false },
+  { "query": "this epic is three weeks of work, split it so four people can work in parallel", "should_trigger": false }
 ]
