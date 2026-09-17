@@ -71,6 +71,18 @@ or incomplete.
 `atk:init` is in no group. It is the skill that writes the profile, so a missing one is its input
 rather than its problem.
 
+The column describes the missing case only. A `Not needed` skill may still read a section that helps
+it when the profile happens to be there: `atk:catchup` reading Tracker to learn where the spec lives
+is the usual example. What the group forbids is the other three behaviours. It never requires the
+profile, it never stops or degrades its output because the profile is absent, and it never mentions
+the profile to the user in either state. A reader who has not run `/atk:init` must not be able to
+tell from the artifact that the file exists as a concept, which is why `atk:intake` reads the same
+Tracker row and says nothing.
+
+The practical test: delete the profile, run the skill again, and compare. A `Not needed` skill
+produces the same artifact with the same confidence, only having worked a little harder to find what
+the profile would have told it.
+
 Three groups rather than two, because the middle case is real: `atk:review` can still read a diff
 against a requirement without knowing how the project builds. What it cannot do is run the
 compile check. Saying so in the review is honest; skipping it silently is not.

@@ -166,10 +166,11 @@ Japanese triggers silently breaks invocation for part of the audience.
 Do NOT use em-dashes (`—`, U+2014) anywhere in user-authored content (READMEs, manifests, skill
 prose, shared references, docs). Use hyphen `-`, comma, semicolon, or colon based on context.
 
-After edits, verify (the `--exclude=CLAUDE.md` matters, since this very section quotes the character):
+After edits, verify. The two exclusions are both files that quote the character in order to document
+this very check: this section, and the verification list inside `.atk/profile.md`.
 
 ```bash
-grep -rn "—" . --exclude-dir=.git --exclude=CLAUDE.md | grep -v -E '(plans|docs)/'
+grep -rn "—" . --exclude-dir=.git --exclude-dir=.atk --exclude=CLAUDE.md | grep -v -E '(plans|docs)/'
 ```
 
 Should print nothing (`grep` exits 1).

@@ -40,7 +40,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 1. Manifests parse: `for f in package.json .claude-plugin/plugin.json .claude-plugin/marketplace.json .cursor-plugin/plugin.json .codex-plugin/plugin.json; do python3 -c "import json,sys; json.load(open('$f'))"; done`
 2. Skill name matches folder: `for d in skills/*/; do n=$(basename "$d"); grep -q "^name: $n$" "$d/SKILL.md" || echo "MISMATCH $n"; done`
 3. Docs mirrored: `diff <(ls docs/*.md | xargs -n1 basename) <(ls docs/vi/*.md | xargs -n1 basename)`
-4. No em-dash: `grep -rn "—" . --exclude-dir=.git --exclude=CLAUDE.md | grep -v -E '(plans|docs)/'`
+4. No em-dash: `grep -rn "—" . --exclude-dir=.git --exclude-dir=.atk --exclude=CLAUDE.md | grep -v -E '(plans|docs)/'`
 
 ## Docs
 
