@@ -23,7 +23,9 @@ dependency, grouping into parallel lanes with explicit file ownership, and writi
 definition of done.
 
 Does NOT handle: sizing (`atk:estimate`), designing the solution (`atk:design-doc`), or
-implementation. It also does not decide who works on what: it proposes, the PM and Tech Lead assign.
+implementation. It stops at the task: how one task is then carried out, file by file and step by
+step, is `atk:plan`, which its assignee writes for themselves afterwards. It also does not decide
+who works on what: it proposes, the PM and Tech Lead assign.
 
 ## Roles
 

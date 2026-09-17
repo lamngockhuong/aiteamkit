@@ -20,11 +20,13 @@ design, and gets reviewed as such.
 ## Scope
 
 Handles: describing the current implementation with citations, framing the problem, comparing viable
-options against stated criteria, specifying the chosen data model, API contracts, and sequence of
-work, and writing the ADR entry.
+options against stated criteria, specifying the chosen data model, API contracts, and the migration
+and rollout sequence the change requires, and writing the ADR entry.
 
 Does NOT handle: writing the requirement (`atk:intake`), sizing (`atk:estimate`), or the
-implementation itself. It also does not approve its own design: review is a separate role.
+implementation itself. It chooses the approach and stops there: sequencing the chosen approach into
+steps for one ticket is `atk:plan`, which never reopens the choice. It also does not approve its own
+design: review is a separate role.
 
 ## Roles
 

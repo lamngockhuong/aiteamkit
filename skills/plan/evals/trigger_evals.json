@@ -1,0 +1,25 @@
+[
+  { "query": "plan how to implement this ticket before I start coding", "should_trigger": true },
+  { "query": "/atk:plan ABC-214", "should_trigger": true },
+  { "query": "lập kế hoạch thực thi cho ticket này", "should_trigger": true },
+  { "query": "vạch các bước để làm tính năng xuất CSV", "should_trigger": true },
+  { "query": "ticket này nên làm theo thứ tự nào, đụng những file nào", "should_trigger": true },
+  { "query": "この チケット の実装計画を立てて", "should_trigger": true },
+  { "query": "作業計画をまとめてほしい", "should_trigger": true },
+  { "query": "what files do I need to touch for this and in what order", "should_trigger": true },
+  { "query": "break this ticket into steps I can check one at a time", "should_trigger": true },
+  { "query": "write the implementation plan from this approved design doc", "should_trigger": true },
+
+  { "query": "split this epic into tasks and assign them across the team", "should_trigger": false },
+  { "query": "chia epic này cho bốn người làm song song", "should_trigger": false },
+  { "query": "who should work on which part of this feature", "should_trigger": false },
+  { "query": "should we use polling or websockets for this, compare the options", "should_trigger": false },
+  { "query": "nên dùng hàng đợi hay gọi trực tiếp, so sánh giúp tôi", "should_trigger": false },
+  { "query": "write the technical design document for the notification system", "should_trigger": false },
+  { "query": "この設計の妥当性を比較検討して", "should_trigger": false },
+  { "query": "just implement the CSV export now", "should_trigger": false },
+  { "query": "code xong tính năng này giúp tôi", "should_trigger": false },
+  { "query": "fix the bug where the export drops the last row", "should_trigger": false },
+  { "query": "estimate how many days this ticket takes", "should_trigger": false },
+  { "query": "write test cases for this ticket", "should_trigger": false }
+]
