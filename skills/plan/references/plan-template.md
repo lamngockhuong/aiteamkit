@@ -7,7 +7,7 @@ survive being read a week later by somebody who has forgotten the conversation.
 ## The directory
 
 ```
-docs/planning/<ticket-or-date>-<slug>/
+plans/<YYMMDD-HHMM>-<slug>/
   plan.md
   phase-01-<slug>.md
   phase-02-<slug>.md
@@ -70,8 +70,8 @@ not every street on it.
 
 | # | Phase | Delivers | Depends on | Status |
 |---|-------|----------|------------|--------|
-| 1 | [Phase 1: <title>](./phase-01-<slug>.md) | <the reviewable piece it ends with> | - | Pending |
-| 2 | [Phase 2: <title>](./phase-02-<slug>.md) | <the reviewable piece it ends with> | 1 | Pending |
+| 1 | [Phase 1: <title>](./phase-01-<slug>.md) | <the reviewable piece it ends with> | - | pending |
+| 2 | [Phase 2: <title>](./phase-02-<slug>.md) | <the reviewable piece it ends with> | 1 | pending |
 
 `Delivers` is the whole point of the row: what exists at the end of the phase that a colleague could
 read, merge and live with. A phase that cannot fill this cell is not a phase, it is a step in the
@@ -117,12 +117,18 @@ Without a profile this section says which commands are inferred, per the Require
 ---
 phase: <N>
 title: "<phase title>"
-status: Pending
-depends_on: [<phase numbers, or empty>]
+status: pending
+dependencies: [<phase numbers, or empty>]
 ---
 ```
 
 No `owner` or `approver` here: both live in the index, and a phase is not separately approved.
+
+`status` means two different things in the two files, and it is worth knowing which is which. In the
+index it is the artifact's approval state from `shared/artifact-paths.md`: `DRAFT`, `IN REVIEW`,
+`APPROVED`, `SUPERSEDED`. In a phase file it is progress: `pending`, `in progress`, `done`. The
+field name is shared with other planning tools that read these directories, which is why it is not
+renamed here.
 
 ### 1. What this phase delivers
 

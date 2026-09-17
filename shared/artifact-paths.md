@@ -21,7 +21,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `estimate` | `docs/planning/estimate-<sprint-or-date>.md` |
 | `design-doc` | `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `breakdown` | `docs/planning/breakdown-<epic>.md` |
-| `plan` | `docs/planning/<ticket-or-date>-<slug>/` holding `plan.md` and one file per phase |
+| `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
 | `convention` | `docs/conventions.md` (and `CONTRIBUTING.md` when the project has one) |
 | `fix` | `docs/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | Review comments go to the pull request; an optional report goes to `docs/reviews/<pr>-<date>.md` |
@@ -34,16 +34,29 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 
 `--out <path>` overrides the default on every skill.
 
-### The one exception: `init`
+### The exceptions: `init` and `plan`
 
-`atk:init` writes to `.atk/profile.md`, outside the docs root. Every other artifact here is prose a
-person reads and reviews; the profile is data a skill reads, and mixing the two makes the docs tree
-noisy. It is still committed, and `shared/project-profile.md` explains the rest.
+Two skills write outside the docs root, for two different reasons.
+
+`atk:init` writes to `.atk/profile.md`. Every other artifact here is prose a person reads and
+reviews; the profile is data a skill reads, and mixing the two makes the docs tree noisy. It is
+still committed, and `shared/project-profile.md` explains the rest.
+
+`atk:plan` writes a directory under `plans/` at the repository root, not under the docs root, and
+names it `<YYMMDD-HHMM>-<slug>` rather than by ticket. Both choices exist so the output sits where
+other planning tools in the ecosystem already look, and so a project that has a `plans/` tree does
+not end up with two of them. The ticket is not lost: it stays in the `ticket:` field of the index
+front matter, which is where every other artifact carries it anyway.
+
+A project that keeps its plans somewhere else says so in its `CLAUDE.md` or `AGENTS.md`, and that
+wins, exactly as the docs root rule works above.
 
 ## Naming
 
 - Dates are `YYMMDD`, taken from `date +%y%m%d` on macOS and Linux or
   `Get-Date -UFormat "%y%m%d"` on Windows PowerShell. Do not guess today's date.
+- Plan directories carry the time too, `YYMMDD-HHMM`, from `date +%y%m%d-%H%M`. Two plans started on
+  one day are common; two started in one minute are not.
 - Slugs are lowercase kebab-case, derived from the title, at most six words.
 - ADR numbers are zero-padded to four digits and never reused. Read the existing `docs/adr/`
   directory to find the next one.

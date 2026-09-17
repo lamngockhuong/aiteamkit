@@ -155,8 +155,12 @@ same ticket, the first time before any code exists, is how a consent prompt stop
 
 ## Output
 
-Written to `docs/planning/<ticket-or-date>-<slug>/` per `shared/artifact-paths.md`: `plan.md` plus
-one file per phase. Both templates are in `references/plan-template.md`.
+Written to `plans/<YYMMDD-HHMM>-<slug>/` at the repository root per `shared/artifact-paths.md`:
+`plan.md` plus one file per phase. Both templates are in `references/plan-template.md`.
+
+This is one of the two skills that write outside the docs root, and the reason is in that file: a
+project that already keeps plans in `plans/` should not end up with a second tree. When the project
+`CLAUDE.md` or `AGENTS.md` names a different plans location, that wins.
 
 The directory is the shape even for a single phase. One layout means the reader, the reviewer, and
 `atk:implement` find the same thing in the same place every time, and a plan that grows a second
