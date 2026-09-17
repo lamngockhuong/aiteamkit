@@ -19,7 +19,12 @@ through does not have to be moved. A one-phase plan is a normal result; do not i
 to fill the shape.
 
 The split between the two files: the index holds everything true of the whole piece of work, a phase
-file holds only what is true of that phase. Nothing appears in both.
+file holds only what is true of that phase. Prose is never written twice.
+
+Four fields do appear in both, because the index has to be readable on its own: a phase's title, its
+dependencies, its progress, and one line of what it delivers. The phase file is the source for all
+four. The index copies them, and whoever changes one changes both in the same edit. When they
+disagree, the phase file is right.
 
 ## `plan.md`
 
@@ -42,8 +47,16 @@ ticket: <ticket id or URL, or none>
 `owner` is `TBD` with a name attached when the plan came from a description rather than an assigned
 ticket, per `shared/team-roles.md`. It is never blank.
 
+`status` here is the artifact's approval state from `shared/artifact-paths.md`: `DRAFT`, `IN
+REVIEW`, `APPROVED`, `SUPERSEDED`. The `Status` column in the phases table below is a different
+vocabulary, `pending` and `in progress` and `done`, because it tracks progress rather than approval.
+One word, two jobs, two places; the phases table is the only place the second meaning appears in
+this file.
+
 `status` stays `DRAFT` and implementation may start anyway. A plan is a statement of intent by the
-person doing the work, not a decision the team has to ratify; the reasoning is in `SKILL.md`.
+person doing the work, not a decision the team has to ratify; the reasoning is in `SKILL.md`. It
+moves to `IN REVIEW` only in the case `SKILL.md` names, where the work turns out to touch a schema,
+a public contract, or more than one service and the Tech Lead does look.
 
 ### 1. Goal and acceptance criteria
 
@@ -118,17 +131,21 @@ Without a profile this section says which commands are inferred, per the Require
 phase: <N>
 title: "<phase title>"
 status: pending
-dependencies: [<phase numbers, or empty>]
+dependencies: []
 ---
 ```
 
-No `owner` or `approver` here: both live in the index, and a phase is not separately approved.
+`dependencies` lists the phase numbers this one needs, `[1]` or `[1, 2]`, and stays `[]` for the
+first phase. No `owner` or `approver` here: both live in the index, and a phase is not separately
+approved.
 
-`status` means two different things in the two files, and it is worth knowing which is which. In the
-index it is the artifact's approval state from `shared/artifact-paths.md`: `DRAFT`, `IN REVIEW`,
-`APPROVED`, `SUPERSEDED`. In a phase file it is progress: `pending`, `in progress`, `done`. The
-field name is shared with other planning tools that read these directories, which is why it is not
-renamed here.
+`status` here is progress: `pending`, `in progress`, `done`. It is the source for the `Status`
+column in the index, and it is set by whoever works through the phases, not by this skill, which
+writes every phase as `pending` once.
+
+The field keeps the name `status` although the index uses that name for approval state, because
+other planning tools that read these directories expect it. The two meanings never meet inside one
+file.
 
 ### 1. What this phase delivers
 
@@ -152,7 +169,7 @@ A numbered list, in the order they will be done. Per step:
 | Leaves the tree | What works after this step. Never broken: see `step-ordering.md` |
 
 Two changes that cannot compile apart are one step carrying the reason, never two steps of which the
-first is broken. `references/step-ordering.md` holds the rule and the reason it is absolute.
+first is broken. `step-ordering.md` holds the rule and the reason it is absolute.
 
 No owner column, for the same reason the index has none.
 
@@ -160,6 +177,10 @@ No owner column, for the same reason the index has none.
 
 What proves the phase is done, beyond the individual step checks: the command from the Commands
 section of `.atk/profile.md` that covers this area, and what a person should see.
+
+In a one-phase plan this section and section 6 of the index would ask the same question. Keep it in
+the index, where a reader looking for how the work is checked will go first, and write one line here
+pointing up.
 
 ### 4. Open questions for this phase
 

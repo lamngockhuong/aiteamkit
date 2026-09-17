@@ -46,7 +46,7 @@ split between people: every phase in a plan belongs to whoever owns the plan.
 |-------|-------------------------|---------|-------------|
 | `atk:design-doc` | How should this be built, and at what cost | TL, BrSE/BA | TL |
 | `atk:breakdown` | Who does what, in what order, in which lane | PM, TL, the team | PM or TL |
-| `atk:plan` | For this work: which phases, which files, which steps, checked how | Implementer, reviewer | TL |
+| `atk:plan` | For this work: which phases, which files, which steps, checked how | Implementer, reviewer | TL, lightly |
 
 An epic passes through all three in that order. A self-contained piece of work needs only the third,
 whether it takes an afternoon or three weeks. Work that turns out to touch a schema or a public
@@ -106,9 +106,10 @@ reads very differently from a scan that never ran.
 
 `references/step-ordering.md` holds both rules, because the work is cut twice.
 
-First into phases. A phase ends where something reviewable exists: a piece a colleague could read,
-merge, and live with, even if the feature is not finished. Work with one such piece is one phase,
-and a one-phase plan is a normal result rather than a small one.
+First into phases. A phase ends where the work could stop for two weeks and nothing would be wrong:
+not merely something mergeable, which every step is, but something that costs nobody anything if the
+next phase never arrives. Work with one such point is one phase, and a one-phase plan is a normal
+result rather than a small one.
 
 Then into steps inside each phase. Order them so the tree works after each one, keep each small
 enough to have its own check and large enough to be worth naming, and when two changes genuinely
@@ -153,18 +154,29 @@ Under `--inline` the Ticket section below does not run. The caller reaches
 `shared/finalize-steps.md` with its own consent prompts later, and asking twice for a comment on the
 same ticket, the first time before any code exists, is how a consent prompt stops being read.
 
+When the design gate fires and there is nothing to sequence, no directory is written. Hand back the
+fork, the name of whoever owns it, and a stop: there is no path for the caller to take, and an empty
+plan directory would look like one.
+
+After the handback, the plan is the caller's to keep current. Whoever works through the phases sets
+each phase file's `status` as it goes; this skill writes them all as `pending` and does not come
+back. A phase left at `pending` after its work is done is a plan nobody will trust twice.
+
 ## Output
 
 Written to `plans/<YYMMDD-HHMM>-<slug>/` at the repository root per `shared/artifact-paths.md`:
 `plan.md` plus one file per phase. Both templates are in `references/plan-template.md`.
 
-This is one of the two skills that write outside the docs root, and the reason is in that file: a
-project that already keeps plans in `plans/` should not end up with a second tree. When the project
-`CLAUDE.md` or `AGENTS.md` names a different plans location, that wins.
+This is one of the two skills that write outside the docs root; that file says why, and what a
+project does when it keeps plans somewhere else.
 
-The directory is the shape even for a single phase. One layout means the reader, the reviewer, and
-`atk:implement` find the same thing in the same place every time, and a plan that grows a second
-phase halfway through does not have to be moved.
+The directory is the shape even for a single phase, so a plan that grows a second phase halfway
+through does not have to be moved.
+
+Planning the same work again makes a new directory, because the name carries the time. Do not leave
+the old one looking current: set its index `status` to `SUPERSEDED` and link the replacement, per
+the rule at the end of `shared/artifact-paths.md`. Two live plans for one piece of work is worse
+than none, because each reader picks a different one.
 
 ## Ticket
 

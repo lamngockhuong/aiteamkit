@@ -111,7 +111,7 @@ Under `--out <path>`, audit the profile at that path rather than the default one
 
 Written to `.atk/profile.md` in the target project, not under `docs/`, and not into the kit. See
 `shared/project-profile.md` for what each section holds and `shared/artifact-paths.md` for why this
-skill is the one exception to the docs-root rule.
+skill is one of the two exceptions to the docs-root rule.
 
 ## Ticket
 

@@ -82,3 +82,8 @@ ticket: <id or URL, or none>
 
 Read the file if it already exists and update it in place. Do not overwrite an `APPROVED` artifact:
 supersede it, link the replacement, and say which decision changed.
+
+A plan directory never collides, because its name carries the time, so updating in place cannot
+happen by accident there. Planning the same work again therefore has to supersede by hand: set the
+old index `status` to `SUPERSEDED`, link the new directory from it, and link back. Otherwise the
+project accumulates plans that all look current.

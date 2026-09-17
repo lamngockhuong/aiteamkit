@@ -43,8 +43,8 @@ a section to delete.
 | Section | Holds | Read by |
 |---------|-------|---------|
 | Project | Name, repository, single repo or monorepo, package manager | all |
-| Layers | Per layer: directory, standards document, reference module | implement, fix, verify |
-| Commands | Per app: test, build, lint, and any extra command a change requires | implement, fix, verify |
+| Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify |
+| Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
 | Docs | Docs root, where conventions live, where designs live, the agent instruction file if any | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the spec lives | intake, catchup, review, release |
 | Team | Role mapped to a real name, who approves what, and the language the team writes artifacts in | all |

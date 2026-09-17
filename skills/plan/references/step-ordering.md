@@ -5,18 +5,22 @@ Getting either wrong produces a plan that is technically complete and useless in
 
 | Cut | A unit ends where | Failure when it is wrong |
 |-----|-------------------|--------------------------|
-| Phase | Something reviewable exists | A phase nobody can merge, or a plan of one giant phase |
+| Phase | Stopping here for two weeks would be fine | A phase that rots if the next one slips |
 | Step | A check becomes possible | A plan longer than the diff, or a step whose failure says nothing |
 
 ## Where a phase ends
 
-A phase ends where something exists that a colleague could read, merge, and live with, even though
-the feature is not finished.
+A phase ends where the work could stop for two weeks and nothing would be wrong.
 
-"Live with" is the load-bearing part. A column that nothing writes to yet, a client that nothing
-calls yet, a flag defaulting to off: all fine, all mergeable, all harmless if the next phase is
-delayed by two weeks. A half-migrated schema or a half-switched call path is not, whatever the
-commit message says.
+That is the test, and it is deliberately not "something mergeable". Every step is mergeable; a step
+leaves the tree building and the tests passing, which is a lower bar than this one. The question a
+phase has to answer is what happens if the next phase never arrives: a column that nothing writes
+to, a client that nothing calls, a flag defaulting to off, all sit there indefinitely and cost
+nobody anything. A half-migrated schema or a half-switched call path is also mergeable, and it is
+somebody's incident three sprints later.
+
+So: a step is safe to stop at until tomorrow, a phase is safe to stop at until somebody decides
+otherwise.
 
 This is why a phase is not simply a group of steps that felt related. Read the `Delivers` cell in
 the index: a phase that cannot fill it in concrete terms is a step in its neighbour, and two phases
@@ -49,9 +53,9 @@ After each step, the tree works: it builds, the existing tests pass, and the app
 the new behaviour, which may still be absent or behind a flag, but everything that worked this
 morning still works.
 
-This is what makes a plan survive an interruption. Work stops at the end of a step, and what is on
-disk at that moment is something a colleague can pull, a reviewer can read, and the author can
-return to in two days without reconstructing where they were.
+This is what makes a plan survive being put down. The author can come back on Monday, run the suite,
+and know exactly where they were, instead of reconstructing which half-finished edit belonged to
+which idea.
 
 The usual order that satisfies it:
 
@@ -83,9 +87,13 @@ apart", and most steps claimed as inseparable are two steps with a shared file.
 A step is one sitting of work. Below that, the plan is longer than the diff and stops being read.
 Above it, the check at the end covers so much that a failure does not say what caused it.
 
-When a step will not fit in a sitting and will not split, that is worth saying out loud in the plan.
-It usually means the ticket is too big, which is `atk:breakdown`'s problem rather than this skill's,
-and the plan is the right place to surface it.
+When a step will not fit in a sitting and will not split, say so in the plan rather than hiding it
+in an estimate. It is a risk the reviewer should see.
+
+It is not a reason to reach for `atk:breakdown`. Size is not what separates the two skills: work
+that stays with one person is planned here however long it runs. Breakdown enters when the work has
+to be shared, and a step nobody can finish alone is one way to discover that, but only when adding a
+second person is actually on the table.
 
 ## What this file does not decide
 

@@ -4,8 +4,9 @@ description: >
   Break an epic or a design document into owned, sequenced tasks: one deliverable each, an owner,
   a dependency order, the parallel lanes that avoid two people editing the same file, and a
   definition of done per task.
-  Use before a sprint starts, when work must be split across several developers, or when a ticket is
-  too big for one person to pick up.
+  Use before a sprint starts, when work has to be shared across several developers, or when a piece
+  of work needs owners and parallel lanes. Work that stays with one person is planned with
+  `atk:plan` instead, however many days it takes.
   Triggers on: "break down", "breakdown", "chia task", "phân chia công việc", "split this epic",
   "task list", "WBS", "タスク分解", "who does what", "assign tasks", "/atk:breakdown".
 argument-hint: "[design-path|requirement-path|epic] [--members <names>] [--parallel] [--tdd] [--out <path>]"
@@ -23,9 +24,9 @@ dependency, grouping into parallel lanes with explicit file ownership, and writi
 definition of done.
 
 Does NOT handle: sizing (`atk:estimate`), designing the solution (`atk:design-doc`), or
-implementation. It decides who carries what: how one person's share is then carried out, in phases
-and steps, is `atk:plan`, which the assignee writes for themselves afterwards. Work that belongs to
-one person needs no breakdown first, however many days it takes. It also does not decide
+implementation. It divides work between people; how one person's share is then carried out, in
+phases and steps, is `atk:plan`, which the assignee writes for themselves afterwards. Work that
+belongs to one person needs no breakdown first, however many days it takes. It also does not decide
 who works on what: it proposes, the PM and Tech Lead assign.
 
 ## Roles
@@ -58,9 +59,9 @@ writes down: migration, seed data, config, feature flag, docs update, and test d
 
 ### 2. Slice
 
-One task equals one reviewable change, ideally under a day. Slice vertically by user-visible
-outcome where possible; slice by layer only when the layers are genuinely independent. A task whose
-title needs the word "and" is two tasks.
+One task equals one reviewable change, ideally under a day. Slice vertically by user-visible outcome
+where possible; slice by layer only when the layers are genuinely independent. A task whose title
+needs the word "and" is two tasks.
 
 ### 3. Order
 

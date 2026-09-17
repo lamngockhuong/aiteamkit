@@ -25,7 +25,7 @@ and rollout sequence the change requires, and writing the ADR entry.
 
 Does NOT handle: writing the requirement (`atk:intake`), sizing (`atk:estimate`), or the
 implementation itself. It chooses the approach and stops there: sequencing the chosen approach into
-steps for one ticket is `atk:plan`, which never reopens the choice. It also does not approve its own
+phases and steps is `atk:plan`, which never reopens the choice. It also does not approve its own
 design: review is a separate role.
 
 ## Roles
