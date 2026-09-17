@@ -82,17 +82,19 @@ skill discovery.
 | `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows | all |
 | `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, and the shared YAML front matter block | all |
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
-| `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review` |
+| `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
 | `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
 
-The first three are cited by every skill. `review-checklist.md` is cited by `convention` and
-`review` only, because it is a contract between exactly those two: `convention` writes the rule rows
-and `review` cites their IDs. `finalize-steps.md` is cited by the two skills that change code, and
-holds the rule that nothing leaves the local repository without being asked for.
+The first three are cited by every skill. The rule record format in `review-checklist.md` is a
+contract between exactly two: `convention` writes the rule rows and `review` cites their IDs.
+`implement` reads the same file for one thing only, the baseline items, which it falls back to when
+the project has recorded no conventions of its own. `finalize-steps.md` is cited by the two skills
+that change code, and holds the rule that nothing leaves the local repository without being asked
+for.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
