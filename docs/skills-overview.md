@@ -1,19 +1,50 @@
 # Skills Overview
 
-Twelve skills, one per stage of a team's delivery lifecycle. Each entry says what the skill
-produces, when to reach for it, and when not to.
+Eighteen skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
 
 ## Where they sit
 
 ```
-intake -> estimate -> design-doc -> breakdown -> convention -> review -> qa -> release
-                                                                                  |
-                         onboard / handover (any time)          incident <--------+
-                                                                    |
-                                                                  retro
+init -> intake -> catchup -> estimate -> design-doc -> breakdown -> convention
+                                                                        |
+                                                                        v
+           release <- verify <- qa <- review <- implement <- plan <------+
+              |
+              v
+           incident -> retro
+
+  fix        when a defect is reported, at any point
+  onboard    when someone joins
+  handover   when someone leaves, or a phase ends
 ```
+
+`atk:init` runs once per project. It writes `.atk/profile.md`, which tells the skills that touch
+code how this project is tested, built, and laid out. `atk:implement`, `atk:fix` and `atk:verify`
+stop without it. `atk:plan` continues and says in the artifact which parts it inferred. Every other
+skill runs without it.
+
+---
+
+## `atk:init`
+
+**Produces.** `.atk/profile.md` in the project: the test, build, and lint command per app, the layer
+layout with a standards document and a reference module for each, the docs roots, the tracker and
+where the spec lives, who approves what, and how to start the application and confirm a side effect
+in its data.
+
+**Use when.** A team first installs `atk` in a project, and again when the project has moved on from
+what the profile says. `--audit` compares an existing profile against the repository and changes
+nothing.
+
+**Do not use when.** You want the kit configured once for every project. A profile is true of one
+project and is committed with it; the kit itself holds no project facts.
+
+**The habit that matters.** It reads the repository before it asks. A question the package manifest,
+the CI workflow, or the test directory could have answered is a question it does not put to a
+person. What no file can answer becomes `TBD` with the name of whoever owes it, never a guess.
 
 ---
 
@@ -31,6 +62,24 @@ the team cannot start from it. Also when two people read the same ticket differe
 
 **The habit that matters.** Criteria such as "works correctly" or "is fast" are rejected rather than
 accepted quietly. They become a number, a state, a visible result, or an open question.
+
+---
+
+## `atk:catchup`
+
+**Produces.** For an epic: what the work is and for whom, why now, scope in and out, who decides
+what, the terms a newcomer will not know, the places it is easy to go wrong, and an understanding
+check the developer answers before writing any code. For a pull request: the same brief scoped to
+the diff, without the check.
+
+**Use when.** Someone picks up an epic they did not help write, joins work already in flight, or has
+to review a pull request in an area they do not know.
+
+**Do not use when.** The person is new to the project rather than to this piece of work
+(`atk:onboard`), or the requirement itself is unclear rather than unfamiliar (`atk:intake`).
+
+**The habit that matters.** The understanding check is answered by the developer, not filled in by
+the skill. A brief nobody has to respond to is a brief nobody has read.
 
 ---
 
@@ -100,6 +149,63 @@ rather than left to look like policy. The `REVIEWED` rules are written in the re
 
 ---
 
+## `atk:plan`
+
+**Produces.** What the code does today with file paths, phases that each end in something a reviewer
+can look at, steps inside a phase that each leave the tree working, what every step touches and how
+it is checked, what is deliberately out of scope, and what is still unclear with the name of whoever
+must answer.
+
+**Use when.** Before starting work large enough to need stages, or when picking up something
+somebody else designed and the steps are not obvious.
+
+**Do not use when.** The work has to be shared across several people, which is `atk:breakdown`; or
+it is one change in one file, where the plan costs more than the work.
+
+**The habit that matters.** A phase that cannot end in something reviewable is not a phase, it is a
+pause. Steps are ordered so the tree still works at every boundary, which is what makes it safe to
+stop halfway.
+
+---
+
+## `atk:implement`
+
+**Produces.** The code, plus an implementation record that becomes the pull request body: what
+changed and why, which plan steps it covers, the command run for each layer with its output, and
+what was deliberately left undone.
+
+**Use when.** A ticket, a plan, or a described requirement is ready to be built, and the question
+left is how to build it rather than what to build.
+
+**Do not use when.** The requirement is still unclear (`atk:intake`), or the work is diagnosing a
+defect (`atk:fix`).
+
+**The habit that matters.** The plan gate has three settings rather than two. A small change goes
+straight to code. A medium one calls `atk:plan`, confirms in a sentence, and carries on. Only a
+change that touches a schema, a public contract, several services, or an open architecture decision
+stops for a person to approve. Drafting a list of steps needs no approver; deciding the architecture
+does.
+
+---
+
+## `atk:fix`
+
+**Produces.** The failure captured verbatim, the cause proven rather than guessed, a check that the
+current behavior is not a decision somebody made on purpose, the smallest change that removes the
+cause, verification by layer, and a report saying what was checked and what was not.
+
+**Use when.** A bug report, a failing test, a broken endpoint or screen, or an investigation that has
+to end in an explanation rather than a guess.
+
+**Do not use when.** Production is down right now: `atk:incident` runs the response, and this skill
+fits inside it. Or nothing is broken and the code is merely unpleasant, which is not a defect.
+
+**The habit that matters.** No file changes before the cause is proven. `--investigate-only` exists
+because the explanation is often the whole deliverable, and stopping there is a valid result rather
+than an unfinished one.
+
+---
+
 ## `atk:review`
 
 **Produces.** Review findings ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each citing a line, stating
@@ -130,6 +236,25 @@ and a developer can automate from.
 
 **The habit that matters.** Traceability runs both ways, so an untested criterion and an untraced
 case are both visible.
+
+---
+
+## `atk:verify`
+
+**Produces.** The application started the way this project starts it, exercised with real requests,
+side effects asserted in the data rather than in a status code, screens compared against the design
+when `--ui` is passed, and a report naming what was proven and what was not.
+
+**Use when.** The suite is green and nobody has yet seen the feature work, before handing a ticket to
+QA, or before a release goes out.
+
+**Do not use when.** The profile has no `Verify` section saying how to start the application and how
+to confirm a side effect. The skill stops rather than guess a start command, because a guessed
+command that exits zero reads as proof.
+
+**The habit that matters.** A 200 is not a result. The skill asserts the row, the file, or the
+message the request was supposed to produce. It also stops after three rounds and escalates to a
+named person, rather than patching until something passes.
 
 ---
 
@@ -212,11 +337,17 @@ it, never declared complete by the person leaving.
 
 ## Adopting the kit
 
-Start with the stage that hurts. Three common entry points:
+Start with the stage that hurts. Five common entry points:
 
 - Requests arrive unclear: `atk:intake`, then `atk:qa` once criteria exist.
 - Reviews are inconsistent: `atk:convention`, then `atk:review` against it.
 - Knowledge keeps walking out the door: `atk:handover` and `atk:onboard`.
+- Bugs come back because the cause was never found: `atk:fix`.
+- Features reach QA having only ever been seen green in CI: `atk:init`, then `atk:verify`.
+
+`atk:implement`, `atk:fix` and `atk:verify` want `.atk/profile.md` before they will do anything, and
+`atk:plan` produces a better plan with it. Every other skill runs on a fresh clone with nothing set
+up.
 
 The artifacts compose, because each skill reads the previous artifact when one exists, but none of
 them requires it.

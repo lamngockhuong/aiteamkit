@@ -7,7 +7,7 @@ removed, or renamed; update it in the same commit.
 
 | File | Purpose |
 |------|---------|
-| `README.md` | Public entry point: lifecycle diagram, the 12-skill table, invocation block, output convention, install instructions |
+| `README.md` | Public entry point: lifecycle diagram, the 18-skill table, invocation block, output convention, install instructions |
 | `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `shared/` DRY rule, cross-file sync list, em-dash policy, release flow, verification commands |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, no scripts; exists to carry the version and repository metadata |
@@ -31,26 +31,79 @@ removed, or renamed; update it in the same commit.
 | `shared/team-roles.md` | Role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows: name an owner, separate author from approver, do not decide what a role owns, write for the absent reader, ask only what the repository cannot answer, follow the team's language |
 | `shared/artifact-paths.md` | Docs root resolution, the default output path per skill, `YYMMDD` naming, ADR numbering, the shared YAML front matter block, and the rule against overwriting an `APPROVED` artifact |
 | `shared/ticket-adapters.md` | Tracker detection order, the atk-to-tracker vocabulary map for GitHub Issues, Jira, Backlog, and Redmine, the `gh` push commands, and the two-way linking rule |
-| `shared/review-checklist.md` | The `CONV-NNN` rule record format that `convention` writes and `review` cites, what each skill does with it, the eight baseline items with default severities, and the rule for retiring a stale rule. Cited by `convention` and `review` only |
+| `shared/review-checklist.md` | The `CONV-NNN` rule record format that `convention` writes and `review` cites, what each skill does with it, the eight baseline items with default severities, and the rule for retiring a stale rule. Cited by `convention` and `review`, plus `implement` for the baseline items alone |
+| `shared/project-profile.md` | What `.atk/profile.md` holds in the target project, why it lives there rather than in the kit, and the three-group rule deciding whether a skill stops, degrades, or ignores a missing profile |
+| `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross. Cited by `fix`, `implement`, and `verify` |
+| `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not. Cited by `fix`, `implement`, and `verify`, so all three say the same thing about the same result |
+
+## Hooks
+
+| File | Purpose |
+|------|---------|
+| `hooks/hooks.json` | Registers one `SessionStart` hook for Claude Code, in exec form so no shell is involved on any platform: `"command": "node"` plus `${CLAUDE_PLUGIN_ROOT}` in `args` |
+| `hooks/check-profile.mjs` | Node ESM, so it behaves the same on Linux, macOS, and Windows. Prints one reminder when a git repository has no `.atk/profile.md`, once per project, and exits 0 on every path. Never blocks, never writes into the user's repository. Codex and Cursor have no wrapper yet |
 
 ## Skills
 
-Each is a single `SKILL.md` with no `references/` or `evals/` yet.
+Each skill is one `SKILL.md`. The six execution skills also carry `references/` and `evals/`; the
+twelve original ones do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
+| `skills/init/SKILL.md` | Setup | `.atk/profile.md`: commands, layers, docs roots, tracker, team, and how to verify at runtime |
 | `skills/intake/SKILL.md` | Requirement | User stories, acceptance criteria, non-goals, open questions with owners |
+| `skills/catchup/SKILL.md` | Requirement | A brief for someone who was not in the conversation, plus the understanding check for an epic |
 | `skills/estimate/SKILL.md` | Planning | Sizes with basis and confidence, capacity, sprint commitment, overflow |
 | `skills/design-doc/SKILL.md` | Design | Technical design with compared options, plus the ADR |
 | `skills/breakdown/SKILL.md` | Planning | Owned tasks, dependency graph, parallel lanes with file ownership |
 | `skills/convention/SKILL.md` | Development | Team conventions classified enforced / reviewed / aspirational |
+| `skills/plan/SKILL.md` | Development | Phases ending in something reviewable, steps that leave the tree working, scope boundary |
+| `skills/implement/SKILL.md` | Development | The code, verified by layer, plus the record that becomes the pull request body |
+| `skills/fix/SKILL.md` | Development | A proven cause, the smallest change removing it, and a report of what was checked |
 | `skills/review/SKILL.md` | Development | Findings ranked blocking / should fix / nit, optionally posted to the PR |
 | `skills/qa/SKILL.md` | Verification | Test plan, traced test cases, regression matrix, entry and exit criteria |
+| `skills/verify/SKILL.md` | Verification | The running system exercised, side effects asserted in data, escalation after three rounds |
 | `skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, rollback, sign-offs |
 | `skills/incident/SKILL.md` | Operation | Timeline, proven root cause, blameless postmortem, actions, runbook |
 | `skills/retro/SKILL.md` | Improvement | Previous actions verified, sprint evidence, three actions, status report |
 | `skills/onboard/SKILL.md` | Team | Verified setup, access list, code map, first week ending in a merged change |
 | `skills/handover/SKILL.md` | Team | True state of in-flight work, decisions, traps, access transfer, receiver sign-off |
+
+### References
+
+Loaded only when a workflow step opens them, so they stay out of the default context.
+
+| File | Purpose |
+|------|---------|
+| `skills/init/references/detection.md` | Where to look for each profile field, and what to do when the repository gives several answers or none |
+| `skills/init/references/profile-template.md` | The shape of `.atk/profile.md` that `init` fills in |
+| `skills/catchup/references/brief-template.md` | One skeleton for both modes, with the epic and pull-request differences marked per section |
+| `skills/catchup/references/understanding-check.md` | The fixed questions, the feature type table, and the two rules deciding whether the check is worth anything |
+| `skills/plan/references/step-ordering.md` | The two cuts, phase and step, and the rule for each |
+| `skills/plan/references/plan-template.md` | The plan index and the phase file |
+| `skills/implement/references/plan-gate.md` | The three settings deciding how much agreement the work needs before code is written |
+| `skills/implement/references/verification.md` | The order to run checks in, how far to reach, and when to stop |
+| `skills/implement/references/review-fix-loop.md` | The team review run against the skill's own output, and the ceiling that stops the loop hiding a design problem |
+| `skills/fix/references/investigate.md` | Proving the cause, the intent check, and the gate that decides whether a fix may happen at all |
+| `skills/fix/references/layer-playbooks.md` | Per layer: where the cause usually hides, how to reproduce it, and how to confirm it is gone |
+| `skills/fix/references/report-template.md` | The fix report, written for a reviewer who has to check a claim rather than trust it |
+| `skills/verify/references/runtime-checks.md` | Bringing the application up, exercising it, asserting a real side effect, and cleaning up |
+| `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
+| `skills/verify/references/report-template.md` | The verification report, naming what was proven and what was not |
+
+### Trigger evals
+
+Each holds an array of `{query, should_trigger}` testing the skill's `description`. There is no
+runner yet; see `docs/project-roadmap.md` phase 4.
+
+| File | Purpose |
+|------|---------|
+| `skills/init/evals/trigger_evals.json` | Setup phrasing against project configuration requests that are not `init` |
+| `skills/catchup/evals/trigger_evals.json` | Catching up on existing work against `intake` and `onboard` |
+| `skills/plan/evals/trigger_evals.json` | Planning one person's work against `breakdown` and `design-doc` |
+| `skills/implement/evals/trigger_evals.json` | Building against planning and reviewing |
+| `skills/fix/evals/trigger_evals.json` | A defect against `incident` and ordinary implementation |
+| `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
 
 ## Assets
 
@@ -79,5 +132,5 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 12 skills |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 18 skills, plus the profile, the shared layer, and the hook |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |

@@ -1,6 +1,6 @@
 # AI Team Kit (`atk`)
 
-Twelve skills covering the software delivery lifecycle of a **company project team**, not a solo
+Eighteen skills covering the software delivery lifecycle of a **company project team**, not a solo
 developer. Every skill assumes work has an author and a separate reviewer, decisions have an owner,
 and artifacts are read by someone who was not in the conversation that produced them.
 
@@ -13,24 +13,39 @@ Walkthrough of what each skill means and when to use it:
 ## Lifecycle
 
 ```
-intake -> estimate -> design-doc -> breakdown -> convention -> review -> qa -> release
-                                                                                  |
-                         onboard / handover (any time)          incident <--------+
-                                                                    |
-                                                                  retro
+init -> intake -> catchup -> estimate -> design-doc -> breakdown -> convention
+                                                                        |
+                                                                        v
+           release <- verify <- qa <- review <- implement <- plan <------+
+              |
+              v
+           incident -> retro
+
+  fix        when a defect is reported, at any point
+  onboard    when someone joins
+  handover   when someone leaves, or a phase ends
 ```
+
+Run `/atk:init` once per project. It writes `.atk/profile.md`, the file the skills that touch code
+read to learn this project's test, build and lint commands, its layer layout, and who approves what.
 
 ## Skills
 
 | Skill | What it produces |
 |-------|------------------|
+| `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
 | `atk:intake` | A raw request turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
+| `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
 | `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, each classified as enforced by tooling, checked in review, or merely aspirational. |
+| `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. |
+| `atk:implement` | The code, written to the project's own conventions and reference modules, verified layer by layer with the project's own commands, and put through review before handover. |
+| `atk:fix` | The failure captured verbatim, the cause proven before a line changes, the smallest change that removes it, and a report of what was checked and what was not. |
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences. |
 | `atk:qa` | A test plan, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria. |
+| `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |
 | `atk:release` | Release notes per audience, a checklist with an owner per step, migration reversibility, and a rollback path written before the deploy. |
 | `atk:incident` | A timestamped incident timeline, a root cause supported by evidence, a blameless postmortem, follow-up actions with owners, and the runbook. |
 | `atk:retro` | Last retro's actions verified first, sprint evidence from git and the tracker, at most three new actions, and the status report. |
@@ -42,18 +57,24 @@ intake -> estimate -> design-doc -> breakdown -> convention -> review -> qa -> r
 Every skill is its own slash command, namespaced `atk:`. There is no separate command layer.
 
 ```bash
-/atk:intake <request-file|ticket|text>   # --interview/--no-interview --lang --out
-/atk:estimate <backlog|epic>             # --points|--days --sprint --capacity --out
-/atk:design-doc <requirement|topic>      # --adr|--no-adr --options --lang --out
-/atk:breakdown <design|epic>             # --members --parallel --tdd --out
-/atk:convention                          # --audit|--init|--sync --scope --lang --out
-/atk:review <pr|branch|paths>            # --against --comment --strict --out
-/atk:qa <requirement|feature>            # --plan|--cases|--regression --lang --out
-/atk:release <version|range>             # --notes|--checklist --audience --env --out
-/atk:incident                            # --live|--postmortem|--runbook --out
-/atk:retro <sprint|range>                # --data-only|--report --audience --lang --out
-/atk:onboard                             # --role --refresh|--audit --lang --out
-/atk:handover --from <a> --to <b>        # --scope --phase|--offboard --lang --out
+/atk:init                                 # --audit --lang --out
+/atk:intake <request-file|ticket|text>    # --interview|--no-interview --lang --out
+/atk:catchup <epic-url|pr-url>            # --no-check --lang --out
+/atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
+/atk:design-doc <requirement|topic>       # --adr|--no-adr --options --lang --out
+/atk:breakdown <design|epic>              # --members --parallel --tdd --out
+/atk:convention                           # --audit|--init|--sync --scope --lang --out
+/atk:plan <ticket|design|description>     # --inline --layer --out
+/atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
+/atk:fix <issue|report|description>       # --layer --investigate-only --out
+/atk:review <pr|branch|paths>             # --against --comment --strict --out
+/atk:qa <requirement|feature>             # --plan|--cases|--regression --lang --out
+/atk:verify <module|paths|ticket>         # --ui --report-only --out
+/atk:release <version|range>              # --notes|--checklist --audience --env --out
+/atk:incident                             # --live|--postmortem|--runbook --out
+/atk:retro <sprint|range>                 # --data-only|--report --audience --lang --out
+/atk:onboard                              # --role --refresh|--audit --lang --out
+/atk:handover --from <a> --to <b>         # --scope --phase|--offboard --lang --out
 ```
 
 ## Where the output goes
@@ -67,6 +88,13 @@ to it. [shared/ticket-adapters.md](shared/ticket-adapters.md) maps the vocabular
 Jira, Backlog, and Redmine, and no skill creates tickets without showing the list and getting a yes.
 
 The role vocabulary every skill shares is in [shared/team-roles.md](shared/team-roles.md).
+
+The skills that touch code read one file that the kit does not ship: `.atk/profile.md`, written by
+`/atk:init` into the target project and committed with it. `atk:implement`, `atk:fix` and
+`atk:verify` stop without it rather than guess a test command. `atk:plan` continues and says in the
+artifact which commands and paths it had to infer. Every other skill runs without it. What the
+profile holds, and which skills are meant to degrade rather than stop, is in
+[shared/project-profile.md](shared/project-profile.md).
 
 `atk:convention` and `atk:review` share one more file,
 [shared/review-checklist.md](shared/review-checklist.md), so a team rule is written once and

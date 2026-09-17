@@ -10,11 +10,18 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-  skills/<name>/SKILL.md        12 skill, mỗi skill một thư mục
-  shared/*.md                   lớp DRY dùng chung cho cả 12 skill
+  skills/<name>/SKILL.md        18 skill, mỗi skill một thư mục
+  skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
+  skills/<name>/evals/*.json    bộ case kiểm trigger của description
+  shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
+  hooks/                        lời nhắc lúc mở phiên, chỉ Claude Code
   assets/*.svg                  icon và logo cho trang marketplace
   docs/, docs/vi/               tài liệu dự án song ngữ
 ```
+
+Không chỗ nào trong cây này mô tả dự án mà kit được cài vào. Phần đó nằm trong một file thuộc **dự án
+đích**, là `.atk/profile.md`, do `atk:init` viết ra và được commit cùng dự án. Thư mục plugin chỉ đọc
+và dùng chung cho mọi dự án trên máy, nên nó là chỗ sai để giữ một sự thật chỉ đúng với một dự án.
 
 ## Một cây nội dung, ba manifest
 
@@ -40,26 +47,35 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho cả 12 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho cả 18 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
+| `.atk/profile.md` | Một lần mỗi lượt chạy, ở skill nào cần sự thật của dự án | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
 
 ## Lớp `shared/`
 
-Năm file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 12 skill trích dẫn:
+Bảy file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 18 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và sáu nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
-File thứ tư là hợp đồng giữa hai skill chứ không phải nguyên tắc toàn kit:
+Ba file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `shared/review-checklist.md`: định dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review`
   trích dẫn theo ID, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một
   lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép lại ở cả hai skill rồi lệch nhau.
+  `atk:implement` chỉ đọc file này để lấy các mục nền, dùng khi dự án chưa ghi quy ước nào của riêng
+  mình.
+- `shared/finalize-steps.md`: trình tự khép lại một thay đổi mã nguồn, gồm nhánh, commit, và ranh
+  giới xin phép mà mọi hành động sau commit phải vượt qua. Được `atk:fix`, `atk:implement` và
+  `atk:verify` trích dẫn, tức ba skill có sửa mã. Không gì rời khỏi repo cục bộ mà chưa được hỏi.
+- `shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
+  minh được điều gì, và không chứng minh được điều gì. Cùng ba skill đó trích dẫn. Mỗi skill chạy một
+  phép kiểm rồi phải nói kết quả có nghĩa gì, và vế thứ hai đó buộc phải giống hệt nhau ở cả ba.
 
-File thứ năm mô tả một file không đi kèm kit:
+File thứ bảy mô tả một file không đi kèm kit:
 
 - `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
@@ -69,7 +85,47 @@ File thứ năm mô tả một file không đi kèm kit:
 `shared/` nằm ở gốc repo chứ không nằm trong `skills/`, vì một thư mục bên trong `skills/` mà không
 có `SKILL.md` sẽ gây nhập nhằng cho cơ chế quét skill. Các skill trích dẫn theo dạng
 `shared/<file>.md`, tương đương `../../shared/<file>.md` tính từ một file skill; cả hai cách viết đều
-có trong phần đầu của mỗi file shared.
+có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại lệ: nó được trích từ gốc dự án
+đích, vì nó không thuộc kit.
+
+## Hook lúc mở phiên
+
+`hooks/hooks.json` đăng ký một hook `SessionStart` chạy `hooks/check-profile.mjs`. Script trả lời
+đúng một câu hỏi, "dự án này đã có profile chưa", và nó nhắc chứ không chặn.
+
+Ranh giới đó là toàn bộ vấn đề. Hook mà chặn thì luật nằm ở hai chỗ, mà luật này vốn không đồng nhất:
+chín skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn
+chat thành yêu cầu, việc chẳng cần gì từ repo. Skill nào cần gì và thiếu thì làm sao, tất cả nằm
+trong `shared/project-profile.md`.
+
+Trên harness này, ranh giới còn đứng vững nhờ chính hợp đồng của nó. Claude Code ghi rõ `SessionStart`
+không chặn được: mã thoát 2 cũng không sinh hành vi chặn, và mọi mã thoát đều đưa stdout vào ngữ cảnh
+của mô hình. Dù vậy script vẫn thoát 0 ở mọi nhánh, và im lặng khi không có gì để nói: thư mục không
+phải repo git, profile đã có sẵn, hoặc dự án này đã được nhắc rồi. Dấu "đã nhắc" ghi vào
+`${CLAUDE_PLUGIN_DATA}` khi harness cung cấp biến đó, ghi vào thư mục trạng thái của người dùng khi
+không, và không bao giờ ghi vào repo của người dùng hay vào một thư mục ai cũng ghi được.
+
+### Vì sao hook viết bằng Node chứ không phải shell script
+
+Mục này là nơi giữ lý do. `CLAUDE.md` và phần chú thích đầu script trỏ về đây chứ không chép lại.
+
+Hook được đăng ký ở **dạng exec**: `"command": "node"` kèm mảng `args`. Claude Code ghi rõ dạng exec
+tìm file thực thi trên `PATH` rồi gọi thẳng, tự thay `${CLAUDE_PLUGIN_ROOT}`, và không có shell nào
+tham gia trên bất kỳ nền nào.
+
+Điều đó quan trọng vì dạng shell không cư xử giống nhau ở mọi nơi. Claude Code chạy hook dạng shell
+bằng bash, trừ trên Windows không có Git Bash thì lùi về PowerShell. Một script shell POSIX vì thế sẽ
+không khởi động được ở đó, mà hook không khởi động được thì không im lặng: phiên hiện ra dòng
+`Failed with non-blocking status code` kèm thông báo của trình thông dịch. Hook lại không có điều
+kiện theo hệ điều hành, nên không thể đăng ký thêm một bản PowerShell mà nó không cùng lúc chạy trên
+Linux và macOS. Một trình thông dịch chạy được mọi nơi là thứ duy nhất khiến ba nền cư xử như nhau.
+
+Một giới hạn, được chấp nhận:
+
+- **Chỉ Claude Code.** Codex và Cursor cũng đóng gói hook được, nhưng mỗi bên một bộ tên sự kiện và
+  một hợp đồng đầu ra riêng, và không bên nào thử được ở đây. Lời nhắc chỉ là tiện nghi; cổng thật
+  nằm trong skill và chạy y hệt nhau trên cả ba harness. Hai lớp vỏ còn lại chờ tới khi có người
+  kiểm được chúng trên một harness đang chạy.
 
 ## Giải phẫu một skill
 
@@ -93,6 +149,7 @@ tiêu đề + mở đầu   skill này sinh ra gì và thói quen nào làm nó 
 yêu cầu của người dùng
    -> harness so khớp trigger trong description
    -> nạp thân SKILL.md
+   -> skill đọc .atk/profile.md khi cần sự thật của dự án
    -> skill đọc bằng chứng của dự án (code, git, CI, tracker) và các file shared/
    -> skill chỉ phỏng vấn phần mà bằng chứng không trả lời được
    -> ghi artifact Markdown vào dự án đích, dưới docs/

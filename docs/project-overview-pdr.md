@@ -2,14 +2,18 @@
 
 ## What atk is
 
-`atk` (AI Team Kit) is a plugin of 12 skills that cover the software delivery lifecycle of a
+`atk` (AI Team Kit) is a plugin of 18 skills that cover the software delivery lifecycle of a
 **company project team**. It is distributed to Claude Code, Cursor, and OpenAI Codex CLI from one
 content tree.
 
 Most skills produce a Markdown artifact that a team can review, approve, and hand to someone who was
-not in the conversation: a requirement document, an estimate sheet, a technical design, a task
-breakdown, a conventions document, a review, a test plan, a release, an incident postmortem, a
-retrospective, an onboarding guide, or a handover.
+not in the conversation: a requirement document, a catch-up brief, an estimate sheet, a technical
+design, a task breakdown, a conventions document, an implementation plan, a review, a test plan, a
+verification report, a release, an incident postmortem, a retrospective, an onboarding guide, or a
+handover.
+
+One writes no prose at all. `atk:init` records what this project is, so the rest of the kit reads
+the project's own test command and layer layout instead of guessing at them.
 
 The rest change the code. Implementing a ticket, fixing a bug, and verifying the result are part of
 the lifecycle a team runs, so they are part of the kit. What separates them from a solo coding
@@ -68,4 +72,4 @@ external client, frequently across Vietnamese, Japanese, and English. Roles are 
 
 - A new joiner can execute any skill's output without asking its author what it meant.
 - Every artifact answers who owns the open questions.
-- A team can adopt one skill at a time without adopting the other eleven.
+- A team can adopt one skill at a time without adopting the other seventeen.

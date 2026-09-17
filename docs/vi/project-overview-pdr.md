@@ -2,13 +2,17 @@
 
 ## atk là gì
 
-`atk` (AI Team Kit) là một plugin gồm 12 skill phủ vòng đời phát triển phần mềm của **một team dự
+`atk` (AI Team Kit) là một plugin gồm 18 skill phủ vòng đời phát triển phần mềm của **một team dự
 án trong công ty**. Cùng một cây nội dung được phân phối cho Claude Code, Cursor và OpenAI Codex CLI.
 
 Phần lớn skill sinh ra một artifact Markdown mà team có thể review, phê duyệt và đưa cho một người
-không có mặt trong cuộc hội thoại tạo ra nó: tài liệu yêu cầu, bảng ước lượng, tài liệu thiết kế kỹ
-thuật, bảng chia task, tài liệu quy ước, kết quả review, test plan, release, postmortem sự cố, biên
-bản retro, tài liệu onboarding hoặc tài liệu bàn giao.
+không có mặt trong cuộc hội thoại tạo ra nó. Trước khi viết mã: tài liệu yêu cầu, bản tóm tắt cho
+người mới vào việc, bảng ước lượng, tài liệu thiết kế kỹ thuật, bảng chia task, tài liệu quy ước và
+kế hoạch triển khai. Sau đó: kết quả review, test plan, báo cáo kiểm chứng, release, postmortem sự
+cố, biên bản retro, tài liệu onboarding và tài liệu bàn giao.
+
+Một skill không viết chữ nào: `atk:init` ghi lại dự án này là gì, để phần còn lại của kit đọc đúng
+lệnh test và bố cục tầng của dự án thay vì đoán chúng.
 
 Số còn lại sửa thẳng vào code. Làm một ticket, sửa một bug, kiểm chứng kết quả đều nằm trong vòng
 đời mà một team phải chạy, nên chúng nằm trong kit. Thứ tách chúng khỏi một trợ lý code cho người
@@ -67,4 +71,4 @@ ngoài, thường xuyên dùng lẫn tiếng Việt, tiếng Nhật và tiếng 
 
 - Một người mới vào có thể thực thi output của bất kỳ skill nào mà không cần hỏi lại tác giả.
 - Mọi artifact đều trả lời được ai chịu trách nhiệm cho các câu hỏi còn treo.
-- Một team có thể áp dụng từng skill một, không cần áp dụng cả mười một skill còn lại.
+- Một team có thể áp dụng từng skill một, không cần áp dụng cả mười bảy skill còn lại.

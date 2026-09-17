@@ -5,10 +5,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
-OpenAI Codex CLI. It packages 12 skills covering the delivery lifecycle of a company project team
-(`intake`, `estimate`, `design-doc`, `breakdown`, `convention`, `review`, `qa`, `release`,
-`incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
-(`/atk:intake`, `/atk:estimate`, and so on).
+OpenAI Codex CLI. It packages 18 skills covering the delivery lifecycle of a company project team
+(`init`, `intake`, `catchup`, `estimate`, `design-doc`, `breakdown`, `convention`, `plan`,
+`implement`, `fix`, `review`, `qa`, `verify`, `release`, `incident`, `retro`, `onboard`,
+`handover`), each invocable as a slash command by its own name (`/atk:intake`, `/atk:estimate`, and
+so on). That is the lifecycle order; use it for every list of skills in the repository.
 
 This is content plus manifests, not a runtime application: there is no build step, no bundler, no
 test suite, and `package.json` is `private: true` with no `scripts` block. "Validation" means JSON
@@ -144,6 +145,31 @@ it; `shared/project-profile.md` defines what it holds and what each skill does w
 
 The kit ships no profile, and no skill writes project facts into the kit itself.
 
+## `hooks/` reminds; it is never where a rule lives
+
+`hooks/hooks.json` registers one `SessionStart` hook running `hooks/check-profile.mjs`, which prints
+one line when a git repository has no `.atk/profile.md`. That is the whole feature.
+
+The script must stay answerable in one sentence: "does this project have a profile yet". The moment
+it answers a second question, the precondition rule exists in two places, and the copy in
+`shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: nine skills
+need no profile at all, so a hook that blocked would stop `atk:intake` from turning a chat message
+into requirements.
+
+Claude Code's contract makes the boundary hold by construction: `SessionStart` cannot block, exit
+code 2 included. The script exits 0 on every path regardless, prints nothing when it has nothing to
+say, and writes its "already reminded" marker to `${CLAUDE_PLUGIN_DATA}` or the user's state
+directory, never into the user's repository.
+
+**Keep the hook in exec form, and keep it Node.** The entry is `"command": "node"` with
+`${CLAUDE_PLUGIN_ROOT}` inside `args`. Rewriting it as a shell script, or moving it to shell form,
+breaks Windows. `docs/system-architecture.md` holds the reasoning under "Why the hook is Node and
+not a shell script"; read it before changing the shape, and keep the exec-form check in the
+verification block below passing.
+
+One accepted limit, recorded in the same section: there is no Codex or Cursor wrapper yet, because
+neither event contract could be tested here. That costs a reminder, not a safeguard.
+
 ## Adding or changing a skill touches several files
 
 Nothing generates these, so they drift silently. When adding, renaming, or removing a **skill**:
@@ -154,7 +180,10 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
 5. `shared/artifact-paths.md` (the default output path row)
 6. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-7. All three manifest descriptions, if the count of 12 changes
+7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 18
+   changes. The Codex manifest carries a second copy inside `interface.longDescription`
+8. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
+   `shared/` layer or the profile is for
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -256,6 +285,18 @@ done
 
 # docs/ and docs/vi/ are mirrored
 diff <(ls docs/*.md | xargs -n1 basename) <(ls docs/vi/*.md | xargs -n1 basename)
+
+# The hook parses, is valid Node, and stays silent in a repo that already has a profile
+python3 -c "import json; json.load(open('hooks/hooks.json'))" && echo "OK hooks.json"
+node --check hooks/check-profile.mjs && echo "OK check-profile.mjs"
+out=$(CLAUDE_PROJECT_DIR="$PWD" CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
+test -z "$out" && echo "OK silent with profile"   # fresh marker dir, so silence means the profile
+
+# The hook is registered in exec form; shell form would break bare Windows
+python3 -c "
+import json; h=json.load(open('hooks/hooks.json'))['hooks']['SessionStart'][0]['hooks'][0]
+assert h['command']=='node' and 'args' in h, 'hook must stay in exec form'
+print('OK exec form')"
 
 # Version agreement across the 6 version-bearing files
 grep -h '"version"' package.json .claude-plugin/plugin.json .cursor-plugin/plugin.json \
