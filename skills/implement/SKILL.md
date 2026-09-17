@@ -111,8 +111,9 @@ written. A test written after the code and never seen red proves that it passes,
 
 ### 3. Verify by layer
 
-`references/verification.md` gives what to run per layer, in what order, and what each run actually
-proves. Every command name comes from the Commands section of `.atk/profile.md`.
+`shared/layer-verification.md` gives what to run per layer and what each run actually proves.
+`references/verification.md` adds the order to run things in, how far to reach, and what to do with a
+check that was already red. Every command name comes from the Commands section of `.atk/profile.md`.
 
 Then walk the blast radius: everything that calls what changed. Run what covers it, and state
 plainly what could not be verified and why. An unverified area named in the record is a known gap;
@@ -132,6 +133,10 @@ does not, and the dispute goes into the record.
 Still `BLOCKING` after the second round means stop. Escalate with the remaining findings, each with
 its file and line, and the name of the person who has to look. A third round is where a design
 problem starts being covered by patches.
+
+A loop that comes out clean hands over to `atk:verify`, which runs the application and asserts the
+side effect in real data rather than in the suite. That handoff is offered, not taken, and the record
+says whether it ran.
 
 `--no-review` skips the call. It does not skip the fact: the record says the change went out
 unreviewed and names who must review it before merge. A skipped review that nobody can see in the
@@ -153,7 +158,8 @@ The record holds: what was built and against which acceptance criteria; which pl
 and why; the files changed by layer; which conventions source was used, naming it as the project's
 own or as the baseline; what was verified with which command and what each run proved; what could
 not be verified and why; the review findings, which were fixed and which were deliberately kept;
-and anything noticed but deliberately not done.
+whether `atk:verify` ran on the change, and if not, that nobody has yet seen it run; and anything
+noticed but deliberately not done.
 
 Under `--out` the file opens with the front matter block in `shared/artifact-paths.md`, like every
 other artifact the kit writes, with the author as `owner` and the reviewer as `approver`. In the
@@ -179,5 +185,6 @@ done: this skill is the author, and done is the approver's word.
 - [ ] `atk:review` was called, or `--no-review` was passed and the record says who must review.
 - [ ] Every `BLOCKING` finding is fixed or escalated by name, and no `NIT` was fixed silently.
 - [ ] The review loop ran at most twice before escalating.
+- [ ] The record says whether `atk:verify` ran, and a change nobody has run is named as one.
 - [ ] Anything noticed outside the scope is listed rather than done.
 - [ ] Nothing was pushed, opened, or merged without the yes that `shared/finalize-steps.md` requires.

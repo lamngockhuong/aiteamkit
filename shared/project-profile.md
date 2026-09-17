@@ -92,10 +92,21 @@ A skill in the Required group checks for the section it actually uses, not merel
 
 ### The sentence to use
 
-A Required-group skill that stops says, in the artifact and in the session:
+A Required-group skill that stops because there is no profile at all says, in the artifact and in the
+session:
 
 > No `.atk/profile.md` found in this project. This skill needs the `<section>` section to know how
 > to `<what it would do>`. Run `/atk:init` to create it.
+
+A Required-group skill that stops because the profile exists but the section it needs is absent, or
+still `TBD`, says this instead:
+
+> `.atk/profile.md` has no usable `<section>` section. This skill needs it to know how to `<what it
+> would do>`. Run `/atk:init --audit` to fill it in.
+
+Two sentences rather than one, because the difference matters to the person reading it. "Not found"
+sends someone to create a file that is already there and already committed, and the minute they spend
+establishing that is a minute the sentence cost them.
 
 A Required-soft skill that continues opens its artifact with:
 
