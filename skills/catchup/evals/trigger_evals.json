@@ -1,0 +1,25 @@
+[
+  { "query": "catch me up on this epic before I start coding", "should_trigger": true },
+  { "query": "/atk:catchup https://github.com/acme/app/issues/412", "should_trigger": true },
+  { "query": "summarize this PR for someone who has never seen this module", "should_trigger": true },
+  { "query": "tóm tắt epic này giúp tôi, tôi mới vào dự án", "should_trigger": true },
+  { "query": "giải thích pull request này đang làm gì", "should_trigger": true },
+  { "query": "この Issue のキャッチアップ資料を作って", "should_trigger": true },
+  { "query": "PR のブリーフをまとめて", "should_trigger": true },
+  { "query": "I picked up ticket ABC-88 and I do not understand the feature", "should_trigger": true },
+  { "query": "give me the questions I should be able to answer before implementing this epic", "should_trigger": true },
+  { "query": "I have to review a PR in a module I have never seen, brief me first", "should_trigger": true },
+
+  { "query": "the client sent this chat message, turn it into user stories", "should_trigger": false },
+  { "query": "khách hàng vừa gửi yêu cầu này, làm rõ thành acceptance criteria", "should_trigger": false },
+  { "query": "この要求を要件定義にまとめて", "should_trigger": false },
+  { "query": "split this epic into tasks and assign owners", "should_trigger": false },
+  { "query": "chia epic này thành các task cho từng người", "should_trigger": false },
+  { "query": "review this PR and tell me what is wrong with it", "should_trigger": false },
+  { "query": "approve this pull request if it looks fine", "should_trigger": false },
+  { "query": "estimate how long this epic will take", "should_trigger": false },
+  { "query": "write the technical design for this epic", "should_trigger": false },
+  { "query": "write test cases for this feature", "should_trigger": false },
+  { "query": "onboard the new developer who joins on Monday", "should_trigger": false },
+  { "query": "summarize what changed in the last sprint", "should_trigger": false }
+]

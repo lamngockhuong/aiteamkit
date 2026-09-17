@@ -17,6 +17,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 |-------|----------------|
 | `init` | `.atk/profile.md` (see the exception below) |
 | `intake` | `docs/requirements/<ticket-or-date>-<slug>.md` |
+| `catchup` | `docs/catchup/<ticket-or-date>-<slug>.md` |
 | `estimate` | `docs/planning/estimate-<sprint-or-date>.md` |
 | `design-doc` | `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `breakdown` | `docs/planning/breakdown-<epic>.md` |
