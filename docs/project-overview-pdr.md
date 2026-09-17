@@ -6,10 +6,15 @@
 **company project team**. It is distributed to Claude Code, Cursor, and OpenAI Codex CLI from one
 content tree.
 
-Each skill produces a Markdown artifact that a team can review, approve, and hand to someone who was
+Most skills produce a Markdown artifact that a team can review, approve, and hand to someone who was
 not in the conversation: a requirement document, an estimate sheet, a technical design, a task
 breakdown, a conventions document, a review, a test plan, a release, an incident postmortem, a
 retrospective, an onboarding guide, or a handover.
+
+The rest change the code. Implementing a ticket, fixing a bug, and verifying the result are part of
+the lifecycle a team runs, so they are part of the kit. What separates them from a solo coding
+assistant is where they stop: at the point a role owns the decision, and never before a reviewer has
+something to read.
 
 ## The problem it addresses
 
@@ -40,8 +45,11 @@ different failure modes, and they are process failures, not coding failures:
 
 ## Non-goals
 
-- **Writing application code.** `atk` covers the process around the code. Implementation, debugging,
-  and pipeline work stay with whichever general kit the team already uses.
+- **Operating the team's infrastructure.** `atk` writes the release checklist and the runbook;
+  running the deploy, the pipeline, and the cloud account stays with the team's own tooling.
+- **Depending on another kit.** Every skill runs on what `atk` ships plus the project itself. No
+  skill hands work to a command from a different kit, because a team that installed only this one
+  would hit a dead end.
 - **Replacing a tracker or a test management tool.** `atk` produces the content; the tool stores it.
 - **Deciding for the team.** No skill approves its own output, commits the team, or declares a
   release ready.

@@ -105,9 +105,11 @@ cd aiteamkit
 
 ## Relationship to other kits
 
-`atk` covers the team process around the code. Skills that do the coding itself, such as
-implementation, debugging, and deployment pipelines, are out of scope here and stay in whichever
-general kit you already use. Where an atk skill stops, its `## Scope` section names what takes over.
+`atk` stands on its own. Every skill runs on what the kit ships plus the project it was installed
+into, and no skill hands work to a command from another kit. Where a skill stops, its `## Scope`
+section names the `atk` skill that takes over, or says the work belongs to a person.
+
+Installing `atk` beside another kit is fine. Neither needs to know about the other.
 
 ## License
 

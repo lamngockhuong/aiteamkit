@@ -47,7 +47,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Bốn file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 12 skill trích dẫn:
+Năm file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 12 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và sáu nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
@@ -58,6 +58,13 @@ File thứ tư là hợp đồng giữa hai skill chứ không phải nguyên t�
 - `shared/review-checklist.md`: định dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review`
   trích dẫn theo ID, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một
   lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép lại ở cả hai skill rồi lệch nhau.
+
+File thứ năm mô tả một file không đi kèm kit:
+
+- `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
+  skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
+  tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không nhắc tới.
+  `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
 `shared/` nằm ở gốc repo chứ không nằm trong `skills/`, vì một thư mục bên trong `skills/` mà không
 có `SKILL.md` sẽ gây nhập nhằng cho cơ chế quét skill. Các skill trích dẫn theo dạng

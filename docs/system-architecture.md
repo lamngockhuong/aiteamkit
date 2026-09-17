@@ -47,7 +47,7 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Four files hold what skills would otherwise repeat. The first three are cited by all 12:
+Five files hold what skills would otherwise repeat. The first three are cited by all 12:
 
 - `shared/team-roles.md`: the role table and the six rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
@@ -58,6 +58,13 @@ The fourth is a contract between two skills rather than a kit-wide rule:
 - `shared/review-checklist.md`: the rule record format that `atk:convention` writes and `atk:review`
   cites by ID, plus the baseline items that hold in any project. It exists so a convention is
   written once and checked in the same words, instead of being restated in both skills and drifting.
+
+The fifth describes a file that does not ship with the kit at all:
+
+- `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
+  skill does when that file is missing. Skills that run commands stop; skills that only read a diff
+  continue and say the profile was absent; skills that work from a chat message ignore it entirely.
+  `atk:init` writes the profile, so it belongs to no group.
 
 `shared/` sits at the repository root rather than under `skills/`, because a folder inside `skills/`
 without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `shared/<file>.md`,
