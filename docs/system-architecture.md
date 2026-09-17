@@ -10,11 +10,19 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-  skills/<name>/SKILL.md        12 skills, one folder each
-  shared/*.md                   DRY layer shared by all 12 skills
+  skills/<name>/SKILL.md        18 skills, one folder each
+  skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
+  skills/<name>/evals/*.json    trigger cases for the description
+  shared/*.md                   DRY layer shared by the skills that cite it
+  hooks/                        session-start reminder, Claude Code only
   assets/*.svg                  icon and logo for marketplace listings
   docs/, docs/vi/               bilingual project documentation
 ```
+
+Nothing in this tree describes the project the kit is installed into. That lives in one file in the
+**target project**, `.atk/profile.md`, written by `atk:init` and committed with the project. The
+plugin directory is read-only and shared by every project on the machine, so it is the wrong place
+for a fact that is true of one of them.
 
 ## One content tree, three manifests
 
@@ -40,26 +48,35 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for all 12 skills | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for all 18 skills | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
+| `.atk/profile.md` | Once per run, in the skills that need project facts | A page of pointers and commands, never prose |
 
 ## The `shared/` layer
 
-Five files hold what skills would otherwise repeat. The first three are cited by all 12:
+Seven files hold what skills would otherwise repeat. The first three are cited by all 18:
 
 - `shared/team-roles.md`: the role table and the six rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
-The fourth is a contract between two skills rather than a kit-wide rule:
+Three are contracts between a named handful of skills rather than kit-wide rules:
 
 - `shared/review-checklist.md`: the rule record format that `atk:convention` writes and `atk:review`
   cites by ID, plus the baseline items that hold in any project. It exists so a convention is
   written once and checked in the same words, instead of being restated in both skills and drifting.
+  `atk:implement` reads it for the baseline items alone, as a fallback when a project has recorded
+  no conventions of its own.
+- `shared/finalize-steps.md`: the closing sequence for a code change, and the consent line that
+  every action past the commit has to cross. Cited by `atk:fix`, `atk:implement`, and `atk:verify`,
+  the three skills that change code. Nothing leaves the local repository without being asked for.
+- `shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
+  proves, and what it does not. Cited by the same three. Each of them runs a check and then has to
+  say what the result means, and the second half of that answer has to be identical in all three.
 
-The fifth describes a file that does not ship with the kit at all:
+The seventh describes a file that does not ship with the kit at all:
 
 - `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
@@ -69,7 +86,49 @@ The fifth describes a file that does not ship with the kit at all:
 `shared/` sits at the repository root rather than under `skills/`, because a folder inside `skills/`
 without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `shared/<file>.md`,
 which resolves to `../../shared/<file>.md` from a skill file; both spellings appear in each shared
-file's header.
+file's header. `.atk/profile.md` is the exception: it is cited from the root of the target project,
+because it is not part of the kit.
+
+## The session-start hook
+
+`hooks/hooks.json` registers one `SessionStart` hook that runs `hooks/check-profile.mjs`. It answers
+a single question, "does this project have a profile yet", and it reminds without blocking.
+
+The boundary is the point. A hook that blocked would put the rule in two places, and the rule is not
+uniform anyway: nine skills need no profile, and a hook that stopped everything would stop
+`atk:intake` from turning a chat message into requirements, which needs nothing from the repository.
+Which skill needs what, and what it does without it, stays in `shared/project-profile.md`.
+
+The boundary also holds by construction on this harness. Claude Code's hook contract says
+`SessionStart` cannot block: exit code 2 takes no blocking action there, and any exit code sends
+stdout to the model as context. The script exits 0 on every path regardless, and prints nothing when
+there is nothing to say: no git entry in the directory, a profile already present, or a reminder
+already given for this project. The "already reminded" marker is written to `${CLAUDE_PLUGIN_DATA}`
+when the harness provides it and to the user's state directory otherwise, never into the user's
+repository and never into a world-writable directory.
+
+### Why the hook is Node and not a shell script
+
+This section is the reason of record. `CLAUDE.md` and the comment at the top of the script point
+here rather than restating it.
+
+The hook is registered in **exec form**: `"command": "node"` plus an `args` array. Claude Code
+documents exec form as resolving the executable on `PATH` and spawning it directly, substituting
+`${CLAUDE_PLUGIN_ROOT}` itself, with no shell involved on any platform.
+
+That matters because shell form does not behave the same everywhere. Claude Code runs a shell-form
+hook under bash, except on Windows without Git Bash, where it falls back to PowerShell. A POSIX
+shell script would therefore fail to spawn there, and a hook that fails to spawn is not silent: the
+session shows `Failed with non-blocking status code` with the interpreter's message. Hooks have no
+operating-system condition, so a second PowerShell copy could not be registered without firing on
+Linux and macOS too. One portable interpreter is what lets the three platforms behave alike.
+
+One limit, accepted:
+
+- **Claude Code only.** Codex and Cursor can package hooks too, but each uses its own event names
+  and output contract, and neither could be tested here. The reminder is a convenience; the gate
+  that matters is in the skills, and it runs identically on all three harnesses. The other two
+  wrappers wait until someone can verify them against a running harness.
 
 ## Skill anatomy
 
@@ -93,6 +152,7 @@ title + intro      what this produces and the one habit that makes it work
 user request
    -> harness matches description triggers
    -> SKILL.md body loads
+   -> skill reads .atk/profile.md when it needs project facts
    -> skill reads project evidence (code, git, CI, tracker) and shared/ references
    -> skill interviews only for what evidence cannot answer
    -> Markdown artifact written into the target project under docs/

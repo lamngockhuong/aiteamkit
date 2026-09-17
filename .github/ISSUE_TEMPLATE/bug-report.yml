@@ -27,19 +27,27 @@ body:
       label: Component
       description: Which part of atk is affected?
       options:
+        - Skill - atk:init
         - Skill - atk:intake
+        - Skill - atk:catchup
         - Skill - atk:estimate
         - Skill - atk:design-doc
         - Skill - atk:breakdown
         - Skill - atk:convention
+        - Skill - atk:plan
+        - Skill - atk:implement
+        - Skill - atk:fix
         - Skill - atk:review
         - Skill - atk:qa
+        - Skill - atk:verify
         - Skill - atk:release
         - Skill - atk:incident
         - Skill - atk:retro
         - Skill - atk:onboard
         - Skill - atk:handover
+        - Project profile (.atk/profile.md)
         - Shared references (shared/)
+        - Session start hook (hooks/)
         - Plugin manifest / installation
         - Documentation
         - Other / unsure

@@ -1,7 +1,7 @@
 # Tổng quan các skill
 
-Mười hai skill, mỗi skill ứng với một chặng trong vòng đời delivery của team. Mỗi mục nói rõ skill
-sinh ra gì, khi nào nên dùng, và khi nào không nên.
+Mười tám skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
 với một skill.
@@ -9,12 +9,42 @@ với một skill.
 ## Vị trí trong vòng đời
 
 ```
-intake -> estimate -> design-doc -> breakdown -> convention -> review -> qa -> release
-                                                                                  |
-                         onboard / handover (bất kỳ lúc nào)    incident <--------+
-                                                                    |
-                                                                  retro
+init -> intake -> catchup -> estimate -> design-doc -> breakdown -> convention
+                                                                        |
+                                                                        v
+           release <- verify <- qa <- review <- implement <- plan <------+
+              |
+              v
+           incident -> retro
+
+  fix        khi có lỗi được báo, ở bất kỳ điểm nào
+  onboard    khi có người vào
+  handover   khi có người rời đi, hoặc một phase kết thúc
 ```
+
+`atk:init` chạy một lần cho mỗi dự án. Nó viết ra `.atk/profile.md`, file cho các skill có động tới
+mã nguồn biết dự án này test thế nào, build ra sao và chia tầng thế nào. `atk:implement`, `atk:fix`
+và `atk:verify` dừng nếu thiếu nó. `atk:plan` vẫn chạy tiếp nhưng nói rõ trong artifact phần nào là
+suy đoán. Những skill còn lại chạy mà không cần tới nó.
+
+---
+
+## `atk:init`
+
+**Sinh ra.** File `.atk/profile.md` trong dự án. Nó ghi lệnh test, build và lint của từng app, bố
+cục các tầng kèm tài liệu chuẩn và module mẫu cho mỗi tầng, các thư mục docs, tracker và nơi đặt tài
+liệu đặc tả, cùng ai duyệt cái gì. Mục cuối nói cách khởi động ứng dụng và cách xác nhận một tác động
+đã thật sự xảy ra trong dữ liệu.
+
+**Dùng khi.** Một team cài `atk` vào dự án lần đầu, và dùng lại khi dự án đã đi xa hơn những gì
+profile đang ghi. Cờ `--audit` đối chiếu profile hiện có với repo và không sửa gì.
+
+**Không dùng khi.** Bạn muốn cấu hình kit một lần cho mọi dự án. Một profile chỉ đúng với một dự án
+và được commit cùng dự án đó; bản thân kit không giữ sự thật nào của dự án.
+
+**Thói quen tạo ra khác biệt.** Nó đọc repo trước khi hỏi. Câu nào mà file manifest, workflow CI hay
+thư mục test đã trả lời được thì nó không đem ra hỏi người. Phần không file nào trả lời được sẽ thành
+`TBD` kèm tên người nợ câu trả lời, chứ không thành một phỏng đoán.
 
 ---
 
@@ -33,6 +63,24 @@ hướng kỹ thuật (`atk:design-doc`).
 **Thói quen tạo ra khác biệt.** Những tiêu chí kiểu "chạy đúng" hay "nhanh" bị từ chối chứ không
 được ghi nhận cho qua. Chúng phải trở thành một con số, một trạng thái, một kết quả nhìn thấy được,
 hoặc một câu hỏi còn treo.
+
+---
+
+## `atk:catchup`
+
+**Sinh ra.** Với một epic: công việc là gì và làm cho ai, vì sao làm lúc này, cái gì trong và ngoài
+phạm vi, ai quyết cái gì, những thuật ngữ người mới sẽ không hiểu, những chỗ dễ làm sai, và phần tự
+kiểm hiểu bài mà dev phải trả lời trước khi viết dòng mã nào. Với một pull request: cùng bản
+tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm.
+
+**Dùng khi.** Một người nhận epic mà họ không tham gia soạn, vào một việc đang chạy giữa chừng, hoặc
+phải review một pull request ở mảng họ không nắm.
+
+**Không dùng khi.** Người đó mới với cả dự án chứ không riêng phần việc đang làm (`atk:onboard`),
+hoặc bản thân yêu cầu còn mập mờ chứ không chỉ là lạ lẫm (`atk:intake`).
+
+**Thói quen tạo ra khác biệt.** Phần tự kiểm do dev trả lời, không phải do skill điền sẵn. Một bản
+tóm tắt không bắt ai phản hồi là bản tóm tắt không ai đọc.
 
 ---
 
@@ -104,6 +152,63 @@ trong `shared/review-checklist.md`, đó là thứ cho phép `atk:review` trích
 
 ---
 
+## `atk:plan`
+
+**Sinh ra.** Mã nguồn hiện đang làm gì, kèm đường dẫn file; các phase mà mỗi phase kết thúc bằng thứ
+người review nhìn được; các bước bên trong một phase mà mỗi bước để lại cây mã vẫn chạy được; mỗi
+bước động vào đâu và được kiểm bằng gì; phần cố ý để ngoài phạm vi; và phần còn chưa rõ kèm tên người
+phải trả lời.
+
+**Dùng khi.** Trước khi bắt đầu một phần việc đủ lớn để cần chia chặng, hoặc khi tiếp quản thứ do
+người khác thiết kế mà các bước không hiển nhiên.
+
+**Không dùng khi.** Việc phải chia cho nhiều người, đó là `atk:breakdown`; hoặc việc chỉ là một thay
+đổi trong một file, khi bản kế hoạch tốn hơn chính phần việc.
+
+**Thói quen tạo ra khác biệt.** Một phase không kết thúc được bằng thứ đem duyệt được thì không phải
+phase, mà là một quãng nghỉ. Các bước được xếp sao cho cây mã vẫn chạy ở mọi ranh giới, và chính điều
+đó khiến việc dừng giữa chừng trở nên an toàn.
+
+---
+
+## `atk:implement`
+
+**Sinh ra.** Mã nguồn, cộng một bản ghi triển khai sẽ trở thành phần mô tả pull request: đã đổi gì và
+vì sao, phủ những bước nào trong kế hoạch, lệnh đã chạy cho từng tầng kèm output của nó, và phần cố ý
+chưa làm.
+
+**Dùng khi.** Một ticket, một bản kế hoạch, hoặc một yêu cầu đã mô tả rõ đã sẵn sàng để làm, và câu
+hỏi còn lại là làm thế nào chứ không phải làm cái gì.
+
+**Không dùng khi.** Yêu cầu còn mập mờ (`atk:intake`), hoặc phần việc là truy nguyên nhân một lỗi
+(`atk:fix`).
+
+**Thói quen tạo ra khác biệt.** Cổng kế hoạch có ba mức chứ không phải hai nhánh. Thay đổi nhỏ đi
+thẳng vào code. Thay đổi vừa thì gọi `atk:plan`, xác nhận bằng một câu, rồi đi tiếp. Chỉ thay đổi
+chạm vào schema, hợp đồng công khai, nhiều service, hoặc còn một quyết định kiến trúc bỏ ngỏ mới dừng
+chờ người duyệt. Soạn một danh sách bước thì không cần người duyệt; quyết kiến trúc thì cần.
+
+---
+
+## `atk:fix`
+
+**Sinh ra.** Lỗi được ghi lại nguyên văn, nguyên nhân được chứng minh chứ không phải đoán, và một
+lượt kiểm xem hành vi hiện tại có phải là quyết định ai đó đưa ra có chủ ý. Sau đó là thay đổi nhỏ
+nhất gỡ được nguyên nhân, kiểm chứng theo tầng, và báo cáo nói rõ đã kiểm những gì và chưa kiểm những
+gì.
+
+**Dùng khi.** Có một bug report, một test đang đỏ, một endpoint hay một màn hình hỏng, hoặc một cuộc
+điều tra phải kết thúc bằng lời giải thích chứ không phải phỏng đoán.
+
+**Không dùng khi.** Production đang chết ngay lúc này: `atk:incident` điều phối cuộc ứng cứu, còn
+skill này nằm bên trong đó. Hoặc chẳng có gì hỏng và mã chỉ đang khó chịu, vốn không phải một lỗi.
+
+**Thói quen tạo ra khác biệt.** Không file nào đổi trước khi nguyên nhân được chứng minh. Cờ
+`--investigate-only` tồn tại vì lời giải thích thường đã là toàn bộ sản phẩm cần giao, và dừng ở đó
+là một kết quả hợp lệ chứ không phải một việc dang dở.
+
+---
+
 ## `atk:review`
 
 **Sinh ra.** Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới
@@ -136,6 +241,25 @@ test case viết ra.
 
 **Thói quen tạo ra khác biệt.** Truy vết chạy cả hai chiều, nên tiêu chí chưa được test và test case
 không gắn tiêu chí nào đều lộ ra.
+
+---
+
+## `atk:verify`
+
+**Sinh ra.** Ứng dụng được khởi động đúng cách dự án này khởi động nó, rồi được tác động bằng
+request thật. Tác động sinh ra được khẳng định trong dữ liệu chứ không phải trong mã trạng thái, màn
+hình được đối chiếu với bản thiết kế khi truyền `--ui`, và báo cáo nói rõ đã chứng minh được gì, chưa
+chứng minh được gì.
+
+**Dùng khi.** Bộ test đã xanh mà chưa ai nhìn thấy tính năng chạy, trước khi chuyển ticket cho QA,
+hoặc trước khi một bản release đi ra.
+
+**Không dùng khi.** Profile chưa có mục `Verify` nói cách khởi động ứng dụng và cách xác nhận một tác
+động. Skill dừng thay vì đoán lệnh khởi động, vì một lệnh đoán mà thoát 0 sẽ được đọc như bằng chứng.
+
+**Thói quen tạo ra khác biệt.** Một mã 200 không phải là kết quả. Skill khẳng định đúng cái dòng dữ
+liệu, cái file, hoặc cái tin nhắn mà request lẽ ra phải sinh ra. Nó cũng dừng sau ba vòng và báo lên
+một người có tên, thay vì cứ vá cho tới khi có thứ gì đó xanh.
 
 ---
 
@@ -222,11 +346,17 @@ bởi người tiếp quản, không bao giờ do người rời đi tự tuyên
 
 ## Bắt đầu áp dụng
 
-Bắt đầu từ chặng đang đau nhất. Ba điểm vào thường gặp:
+Bắt đầu từ chặng đang đau nhất. Năm điểm vào thường gặp:
 
 - Yêu cầu tới mập mờ: `atk:intake`, rồi `atk:qa` khi đã có tiêu chí.
 - Review thiếu nhất quán: `atk:convention`, rồi `atk:review` dựa trên nó.
 - Kiến thức cứ đi theo người: `atk:handover` và `atk:onboard`.
+- Lỗi cứ quay lại vì nguyên nhân chưa bao giờ được tìm ra: `atk:fix`.
+- Tính năng tới tay QA mà mới chỉ được nhìn thấy xanh trên CI: `atk:init`, rồi `atk:verify`.
+
+`atk:implement`, `atk:fix` và `atk:verify` đòi có `.atk/profile.md` trước khi làm bất cứ việc gì, còn
+`atk:plan` có nó thì cho ra kế hoạch tốt hơn. Mọi skill còn lại chạy được trên một bản clone mới
+tinh, chưa cài đặt gì.
 
 Các artifact ghép được với nhau, vì mỗi skill sẽ đọc artifact của bước trước nếu có, nhưng không
 skill nào bắt buộc phải có nó.

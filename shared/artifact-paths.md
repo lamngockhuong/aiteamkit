@@ -21,13 +21,13 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `estimate` | `docs/planning/estimate-<sprint-or-date>.md` |
 | `design-doc` | `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `breakdown` | `docs/planning/breakdown-<epic>.md` |
-| `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
 | `convention` | `docs/conventions.md` (and `CONTRIBUTING.md` when the project has one) |
+| `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
 | `implement` | The code; the implementation record becomes the pull request body, and an optional file goes to `docs/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | Review comments go to the pull request; an optional report goes to `docs/reviews/<pr>-<date>.md` |
-| `verify` | `docs/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/verification/<ticket-or-date>-<slug>/` beside it |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md` |
+| `verify` | `docs/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/verification/<ticket-or-date>-<slug>/` beside it |
 | `release` | `docs/releases/<version>.md` |
 | `incident` | `docs/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
 | `retro` | `docs/retros/<sprint-or-date>.md` |
