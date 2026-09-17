@@ -73,7 +73,7 @@ frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `##
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Five files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Six files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -84,13 +84,15 @@ skill discovery.
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
 | `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
+| `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
 
-The first three are cited by all 12 skills; `review-checklist.md` is cited by `convention` and
+The first three are cited by every skill. `review-checklist.md` is cited by `convention` and
 `review` only, because it is a contract between exactly those two: `convention` writes the rule rows
-and `review` cites their IDs.
+and `review` cites their IDs. `finalize-steps.md` is cited by the two skills that change code, and
+holds the rule that nothing leaves the local repository without being asked for.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or

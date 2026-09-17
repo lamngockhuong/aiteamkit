@@ -22,6 +22,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `design-doc` | `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `breakdown` | `docs/planning/breakdown-<epic>.md` |
 | `convention` | `docs/conventions.md` (and `CONTRIBUTING.md` when the project has one) |
+| `fix` | `docs/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | Review comments go to the pull request; an optional report goes to `docs/reviews/<pr>-<date>.md` |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md` |
 | `release` | `docs/releases/<version>.md` |

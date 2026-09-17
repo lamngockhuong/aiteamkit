@@ -22,8 +22,9 @@ Handles: structuring the live response, recording the timeline, classifying seve
 proving root cause, writing the blameless postmortem, generating follow-up actions, and writing or
 updating the runbook.
 
-Does NOT handle: fixing the code, which the responder does; deploying the hotfix (`atk:release`); or
-assigning blame, which is never an output of this skill.
+Does NOT handle: fixing the code, which is `atk:fix` once the service is stable and the timeline no
+longer needs a responder's attention; deploying the hotfix (`atk:release`); or assigning blame,
+which is never an output of this skill.
 
 ## Roles
 
