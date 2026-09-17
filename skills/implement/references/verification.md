@@ -1,18 +1,16 @@
 # Verification
 
 Loaded by `atk:implement` after the code is written, and again after each round of review fixes.
-It answers three questions: what to run, in what order, and what the run is allowed to be said to
-prove.
+It answers the questions that are this skill's own: in what order to run things, how far to reach,
+and what to do about a check that was already failing.
 
-Commands and layer names are blanks here, filled from the Commands and Layers sections of
-`.atk/profile.md`. A tool named in this file would be right for one repository and wrong for every
-other, and would be copied anyway because a written command looks authoritative. The five layers
-below are the common shape; a project with other layers uses its own names and the same columns.
+What to run per layer, and what each run may be said to prove, is in `shared/layer-verification.md`.
+Read it alongside this file. It is shared because `atk:fix` and `atk:verify` answer that same
+question for their own reasons, and a correction to what a run proves has to reach all three.
 
-`atk:fix` verifies by layer too, from `skills/fix/references/layer-playbooks.md`. That file answers
-where a cause usually hides and how to reproduce it; this one answers what to run after writing
-code, in what order, and what the run may be said to prove. The per-layer rows overlap by design,
-and the overlap is the place to watch: a correction made to what a run proves belongs in both.
+Commands and layer names are blanks in both files, filled from the Commands and Layers sections of
+`.atk/profile.md`. A tool named here would be right for one repository and wrong for every other,
+and would be copied anyway because a written command looks authoritative.
 
 ## Order
 
@@ -30,17 +28,10 @@ Running the build first is how twenty minutes get spent proving that a typo is s
 
 ## Per layer
 
-| Layer | Run | A pass proves | It does not prove |
-|-------|-----|---------------|-------------------|
-| Presentation | The component test command | The component renders right for the values under test | Anything about the values not under test, or about the live screen |
-| Interface | The request or integration test command | The contract holds for the covered cases, status code included | That every consumer of a changed response shape was updated |
-| Domain | The unit test command | The rule behaves for the covered inputs | That callers pass the inputs the rule now expects |
-| Data | The migration command forward and back, then the integration test command | The migration reverses, and the queries return what is asserted | That existing rows survive it, unless the run had some |
-| Infrastructure | The tool's own validate or parse command | The file is well formed and its references resolve | That the deployment works. Nothing here proves that |
-
-The fourth column is the one that gets dropped, and it is the one that makes the record honest. A
-verification section that lists only passes reads as a claim that the change is correct. It is a
-claim that some checks passed.
+`shared/layer-verification.md` holds the table: the command for each layer, what a pass proves, and
+what it does not. Its `Run` column is step 2 of the order above. Step 1 is narrower than any row
+there, being the single unit or component that changed, and the table has no column for it. The
+record is written from the last two columns.
 
 ## The blast radius
 
@@ -76,8 +67,9 @@ because the order was kept.
 
 ## What to write down
 
-For each run: the command as it came from the profile, the result, and what it covers. Then the list
-from the fourth column above for anything that could not be checked, and the pre-existing failures.
+For each run: the command as it came from the profile, the result, and what it covers. Then, for
+anything that could not be checked, the last column of the table in `shared/layer-verification.md`,
+and the pre-existing failures.
 
 The record never says "verified" without naming what was run. It is the word most likely to be
 believed and least likely to be checked.

@@ -102,8 +102,10 @@ impossible on the day it is needed.
 
 ### 4. Verify by layer
 
-`references/layer-playbooks.md` gives, per layer, what to run and what it proves. Every command name
-comes from the Commands section of `.atk/profile.md`.
+`shared/layer-verification.md` gives, per layer, what to run and what the run proves.
+`references/layer-playbooks.md` adds what is this skill's own: where the cause hides, how to
+reproduce it, and what belongs in the commit. Every command name comes from the Commands section of
+`.atk/profile.md`.
 
 Re-run the reproduction captured in step 1 and show that it no longer reproduces. That comparison is
 the point of having captured it verbatim.

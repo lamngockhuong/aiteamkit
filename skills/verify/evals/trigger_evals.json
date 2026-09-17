@@ -1,0 +1,27 @@
+[
+  { "query": "the tests pass but nobody has actually run this, verify it works", "should_trigger": true },
+  { "query": "/atk:verify checkout-flow --ui", "should_trigger": true },
+  { "query": "start the app and check the order really gets written to the database", "should_trigger": true },
+  { "query": "kiểm chứng tính năng này trên app chạy thật trước khi giao cho QA", "should_trigger": true },
+  { "query": "chạy thử thật xem đơn hàng có được ghi vào database không", "should_trigger": true },
+  { "query": "test thực tế cái màn hình này giúp tôi", "should_trigger": true },
+  { "query": "đối chiếu thiết kế với màn hình vừa làm xong", "should_trigger": true },
+  { "query": "動作確認をお願いします", "should_trigger": true },
+  { "query": "実機確認して、DBにレコードが入るか見てほしい", "should_trigger": true },
+  { "query": "画面確認、デザインと合っているか見て", "should_trigger": true },
+  { "query": "confirm the job actually lands on the queue, not just that the endpoint returns 200", "should_trigger": true },
+  { "query": "run the feature end to end and screenshot the screens at mobile and desktop width", "should_trigger": true },
+
+  { "query": "write the test cases for the login screen", "should_trigger": false },
+  { "query": "viết test case cho màn hình đăng nhập", "should_trigger": false },
+  { "query": "テストケースを書いて", "should_trigger": false },
+  { "query": "write a test plan for this sprint with exit criteria", "should_trigger": false },
+  { "query": "what should QA check before this goes out", "should_trigger": false },
+  { "query": "the report total is wrong, find out why", "should_trigger": false },
+  { "query": "sửa bug này, danh sách trả về rỗng", "should_trigger": false },
+  { "query": "implement the CSV export", "should_trigger": false },
+  { "query": "review this pull request before I approve it", "should_trigger": false },
+  { "query": "production is down, checkout is failing for everyone", "should_trigger": false },
+  { "query": "write the release notes for version 2.3", "should_trigger": false },
+  { "query": "add a unit test for this function", "should_trigger": false }
+]

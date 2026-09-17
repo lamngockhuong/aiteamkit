@@ -62,18 +62,26 @@ skills/<name>/
   evals/trigger_evals.json    optional; array of {query, should_trigger} for description testing
 ```
 
-Current skills are skeletons: `SKILL.md` only, around 95 to 105 lines each, with no `references/`
-or `evals/` yet. Deepening a skill means adding `references/` files and pointing at them from the
-relevant workflow step, not growing `SKILL.md` past 300 lines.
+The twelve original skills are still skeletons: `SKILL.md` only, around 95 to 105 lines each, with no
+`references/` or `evals/`. The six added since (`init`, `catchup`, `plan`, `implement`, `fix`,
+`verify`) carry both. Deepening a skill means adding `references/` files and pointing at them from
+the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
 `## Invocation`, `## Workflow` (ASCII pipeline then numbered steps), `## Output`, `## Ticket`,
 `## Definition of done`.
 
+One skill carries an extra section: `verify` adds `## Process management` between `## Workflow` and
+`## Output`. It is the only skill that starts long-running processes, and the rules for not leaving
+them behind are binding policy that two separate workflow steps defer to, so burying them inside one
+step would hide a rule the other step also has to obey. That is the bar for an extra section: a rule
+the workflow points at from more than one place, in a skill that does something no other skill does.
+Anything narrower goes inside the step it belongs to.
+
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Six files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Seven files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -84,7 +92,8 @@ skill discovery.
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
 | `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
-| `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement` |
+| `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
+| `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -92,9 +101,16 @@ Both spellings appear in each shared file's header so an agent can resolve the p
 The first three are cited by every skill. The rule record format in `review-checklist.md` is a
 contract between exactly two: `convention` writes the rule rows and `review` cites their IDs.
 `implement` reads the same file for one thing only, the baseline items, which it falls back to when
-the project has recorded no conventions of its own. `finalize-steps.md` is cited by the two skills
+the project has recorded no conventions of its own. `finalize-steps.md` is cited by the three skills
 that change code, and holds the rule that nothing leaves the local repository without being asked
-for.
+for. `verify` is one of them because the fixes it makes between retry rounds are code like any other.
+
+`layer-verification.md` is a contract between the same three: each runs a check and then has to say
+what the result means, and the answer to that second half has to be the same in all three. Each keeps
+its own half beside its own workflow, which is why `skills/fix/references/layer-playbooks.md` still
+holds where a cause hides, `skills/implement/references/verification.md` still holds the order to run
+things in, and `skills/verify/references/runtime-checks.md` still holds how to assert against a
+running system.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or

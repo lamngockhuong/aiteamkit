@@ -4,9 +4,9 @@ Shared closing sequence for every `atk` skill that changes code. Referenced from
 `skills/<name>/SKILL.md` as `shared/finalize-steps.md`, which is `../../shared/finalize-steps.md`
 relative to a skill file.
 
-Cited by `fix` and `implement`. Reaching this file means the change is finished and verified by
-whatever the calling skill counts as verification. What is left is putting it where the team can see
-it, in the order that keeps it reviewable.
+Cited by `fix`, `implement`, and `verify`. Reaching this file means the change is finished and
+verified by whatever the calling skill counts as verification. What is left is putting it where the
+team can see it, in the order that keeps it reviewable.
 
 ## The consent line
 

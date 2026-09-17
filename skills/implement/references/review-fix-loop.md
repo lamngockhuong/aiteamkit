@@ -86,6 +86,20 @@ nobody. Rule 1 in `shared/team-roles.md` applies here as anywhere: an owner is a
 Nothing is pushed, opened, or merged after an escalation. The change stays committed on its branch,
 where the named person can read it.
 
+## When the loop comes out clean
+
+A clean loop means no `BLOCKING` finding remains. It does not mean anybody has seen the change run.
+Everything verified up to this point was verified by the suite, and the suite is a set of checks
+somebody wrote earlier against what they expected.
+
+So the loop hands over to `atk:verify`, which starts the application and asserts the side effect in
+real data. Offer it, with what to verify and against which acceptance criteria, and record in the
+implementation record whether it ran. Work that goes to a reviewer having never been run is worth
+flagging as exactly that, in the record, where the reviewer can see it.
+
+The handoff is an offer and not an automatic step, because `atk:verify` starts processes and writes
+real side effects, and `shared/finalize-steps.md` holds the rule about acting on an assumed yes.
+
 ## Under `--no-review`
 
 The loop does not run. The record says so in its own line: that the review was skipped, that the
