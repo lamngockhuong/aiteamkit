@@ -139,6 +139,9 @@ shared front matter block: the sections from the mode table in step 4, then the 
 spec author from step 6, which closes the artifact in both modes because it is the part that leaves
 it.
 
+Where the feature crosses roles or services, one diagram in the scope section earns its place, drawn
+per `shared/diagram-conventions.md`. A feature that lives in one module does not get one.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Offer the questions for the spec author as a comment on the epic

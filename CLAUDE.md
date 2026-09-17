@@ -82,7 +82,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Seven files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Eight files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -95,6 +95,7 @@ skill discovery.
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
 | `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
+| `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -184,6 +185,8 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 8. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
+9. `docs/flow/project-flow.md` and `docs/flow/skill-chain.md`, plus both `docs/vi/flow/` mirrors.
+   Each names all 18 skills: the phase table and the consumes/produces table respectively
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -224,11 +227,37 @@ grep -rn "—" . --exclude-dir=.git --exclude-dir=.atk --exclude=CLAUDE.md | gre
 
 Should print nothing (`grep` exits 1).
 
+## Diagrams are Mermaid, except where they are not
+
+Every flow, graph, and diagram in a doc, in the README, or in an artifact a skill produces is a
+fenced `mermaid` block. The drawing rules are in `shared/diagram-conventions.md`, which is also what
+the five diagram-producing skills cite; do not restate them here or in a `SKILL.md`.
+
+Two places keep plain ASCII on purpose:
+
+- **The `## Workflow` pipeline in every `SKILL.md`.** An agent reads a skill body in a terminal,
+  where Mermaid does not render, so a diagram there costs tokens on every invocation and shows the
+  reader nothing. The one-line ASCII pipeline is the contract; `docs/system-architecture.md` records
+  it under "Skill anatomy".
+- **Directory trees.** Mermaid has no tree shape worth the trouble, and an indented listing is
+  already the form every reader knows.
+
+After edits, verify. The one exclusion is the file that quotes the banned pattern in order to
+document it:
+
+```bash
+grep -rn "style .* fill:#" skills/ shared/ docs/ README.md \
+  | grep -v shared/diagram-conventions.md
+```
+
+Should print nothing: a hardcoded fill is black text on a pale background for every reader in a dark
+theme, which is most of them on a tracker.
+
 ## Docs are bilingual
 
-`docs/` is the English source of truth; `docs/vi/` mirrors it file-for-file with the same filenames.
-Every `docs/*.md` must have a `docs/vi/*.md` counterpart; adding or renaming one means doing the
-same on the other side.
+`docs/` is the English source of truth; `docs/vi/` mirrors it file-for-file with the same filenames,
+subdirectories included. Every `docs/**/*.md` must have a `docs/vi/**/*.md` counterpart at the same
+relative path; adding or renaming one means doing the same on the other side.
 
 | File | Purpose |
 |------|---------|
@@ -237,6 +266,8 @@ same on the other side.
 | `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
+| `flow/project-flow.md` | The 18 skills placed in delivery phases, with the author and approver of each artifact |
+| `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 
 ## Release flow (release-please, pre-1.0 mode)
 
@@ -284,7 +315,8 @@ for d in skills/*/; do
 done
 
 # docs/ and docs/vi/ are mirrored
-diff <(ls docs/*.md | xargs -n1 basename) <(ls docs/vi/*.md | xargs -n1 basename)
+diff <(cd docs && find . -name '*.md' -not -path './vi/*' | sort) \
+     <(cd docs/vi && find . -name '*.md' | sort)
 
 # The hook parses, is valid Node, and stays silent in a repo that already has a profile
 python3 -c "import json; json.load(open('hooks/hooks.json'))" && echo "OK hooks.json"

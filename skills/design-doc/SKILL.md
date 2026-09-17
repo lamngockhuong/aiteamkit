@@ -83,7 +83,9 @@ from the existing `docs/adr/` directory. Set `status: IN REVIEW` and list the re
 ## Output
 
 Design at `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
-`shared/artifact-paths.md`. Diagrams are inline Mermaid so they stay readable in a pull request.
+`shared/artifact-paths.md`. Diagrams are inline Mermaid so they stay readable in a pull request,
+drawn per `shared/diagram-conventions.md`: a sequence or component diagram beside the option it
+belongs to, and nothing the prose does not also say.
 
 ## Ticket
 

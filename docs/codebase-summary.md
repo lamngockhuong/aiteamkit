@@ -35,6 +35,7 @@ removed, or renamed; update it in the same commit.
 | `shared/project-profile.md` | What `.atk/profile.md` holds in the target project, why it lives there rather than in the kit, and the three-group rule deciding whether a skill stops, degrades, or ignores a missing profile |
 | `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross. Cited by `fix`, `implement`, and `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not. Cited by `fix`, `implement`, and `verify`, so all three say the same thing about the same result |
+| `shared/diagram-conventions.md` | When a diagram earns its place in an artifact, the four shapes the kit draws (approval flow, dependency graph, sequence, causal chain), and the rules that keep them readable: Mermaid only, `<br/>` not a literal newline, roles instead of names, both branches on every decision, no hardcoded fill colours. Cited by `catchup`, `design-doc`, `plan`, `breakdown`, and `incident` |
 
 ## Hooks
 
@@ -123,7 +124,9 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/skills-overview.md` | Per skill: what it produces, when to use, when not to, and the one habit that makes it work |
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
-| `docs/vi/*.md` | Vietnamese mirror of the five files above |
+| `docs/flow/project-flow.md` | The 18 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
+| `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
+| `docs/vi/**/*.md` | Vietnamese mirror of the seven files above, at the same relative paths |
 
 ## GitHub
 

@@ -1,0 +1,89 @@
+# Chuỗi skill
+
+Mỗi skill đọc gì, để lại gì, và skill nào nhặt thứ đó lên tiếp. Các pha và cửa duyệt giữa chúng nằm
+ở [project-flow.md](./project-flow.md); tài liệu này nói về artifact.
+
+Đường dẫn output chính xác không chép lại ở đây. Chúng nằm một chỗ duy nhất là
+`shared/artifact-paths.md`, và khi hai bên lệch nhau thì file đó đúng.
+
+## Chuỗi
+
+Các nút là artifact. Nhãn trên mũi tên là skill biến artifact này thành artifact kia.
+
+```mermaid
+flowchart LR
+    A0["Yêu cầu thô<br/><small>chat, mail, ticket</small>"]
+    A1["Yêu cầu<br/><small>user story, tiêu chí, câu hỏi bỏ ngỏ</small>"]
+    A2["Ước lượng<br/><small>khối lượng, năng lực, cam kết</small>"]
+    A3["Thiết kế + ADR"]
+    A4["Danh sách task<br/><small>chủ sở hữu, làn, phụ thuộc</small>"]
+    A5["Kế hoạch<br/><small>pha và bước</small>"]
+    A6["Code + bản ghi thực thi"]
+    A7["Kết quả review"]
+    A8["Kế hoạch và test case"]
+    A9["Báo cáo kiểm chứng"]
+    A10["Ghi chú phát hành + checklist"]
+    A11["Postmortem + runbook"]
+    A12["Retro + báo cáo trạng thái"]
+
+    A0 -->|intake| A1
+    A1 -->|estimate| A2
+    A1 -->|design-doc| A3
+    A2 -->|breakdown| A4
+    A3 -->|breakdown| A4
+    A4 -->|plan| A5
+    A5 -->|implement| A6
+    A6 -->|review| A7
+    A7 -->|implement| A6
+    A6 -->|qa| A8
+    A8 -->|verify| A9
+    A9 -->|release| A10
+    A10 -->|incident| A11
+    A10 -->|retro| A12
+```
+
+Ba skill đứng bên cạnh chuỗi chứ không nằm trong nó, vì chúng đọc cả chuỗi thay vì một mắt xích:
+`catchup` tóm tắt bất kỳ artifact nào cho người mới, `onboard` dẫn thành viên mới đi qua repo, và
+`handover` ghi lại trạng thái thật của mọi việc còn dở.
+
+Hai skill nữa nuôi chuỗi mà không do chuỗi sinh ra: `init` viết profile mà mọi skill đụng code đều
+đọc, còn `convention` viết ra bộ quy tắc `implement` tuân theo và `review` soi.
+
+## Mỗi skill ăn vào gì
+
+| Skill | Đọc | Sinh ra | Skill dùng tiếp |
+|-------|-----|---------|-----------------|
+| `init` | Repo | Profile của dự án | Mọi skill có chạy lệnh |
+| `intake` | Một yêu cầu thô | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa` |
+| `catchup` | Một epic hoặc một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài | Con người, không phải skill |
+| `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |
+| `design-doc` | Yêu cầu | Thiết kế kèm ADR | `breakdown`, `plan`, `implement` |
+| `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
+| `convention` | Code và lịch sử của nó | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
+| `plan` | Ticket, thiết kế, hoặc mô tả | Pha và bước | `implement` |
+| `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR | `review`, `qa` |
+| `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
+| `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt | `implement`, `fix` |
+| `qa` | Tiêu chí nghiệm thu và thay đổi | Kế hoạch test, test case, ma trận hồi quy | `verify` |
+| `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | `release` |
+| `release` | Diff kể từ phiên bản trước | Ghi chú, checklist, đường lui | `incident`, `retro` |
+| `incident` | Log, số đo, dòng thời gian | Postmortem kèm runbook | `retro`, `fix` |
+| `retro` | Git, tracker, cả đội | Hành động đã kiểm, bằng chứng, báo cáo trạng thái | Chu kỳ sau |
+| `onboard` | Repo và danh sách quyền truy cập | Thiết lập, bản đồ code, tuần đầu | Thành viên mới |
+| `handover` | Mọi việc còn dở | Trạng thái, quyết định, cạm bẫy, chuyển quyền | Người nhận |
+
+## Chỗ chuỗi đứt
+
+Một mắt xích chỉ tốt bằng artifact nằm sau nó, và có ba chỗ đứt đủ phổ biến để gọi tên.
+
+**Không có profile.** Skill nào chạy lệnh của chính dự án thì dừng lại và đòi `atk:init`, thay vì
+đoán bừa lệnh test. Skill nào chỉ đọc diff thì chạy tiếp và ghi rằng lúc đó không có profile.
+`shared/project-profile.md` nói skill nào rơi vào nhóm nào.
+
+**Artifact chưa từng được duyệt.** Một thiết kế ở trạng thái `DRAFT` mới là đề xuất, và xây từ đó có
+nghĩa là bình luận review đầu tiên sẽ nhắm vào chính thiết kế. Hãy xem trường `status` trong front
+matter trước khi dùng một artifact, đừng chỉ xem file có tồn tại hay không.
+
+**Artifact đã bị thay thế nhưng trông vẫn như bản hiện hành.** Lập kế hoạch lại cho cùng một việc sẽ
+tạo thư mục thứ hai, và không có gì tự đánh dấu thư mục đầu là đã chết. Quy tắc khai tử nó nằm ở
+cuối `shared/artifact-paths.md`.

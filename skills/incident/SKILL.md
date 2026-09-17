@@ -88,6 +88,10 @@ Incident at `docs/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.
 `shared/artifact-paths.md`. Sections: front matter, summary, impact, timeline, root cause with
 evidence, detection gap, mitigation, follow-up actions, and lessons.
 
+The timeline stays a table, because a reader checks it against a log line by line. A causal chain
+diagram goes under the root cause, per `shared/diagram-conventions.md`, showing what led to what and
+where detection should have fired.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Each follow-up action becomes one issue linked to the incident.
