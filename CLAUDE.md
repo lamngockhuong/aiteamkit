@@ -63,9 +63,10 @@ skills/<name>/
   evals/trigger_evals.json    optional; array of {query, should_trigger} for description testing
 ```
 
-The twelve original skills are still skeletons: `SKILL.md` only, around 95 to 105 lines each, with no
-`references/` or `evals/`. The six added since (`init`, `catchup`, `plan`, `implement`, `fix`,
-`verify`) carry both. Deepening a skill means adding `references/` files and pointing at them from
+Eleven of the twelve original skills are still skeletons: `SKILL.md` only, around 95 to 105 lines
+each, with no `references/` or `evals/`. The six added since (`init`, `catchup`, `plan`, `implement`,
+`fix`, `verify`) carry both. `review` sits between the two: it grew a `references/` file for parallel
+review and still has no `evals/`. Deepening a skill means adding `references/` files and pointing at them from
 the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
@@ -82,7 +83,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Eight files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Ten files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -96,6 +97,8 @@ skill discovery.
 | `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
+| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers | `fix`, `implement`, `verify`, `review` |
+| `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -114,6 +117,13 @@ holds where a cause hides, `skills/implement/references/verification.md` still h
 things in, and `skills/verify/references/runtime-checks.md` still holds how to assert against a
 running system.
 
+`host-capabilities.md` decides a boundary rather than a format: a capability the harness itself ships
+may be used and named, a command from another kit may not. It also carries the degradation rule,
+since a skill that leans on a host capability must still work on the harness that has none.
+`tidy-pass.md` is what that rule degrades into, and the reason the kit does not ship a `simplify`
+skill of its own: the content belongs to three skills that already run it, not to a nineteenth slash
+command with no artifact and no approver.
+
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
 where the spec lives, and follow its three-group rule for what to do when that file is missing.
@@ -121,14 +131,21 @@ where the spec lives, and follow its three-group rule for what to do when that f
 When adding a rule that two or more skills need, put it in `shared/` and reference it. Do not paste
 it into each `SKILL.md`.
 
-## The kit stands alone
+## The kit stands alone, but it may use the harness it runs on
 
 A skill may say that something is outside the kit's scope. It must NOT name a command from another
 kit as the thing that handles it. A team that installed only `atk` would hit a dead end, and the
 dead end would be invisible until they followed the pointer.
 
-Say "which the author does" or "outside this kit", or name an `atk:` skill. Never `ak:cook`,
-`/simplify`, or any other foreign command.
+Say "which the author does" or "outside this kit", or name an `atk:` skill. Never `ak:cook` or any
+other kit's command.
+
+A capability the host agent itself ships is different, and is allowed: it arrived with the harness,
+so every team on that harness has it. `atk:implement`, `atk:fix` and `atk:verify` use the host's
+code clean-up capability, `/simplify` in Claude Code, and `atk:review` uses the host's parallel
+agents. `shared/host-capabilities.md` owns the rules: name the capability before its local name,
+resolve that name from the harness at the time of use, and degrade into doing the work by hand,
+recorded as such, on a harness that has none. No skill stops because a host capability is missing.
 
 After edits, verify:
 
@@ -185,7 +202,8 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 8. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
-9. `docs/flow/project-flow.md` and `docs/flow/skill-chain.md`, plus both `docs/vi/flow/` mirrors.
+9. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
+   all three `docs/vi/flow/` mirrors.
    Each names all 18 skills: the phase table and the consumes/produces table respectively
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
@@ -268,6 +286,7 @@ relative path; adding or renaming one means doing the same on the other side.
 | `project-roadmap.md` | Phase plan and status |
 | `flow/project-flow.md` | The 18 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
+| `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 
 ## Release flow (release-please, pre-1.0 mode)
 

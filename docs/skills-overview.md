@@ -171,8 +171,8 @@ stop halfway.
 ## `atk:implement`
 
 **Produces.** The code, plus an implementation record that becomes the pull request body: what
-changed and why, which plan steps it covers, the command run for each layer with its output, and
-what was deliberately left undone.
+changed and why, which plan steps it covers, the command run for each layer with its output, what
+the clean-up step changed, and what was deliberately left undone.
 
 **Use when.** A ticket, a plan, or a described requirement is ready to be built, and the question
 left is how to build it rather than what to build.
@@ -185,6 +185,11 @@ straight to code. A medium one calls `atk:plan`, confirms in a sentence, and car
 change that touches a schema, a public contract, several services, or an open architecture decision
 stops for a person to approve. Drafting a list of steps needs no approver; deciding the architecture
 does.
+
+Once the verification is green, the change goes through the host's code clean-up capability,
+`/simplify` in Claude Code, before the review is called: a reviewer should spend their round on
+behavior, not on duplication the author could have removed. On a harness without that capability the
+record says so rather than leaving the step invisible.
 
 ---
 
@@ -202,7 +207,9 @@ fits inside it. Or nothing is broken and the code is merely unpleasant, which is
 
 **The habit that matters.** No file changes before the cause is proven. `--investigate-only` exists
 because the explanation is often the whole deliverable, and stopping there is a valid result rather
-than an unfinished one.
+than an unfinished one. The clean-up step that follows verification is narrower here than anywhere
+else in the kit: it covers the lines the fix touched and nothing beside them, because a fix carrying
+a tidy-up of the surrounding file cannot be reverted cleanly.
 
 ---
 
@@ -220,6 +227,12 @@ questioned (`atk:intake`).
 and it separates blocking defects from preferences, which is what makes a review feel fair. A
 convention finding quotes the rule and cites its ID, so the author can dispute the rule rather than
 the reviewer.
+
+A change of more than five files gets several independent passes over the same diff where the
+harness can run agents in parallel, and each finding carries how many of those passes raised it. The
+width is bounded by the machine and can be forced with `--parallel <N>`; a finding only one pass
+raised is checked against the code before it is reported. Agreement between passes is still one
+model's work, never a stand-in for the colleague who approves.
 
 ---
 
@@ -254,7 +267,9 @@ command that exits zero reads as proof.
 
 **The habit that matters.** A 200 is not a result. The skill asserts the row, the file, or the
 message the request was supposed to produce. It also stops after three rounds and escalates to a
-named person, rather than patching until something passes.
+named person, rather than patching until something passes. Code its rounds changed is tidied and the
+failing case re-run before the change is closed, because a fix made at the end of a long run is
+still a change somebody has to review.
 
 ---
 

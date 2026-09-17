@@ -1,7 +1,8 @@
 # Chuỗi skill
 
 Mỗi skill đọc gì, để lại gì, và skill nào nhặt thứ đó lên tiếp. Các pha và cửa duyệt giữa chúng nằm
-ở [project-flow.md](./project-flow.md); tài liệu này nói về artifact.
+ở [project-flow.md](./project-flow.md), còn chuyện một skill chạy ra sao và gọi sang skill khác thế
+nào thì ở [skill-lifecycle.md](./skill-lifecycle.md); tài liệu này nói về artifact.
 
 Đường dẫn output chính xác không chép lại ở đây. Chúng nằm một chỗ duy nhất là
 `shared/artifact-paths.md`, và khi hai bên lệch nhau thì file đó đúng.

@@ -4,6 +4,7 @@ How the 18 skills fall into a team's delivery cycle: which phase each one belong
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,
+[skill-lifecycle.md](./skill-lifecycle.md) for how one skill runs and when it reaches for another,
 [../skills-overview.md](../skills-overview.md) for when to use a skill and when not to.
 
 Roles are the ones in `shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE, and Stakeholder. A

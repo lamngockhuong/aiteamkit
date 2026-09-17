@@ -25,8 +25,8 @@ who owns it.
 ## Scope
 
 Handles: capturing the failure, tracing it to the line that produces it, proving the cause, checking
-the fix against recorded intent, making the minimal change, verifying by layer, and writing the
-report a reviewer can check against the evidence.
+the fix against recorded intent, making the minimal change, verifying by layer, tidying the lines the
+fix touched, and writing the report a reviewer can check against the evidence.
 
 Does NOT handle: a production incident in progress, which is `atk:incident` and owns the timeline,
 the severity, and the client communication while users are down; reviewing somebody else's change
@@ -59,7 +59,7 @@ a test command: a guessed command that passes is worse evidence than no command 
 
 ```
 [1. Capture and prove] -> [2. Intent check] -> [3. Minimal fix] -> [4. Verify by layer]
-  -> [5. Report and finalize]
+  -> [5. Tidy the fix] -> [6. Report and finalize]
 ```
 
 ### 1. Capture and prove
@@ -114,7 +114,23 @@ Then walk the blast radius from the investigation: every other caller of the cod
 Run what covers them. State plainly what could not be verified and why. An unverified area named in
 the report is a known gap; the same area left out is a claim that it was checked.
 
-### 5. Report and finalize
+### 5. Tidy the fix
+
+With the verification green, hand the change to the host's code clean-up capability, `/simplify` in
+Claude Code, per `shared/host-capabilities.md`.
+
+Here it is narrower than anywhere else in the kit, because step 3 already said the change is the
+smallest one that removes the cause. The clean-up covers the lines this fix touched and nothing
+beside them: a fix that arrives carrying a tidy-up of the surrounding file is the fix that cannot be
+reverted on the day it has to be.
+
+Afterwards, re-run the narrowest check that covers what it touched, and the captured reproduction
+again. A clean-up that breaks either is reverted rather than debugged, and the report says it was.
+
+Nothing runs here under `--investigate-only` or when the intent check stopped the work, since no
+file changed.
+
+### 6. Report and finalize
 
 Write the report from `references/report-template.md`, then follow `shared/finalize-steps.md` for
 the branch, the commit, and anything that leaves the local repository.
@@ -149,6 +165,8 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
 - [ ] The change is the smallest one that removes the cause, and anything else found is listed, not
       done.
 - [ ] The captured reproduction was re-run and no longer reproduces.
+- [ ] The tidy step stayed inside the lines the fix touched, the reproduction was re-run after it,
+      and the report says what it changed or that the harness has no such capability.
 - [ ] Every caller in the blast radius was either exercised or named as unverified.
 - [ ] The report says what could not be verified.
 - [ ] Under `--investigate-only`, `git status` shows the working tree untouched.

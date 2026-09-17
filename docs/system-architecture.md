@@ -64,13 +64,13 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Eight files hold what skills would otherwise repeat. The first three are cited by all 18:
+Ten files hold what skills would otherwise repeat. The first three are cited by all 18:
 
 - `shared/team-roles.md`: the role table and the six rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
-Four are contracts between a named handful of skills rather than kit-wide rules:
+Six are contracts between a named handful of skills rather than kit-wide rules:
 
 - `shared/review-checklist.md`: the rule record format that `atk:convention` writes and `atk:review`
   cites by ID, plus the baseline items that hold in any project. It exists so a convention is
@@ -88,8 +88,20 @@ Four are contracts between a named handful of skills rather than kit-wide rules:
   `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, and `atk:incident`, the five skills
   whose artifacts carry a diagram. Diagrams are Mermaid, so they render where the artifact is read
   and nothing has to be committed as an image.
+- `shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
+  does on a harness that has none. Cited by `atk:fix`, `atk:implement`, and `atk:verify` for the
+  tidy step that follows a green verification, and by `atk:review` for independent passes run in
+  parallel. It draws the line the kit had drawn only one way before: a capability the harness itself
+  ships may be named and used, a command belonging to another kit may not, because the first is
+  there for everyone who installed atk on that harness and the second is not.
+- `shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
+  and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
+  exists so the step lands the same way on a harness that ships a clean-up capability and on one
+  where the skill works through the list itself, and it is why the kit ships no `simplify` skill of
+  its own: the content belongs to the skills that already run it, not to a slash command that would
+  produce no artifact and answer to no approver.
 
-The eighth describes a file that does not ship with the kit at all:
+The tenth describes a file that does not ship with the kit at all:
 
 - `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff

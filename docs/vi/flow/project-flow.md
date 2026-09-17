@@ -4,7 +4,9 @@
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,
-[../skills-overview.md](../skills-overview.md) cho biết khi nào nên dùng một skill và khi nào không.
+[skill-lifecycle.md](./skill-lifecycle.md) cho biết một skill chạy ra sao và khi nào nó với sang
+skill khác, [../skills-overview.md](../skills-overview.md) cho biết khi nào nên dùng một skill và
+khi nào không.
 
 Các vai trò lấy từ `shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE và Stakeholder. Đội nhỏ thì
 một người gánh vài vai; lý do vẫn tách tên ra là vì người viết artifact và người duyệt nó là hai

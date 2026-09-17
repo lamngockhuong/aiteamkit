@@ -8,7 +8,7 @@ description: >
   opinion.
   Triggers on: "review PR", "code review", "review this branch", "review giúp", "duyệt code",
   "check PR", "レビュー", "approve this", "is this ready to merge", "/atk:review".
-argument-hint: "[pr-number|branch|commit|paths] [--against <design-path>] [--comment] [--strict] [--out <path>]"
+argument-hint: "[pr-number|branch|commit|paths] [--against <design-path>] [--comment] [--strict] [--parallel <N>] [--out <path>]"
 ---
 
 # Team Code Review (`atk:review`)
@@ -19,9 +19,9 @@ because mixing them is what makes reviews feel arbitrary.
 
 ## Scope
 
-Handles: reading the diff in the context of the requirement, design, and conventions, finding
-correctness and regression risks, checking test coverage of the changed behavior, and writing
-review comments that a person can act on.
+Handles: reading the diff in the context of the requirement, design, and conventions, deciding how
+many independent passes the change is worth, finding correctness and regression risks, checking test
+coverage of the changed behavior, and writing review comments that a person can act on.
 
 Does NOT handle: approving or merging, which is a human act; rewriting the code, which the author
 does with `atk:implement` or `atk:fix`; or deciding whether the requirement itself is right
@@ -41,13 +41,15 @@ reviews test adequacy. See `shared/team-roles.md`.
 /atk:review --against docs/design/x.md    # Review against a specific design document
 /atk:review --comment                     # Post findings as inline PR comments
 /atk:review --strict                      # Include low-severity and stylistic findings
+/atk:review --parallel 5                  # Force the number of independent passes over the diff
 /atk:review --out <path>                  # Write a review report as well
 ```
 
 ## Workflow
 
 ```
-[1. Establish intent] -> [2. Read diff in context] -> [3. Find] -> [4. Verify] -> [5. Rank and write]
+[1. Establish intent] -> [2. Read diff in context] -> [3. Choose the width] -> [4. Find]
+  -> [5. Verify] -> [6. Rank and write]
 ```
 
 ### 1. Establish intent
@@ -61,7 +63,23 @@ Open the surrounding files, not only the changed lines. Most real defects live i
 implies elsewhere: a caller not updated, an enum case not handled, a migration without a backfill,
 a cache not invalidated.
 
-### 3. Find
+### 3. Choose the width
+
+A change large enough to be worth more than one pass gets more than one, using the host's ability to
+run agents in parallel per `shared/host-capabilities.md`. `references/parallel-review.md` holds the
+width table, the memory cap that bounds it, what every reviewer is given, and how the findings are
+merged back into one list.
+
+Five files or fewer stay in this agent, and `--parallel <N>` overrides the table but not the cap. The
+reviewers all read the same diff: independence is the point, so splitting the files between them
+would produce agreement that means nothing.
+
+Steps 1, 5, and 6 are never delegated. Intent is what the passes are measured against, and ranking
+one list out of several needs all of them in one context.
+
+Where the harness cannot spawn agents, one pass runs and the report says so.
+
+### 4. Find
 
 Look for, in this order: behavior that contradicts an acceptance criterion, correctness bugs and
 regressions, missing error and edge-case handling, security and data exposure, untested new
@@ -73,18 +91,22 @@ quoted verbatim so the author can dispute the rule rather than the reviewer. Whe
 recorded conventions, use the baseline items in that file and say so in the review. Do not invent
 project-specific rules mid-review; report the gap so `atk:convention` can record it.
 
-### 4. Verify before reporting
+### 5. Verify before reporting
 
 Every finding must survive a check: trace the code path, or state the concrete input that produces
 the wrong output. A finding you cannot make concrete is dropped, not softened into a question.
 
-### 5. Rank and write
+### 6. Rank and write
 
 | Severity | Meaning |
 |----------|---------|
 | `BLOCKING` | Wrong behavior, data risk, security risk, or a broken contract |
 | `SHOULD FIX` | Real problem, safe to fix in a follow-up if the author agrees |
 | `NIT` | Preference. Never blocks. Say so in the comment |
+
+Where several reviewers ran, each finding carries how many of them raised it, and a finding only one
+reviewer raised was checked against the code before it reached this list. The report says which width
+ran. It never presents a count of agreeing reviewers as agreement between people.
 
 A convention violation takes the severity recorded against its rule. Raise it only when the concrete
 failure is worse than the rule anticipated, and say why.
@@ -112,4 +134,7 @@ line it cites, and the summary as one review comment. Post nothing before showin
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.
+- [ ] The width that ran is stated, and a width the machine forced down says so.
+- [ ] Every reviewer received the same scope, and a finding only one of them raised was checked
+      against the code before it was reported.
 - [ ] No comment addresses the author rather than the code.

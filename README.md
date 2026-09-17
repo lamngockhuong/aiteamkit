@@ -28,7 +28,9 @@ Three skills answer an event rather than a phase: `fix` when a defect is reporte
 How the phases map to roles and approval gates: [docs/flow/project-flow.md](docs/flow/project-flow.md)
 ([Tiếng Việt](docs/vi/flow/project-flow.md)). What each skill consumes and produces:
 [docs/flow/skill-chain.md](docs/flow/skill-chain.md)
-([Tiếng Việt](docs/vi/flow/skill-chain.md)).
+([Tiếng Việt](docs/vi/flow/skill-chain.md)). How one skill runs and when it reaches for another:
+[docs/flow/skill-lifecycle.md](docs/flow/skill-lifecycle.md)
+([Tiếng Việt](docs/vi/flow/skill-lifecycle.md)).
 
 Run `/atk:init` once per project. It writes `.atk/profile.md`, the file the skills that touch code
 read to learn this project's test, build and lint commands, its layer layout, and who approves what.
@@ -71,7 +73,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:plan <ticket|design|description>     # --inline --layer --out
 /atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
 /atk:fix <issue|report|description>       # --layer --investigate-only --out
-/atk:review <pr|branch|paths>             # --against --comment --strict --out
+/atk:review <pr|branch|paths>             # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature>             # --plan|--cases|--regression --lang --out
 /atk:verify <module|paths|ticket>         # --ui --report-only --out
 /atk:release <version|range>              # --notes|--checklist --audience --env --out
@@ -104,6 +106,14 @@ profile holds, and which skills are meant to degrade rather than stop, is in
 [shared/review-checklist.md](shared/review-checklist.md), so a team rule is written once and
 enforced in the same words: `convention` records each rule with an ID and a default severity, and
 `review` cites that ID in its findings instead of restating the rule from memory.
+
+Where the harness offers capabilities of its own, the skills use them. `atk:implement`, `atk:fix`
+and `atk:verify` tidy a change through the host's code clean-up capability, `/simplify` in Claude
+Code, after the verification passes and before anyone reviews it; `atk:review` puts several
+independent passes over a large diff when the host can run agents in parallel. None of it is
+required: on a harness without them the step runs by hand, against the same list in
+[shared/tidy-pass.md](shared/tidy-pass.md), and the artifact says which way it ran. The rules are in
+[shared/host-capabilities.md](shared/host-capabilities.md).
 
 ## Installation
 

@@ -1,7 +1,8 @@
 # Skill Chain
 
 What each skill reads, what it leaves behind, and which skill picks that up next. The phases and the
-approval gates between them are in [project-flow.md](./project-flow.md); this document is about the
+approval gates between them are in [project-flow.md](./project-flow.md), and how one skill runs and
+calls another is in [skill-lifecycle.md](./skill-lifecycle.md); this document is about the
 artifacts.
 
 Exact output paths are not repeated here. They live in one place, `shared/artifact-paths.md`, and
