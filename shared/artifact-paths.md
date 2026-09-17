@@ -15,6 +15,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 
 | Skill | Default output |
 |-------|----------------|
+| `init` | `.atk/profile.md` (see the exception below) |
 | `intake` | `docs/requirements/<ticket-or-date>-<slug>.md` |
 | `estimate` | `docs/planning/estimate-<sprint-or-date>.md` |
 | `design-doc` | `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
@@ -30,6 +31,12 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 
 `--out <path>` overrides the default on every skill.
 
+### The one exception: `init`
+
+`atk:init` writes to `.atk/profile.md`, outside the docs root. Every other artifact here is prose a
+person reads and reviews; the profile is data a skill reads, and mixing the two makes the docs tree
+noisy. It is still committed, and `shared/project-profile.md` explains the rest.
+
 ## Naming
 
 - Dates are `YYMMDD`, taken from `date +%y%m%d` on macOS and Linux or
@@ -40,14 +47,15 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 
 ## Front matter
 
-Every artifact opens with the same block so a reader knows its state without reading the body:
+Every artifact opens with the same block so a reader knows its state without reading the body. A
+`TBD` always carries the name of whoever can resolve it; a bare `TBD` is a hole nobody owns:
 
 ```yaml
 ---
 title: <one line>
 status: DRAFT | IN REVIEW | APPROVED | SUPERSEDED
 owner: <person>
-approver: <person or TBD>
+approver: <person, or "TBD (ask <person>)">
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ticket: <id or URL, or none>

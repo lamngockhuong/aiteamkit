@@ -45,13 +45,14 @@ a section to delete.
 | Project | Name, repository, single repo or monorepo, package manager | all |
 | Layers | Per layer: directory, standards document, reference module | implement, fix, verify |
 | Commands | Per app: test, build, lint, and any extra command a change requires | implement, fix, verify |
-| Docs | Docs root, where conventions live, where designs live | every skill that writes an artifact |
+| Docs | Docs root, where conventions live, where designs live, the agent instruction file if any | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the spec lives | intake, catchup, review, release |
-| Team | Role mapped to a real name, and who approves what | all |
-| Verify | How to start each app, how to confirm a side effect, how to clean up | verify |
+| Team | Role mapped to a real name, who approves what, and the language the team writes artifacts in | all |
+| Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to clean up, how to be sure the target is local | verify |
 
-Every entry is a pointer or a command, never prose copied from elsewhere. A section longer than five
-lines is usually a section that has started duplicating a document instead of linking it.
+Every entry is a pointer or a command, never prose copied from elsewhere. A section that runs long
+because it has started explaining instead of linking is duplicating a document; a section that runs
+long because it is a list of short labelled fields, as Verify is, is fine.
 
 An answer nobody has yet is recorded as `TBD` plus the name of the person who owes it. Never blank,
 and never guessed.
