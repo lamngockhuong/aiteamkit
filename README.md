@@ -12,19 +12,23 @@ Walkthrough of what each skill means and when to use it:
 
 ## Lifecycle
 
+```mermaid
+flowchart LR
+    I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
+    E --> D["design-doc"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
+    R -.->|Blocking findings| IM
+    RL --> IC["incident"] --> RT["retro"]
+    RT -.->|Next cycle| IN
 ```
-init -> intake -> catchup -> estimate -> design-doc -> breakdown -> convention
-                                                                        |
-                                                                        v
-           release <- verify <- qa <- review <- implement <- plan <------+
-              |
-              v
-           incident -> retro
 
-  fix        when a defect is reported, at any point
-  onboard    when someone joins
-  handover   when someone leaves, or a phase ends
-```
+Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
+`onboard` when someone joins; `handover` when someone leaves or a phase ends.
+
+How the phases map to roles and approval gates: [docs/flow/project-flow.md](docs/flow/project-flow.md)
+([Tiếng Việt](docs/vi/flow/project-flow.md)). What each skill consumes and produces:
+[docs/flow/skill-chain.md](docs/flow/skill-chain.md)
+([Tiếng Việt](docs/vi/flow/skill-chain.md)).
 
 Run `/atk:init` once per project. It writes `.atk/profile.md`, the file the skills that touch code
 read to learn this project's test, build and lint commands, its layer layout, and who approves what.

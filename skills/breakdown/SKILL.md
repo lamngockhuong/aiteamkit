@@ -86,6 +86,9 @@ Written to `docs/planning/breakdown-<epic>.md` per `shared/artifact-paths.md`. S
 matter, deliverable inventory, task table with ID, title, owner, depends-on, and DoD, a Mermaid
 dependency graph, parallel lanes with file ownership, and the serialization points.
 
+The graph follows `shared/diagram-conventions.md` and reuses the task IDs from the table, so the two
+can be checked against each other. It never carries an owner or a date the table does not.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Map epic to epic and task to issue or sub-task. Show the full

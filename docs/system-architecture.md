@@ -35,6 +35,14 @@ is never duplicated per harness. The manifests differ only in how they declare c
 | `.cursor-plugin/plugin.json` | `"skills": "./skills/"` | `displayName` |
 | `.codex-plugin/plugin.json` | `"skills": "./skills/"` | `interface{}` with `defaultPrompt`, icons, `brandColor` |
 
+```mermaid
+flowchart LR
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>18 folders, one SKILL.md each</small>"]
+    UP[".cursor-plugin/plugin.json"] --> SK
+    XP[".codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
+    SK --> SH["shared/<br/><small>cited by the skills that need it</small>"]
+```
+
 There is no `commands/` layer. A skill is its own slash command, named from its folder, namespaced
 `atk:` by the harness at load time from `plugin.json`.
 
@@ -56,13 +64,13 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Seven files hold what skills would otherwise repeat. The first three are cited by all 18:
+Eight files hold what skills would otherwise repeat. The first three are cited by all 18:
 
 - `shared/team-roles.md`: the role table and the six rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
-Three are contracts between a named handful of skills rather than kit-wide rules:
+Four are contracts between a named handful of skills rather than kit-wide rules:
 
 - `shared/review-checklist.md`: the rule record format that `atk:convention` writes and `atk:review`
   cites by ID, plus the baseline items that hold in any project. It exists so a convention is
@@ -75,8 +83,13 @@ Three are contracts between a named handful of skills rather than kit-wide rules
 - `shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
   proves, and what it does not. Cited by the same three. Each of them runs a check and then has to
   say what the result means, and the second half of that answer has to be identical in all three.
+- `shared/diagram-conventions.md`: when a diagram earns its place in an artifact, the four shapes
+  the kit draws, and the rules that keep them readable in a pull request on either theme. Cited by
+  `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, and `atk:incident`, the five skills
+  whose artifacts carry a diagram. Diagrams are Mermaid, so they render where the artifact is read
+  and nothing has to be committed as an image.
 
-The seventh describes a file that does not ship with the kit at all:
+The eighth describes a file that does not ship with the kit at all:
 
 - `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
@@ -148,15 +161,20 @@ title + intro      what this produces and the one habit that makes it work
 
 ## Data flow at runtime
 
-```
-user request
-   -> harness matches description triggers
-   -> SKILL.md body loads
-   -> skill reads .atk/profile.md when it needs project facts
-   -> skill reads project evidence (code, git, CI, tracker) and shared/ references
-   -> skill interviews only for what evidence cannot answer
-   -> Markdown artifact written into the target project under docs/
-   -> optional pointer pushed to the tracker, after the user approves the list
+```mermaid
+flowchart TD
+    U["User request"] --> T["Harness matches<br/>description triggers"]
+    T --> S["SKILL.md body loads"]
+    S --> P{"Needs project facts?"}
+    P -->|Yes| PR[".atk/profile.md read<br/><small>target project</small>"]
+    P -->|No| EV
+    PR --> EV["Project evidence read<br/><small>code, git, CI, tracker</small>"]
+    EV --> SR["shared/ references opened<br/><small>only the ones cited</small>"]
+    SR --> Q{"Evidence answers<br/>everything?"}
+    Q -->|No| IV["Interview the user<br/><small>judgment and agreements only</small>"]
+    Q -->|Yes| W
+    IV --> W["Markdown artifact written<br/><small>into the target project</small>"]
+    W --> TK["Pointer pushed to the tracker<br/><small>only after the user approves the list</small>"]
 ```
 
 Artifacts are written into the **target project**, never into the atk kit itself.

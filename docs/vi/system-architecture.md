@@ -34,6 +34,14 @@ nhân bản theo từng harness. Các manifest chỉ khác nhau ở cách khai b
 | `.cursor-plugin/plugin.json` | `"skills": "./skills/"` | `displayName` |
 | `.codex-plugin/plugin.json` | `"skills": "./skills/"` | khối `interface{}` với `defaultPrompt`, icon, `brandColor` |
 
+```mermaid
+flowchart LR
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>18 thư mục, mỗi thư mục một SKILL.md</small>"]
+    UP[".cursor-plugin/plugin.json"] --> SK
+    XP[".codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
+    SK --> SH["shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]
+```
+
 Không có lớp `commands/`. Mỗi skill tự là một slash command, lấy tên từ thư mục của nó, và được
 harness gắn namespace `atk:` lúc nạp dựa trên `plugin.json`.
 
@@ -55,13 +63,13 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Bảy file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 18 skill trích dẫn:
+Tám file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 18 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và sáu nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
-Ba file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Bốn file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `shared/review-checklist.md`: định dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review`
   trích dẫn theo ID, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một
@@ -74,8 +82,13 @@ Ba file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ th�
 - `shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
   minh được điều gì, và không chứng minh được điều gì. Cùng ba skill đó trích dẫn. Mỗi skill chạy một
   phép kiểm rồi phải nói kết quả có nghĩa gì, và vế thứ hai đó buộc phải giống hệt nhau ở cả ba.
+- `shared/diagram-conventions.md`: khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình
+  mà kit vẽ, và các quy tắc giữ cho chúng dễ đọc trong một pull request ở cả nền sáng lẫn nền tối.
+  Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown` và `atk:incident` trích dẫn, tức
+  năm skill có sơ đồ trong artifact. Sơ đồ viết bằng Mermaid nên hiện ra ngay tại nơi người ta đọc
+  artifact, và không phải commit thêm file ảnh nào.
 
-File thứ bảy mô tả một file không đi kèm kit:
+File thứ tám mô tả một file không đi kèm kit:
 
 - `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
@@ -145,15 +158,20 @@ tiêu đề + mở đầu   skill này sinh ra gì và thói quen nào làm nó 
 
 ## Luồng dữ liệu lúc chạy
 
-```
-yêu cầu của người dùng
-   -> harness so khớp trigger trong description
-   -> nạp thân SKILL.md
-   -> skill đọc .atk/profile.md khi cần sự thật của dự án
-   -> skill đọc bằng chứng của dự án (code, git, CI, tracker) và các file shared/
-   -> skill chỉ phỏng vấn phần mà bằng chứng không trả lời được
-   -> ghi artifact Markdown vào dự án đích, dưới docs/
-   -> tùy chọn đẩy con trỏ lên tracker, sau khi người dùng duyệt danh sách
+```mermaid
+flowchart TD
+    U["Yêu cầu của người dùng"] --> T["Harness so khớp<br/>trigger trong description"]
+    T --> S["Nạp thân SKILL.md"]
+    S --> P{"Có cần sự thật<br/>của dự án không?"}
+    P -->|Có| PR["Đọc .atk/profile.md<br/><small>trong dự án đích</small>"]
+    P -->|Không| EV
+    PR --> EV["Đọc bằng chứng của dự án<br/><small>code, git, CI, tracker</small>"]
+    EV --> SR["Mở các file shared/<br/><small>chỉ những file được trích dẫn</small>"]
+    SR --> Q{"Bằng chứng đã<br/>trả lời hết chưa?"}
+    Q -->|Chưa| IV["Phỏng vấn người dùng<br/><small>chỉ hỏi phán đoán và thỏa thuận</small>"]
+    Q -->|Rồi| W
+    IV --> W["Ghi artifact Markdown<br/><small>vào dự án đích</small>"]
+    W --> TK["Đẩy con trỏ lên tracker<br/><small>chỉ sau khi người dùng duyệt danh sách</small>"]
 ```
 
 Artifact luôn được ghi vào **dự án đích**, không bao giờ ghi vào chính bộ kit atk.
