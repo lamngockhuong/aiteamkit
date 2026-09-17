@@ -43,8 +43,8 @@ a section to delete.
 | Section | Holds | Read by |
 |---------|-------|---------|
 | Project | Name, repository, single repo or monorepo, package manager | all |
-| Layers | Per layer: directory, standards document, reference module | implement, fix, verify |
-| Commands | Per app: test, build, lint, and any extra command a change requires | implement, fix, verify |
+| Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify |
+| Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
 | Docs | Docs root, where conventions live, where designs live, the agent instruction file if any | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the spec lives | intake, catchup, review, release |
 | Team | Role mapped to a real name, who approves what, and the language the team writes artifacts in | all |
@@ -70,6 +70,18 @@ or incomplete.
 
 `atk:init` is in no group. It is the skill that writes the profile, so a missing one is its input
 rather than its problem.
+
+The column describes the missing case only. A `Not needed` skill may still read a section that helps
+it when the profile happens to be there: `atk:catchup` reading Tracker to learn where the spec lives
+is the usual example. What the group forbids is the other three behaviours. It never requires the
+profile, it never stops or degrades its output because the profile is absent, and it never mentions
+the profile to the user in either state. A reader who has not run `/atk:init` must not be able to
+tell from the artifact that the file exists as a concept, which is why `atk:intake` reads the same
+Tracker row and says nothing.
+
+The practical test: delete the profile, run the skill again, and compare. A `Not needed` skill
+produces the same artifact with the same confidence, only having worked a little harder to find what
+the profile would have told it.
 
 Three groups rather than two, because the middle case is real: `atk:review` can still read a diff
 against a requirement without knowing how the project builds. What it cannot do is run the

@@ -1,0 +1,25 @@
+[
+  { "query": "fix this bug: the total on the invoice screen is off by one row", "should_trigger": true },
+  { "query": "/atk:fix https://github.com/acme/app/issues/318", "should_trigger": true },
+  { "query": "this test started failing and I do not know why", "should_trigger": true },
+  { "query": "sửa bug này giúp tôi, danh sách trả về rỗng khi lọc theo ngày", "should_trigger": true },
+  { "query": "điều tra lỗi 500 ở endpoint tạo đơn hàng", "should_trigger": true },
+  { "query": "tìm nguyên nhân vì sao số liệu báo cáo sai", "should_trigger": true },
+  { "query": "このバグを修正して", "should_trigger": true },
+  { "query": "不具合の原因を調査してほしい", "should_trigger": true },
+  { "query": "find the root cause of this wrong value but do not change any code yet", "should_trigger": true },
+  { "query": "the endpoint returns 403 for a user who should have access, work out why", "should_trigger": true },
+
+  { "query": "production is down right now, the checkout is failing for everyone", "should_trigger": false },
+  { "query": "site đang sập, khách không đặt hàng được", "should_trigger": false },
+  { "query": "本番障害の対応を始めて", "should_trigger": false },
+  { "query": "write the postmortem for last night's outage", "should_trigger": false },
+  { "query": "review this pull request before I approve it", "should_trigger": false },
+  { "query": "duyệt code của bạn kia giúp tôi", "should_trigger": false },
+  { "query": "implement the export to CSV feature", "should_trigger": false },
+  { "query": "add a new column to the orders table for the discount", "should_trigger": false },
+  { "query": "write test cases for the login screen", "should_trigger": false },
+  { "query": "our code style is inconsistent, write down the conventions", "should_trigger": false },
+  { "query": "estimate how long the payment integration will take", "should_trigger": false },
+  { "query": "summarize this epic for me before I start", "should_trigger": false }
+]
