@@ -5,10 +5,15 @@
 `atk` (AI Team Kit) là một plugin gồm 12 skill phủ vòng đời phát triển phần mềm của **một team dự
 án trong công ty**. Cùng một cây nội dung được phân phối cho Claude Code, Cursor và OpenAI Codex CLI.
 
-Mỗi skill sinh ra một artifact Markdown mà team có thể review, phê duyệt và đưa cho một người không
-có mặt trong cuộc hội thoại tạo ra nó: tài liệu yêu cầu, bảng ước lượng, tài liệu thiết kế kỹ thuật,
-bảng chia task, tài liệu quy ước, kết quả review, test plan, release, postmortem sự cố, biên bản
-retro, tài liệu onboarding hoặc tài liệu bàn giao.
+Phần lớn skill sinh ra một artifact Markdown mà team có thể review, phê duyệt và đưa cho một người
+không có mặt trong cuộc hội thoại tạo ra nó: tài liệu yêu cầu, bảng ước lượng, tài liệu thiết kế kỹ
+thuật, bảng chia task, tài liệu quy ước, kết quả review, test plan, release, postmortem sự cố, biên
+bản retro, tài liệu onboarding hoặc tài liệu bàn giao.
+
+Số còn lại sửa thẳng vào code. Làm một ticket, sửa một bug, kiểm chứng kết quả đều nằm trong vòng
+đời mà một team phải chạy, nên chúng nằm trong kit. Thứ tách chúng khỏi một trợ lý code cho người
+làm một mình là chỗ chúng dừng lại: dừng ở ranh giới mà một vai trò nắm quyền quyết, và không bao
+giờ kết thúc trước khi người review có thứ để đọc.
 
 ## Vấn đề mà atk giải quyết
 
@@ -39,8 +44,11 @@ trong công ty gặp những kiểu hỏng khác, và chúng là hỏng về quy
 
 ## Không nằm trong phạm vi
 
-- **Viết code ứng dụng.** `atk` lo phần quy trình bao quanh code. Việc implement, debug và làm
-  pipeline vẫn thuộc về bộ kit tổng quát mà team đang dùng.
+- **Vận hành hạ tầng của team.** `atk` viết checklist release và runbook; còn chạy deploy, chạy
+  pipeline và quản tài khoản cloud vẫn thuộc về công cụ riêng của team.
+- **Phụ thuộc vào một bộ kit khác.** Mọi skill chỉ chạy bằng những gì `atk` mang theo cộng với chính
+  dự án đích. Không skill nào đẩy việc sang một lệnh của kit khác, vì một team chỉ cài mỗi kit này
+  sẽ đi vào ngõ cụt.
 - **Thay thế tracker hay công cụ quản lý test.** `atk` tạo nội dung; công cụ lưu nội dung đó.
 - **Quyết định thay team.** Không skill nào tự duyệt output của chính nó, tự cam kết thay team, hay
   tự tuyên bố một bản release đã sẵn sàng.

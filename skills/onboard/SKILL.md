@@ -22,8 +22,9 @@ Handles: deriving setup from the actual repository, listing access and accounts 
 them, mapping the codebase by area and owner, recording team working agreements, and building a
 first-week plan with a real starter task.
 
-Does NOT handle: granting access, writing the conventions themselves (`atk:convention`), or teaching
-the business domain in depth, which belongs to the project's domain documentation.
+Does NOT handle: granting access, writing the conventions themselves (`atk:convention`), setting the
+project up for the kit (`atk:init`, which runs once per project rather than once per joiner), or
+teaching the business domain in depth, which belongs to the project's domain documentation.
 
 ## Roles
 

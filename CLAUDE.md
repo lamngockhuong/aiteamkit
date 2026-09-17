@@ -73,16 +73,17 @@ frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `##
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Four files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Five files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
-| File | Owns |
-|------|------|
-| `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows |
-| `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, and the shared YAML front matter block |
-| `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map |
-| `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project |
+| File | Owns | Cited by |
+|------|------|----------|
+| `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows | all |
+| `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, and the shared YAML front matter block | all |
+| `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
+| `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review` |
+| `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -91,8 +92,37 @@ The first three are cited by all 12 skills; `review-checklist.md` is cited by `c
 `review` only, because it is a contract between exactly those two: `convention` writes the rule rows
 and `review` cites their IDs.
 
+`project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
+project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
+where the spec lives, and follow its three-group rule for what to do when that file is missing.
+
 When adding a rule that two or more skills need, put it in `shared/` and reference it. Do not paste
 it into each `SKILL.md`.
+
+## The kit stands alone
+
+A skill may say that something is outside the kit's scope. It must NOT name a command from another
+kit as the thing that handles it. A team that installed only `atk` would hit a dead end, and the
+dead end would be invisible until they followed the pointer.
+
+Say "which the author does" or "outside this kit", or name an `atk:` skill. Never `ak:cook`,
+`/simplify`, or any other foreign command.
+
+After edits, verify:
+
+```bash
+grep -rn "\bak:" skills/ shared/ README.md docs/
+```
+
+Should print nothing (`grep` exits 1).
+
+## `.atk/` in the target project
+
+Skills that need project facts (build commands, layer layout, where the spec lives) read
+`.atk/profile.md` from the root of the **target project**, never from the kit. `atk:init` creates
+it; `shared/project-profile.md` defines what it holds and what each skill does when it is missing.
+
+The kit ships no profile, and no skill writes project facts into the kit itself.
 
 ## Adding or changing a skill touches several files
 

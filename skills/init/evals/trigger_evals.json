@@ -1,0 +1,19 @@
+[
+  { "query": "set up atk in this project", "should_trigger": true },
+  { "query": "/atk:init", "should_trigger": true },
+  { "query": "khởi tạo atk cho repo này", "should_trigger": true },
+  { "query": "tạo file cấu hình dự án cho atk", "should_trigger": true },
+  { "query": "atk の初期設定をして", "should_trigger": true },
+  { "query": "I just installed the kit, what do I run first", "should_trigger": true },
+  { "query": "check whether our atk profile is still accurate", "should_trigger": true },
+  { "query": "the build command in the profile is wrong, re-detect it", "should_trigger": true },
+
+  { "query": "onboard a new developer joining the team", "should_trigger": false },
+  { "query": "viết tài liệu hướng dẫn cho thành viên mới", "should_trigger": false },
+  { "query": "新メンバーのオンボーディング資料を作って", "should_trigger": false },
+  { "query": "write down our coding conventions", "should_trigger": false },
+  { "query": "write down the branch and commit rules our team follows", "should_trigger": false },
+  { "query": "set up the development environment on my machine", "should_trigger": false },
+  { "query": "initialize a new git repository", "should_trigger": false },
+  { "query": "create the first sprint plan", "should_trigger": false }
+]

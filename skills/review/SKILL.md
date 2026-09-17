@@ -23,8 +23,8 @@ Handles: reading the diff in the context of the requirement, design, and convent
 correctness and regression risks, checking test coverage of the changed behavior, and writing
 review comments that a person can act on.
 
-Does NOT handle: approving or merging, which is a human act; rewriting the code (`ak:cook` or the
-author does that); or deciding whether the requirement itself is right (`atk:intake`).
+Does NOT handle: approving or merging, which is a human act; rewriting the code, which the author
+does; or deciding whether the requirement itself is right (`atk:intake`).
 
 ## Roles
 
