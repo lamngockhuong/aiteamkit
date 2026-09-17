@@ -24,7 +24,8 @@ correctness and regression risks, checking test coverage of the changed behavior
 review comments that a person can act on.
 
 Does NOT handle: approving or merging, which is a human act; rewriting the code, which the author
-does; or deciding whether the requirement itself is right (`atk:intake`).
+does with `atk:implement` or `atk:fix`; or deciding whether the requirement itself is right
+(`atk:intake`).
 
 ## Roles
 

@@ -23,7 +23,7 @@ Handles: writing the test plan, deriving test cases from acceptance criteria, ad
 boundary cases, building the regression matrix from change impact, listing test data and environment
 needs, and defining the QA entry and exit criteria.
 
-Does NOT handle: writing automated test code, which belongs to the implementation skill; running the
+Does NOT handle: writing automated test code, which belongs to `atk:implement`; running the
 suite; or signing off a release (`atk:release`).
 
 ## Roles
