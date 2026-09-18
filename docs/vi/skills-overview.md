@@ -8,19 +8,18 @@ với một skill.
 
 ## Vị trí trong vòng đời
 
+```mermaid
+flowchart LR
+    I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
+    E --> D["design-doc"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
+    R -.->|Có phát hiện chặn| IM
+    RL --> IC["incident"] --> RT["retro"]
+    RT -.->|Chu kỳ sau| IN
 ```
-init -> intake -> catchup -> estimate -> design-doc -> breakdown -> convention
-                                                                        |
-                                                                        v
-           release <- verify <- qa <- review <- implement <- plan <------+
-              |
-              v
-           incident -> retro
 
-  fix        khi có lỗi được báo, ở bất kỳ điểm nào
-  onboard    khi có người vào
-  handover   khi có người rời đi, hoặc một phase kết thúc
-```
+Ba skill đáp lại một sự kiện chứ không nằm trong phase nào: `fix` khi có lỗi được báo, ở bất kỳ
+điểm nào; `onboard` khi có người vào; `handover` khi có người rời đi, hoặc một phase kết thúc.
 
 `atk:init` chạy một lần cho mỗi dự án. Nó viết ra `.atk/profile.md`, file cho các skill có động tới
 mã nguồn biết dự án này test thế nào, build ra sao và chia tầng thế nào. `atk:implement`, `atk:fix`

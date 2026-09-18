@@ -7,19 +7,18 @@ Read this before adopting the kit: every skill works alone, and a team can start
 
 ## Where they sit
 
+```mermaid
+flowchart LR
+    I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
+    E --> D["design-doc"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
+    R -.->|Blocking findings| IM
+    RL --> IC["incident"] --> RT["retro"]
+    RT -.->|Next cycle| IN
 ```
-init -> intake -> catchup -> estimate -> design-doc -> breakdown -> convention
-                                                                        |
-                                                                        v
-           release <- verify <- qa <- review <- implement <- plan <------+
-              |
-              v
-           incident -> retro
 
-  fix        when a defect is reported, at any point
-  onboard    when someone joins
-  handover   when someone leaves, or a phase ends
-```
+Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
+`onboard` when someone joins; `handover` when someone leaves or a phase ends.
 
 `atk:init` runs once per project. It writes `.atk/profile.md`, which tells the skills that touch
 code how this project is tested, built, and laid out. `atk:implement`, `atk:fix` and `atk:verify`
