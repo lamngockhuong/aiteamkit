@@ -61,6 +61,8 @@ Never one document with a shared one.
 [1. Resolve kind and file] -> [2. Take the shape] -> [3. Read the code] -> [4. Write] -> [5. Report]
 ```
 
+Before step 1, read `.atk/overrides/spec.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Resolve the kind and the file
 
 The kind comes from `--kind`, or from the subject when it is unambiguous: a route or a resource name

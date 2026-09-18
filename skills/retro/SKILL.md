@@ -48,6 +48,8 @@ named owner. See `shared/team-roles.md`.
 [1. Check last actions] -> [2. Gather evidence] -> [3. Structure] -> [4. Capture] -> [5. Actions and report]
 ```
 
+Before step 1, read `.atk/overrides/retro.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Check the previous retro
 
 Read the last retro record and report each action as `DONE`, `IN PROGRESS`, or `NOT STARTED`, with

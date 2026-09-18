@@ -73,6 +73,8 @@ that exits zero is the worst outcome available here, because it reads as proof.
   -> [5. Review and fix] -> [6. Finalize]
 ```
 
+Before step 1, read `.atk/overrides/implement.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Plan gate
 
 `references/plan-gate.md` holds the input table, the three levels with the signals that put work in

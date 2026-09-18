@@ -10,11 +10,11 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-  skills/<name>/SKILL.md        19 skills, one folder each
+  skills/<name>/SKILL.md        20 skills, one folder each
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
   skills/<name>/evals/*.json    trigger cases for the description
   shared/*.md                   DRY layer shared by the skills that cite it
-  hooks/                        session-start reminder, Claude Code only
+  hooks/                        profile reminder and override loader, Claude Code only
   assets/*.svg                  icon and logo for marketplace listings
   docs/, docs/vi/               bilingual project documentation
 ```
@@ -56,7 +56,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for all 19 skills | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for all 20 skills | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
@@ -64,9 +64,9 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Eleven files hold what skills would otherwise repeat. The first three are cited by all 19:
+Twelve files hold what skills would otherwise repeat. The first three are cited by all 20:
 
-- `shared/team-roles.md`: the role table and the six rules every skill follows.
+- `shared/team-roles.md`: the role table and the seven rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
@@ -113,12 +113,24 @@ Seven are contracts between a named handful of skills rather than kit-wide rules
   the widest of these contracts, because `shared/finalize-steps.md` now opens with its obligation,
   which makes every code-changing skill a party to it.
 
-The eleventh describes a file that does not ship with the kit at all:
+The last two describe files that do not ship with the kit at all:
 
 - `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message ignore it entirely.
   `atk:init` writes the profile, so it belongs to no group.
+
+- `shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
+  the two sections it may carry, and the seven things an override may never remove. The seven
+  exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
+  skill that skips part of an override says so in its artifact rather than silently.
+
+The override mechanism is the one that reaches every skill in two halves, and the split is
+deliberate. Rule 7 of `shared/team-roles.md` holds the behaviour, stated once. Each `## Workflow`
+carries one line naming its own override file and pointing at that rule, because a shared file is
+only read when something makes a skill open it, and a citation under `## Roles` does not. The line
+costs a few tokens per invocation and buys the guarantee that the mechanism runs at all; putting the
+behaviour itself in 19 files instead would be 19 copies of one rule, drifting.
 
 `shared/` sits at the repository root rather than under `skills/`, because a folder inside `skills/`
 without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `shared/<file>.md`,
@@ -132,7 +144,7 @@ because it is not part of the kit.
 a single question, "does this project have a profile yet", and it reminds without blocking.
 
 The boundary is the point. A hook that blocked would put the rule in two places, and the rule is not
-uniform anyway: nine skills need no profile, and a hook that stopped everything would stop
+uniform anyway: ten skills need no profile, and a hook that stopped everything would stop
 `atk:intake` from turning a chat message into requirements, which needs nothing from the repository.
 Which skill needs what, and what it does without it, stays in `shared/project-profile.md`.
 
@@ -166,6 +178,27 @@ One limit, accepted:
   and output contract, and neither could be tested here. The reminder is a convenience; the gate
   that matters is in the skills, and it runs identically on all three harnesses. The other two
   wrappers wait until someone can verify them against a running harness.
+
+### Why a hook may only save work, never do it
+
+The kit runs two hooks and will accept a third on one condition: the kit behaves the same when it is
+missing.
+
+`hooks/load-overrides.mjs` is the case that makes the rule concrete. It fires on `PreToolUse` with
+matcher `Skill` and puts `.atk/overrides/<skill>.md` in front of the skill that owns it. Every skill
+also names that file at the top of its own `## Workflow` and opens it when nothing put it there, so
+Cursor and Codex, which have no matching event, produce the same result one file read slower.
+
+The alternative was available and was rejected. Putting the override mechanism in the hook alone
+would have cost no edits to any `SKILL.md`, and it would have given two of the three harnesses
+nothing at all. `shared/project-profile.md` already refused the same move for the precondition rule,
+for a reason that holds here and is worth repeating: three hook dialects mean three implementations
+of one rule, and three implementations of one rule drift apart.
+
+So the boundary is not "hooks are for reminders". It is that a hook may make something cheaper and
+may never be the only road to it. The test is mechanical: run a skill against a project that has an
+override for it, once with the `PreToolUse` entry registered and once with it removed, and compare.
+The two results have to match.
 
 ## Skill anatomy
 

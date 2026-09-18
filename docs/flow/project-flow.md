@@ -1,6 +1,6 @@
 # Project Flow
 
-How the 19 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
+How the 20 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,
@@ -35,6 +35,8 @@ artifact goes back to its author, which is the loop each phase is drawn with.
 flowchart TD
     subgraph S0["0. Setup"]
         I0["atk:init<br/><small>Dev or TL</small>"] --> I1[".atk/profile.md committed"]
+        I1 --> I2["atk:tailor<br/><small>optional, TL or the owning role</small>"]
+        I2 --> I3[".atk/overrides/&lt;skill&gt;.md committed"]
     end
 
     subgraph S1["1. Requirement"]
@@ -111,6 +113,7 @@ flowchart TD
 | Phase | Skill | Author | Accepted by | Artifact state at the gate |
 |-------|-------|--------|-------------|-----------------------------|
 | 0. Setup | `atk:init` | Dev or TL | Committed with the repository, no separate approval | n/a |
+| 0. Setup | `atk:tailor` | TL, or whoever owns the skill's output | The role that owns what the tailored skill produces | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:intake` | BrSE/BA | Stakeholder, on scope and criteria | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:catchup` | Whoever joins | Nobody; the understanding check is self-marked | `DRAFT` |
 | 2. Estimate | `atk:estimate` | Dev, with PM on capacity | PM and Stakeholder together | `IN REVIEW` to `APPROVED` |

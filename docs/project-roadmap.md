@@ -5,9 +5,9 @@
 | Phase | State | Summary |
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
-| 2. Skill coverage | DONE | 19 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for eight, pending for the eleven original ones |
-| 4. Trigger evals | IN PROGRESS | `evals/trigger_evals.json` per skill. Done for seven, pending for the twelve others. A runner is still missing |
+| 2. Skill coverage | DONE | 20 `SKILL.md` files covering the lifecycle, sharing one section contract |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for nine, pending for the eleven original ones |
+| 4. Trigger evals | IN PROGRESS | `evals/trigger_evals.json` per skill. Done for eight, pending for the twelve others. Run them with a tool outside the kit; the kit ships no runner |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
 
@@ -19,10 +19,10 @@ Repository layout mirroring a working multi-harness plugin: `.claude-plugin/`, `
 
 ## Phase 2: Skill coverage (done)
 
-Nineteen skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter with
+Twenty skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter with
 multilingual triggers, scope, roles, invocation, workflow, output, ticket, and a definition of done.
 
-Twelve of them cover the process a team runs around the code. Seven were added afterwards so the kit
+Twelve of them cover the process a team runs around the code. Eight were added afterwards so the kit
 also covers the work on the code itself, and so it stops where a role owns the decision rather than
 where another kit would have taken over: `init` records what the project is, `catchup` brings
 someone up to speed on work they did not help start, `plan` breaks a piece of work into reviewable
@@ -30,7 +30,7 @@ phases, `implement` writes the code, `fix` proves a defect's cause before changi
 exercises the running system, and `spec` keeps the documents that say what the API, the schema and
 each feature do today.
 
-The `shared/` layer holds what would otherwise be repeated nineteen times: the role vocabulary, the
+The `shared/` layer holds what would otherwise be repeated twenty times: the role vocabulary, the
 artifact path convention, and the tracker adapters, cited by every skill. Eight more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
@@ -41,7 +41,7 @@ five skills that have to leave its documents true, and `project-profile.md`, whi
 
 ## Phase 3: Reference depth (in progress)
 
-Seven skills ship with `references/` already. The eleven original ones without them do not. For those
+Nine skills ship with `references/` already. The eleven original ones without them do not. For those
 whose output is a document with a fixed shape, the template is re-derived on every run:
 
 | Skill | Reference to add |
@@ -80,10 +80,11 @@ pre-1.0 by dropping the two `bump-*-pre-major` flags in `release-please-config.j
 
 - Do teams tracking work in Backlog or Redmine need a real adapter with API calls, or is the
   vocabulary map plus manual paste enough?
-- Is a nineteenth skill for daily and weekly reporting worth it, or does `atk:retro --report` already
+- Is a further skill for daily and weekly reporting worth it, or does `atk:retro --report` already
   cover the need at a lower cadence?
-- The session-start hook reminds only on Claude Code. Codex and Cursor can package hooks too; is the
-  reminder worth maintaining three times, given that the real gate lives in the skills?
+- Both hooks run only on Claude Code. Codex and Cursor can package hooks too; is either worth
+  maintaining three times, given that the reminder is a convenience and the override loader only
+  saves a file read the skill would otherwise do itself?
 - `shared/project-profile.md` puts `review`, `qa`, `release` and `convention` in the Required-soft
   group, meant to continue without a profile and say so in the artifact. None of those four
   `SKILL.md` files cites the profile at all, so nothing implements it; `plan` is the only Required-

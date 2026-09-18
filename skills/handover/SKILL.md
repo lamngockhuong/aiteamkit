@@ -49,6 +49,8 @@ taking it, never by the person leaving. Tech Lead arbitrates gaps. PM owns acces
 [1. Inventory] -> [2. True state] -> [3. Decisions and traps] -> [4. Access] -> [5. Validate]
 ```
 
+Before step 1, read `.atk/overrides/handover.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Inventory
 
 Gather from the tracker, open branches and pull requests, uncommitted work, review queue, scheduled

@@ -10,11 +10,11 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-  skills/<name>/SKILL.md        19 skill, mỗi skill một thư mục
+  skills/<name>/SKILL.md        20 skill, mỗi skill một thư mục
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
   shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
-  hooks/                        lời nhắc lúc mở phiên, chỉ Claude Code
+  hooks/                        lời nhắc profile và bộ nạp file ghi đè, chỉ Claude Code
   assets/*.svg                  icon và logo cho trang marketplace
   docs/, docs/vi/               tài liệu dự án song ngữ
 ```
@@ -55,7 +55,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho cả 19 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho cả 20 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
@@ -63,9 +63,9 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười một file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 19 skill trích dẫn:
+Mười hai file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 20 skill trích dẫn:
 
-- `shared/team-roles.md`: bảng vai trò và sáu nguyên tắc mà mọi skill tuân theo.
+- `shared/team-roles.md`: bảng vai trò và bảy nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
@@ -111,12 +111,24 @@ Bảy file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi skill đổi mã nguồn đều là
   một bên của nó.
 
-File thứ mười một mô tả một file không đi kèm kit:
+Hai file cuối mô tả những file không đi kèm kit:
 
 - `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không nhắc tới.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
+
+- `shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
+  hai mục mà file đó được phép mang, và bảy thứ phần ghi đè không bao giờ được gỡ. Bảy điều loại trừ
+  là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
+  qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng.
+
+Cơ chế ghi đè là cơ chế duy nhất chạm tới mọi skill bằng hai nửa, và việc tách đôi là cố ý. Nguyên
+tắc 7 của `shared/team-roles.md` giữ phần hành vi, viết đúng một lần. Mỗi mục `## Workflow` mang một
+dòng gọi tên file ghi đè của chính nó và trỏ về nguyên tắc ấy, bởi một file shared chỉ được đọc khi
+có thứ gì đó buộc skill mở nó ra, mà một câu trích dẫn nằm trong mục `## Roles` thì không buộc được.
+Dòng đó tốn vài token mỗi lần gọi và đổi lấy điều chắc chắn rằng cơ chế thật sự chạy; còn đưa hẳn
+phần hành vi vào 19 file thì thành 19 bản của cùng một nguyên tắc, rồi lệch nhau.
 
 `shared/` nằm ở gốc repo chứ không nằm trong `skills/`, vì một thư mục bên trong `skills/` mà không
 có `SKILL.md` sẽ gây nhập nhằng cho cơ chế quét skill. Các skill trích dẫn theo dạng
@@ -130,7 +142,7 @@ có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại l
 đúng một câu hỏi, "dự án này đã có profile chưa", và nó nhắc chứ không chặn.
 
 Ranh giới đó là toàn bộ vấn đề. Hook mà chặn thì luật nằm ở hai chỗ, mà luật này vốn không đồng nhất:
-chín skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn
+mười skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn
 chat thành yêu cầu, việc chẳng cần gì từ repo. Skill nào cần gì và thiếu thì làm sao, tất cả nằm
 trong `shared/project-profile.md`.
 
@@ -162,6 +174,25 @@ Một giới hạn, được chấp nhận:
   một hợp đồng đầu ra riêng, và không bên nào thử được ở đây. Lời nhắc chỉ là tiện nghi; cổng thật
   nằm trong skill và chạy y hệt nhau trên cả ba harness. Hai lớp vỏ còn lại chờ tới khi có người
   kiểm được chúng trên một harness đang chạy.
+
+### Vì sao một hook chỉ được làm đỡ việc, không bao giờ được làm thay
+
+Kit chạy hai hook và sẽ nhận hook thứ ba với đúng một điều kiện: thiếu nó thì kit vẫn cư xử như cũ.
+
+`hooks/load-overrides.mjs` là trường hợp làm điều kiện ấy thành cụ thể. Nó chạy ở `PreToolUse` với
+matcher `Skill` và đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó. Mỗi skill cũng gọi
+tên chính file ấy ở đầu mục `## Workflow` của mình và tự mở khi không có gì đặt sẵn, nên Cursor và
+Codex, vốn không có sự kiện tương ứng, cho ra cùng một kết quả, chỉ chậm hơn một lượt đọc file.
+
+Hướng còn lại đã có sẵn và đã bị loại. Đặt trọn cơ chế ghi đè vào hook thì không phải sửa `SKILL.md`
+nào, đổi lại hai trong ba harness không có gì cả. `shared/project-profile.md` đã từ chối đúng nước
+đi đó cho luật tiền điều kiện, vì một lý do vẫn đúng ở đây và đáng nhắc lại: ba phương ngữ hook nghĩa
+là ba bản của một luật, và ba bản của một luật rồi sẽ lệch nhau.
+
+Vậy ranh giới không phải là "hook chỉ để nhắc". Ranh giới là một hook được phép làm thứ gì đó rẻ đi,
+và không bao giờ được là con đường duy nhất tới thứ đó. Phép thử làm bằng máy: chạy một skill trên
+một dự án có file ghi đè cho nó, một lần có mục `PreToolUse` trong `hooks/hooks.json` và một lần gỡ
+mục đó ra, rồi so hai kết quả. Hai kết quả phải giống nhau.
 
 ## Giải phẫu một skill
 

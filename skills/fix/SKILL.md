@@ -65,6 +65,8 @@ a test command: a guessed command that passes is worse evidence than no command 
   -> [5. Tidy the fix] -> [6. Report and finalize]
 ```
 
+Before step 1, read `.atk/overrides/fix.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Capture and prove
 
 `references/investigate.md` holds the steps and the shape of the result. In short: copy the failure

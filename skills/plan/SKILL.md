@@ -83,6 +83,8 @@ reader knows which parts were inferred.
   -> [5. Hand off]
 ```
 
+Before step 1, read `.atk/overrides/plan.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Read the request
 
 Take the goal and the acceptance criteria from the ticket and the design it links to. Copy them; do
@@ -170,7 +172,7 @@ Written to `plans/<YYMMDD-HHMM>-<slug>/` at the repository root per `shared/arti
 Phases that are not a straight line get a Mermaid diagram in the index, per
 `shared/diagram-conventions.md`. A line of phases does not: the numbered list already says it.
 
-This is one of the two skills that write outside the docs root; that file says why, and what a
+This is one of the three skills that write outside the docs root; that file says why, and what a
 project does when it keeps plans somewhere else.
 
 The directory is the shape even for a single phase, so a plan that grows a second phase halfway

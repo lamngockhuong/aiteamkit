@@ -36,3 +36,8 @@ ask who plays it, or mark the artifact `OWNER: TBD` rather than assigning it to 
    Interview for judgment, context, and agreements, not for facts already on disk.
 6. **Language.** Artifacts follow the team's working language. Default to the language the user
    writes in; keep code identifiers, commands, and file paths in their original form.
+7. **Honour the project's overrides.** Read `.atk/overrides/<this skill>.md` when it exists: `## Before`
+   applies to the first workflow step, `## After` to the result before the artifact is written. Skip
+   any instruction that breaks rules 1 to 3, or one of the four safety limits a skill owes its team,
+   and say in the artifact what was skipped and why. Format and the full list:
+   `shared/project-overrides.md`.

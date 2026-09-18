@@ -1,6 +1,6 @@
 # AI Team Kit (`atk`)
 
-Nineteen skills covering the software delivery lifecycle of a **company project team**, not a solo
+Twenty skills covering the software delivery lifecycle of a **company project team**, not a solo
 developer. Every skill assumes work has an author and a separate reviewer, decisions have an owner,
 and artifacts are read by someone who was not in the conversation that produced them.
 
@@ -14,7 +14,7 @@ Walkthrough of what each skill means and when to use it:
 
 ```mermaid
 flowchart LR
-    I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
+    I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
     E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
     R -.->|Blocking findings| IM
@@ -40,6 +40,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | Skill | What it produces |
 |-------|------------------|
 | `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
+| `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
 | `atk:intake` | A raw request turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
 | `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
@@ -65,6 +66,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 
 ```bash
 /atk:init                                 # --audit --lang --out
+/atk:tailor <skill>                       # --audit --out
 /atk:intake <request-file|ticket|text>    # --interview|--no-interview --lang --out
 /atk:catchup <epic-url|pr-url>            # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out

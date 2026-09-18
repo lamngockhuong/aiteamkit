@@ -49,6 +49,8 @@ testable. See `shared/team-roles.md`.
 [1. Read request] -> [2. Scan repo] -> [3. Interview gaps] -> [4. Draft stories] -> [5. Review gate]
 ```
 
+Before step 1, read `.atk/overrides/intake.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Read the request
 
 Quote the request verbatim into the artifact before interpreting it. Interpretation drifts; the

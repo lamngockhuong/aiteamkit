@@ -48,6 +48,8 @@ communication. See `shared/team-roles.md`.
 [1. Declare] -> [2. Mitigate and log] -> [3. Resolve] -> [4. Prove cause] -> [5. Postmortem and runbook]
 ```
 
+Before step 1, read `.atk/overrides/incident.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Declare
 
 Name the Incident Commander, set the severity, and state the impact in user terms: who cannot do

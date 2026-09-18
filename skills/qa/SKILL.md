@@ -48,6 +48,8 @@ handoff and the test data. PM owns the exit criteria. See `shared/team-roles.md`
 [1. Read criteria] -> [2. Derive cases] -> [3. Negative and boundary] -> [4. Regression] -> [5. Entry and exit]
 ```
 
+Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Read the acceptance criteria
 
 Load the requirement and design. List every acceptance criterion with an ID. A criterion that

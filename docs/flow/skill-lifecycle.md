@@ -69,7 +69,7 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another eighty times across the nineteen files, in fifty-four distinct pairs, which
+One skill names another ninety times across the twenty files, in fifty-seven distinct pairs, which
 sounds like a dense graph. It is not: most of those are boundaries rather than edges. Five kinds, and
 only the first four happen at run time.
 
@@ -79,7 +79,7 @@ only the first four happen at run time.
 | Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc` |
 | Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
-| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa` |
+| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa` |
 
 ```mermaid
 flowchart TD

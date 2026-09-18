@@ -58,6 +58,8 @@ will write the code, and nobody answers it for them. See `shared/team-roles.md`.
   -> [5. Understanding check] -> [6. Questions for the spec author]
 ```
 
+Before step 1, read `.atk/overrides/catchup.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Pick the mode
 
 Classify by what the input resolves to, not by how it was typed. A URL whose path contains `/pull/`,

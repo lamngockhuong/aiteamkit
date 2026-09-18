@@ -1,6 +1,6 @@
 # Luồng dự án
 
-19 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
+20 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,
@@ -36,6 +36,8 @@ Artifact bị trả về tay người viết, và đó là vòng lặp được 
 flowchart TD
     subgraph S0["0. Thiết lập"]
         I0["atk:init<br/><small>Dev hoặc TL</small>"] --> I1["Đã commit .atk/profile.md"]
+        I1 --> I2["atk:tailor<br/><small>không bắt buộc, TL hoặc vai sở hữu</small>"]
+        I2 --> I3["Đã commit .atk/overrides/&lt;skill&gt;.md"]
     end
 
     subgraph S1["1. Yêu cầu"]
@@ -112,6 +114,7 @@ flowchart TD
 | Pha | Skill | Người viết | Người chấp nhận | Trạng thái artifact tại cửa duyệt |
 |-----|-------|------------|-----------------|------------------------------------|
 | 0. Thiết lập | `atk:init` | Dev hoặc TL | Commit cùng repo, không cần duyệt riêng | không có |
+| 0. Thiết lập | `atk:tailor` | TL, hoặc ai sở hữu thứ skill đó sinh ra | Vai sở hữu kết quả của skill được tùy biến | `IN REVIEW` sang `APPROVED` |
 | 1. Yêu cầu | `atk:intake` | BrSE/BA | Stakeholder, về phạm vi và tiêu chí | `IN REVIEW` sang `APPROVED` |
 | 1. Yêu cầu | `atk:catchup` | Người mới vào việc | Không ai; phần kiểm tra hiểu bài là tự chấm | `DRAFT` |
 | 2. Ước lượng | `atk:estimate` | Dev, PM soát năng lực | PM và Stakeholder cùng chốt | `IN REVIEW` sang `APPROVED` |

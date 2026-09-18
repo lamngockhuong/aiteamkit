@@ -1,7 +1,7 @@
 {
   "name": "atk",
   "displayName": "AI Team Kit",
-  "description": "Project profile setup, requirement intake, catching up on work in flight, estimation, technical design, task breakdown, conventions, implementation planning, implementation, bug fixing, code review, QA, runtime verification, release, incident response, retrospective, onboarding, and handover for a company project team",
+  "description": "Project profile setup, per-team skill overrides, requirement intake, catching up on work in flight, estimation, technical design, task breakdown, conventions, implementation planning, implementation, bug fixing, code review, QA, runtime verification, release, incident response, retrospective, onboarding, and handover for a company project team",
   "version": "0.0.1",
   "author": {
     "name": "Lam Ngoc Khuong",
@@ -13,6 +13,7 @@
   "keywords": [
     "skills",
     "team",
+    "customization",
     "sdlc",
     "delivery",
     "requirements",

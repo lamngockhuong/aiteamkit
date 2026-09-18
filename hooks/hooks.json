@@ -13,6 +13,21 @@
           }
         ]
       }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "${CLAUDE_PLUGIN_ROOT}/hooks/load-overrides.mjs"
+            ],
+            "timeout": 5
+          }
+        ]
+      }
     ]
   }
 }
