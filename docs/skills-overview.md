@@ -154,7 +154,9 @@ merge conflict nobody planned for.
 
 **Produces.** The team's conventions derived from its own code and git history, each rule classified
 as `ENFORCED` by tooling, `REVIEWED` by a human, or `ASPIRATIONAL`, plus the tooling that could
-enforce the ones currently checked by hand.
+enforce the ones currently checked by hand. A team that already keeps standards documents gets that
+classification written into the set it has, in the shape it already uses: `docs/conventions.md` is
+the kit's default, not an address every project has to move to.
 
 **Use when.** There is no written convention, the written one no longer matches the code, or reviews
 keep repeating the same comment.

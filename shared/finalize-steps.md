@@ -45,8 +45,8 @@ the first pull request to notice is the cheapest place to close it.
 ## 2. Branch
 
 The naming rule comes from the project, never from this file. Look in this order and say which
-source decided it: the conventions document named in the Docs section of `.atk/profile.md`, then
-`docs/conventions.md`, then the shape of the recent branch names in `git branch -a`.
+source decided it: the conventions document, resolved per Where the rules live in
+`shared/review-checklist.md`, then the shape of the recent branch names in `git branch -a`.
 
 Never commit onto the default branch. When the work has already started there, create the branch now
 and carry the changes across, which is cheaper than the conversation that follows a direct push.

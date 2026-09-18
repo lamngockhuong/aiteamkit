@@ -92,7 +92,7 @@ skill discovery.
 | `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows | all |
 | `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, the shared YAML front matter block, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
-| `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review`, `implement` |
+| `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
@@ -105,9 +105,12 @@ Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relati
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
 
 The first three are cited by every skill. The rule record format in `review-checklist.md` is a
-contract between exactly two: `convention` writes the rule rows and `review` cites their IDs.
-`implement` reads the same file for one thing only, the baseline items, which it falls back to when
-the project has recorded no conventions of its own. `finalize-steps.md` is cited by the three skills
+contract between exactly two: `convention` writes the rule rows and `review` cites their IDs. All
+three readers need the resolution that opens the same file, because `docs/conventions.md` is a
+default and not an address: a team that already keeps a standards directory keeps its rules there,
+and a skill that reads the default instead would report a project with thirty standards documents as
+having recorded no conventions. `implement` reads the file for that and for the baseline items,
+which it falls back to when the project really has recorded none. `finalize-steps.md` is cited by the three skills
 that change code, and holds the rule that nothing leaves the local repository without being asked
 for. `verify` is one of them because the fixes it makes between retry rounds are code like any other.
 

@@ -72,11 +72,15 @@ Eleven files hold what skills would otherwise repeat. The first three are cited 
 
 Seven are contracts between a named handful of skills rather than kit-wide rules:
 
-- `shared/review-checklist.md`: the rule record format that `atk:convention` writes and `atk:review`
-  cites by ID, plus the baseline items that hold in any project. It exists so a convention is
-  written once and checked in the same words, instead of being restated in both skills and drifting.
-  `atk:implement` reads it for the baseline items alone, as a fallback when a project has recorded
-  no conventions of its own.
+- `shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
+  it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
+  that a project which already writes conventions keeps its own shape, and the baseline items that
+  hold in any project. It exists so a convention is written once and checked in the same words,
+  instead of being restated in both skills and drifting. The resolution is here for the same reason:
+  `docs/conventions.md` is a default and not an address, so a reader that went straight to it would
+  report a team with a directory of standards documents as having recorded nothing.
+  `atk:implement` reads the file for that resolution and for the baseline items, which it falls back
+  to when a project really has recorded no conventions of its own.
 - `shared/finalize-steps.md`: the closing sequence for a code change, and the consent line that
   every action past the commit has to cross. Cited by `atk:fix`, `atk:implement`, and `atk:verify`,
   the three skills that change code. Nothing leaves the local repository without being asked for.

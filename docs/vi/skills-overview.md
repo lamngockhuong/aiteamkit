@@ -157,7 +157,10 @@ nói rõ ra, đó chính là thứ ngăn cú merge conflict mà không ai lườ
 
 **Sinh ra.** Quy ước của team được rút ra từ chính code và lịch sử git của team, mỗi quy tắc được
 phân loại `ENFORCED` (công cụ chặn), `REVIEWED` (người kiểm trong review) hay `ASPIRATIONAL` (không
-ai kiểm), kèm công cụ có thể tự động hóa những quy tắc đang phải kiểm bằng tay.
+ai kiểm), kèm công cụ có thể tự động hóa những quy tắc đang phải kiểm bằng tay. Một team đã có sẵn
+bộ tài liệu chuẩn thì phần phân loại đó được viết vào chính bộ tài liệu ấy, theo đúng hình dạng team
+đang dùng: `docs/conventions.md` là giá trị mặc định của kit, không phải địa chỉ mà mọi dự án phải
+chuyển sang.
 
 **Dùng khi.** Chưa có quy ước viết ra, quy ước đã viết không còn khớp với code, hoặc review cứ lặp
 đi lặp lại cùng một comment.

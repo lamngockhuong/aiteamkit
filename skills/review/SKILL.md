@@ -86,10 +86,11 @@ regressions, missing error and edge-case handling, security and data exposure, u
 behavior, a public contract changed without its reference document, convention violations, then
 readability.
 
-Convention checking runs off `shared/review-checklist.md`: read the review checklist section of the
-project's `docs/conventions.md`, check each `REVIEWED` rule, and cite the rule ID with its text
-quoted verbatim so the author can dispute the rule rather than the reviewer. When the project has no
-recorded conventions, use the baseline items in that file and say so in the review. Do not invent
+Convention checking runs off `shared/review-checklist.md`: resolve the project's conventions
+document per Where the rules live in that file, read its review checklist section, check each
+`REVIEWED` rule, and cite the rule ID with its text quoted verbatim so the author can dispute the
+rule rather than the reviewer. When the project has no recorded conventions, use the baseline items
+in that file and say so in the review. Do not invent
 project-specific rules mid-review; report the gap so `atk:convention` can record it.
 
 The reference-document check is the sync obligation in `shared/spec-docs.md`, which lists the five

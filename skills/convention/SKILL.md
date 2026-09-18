@@ -50,9 +50,15 @@ team agreeing is a proposal, marked as such. See `shared/team-roles.md`.
 
 ### 1. Read what exists
 
+Resolve where this project keeps its conventions, per Where the rules live in
+`shared/review-checklist.md`, and read what is there. A project that keeps a standards directory
+rather than one file has its conventions across all of those documents, so read the set, not the
+first file in it.
+
 Read `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, `.editorconfig`, linter and formatter configs,
-`CODEOWNERS`, PR templates, and any existing convention document. Do not duplicate what a config
-file already states: link to it.
+`CODEOWNERS`, and PR templates as well. Do not duplicate what a config file already states: link to
+it. A rule the project has already written is not rewritten here either; it is classified in step 3
+and cited where it lives.
 
 ### 2. Derive from the code
 
@@ -82,19 +88,36 @@ the config change needed. Propose; do not silently install tooling or rewrite CI
 
 ### 5. Write
 
-Update `docs/conventions.md` in place. Its review checklist section holds the `REVIEWED` rules only,
-per `shared/review-checklist.md`; an `ENFORCED` rule is already checked by a tool and repeating it
-wastes a reviewer's attention, and `ASPIRATIONAL` rules are listed apart and marked unchecked.
+Update the document resolved in step 1, in place. Its review checklist section holds the `REVIEWED`
+rules only, per `shared/review-checklist.md`; an `ENFORCED` rule is already checked by a tool and
+repeating it wastes a reviewer's attention, and `ASPIRATIONAL` rules are listed apart and marked
+unchecked.
+
+Where the project already keeps conventions, its shape wins, under the rule of that name in
+`shared/review-checklist.md`. Write into the set as it is arranged, put the checklist section in its
+index document, and leave the rest of the set alone. Converting a team's standards directory into
+this skill's default layout is its own piece of work with its own approver, never a side effect of
+recording one rule.
+
+Tell the user which document now carries the checklist, so the Docs section of `.atk/profile.md`
+records it and the next skill resolves it without guessing.
 
 Where the project has a `CONTRIBUTING.md`, keep the human contribution flow there and link to the
 conventions rather than copying them.
 
 ## Output
 
-Written to `docs/conventions.md` per `shared/artifact-paths.md`. Sections: front matter, branch and
-commit rules, code layout and naming, error handling and logging, testing rules, the review
-checklist in the `shared/review-checklist.md` record format, and the enforcement table mapping every
-rule to its bucket and tool.
+Written to the document resolved per `shared/review-checklist.md`, which is `docs/conventions.md`
+by default under `shared/artifact-paths.md`.
+
+For a project with nothing written yet, the sections are: front matter, branch and commit rules,
+code layout and naming, error handling and logging, testing rules, the review checklist in the
+`shared/review-checklist.md` record format, and the enforcement table mapping every rule to its
+bucket and tool.
+
+For a project that already keeps conventions, the same content goes into the shape it already uses,
+and the two sections it will not have are the review checklist and the enforcement table. Those are
+the addition; the rest is classification of what is already written.
 
 ## Ticket
 
@@ -106,6 +129,8 @@ only when the user asks.
 - [ ] Every rule is derived from the code or explicitly agreed, never imported unexamined.
 - [ ] Every rule is classified `ENFORCED`, `REVIEWED`, or `ASPIRATIONAL`.
 - [ ] The document links to config files instead of restating their contents.
+- [ ] A project that already keeps conventions still has its own shape afterwards.
+- [ ] The document carrying the checklist is named to the user, for the profile to record.
 - [ ] `--audit` reports disagreements without changing any file.
 - [ ] Rules the team has not agreed to are marked as proposals.
 - [ ] The review checklist section carries only `REVIEWED` rules, each with an ID and a default severity.
