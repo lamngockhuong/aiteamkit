@@ -105,8 +105,25 @@ names things to establish before starting. Apply `## After` once the last step h
 result, before the artifact is written, so anything it adds lands in the artifact rather than in a
 follow-up message.
 
-A harness may load the file ahead of the skill instead. When the instructions are already in front
-of the skill, use those and do not open the file again.
+### When a harness loaded it already
+
+A harness may put the file in front of the skill before the skill starts. Claude Code does, through
+`hooks/load-overrides.mjs`; Cursor and Codex have no equivalent event and the skill opens the file
+itself, one read slower and with the same result.
+
+Check for it before reading. Loaded content arrives introduced by this sentence, and the words are
+fixed because the hook and the skill both have to recognise them:
+
+> Loaded from `.atk/overrides/<skill>.md`. This is the project's override file for `<skill>`. Apply
+> it per rule 7 of `shared/team-roles.md` and do not open the file again.
+
+A file too long to put in front of the skill is named instead of quoted, and that sentence ends
+`too long to inline (<n> characters). Read that file and apply it per rule 7 of
+shared/team-roles.md.` Then read it.
+
+Nothing else changes. The hook decides nothing, skips nothing, and reports nothing; what it saves is
+one file read. A skill that finds no such sentence opens the file, which is what happens on two of
+the three harnesses and on the third whenever the hook is turned off.
 
 ## What an override cannot change
 

@@ -14,7 +14,7 @@ aiteamkit/
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
   shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
-  hooks/                        lời nhắc lúc mở phiên, chỉ Claude Code
+  hooks/                        lời nhắc profile và bộ nạp file ghi đè, chỉ Claude Code
   assets/*.svg                  icon và logo cho trang marketplace
   docs/, docs/vi/               tài liệu dự án song ngữ
 ```
@@ -174,6 +174,25 @@ Một giới hạn, được chấp nhận:
   một hợp đồng đầu ra riêng, và không bên nào thử được ở đây. Lời nhắc chỉ là tiện nghi; cổng thật
   nằm trong skill và chạy y hệt nhau trên cả ba harness. Hai lớp vỏ còn lại chờ tới khi có người
   kiểm được chúng trên một harness đang chạy.
+
+### Vì sao một hook chỉ được làm đỡ việc, không bao giờ được làm thay
+
+Kit chạy hai hook và sẽ nhận hook thứ ba với đúng một điều kiện: thiếu nó thì kit vẫn cư xử như cũ.
+
+`hooks/load-overrides.mjs` là trường hợp làm điều kiện ấy thành cụ thể. Nó chạy ở `PreToolUse` với
+matcher `Skill` và đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó. Mỗi skill cũng gọi
+tên chính file ấy ở đầu mục `## Workflow` của mình và tự mở khi không có gì đặt sẵn, nên Cursor và
+Codex, vốn không có sự kiện tương ứng, cho ra cùng một kết quả, chỉ chậm hơn một lượt đọc file.
+
+Hướng còn lại đã có sẵn và đã bị loại. Đặt trọn cơ chế ghi đè vào hook thì không phải sửa `SKILL.md`
+nào, đổi lại hai trong ba harness không có gì cả. `shared/project-profile.md` đã từ chối đúng nước
+đi đó cho luật tiền điều kiện, vì một lý do vẫn đúng ở đây và đáng nhắc lại: ba phương ngữ hook nghĩa
+là ba bản của một luật, và ba bản của một luật rồi sẽ lệch nhau.
+
+Vậy ranh giới không phải là "hook chỉ để nhắc". Ranh giới là một hook được phép làm thứ gì đó rẻ đi,
+và không bao giờ được là con đường duy nhất tới thứ đó. Phép thử làm bằng máy: chạy một skill trên
+một dự án có file ghi đè cho nó, một lần có mục `PreToolUse` trong `hooks/hooks.json` và một lần gỡ
+mục đó ra, rồi so hai kết quả. Hai kết quả phải giống nhau.
 
 ## Giải phẫu một skill
 

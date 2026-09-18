@@ -178,23 +178,35 @@ it; `shared/project-profile.md` defines what it holds and what each skill does w
 
 The kit ships no profile, and no skill writes project facts into the kit itself.
 
-## `hooks/` reminds; it is never where a rule lives
+## `hooks/` never holds a rule, and is never the only road to a behavior
 
-`hooks/hooks.json` registers one `SessionStart` hook running `hooks/check-profile.mjs`, which prints
-one line when a git repository has no `.atk/profile.md`. That is the whole feature.
+Two hooks, and both boundaries have to hold or the kit stops being the same kit on three harnesses.
 
-The script must stay answerable in one sentence: "does this project have a profile yet". The moment
-it answers a second question, the precondition rule exists in two places, and the copy in
+`SessionStart` runs `hooks/check-profile.mjs`, which prints one line when a git repository has no
+`.atk/profile.md`. It must stay answerable in one sentence: "does this project have a profile yet".
+The moment it answers a second question, the precondition rule exists in two places, and the copy in
 `shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: ten skills
 need no profile at all, so a hook that blocked would stop `atk:intake` from turning a chat message
 into requirements.
+
+`PreToolUse` with matcher `Skill` runs `hooks/load-overrides.mjs`, which puts
+`.atk/overrides/<skill>.md` in front of the skill that owns it. It decides nothing and skips nothing;
+what it saves is one file read. Every skill names its own override file at the top of its
+`## Workflow` and opens it when no hook put it there, which is what happens on Cursor and Codex and
+on Claude Code with the hook turned off. The test that keeps this honest: run a skill against a
+project that has an override for it twice, once with the `PreToolUse` entry in `hooks/hooks.json`
+and once with it removed, and compare the two results. A difference means a behavior has moved into
+the hook and two harnesses have silently lost it.
+
+That is the bar for a third hook: it saves work a skill could do itself, and the kit behaves the
+same when it is missing.
 
 Claude Code's contract makes the boundary hold by construction: `SessionStart` cannot block, exit
 code 2 included. The script exits 0 on every path regardless, prints nothing when it has nothing to
 say, and writes its "already reminded" marker to `${CLAUDE_PLUGIN_DATA}` or the user's state
 directory, never into the user's repository.
 
-**Keep the hook in exec form, and keep it Node.** The entry is `"command": "node"` with
+**Keep both hooks in exec form, and keep them Node.** The entry is `"command": "node"` with
 `${CLAUDE_PLUGIN_ROOT}` inside `args`. Rewriting it as a shell script, or moving it to shell form,
 breaks Windows. `docs/system-architecture.md` holds the reasoning under "Why the hook is Node and
 not a shell script"; read it before changing the shape, and keep the exec-form check in the
@@ -353,16 +365,28 @@ done
 diff <(cd docs && find . -name '*.md' -not -path './vi/*' | sort) \
      <(cd docs/vi && find . -name '*.md' | sort)
 
-# The hook parses, is valid Node, and stays silent in a repo that already has a profile
+# Both hooks parse and are valid Node; check-profile stays silent where a profile exists
 python3 -c "import json; json.load(open('hooks/hooks.json'))" && echo "OK hooks.json"
-node --check hooks/check-profile.mjs && echo "OK check-profile.mjs"
+node --check hooks/check-profile.mjs && node --check hooks/load-overrides.mjs && echo "OK node"
 out=$(CLAUDE_PROJECT_DIR="$PWD" CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
 test -z "$out" && echo "OK silent with profile"   # fresh marker dir, so silence means the profile
 
-# The hook is registered in exec form; shell form would break bare Windows
+# load-overrides says nothing it was not asked for, and cannot read outside .atk/overrides/
+for payload in '{"tool_name":"Bash","tool_input":{}}' \
+               '{"tool_name":"Skill","tool_input":{"skill":"atk:no-such-skill"}}' \
+               '{"tool_name":"Skill","tool_input":{"skill":"../../../etc/passwd"}}' \
+               'not json'; do
+  out=$(echo "$payload" | CLAUDE_PROJECT_DIR="$PWD" node hooks/load-overrides.mjs)
+  test "$out" = "{}" || echo "LEAK on: $payload"
+done; echo "OK load-overrides quiet"
+
+# Every hook is registered in exec form; shell form would break bare Windows
 python3 -c "
-import json; h=json.load(open('hooks/hooks.json'))['hooks']['SessionStart'][0]['hooks'][0]
-assert h['command']=='node' and 'args' in h, 'hook must stay in exec form'
+import json
+for event in json.load(open('hooks/hooks.json'))['hooks'].values():
+    for group in event:
+        for h in group['hooks']:
+            assert h['command']=='node' and 'args' in h, 'hook must stay in exec form'
 print('OK exec form')"
 
 # Version agreement across the 6 version-bearing files

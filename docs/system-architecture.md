@@ -14,7 +14,7 @@ aiteamkit/
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
   skills/<name>/evals/*.json    trigger cases for the description
   shared/*.md                   DRY layer shared by the skills that cite it
-  hooks/                        session-start reminder, Claude Code only
+  hooks/                        profile reminder and override loader, Claude Code only
   assets/*.svg                  icon and logo for marketplace listings
   docs/, docs/vi/               bilingual project documentation
 ```
@@ -178,6 +178,27 @@ One limit, accepted:
   and output contract, and neither could be tested here. The reminder is a convenience; the gate
   that matters is in the skills, and it runs identically on all three harnesses. The other two
   wrappers wait until someone can verify them against a running harness.
+
+### Why a hook may only save work, never do it
+
+The kit runs two hooks and will accept a third on one condition: the kit behaves the same when it is
+missing.
+
+`hooks/load-overrides.mjs` is the case that makes the rule concrete. It fires on `PreToolUse` with
+matcher `Skill` and puts `.atk/overrides/<skill>.md` in front of the skill that owns it. Every skill
+also names that file at the top of its own `## Workflow` and opens it when nothing put it there, so
+Cursor and Codex, which have no matching event, produce the same result one file read slower.
+
+The alternative was available and was rejected. Putting the override mechanism in the hook alone
+would have cost no edits to any `SKILL.md`, and it would have given two of the three harnesses
+nothing at all. `shared/project-profile.md` already refused the same move for the precondition rule,
+for a reason that holds here and is worth repeating: three hook dialects mean three implementations
+of one rule, and three implementations of one rule drift apart.
+
+So the boundary is not "hooks are for reminders". It is that a hook may make something cheaper and
+may never be the only road to it. The test is mechanical: run a skill against a project that has an
+override for it, once with the `PreToolUse` entry registered and once with it removed, and compare.
+The two results have to match.
 
 ## Skill anatomy
 
