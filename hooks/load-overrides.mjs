@@ -39,10 +39,18 @@ function readStdin() {
   }
 }
 
-// "atk:review" and "review" both name the same file. Anything with a path
-// separator in it is not a skill name at all.
+// Only this kit's own skills, and only under this kit's namespace. Harnesses name
+// a plugin skill "<plugin>:<skill>", and atk's skill names are ordinary words:
+// fix, plan, review, implement, docs. Accepting a bare name, or any namespace,
+// would hand this project's instructions for atk:fix to whatever other kit also
+// ships a skill called fix, together with a pointer to a shared/ file that kit
+// does not have. Silence is the right answer there, and it costs nothing: the
+// skill opens the file itself when no hook put it in front of it.
+const NAMESPACE = 'atk:';
+
 function skillFileName(name) {
-  const bare = name.includes(':') ? name.slice(name.lastIndexOf(':') + 1) : name;
+  if (!name.startsWith(NAMESPACE)) return null;
+  const bare = name.slice(NAMESPACE.length);
   return /^[a-z][a-z0-9-]*$/.test(bare) ? `${bare}.md` : null;
 }
 

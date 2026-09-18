@@ -371,10 +371,14 @@ node --check hooks/check-profile.mjs && node --check hooks/load-overrides.mjs &&
 out=$(CLAUDE_PROJECT_DIR="$PWD" CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
 test -z "$out" && echo "OK silent with profile"   # fresh marker dir, so silence means the profile
 
-# load-overrides says nothing it was not asked for, and cannot read outside .atk/overrides/
+# load-overrides answers only for atk: skills, and cannot read outside .atk/overrides/.
+# The ak:review and bare-review cases matter: atk's skill names are ordinary words, so a
+# hook that ignored the namespace would hand this project's overrides to another kit.
 for payload in '{"tool_name":"Bash","tool_input":{}}' \
                '{"tool_name":"Skill","tool_input":{"skill":"atk:no-such-skill"}}' \
-               '{"tool_name":"Skill","tool_input":{"skill":"../../../etc/passwd"}}' \
+               '{"tool_name":"Skill","tool_input":{"skill":"atk:../../../etc/passwd"}}' \
+               '{"tool_name":"Skill","tool_input":{"skill":"ak:review"}}' \
+               '{"tool_name":"Skill","tool_input":{"skill":"review"}}' \
                'not json'; do
   out=$(echo "$payload" | CLAUDE_PROJECT_DIR="$PWD" node hooks/load-overrides.mjs)
   test "$out" = "{}" || echo "LEAK on: $payload"

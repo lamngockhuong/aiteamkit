@@ -47,7 +47,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 |------|----------|
 | `hooks/hooks.json` | Đăng ký hai hook cho Claude Code, cả hai ở dạng exec nên không nền nào dùng tới shell: `"command": "node"` cộng `${CLAUDE_PLUGIN_ROOT}` trong `args` |
 | `hooks/check-profile.mjs` | `SessionStart`. Node ESM, nên cư xử như nhau trên Linux, macOS và Windows. In một lời nhắc khi một repo git chưa có `.atk/profile.md`, mỗi dự án một lần, và thoát 0 ở mọi nhánh. Không chặn, không ghi gì vào repo của người dùng. Codex và Cursor chưa có lớp vỏ riêng |
-| `hooks/load-overrides.mjs` | `PreToolUse` với matcher `Skill`. Đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó, chỉ để đỡ một lượt đọc chứ không làm gì thêm. In ra một object rỗng khi payload thuộc công cụ khác, khi không có file, khi tên skill chứa dấu phân cách đường dẫn, hoặc khi đầu vào hỏng; file dài quá 4096 ký tự thì gọi tên chứ không chép vào. Nơi không có hook, mỗi skill tự mở file |
+| `hooks/load-overrides.mjs` | `PreToolUse` với matcher `Skill`. Đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó, chỉ để đỡ một lượt đọc chứ không làm gì thêm. Chỉ trả lời cho skill thuộc namespace `atk:`, nên một skill trùng tên của kit khác không bao giờ nhận chỉ dẫn của dự án này. In ra một object rỗng khi payload thuộc công cụ khác, khi namespace khác, khi tên không có tiền tố, khi không có file, khi tên skill chứa dấu phân cách đường dẫn, hoặc khi đầu vào hỏng; file dài quá 4096 ký tự thì gọi tên chứ không chép vào. Nơi không có hook, mỗi skill tự mở file |
 
 ## Các skill
 

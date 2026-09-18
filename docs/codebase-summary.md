@@ -47,7 +47,7 @@ removed, or renamed; update it in the same commit.
 |------|---------|
 | `hooks/hooks.json` | Registers two Claude Code hooks, both in exec form so no shell is involved on any platform: `"command": "node"` plus `${CLAUDE_PLUGIN_ROOT}` in `args` |
 | `hooks/check-profile.mjs` | `SessionStart`. Node ESM, so it behaves the same on Linux, macOS, and Windows. Prints one reminder when a git repository has no `.atk/profile.md`, once per project, and exits 0 on every path. Never blocks, never writes into the user's repository. Codex and Cursor have no wrapper yet |
-| `hooks/load-overrides.mjs` | `PreToolUse` with matcher `Skill`. Puts `.atk/overrides/<skill>.md` in front of the skill that owns it, saving a read and nothing more. Prints an empty object for another tool, a missing file, a name with a path separator, or malformed input, and names rather than inlines a file past 4096 characters. Every skill opens the file itself where no hook ran |
+| `hooks/load-overrides.mjs` | `PreToolUse` with matcher `Skill`. Puts `.atk/overrides/<skill>.md` in front of the skill that owns it, saving a read and nothing more. Answers only for skills under the `atk:` namespace, so another kit's same-named skill never receives this project's instructions. Prints an empty object for another tool, another namespace, a bare name, a missing file, a name with a path separator, or malformed input, and names rather than inlines a file past 4096 characters. Every skill opens the file itself where no hook ran |
 
 ## Skills
 
