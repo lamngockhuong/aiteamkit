@@ -10,7 +10,7 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-  skills/<name>/SKILL.md        18 skills, one folder each
+  skills/<name>/SKILL.md        19 skills, one folder each
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
   skills/<name>/evals/*.json    trigger cases for the description
   shared/*.md                   DRY layer shared by the skills that cite it
@@ -37,7 +37,7 @@ is never duplicated per harness. The manifests differ only in how they declare c
 
 ```mermaid
 flowchart LR
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>18 folders, one SKILL.md each</small>"]
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>19 folders, one SKILL.md each</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
     SK --> SH["shared/<br/><small>cited by the skills that need it</small>"]
@@ -56,7 +56,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for all 18 skills | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for all 19 skills | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
@@ -64,13 +64,13 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Ten files hold what skills would otherwise repeat. The first three are cited by all 18:
+Eleven files hold what skills would otherwise repeat. The first three are cited by all 19:
 
 - `shared/team-roles.md`: the role table and the six rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
-Six are contracts between a named handful of skills rather than kit-wide rules:
+Seven are contracts between a named handful of skills rather than kit-wide rules:
 
 - `shared/review-checklist.md`: the rule record format that `atk:convention` writes and `atk:review`
   cites by ID, plus the baseline items that hold in any project. It exists so a convention is
@@ -101,7 +101,15 @@ Six are contracts between a named handful of skills rather than kit-wide rules:
   its own: the content belongs to the skills that already run it, not to a slash command that would
   produce no artifact and answer to no approver.
 
-The tenth describes a file that does not ship with the kit at all:
+- `shared/spec-docs.md`: what separates a reference document from a design document, whose shape
+  wins when a project already keeps documents of its own, the five kinds of change that oblige a
+  pull request to carry its reference document, and the line between drift and a question nobody
+  has answered. Cited by `atk:spec`, which writes those documents, and by `atk:design-doc`,
+  `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave them true. It is
+  the widest of these contracts, because `shared/finalize-steps.md` now opens with its obligation,
+  which makes every code-changing skill a party to it.
+
+The eleventh describes a file that does not ship with the kit at all:
 
 - `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff

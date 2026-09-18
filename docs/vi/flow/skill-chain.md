@@ -17,6 +17,7 @@ flowchart LR
     A1["Yêu cầu<br/><small>user story, tiêu chí, câu hỏi bỏ ngỏ</small>"]
     A2["Ước lượng<br/><small>khối lượng, năng lực, cam kết</small>"]
     A3["Thiết kế + ADR"]
+    A3b["Tài liệu tham chiếu<br/><small>API, schema, tính năng</small>"]
     A4["Danh sách task<br/><small>chủ sở hữu, làn, phụ thuộc</small>"]
     A5["Kế hoạch<br/><small>pha và bước</small>"]
     A6["Code + bản ghi thực thi"]
@@ -32,10 +33,13 @@ flowchart LR
     A1 -->|design-doc| A3
     A2 -->|breakdown| A4
     A3 -->|breakdown| A4
+    A3b -->|design-doc| A3
     A4 -->|plan| A5
     A5 -->|implement| A6
     A6 -->|review| A7
     A7 -->|implement| A6
+    A6 -->|spec --sync| A3b
+    A3b -->|qa| A8
     A6 -->|qa| A8
     A8 -->|verify| A9
     A9 -->|release| A10
@@ -50,6 +54,10 @@ Ba skill đứng bên cạnh chuỗi chứ không nằm trong nó, vì chúng đ
 Hai skill nữa nuôi chuỗi mà không do chuỗi sinh ra: `init` viết profile mà mọi skill đụng code đều
 đọc, còn `convention` viết ra bộ quy tắc `implement` tuân theo và `review` soi.
 
+`spec` là nút duy nhất mà chuỗi quay về chứ không đi ngang qua. Tài liệu của nó vừa là đầu vào cho
+thiết kế kế tiếp và test plan kế tiếp, vừa là đầu ra của mọi thay đổi đụng tới hợp đồng. Đó là lý do
+mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết kế đề xuất ra nó.
+
 ## Mỗi skill ăn vào gì
 
 | Skill | Đọc | Sinh ra | Skill dùng tiếp |
@@ -58,7 +66,8 @@ Hai skill nữa nuôi chuỗi mà không do chuỗi sinh ra: `init` viết profi
 | `intake` | Một yêu cầu thô | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa` |
 | `catchup` | Một epic hoặc một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài | Con người, không phải skill |
 | `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |
-| `design-doc` | Yêu cầu | Thiết kế kèm ADR | `breakdown`, `plan`, `implement` |
+| `design-doc` | Yêu cầu, và tài liệu tham chiếu của vùng sắp đổi | Thiết kế kèm ADR | `breakdown`, `plan`, `implement` |
+| `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/` | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `implement`, `review` |
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
 | `convention` | Code và lịch sử của nó | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
 | `plan` | Ticket, thiết kế, hoặc mô tả | Pha và bước | `implement` |
@@ -75,7 +84,7 @@ Hai skill nữa nuôi chuỗi mà không do chuỗi sinh ra: `init` viết profi
 
 ## Chỗ chuỗi đứt
 
-Một mắt xích chỉ tốt bằng artifact nằm sau nó, và có ba chỗ đứt đủ phổ biến để gọi tên.
+Một mắt xích chỉ tốt bằng artifact nằm sau nó, và có bốn chỗ đứt đủ phổ biến để gọi tên.
 
 **Không có profile.** Skill nào chạy lệnh của chính dự án thì dừng lại và đòi `atk:init`, thay vì
 đoán bừa lệnh test. Skill nào chỉ đọc diff thì chạy tiếp và ghi rằng lúc đó không có profile.
@@ -84,6 +93,11 @@ Một mắt xích chỉ tốt bằng artifact nằm sau nó, và có ba chỗ đ
 **Artifact chưa từng được duyệt.** Một thiết kế ở trạng thái `DRAFT` mới là đề xuất, và xây từ đó có
 nghĩa là bình luận review đầu tiên sẽ nhắm vào chính thiết kế. Hãy xem trường `status` trong front
 matter trước khi dùng một artifact, đừng chỉ xem file có tồn tại hay không.
+
+**Tài liệu tham chiếu không ai mang theo.** Hợp đồng đổi mà tài liệu đứng yên, nên người thiết kế
+tiếp theo thiết kế dựa trên thứ đã hết đúng. `atk:review` nêu đây là phát hiện mức chặn, còn
+`atk:spec --check` tìm ra những chỗ đã lọt. Nghĩa vụ này và năm loại thay đổi kích hoạt nó nằm trong
+`shared/spec-docs.md`.
 
 **Artifact đã bị thay thế nhưng trông vẫn như bản hiện hành.** Lập kế hoạch lại cho cùng một việc sẽ
 tạo thư mục thứ hai, và không có gì tự đánh dấu thư mục đầu là đã chết. Quy tắc khai tử nó nằm ở

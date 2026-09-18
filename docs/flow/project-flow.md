@@ -1,6 +1,6 @@
 # Project Flow
 
-How the 18 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
+How the 19 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,
@@ -55,6 +55,7 @@ flowchart TD
         D0 -->|Yes| D1["atk:design-doc<br/><small>TL or Dev drafts, ADR recorded</small>"]
         D1 --> D2{"TL approves"}
         D2 -->|Change requested| D1
+        D3["atk:spec<br/><small>what the area does today</small>"]
     end
 
     subgraph S4["4. Split and sequence"]
@@ -96,6 +97,8 @@ flowchart TD
     D2 -->|Approved| B0
     C0 --> M0
     B2 --> M0
+    D0 -->|Yes| D3
+    M2 -.->|Contract changed| D3
     M2 --> V0
     V2 -->|Passed| L0
     L2 --> O0
@@ -112,6 +115,7 @@ flowchart TD
 | 1. Requirement | `atk:catchup` | Whoever joins | Nobody; the understanding check is self-marked | `DRAFT` |
 | 2. Estimate | `atk:estimate` | Dev, with PM on capacity | PM and Stakeholder together | `IN REVIEW` to `APPROVED` |
 | 3. Design | `atk:design-doc` | TL or Dev | TL, who owns the final technical call | `IN REVIEW` to `APPROVED` |
+| 3. Design | `atk:spec` | Dev | TL for `api` and `db`, BrSE/BA for `feature` | `IN REVIEW` to `APPROVED`, then updated in place forever |
 | 4. Split | `atk:breakdown` | TL or PM | Dev owners accept their own tasks | `IN REVIEW` to `APPROVED` |
 | 4. Sequence | `atk:plan` | Dev | The author, unless the plan gate raised it to TL | `DRAFT` |
 | 4. Rules | `atk:convention` | TL | Team agreement, recorded per rule | `IN REVIEW` to `APPROVED` |
@@ -136,6 +140,11 @@ flowchart LR
 
 `atk:fix` is the one that reaches back into the cycle: a defect found in phase 6 returns to phase 6
 after the fix, and one found after release opens phase 8 instead.
+
+`atk:spec` is drawn in phase 3 because that is where a team first writes down what an area does, but
+the dotted edge from the merge is the one that fires most often. A change altering a contract carries
+its reference document in the same pull request, per `shared/spec-docs.md`, which is why the document
+outlives the phase it was first written in.
 
 ## What this flow does not say
 

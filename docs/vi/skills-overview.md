@@ -1,6 +1,6 @@
 # Tổng quan các skill
 
-Mười tám skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+Mười chín skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
 dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
@@ -11,7 +11,7 @@ với một skill.
 ```mermaid
 flowchart LR
     I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
-    E --> D["design-doc"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
     R -.->|Có phát hiện chặn| IM
     RL --> IC["incident"] --> RT["retro"]
@@ -114,6 +114,26 @@ tốn hơn phần nhận lại.
 
 **Thói quen tạo ra khác biệt.** Một phương án thì là kế hoạch, không phải thiết kế. Tài liệu bắt
 buộc có cả phương án mà team sẽ chọn theo quán tính, và nói rõ vì sao nó thua.
+
+---
+
+## `atk:spec`
+
+**Sinh ra.** Tài liệu tham chiếu mà đội còn đọc rất lâu sau khi công việc sinh ra nó đã merge: API
+contract theo từng resource trong `docs/api/`, schema theo từng bảng trong `docs/database/`, và hành
+vi của từng tính năng trong `docs/features/`. Mỗi chủ thể một file, đặt tên theo chủ thể, ghi đè tại
+chỗ. Cờ `--check` báo chỗ tài liệu và code không khớp nhau mà không sửa gì.
+
+**Dùng khi.** Dự án chưa có contract nào được viết ra, một thay đổi đã merge bỏ quên tài liệu, hoặc
+không ai còn tin vào tài liệu nữa. Cờ `--sync` gấp thay đổi trên nhánh hiện tại vào đúng những tài
+liệu mà nó đụng tới.
+
+**Không dùng khi.** Câu hỏi vẫn là chọn hướng nào. Đó là việc của `atk:design-doc`, vốn so sánh
+phương án rồi dừng lại; skill này mô tả thứ đã thực sự làm.
+
+**Thói quen tạo ra khác biệt.** Hình dạng tài liệu lấy từ những tài liệu dự án đang giữ, không lấy
+từ kit. Một đội đang có 29 file API cùng một hình dạng là đã có quy ước, và file thứ ba mươi khác
+hình dạng làm họ tốn hơn phần thời gian nó tiết kiệm được.
 
 ---
 

@@ -70,17 +70,17 @@ commit đều phải hỏi, hỏi lại từng lần.
 
 ## Một skill với sang skill khác thế nào
 
-Trong mười tám file, một skill gọi tên skill khác bảy mươi lăm lượt, thành năm mươi cặp khác nhau,
+Trong mười chín file, một skill gọi tên skill khác tám mươi lượt, thành năm mươi tư cặp khác nhau,
 nghe như một đồ thị dày đặc. Thực ra không: phần lớn trong số đó là ranh giới chứ không phải cạnh.
 Có năm loại, và chỉ bốn loại đầu xảy ra lúc chạy.
 
 | Loại | Công việc đi đâu | Xuất hiện ở |
 |------|------------------|-------------|
-| Gọi rồi đi tiếp | Skill kia chạy, trả kết quả về, skill này chạy tiếp | `implement` sang `plan`, `implement` sang `review` |
+| Gọi rồi đi tiếp | Skill kia chạy, trả kết quả về, skill này chạy tiếp | `implement` sang `plan`, `implement` sang `review`, `implement` sang `spec` |
 | Dừng và giao lại | Skill này không đổi thêm gì nữa; công việc chuyển đi | `implement` sang `design-doc`, `implement` sang `fix`, `plan` sang `design-doc` |
 | Đề nghị và chờ một tiếng đồng ý | Có thể không xảy ra, và bản ghi nói rõ là đã xảy ra hay chưa | `implement` sang `verify` |
 | Gửi ngược một phát hiện | Skill này chạy tiếp; skill kia mới là nơi ghi lại phát hiện đó | `review` sang `convention`, `verify` sang `qa` |
-| Viết một file skill khác đọc | Không có lời gọi nào; hợp đồng đi qua một file | `init` tới mọi skill sửa mã, `convention` tới `implement` và `review` |
+| Viết một file skill khác đọc | Không có lời gọi nào; hợp đồng đi qua một file | `init` tới mọi skill sửa mã, `convention` tới `implement` và `review`, `spec` tới `design-doc` và `qa` |
 
 ```mermaid
 flowchart TD
@@ -92,12 +92,14 @@ flowchart TD
     FIX["atk:fix"]
     QA["atk:qa"]
     CNV["atk:convention"]
+    SPC["atk:spec"]
 
     IMP -->|"gọi: phần việc cỡ vừa"| PLN
     IMP -->|"gọi: rồi sửa thứ bị chặn"| REV
     IMP -->|"dừng: schema, hợp đồng, kiến trúc"| DSG
     IMP -->|"dừng: đầu vào là một lỗi"| FIX
     PLN -->|"dừng: có hai phương án cần so"| DSG
+    IMP -->|"gọi: hợp đồng vừa đổi"| SPC
     IMP -.->|"đề nghị: cần một tiếng đồng ý"| VER
     REV -.->|"gửi ngược khoảng trống quy ước"| CNV
     VER -.->|"gửi ngược ca chưa ai nghĩ tới"| QA
@@ -108,6 +110,10 @@ phẩm của mình, chạy nhiều nhất hai lượt rồi báo lên đích dan
 qua hai lượt sửa thường là vấn đề thiết kế đang bị vá. Vòng còn lại là lúc `implement` dừng ở cổng
 lớn: phần việc chạm vào schema, một hợp đồng công khai, một module dùng chung, hoặc nhiều hơn một
 service thì không file nào được đổi cho tới khi có người duyệt cách làm.
+
+Cạnh đi vào `atk:spec` chỉ vẽ từ `implement` cho sơ đồ còn đọc được, nhưng `fix` và `verify` mang
+đúng nghĩa vụ đó qua cùng một bước đầu của `shared/finalize-steps.md`. Cả ba, hễ đổi một endpoint,
+một response, một mã lỗi, một cột hay một giá trị enum, đều phải mang tài liệu tham chiếu đi cùng.
 
 ## Thứ không phải là cạnh
 

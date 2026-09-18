@@ -10,7 +10,7 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-  skills/<name>/SKILL.md        18 skill, mỗi skill một thư mục
+  skills/<name>/SKILL.md        19 skill, mỗi skill một thư mục
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
   shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
@@ -36,7 +36,7 @@ nhân bản theo từng harness. Các manifest chỉ khác nhau ở cách khai b
 
 ```mermaid
 flowchart LR
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>18 thư mục, mỗi thư mục một SKILL.md</small>"]
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>19 thư mục, mỗi thư mục một SKILL.md</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
     SK --> SH["shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]
@@ -55,7 +55,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho cả 18 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho cả 19 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
@@ -63,13 +63,13 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 18 skill trích dẫn:
+Mười một file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 19 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và sáu nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
-Sáu file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Bảy file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `shared/review-checklist.md`: định dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review`
   trích dẫn theo ID, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một
@@ -100,7 +100,15 @@ Sáu file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
   này thuộc về ba skill đang chạy nó, không thuộc về một slash command chẳng sinh artifact và chẳng
   có ai duyệt.
 
-File thứ mười mô tả một file không đi kèm kit:
+- `shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, hình dạng
+  của ai thắng khi dự án đã giữ sẵn tài liệu của mình, năm loại thay đổi buộc pull request phải
+  mang theo tài liệu tham chiếu, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
+  viết ra những tài liệu đó, còn `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và
+  `atk:verify` có nghĩa vụ để chúng đúng. Đây là hợp đồng rộng nhất trong nhóm, vì
+  `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi skill đổi mã nguồn đều là
+  một bên của nó.
+
+File thứ mười một mô tả một file không đi kèm kit:
 
 - `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
