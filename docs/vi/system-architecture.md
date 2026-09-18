@@ -81,7 +81,9 @@ Bảy file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   ấy và các mục nền, dùng khi dự án thật sự chưa ghi quy ước nào của riêng mình.
 - `shared/finalize-steps.md`: trình tự khép lại một thay đổi mã nguồn, gồm nhánh, commit, và ranh
   giới xin phép mà mọi hành động sau commit phải vượt qua. Được `atk:fix`, `atk:implement` và
-  `atk:verify` trích dẫn, tức ba skill có sửa mã. Không gì rời khỏi repo cục bộ mà chưa được hỏi.
+  `atk:verify` trích dẫn, tức ba skill có sửa mã, và được `atk:tailor` trích riêng phần ranh giới xin
+  phép, vì bản ghi `--feedback` gửi sang một repo mà team không sở hữu. Không gì rời khỏi repo cục bộ
+  mà chưa được hỏi.
 - `shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
   minh được điều gì, và không chứng minh được điều gì. Cùng ba skill đó trích dẫn. Mỗi skill chạy một
   phép kiểm rồi phải nói kết quả có nghĩa gì, và vế thứ hai đó buộc phải giống hệt nhau ở cả ba.

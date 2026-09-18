@@ -11,7 +11,7 @@ description: >
   Triggers on: "tailor", "customise a skill", "customize skill", "override a skill", "tùy biến
   skill", "sửa skill theo đội", "thêm bước cho skill", "ghi đè skill", "スキルをカスタマイズ",
   "チーム独自のルール", "our team does this differently", "make the skill always", "/atk:tailor".
-argument-hint: "<skill> [--audit] [--out <path>]"
+argument-hint: "<skill> [--audit|--feedback] [--out <path>]"
 ---
 
 # Skill Tailoring (`atk:tailor`)
@@ -27,7 +27,8 @@ exists, it just lives in somebody's head.
 
 Handles: reading a shipped skill to see what it already does, interviewing for what the team wants
 different, refusing the instructions an override may not carry, writing or updating
-`.atk/overrides/<skill>.md`, and auditing existing override files against the skills they belong to.
+`.atk/overrides/<skill>.md`, auditing existing override files against the skills they belong to, and
+turning a run that went wrong into either an override or a record the kit author can act on.
 
 Does NOT handle: editing anything inside the kit, which nothing in atk does; recording the team's
 coding rules, which is `atk:convention` and lands in the conventions document rather than here;
@@ -53,6 +54,7 @@ who must decide, and never guess. See `shared/team-roles.md`.
 /atk:tailor <skill>            # Write or update .atk/overrides/<skill>.md
 /atk:tailor --audit            # Check every override file in the project, change nothing
 /atk:tailor --audit <skill>    # Check one override file
+/atk:tailor --feedback <skill> # Turn a run that went wrong into an override or a record
 /atk:tailor <skill> --out <path>   # Override the default output path
 ```
 
@@ -138,17 +140,43 @@ been renamed rather than removed.
 Change nothing, including the files found to be wrong. The output is a list the approver acts on.
 With no override files in the project, say so and stop rather than offering to create one.
 
+### `--feedback`
+
+Takes a run that went wrong and reaches the right one of three outcomes: an override for this team,
+a record for the kit author, or neither. `references/feedback.md` holds the question that separates
+them, what the record carries, and the two things it must never carry.
+
+Ask that question once per finding rather than once per run. One bad run usually produces findings
+of more than one kind, and sorting them is the work. A finding that lands on the override side
+rejoins step 2 above and is written like any other. A finding that belongs to the author goes into
+`docs/derived/feedback/<skill>-<date>.md` and stops there.
+
+A finding whose cause is that the run ignored something the skill states plainly changes nothing in
+either place. Say so, and say which line of the skill already covers it, so the team can tell a
+definition that is wrong apart from a run that was.
+
+The record leaves the repository only when the user asks, per the consent line in
+`shared/finalize-steps.md`. Offer it, name the issue form it fits, and wait. Never open the issue as
+a side effect of writing the record.
+
 ## Output
 
 Written to `.atk/overrides/<skill>.md` in the target project, not under `docs/`, and never into the
 kit. See `shared/project-overrides.md` for the format and the seven exclusions, and
 `shared/artifact-paths.md` for why this skill is one of the three exceptions to the docs-root rule.
 
+A `--feedback` record goes to `docs/derived/feedback/<skill>-<date>.md` instead. It is derived under
+`shared/artifact-paths.md`, because once it reaches the kit repository that issue holds the
+original, the same reason a review report is derived from the pull request that holds it.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. An override that a role other than the author must approve can
 become one issue carrying the proposed file and the name of the approver, when the user asks. The
 file itself lives in the repository; the tracker holds a pointer to it.
+
+A `--feedback` record goes to the kit repository rather than the project's tracker, and only when
+the user asks. One record is one issue: a form listing four unrelated findings gets triaged as one.
 
 ## Definition of done
 
@@ -163,3 +191,6 @@ file itself lives in the repository; the tracker holds a pointer to it.
 - [ ] The two heading names are in English and the instructions are in the team's language.
 - [ ] The user was told the file is committed.
 - [ ] Under `--audit`, no file was modified.
+- [ ] Under `--feedback`, every finding was sorted one at a time into an override, a record, or neither.
+- [ ] A feedback record names the person reporting and proposes no replacement wording for the skill.
+- [ ] Nothing was sent to the kit repository without being asked.
