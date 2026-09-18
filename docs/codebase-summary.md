@@ -132,12 +132,13 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/project-overview-pdr.md` | What atk is, the process failures it addresses, goals, non-goals, audience, success criteria |
 | `docs/system-architecture.md` | One content tree with three manifests, the load model and its size budget, the `shared/` layer, skill anatomy, runtime data flow |
 | `docs/skills-overview.md` | Per skill: what it produces, when to use, when not to, and the one habit that makes it work |
+| `docs/artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, what each deletion costs, and the three policies a team can choose between |
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
 | `docs/flow/project-flow.md` | The 19 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
-| `docs/vi/**/*.md` | Vietnamese mirror of the seven files above, at the same relative paths |
+| `docs/vi/**/*.md` | Vietnamese mirror of the eight files above, at the same relative paths |
 
 ## GitHub
 

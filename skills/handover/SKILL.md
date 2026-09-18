@@ -85,7 +85,7 @@ Unanswered questions stay in the document as `OPEN` with the person who must now
 
 ## Output
 
-Written to `docs/handover/<date>-<from>-to-<to>.md` per `shared/artifact-paths.md`. Sections: front
+Written to `docs/records/handover/<date>-<from>-to-<to>.md` per `shared/artifact-paths.md`. Sections: front
 matter, scope, work inventory with true state, decisions, traps, access and duties, contacts, open
 questions, and the receiver's validation checklist.
 

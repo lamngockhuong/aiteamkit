@@ -38,7 +38,7 @@ reviews test adequacy. See `shared/team-roles.md`.
 /atk:review <pr-number>                   # Review a pull request from the detected tracker
 /atk:review <branch|commit>               # Review a branch diff or a single commit
 /atk:review <paths>                       # Review given paths in the working tree
-/atk:review --against docs/design/x.md    # Review against a specific design document
+/atk:review --against <design-path>       # Review against a specific design document
 /atk:review --comment                     # Post findings as inline PR comments
 /atk:review --strict                      # Include low-severity and stylistic findings
 /atk:review --parallel 5                  # Force the number of independent passes over the diff
@@ -128,7 +128,7 @@ nothing about what to repeat.
 ## Output
 
 By default the findings are reported in the session, grouped by severity. Under `--out`, a report is
-written to `docs/reviews/<pr>-<date>.md` per `shared/artifact-paths.md`.
+written to `docs/derived/reviews/<pr>-<date>.md` per `shared/artifact-paths.md`.
 
 ## Ticket
 

@@ -91,6 +91,12 @@ Artifacts are Markdown, written into the **target project** under `docs/`, one f
 stage. The full path table, the naming rules, and the shared front matter live in
 [shared/artifact-paths.md](shared/artifact-paths.md).
 
+Not every artifact has the same fate. A reference document is updated in place forever, a record is
+never edited and rarely deleted, and one directory is safe to delete or leave out of git entirely.
+Which is which, what each deletion costs, and the three policies a team can choose between:
+[docs/artifact-lifecycle.md](docs/artifact-lifecycle.md)
+([Tiếng Việt](docs/vi/artifact-lifecycle.md)).
+
 `atk` is tool-agnostic: the Markdown artifact is the source of truth and a tracker holds a pointer
 to it. [shared/ticket-adapters.md](shared/ticket-adapters.md) maps the vocabulary to GitHub Issues,
 Jira, Backlog, and Redmine, and no skill creates tickets without showing the list and getting a yes.
