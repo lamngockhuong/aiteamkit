@@ -194,6 +194,8 @@ done: this skill is the author, and done is the approver's word.
 - [ ] Medium-gate work has a plan directory written by `atk:plan`, and code began only after the
       confirmation.
 - [ ] No plan was written inside this skill instead of by `atk:plan`.
+- [ ] A plan that was run has no phase left at `pending`, in the phase file and in the index
+      table alike.
 - [ ] The conventions source is named, and a project with none says the baseline was used.
 - [ ] Every command run came from the Commands section of `.atk/profile.md`.
 - [ ] The blast radius was walked, and anything unverified is named as unverified.

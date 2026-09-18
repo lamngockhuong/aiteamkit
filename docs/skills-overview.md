@@ -7,19 +7,18 @@ Read this before adopting the kit: every skill works alone, and a team can start
 
 ## Where they sit
 
+```mermaid
+flowchart LR
+    I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
+    E --> D["design-doc"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
+    R -.->|Blocking findings| IM
+    RL --> IC["incident"] --> RT["retro"]
+    RT -.->|Next cycle| IN
 ```
-init -> intake -> catchup -> estimate -> design-doc -> breakdown -> convention
-                                                                        |
-                                                                        v
-           release <- verify <- qa <- review <- implement <- plan <------+
-              |
-              v
-           incident -> retro
 
-  fix        when a defect is reported, at any point
-  onboard    when someone joins
-  handover   when someone leaves, or a phase ends
-```
+Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
+`onboard` when someone joins; `handover` when someone leaves or a phase ends.
 
 `atk:init` runs once per project. It writes `.atk/profile.md`, which tells the skills that touch
 code how this project is tested, built, and laid out. `atk:implement`, `atk:fix` and `atk:verify`
@@ -205,7 +204,10 @@ to end in an explanation rather than a guess.
 **Do not use when.** Production is down right now: `atk:incident` runs the response, and this skill
 fits inside it. Or nothing is broken and the code is merely unpleasant, which is not a defect.
 
-**The habit that matters.** No file changes before the cause is proven. `--investigate-only` exists
+**The habit that matters.** No file changes before the cause is proven, and the proving itself has a
+ceiling: three ruled-out hypotheses, then the skill stops and hands the investigation to a person by
+name, because what is left after three is usually somebody's knowledge rather than another search.
+`--investigate-only` exists
 because the explanation is often the whole deliverable, and stopping there is a valid result rather
 than an unfinished one. The clean-up step that follows verification is narrower here than anywhere
 else in the kit: it covers the lines the fix touched and nothing beside them, because a fix carrying

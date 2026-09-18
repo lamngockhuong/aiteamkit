@@ -67,6 +67,31 @@ Exactly one of these three, and it goes in the report verbatim:
 "It looks like the cache is stale" is a hypothesis. "Line 44 reads the cache before line 51
 invalidates it, and the log at 09:14 shows the read at the old value" is evidence.
 
+### The ceiling: three hypotheses
+
+A hypothesis is stated before it is checked, and the check either turns it into evidence or rules it
+out. Three of them, counted across the whole run, and the count goes in the report whether or not it
+was reached. Past the third the investigation stops and hands over what it has.
+
+It stops there because the fourth hypothesis is where the cost changes shape. The cheap places have
+been looked at, and what is usually left is a question about how the thing was meant to work, which
+is somebody's knowledge rather than another search. Carrying on past that point is how an
+investigation turns into changing things to see what happens, which is exactly the order this
+skill exists to prevent.
+
+Three hypotheses ruled out is a real result, and losing it is what makes the next person repeat it.
+The handover carries four things and is not complete without the fourth:
+
+1. Each hypothesis in the order it was tried, with what was checked and what ruled it out.
+2. The captured failure and its reproduction, unchanged.
+3. Where the search went: the files, the symbols, and the logs already read.
+4. The name of the person who has to look, from the `Team` section of `.atk/profile.md`.
+
+The working tree is untouched, because no change was allowed before the cause was proven and it
+never was. `--investigate-only` does not alter any of this: that flag ends the run after step 6 in
+every case, and the ceiling decides only whether the report carries a cause or a list of what is not
+the cause.
+
 ## Step 5b: blast radius
 
 The proven cause names the code that is about to change. Find everyone else who depends on it before

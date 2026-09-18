@@ -3,8 +3,9 @@ name: fix
 description: >
   Fix a defect the way a team reviewer will accept: capture the failure verbatim, prove the cause
   before changing a line, check that the current behaviour is not a decision somebody made on
-  purpose, make the smallest change that removes the cause, verify it by layer, and write the report
-  that shows what was checked and what was not.
+  purpose, make the smallest change that removes the cause, verify it by layer, stop after three
+  ruled-out hypotheses with a named person rather than guessing, and write the report that shows
+  what was checked and what was not.
   Use for a bug report, a failing test, a broken endpoint or screen, or an investigation that has to
   end in an explanation rather than a guess.
   Triggers on: "fix bug", "debug", "bug", "sửa bug", "điều tra lỗi", "tìm nguyên nhân", "lỗi này",
@@ -18,9 +19,11 @@ Proves the cause, then fixes it. In that order, because a change made before the
 a guess with a diff attached, and the review that catches it costs more than the investigation would
 have.
 
-The other half of the skill is the stop. When the behaviour being called a bug turns out to be a
-decision somebody recorded, this skill does not fix it. It brings the decision back to the person
-who owns it.
+The other half of the skill is where it stops, and it stops for two different reasons. When the
+behaviour being called a bug turns out to be a decision somebody recorded, this skill does not fix
+it; it brings the decision back to the person who owns it. And when three hypotheses have been ruled
+out and none of them proved the cause, it hands the investigation over by name rather than carrying
+on, because what is left at that point is usually somebody's knowledge rather than another search.
 
 ## Scope
 
@@ -72,6 +75,12 @@ answer why it broke now, prove it, and list everyone else who calls what is abou
 Proof is one of exactly three things: a red test that reproduces it, a direct reproduction with its
 output, or the responsible lines quoted together with a specific check that shows they do it. A
 cause with no evidence block is not a cause, it is the first hypothesis.
+
+The step has a ceiling of three hypotheses, counted across the whole run. Past the third the
+investigation stops and hands over the four things `references/investigate.md` lists under the
+ceiling, the last of which is the name of the person who has to look. "Needs further investigation"
+is not a handover: rule 1 in `shared/team-roles.md` applies here as everywhere, and an owner is a
+person.
 
 No file changes in this step, with one exception: the failing test may be written, because the test
 is the evidence. Under `--investigate-only` even that exception is off, and the test goes into the
@@ -138,8 +147,10 @@ the branch, the commit, and anything that leaves the local repository.
 ### `--investigate-only`
 
 Stop after the intent check and write the report with the cause, the evidence, the blast radius,
-and, when the intent check found a contradiction, its four parts and the options. No change section,
-no verification section.
+and, when the intent check found a contradiction, its four parts and the options. Where the ceiling
+stopped the investigation before a cause was proven, the report carries what ruled the three
+hypotheses out and who has to look, in place of the cause. No change section, no verification
+section.
 
 The working tree must be exactly as it was found, including no new test file: show `git status` to
 prove it. A red test still counts as evidence here, written into the report as a code block that a
@@ -159,6 +170,8 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
 
 - [ ] The failure was captured verbatim before any file changed.
 - [ ] The evidence block is one of the three accepted forms and is not empty.
+- [ ] The hypothesis count is recorded, and a run that reached three stopped and named the person
+      who has to look.
 - [ ] No code changed before the cause was proven, apart from a test that reproduces it.
 - [ ] "Why now" is answered with a commit, or explicitly with "broken since it was written".
 - [ ] The intent check ran, and a contradiction stopped the work rather than being noted afterwards.
