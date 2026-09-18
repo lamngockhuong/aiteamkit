@@ -63,13 +63,13 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Tám file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 18 skill trích dẫn:
+Mười file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 18 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và sáu nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
-Bốn file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Sáu file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `shared/review-checklist.md`: định dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review`
   trích dẫn theo ID, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một
@@ -87,8 +87,20 @@ Bốn file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown` và `atk:incident` trích dẫn, tức
   năm skill có sơ đồ trong artifact. Sơ đồ viết bằng Mermaid nên hiện ra ngay tại nơi người ta đọc
   artifact, và không phải commit thêm file ảnh nào.
+- `shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
+  dùng, và cách xử lý trên harness không có chúng. Được `atk:fix`, `atk:implement` và `atk:verify`
+  trích dẫn cho bước dọn mã ngay sau lượt kiểm chứng đạt, và `atk:review` trích dẫn cho những lượt
+  đọc độc lập chạy song song. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo một chiều: khả
+  năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về một kit khác thì
+  không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai thì không.
+- `shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
+  phần không bao giờ đụng tới. Cùng ba skill sửa mã đó trích dẫn, thông qua `host-capabilities.md`.
+  Nó tồn tại để bước dọn mã cho ra cùng một kết quả trên harness có sẵn khả năng dọn và trên harness
+  mà skill phải tự đi hết danh sách. Đây cũng là lý do kit không có skill `simplify` riêng: nội dung
+  này thuộc về ba skill đang chạy nó, không thuộc về một slash command chẳng sinh artifact và chẳng
+  có ai duyệt.
 
-File thứ tám mô tả một file không đi kèm kit:
+File thứ mười mô tả một file không đi kèm kit:
 
 - `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy

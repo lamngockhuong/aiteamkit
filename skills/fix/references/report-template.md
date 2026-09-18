@@ -70,6 +70,11 @@ change to describe, and a section with a plan in it reads like a change that was
 What changed, in one paragraph, and why this is the smallest change that removes the cause. Where a
 wider change was needed, what forced it.
 
+Then one line for the tidy step per `shared/host-capabilities.md`: what the clean-up changed inside
+those lines, or that it changed nothing, or that it was reverted and why, or that the harness has no
+such capability. A reader comparing the diff against "the smallest change" needs to know which lines
+came from the fix and which from the clean-up after it.
+
 ## 6. Verified
 
 **Skipped under `--investigate-only` and when the conflict gate stopped the work**, for the same

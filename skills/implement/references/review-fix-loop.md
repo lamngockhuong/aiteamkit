@@ -1,8 +1,8 @@
 # Review and fix loop
 
-Loaded by `atk:implement` once the change is written and verified. It holds the loop that runs the
-team review against the skill's own output, and the ceiling that stops the loop from hiding a design
-problem under patches.
+Loaded by `atk:implement` once the change is written, verified, and tidied. It holds the loop that
+runs the team review against the skill's own output, and the ceiling that stops the loop from hiding
+a design problem under patches.
 
 Nothing here defines what a review looks for or how severe a finding is. `atk:review` owns the
 checklist, the severity scale, and the breadth, and it reads the project's rules through

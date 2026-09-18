@@ -36,6 +36,8 @@ removed, or renamed; update it in the same commit.
 | `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross. Cited by `fix`, `implement`, and `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not. Cited by `fix`, `implement`, and `verify`, so all three say the same thing about the same result |
 | `shared/diagram-conventions.md` | When a diagram earns its place in an artifact, the four shapes the kit draws (approval flow, dependency graph, sequence, causal chain), and the rules that keep them readable: Mermaid only, `<br/>` not a literal newline, roles instead of names, both branches on every decision, no hardcoded fill colours. Cited by `catchup`, `design-doc`, `plan`, `breakdown`, and `incident` |
+| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use and how to name one, the rule that a command from another kit still may not be named, what to do on a harness that has neither, the four rules of the tidy step, and the policy bounding parallel reviewers. Cited by `fix`, `implement`, `verify`, and `review` |
+| `shared/tidy-pass.md` | The content of the tidy step: three lenses (reuse, clarity, efficiency), what may be changed, what is never touched, and what to read in the diff afterwards. Cited by `fix`, `implement`, and `verify` through `host-capabilities.md`, and the reason the kit ships no `simplify` skill |
 
 ## Hooks
 
@@ -46,8 +48,8 @@ removed, or renamed; update it in the same commit.
 
 ## Skills
 
-Each skill is one `SKILL.md`. The six execution skills also carry `references/` and `evals/`; the
-twelve original ones do not yet.
+Each skill is one `SKILL.md`. The six execution skills also carry `references/` and `evals/`.
+`review` carries `references/` alone; the other eleven original skills carry neither yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
@@ -88,6 +90,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/fix/references/investigate.md` | Proving the cause, the intent check, and the gate that decides whether a fix may happen at all |
 | `skills/fix/references/layer-playbooks.md` | Per layer: where the cause usually hides, how to reproduce it, and how to confirm it is gone |
 | `skills/fix/references/report-template.md` | The fix report, written for a reviewer who has to check a claim rather than trust it |
+| `skills/review/references/parallel-review.md` | The width table and the memory cap bounding it, what every reviewer is given, and how several passes become one ranked list |
 | `skills/verify/references/runtime-checks.md` | Bringing the application up, exercising it, asserting a real side effect, and cleaning up |
 | `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
 | `skills/verify/references/report-template.md` | The verification report, naming what was proven and what was not |
@@ -126,6 +129,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/project-roadmap.md` | Phase plan and status |
 | `docs/flow/project-flow.md` | The 18 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
+| `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/vi/**/*.md` | Vietnamese mirror of the seven files above, at the same relative paths |
 
 ## GitHub

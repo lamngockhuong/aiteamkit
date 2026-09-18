@@ -157,8 +157,13 @@ Write the report from `references/report-template.md`. It is the same report whe
 failed, or escalated. A run that found nothing still records what was exercised and what was not,
 because that is what the next person needs in order to trust it.
 
-Where a round changed code, close it through `shared/finalize-steps.md` like any other change the kit
-makes: the branch, the commit, and the consent line that everything past the commit has to cross. A
+Where a round changed code, tidy it first, with the host's code clean-up capability, `/simplify` in
+Claude Code, per `shared/host-capabilities.md`. It covers only what the rounds changed, and the case
+that was failing is re-run after it: a clean-up that puts that case back to red is reverted rather
+than debugged, and the report says so. A run whose rounds changed nothing skips this and the
+paragraph below with it.
+
+Then close it through `shared/finalize-steps.md` like any other change the kit makes: the branch, the commit, and the consent line that everything past the commit has to cross. A
 verification that ends with edited files sitting in the working tree and no decision about them is
 how a fix made at six o'clock gets committed by somebody else tomorrow, inside a commit about
 something else. A run that changed nothing skips this and says so.
@@ -223,6 +228,8 @@ distance between those two is the whole reason the kit separates the roles.
 - [ ] No status code is reported as an assertion on its own.
 - [ ] The retry count is recorded, and no run exceeded three rounds.
 - [ ] A run that hit the ceiling escalated with all four parts, including a person's name.
+- [ ] Code changed during a round was tidied per `shared/host-capabilities.md`, with the failing case
+      re-run afterwards, and the report says what the clean-up changed or why it did not run.
 - [ ] Code changed during a round went through `shared/finalize-steps.md`, and a run that changed
       nothing says so.
 - [ ] Under `--report-only`, `git status` shows no source file touched.

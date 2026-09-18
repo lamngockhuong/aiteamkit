@@ -36,6 +36,8 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `shared/finalize-steps.md` | Trình tự khép lại một thay đổi mã nguồn: nhánh, commit, và ranh giới xin phép mà mọi hành động sau commit phải vượt qua. `fix`, `implement` và `verify` trích dẫn |
 | `shared/layer-verification.md` | Bảng năm tầng: chạy gì cho một tầng, một lượt đạt chứng minh được gì, và không chứng minh được gì. `fix`, `implement` và `verify` trích dẫn, để cả ba nói cùng một điều về cùng một kết quả |
 | `shared/diagram-conventions.md` | Khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình kit vẽ (luồng duyệt, đồ thị phụ thuộc, sequence, chuỗi nhân quả), và các quy tắc giữ cho chúng dễ đọc: chỉ Mermaid, xuống dòng bằng `<br/>` chứ không bằng ký tự xuống dòng thô, gọi vai trò thay vì gọi tên người, hình thoi nào cũng có đủ hai nhánh, không đặt màu nền cứng. `catchup`, `design-doc`, `plan`, `breakdown` và `incident` trích dẫn |
+| `shared/host-capabilities.md` | Skill được dùng những khả năng nào của agent chủ và gọi tên chúng ra sao, nguyên tắc vẫn cấm gọi tên lệnh của một kit khác, cách xử lý trên harness không có khả năng đó, bốn quy tắc của bước dọn mã, và phần chính sách chặn trên số lượt review song song. `fix`, `implement`, `verify` và `review` trích dẫn |
+| `shared/tidy-pass.md` | Nội dung của bước dọn mã: ba lăng kính (tái dùng, sáng rõ, hiệu năng), phần được sửa, phần không bao giờ đụng, và những gì phải soi lại trong diff sau đó. `fix`, `implement` và `verify` trích dẫn thông qua `host-capabilities.md`, và đây là lý do kit không có skill `simplify` |
 
 ## Hook
 
@@ -46,8 +48,8 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md`. Sáu skill thực thi có thêm `references/` và `evals/`; mười hai skill gốc
-thì chưa.
+Mỗi skill là một `SKILL.md`. Sáu skill thực thi có thêm `references/` và `evals/`. Riêng `review` chỉ
+có `references/`; mười một skill gốc còn lại thì chưa có gì thêm.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
@@ -88,6 +90,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/fix/references/investigate.md` | Chứng minh nguyên nhân, kiểm xem hành vi hiện tại có phải chủ ý, và cổng quyết định có được sửa hay không |
 | `skills/fix/references/layer-playbooks.md` | Theo từng tầng: nguyên nhân thường nấp ở đâu, tái hiện thế nào, và xác nhận nó đã hết ra sao |
 | `skills/fix/references/report-template.md` | Báo cáo sửa lỗi, viết cho người review phải kiểm lại một khẳng định chứ không phải tin vào nó |
+| `skills/review/references/parallel-review.md` | Bảng chọn số lượt review và trần bộ nhớ chặn nó, mỗi người review được đưa những gì, và cách gộp nhiều lượt thành một danh sách xếp hạng |
 | `skills/verify/references/runtime-checks.md` | Dựng ứng dụng lên, tác động vào nó, khẳng định một tác động thật, và dọn dẹp sau đó |
 | `skills/verify/references/ui-checks.md` | Lượt chạy `--ui`: đối chiếu màn hình với bản thiết kế |
 | `skills/verify/references/report-template.md` | Báo cáo kiểm chứng, nêu rõ đã chứng minh được gì và chưa chứng minh được gì |
@@ -126,6 +129,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/project-roadmap.md` | Kế hoạch theo phase và trạng thái |
 | `docs/flow/project-flow.md` | 18 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, và vòng quay lại khi artifact bị trả về |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
+| `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
 | `docs/vi/**/*.md` | Bản tiếng Việt mirror bảy file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub

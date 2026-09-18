@@ -174,8 +174,8 @@ phase, mà là một quãng nghỉ. Các bước được xếp sao cho cây mã
 ## `atk:implement`
 
 **Sinh ra.** Mã nguồn, cộng một bản ghi triển khai sẽ trở thành phần mô tả pull request: đã đổi gì và
-vì sao, phủ những bước nào trong kế hoạch, lệnh đã chạy cho từng tầng kèm output của nó, và phần cố ý
-chưa làm.
+vì sao, phủ những bước nào trong kế hoạch, lệnh đã chạy cho từng tầng kèm output của nó, bước dọn mã
+đã đổi những gì, và phần cố ý chưa làm.
 
 **Dùng khi.** Một ticket, một bản kế hoạch, hoặc một yêu cầu đã mô tả rõ đã sẵn sàng để làm, và câu
 hỏi còn lại là làm thế nào chứ không phải làm cái gì.
@@ -187,6 +187,11 @@ hỏi còn lại là làm thế nào chứ không phải làm cái gì.
 thẳng vào code. Thay đổi vừa thì gọi `atk:plan`, xác nhận bằng một câu, rồi đi tiếp. Chỉ thay đổi
 chạm vào schema, hợp đồng công khai, nhiều service, hoặc còn một quyết định kiến trúc bỏ ngỏ mới dừng
 chờ người duyệt. Soạn một danh sách bước thì không cần người duyệt; quyết kiến trúc thì cần.
+
+Khi lượt kiểm chứng đã xanh, thay đổi được đưa qua khả năng dọn mã có sẵn của harness, `/simplify`
+trên Claude Code, trước khi gọi review: người review nên dành lượt đọc cho hành vi, chứ không phải
+cho đoạn trùng lặp mà tác giả tự bỏ được. Trên harness không có khả năng đó, bản ghi nói rõ bước này
+đã không chạy, thay vì để nó biến mất không dấu vết.
 
 ---
 
@@ -205,7 +210,9 @@ skill này nằm bên trong đó. Hoặc chẳng có gì hỏng và mã chỉ đ
 
 **Thói quen tạo ra khác biệt.** Không file nào đổi trước khi nguyên nhân được chứng minh. Cờ
 `--investigate-only` tồn tại vì lời giải thích thường đã là toàn bộ sản phẩm cần giao, và dừng ở đó
-là một kết quả hợp lệ chứ không phải một việc dang dở.
+là một kết quả hợp lệ chứ không phải một việc dang dở. Bước dọn mã sau lượt kiểm chứng ở đây hẹp hơn
+mọi chỗ khác trong kit: nó chỉ chạm đúng những dòng bản vá đã chạm, vì một bản vá mang kèm một lượt
+dọn dẹp cả file xung quanh thì không revert gọn được vào ngày cần revert.
 
 ---
 
@@ -224,6 +231,12 @@ yêu cầu (`atk:intake`).
 phát từ diff, và nó tách lỗi chặn merge khỏi ý kiến sở thích, đó là thứ khiến một lần review được
 cảm nhận là công bằng. Một phát hiện về quy ước sẽ trích nguyên văn quy tắc kèm ID, để tác giả tranh
 luận với quy tắc chứ không tranh luận với người review.
+
+Thay đổi lớn hơn năm file sẽ được đọc nhiều lượt độc lập trên cùng một diff, khi harness chạy được
+nhiều agent song song, và mỗi phát hiện mang theo con số bao nhiêu lượt đã nêu nó. Số lượt bị chặn
+trên bởi bộ nhớ của máy, và ép được bằng `--parallel <N>`; phát hiện chỉ một lượt nêu ra phải được
+đối chiếu lại với mã trước khi vào báo cáo. Nhiều lượt cùng nói một điều vẫn là công việc của một mô
+hình, không thay được người đồng nghiệp đọc thay đổi rồi phê duyệt.
 
 ---
 
@@ -259,7 +272,9 @@ hoặc trước khi một bản release đi ra.
 
 **Thói quen tạo ra khác biệt.** Một mã 200 không phải là kết quả. Skill khẳng định đúng cái dòng dữ
 liệu, cái file, hoặc cái tin nhắn mà request lẽ ra phải sinh ra. Nó cũng dừng sau ba vòng và báo lên
-một người có tên, thay vì cứ vá cho tới khi có thứ gì đó xanh.
+một người có tên, thay vì cứ vá cho tới khi có thứ gì đó xanh. Mã mà các vòng thử đã đổi sẽ được dọn
+lại, rồi chạy lại đúng ca đang hỏng, trước khi thay đổi được đóng: một bản vá làm ở cuối một lượt
+chạy dài vẫn là thay đổi có người phải review.
 
 ---
 

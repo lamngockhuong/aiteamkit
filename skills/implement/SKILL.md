@@ -26,8 +26,8 @@ agree something on the team's behalf, it stops and says whose call it is.
 
 Handles: reading the plan, ticket, or description, scoring how much agreement the work needs before
 code, writing the change against the project's conventions and reference modules, verifying by
-layer with the project's own commands, calling `atk:review` and fixing what it blocks on, and
-closing through the shared finalize sequence.
+layer with the project's own commands, tidying what was written before anyone reviews it, calling
+`atk:review` and fixing what it blocks on, and closing through the shared finalize sequence.
 
 Does NOT handle: the review checklist, the severity scale, and the breadth of a review, all of
 which belong to `atk:review` and are not restated here; sequencing work into phases and steps
@@ -69,8 +69,8 @@ that exits zero is the worst outcome available here, because it reads as proof.
 ## Workflow
 
 ```
-[1. Plan gate] -> [2. Write the code] -> [3. Verify by layer] -> [4. Review and fix]
-  -> [5. Finalize]
+[1. Plan gate] -> [2. Write the code] -> [3. Verify by layer] -> [4. Tidy the change]
+  -> [5. Review and fix] -> [6. Finalize]
 ```
 
 ### 1. Plan gate
@@ -119,7 +119,21 @@ Then walk the blast radius: everything that calls what changed. Run what covers 
 plainly what could not be verified and why. An unverified area named in the record is a known gap;
 the same area left unmentioned is a claim that it was checked.
 
-### 4. Review and fix
+### 4. Tidy the change
+
+Once the verification is green, hand the change to the host's code clean-up capability, `/simplify`
+in Claude Code, per `shared/host-capabilities.md`. That file holds the four rules: after
+verification and not before, only the code this change touched, re-verify what the clean-up touched,
+and revert rather than debug a clean-up that breaks a check.
+
+It runs here rather than after the review because the reviewer should not spend a round on
+duplication the author could have removed, and rather than before the verification because a clean-up
+applied to code that does not work yet rewrites lines that are about to be rewritten.
+
+The record says what it changed, or that it changed nothing, or that the harness has no such
+capability. A clean-up nobody can see in the record is indistinguishable from one that never ran.
+
+### 5. Review and fix
 
 `references/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
 `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work, re-run the
@@ -142,7 +156,7 @@ says whether it ran.
 unreviewed and names who must review it before merge. A skipped review that nobody can see in the
 record is the same as a review that never happened and was never missed.
 
-### 5. Finalize
+### 6. Finalize
 
 Follow `shared/finalize-steps.md` for the branch, the commit, and every action past it. The consent
 line in that file is what keeps this skill from pushing, opening a pull request, or touching the
@@ -157,7 +171,8 @@ session by default, which becomes the body of the pull request per `shared/final
 The record holds: what was built and against which acceptance criteria; which plan gate level fired
 and why; the files changed by layer; which conventions source was used, naming it as the project's
 own or as the baseline; what was verified with which command and what each run proved; what could
-not be verified and why; the review findings, which were fixed and which were deliberately kept;
+not be verified and why; what the tidy step changed, or that it did not run and why; the review
+findings, which were fixed and which were deliberately kept;
 whether `atk:verify` ran on the change, and if not, that nobody has yet seen it run; and anything
 noticed but deliberately not done.
 
@@ -182,6 +197,8 @@ done: this skill is the author, and done is the approver's word.
 - [ ] The conventions source is named, and a project with none says the baseline was used.
 - [ ] Every command run came from the Commands section of `.atk/profile.md`.
 - [ ] The blast radius was walked, and anything unverified is named as unverified.
+- [ ] The tidy step ran after a green verification, touched only this change, and was re-verified;
+      the record says what it changed, or that the harness has no such capability.
 - [ ] `atk:review` was called, or `--no-review` was passed and the record says who must review.
 - [ ] Every `BLOCKING` finding is fixed or escalated by name, and no `NIT` was fixed silently.
 - [ ] The review loop ran at most twice before escalating.

@@ -81,6 +81,11 @@ and what happened on the retry.
 Write this section even when the answer is zero rounds. "Passed on the first run" is information
 about the change, and a missing section reads as a forgotten one.
 
+Where at least one round changed code, add one line for the tidy step per
+`shared/host-capabilities.md`: what the clean-up changed, or that it changed nothing, or that it was
+reverted and why, or that the harness has no such capability. A run of zero rounds leaves the line
+out, because there was nothing to tidy.
+
 Where the ceiling was hit, this section carries the four parts of the escalation from step 4 of
 `SKILL.md`, ending with the name of the person who has to look. The report then stops here: no
 conclusion, no recommendation dressed as a result.
