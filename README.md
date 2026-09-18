@@ -48,7 +48,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:convention` | The team's real conventions derived from the code, each classified as enforced by tooling, checked in review, or merely aspirational. |
 | `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. |
 | `atk:implement` | The code, written to the project's own conventions and reference modules, verified layer by layer with the project's own commands, and put through review before handover. |
-| `atk:fix` | The failure captured verbatim, the cause proven before a line changes, the smallest change that removes it, and a report of what was checked and what was not. |
+| `atk:fix` | The failure captured verbatim, the cause proven before a line changes, a stop after three ruled-out hypotheses rather than a guess, the smallest change that removes it, and a report of what was checked and what was not. |
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences. |
 | `atk:qa` | A test plan, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria. |
 | `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |

@@ -1,6 +1,6 @@
 # Fix report template
 
-Loaded by `atk:fix` in step 5. The reader is a reviewer who was not part of the investigation and
+Loaded by `atk:fix` in step 6. The reader is a reviewer who was not part of the investigation and
 who has to decide whether to approve the change. Everything here exists so they can check a claim
 rather than trust one.
 
@@ -23,7 +23,8 @@ ticket: <bug URL or id, or none>
 `status` opens at `IN REVIEW`, never `APPROVED`. The approver is a person, taken from the Team
 section of `.atk/profile.md` or asked for; when neither gives one, `TBD` naming who can assign a
 reviewer, per `shared/team-roles.md`. Under `--investigate-only` the status is `DRAFT`, because
-there is nothing to approve yet.
+there is nothing to approve yet. A run the hypothesis ceiling stopped is `DRAFT` too: the work is
+not finished, and a reader who sees `IN REVIEW` will assume it is.
 
 ## 1. Symptom as captured
 
@@ -39,11 +40,21 @@ One sentence naming the mechanism, then the location as `path:line`, then every 
 trace. The mechanism, not the symptom: "the list renders before the fetch resolves", not "the list
 is empty".
 
+When the ceiling in `references/investigate.md` stopped the run, this section carries what is known
+instead: each of the three hypotheses in the order it was tried with the one line that ruled it out,
+where the search went so it is not run again, and the name of the person who has to look. The
+heading stays, because a reader scanning for the cause has to find out here that there is not one
+yet.
+
 ## 3. Evidence
 
 One of the three accepted forms from `references/investigate.md`, verbatim. A red test goes in with
 its name and its failure output. A reproduction goes in with its command and its output. Quoted
 lines go in with the check that shows they produce the behaviour.
+
+After a ceiling stop there is no cause to evidence, and this section carries the checks that ruled
+the three hypotheses out, with their output. Section 2 says what each one settled; this is what it
+was settled with.
 
 This section is never a summary of the evidence. It is the evidence.
 
@@ -64,8 +75,9 @@ with its cost. The report then stops here and waits for the person who owns the 
 
 ## 5. The change
 
-**Skipped under `--investigate-only` and when the conflict gate stopped the work.** There is no
-change to describe, and a section with a plan in it reads like a change that was made.
+**Skipped under `--investigate-only`, when the conflict gate stopped the work, and when the
+hypothesis ceiling did.** There is no change to describe, and a section with a plan in it reads like
+a change that was made.
 
 What changed, in one paragraph, and why this is the smallest change that removes the cause. Where a
 wider change was needed, what forced it.
@@ -77,8 +89,7 @@ came from the fix and which from the clean-up after it.
 
 ## 6. Verified
 
-**Skipped under `--investigate-only` and when the conflict gate stopped the work**, for the same
-reason.
+**Skipped in the same three cases as section 5**, for the same reason.
 
 Per layer: the command run, taken from `.atk/profile.md`, and what its result proves. Include the
 re-run of the captured reproduction, showing it no longer reproduces.

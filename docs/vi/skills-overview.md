@@ -208,7 +208,10 @@ gì.
 **Không dùng khi.** Production đang chết ngay lúc này: `atk:incident` điều phối cuộc ứng cứu, còn
 skill này nằm bên trong đó. Hoặc chẳng có gì hỏng và mã chỉ đang khó chịu, vốn không phải một lỗi.
 
-**Thói quen tạo ra khác biệt.** Không file nào đổi trước khi nguyên nhân được chứng minh. Cờ
+**Thói quen tạo ra khác biệt.** Không file nào đổi trước khi nguyên nhân được chứng minh, và chính
+việc chứng minh cũng có trần: ba giả thuyết bị loại thì skill dừng lại và giao cuộc điều tra cho một
+người có tên, vì thứ còn lại sau ba lần loại thường nằm trong đầu ai đó chứ không nằm ở một lượt tìm
+kiếm nữa. Cờ
 `--investigate-only` tồn tại vì lời giải thích thường đã là toàn bộ sản phẩm cần giao, và dừng ở đó
 là một kết quả hợp lệ chứ không phải một việc dang dở. Bước dọn mã sau lượt kiểm chứng ở đây hẹp hơn
 mọi chỗ khác trong kit: nó chỉ chạm đúng những dòng bản vá đã chạm, vì một bản vá mang kèm một lượt
