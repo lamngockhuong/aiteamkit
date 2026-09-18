@@ -1,0 +1,23 @@
+[
+  { "query": "write down the coding conventions this team actually follows", "should_trigger": true },
+  { "query": "/atk:convention --audit", "should_trigger": true },
+  { "query": "ghi lại quy ước code của team", "should_trigger": true },
+  { "query": "quy ước đặt tên branch và commit của team là gì, viết thành tài liệu", "should_trigger": true },
+  { "query": "reviews keep repeating the same comment, write the rule down", "should_trigger": true },
+  { "query": "コーディング規約をまとめて", "should_trigger": true },
+  { "query": "命名規則とディレクトリ構成のルールをドキュメント化して", "should_trigger": true },
+  { "query": "our style guide no longer matches the code, sync it", "should_trigger": true },
+  { "query": "/atk:convention --sync --scope src/api", "should_trigger": true },
+  { "query": "kiểm tra xem code còn khớp với quy ước đã viết không", "should_trigger": true },
+
+  { "query": "review this pull request", "should_trigger": false },
+  { "query": "duyệt code giúp tôi", "should_trigger": false },
+  { "query": "viết tài liệu đặc tả cho API orders", "should_trigger": false },
+  { "query": "onboard a new developer joining the team", "should_trigger": false },
+  { "query": "viết tài liệu hướng dẫn cho thành viên mới", "should_trigger": false },
+  { "query": "set up atk in this project", "should_trigger": false },
+  { "query": "khởi tạo profile dự án cho atk", "should_trigger": false },
+  { "query": "team này muốn atk:review làm khác đi một chút", "should_trigger": false },
+  { "query": "choose the framework for the new service", "should_trigger": false },
+  { "query": "テストケースを書いて", "should_trigger": false }
+]

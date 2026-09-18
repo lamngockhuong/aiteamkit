@@ -1,0 +1,23 @@
+[
+  { "query": "production is down, checkout is failing for everyone", "should_trigger": true },
+  { "query": "/atk:incident --postmortem", "should_trigger": true },
+  { "query": "sự cố production, dựng lại timeline từ log giúp tôi", "should_trigger": true },
+  { "query": "viết postmortem cho sự cố hôm qua", "should_trigger": true },
+  { "query": "we need an RCA document for last night's outage", "should_trigger": true },
+  { "query": "障害報告書を書いて", "should_trigger": true },
+  { "query": "本番障害が起きている、まず何をすればいい", "should_trigger": true },
+  { "query": "write the runbook for this failure, it keeps coming back", "should_trigger": true },
+  { "query": "runbook cho lỗi hay lặp lại này", "should_trigger": true },
+  { "query": "/atk:incident --live P1", "should_trigger": true },
+
+  { "query": "the list endpoint returns empty, find the cause and fix it", "should_trigger": false },
+  { "query": "sửa bug này giúp, test đang đỏ", "should_trigger": false },
+  { "query": "このテストが落ちる、直して", "should_trigger": false },
+  { "query": "deploy the hotfix to production", "should_trigger": false },
+  { "query": "write the release notes for this version", "should_trigger": false },
+  { "query": "review the fix before it merges", "should_trigger": false },
+  { "query": "write the test cases for the payment flow", "should_trigger": false },
+  { "query": "tổng kết sprint vừa rồi", "should_trigger": false },
+  { "query": "kiểm chứng app chạy thật sau khi sửa", "should_trigger": false },
+  { "query": "ước lượng thời gian sửa xong", "should_trigger": false }
+]

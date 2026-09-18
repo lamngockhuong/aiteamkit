@@ -1,0 +1,23 @@
+[
+  { "query": "run the retro for sprint 13", "should_trigger": true },
+  { "query": "/atk:retro sprint-13 --report --audience client", "should_trigger": true },
+  { "query": "tổng kết sprint vừa rồi bằng số liệu chứ không bằng trí nhớ", "should_trigger": true },
+  { "query": "họp retro tuần này cần chuẩn bị số liệu gì", "should_trigger": true },
+  { "query": "write the weekly status report for the PM", "should_trigger": true },
+  { "query": "振り返りをしたい", "should_trigger": true },
+  { "query": "スプリントの実績をデータで出して", "should_trigger": true },
+  { "query": "did the actions from the last retro actually happen", "should_trigger": true },
+  { "query": "báo cáo tình hình dự án gửi khách hàng tuần này", "should_trigger": true },
+  { "query": "/atk:retro --data-only", "should_trigger": true },
+
+  { "query": "estimate the next sprint", "should_trigger": false },
+  { "query": "ước lượng cho sprint tới", "should_trigger": false },
+  { "query": "write the release notes for 2.3", "should_trigger": false },
+  { "query": "hand my work over before I leave", "should_trigger": false },
+  { "query": "bàn giao công việc trước khi nghỉ", "should_trigger": false },
+  { "query": "write the postmortem for last night's outage", "should_trigger": false },
+  { "query": "障害の振り返りをして、原因と再発防止をまとめたい", "should_trigger": false },
+  { "query": "review this pull request", "should_trigger": false },
+  { "query": "summarise this epic for someone joining late", "should_trigger": false },
+  { "query": "viết test case cho sprint này", "should_trigger": false }
+]

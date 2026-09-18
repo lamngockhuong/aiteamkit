@@ -49,19 +49,25 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `hooks/check-profile.mjs` | `SessionStart`. Node ESM, nên cư xử như nhau trên Linux, macOS và Windows. In một lời nhắc khi một repo git chưa có `.atk/profile.md`, mỗi dự án một lần, và thoát 0 ở mọi nhánh. Không chặn, không ghi gì vào repo của người dùng. Codex và Cursor chưa có lớp vỏ riêng |
 | `hooks/load-overrides.mjs` | `PreToolUse` với matcher `Skill`. Đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó, chỉ để đỡ một lượt đọc chứ không làm gì thêm. Chỉ trả lời cho skill thuộc namespace `atk:`, nên một skill trùng tên của kit khác không bao giờ nhận chỉ dẫn của dự án này. In ra một object rỗng khi payload thuộc công cụ khác, khi namespace khác, khi tên không có tiền tố, khi không có file, khi tên skill chứa dấu phân cách đường dẫn, hoặc khi đầu vào hỏng; file dài quá 4096 ký tự thì gọi tên chứ không chép vào. Nơi không có hook, mỗi skill tự mở file |
 
+## `.atk/` của chính repo này
+
+Kit tự áp lên mình. Do `atk:init` và `atk:tailor` viết ra ngay trong repo này, được các skill đọc ở
+đầu workflow, và được commit để người bảo trì sau thừa hưởng cả hai.
+
+| File | Mục đích |
+|------|----------|
+| `.atk/profile.md` | Profile của chính repo này: không có lệnh build cũng không có lệnh test, nên mục Commands mang bốn phép kiểm trong `CLAUDE.md` thay cho chúng, cộng một tầng nội dung, thư mục docs là `docs/`, `CLAUDE.md` vừa là nơi giữ quy ước vừa là nơi giữ review checklist, và tracker là GitHub Issues |
+| `.atk/overrides/review.md` | Phần ghi đè mà `atk:tailor` viết cho `atk:review` ở đây: diff chạm vào một khối lệnh kiểm tra trong `CLAUDE.md` thì phải kiểm bằng cách chạy khối đó chứ không phải bằng cách đọc, ở mức `BLOCKING`. Các luật về nội dung repo không nằm trong file này; chúng là những dòng `CONV-NNN` trong `CLAUDE.md` |
+
 ## Các skill
 
-Mỗi skill là một `SKILL.md`. Tám skill có thêm `references/` và `evals/`. Riêng `review` chỉ
-có `references/`; mười một skill gốc còn lại thì chưa có gì thêm.
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Chín skill có thêm `references/`;
+mười một skill gốc còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
 | `skills/init/SKILL.md` | Khởi tạo | `.atk/profile.md`: lệnh, tầng, thư mục docs, tracker, team, và cách kiểm chứng lúc chạy |
 | `skills/tailor/SKILL.md` | Khởi tạo | `.atk/overrides/<skill>.md`: điều team này muốn một skill làm khác đi, người duyệt là vai sở hữu kết quả |
-| `skills/tailor/references/interview.md` | Khởi tạo | Năm nhóm câu hỏi, bộ lọc đẩy câu trả lời sang `init` hoặc `convention`, và một ví dụ cho mỗi nhóm |
-| `skills/tailor/references/audit.md` | Khởi tạo | Ba phép kiểm của `--audit`, vì sao mâu thuẫn là khẳng định còn neo lỗi thời là nghi vấn, và luật nó không sửa gì |
-| `skills/tailor/references/feedback.md` | Khởi tạo | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, và hai thứ nó không bao giờ được chứa |
-| `skills/tailor/evals/trigger_evals.json` | Khởi tạo | 25 case trigger, gồm cả cặp `convention` và `init` mà nó không được giành |
 | `skills/intake/SKILL.md` | Yêu cầu | User story, tiêu chí nghiệm thu, ngoài phạm vi, câu hỏi treo có người phụ trách |
 | `skills/catchup/SKILL.md` | Yêu cầu | Bản tóm tắt cho người không có mặt trong cuộc hội thoại, kèm phần tự kiểm hiểu bài cho epic |
 | `skills/estimate/SKILL.md` | Lập kế hoạch | Ước lượng có căn cứ và độ tin cậy, capacity, cam kết sprint, phần dư |
@@ -89,6 +95,9 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 |------|----------|
 | `skills/init/references/detection.md` | Tìm từng trường của profile ở đâu, và làm gì khi repo cho nhiều đáp án hoặc không cho đáp án nào |
 | `skills/init/references/profile-template.md` | Bố cục của `.atk/profile.md` mà `init` điền vào |
+| `skills/tailor/references/interview.md` | Năm nhóm câu hỏi, bộ lọc đẩy câu trả lời sang `init` hoặc `convention`, và một ví dụ cho mỗi nhóm |
+| `skills/tailor/references/audit.md` | Ba phép kiểm của `--audit`, vì sao mâu thuẫn là khẳng định còn neo lỗi thời là nghi vấn, và luật nó không sửa gì |
+| `skills/tailor/references/feedback.md` | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, và hai thứ nó không bao giờ được chứa |
 | `skills/catchup/references/brief-template.md` | Một khung chung cho hai chế độ, phần khác nhau giữa epic và pull request được đánh dấu theo từng mục |
 | `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, bảng phân loại kiểu tính năng, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
 | `skills/plan/references/step-ordering.md` | Hai lần cắt, theo phase và theo bước, mỗi lần một quy tắc riêng |
@@ -110,18 +119,31 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 
 ### Thư mục `evals/`
 
-Mỗi file là một mảng `{query, should_trigger}` kiểm phần `description` của skill. Chưa có bộ chạy;
-xem phase 4 trong `docs/vi/project-roadmap.md`.
+Mỗi skill một file, là mảng `{query, should_trigger}` kiểm phần `description` của chính skill đó,
+bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 trong `docs/vi/project-roadmap.md`.
 
 | File | Mục đích |
 |------|----------|
 | `skills/init/evals/trigger_evals.json` | Cách nói về khởi tạo, đối lại những yêu cầu cấu hình dự án không thuộc `init` |
+| `skills/tailor/evals/trigger_evals.json` | Việc chỉnh một skill cho hợp team, đối lại cặp `convention` và `init` mà nó không được giành |
+| `skills/intake/evals/trigger_evals.json` | Một yêu cầu thô thành user story, đối lại `design-doc`, `estimate` và `breakdown` |
 | `skills/catchup/evals/trigger_evals.json` | Nắm bắt việc đang chạy, đối lại `intake` và `onboard` |
-| `skills/plan/evals/trigger_evals.json` | Lập kế hoạch cho một người, đối lại `breakdown` và `design-doc` |
+| `skills/estimate/evals/trigger_evals.json` | Ước lượng và capacity, đối lại `breakdown` và `retro` |
+| `skills/design-doc/evals/trigger_evals.json` | Chọn phương án, đối lại `intake`, `spec` và `plan` |
 | `skills/spec/evals/trigger_evals.json` | Tài liệu tham chiếu, đối lại `design-doc`, `intake` và việc sinh mã |
+| `skills/breakdown/evals/trigger_evals.json` | Chia việc giữa nhiều người, đối lại `plan` và `estimate` |
+| `skills/convention/evals/trigger_evals.json` | Ghi lại luật của team, đối lại `review`, `init` và `tailor` |
+| `skills/plan/evals/trigger_evals.json` | Lập kế hoạch cho một người, đối lại `breakdown` và `design-doc` |
 | `skills/implement/evals/trigger_evals.json` | Làm việc xây dựng, đối lại lập kế hoạch và review |
 | `skills/fix/evals/trigger_evals.json` | Một lỗi, đối lại `incident` và việc triển khai thông thường |
+| `skills/review/evals/trigger_evals.json` | Đọc một diff, đối lại `qa`, `verify`, `fix` và `catchup` |
+| `skills/qa/evals/trigger_evals.json` | Test case và test plan viết ra, đối lại `verify` và việc viết mã test tự động |
 | `skills/verify/evals/trigger_evals.json` | Kiểm chứng lúc chạy, đối lại `qa` và `review` |
+| `skills/release/evals/trigger_evals.json` | Ghi chú và checklist deploy, đối lại `incident` và `qa` |
+| `skills/incident/evals/trigger_evals.json` | Một sự cố và postmortem của nó, đối lại `fix` và `release` |
+| `skills/retro/evals/trigger_evals.json` | Bằng chứng sprint và báo cáo tình hình, đối lại `estimate` và `handover` |
+| `skills/onboard/evals/trigger_evals.json` | Một người vào dự án, đối lại `handover`, `init` và `catchup` |
+| `skills/handover/evals/trigger_evals.json` | Một người rời việc, đối lại `onboard` và `catchup` |
 
 ## Assets
 
@@ -142,10 +164,11 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/artifact-lifecycle.md` | Artifact nào nên commit, cái nào được phép xóa, xóa mỗi loại thì mất gì, và ba chính sách một đội có thể chọn |
 | `docs/codebase-summary.md` | Chính là file này |
 | `docs/project-roadmap.md` | Kế hoạch theo phase và trạng thái |
+| `docs/trigger-eval-measurement.md` | Cách lấy một số đo đúng từ `evals/trigger_evals.json`: vì sao một bộ chạy thông thường báo ra điểm số rỗng, hook `PreToolUse` đo được việc chọn skill, ba điều kiện một lượt chạy cần có, và những case không gì quan sát được |
 | `docs/flow/project-flow.md` | 20 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, và vòng quay lại khi artifact bị trả về |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
-| `docs/vi/**/*.md` | Bản tiếng Việt mirror tám file trên, đặt ở cùng đường dẫn tương đối |
+| `docs/vi/**/*.md` | Bản tiếng Việt mirror mười file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub
 

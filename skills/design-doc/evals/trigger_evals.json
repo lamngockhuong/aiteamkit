@@ -1,0 +1,23 @@
+[
+  { "query": "write the design doc for moving order processing onto a queue", "should_trigger": true },
+  { "query": "/atk:design-doc docs/records/requirements/req-260918-export.md --adr", "should_trigger": true },
+  { "query": "tài liệu thiết kế kỹ thuật cho việc tách service thanh toán", "should_trigger": true },
+  { "query": "so sánh vài phương án rồi chốt cách làm, viết thành tài liệu cho team duyệt", "should_trigger": true },
+  { "query": "we need an ADR recording why we picked this queue over the other one", "should_trigger": true },
+  { "query": "設計書を書いて", "should_trigger": true },
+  { "query": "スキーマを変更するので、詳細設計をまとめてレビューに出したい", "should_trigger": true },
+  { "query": "how should we build this, it touches the schema and two services", "should_trigger": true },
+  { "query": "ghi lại quyết định kiến trúc này kèm lý do và phương án đã loại", "should_trigger": true },
+  { "query": "/atk:design-doc --options 3", "should_trigger": true },
+
+  { "query": "turn the client mail into user stories", "should_trigger": false },
+  { "query": "viết user story cho yêu cầu này", "should_trigger": false },
+  { "query": "chia epic này thành task cho từng người", "should_trigger": false },
+  { "query": "cắt phần việc này thành các phase để tôi làm", "should_trigger": false },
+  { "query": "document what the payments API does today", "should_trigger": false },
+  { "query": "viết tài liệu đặc tả cho bảng orders", "should_trigger": false },
+  { "query": "estimate this epic in man-days", "should_trigger": false },
+  { "query": "review this pull request against the design", "should_trigger": false },
+  { "query": "implement the design in docs/records/design/design-260901-queue.md", "should_trigger": false },
+  { "query": "設計書どおりに実装して", "should_trigger": false }
+]

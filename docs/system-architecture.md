@@ -37,7 +37,7 @@ is never duplicated per harness. The manifests differ only in how they declare c
 
 ```mermaid
 flowchart LR
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>19 folders, one SKILL.md each</small>"]
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>20 folders, one SKILL.md each</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
     SK --> SH["shared/<br/><small>cited by the skills that need it</small>"]
@@ -132,7 +132,7 @@ deliberate. Rule 7 of `shared/team-roles.md` holds the behaviour, stated once. E
 carries one line naming its own override file and pointing at that rule, because a shared file is
 only read when something makes a skill open it, and a citation under `## Roles` does not. The line
 costs a few tokens per invocation and buys the guarantee that the mechanism runs at all; putting the
-behaviour itself in 19 files instead would be 19 copies of one rule, drifting.
+behaviour itself in 20 files instead would be 20 copies of one rule, drifting.
 
 `shared/` sits at the repository root rather than under `skills/`, because a folder inside `skills/`
 without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `shared/<file>.md`,

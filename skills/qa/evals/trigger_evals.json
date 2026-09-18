@@ -1,0 +1,24 @@
+[
+  { "query": "write the test cases for the login screen", "should_trigger": true },
+  { "query": "/atk:qa docs/records/requirements/req-260918-export.md --cases", "should_trigger": true },
+  { "query": "viết test case cho màn hình đăng nhập", "should_trigger": true },
+  { "query": "kiểm thử tính năng này cần những case nào", "should_trigger": true },
+  { "query": "we need a test plan with entry and exit criteria for this release", "should_trigger": true },
+  { "query": "テストケースを書いて", "should_trigger": true },
+  { "query": "テスト計画を作って、観点と終了条件も含めて", "should_trigger": true },
+  { "query": "what should QA check before this goes out", "should_trigger": true },
+  { "query": "build the regression matrix for this change", "should_trigger": true },
+  { "query": "ma trận regression cho lần phát hành này", "should_trigger": true },
+  { "query": "what does a developer owe QA before moving a ticket to testing", "should_trigger": true },
+
+  { "query": "start the app and confirm the whole flow works", "should_trigger": false },
+  { "query": "chạy thử thật xem đơn hàng có vào database không", "should_trigger": false },
+  { "query": "動作確認をお願いします", "should_trigger": false },
+  { "query": "add a unit test for this function", "should_trigger": false },
+  { "query": "viết code test tự động cho hàm này", "should_trigger": false },
+  { "query": "review this pull request", "should_trigger": false },
+  { "query": "the list comes back empty, find out why", "should_trigger": false },
+  { "query": "write the release checklist for production", "should_trigger": false },
+  { "query": "viết user story và tiêu chí nghiệm thu", "should_trigger": false },
+  { "query": "ước lượng sprint tới", "should_trigger": false }
+]

@@ -60,14 +60,15 @@ shows up duplicated in the `/` menu, at a real always-on token cost for no behav
 skills/<name>/
   SKILL.md                    required; frontmatter + workflow, kept under 300 lines
   references/*.md             optional, lazily loaded detail (templates, checklists, schemas)
-  evals/trigger_evals.json    optional; array of {query, should_trigger} for description testing
+  evals/trigger_evals.json    one per skill; array of {query, should_trigger} for description testing
 ```
 
-Eleven of the twelve original skills are still skeletons: `SKILL.md` only, around 95 to 105 lines
-each, with no `references/` or `evals/`. The eight added since (`init`, `tailor`, `catchup`, `plan`,
-`implement`, `fix`, `verify`, `spec`) carry both. `review` sits between the two: it grew a `references/` file for parallel
-review and still has no `evals/`. Deepening a skill means adding `references/` files and pointing at them from
-the relevant workflow step, not growing `SKILL.md` past 300 lines.
+Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
+neighbours it must not steal. `references/` is where they still differ: the eight added after the
+first twelve (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`) carry one,
+`review` grew one for parallel review, and the other eleven are still `SKILL.md` alone. Deepening a
+skill means adding `references/` files and pointing at them from the relevant workflow step, not
+growing `SKILL.md` past 300 lines.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
@@ -227,7 +228,7 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
 5. `shared/artifact-paths.md` (the default output path row)
 6. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 19
+7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 20
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 8. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
@@ -425,7 +426,9 @@ for event in json.load(open('hooks/hooks.json'))['hooks'].values():
             assert h['command']=='node' and 'args' in h, 'hook must stay in exec form'
 print('OK exec form')"
 
-# Trigger evals parse. The kit ships no runner: run them with a skill-eval tool from outside it
+# Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
+# vacuous score against an installed plugin. To actually measure one, follow
+# docs/trigger-eval-measurement.md
 for f in skills/*/evals/trigger_evals.json; do
   python3 -c "import json,sys; d=json.load(open('$f')); assert isinstance(d,list) and d" || echo "FAIL $f"
 done; echo "OK evals"

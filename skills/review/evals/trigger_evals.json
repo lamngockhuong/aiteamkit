@@ -1,0 +1,24 @@
+[
+  { "query": "review this pull request before I approve it", "should_trigger": true },
+  { "query": "/atk:review 214 --against docs/records/design/design-260901-orders.md", "should_trigger": true },
+  { "query": "duyệt code nhánh feature/export giúp tôi", "should_trigger": true },
+  { "query": "review giúp phần thay đổi trong thư mục api", "should_trigger": true },
+  { "query": "is this ready to merge", "should_trigger": true },
+  { "query": "レビューをお願いします", "should_trigger": true },
+  { "query": "このPR、マージして大丈夫か見てほしい", "should_trigger": true },
+  { "query": "second opinion on this branch, the error handling looks off to me", "should_trigger": true },
+  { "query": "check this diff against the requirement and our conventions", "should_trigger": true },
+  { "query": "/atk:review --strict --parallel 3", "should_trigger": true },
+
+  { "query": "write the test cases for this feature", "should_trigger": false },
+  { "query": "viết test case cho tính năng này", "should_trigger": false },
+  { "query": "start the app and confirm the order really lands in the database", "should_trigger": false },
+  { "query": "kiểm chứng trên app chạy thật trước khi giao QA", "should_trigger": false },
+  { "query": "fix the bug this review found", "should_trigger": false },
+  { "query": "sửa lỗi danh sách trả về rỗng", "should_trigger": false },
+  { "query": "implement the CSV export", "should_trigger": false },
+  { "query": "write down our review etiquette as a team rule", "should_trigger": false },
+  { "query": "ghi lại quy ước review của team", "should_trigger": false },
+  { "query": "summarise this pull request for someone who does not know the area", "should_trigger": false },
+  { "query": "このPRの背景を知らない人向けにまとめて", "should_trigger": false }
+]

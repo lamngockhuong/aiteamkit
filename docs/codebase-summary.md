@@ -49,19 +49,25 @@ removed, or renamed; update it in the same commit.
 | `hooks/check-profile.mjs` | `SessionStart`. Node ESM, so it behaves the same on Linux, macOS, and Windows. Prints one reminder when a git repository has no `.atk/profile.md`, once per project, and exits 0 on every path. Never blocks, never writes into the user's repository. Codex and Cursor have no wrapper yet |
 | `hooks/load-overrides.mjs` | `PreToolUse` with matcher `Skill`. Puts `.atk/overrides/<skill>.md` in front of the skill that owns it, saving a read and nothing more. Answers only for skills under the `atk:` namespace, so another kit's same-named skill never receives this project's instructions. Prints an empty object for another tool, another namespace, a bare name, a missing file, a name with a path separator, or malformed input, and names rather than inlines a file past 4096 characters. Every skill opens the file itself where no hook ran |
 
+## `.atk/` in this repository
+
+The kit applied to itself. Written by `atk:init` and `atk:tailor` in this repository, read by the
+skills at the top of their workflow, and committed so the next maintainer inherits both.
+
+| File | Purpose |
+|------|---------|
+| `.atk/profile.md` | This repository's own profile: no build and no test command, so the Commands section carries the four verification checks from `CLAUDE.md` instead, plus one content layer, `docs/` as the docs root, `CLAUDE.md` as both the conventions and the review checklist, and GitHub Issues as the tracker |
+| `.atk/overrides/review.md` | The override `atk:tailor` wrote for `atk:review` here: a diff touching a verification command block in `CLAUDE.md` has to be checked by running the block, not by reading it, at `BLOCKING`. The repository's content rules stay out of it; those are the `CONV-NNN` rows in `CLAUDE.md` |
+
 ## Skills
 
-Each skill is one `SKILL.md`. Eight skills also carry `references/` and `evals/`.
-`review` carries `references/` alone; the other eleven original skills carry neither yet.
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Nine also carry
+`references/`; the eleven original ones do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
 | `skills/init/SKILL.md` | Setup | `.atk/profile.md`: commands, layers, docs roots, tracker, team, and how to verify at runtime |
 | `skills/tailor/SKILL.md` | Setup | `.atk/overrides/<skill>.md`: what this team wants one skill to do differently, with the owning role as approver |
-| `skills/tailor/references/interview.md` | Setup | The five groups of question, the filter that sends an answer to `init` or `convention` instead, and a worked example per group |
-| `skills/tailor/references/audit.md` | Setup | The three `--audit` checks, why a conflict is a fact and a stale anchor is a question, and the rule that it changes nothing |
-| `skills/tailor/references/feedback.md` | Setup | The three-way fork a bad run splits into, what the `--feedback` record holds, and the two things it may never hold |
-| `skills/tailor/evals/trigger_evals.json` | Setup | 25 trigger cases, including the `convention` and `init` pairs it must not steal |
 | `skills/intake/SKILL.md` | Requirement | User stories, acceptance criteria, non-goals, open questions with owners |
 | `skills/catchup/SKILL.md` | Requirement | A brief for someone who was not in the conversation, plus the understanding check for an epic |
 | `skills/estimate/SKILL.md` | Planning | Sizes with basis and confidence, capacity, sprint commitment, overflow |
@@ -89,6 +95,9 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 |------|---------|
 | `skills/init/references/detection.md` | Where to look for each profile field, and what to do when the repository gives several answers or none |
 | `skills/init/references/profile-template.md` | The shape of `.atk/profile.md` that `init` fills in |
+| `skills/tailor/references/interview.md` | The five groups of question, the filter that sends an answer to `init` or `convention` instead, and a worked example per group |
+| `skills/tailor/references/audit.md` | The three `--audit` checks, why a conflict is a fact and a stale anchor is a question, and the rule that it changes nothing |
+| `skills/tailor/references/feedback.md` | The three-way fork a bad run splits into, what the `--feedback` record holds, and the two things it may never hold |
 | `skills/catchup/references/brief-template.md` | One skeleton for both modes, with the epic and pull-request differences marked per section |
 | `skills/catchup/references/understanding-check.md` | The fixed questions, the feature type table, and the two rules deciding whether the check is worth anything |
 | `skills/plan/references/step-ordering.md` | The two cuts, phase and step, and the rule for each |
@@ -110,18 +119,31 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 
 ### Trigger evals
 
-Each holds an array of `{query, should_trigger}` testing the skill's `description`. There is no
-runner yet; see `docs/project-roadmap.md` phase 4.
+One per skill, each an array of `{query, should_trigger}` testing that skill's `description`, in
+all three trigger languages. The kit ships no runner; see `docs/project-roadmap.md` phase 4.
 
 | File | Purpose |
 |------|---------|
 | `skills/init/evals/trigger_evals.json` | Setup phrasing against project configuration requests that are not `init` |
+| `skills/tailor/evals/trigger_evals.json` | Tailoring a skill, against the `convention` and `init` pairs it must not steal |
+| `skills/intake/evals/trigger_evals.json` | A raw request becoming stories, against `design-doc`, `estimate`, and `breakdown` |
 | `skills/catchup/evals/trigger_evals.json` | Catching up on existing work against `intake` and `onboard` |
-| `skills/plan/evals/trigger_evals.json` | Planning one person's work against `breakdown` and `design-doc` |
+| `skills/estimate/evals/trigger_evals.json` | Sizing and capacity, against `breakdown` and `retro` |
+| `skills/design-doc/evals/trigger_evals.json` | Choosing an approach, against `intake`, `spec`, and `plan` |
 | `skills/spec/evals/trigger_evals.json` | Reference documents against `design-doc`, `intake`, and code generation |
+| `skills/breakdown/evals/trigger_evals.json` | Dividing work between people, against `plan` and `estimate` |
+| `skills/convention/evals/trigger_evals.json` | Recording the team's rules, against `review`, `init`, and `tailor` |
+| `skills/plan/evals/trigger_evals.json` | Planning one person's work against `breakdown` and `design-doc` |
 | `skills/implement/evals/trigger_evals.json` | Building against planning and reviewing |
 | `skills/fix/evals/trigger_evals.json` | A defect against `incident` and ordinary implementation |
+| `skills/review/evals/trigger_evals.json` | Reading a diff, against `qa`, `verify`, `fix`, and `catchup` |
+| `skills/qa/evals/trigger_evals.json` | Written cases and plans, against `verify` and automated test code |
 | `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
+| `skills/release/evals/trigger_evals.json` | Notes and the deploy checklist, against `incident` and `qa` |
+| `skills/incident/evals/trigger_evals.json` | An outage and its postmortem, against `fix` and `release` |
+| `skills/retro/evals/trigger_evals.json` | Sprint evidence and the status report, against `estimate` and `handover` |
+| `skills/onboard/evals/trigger_evals.json` | A person joining, against `handover`, `init`, and `catchup` |
+| `skills/handover/evals/trigger_evals.json` | A person leaving, against `onboard` and `catchup` |
 
 ## Assets
 
@@ -142,10 +164,11 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, what each deletion costs, and the three policies a team can choose between |
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
+| `docs/trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`: why a generic harness reports a vacuous score, the `PreToolUse` hook that does measure selection, the three conditions a run needs, and the cases nothing can observe |
 | `docs/flow/project-flow.md` | The 20 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
-| `docs/vi/**/*.md` | Vietnamese mirror of the eight files above, at the same relative paths |
+| `docs/vi/**/*.md` | Vietnamese mirror of the ten files above, at the same relative paths |
 
 ## GitHub
 
