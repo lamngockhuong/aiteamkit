@@ -45,8 +45,8 @@ a section to delete.
 | Project | Name, repository, single repo or monorepo, package manager | all |
 | Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify |
 | Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
-| Docs | Docs root, where conventions live, where designs live, the agent instruction file if any | every skill that writes an artifact |
-| Tracker | Tracker in use, repository owner, where the spec lives | intake, catchup, review, release |
+| Docs | Docs root, where conventions live, where designs live, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
+| Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release |
 | Team | Role mapped to a real name, who approves what, and the language the team writes artifacts in | all |
 | Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to clean up, how to be sure the target is local | verify |
 
@@ -65,14 +65,14 @@ or incomplete.
 | Group | Skills | Behavior when the profile is missing |
 |-------|--------|--------------------------------------|
 | Required | implement, fix, verify | Stop. Say what is missing and that `/atk:init` creates it. Change nothing. |
-| Required-soft | plan, review, qa, release, convention | Continue, and state in the artifact that no profile was found, so every command and path in it is a guess. |
+| Required-soft | plan, review, qa, release, convention, spec | Continue, and state in the artifact that no profile was found, so every command and path in it is a guess. |
 | Not needed | intake, catchup, estimate, design-doc, breakdown, incident, retro, onboard, handover | Never mention the profile. |
 
 `atk:init` is in no group. It is the skill that writes the profile, so a missing one is its input
 rather than its problem.
 
 The column describes the missing case only. A `Not needed` skill may still read a section that helps
-it when the profile happens to be there: `atk:catchup` reading Tracker to learn where the spec lives
+it when the profile happens to be there: `atk:catchup` reading Tracker to find the incoming specification
 is the usual example. What the group forbids is the other three behaviours. It never requires the
 profile, it never stops or degrades its output because the profile is absent, and it never mentions
 the profile to the user in either state. A reader who has not run `/atk:init` must not be able to
@@ -82,6 +82,10 @@ Tracker row and says nothing.
 The practical test: delete the profile, run the skill again, and compare. A `Not needed` skill
 produces the same artifact with the same confidence, only having worked a little harder to find what
 the profile would have told it.
+
+`atk:spec` is Required-soft rather than Required because it has two other ways to find its
+footing: the documents already in the directory, whose shape it copies, and the three default kinds.
+What it loses without a profile is the project's own directory layout, so it says so and carries on.
 
 Three groups rather than two, because the middle case is real: `atk:review` can still read a diff
 against a requirement without knowing how the project builds. What it cannot do is run the

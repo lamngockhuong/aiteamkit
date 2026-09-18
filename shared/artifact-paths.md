@@ -20,6 +20,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `catchup` | `docs/catchup/<ticket-or-date>-<slug>.md` |
 | `estimate` | `docs/planning/estimate-<sprint-or-date>.md` |
 | `design-doc` | `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
+| `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
 | `breakdown` | `docs/planning/breakdown-<epic>.md` |
 | `convention` | `docs/conventions.md` (and `CONTRIBUTING.md` when the project has one) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
@@ -53,6 +54,41 @@ front matter, which is where every other artifact carries it anyway.
 A project that keeps its plans somewhere else says so in its `CLAUDE.md` or `AGENTS.md`, and that
 wins, exactly as the docs root rule works above.
 
+### Named after the subject: `plan` is dated, `spec` is not
+
+`atk:spec` is the one skill whose file names carry neither a ticket nor a date. A reference document
+is named after the thing it describes, one file per resource, per table, or per feature, because the
+next person looks for the resource rather than for the sprint it was built in. The default kinds:
+
+| Kind | Directory | One file per |
+|------|-----------|--------------|
+| `api` | `docs/api/` | resource |
+| `db` | `docs/database/` | table |
+| `feature` | `docs/features/` | feature |
+
+A project overrides a row, or adds a row of its own, in the `Docs` section of `.atk/profile.md`. The
+kind name is also the value of `--kind`, so a kind the project declared is invocable without touching
+the kit.
+
+## Persistence
+
+Three groups, and the group decides what happens to a file after the work that produced it is merged.
+
+| Group | Which | After the merge |
+|-------|-------|-----------------|
+| Reference | the `spec` kinds, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/<slug>.md`, `.atk/profile.md` | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
+| Record | every row above named `<ticket-or-date>` or `<sprint-or-date>` | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
+| Not a file | the implementation record, review comments | Lives on the pull request |
+
+Every file in the first two groups is committed, the same as `.atk/profile.md`. The kit writes no
+artifact meant to stay untracked.
+
+The split is why `docs/design/<ticket>-<slug>.md` and `docs/api/<resource>.md` are two documents
+rather than one. A design argues for a change and cites the code as it stood before it; the day the
+change merges, that citation stops being true and the document becomes an account of a decision. The
+reference document begins where the design ends, and from then on it is the code that has to keep up
+with it, or it with the code.
+
 ## Naming
 
 - Dates are `YYMMDD`, taken from `date +%y%m%d` on macOS and Linux or
@@ -60,6 +96,8 @@ wins, exactly as the docs root rule works above.
 - Plan directories carry the time too, `YYMMDD-HHMM`, from `date +%y%m%d-%H%M`. Two plans started on
   one day are common; two started in one minute are not.
 - Slugs are lowercase kebab-case, derived from the title, at most six words.
+- A reference document takes its name from its subject, not from a title: the resource, the table,
+  or the feature. Lowercase kebab-case, and it does not change when the subject is extended.
 - ADR numbers are zero-padded to four digits and never reused. Read the existing `docs/adr/`
   directory to find the next one.
 
@@ -84,6 +122,10 @@ ticket: <id or URL, or none>
 
 Read the file if it already exists and update it in place. Do not overwrite an `APPROVED` artifact:
 supersede it, link the replacement, and say which decision changed.
+
+The no-overwrite rule is about records. A reference document is updated in place by design, and
+superseding one would leave the project holding two files that both claim to describe the same live
+endpoint. Its front matter goes back to `IN REVIEW` when an update changes what it promises.
 
 A plan directory never collides, because its name carries the time, so updating in place cannot
 happen by accident there. Planning the same work again therefore has to supersede by hand: set the

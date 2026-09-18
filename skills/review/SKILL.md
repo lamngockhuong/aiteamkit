@@ -83,13 +83,23 @@ Where the harness cannot spawn agents, one pass runs and the report says so.
 
 Look for, in this order: behavior that contradicts an acceptance criterion, correctness bugs and
 regressions, missing error and edge-case handling, security and data exposure, untested new
-behavior, convention violations, then readability.
+behavior, a public contract changed without its reference document, convention violations, then
+readability.
 
 Convention checking runs off `shared/review-checklist.md`: read the review checklist section of the
 project's `docs/conventions.md`, check each `REVIEWED` rule, and cite the rule ID with its text
 quoted verbatim so the author can dispute the rule rather than the reviewer. When the project has no
 recorded conventions, use the baseline items in that file and say so in the review. Do not invent
 project-specific rules mid-review; report the gap so `atk:convention` can record it.
+
+The reference-document check is the sync obligation in `shared/spec-docs.md`, which lists the five
+kinds of change that trigger it. Raise a `BLOCKING` finding when a contract moved and neither the
+document nor a stated skip came with it. Where the pull request says what is stale and who will fix
+it, the obligation was met and there is no finding.
+
+Do not fix the document as the reviewer. That moves the work to the wrong person and teaches the next
+author that the rule is optional. Something the document never settled is an open question, not
+drift, per the same file.
 
 ### 5. Verify before reporting
 
@@ -137,4 +147,6 @@ line it cites, and the summary as one review comment. Post nothing before showin
 - [ ] The width that ran is stated, and a width the machine forced down says so.
 - [ ] Every reviewer received the same scope, and a finding only one of them raised was checked
       against the code before it was reported.
+- [ ] A change touching a public contract either carried its reference document or stated the skip,
+      and neither was silently fixed by the reviewer.
 - [ ] No comment addresses the author rather than the code.

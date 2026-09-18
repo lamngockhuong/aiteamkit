@@ -163,7 +163,7 @@ that was failing is re-run after it: a clean-up that puts that case back to red 
 than debugged, and the report says so. A run whose rounds changed nothing skips this and the
 paragraph below with it.
 
-Then close it through `shared/finalize-steps.md` like any other change the kit makes: the branch, the commit, and the consent line that everything past the commit has to cross. A
+Then close it through `shared/finalize-steps.md` like any other change the kit makes: the reference documents the change owes, the branch, the commit, and the consent line that everything past the commit has to cross. A
 verification that ends with edited files sitting in the working tree and no decision about them is
 how a fix made at six o'clock gets committed by somebody else tomorrow, inside a commit about
 something else. A run that changed nothing skips this and says so.
@@ -232,6 +232,8 @@ distance between those two is the whole reason the kit separates the roles.
       re-run afterwards, and the report says what the clean-up changed or why it did not run.
 - [ ] Code changed during a round went through `shared/finalize-steps.md`, and a run that changed
       nothing says so.
+- [ ] A round that changed a public contract carried its reference document, per
+      `shared/spec-docs.md`.
 - [ ] Under `--report-only`, `git status` shows no source file touched.
 - [ ] Every process this run started is stopped, and the post-run inventory confirming it is in the
       report.
