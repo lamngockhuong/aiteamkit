@@ -56,7 +56,8 @@ skill's output named as approver.
 **Use when.** The team keeps making the same correction to what a skill produces, a client or an
 internal standard adds a step the kit does not know about, or an override written earlier no longer
 matches the skill it belongs to. `--audit` checks every override file in the project and changes
-nothing.
+nothing. `--feedback` takes a run that went wrong and sorts each finding into an override for this
+team, a record for the kit author, or neither, and the record leaves the project only when asked.
 
 **Do not use when.** The rule is about the code rather than about the skill. "Every pull request
 needs a test" is checkable by a person with no kit installed, so it is a `CONV-NNN` row that

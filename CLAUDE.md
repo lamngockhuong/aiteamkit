@@ -95,7 +95,7 @@ skill discovery.
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, the two sections it may hold, and the seven things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
-| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
+| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify`, `tailor` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers | `fix`, `implement`, `verify`, `review` |
@@ -114,6 +114,8 @@ having recorded no conventions. `implement` reads the file for that and for the 
 which it falls back to when the project really has recorded none. `finalize-steps.md` is cited by the three skills
 that change code, and holds the rule that nothing leaves the local repository without being asked
 for. `verify` is one of them because the fixes it makes between retry rounds are code like any other.
+`tailor` is the one citer that changes no code: it cites the consent line alone, because a
+`--feedback` record is sent to a repository the team does not own.
 
 `layer-verification.md` is a contract between the same three: each runs a check and then has to say
 what the result means, and the answer to that second half has to be the same in all three. Each keeps

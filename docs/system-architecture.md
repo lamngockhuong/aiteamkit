@@ -83,7 +83,9 @@ Seven are contracts between a named handful of skills rather than kit-wide rules
   to when a project really has recorded no conventions of its own.
 - `shared/finalize-steps.md`: the closing sequence for a code change, and the consent line that
   every action past the commit has to cross. Cited by `atk:fix`, `atk:implement`, and `atk:verify`,
-  the three skills that change code. Nothing leaves the local repository without being asked for.
+  the three skills that change code, and by `atk:tailor` for the consent line alone, because a
+  `--feedback` record is sent to a repository the team does not own. Nothing leaves the local
+  repository without being asked for.
 - `shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
   proves, and what it does not. Cited by the same three. Each of them runs a check and then has to
   say what the result means, and the second half of that answer has to be identical in all three.

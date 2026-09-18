@@ -1,0 +1,91 @@
+name: Skill run report
+description: Report how a skill behaved on a real run, so its definition can be fixed
+labels: ["skill-run"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form takes the record `/atk:tailor --feedback <skill>` writes. Paste each section into the
+        matching field.
+
+        Report what happened rather than proposing replacement wording for the skill: the shared rules
+        behind a skill are not visible from its own file, so a proposed line often restates or
+        contradicts one of them.
+
+  - type: input
+    id: skill
+    attributes:
+      label: Skill
+      description: The skill that ran, as invoked.
+      placeholder: atk:convention
+    validations:
+      required: true
+
+  - type: dropdown
+    id: harness
+    attributes:
+      label: Harness
+      options:
+        - Claude Code
+        - Cursor
+        - OpenAI Codex CLI
+        - Multiple (please specify below)
+        - Other / unsure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The atk version from .claude-plugin/plugin.json, plus your harness version.
+    validations:
+      required: true
+
+  - type: textarea
+    id: asked
+    attributes:
+      label: What was asked of it
+      description: The invocation, the flags, and what the run was meant to produce.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Which steps ran
+      description: The steps of SKILL.md that ran, the ones that did not, and the order they came in.
+      placeholder: |
+        1. Read what exists - ran, partly: skipped CODEOWNERS
+        2. Derive from the code - ran
+        3. Classify - ran, but not in the record format
+    validations:
+      required: true
+
+  - type: textarea
+    id: silent
+    attributes:
+      label: Where the skill was silent
+      description: Every place the run had to guess, citing the skill as path:line.
+      placeholder: skills/convention/SKILL.md:37 says "change nothing" without saying whether a report may be saved.
+    validations:
+      required: true
+
+  - type: textarea
+    id: corrected
+    attributes:
+      label: What you corrected by hand
+      description: What you had to fix in the output afterwards, and what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: not-an-override
+    attributes:
+      label: Why this is not a project override
+      description: >
+        Would a team that knows nothing about your project hit the same thing? A finding that depends on
+        your stack, client, house style, or working language belongs in .atk/overrides/<skill>.md rather
+        than here.
+    validations:
+      required: true

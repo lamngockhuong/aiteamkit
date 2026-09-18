@@ -34,7 +34,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `shared/review-checklist.md` | Thứ tự tra ra nơi một dự án đặt quy ước, luật rằng dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, định dạng bản ghi quy tắc `CONV-NNN` mà `convention` viết ra và `review` trích dẫn, vai trò của từng skill với nó, tám mục nền kèm mức nghiêm trọng mặc định, và quy tắc loại bỏ quy tắc đã cũ. `convention`, `review` và `implement` trích dẫn |
 | `shared/project-profile.md` | Nội dung của `.atk/profile.md` trong dự án đích, lý do nó nằm ở đó chứ không nằm trong kit, và quy tắc ba nhóm quyết định skill nào dừng, skill nào giảm chất lượng, skill nào bỏ qua khi thiếu profile |
 | `shared/project-overrides.md` | Nội dung của `.atk/overrides/<skill>.md` trong dự án đích, vì sao mỗi skill một file thay vì nhiều file, hai mục `## Before` và `## After`, bảy thứ mà phần ghi đè không bao giờ được gỡ, và dòng skill phải in ra khi bỏ qua một chỉ dẫn. Vào qua nguyên tắc 7 của `shared/team-roles.md`, nên mọi skill đều tuân theo |
-| `shared/finalize-steps.md` | Trình tự khép lại một thay đổi mã nguồn: tài liệu tham chiếu mà thay đổi đó mắc nợ, nhánh, commit, và ranh giới xin phép mà mọi hành động sau commit phải vượt qua. `fix`, `implement` và `verify` trích dẫn |
+| `shared/finalize-steps.md` | Trình tự khép lại một thay đổi mã nguồn: tài liệu tham chiếu mà thay đổi đó mắc nợ, nhánh, commit, và ranh giới xin phép mà mọi hành động sau commit phải vượt qua. `fix`, `implement` và `verify` trích dẫn, còn `tailor` chỉ trích ranh giới xin phép |
 | `shared/layer-verification.md` | Bảng năm tầng: chạy gì cho một tầng, một lượt đạt chứng minh được gì, và không chứng minh được gì. `fix`, `implement` và `verify` trích dẫn, để cả ba nói cùng một điều về cùng một kết quả |
 | `shared/diagram-conventions.md` | Khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình kit vẽ (luồng duyệt, đồ thị phụ thuộc, sequence, chuỗi nhân quả), và các quy tắc giữ cho chúng dễ đọc: chỉ Mermaid, xuống dòng bằng `<br/>` chứ không bằng ký tự xuống dòng thô, gọi vai trò thay vì gọi tên người, hình thoi nào cũng có đủ hai nhánh, không đặt màu nền cứng. `catchup`, `design-doc`, `plan`, `breakdown` và `incident` trích dẫn |
 | `shared/host-capabilities.md` | Skill được dùng những khả năng nào của agent chủ và gọi tên chúng ra sao, nguyên tắc vẫn cấm gọi tên lệnh của một kit khác, cách xử lý trên harness không có khả năng đó, bốn quy tắc của bước dọn mã, và phần chính sách chặn trên số lượt review song song. `fix`, `implement`, `verify` và `review` trích dẫn |
@@ -60,6 +60,7 @@ có `references/`; mười một skill gốc còn lại thì chưa có gì thêm
 | `skills/tailor/SKILL.md` | Khởi tạo | `.atk/overrides/<skill>.md`: điều team này muốn một skill làm khác đi, người duyệt là vai sở hữu kết quả |
 | `skills/tailor/references/interview.md` | Khởi tạo | Năm nhóm câu hỏi, bộ lọc đẩy câu trả lời sang `init` hoặc `convention`, và một ví dụ cho mỗi nhóm |
 | `skills/tailor/references/audit.md` | Khởi tạo | Ba phép kiểm của `--audit`, vì sao mâu thuẫn là khẳng định còn neo lỗi thời là nghi vấn, và luật nó không sửa gì |
+| `skills/tailor/references/feedback.md` | Khởi tạo | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, và hai thứ nó không bao giờ được chứa |
 | `skills/tailor/evals/trigger_evals.json` | Khởi tạo | 25 case trigger, gồm cả cặp `convention` và `init` mà nó không được giành |
 | `skills/intake/SKILL.md` | Yêu cầu | User story, tiêu chí nghiệm thu, ngoài phạm vi, câu hỏi treo có người phụ trách |
 | `skills/catchup/SKILL.md` | Yêu cầu | Bản tóm tắt cho người không có mặt trong cuộc hội thoại, kèm phần tự kiểm hiểu bài cho epic |
@@ -155,3 +156,4 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `.github/ISSUE_TEMPLATE/config.yml` | Tắt issue trống, dẫn sang Discussions |
 | `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 20 skill, cộng profile, phần ghi đè, lớp dùng chung và các hook |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Form tính năng, hỏi tình huống của team trước khi hỏi năng lực đề xuất |
+| `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Form báo lần chạy skill, nhận bản ghi `--feedback`: đã yêu cầu gì, bước nào chạy, chỗ nào skill không nói, và team mong đợi gì |
