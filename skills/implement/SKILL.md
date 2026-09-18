@@ -93,9 +93,10 @@ session and never written down leaves the reviewer nothing to read, and the revi
 
 ### 2. Write the code
 
-Conventions come from the target project's `docs/conventions.md`, which is what `atk:convention`
-writes. Where the project has none, use the baseline items in `shared/review-checklist.md` and say
-in the record that the baseline was used. Never invent a project rule mid-change: an unrecorded rule
+Conventions come from the target project's conventions document, which is what `atk:convention`
+writes and which Where the rules live in `shared/review-checklist.md` resolves; a project that keeps
+a standards directory keeps them across that set. Where the project has none, use the baseline items
+in that same file and say in the record that the baseline was used. Never invent a project rule mid-change: an unrecorded rule
 applied here will be applied differently by the next person.
 
 Shape comes from the reference module named for that layer in the Layers section of

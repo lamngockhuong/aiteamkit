@@ -143,8 +143,12 @@ First that exists: a docs path named in `CLAUDE.md` or `AGENTS.md`, then an exis
 directory, then `documentation/`, then nothing. Never create a second tree beside one that already
 exists; `shared/artifact-paths.md` owns this rule and this is only its detection half.
 
-Where conventions live: `docs/conventions.md`, `CONTRIBUTING.md`, `.editorconfig`, or the linter
-config. Record every one found; they are different kinds of rule.
+Where conventions live: a convention document, a directory of standards documents split by topic or
+by side of the stack, `CONTRIBUTING.md`, `.editorconfig`, or the linter config. Record every one
+found; they are different kinds of rule. Where the project keeps a set of documents rather than one,
+record which of them carries the review checklist, or that none does yet. That is the answer
+`shared/review-checklist.md` looks for first, and the profile is the only place it can be recorded
+once.
 
 ### Tracker and repository owner
 

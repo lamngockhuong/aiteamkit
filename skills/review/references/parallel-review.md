@@ -45,7 +45,7 @@ times the wall clock to reach one answer, and the width comes out of that budget
 - Step 1 of the workflow: the requirement, the design, and the acceptance criteria. A reviewer with
   no stated intent performs a style check, and N of them perform N style checks.
 - The changed-file list, and the diff, written somewhere every reviewer can read.
-- The convention rules that apply, resolved from the project's `docs/conventions.md` per
+- The convention rules that apply, resolved from the project's conventions document per
   `shared/review-checklist.md`, with their IDs and text. Resolving them once is also what stops five
   reviewers quoting five different readings of one rule.
 - Any compile or type check over the changed tree. It is a function of the tree, identical for every

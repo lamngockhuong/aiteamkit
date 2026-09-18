@@ -71,11 +71,14 @@ Mười một file giữ những gì các skill sẽ phải lặp lại. Ba file
 
 Bảy file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
-- `shared/review-checklist.md`: định dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review`
-  trích dẫn theo ID, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một
-  lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép lại ở cả hai skill rồi lệch nhau.
-  `atk:implement` chỉ đọc file này để lấy các mục nền, dùng khi dự án chưa ghi quy ước nào của riêng
-  mình.
+- `shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
+  dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
+  dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, cộng với các mục nền đúng với mọi dự
+  án. Nó tồn tại để một quy ước chỉ viết một lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép
+  lại ở cả hai skill rồi lệch nhau. Thứ tự tra nằm ở đây cũng vì lý do ấy: `docs/conventions.md` là
+  giá trị mặc định chứ không phải địa chỉ, nên một skill đọc thẳng vào đó sẽ báo rằng một team có cả
+  một thư mục tài liệu chuẩn là chưa ghi quy ước nào. `atk:implement` đọc file này để lấy thứ tự tra
+  ấy và các mục nền, dùng khi dự án thật sự chưa ghi quy ước nào của riêng mình.
 - `shared/finalize-steps.md`: trình tự khép lại một thay đổi mã nguồn, gồm nhánh, commit, và ranh
   giới xin phép mà mọi hành động sau commit phải vượt qua. Được `atk:fix`, `atk:implement` và
   `atk:verify` trích dẫn, tức ba skill có sửa mã. Không gì rời khỏi repo cục bộ mà chưa được hỏi.

@@ -15,7 +15,8 @@ only the content of the pass.
   only the lines the fix itself touched. Nothing here widens it.
 - **The verification.** `shared/layer-verification.md` says what to run and what a pass proves, with
   command names from the Commands section of `.atk/profile.md`.
-- **The project's rules.** They come from `docs/conventions.md` through `shared/review-checklist.md`.
+- **The project's rules.** They come from the project's conventions document, through
+  `shared/review-checklist.md`, which is also what resolves where that document is.
   A rule this pass wishes existed but the project never recorded is a convention gap for
   `atk:convention` to record, not a preference to apply while nobody is looking.
 
