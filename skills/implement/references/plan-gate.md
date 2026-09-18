@@ -17,8 +17,14 @@ because the decision inside it was never visible as a decision.
 | A ticket URL or a free description | Score it, then take one of the three levels below |
 
 An existing plan is run one phase at a time, in the order its index gives, and each phase's `status`
-is set as it completes. `atk:plan` writes every phase as `pending` and does not come back, so a plan
-left full of `pending` after the work is done is this skill's omission rather than that one's.
+is set as it completes: `in progress` when the phase starts, `done` when its verification passes.
+
+It is set in two files, because that is where the two copies live. The `status` field in
+`phase-NN-<slug>.md` is the source, and the `Status` cell for that row in the index's phases table
+is what a reader opens first. Updating only the source leaves `pending` in the more visible of the
+two, which reads as work that was never started. `atk:plan` writes every phase as `pending` and
+does not come back, so a plan left full of `pending` after the work is done is this skill's omission
+rather than that one's.
 
 ## The three levels
 
