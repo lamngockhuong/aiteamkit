@@ -34,11 +34,11 @@ team agreeing is a proposal, marked as such. See `shared/team-roles.md`.
 
 ```bash
 /atk:convention                   # Derive from the codebase and write or update the document
-/atk:convention --audit           # Report where the code and the document disagree, change nothing
+/atk:convention --audit           # Report where the code and the document disagree; writes no project file
 /atk:convention --init            # Bootstrap a document for a project with no conventions yet
 /atk:convention --sync            # Update the document to match what the code now does
 /atk:convention --scope src/api   # Limit derivation to given paths
-/atk:convention --lang vi         # Write the document in Vietnamese
+/atk:convention --lang vi         # Write the document and the report in Vietnamese
 /atk:convention --out <path>      # Override the default output path
 ```
 
@@ -52,15 +52,20 @@ Before step 1, read `.atk/overrides/convention.md` when it exists, per rule 7 of
 
 ### 1. Read what exists
 
+Read `.atk/profile.md` first, since its Docs section opens the resolution below. This skill is
+Required-soft in the three-group table of `shared/project-profile.md`: a missing profile does not
+stop the run, and the artifact says none was found.
+
 Resolve where this project keeps its conventions, per Where the rules live in
 `shared/review-checklist.md`, and read what is there. A project that keeps a standards directory
 rather than one file has its conventions across all of those documents, so read the set, not the
 first file in it.
 
 Read `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, `.editorconfig`, linter and formatter configs,
-`CODEOWNERS`, and PR templates as well. Do not duplicate what a config file already states: link to
-it. A rule the project has already written is not rewritten here either; it is classified in step 3
-and cited where it lives.
+`CODEOWNERS`, and PR templates as well, and record which of them exist: a convention nobody read is
+reported as absent rather than as followed. Do not duplicate what a config file already states: link
+to it. A rule the project has already written is not rewritten here either; it is classified in
+step 3 and cited where it lives.
 
 ### 2. Derive from the code
 
@@ -107,6 +112,43 @@ records it and the next skill resolves it without guessing.
 Where the project has a `CONTRIBUTING.md`, keep the human contribution flow there and link to the
 conventions rather than copying them.
 
+### `--audit`
+
+Runs steps 1 to 4 and stops. It writes nothing into the project: the report comes back in the
+session, and goes to a file only under `--out`, because an audit records one moment while the
+conventions document is the thing meant to last.
+
+It reports four things, in this order:
+
+1. Which document the resolution in step 1 landed on, and which one carries the review checklist.
+   Where the resolution came up empty, say the project has recorded no conventions rather than
+   naming the default as though it existed.
+2. Every disagreement between a written rule and the code: the rule, where it is written as
+   `path:line`, and the counter-evidence as a count over a population, such as "69 of 568 files".
+   Two documents stating the same rule differently are one finding carrying both sources, and which
+   of them is right is the Tech Lead's call under rule 3 of `shared/team-roles.md`.
+3. Every `ASPIRATIONAL` rule with the tool that could enforce it, or `none` where there is none, and
+   every checklist rule no recent review has cited, per Keeping them in step in
+   `shared/review-checklist.md`.
+4. One line naming the rules checked and found clean, so "checked, no drift" reads as different from
+   "not checked".
+
+Findings cite `path:line`, never `CONV-NNN`. An ID is assigned when a rule is written into the
+document, and one invented during an audit collides with the next write.
+
+### `--init` and `--sync`
+
+Both run the whole workflow. They differ in what step 1 expects to find and what step 5 may touch.
+
+`--init` is for a project the step 1 resolution found nothing for. It still reads the configs and
+derives from the code, and every rule it writes is a proposal until the Tech Lead agrees, per the
+Roles section above.
+
+`--sync` is for a document that has fallen behind the code. It changes only the rules the code
+contradicts and the buckets that moved, and leaves the wording of every rule the code still matches
+exactly as it is. A disagreement it cannot settle becomes an open question carrying the name of
+whoever can answer it, never a silent rewrite.
+
 ## Output
 
 Written to the document resolved per `shared/review-checklist.md`, which is `docs/conventions.md`
@@ -133,6 +175,8 @@ only when the user asks.
 - [ ] The document links to config files instead of restating their contents.
 - [ ] A project that already keeps conventions still has its own shape afterwards.
 - [ ] The document carrying the checklist is named to the user, for the profile to record.
-- [ ] `--audit` reports disagreements without changing any file.
+- [ ] Every file listed in step 1 was checked, and the absent ones were reported as absent.
+- [ ] `--audit` changed no file and cited `path:line` rather than assigning an ID.
+- [ ] `--sync` left the wording of every rule the code still matches untouched.
 - [ ] Rules the team has not agreed to are marked as proposals.
 - [ ] The review checklist section carries only `REVIEWED` rules, each with an ID and a default severity.
