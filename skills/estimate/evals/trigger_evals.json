@@ -1,0 +1,23 @@
+[
+  { "query": "estimate this backlog in story points", "should_trigger": true },
+  { "query": "/atk:estimate --days --sprint sprint-14", "should_trigger": true },
+  { "query": "ước lượng man-day cho epic này", "should_trigger": true },
+  { "query": "sprint tới team còn bao nhiêu capacity, nhét vừa những gì", "should_trigger": true },
+  { "query": "how long will the export feature take", "should_trigger": true },
+  { "query": "見積をお願いします", "should_trigger": true },
+  { "query": "工数を出して、来週のスプリントに入るか見たい", "should_trigger": true },
+  { "query": "two people are on leave next sprint, does the scope still fit", "should_trigger": true },
+  { "query": "re-estimate this after the scope change", "should_trigger": true },
+  { "query": "tính lại điểm sau khi khách đổi phạm vi", "should_trigger": true },
+
+  { "query": "break the epic into tasks with owners", "should_trigger": false },
+  { "query": "chia task và gán người phụ trách", "should_trigger": false },
+  { "query": "viết user story cho yêu cầu này", "should_trigger": false },
+  { "query": "plan the phases for this piece of work", "should_trigger": false },
+  { "query": "how do we test this", "should_trigger": false },
+  { "query": "run the retro for sprint 13", "should_trigger": false },
+  { "query": "スプリントの振り返りをして", "should_trigger": false },
+  { "query": "write the release notes for 2.3", "should_trigger": false },
+  { "query": "which task depends on which", "should_trigger": false },
+  { "query": "kiểm thử tính năng này cần bao nhiêu case", "should_trigger": false }
+]

@@ -1,0 +1,23 @@
+[
+  { "query": "I am leaving next month, prepare the handover", "should_trigger": true },
+  { "query": "/atk:handover --from An --to Binh --offboard", "should_trigger": true },
+  { "query": "bàn giao công việc cho bạn khác", "should_trigger": true },
+  { "query": "chuyển giao dự án cho team của khách hàng", "should_trigger": true },
+  { "query": "knowledge transfer before I go on leave for two months", "should_trigger": true },
+  { "query": "引き継ぎ資料を作って", "should_trigger": true },
+  { "query": "担当が変わるので、今の状況と決定事項をまとめて", "should_trigger": true },
+  { "query": "what state is each ticket really in, and what traps should the next person know", "should_trigger": true },
+  { "query": "phase này kết thúc, chuyển phần bảo trì cho team khác", "should_trigger": true },
+  { "query": "/atk:handover --phase", "should_trigger": true },
+
+  { "query": "onboard the person taking this over", "should_trigger": false },
+  { "query": "hướng dẫn thành viên mới cài môi trường", "should_trigger": false },
+  { "query": "オンボーディング資料を作って", "should_trigger": false },
+  { "query": "summarise this pull request for a reviewer who does not know the area", "should_trigger": false },
+  { "query": "write the status report for the sprint", "should_trigger": false },
+  { "query": "grant the new person access to the repository", "should_trigger": false },
+  { "query": "review the branch before I go", "should_trigger": false },
+  { "query": "hand this coding session over to another AI agent", "should_trigger": false },
+  { "query": "viết postmortem cho sự cố tuần trước", "should_trigger": false },
+  { "query": "ước lượng phần việc còn lại", "should_trigger": false }
+]

@@ -1,0 +1,25 @@
+[
+  { "query": "the client sent this message, turn it into requirements we can work from", "should_trigger": true },
+  { "query": "/atk:intake ticket-412", "should_trigger": true },
+  { "query": "làm rõ yêu cầu từ mail của khách hàng", "should_trigger": true },
+  { "query": "viết user story và tiêu chí nghiệm thu cho phần này", "should_trigger": true },
+  { "query": "phân tích yêu cầu giúp tôi, ticket mới chỉ có một dòng", "should_trigger": true },
+  { "query": "要件整理をお願いします", "should_trigger": true },
+  { "query": "この要望をユーザーストーリーに落として", "should_trigger": true },
+  { "query": "this ticket says add export and nothing else, we cannot start from that", "should_trigger": true },
+  { "query": "split this request into stories, with acceptance criteria and a list of what is out of scope", "should_trigger": true },
+  { "query": "what do we need to ask the stakeholder before anyone starts on this", "should_trigger": true },
+  { "query": "/atk:intake --interview", "should_trigger": true },
+
+  { "query": "write the technical design for the export feature", "should_trigger": false },
+  { "query": "thiết kế kỹ thuật cho tính năng export", "should_trigger": false },
+  { "query": "how long will this take, in man-days", "should_trigger": false },
+  { "query": "ước lượng story point cho backlog này", "should_trigger": false },
+  { "query": "chia task cho ba bạn dev", "should_trigger": false },
+  { "query": "write the test cases from these acceptance criteria", "should_trigger": false },
+  { "query": "viết test case cho phần này", "should_trigger": false },
+  { "query": "document what the orders API does today", "should_trigger": false },
+  { "query": "implement the export endpoint", "should_trigger": false },
+  { "query": "この設計書をレビューして", "should_trigger": false },
+  { "query": "tóm tắt epic này cho người mới nhận việc", "should_trigger": false }
+]

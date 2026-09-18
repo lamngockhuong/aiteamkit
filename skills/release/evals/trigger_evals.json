@@ -1,0 +1,23 @@
+[
+  { "query": "write the release notes for version 2.3", "should_trigger": true },
+  { "query": "/atk:release v2.3 --notes --audience client", "should_trigger": true },
+  { "query": "ghi chú phát hành bản 2.3 để gửi khách", "should_trigger": true },
+  { "query": "chuẩn bị checklist deploy lên production, ai làm bước nào", "should_trigger": true },
+  { "query": "we cut a version tomorrow, what is on the checklist", "should_trigger": true },
+  { "query": "リリースノートを書いて", "should_trigger": true },
+  { "query": "本番リリースの手順とロールバック手順をまとめて", "should_trigger": true },
+  { "query": "what changed since the last tag", "should_trigger": true },
+  { "query": "state the rollback path for this deploy", "should_trigger": true },
+  { "query": "/atk:release --checklist --env staging", "should_trigger": true },
+
+  { "query": "production is down after the deploy", "should_trigger": false },
+  { "query": "sự cố production, viết postmortem", "should_trigger": false },
+  { "query": "run the regression pass before we ship", "should_trigger": false },
+  { "query": "chạy regression trước khi phát hành", "should_trigger": false },
+  { "query": "review the pull requests going into this release", "should_trigger": false },
+  { "query": "tổng kết sprint và viết báo cáo gửi khách", "should_trigger": false },
+  { "query": "バグを直して", "should_trigger": false },
+  { "query": "estimate the next sprint", "should_trigger": false },
+  { "query": "kiểm chứng tính năng này trên app chạy thật", "should_trigger": false },
+  { "query": "viết test case cho luồng thanh toán", "should_trigger": false }
+]

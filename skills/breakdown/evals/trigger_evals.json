@@ -1,0 +1,23 @@
+[
+  { "query": "break this epic into tasks with owners and an order", "should_trigger": true },
+  { "query": "/atk:breakdown docs/records/design/design-260918-export.md --members An,Binh,Chi --parallel", "should_trigger": true },
+  { "query": "chia task cho ba bạn dev, tránh hai người sửa cùng một file", "should_trigger": true },
+  { "query": "phân chia công việc cho sprint tới", "should_trigger": true },
+  { "query": "WBS cho tài liệu thiết kế này", "should_trigger": true },
+  { "query": "タスク分解してください", "should_trigger": true },
+  { "query": "誰が何をやるか、依存関係も含めて整理して", "should_trigger": true },
+  { "query": "who does what for this epic, and what has to finish first", "should_trigger": true },
+  { "query": "split this work across four people so nobody blocks anybody", "should_trigger": true },
+  { "query": "làn nào chạy song song được, làn nào phải chờ", "should_trigger": true },
+
+  { "query": "plan the phases for the part assigned to me", "should_trigger": false },
+  { "query": "lập kế hoạch cho phần việc của riêng tôi", "should_trigger": false },
+  { "query": "estimate each task in points", "should_trigger": false },
+  { "query": "ước lượng thời gian cho từng task", "should_trigger": false },
+  { "query": "write the design doc first", "should_trigger": false },
+  { "query": "turn this request into user stories", "should_trigger": false },
+  { "query": "implement the first task", "should_trigger": false },
+  { "query": "スプリントの見積を出して", "should_trigger": false },
+  { "query": "write the test cases for each task", "should_trigger": false },
+  { "query": "review the branch for task 3", "should_trigger": false }
+]
