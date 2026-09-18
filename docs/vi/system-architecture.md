@@ -36,7 +36,7 @@ nhân bản theo từng harness. Các manifest chỉ khác nhau ở cách khai b
 
 ```mermaid
 flowchart LR
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>19 thư mục, mỗi thư mục một SKILL.md</small>"]
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>20 thư mục, mỗi thư mục một SKILL.md</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
     SK --> SH["shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]
@@ -130,7 +130,7 @@ tắc 7 của `shared/team-roles.md` giữ phần hành vi, viết đúng một 
 dòng gọi tên file ghi đè của chính nó và trỏ về nguyên tắc ấy, bởi một file shared chỉ được đọc khi
 có thứ gì đó buộc skill mở nó ra, mà một câu trích dẫn nằm trong mục `## Roles` thì không buộc được.
 Dòng đó tốn vài token mỗi lần gọi và đổi lấy điều chắc chắn rằng cơ chế thật sự chạy; còn đưa hẳn
-phần hành vi vào 19 file thì thành 19 bản của cùng một nguyên tắc, rồi lệch nhau.
+phần hành vi vào 20 file thì thành 20 bản của cùng một nguyên tắc, rồi lệch nhau.
 
 `shared/` nằm ở gốc repo chứ không nằm trong `skills/`, vì một thư mục bên trong `skills/` mà không
 có `SKILL.md` sẽ gây nhập nhằng cho cơ chế quét skill. Các skill trích dẫn theo dạng

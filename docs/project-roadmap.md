@@ -7,7 +7,7 @@
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
 | 2. Skill coverage | DONE | 20 `SKILL.md` files covering the lifecycle, sharing one section contract |
 | 3. Reference depth | IN PROGRESS | `references/` per skill. Done for nine, pending for the eleven original ones |
-| 4. Trigger evals | IN PROGRESS | `evals/trigger_evals.json` per skill. Done for eight, pending for the twelve others. Run them with a tool outside the kit; the kit ships no runner |
+| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 20 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
 
@@ -47,7 +47,9 @@ whose output is a document with a fixed shape, the template is re-derived on eve
 | Skill | Reference to add |
 |-------|------------------|
 | `intake` | Story and acceptance-criteria templates, an interview question bank |
+| `estimate` | The sizing scales with one worked example each, and the capacity worksheet |
 | `design-doc` | Design document template, ADR template, the option-comparison criteria set |
+| `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
 | `qa` | Test case table schema, a negative and boundary case checklist by input type |
 | `release` | Checklist template per environment, the client-notes style rules |
 | `incident` | Severity rubric, timeline format, postmortem template |
@@ -57,13 +59,21 @@ whose output is a document with a fixed shape, the template is re-derived on eve
 
 The constraint stays: `SKILL.md` under 300 lines, detail moves to `references/`.
 
-## Phase 4: Trigger evals
+## Phase 4: Trigger evals (done)
 
-One `evals/trigger_evals.json` per skill, each an array of `{query, should_trigger}`. Seven skills
-have theirs; the twelve others do not. The cases that matter are the
-near-misses between neighbours: `intake` against `design-doc`, `plan` against `breakdown`, `fix`
-against `incident`, `review` against `qa`, `qa` against `verify`, `onboard` against `handover`. Add
-a runner that reports which description changes broke which case.
+One `evals/trigger_evals.json` per skill, each an array of `{query, should_trigger}`, 20 to 22 cases
+split between phrasings that must trigger the skill and phrasings that must not. The cases that earn
+their place are the near-misses between neighbours, and every pair now has a file on both sides:
+`intake` against `design-doc`, `plan` against `breakdown`, `fix` against `incident`, `review`
+against `qa`, `qa` against `verify`, `onboard` against `handover`. Each file also covers the three
+trigger languages, so dropping the Vietnamese or Japanese phrasings from a `description` fails a
+case rather than passing unnoticed.
+
+The kit ships no runner on purpose: one more slash command with no artifact and no approver is not
+what the kit is for. Measuring a case is not as simple as pointing a generic harness at the file,
+which reports a vacuous score against an installed plugin;
+[trigger-eval-measurement.md](trigger-eval-measurement.md) holds the method that works and the
+cases nothing can observe.
 
 ## Phase 5: Field validation
 
@@ -86,6 +96,6 @@ pre-1.0 by dropping the two `bump-*-pre-major` flags in `release-please-config.j
   maintaining three times, given that the reminder is a convenience and the override loader only
   saves a file read the skill would otherwise do itself?
 - `shared/project-profile.md` puts `review`, `qa`, `release` and `convention` in the Required-soft
-  group, meant to continue without a profile and say so in the artifact. None of those four
-  `SKILL.md` files cites the profile at all, so nothing implements it; `plan` is the only Required-
-  soft skill that does. Wire the other four, or move them to the group that needs nothing.
+  group, meant to continue without a profile and say so in the artifact. `plan` and `convention`
+  implement it; `review`, `qa` and `release` do not cite the profile at all, so for them nothing
+  does. Wire the other three, or move them to the group that needs nothing.

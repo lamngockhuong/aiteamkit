@@ -5,9 +5,9 @@
 | Phase | Trạng thái | Tóm tắt |
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
-| 2. Độ phủ skill | XONG | 19 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Tám skill đã có, mười một skill gốc chưa |
-| 4. Eval trigger | ĐANG LÀM | `evals/trigger_evals.json` cho từng skill. Tám skill đã có, mười hai skill còn lại chưa. Chạy bằng công cụ ngoài kit; kit không kèm bộ chạy nào |
+| 2. Độ phủ skill | XONG | 20 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Chín skill đã có, mười một skill gốc chưa |
+| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 20 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
 
@@ -30,7 +30,7 @@ duyệt, `implement` viết mã, `fix` chứng minh nguyên nhân của lỗi tr
 chạy thật hệ thống lên để đối chứng, và `spec` giữ những tài liệu nói API, schema và từng tính năng
 hôm nay làm gì.
 
-Lớp `shared/` giữ những gì lẽ ra phải lặp lại mười chín lần: từ vựng vai trò, quy ước đường dẫn
+Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi lần: từ vựng vai trò, quy ước đường dẫn
 artifact và các adapter tracker, đều được mọi skill trích dẫn. Tám file còn lại là hợp đồng giữa
 những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa năm skill có
@@ -46,7 +46,9 @@ tài liệu bố cục cố định, template phải suy ra lại mỗi lần ch
 | Skill | Reference cần thêm |
 |-------|--------------------|
 | `intake` | Template story và tiêu chí nghiệm thu, ngân hàng câu hỏi phỏng vấn |
+| `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang, và bảng tính capacity |
 | `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án |
+| `breakdown` | Schema bảng task và luật sở hữu file cho các làn song song |
 | `qa` | Schema bảng test case, checklist case âm và biên theo từng kiểu input |
 | `release` | Template checklist theo môi trường, quy tắc hành văn cho ghi chú gửi khách |
 | `incident` | Thang mức nghiêm trọng, định dạng timeline, template postmortem |
@@ -56,12 +58,20 @@ tài liệu bố cục cố định, template phải suy ra lại mỗi lần ch
 
 Ràng buộc giữ nguyên: `SKILL.md` dưới 300 dòng, chi tiết chuyển vào `references/`.
 
-## Phase 4: Eval trigger
+## Phase 4: Eval trigger (xong)
 
-Mỗi skill một `evals/trigger_evals.json`, là mảng các `{query, should_trigger}`. Sáu skill thực thi
-đã có, mười hai skill còn lại chưa. Những case đáng giá là các cặp dễ nhầm giữa skill kề nhau: `intake`
-với `design-doc`, `plan` với `breakdown`, `fix` với `incident`, `review` với `qa`, `qa` với `verify`,
-`onboard` với `handover`. Thêm một bộ chạy để biết thay đổi description nào làm hỏng case nào.
+Mỗi skill một `evals/trigger_evals.json`, là mảng các `{query, should_trigger}`, từ 20 đến 22 case
+chia làm hai phần: cách nói phải gọi đúng skill đó, và cách nói không được gọi nó. Những case đáng
+giá là các cặp dễ nhầm giữa skill kề nhau, và giờ cặp nào cũng có file ở cả hai phía: `intake` với
+`design-doc`, `plan` với `breakdown`, `fix` với `incident`, `review` với `qa`, `qa` với `verify`,
+`onboard` với `handover`. Mỗi file đều phủ cả ba ngôn ngữ trigger, nên bỏ phần tiếng Việt hoặc tiếng
+Nhật khỏi một `description` sẽ làm rớt case chứ không trôi qua im lặng.
+
+Kit cố ý không kèm bộ chạy: thêm một slash command không sinh artifact, không có người duyệt, không
+phải thứ kit này nhắm tới. Đo một case không đơn giản là chĩa một bộ chạy thông thường vào file, vì
+nó báo ra một điểm số rỗng khi skill đã cài dưới dạng plugin;
+[trigger-eval-measurement.md](trigger-eval-measurement.md) giữ cách đo được và những case không gì
+quan sát nổi.
 
 ## Phase 5: Kiểm chứng thực địa
 
@@ -78,11 +88,11 @@ tiền 1.0 bằng cách bỏ hai cờ `bump-*-pre-major` trong `release-please-c
 
 - Team dùng Backlog hoặc Redmine có cần adapter thật gọi API không, hay bảng ánh xạ từ vựng cộng với
   copy tay là đủ?
-- Có đáng thêm skill thứ mười chín cho báo cáo ngày và tuần không, hay `atk:retro --report` đã phủ
+- Có đáng thêm một skill nữa cho báo cáo ngày và tuần không, hay `atk:retro --report` đã phủ
   nhu cầu đó ở tần suất thưa hơn?
 - Hook lúc mở phiên hiện chỉ nhắc trên Claude Code. Codex và Cursor cũng đóng gói hook được; nuôi lời
   nhắc đó ba lần có đáng không, khi cổng thật vốn nằm trong skill?
 - `shared/project-profile.md` xếp `review`, `qa`, `release` và `convention` vào nhóm Required-soft,
-  tức chạy tiếp khi thiếu profile và nói rõ điều đó trong artifact. Nhưng cả bốn `SKILL.md` đó không
-  hề nhắc tới profile, nên không có gì cài đặt luật này; `plan` là skill Required-soft duy nhất có
-  cài đặt. Hoặc bổ sung cho bốn skill kia, hoặc chuyển chúng sang nhóm không cần profile.
+  tức chạy tiếp khi thiếu profile và nói rõ điều đó trong artifact. `plan` và `convention` đã cài đặt
+  luật này; `review`, `qa` và `release` không hề nhắc tới profile, nên với ba skill đó không có gì
+  cài đặt. Hoặc bổ sung cho ba skill kia, hoặc chuyển chúng sang nhóm không cần profile.
