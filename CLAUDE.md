@@ -346,6 +346,36 @@ above, drop the two `bump-*-pre-major` flags.
   `test:`). Type drives release-please's CHANGELOG grouping and version logic.
 - `feat:` and `fix:` appear in CHANGELOG; the others are silent by default.
 
+## Review checklist
+
+This is the section `atk:review` reads and cites by ID, in the record format from
+`shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks, because this
+repository has no CI that runs anything. `.github/workflows/` carries release-please and nothing
+else, so no rule here is `ENFORCED` and none is enforced by a tool failing a build.
+
+Every rule below is already stated in prose somewhere above; this table is the checkable form of it,
+not a second set of rules. The `source` column says where the prose lives.
+
+| id | rule | bucket | tool | severity | source |
+|----|------|--------|------|----------|--------|
+| `CONV-001` | Adding, renaming, or removing a skill touches all nine groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
+| `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
+| `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
+| `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
+| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
+| `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
+| `CONV-008` | The five manifests and every `evals/*.json` parse, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
+| `CONV-009` | Both hooks stay in exec form with `"command": "node"`, and stay Node | `REVIEWED` | the exec-form check below | `BLOCKING` | "`hooks/` never holds a rule" |
+
+Numbers are sequential and never reused. A rule that stops applying is struck through rather than
+deleted, so a review that cited it stays readable.
+
+Two things worth automating, proposed and not installed. A CI job running the block below would move
+most of this table to `ENFORCED` and stop a reviewer spending attention on it. `CONV-001` is the one
+that would need writing rather than wiring: a check that a diff touching `skills/` also touches the
+nine groups. Neither is done here, and both belong to whoever owns the repository's tooling.
+
 ## Common verification commands
 
 ```bash

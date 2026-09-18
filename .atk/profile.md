@@ -46,6 +46,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 - Docs root: `docs/`  <!-- source: existing directory -->
 - Conventions: `CLAUDE.md`  <!-- source: no CONTRIBUTING.md, no .editorconfig -->
+- Review checklist: `CLAUDE.md`, section "Review checklist"  <!-- source: written by /atk:convention on 2026-09-18 -->
 - Designs: `docs/system-architecture.md`
 - Agent instructions: `CLAUDE.md`
 

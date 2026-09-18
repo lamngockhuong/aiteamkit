@@ -8,7 +8,7 @@ removed, or renamed; update it in the same commit.
 | File | Purpose |
 |------|---------|
 | `README.md` | Public entry point: lifecycle diagram, the 20-skill table, invocation block, output convention, install instructions |
-| `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `shared/` DRY rule, cross-file sync list, em-dash policy, release flow, verification commands |
+| `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `shared/` DRY rule, cross-file sync list, em-dash policy, the `CONV-NNN` review checklist this repository is held to, release flow, verification commands |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, no scripts; exists to carry the version and repository metadata |
 | `release-please-config.json` | Release automation: `simple` release type, pre-1.0 bump flags, and the five version `extra-files` |
