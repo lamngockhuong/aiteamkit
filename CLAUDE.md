@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
-OpenAI Codex CLI. It packages 18 skills covering the delivery lifecycle of a company project team
-(`init`, `intake`, `catchup`, `estimate`, `design-doc`, `breakdown`, `convention`, `plan`,
+OpenAI Codex CLI. It packages 19 skills covering the delivery lifecycle of a company project team
+(`init`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`, `convention`, `plan`,
 `implement`, `fix`, `review`, `qa`, `verify`, `release`, `incident`, `retro`, `onboard`,
 `handover`), each invocable as a slash command by its own name (`/atk:intake`, `/atk:estimate`, and
 so on). That is the lifecycle order; use it for every list of skills in the repository.
@@ -64,8 +64,8 @@ skills/<name>/
 ```
 
 Eleven of the twelve original skills are still skeletons: `SKILL.md` only, around 95 to 105 lines
-each, with no `references/` or `evals/`. The six added since (`init`, `catchup`, `plan`, `implement`,
-`fix`, `verify`) carry both. `review` sits between the two: it grew a `references/` file for parallel
+each, with no `references/` or `evals/`. The seven added since (`init`, `catchup`, `plan`,
+`implement`, `fix`, `verify`, `spec`) carry both. `review` sits between the two: it grew a `references/` file for parallel
 review and still has no `evals/`. Deepening a skill means adding `references/` files and pointing at them from
 the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
@@ -83,7 +83,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Ten files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Eleven files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -94,10 +94,11 @@ skill discovery.
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
 | `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
-| `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
+| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers | `fix`, `implement`, `verify`, `review` |
+| `shared/spec-docs.md` | What separates a reference document from a design document, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
@@ -121,12 +122,22 @@ running system.
 may be used and named, a command from another kit may not. It also carries the degradation rule,
 since a skill that leans on a host capability must still work on the harness that has none.
 `tidy-pass.md` is what that rule degrades into, and the reason the kit does not ship a `simplify`
-skill of its own: the content belongs to three skills that already run it, not to a nineteenth slash
-command with no artifact and no approver.
+skill of its own: the content belongs to three skills that already run it, not to one more slash
+command with no artifact and no approver. `spec` clears that bar and `simplify` does not, which is
+the test, not the count.
+
+`spec-docs.md` is a contract of the same kind and the widest of them: `atk:spec` writes the
+reference documents, and five other skills have to leave them true. It holds the tense distinction
+because both `spec` and `design-doc` need it stated identically, and it holds the sync obligation
+because `shared/finalize-steps.md` now opens with it, which makes every code-changing skill a party
+to the rule. The drift-versus-open-question line lives there for the same reason as the rule record
+format in `review-checklist.md`: two skills have to answer it the same way, so neither of them owns
+it.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
-where the spec lives, and follow its three-group rule for what to do when that file is missing.
+where the incoming specification lives, and follow its three-group rule for what to do when that file
+is missing.
 
 When adding a rule that two or more skills need, put it in `shared/` and reference it. Do not paste
 it into each `SKILL.md`.
@@ -198,13 +209,13 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
 5. `shared/artifact-paths.md` (the default output path row)
 6. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 18
+7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 19
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 8. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
 9. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
    all three `docs/vi/flow/` mirrors.
-   Each names all 18 skills: the phase table and the consumes/produces table respectively
+   Each names all 19 skills: the phase table and the consumes/produces table respectively
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -284,7 +295,7 @@ relative path; adding or renaming one means doing the same on the other side.
 | `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `flow/project-flow.md` | The 18 skills placed in delivery phases, with the author and approver of each artifact |
+| `flow/project-flow.md` | The 19 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 

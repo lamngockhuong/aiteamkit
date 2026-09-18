@@ -1,6 +1,6 @@
 # Luồng dự án
 
-18 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
+19 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,
@@ -56,6 +56,7 @@ flowchart TD
         D0 -->|Có| D1["atk:design-doc<br/><small>TL hoặc Dev soạn, ghi ADR</small>"]
         D1 --> D2{"TL duyệt"}
         D2 -->|Yêu cầu sửa| D1
+        D3["atk:spec<br/><small>vùng này hiện làm gì</small>"]
     end
 
     subgraph S4["4. Chia việc và xếp thứ tự"]
@@ -96,6 +97,8 @@ flowchart TD
     N0 --> B0
     D2 -->|Đã duyệt| B0
     C0 --> M0
+    D0 -->|Có| D3
+    M2 -.->|Hợp đồng thay đổi| D3
     B2 --> M0
     M2 --> V0
     V2 -->|Đạt| L0
@@ -113,6 +116,7 @@ flowchart TD
 | 1. Yêu cầu | `atk:catchup` | Người mới vào việc | Không ai; phần kiểm tra hiểu bài là tự chấm | `DRAFT` |
 | 2. Ước lượng | `atk:estimate` | Dev, PM soát năng lực | PM và Stakeholder cùng chốt | `IN REVIEW` sang `APPROVED` |
 | 3. Thiết kế | `atk:design-doc` | TL hoặc Dev | TL, người nắm quyết định kỹ thuật cuối | `IN REVIEW` sang `APPROVED` |
+| 3. Thiết kế | `atk:spec` | Dev | TL với loại `api` và `db`, BrSE/BA với loại `feature` | `IN REVIEW` sang `APPROVED`, sau đó ghi đè tại chỗ mãi mãi |
 | 4. Chia việc | `atk:breakdown` | TL hoặc PM | Từng Dev nhận phần việc của mình | `IN REVIEW` sang `APPROVED` |
 | 4. Xếp thứ tự | `atk:plan` | Dev | Chính tác giả, trừ khi cửa kiểm tra đẩy lên TL | `DRAFT` |
 | 4. Quy ước | `atk:convention` | TL | Cả đội đồng thuận, ghi theo từng quy tắc | `IN REVIEW` sang `APPROVED` |
@@ -137,6 +141,11 @@ flowchart LR
 
 `atk:fix` là skill duy nhất thò tay ngược vào chu trình: lỗi bắt ở pha 6 thì sửa xong quay lại pha 6,
 còn lỗi lộ ra sau khi phát hành thì mở thẳng pha 8.
+
+`atk:spec` vẽ ở pha 3 vì đó là lúc một đội lần đầu viết ra vùng này làm gì, nhưng cạnh nét đứt đi từ
+chỗ merge mới là cạnh chạy thường xuyên nhất. Thay đổi nào đụng tới hợp đồng thì mang theo tài liệu
+tham chiếu trong cùng pull request, theo `shared/spec-docs.md`, và đó là lý do tài liệu sống lâu hơn
+cái pha sinh ra nó.
 
 ## Những gì luồng này không quy định
 

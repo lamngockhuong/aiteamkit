@@ -7,7 +7,7 @@ removed, or renamed; update it in the same commit.
 
 | File | Purpose |
 |------|---------|
-| `README.md` | Public entry point: lifecycle diagram, the 18-skill table, invocation block, output convention, install instructions |
+| `README.md` | Public entry point: lifecycle diagram, the 19-skill table, invocation block, output convention, install instructions |
 | `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `shared/` DRY rule, cross-file sync list, em-dash policy, release flow, verification commands |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, no scripts; exists to carry the version and repository metadata |
@@ -29,14 +29,15 @@ removed, or renamed; update it in the same commit.
 | File | Purpose |
 |------|---------|
 | `shared/team-roles.md` | Role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows: name an owner, separate author from approver, do not decide what a role owns, write for the absent reader, ask only what the repository cannot answer, follow the team's language |
-| `shared/artifact-paths.md` | Docs root resolution, the default output path per skill, `YYMMDD` naming, ADR numbering, the shared YAML front matter block, and the rule against overwriting an `APPROVED` artifact |
+| `shared/artifact-paths.md` | Docs root resolution, the default output path per skill, `YYMMDD` naming, the reference-document kinds table, the three persistence groups and which of them are committed, ADR numbering, the shared YAML front matter block, and the rule against overwriting an `APPROVED` record |
 | `shared/ticket-adapters.md` | Tracker detection order, the atk-to-tracker vocabulary map for GitHub Issues, Jira, Backlog, and Redmine, the `gh` push commands, and the two-way linking rule |
 | `shared/review-checklist.md` | The `CONV-NNN` rule record format that `convention` writes and `review` cites, what each skill does with it, the eight baseline items with default severities, and the rule for retiring a stale rule. Cited by `convention` and `review`, plus `implement` for the baseline items alone |
 | `shared/project-profile.md` | What `.atk/profile.md` holds in the target project, why it lives there rather than in the kit, and the three-group rule deciding whether a skill stops, degrades, or ignores a missing profile |
-| `shared/finalize-steps.md` | The closing sequence for a code change: branch, commit, and the consent line every action past the commit has to cross. Cited by `fix`, `implement`, and `verify` |
+| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross. Cited by `fix`, `implement`, and `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not. Cited by `fix`, `implement`, and `verify`, so all three say the same thing about the same result |
 | `shared/diagram-conventions.md` | When a diagram earns its place in an artifact, the four shapes the kit draws (approval flow, dependency graph, sequence, causal chain), and the rules that keep them readable: Mermaid only, `<br/>` not a literal newline, roles instead of names, both branches on every decision, no hardcoded fill colours. Cited by `catchup`, `design-doc`, `plan`, `breakdown`, and `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use and how to name one, the rule that a command from another kit still may not be named, what to do on a harness that has neither, the four rules of the tidy step, and the policy bounding parallel reviewers. Cited by `fix`, `implement`, `verify`, and `review` |
+| `shared/spec-docs.md` | What separates a reference document from a design document, the rule that the project's own document shape wins over a kit template, the five kinds of change that oblige a pull request to carry its reference document, and the line between drift and a question nobody has answered. Cited by `spec`, `design-doc`, `implement`, `fix`, `verify`, and `review` |
 | `shared/tidy-pass.md` | The content of the tidy step: three lenses (reuse, clarity, efficiency), what may be changed, what is never touched, and what to read in the diff afterwards. Cited by `fix`, `implement`, and `verify` through `host-capabilities.md`, and the reason the kit ships no `simplify` skill |
 
 ## Hooks
@@ -48,7 +49,7 @@ removed, or renamed; update it in the same commit.
 
 ## Skills
 
-Each skill is one `SKILL.md`. The six execution skills also carry `references/` and `evals/`.
+Each skill is one `SKILL.md`. Seven skills also carry `references/` and `evals/`.
 `review` carries `references/` alone; the other eleven original skills carry neither yet.
 
 | File | Stage | Produces |
@@ -58,6 +59,7 @@ Each skill is one `SKILL.md`. The six execution skills also carry `references/` 
 | `skills/catchup/SKILL.md` | Requirement | A brief for someone who was not in the conversation, plus the understanding check for an epic |
 | `skills/estimate/SKILL.md` | Planning | Sizes with basis and confidence, capacity, sprint commitment, overflow |
 | `skills/design-doc/SKILL.md` | Design | Technical design with compared options, plus the ADR |
+| `skills/spec/SKILL.md` | Design | Reference documents for API, schema, and feature, updated in place, plus the drift check |
 | `skills/breakdown/SKILL.md` | Planning | Owned tasks, dependency graph, parallel lanes with file ownership |
 | `skills/convention/SKILL.md` | Development | Team conventions classified enforced / reviewed / aspirational |
 | `skills/plan/SKILL.md` | Development | Phases ending in something reviewable, steps that leave the tree working, scope boundary |
@@ -90,6 +92,10 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/fix/references/investigate.md` | Proving the cause, the intent check, and the gate that decides whether a fix may happen at all |
 | `skills/fix/references/layer-playbooks.md` | Per layer: where the cause usually hides, how to reproduce it, and how to confirm it is gone |
 | `skills/fix/references/report-template.md` | The fix report, written for a reviewer who has to check a claim rather than trust it |
+| `skills/spec/references/api-spec-template.md` | The API document shape for an empty directory: processing strategy first, then one block per endpoint |
+| `skills/spec/references/db-spec-template.md` | The table document shape: columns, keys, the lifecycle of a row, access rules |
+| `skills/spec/references/feature-spec-template.md` | The feature document shape: entry points including jobs, behaviour by condition, permissions by role |
+| `skills/spec/references/drift-check.md` | The coverage checklist, the shape of a finding, the three severities, and the read-only boundary |
 | `skills/review/references/parallel-review.md` | The width table and the memory cap bounding it, what every reviewer is given, and how several passes become one ranked list |
 | `skills/verify/references/runtime-checks.md` | Bringing the application up, exercising it, asserting a real side effect, and cleaning up |
 | `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
@@ -105,6 +111,7 @@ runner yet; see `docs/project-roadmap.md` phase 4.
 | `skills/init/evals/trigger_evals.json` | Setup phrasing against project configuration requests that are not `init` |
 | `skills/catchup/evals/trigger_evals.json` | Catching up on existing work against `intake` and `onboard` |
 | `skills/plan/evals/trigger_evals.json` | Planning one person's work against `breakdown` and `design-doc` |
+| `skills/spec/evals/trigger_evals.json` | Reference documents against `design-doc`, `intake`, and code generation |
 | `skills/implement/evals/trigger_evals.json` | Building against planning and reviewing |
 | `skills/fix/evals/trigger_evals.json` | A defect against `incident` and ordinary implementation |
 | `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
@@ -127,7 +134,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/skills-overview.md` | Per skill: what it produces, when to use, when not to, and the one habit that makes it work |
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
-| `docs/flow/project-flow.md` | The 18 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
+| `docs/flow/project-flow.md` | The 19 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/vi/**/*.md` | Vietnamese mirror of the seven files above, at the same relative paths |
@@ -139,5 +146,5 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 18 skills, plus the profile, the shared layer, and the hook |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 19 skills, plus the profile, the shared layer, and the hook |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |

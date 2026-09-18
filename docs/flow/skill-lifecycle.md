@@ -69,17 +69,17 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another seventy-five times across the eighteen files, in fifty distinct pairs, which
+One skill names another eighty times across the nineteen files, in fifty-four distinct pairs, which
 sounds like a dense graph. It is not: most of those are boundaries rather than edges. Five kinds, and
 only the first four happen at run time.
 
 | Kind | What happens to the work | Where it appears |
 |------|--------------------------|------------------|
-| Calls, and carries on | The other skill runs, returns, and this one continues | `implement` to `plan`, `implement` to `review` |
+| Calls, and carries on | The other skill runs, returns, and this one continues | `implement` to `plan`, `implement` to `review`, `implement` to `spec` |
 | Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc` |
 | Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
-| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `convention` to `implement` and `review` |
+| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa` |
 
 ```mermaid
 flowchart TD
@@ -91,12 +91,14 @@ flowchart TD
     FIX["atk:fix"]
     QA["atk:qa"]
     CNV["atk:convention"]
+    SPC["atk:spec"]
 
     IMP -->|"calls: work is medium sized"| PLN
     IMP -->|"calls: then fixes what blocks"| REV
     IMP -->|"stops: schema, contract, architecture"| DSG
     IMP -->|"stops: the input was a defect"| FIX
     PLN -->|"stops: options need comparing"| DSG
+    IMP -->|"calls: a contract moved"| SPC
     IMP -.->|"offers: needs a yes"| VER
     REV -.->|"sends the convention gap back"| CNV
     VER -.->|"sends the untested case back"| QA
@@ -107,6 +109,11 @@ runs at most twice before it escalates by name, because a finding that survives 
 is usually a design problem being patched. `implement` stopping at the large gate is the other:
 work that touches a schema, a public contract, a shared module, or more than one service changes no
 file until somebody has approved how.
+
+The edge into `atk:spec` is drawn from `implement` alone to keep the picture readable, but `fix` and
+`verify` carry the same obligation through the same first step of `shared/finalize-steps.md`. Any of
+the three that changes an endpoint, a response, an error code, a column, or an enum carries the
+reference document with it.
 
 ## What is not an edge
 

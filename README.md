@@ -1,6 +1,6 @@
 # AI Team Kit (`atk`)
 
-Eighteen skills covering the software delivery lifecycle of a **company project team**, not a solo
+Nineteen skills covering the software delivery lifecycle of a **company project team**, not a solo
 developer. Every skill assumes work has an author and a separate reviewer, decisions have an owner,
 and artifacts are read by someone who was not in the conversation that produced them.
 
@@ -15,7 +15,7 @@ Walkthrough of what each skill means and when to use it:
 ```mermaid
 flowchart LR
     I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
-    E --> D["design-doc"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
     R -.->|Blocking findings| IM
     RL --> IC["incident"] --> RT["retro"]
@@ -44,6 +44,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
 | `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. |
+| `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, updated in place and checked against the code for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, each classified as enforced by tooling, checked in review, or merely aspirational. |
 | `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. |
@@ -68,6 +69,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:catchup <epic-url|pr-url>            # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
 /atk:design-doc <requirement|topic>       # --adr|--no-adr --options --lang --out
+/atk:spec [subject]                       # --kind --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
 /atk:convention                           # --audit|--init|--sync --scope --lang --out
 /atk:plan <ticket|design|description>     # --inline --layer --out

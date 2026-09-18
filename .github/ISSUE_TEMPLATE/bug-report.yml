@@ -32,6 +32,7 @@ body:
         - Skill - atk:catchup
         - Skill - atk:estimate
         - Skill - atk:design-doc
+        - Skill - atk:spec
         - Skill - atk:breakdown
         - Skill - atk:convention
         - Skill - atk:plan

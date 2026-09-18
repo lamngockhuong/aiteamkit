@@ -28,6 +28,10 @@ implementation itself. It chooses the approach and stops there: sequencing the c
 phases and steps is `atk:plan`, which never reopens the choice. It also does not approve its own
 design: review is a separate role.
 
+It does not keep anything current either. This document argues for a change and cites the code as it
+stood before it, so the day the change merges the citation stops being true and what is left is an
+account of a decision. What the system does from then on is `atk:spec`, per `shared/spec-docs.md`.
+
 ## Roles
 
 Tech Lead owns the decision and is the approver. Dev authors and implements. BrSE/BA confirms the
@@ -83,7 +87,9 @@ from the existing `docs/adr/` directory. Set `status: IN REVIEW` and list the re
 ## Output
 
 Design at `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
-`shared/artifact-paths.md`. Diagrams are inline Mermaid so they stay readable in a pull request,
+`shared/artifact-paths.md`. Both are records of a moment and neither is edited afterwards; the data
+model and the API contract specified in step 4 reach their lasting form in `docs/api/` and
+`docs/database/`, written by `atk:spec` once the change is real. Diagrams are inline Mermaid so they stay readable in a pull request,
 drawn per `shared/diagram-conventions.md`: a sequence or component diagram beside the option it
 belongs to, and nothing the prose does not also say.
 

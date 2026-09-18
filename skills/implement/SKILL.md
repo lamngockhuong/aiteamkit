@@ -158,9 +158,14 @@ record is the same as a review that never happened and was never missed.
 
 ### 6. Finalize
 
-Follow `shared/finalize-steps.md` for the branch, the commit, and every action past it. The consent
-line in that file is what keeps this skill from pushing, opening a pull request, or touching the
-ticket because it assumed a yes.
+Follow `shared/finalize-steps.md` for the reference documents the change owes, the branch, the
+commit, and every action past it. The consent line in that file is what keeps this skill from
+pushing, opening a pull request, or touching the ticket because it assumed a yes.
+
+Its first step is the one this skill reaches most often: a change that altered an endpoint, a
+response, an error code, a column, or an enum carries its reference document in the same commit, per
+`shared/spec-docs.md`. The record says which documents changed, or names what is now stale and who
+will fix it.
 
 ## Output
 
@@ -206,4 +211,6 @@ done: this skill is the author, and done is the approver's word.
 - [ ] The review loop ran at most twice before escalating.
 - [ ] The record says whether `atk:verify` ran, and a change nobody has run is named as one.
 - [ ] Anything noticed outside the scope is listed rather than done.
+- [ ] A change touching a public contract carried its reference document, or the record names what is
+      stale and who will fix it, per `shared/spec-docs.md`.
 - [ ] Nothing was pushed, opened, or merged without the yes that `shared/finalize-steps.md` requires.

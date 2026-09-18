@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "atk",
-      "description": "AI Team Kit - 18 skills covering the software delivery lifecycle of a company project team: project profile setup, requirement intake, catching up on work in flight, estimation, technical design, task breakdown, conventions, implementation planning, implementation, bug fixing, code review, QA, runtime verification, release, incident response, retrospective, onboarding, and handover",
+      "description": "AI Team Kit - 19 skills covering the software delivery lifecycle of a company project team: project profile setup, requirement intake, catching up on work in flight, estimation, technical design, reference specs for API, schema and feature, task breakdown, conventions, implementation planning, implementation, bug fixing, code review, QA, runtime verification, release, incident response, retrospective, onboarding, and handover",
       "version": "0.0.1",
       "source": "./",
       "author": {

@@ -141,8 +141,14 @@ file changed.
 
 ### 6. Report and finalize
 
-Write the report from `references/report-template.md`, then follow `shared/finalize-steps.md` for
-the branch, the commit, and anything that leaves the local repository.
+Write the report from `references/report-template.md`, then follow `shared/finalize-steps.md` for the
+reference documents the change owes, the branch, the commit, and anything that leaves the local
+repository.
+
+A fix reaches that first step less often than an implementation does, and the case that matters is
+the one where the document was right all along and the code was wrong. Fixing the code closes the
+gap, so the document needs nothing; say that in the report rather than leaving a reader to wonder
+whether it was checked.
 
 ### `--investigate-only`
 
@@ -181,5 +187,7 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
 - [ ] The tidy step stayed inside the lines the fix touched, the reproduction was re-run after it,
       and the report says what it changed or that the harness has no such capability.
 - [ ] Every caller in the blast radius was either exercised or named as unverified.
+- [ ] The report says whether the fix changed a public contract, and if it did, which reference
+      document moved with it, per `shared/spec-docs.md`.
 - [ ] The report says what could not be verified.
 - [ ] Under `--investigate-only`, `git status` shows the working tree untouched.

@@ -1,0 +1,27 @@
+[
+  { "query": "document what this endpoint actually does today", "should_trigger": true },
+  { "query": "/atk:spec business-office-report --kind api", "should_trigger": true },
+  { "query": "we have no written API contract for any of this, start one", "should_trigger": true },
+  { "query": "check whether the api docs still match the code", "should_trigger": true },
+  { "query": "the spec and the implementation have drifted, show me where", "should_trigger": true },
+  { "query": "write the schema documentation for the announcements table", "should_trigger": true },
+  { "query": "viết tài liệu API cho resource này", "should_trigger": true },
+  { "query": "đặc tả tính năng khoá tài khoản, ai đọc cũng hiểu", "should_trigger": true },
+  { "query": "tài liệu database đang lệch với code, kiểm tra giúp tôi", "should_trigger": true },
+  { "query": "cập nhật tài liệu sau khi merge xong PR này", "should_trigger": true },
+  { "query": "この API の仕様書を書いて", "should_trigger": true },
+  { "query": "仕様書と実装がずれていないか確認して", "should_trigger": true },
+  { "query": "テーブル定義書を更新して", "should_trigger": true },
+
+  { "query": "should we use a queue or a cron job for this", "should_trigger": false },
+  { "query": "compare two options for the notification delivery and pick one", "should_trigger": false },
+  { "query": "nên chọn phương án nào cho phần gửi thông báo", "should_trigger": false },
+  { "query": "設計書を書いて、方式を比較して決めたい", "should_trigger": false },
+  { "query": "review this pull request before I approve it", "should_trigger": false },
+  { "query": "turn this client message into user stories and acceptance criteria", "should_trigger": false },
+  { "query": "write test cases for the report screen", "should_trigger": false },
+  { "query": "generate an openapi file from the controllers", "should_trigger": false },
+  { "query": "write the migration that adds the column", "should_trigger": false },
+  { "query": "onboarding doc for the new developer joining monday", "should_trigger": false },
+  { "query": "what conventions does this team follow for branch names", "should_trigger": false }
+]

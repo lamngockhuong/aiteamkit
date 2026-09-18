@@ -1,6 +1,6 @@
 # Skills Overview
 
-Eighteen skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+Nineteen skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
 to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
@@ -10,7 +10,7 @@ Read this before adopting the kit: every skill works alone, and a team can start
 ```mermaid
 flowchart LR
     I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
-    E --> D["design-doc"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
     R -.->|Blocking findings| IM
     RL --> IC["incident"] --> RT["retro"]
@@ -112,6 +112,26 @@ more than it returns.
 
 **The habit that matters.** One option is a plan, not a design. The document includes the option the
 team would have picked by default, and says why it loses.
+
+---
+
+## `atk:spec`
+
+**Produces.** The reference documents a team reads long after the work that produced them merged: the
+API contract per resource in `docs/api/`, the schema per table in `docs/database/`, and what a feature
+does in `docs/features/`. One file per subject, named after the subject, updated in place. `--check`
+reports where a document and the code disagree and changes nothing.
+
+**Use when.** A project has no written contract, a merged change left one behind, or nobody trusts
+the documents any more. `--sync` folds the change on the current branch into the documents it
+touched.
+
+**Do not use when.** The question is still which approach to take. That is `atk:design-doc`, which
+compares options and stops; this skill describes what was actually done.
+
+**The habit that matters.** The shape comes from the documents the project already keeps, not from
+the kit. A team holding 29 API documents in one shape has a convention, and a thirtieth in another
+shape costs them more than the time it saved.
 
 ---
 
