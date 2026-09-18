@@ -64,9 +64,9 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Eleven files hold what skills would otherwise repeat. The first three are cited by all 19:
+Twelve files hold what skills would otherwise repeat. The first three are cited by all 19:
 
-- `shared/team-roles.md`: the role table and the six rules every skill follows.
+- `shared/team-roles.md`: the role table and the seven rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
@@ -113,12 +113,24 @@ Seven are contracts between a named handful of skills rather than kit-wide rules
   the widest of these contracts, because `shared/finalize-steps.md` now opens with its obligation,
   which makes every code-changing skill a party to it.
 
-The eleventh describes a file that does not ship with the kit at all:
+The last two describe files that do not ship with the kit at all:
 
 - `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message ignore it entirely.
   `atk:init` writes the profile, so it belongs to no group.
+
+- `shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
+  the two sections it may carry, and the seven things an override may never remove. The seven
+  exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
+  skill that skips part of an override says so in its artifact rather than silently.
+
+The override mechanism is the one that reaches every skill in two halves, and the split is
+deliberate. Rule 7 of `shared/team-roles.md` holds the behaviour, stated once. Each `## Workflow`
+carries one line naming its own override file and pointing at that rule, because a shared file is
+only read when something makes a skill open it, and a citation under `## Roles` does not. The line
+costs a few tokens per invocation and buys the guarantee that the mechanism runs at all; putting the
+behaviour itself in 19 files instead would be 19 copies of one rule, drifting.
 
 `shared/` sits at the repository root rather than under `skills/`, because a folder inside `skills/`
 without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `shared/<file>.md`,
@@ -132,7 +144,7 @@ because it is not part of the kit.
 a single question, "does this project have a profile yet", and it reminds without blocking.
 
 The boundary is the point. A hook that blocked would put the rule in two places, and the rule is not
-uniform anyway: nine skills need no profile, and a hook that stopped everything would stop
+uniform anyway: ten skills need no profile, and a hook that stopped everything would stop
 `atk:intake` from turning a chat message into requirements, which needs nothing from the repository.
 Which skill needs what, and what it does without it, stays in `shared/project-profile.md`.
 

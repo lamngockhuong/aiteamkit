@@ -31,7 +31,7 @@ flowchart TB
 
 | Nhóm | Gồm những gì | Commit | Sửa về sau | Xóa về sau |
 |------|--------------|--------|------------|------------|
-| Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md` | Có | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì |
+| Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì |
 | Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
 | Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội | Chạy lại skill | Được, thoải mái |
 

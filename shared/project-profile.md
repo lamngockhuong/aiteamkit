@@ -15,6 +15,10 @@ This file lives in the kit and describes the shape of a second file that does no
 The kit ships no profile. A freshly installed `atk` knows nothing about the project it was installed
 into, and that is the gap `.atk/profile.md` closes.
 
+`.atk/` is not only the profile. `.atk/overrides/<skill>.md` holds instructions a team adds to one
+skill, and `shared/project-overrides.md` defines it, including the line between the two files: this
+one records what the project **is**, an override records what a skill should **do** differently here.
+
 ## Why `.atk/` and not somewhere else
 
 - Not inside the kit: the plugin directory is read-only and shared across every project on the
@@ -66,7 +70,7 @@ or incomplete.
 |-------|--------|--------------------------------------|
 | Required | implement, fix, verify | Stop. Say what is missing and that `/atk:init` creates it. Change nothing. |
 | Required-soft | plan, review, qa, release, convention, spec | Continue, and state in the artifact that no profile was found, so every command and path in it is a guess. |
-| Not needed | intake, catchup, estimate, design-doc, breakdown, incident, retro, onboard, handover | Never mention the profile. |
+| Not needed | tailor, intake, catchup, estimate, design-doc, breakdown, incident, retro, onboard, handover | Never mention the profile. |
 
 `atk:init` is in no group. It is the skill that writes the profile, so a missing one is its input
 rather than its problem.
@@ -127,7 +131,7 @@ The three hook dialects differ in event names and output contracts: Claude Code 
 implementations of one rule, and three implementations of one rule drift apart. That breaks the
 property the whole kit is built on: write `SKILL.md` once, all three manifests pick it up.
 
-The rule is also not uniform. Nine skills need no profile at all, and a hook that blocks everything
+The rule is also not uniform. Ten skills need no profile at all, and a hook that blocks everything
 would stop `atk:intake` from turning a chat message into requirements, which needs nothing from the
 repository.
 

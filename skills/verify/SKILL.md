@@ -79,6 +79,8 @@ the names the report uses.
   -> [5. Clean up and report]
 ```
 
+Before step 1, read `.atk/overrides/verify.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Preflight
 
 Read the profile once. Establish what is being verified and against which acceptance criteria: the

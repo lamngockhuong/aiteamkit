@@ -83,17 +83,18 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Eleven files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Twelve files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
 | File | Owns | Cited by |
 |------|------|----------|
-| `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows | all |
+| `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the seven rules every skill follows | all |
 | `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, the shared YAML front matter block, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
+| `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, the two sections it may hold, and the seven things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
@@ -184,7 +185,7 @@ one line when a git repository has no `.atk/profile.md`. That is the whole featu
 
 The script must stay answerable in one sentence: "does this project have a profile yet". The moment
 it answers a second question, the precondition rule exists in two places, and the copy in
-`shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: nine skills
+`shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: ten skills
 need no profile at all, so a hook that blocked would stop `atk:intake` from turning a chat message
 into requirements.
 

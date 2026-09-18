@@ -48,6 +48,8 @@ as a separate line, never folded silently into a Dev number. See `shared/team-ro
 [1. Load items] -> [2. Find comparables] -> [3. Size] -> [4. Capacity] -> [5. Commit sheet]
 ```
 
+Before step 1, read `.atk/overrides/estimate.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Load items
 
 Read each item and reject what cannot be estimated. An item with no acceptance criteria, or with an

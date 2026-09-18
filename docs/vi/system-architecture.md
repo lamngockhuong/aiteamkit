@@ -63,9 +63,9 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười một file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 19 skill trích dẫn:
+Mười hai file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 19 skill trích dẫn:
 
-- `shared/team-roles.md`: bảng vai trò và sáu nguyên tắc mà mọi skill tuân theo.
+- `shared/team-roles.md`: bảng vai trò và bảy nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
@@ -111,12 +111,24 @@ Bảy file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi skill đổi mã nguồn đều là
   một bên của nó.
 
-File thứ mười một mô tả một file không đi kèm kit:
+Hai file cuối mô tả những file không đi kèm kit:
 
 - `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không nhắc tới.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
+
+- `shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
+  hai mục mà file đó được phép mang, và bảy thứ phần ghi đè không bao giờ được gỡ. Bảy điều loại trừ
+  là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
+  qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng.
+
+Cơ chế ghi đè là cơ chế duy nhất chạm tới mọi skill bằng hai nửa, và việc tách đôi là cố ý. Nguyên
+tắc 7 của `shared/team-roles.md` giữ phần hành vi, viết đúng một lần. Mỗi mục `## Workflow` mang một
+dòng gọi tên file ghi đè của chính nó và trỏ về nguyên tắc ấy, bởi một file shared chỉ được đọc khi
+có thứ gì đó buộc skill mở nó ra, mà một câu trích dẫn nằm trong mục `## Roles` thì không buộc được.
+Dòng đó tốn vài token mỗi lần gọi và đổi lấy điều chắc chắn rằng cơ chế thật sự chạy; còn đưa hẳn
+phần hành vi vào 19 file thì thành 19 bản của cùng một nguyên tắc, rồi lệch nhau.
 
 `shared/` nằm ở gốc repo chứ không nằm trong `skills/`, vì một thư mục bên trong `skills/` mà không
 có `SKILL.md` sẽ gây nhập nhằng cho cơ chế quét skill. Các skill trích dẫn theo dạng
@@ -130,7 +142,7 @@ có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại l
 đúng một câu hỏi, "dự án này đã có profile chưa", và nó nhắc chứ không chặn.
 
 Ranh giới đó là toàn bộ vấn đề. Hook mà chặn thì luật nằm ở hai chỗ, mà luật này vốn không đồng nhất:
-chín skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn
+mười skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn
 chat thành yêu cầu, việc chẳng cần gì từ repo. Skill nào cần gì và thiếu thì làm sao, tất cả nằm
 trong `shared/project-profile.md`.
 

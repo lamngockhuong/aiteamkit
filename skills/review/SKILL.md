@@ -52,6 +52,8 @@ reviews test adequacy. See `shared/team-roles.md`.
   -> [5. Verify] -> [6. Rank and write]
 ```
 
+Before step 1, read `.atk/overrides/review.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Establish intent
 
 Find the requirement and design behind the change. Without them, say so in the review and review

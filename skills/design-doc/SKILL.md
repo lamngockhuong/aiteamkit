@@ -56,6 +56,8 @@ See `shared/team-roles.md`.
 [1. Read requirement] -> [2. Map current state] -> [3. Options] -> [4. Specify] -> [5. ADR + review]
 ```
 
+Before step 1, read `.atk/overrides/design-doc.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Read the requirement
 
 Restate the acceptance criteria the design must satisfy. A design that cannot be traced back to a

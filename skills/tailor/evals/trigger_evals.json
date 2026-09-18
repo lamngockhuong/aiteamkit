@@ -1,0 +1,28 @@
+[
+  { "query": "make atk:review always check our i18n helper too", "should_trigger": true },
+  { "query": "/atk:tailor design-doc", "should_trigger": true },
+  { "query": "our team needs a security section in every design doc, can the skill add it", "should_trigger": true },
+  { "query": "customise the estimate skill for our client's monthly sign-off", "should_trigger": true },
+  { "query": "I keep adding the same paragraph to what this skill produces, automate it", "should_trigger": true },
+  { "query": "override a skill without editing the kit", "should_trigger": true },
+  { "query": "check whether our override files still match the skills", "should_trigger": true },
+  { "query": "/atk:tailor --audit", "should_trigger": true },
+  { "query": "tùy biến skill review cho đội mình", "should_trigger": true },
+  { "query": "thêm một bước vào skill design-doc mà không sửa kit", "should_trigger": true },
+  { "query": "đội mình luôn phải có mục bảo mật trong tài liệu thiết kế, ghi lại đi", "should_trigger": true },
+  { "query": "kiểm tra xem các file ghi đè còn khớp với skill không", "should_trigger": true },
+  { "query": "スキルをうちのチーム向けにカスタマイズして", "should_trigger": true },
+  { "query": "レビューのスキルに独自のチェック項目を追加したい", "should_trigger": true },
+  { "query": "キットを触らずにスキルの動きを変えたい", "should_trigger": true },
+
+  { "query": "every pull request must include a test for the changed behaviour", "should_trigger": false },
+  { "query": "write down our branch naming and commit message rules", "should_trigger": false },
+  { "query": "quy ước đặt tên biến của đội mình là gì, ghi lại vào tài liệu", "should_trigger": false },
+  { "query": "コーディング規約をまとめて", "should_trigger": false },
+  { "query": "set up atk in this project", "should_trigger": false },
+  { "query": "the build command in the profile is wrong, fix it", "should_trigger": false },
+  { "query": "khởi tạo atk cho dự án này", "should_trigger": false },
+  { "query": "review this pull request", "should_trigger": false },
+  { "query": "create a new skill for our kit", "should_trigger": false },
+  { "query": "sửa giúp tôi lỗi trong file này", "should_trigger": false }
+]

@@ -52,6 +52,8 @@ matter accepts it. See `shared/team-roles.md`.
 [1. Detect] -> [2. Show what was found] -> [3. Ask what is left] -> [4. Write] -> [5. Hand off]
 ```
 
+Before step 1, read `.atk/overrides/init.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Detect
 
 Read the repository before asking anything. `references/detection.md` gives the command per
@@ -111,7 +113,7 @@ Under `--out <path>`, audit the profile at that path rather than the default one
 
 Written to `.atk/profile.md` in the target project, not under `docs/`, and not into the kit. See
 `shared/project-profile.md` for what each section holds and `shared/artifact-paths.md` for why this
-skill is one of the two exceptions to the docs-root rule.
+skill is one of the three exceptions to the docs-root rule.
 
 ## Ticket
 

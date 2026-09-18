@@ -52,6 +52,8 @@ own test tasks in the same list, not a single "testing" task at the end. See `sh
 [1. Load scope] -> [2. Slice] -> [3. Order] -> [4. Lanes and owners] -> [5. DoD per task]
 ```
 
+Before step 1, read `.atk/overrides/breakdown.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Load the scope
 
 Read the design or requirement and list every deliverable it implies, including the ones nobody

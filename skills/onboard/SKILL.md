@@ -48,6 +48,8 @@ the document. The new member owns reporting what the document got wrong. See `sh
 [1. Derive setup] -> [2. Verify] -> [3. Access list] -> [4. Code map] -> [5. First week]
 ```
 
+Before step 1, read `.atk/overrides/onboard.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Derive the setup from the repository
 
 Read the package manifests, runtime version files, `Dockerfile` and compose files, `.env.example`,

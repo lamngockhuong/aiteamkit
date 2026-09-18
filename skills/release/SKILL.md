@@ -46,6 +46,8 @@ off the test result. Tech Lead signs off the technical risk. See `shared/team-ro
 [1. Collect changes] -> [2. Notes per audience] -> [3. Risk and migration] -> [4. Checklist] -> [5. Go decision]
 ```
 
+Before step 1, read `.atk/overrides/release.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Collect the changes
 
 Read the commit range and the linked tickets. Group by user-visible feature, fix, and internal

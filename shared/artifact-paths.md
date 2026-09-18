@@ -16,6 +16,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | Skill | Default output |
 |-------|----------------|
 | `init` | `.atk/profile.md` (see the exception below) |
+| `tailor` | `.atk/overrides/<skill>.md` (see the exception below) |
 | `intake` | `docs/records/requirements/<ticket-or-date>-<slug>.md` |
 | `catchup` | `docs/derived/catchup/<ticket-or-date>-<slug>.md` |
 | `estimate` | `docs/records/planning/estimate-<sprint-or-date>.md` |
@@ -37,13 +38,18 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 
 `--out <path>` overrides the default on every skill.
 
-### The exceptions: `init` and `plan`
+### The exceptions: `init`, `tailor`, and `plan`
 
-Two skills write outside the docs root, for two different reasons.
+Three skills write outside the docs root, for two different reasons.
 
-`atk:init` writes to `.atk/profile.md`. Every other artifact here is prose a person reads and
-reviews; the profile is data a skill reads, and mixing the two makes the docs tree noisy. It is
-still committed, and `shared/project-profile.md` explains the rest.
+`atk:init` writes to `.atk/profile.md` and `atk:tailor` writes to `.atk/overrides/<skill>.md`. Every
+other artifact here is prose a person reads and reviews; these two are read by a skill, and mixing
+the two kinds makes the docs tree noisy. Both are still committed. `shared/project-profile.md` and
+`shared/project-overrides.md` explain the rest, including what separates the two files.
+
+The override file is named after the skill it belongs to, with no date and no ticket, for the reason
+the next section gives: the next person looks for the skill, not for the sprint in which somebody
+decided to change it.
 
 `atk:plan` writes a directory under `plans/` at the repository root, not under the docs root, and
 names it `<YYMMDD-HHMM>-<slug>` rather than by ticket. Both choices exist so the output sits where
@@ -56,10 +62,10 @@ wins, exactly as the docs root rule works above.
 
 ### Named after the subject: `plan` is dated, `spec` is not
 
-`atk:spec` and `atk:qa` are the two skills whose file names carry neither a ticket nor a date. A
-reference document is named after the thing it describes, one file per resource, per table, or per
-feature, because the next person looks for the resource rather than for the sprint it was built in.
-The `spec` kinds:
+`atk:spec`, `atk:qa` and `atk:tailor` are the three skills whose file names carry neither a ticket
+nor a date. A reference document is named after the thing it describes, one file per resource, per
+table, per feature, or per skill, because the next person looks for the subject rather than for the
+sprint it was built in. The `spec` kinds:
 
 | Kind | Directory | One file per |
 |------|-----------|--------------|
@@ -78,7 +84,7 @@ merged and which directory it goes in.
 
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
-| Reference | the `spec` kinds, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/<slug>.md`, `.atk/profile.md` | the top level of the docs root, and `.atk/` for the profile | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
+| Reference | the `spec` kinds, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
 | Derived | the implementation record, the review report, the catchup brief | `docs/derived/<kind>/` | Safe to delete. Nothing here is the only copy |
 

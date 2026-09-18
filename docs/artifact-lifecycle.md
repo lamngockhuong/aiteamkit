@@ -31,7 +31,7 @@ flowchart TB
 
 | Group | What is in it | Commit | Change it later | Delete it later |
 |-------|---------------|--------|-----------------|-----------------|
-| Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md` | Yes | Always, in place | No. It is the only statement of what the system does today |
+| Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes | Always, in place | No. It is the only statement of what the system does today |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead | Only as a decision somebody owns, never as a blanket rule |
 | Derived | everything under `docs/derived/` | Optional | Run the skill again | Yes, freely |
 

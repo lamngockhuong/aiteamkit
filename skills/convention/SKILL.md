@@ -48,6 +48,8 @@ team agreeing is a proposal, marked as such. See `shared/team-roles.md`.
 [1. Read existing] -> [2. Derive from code] -> [3. Classify] -> [4. Map to tooling] -> [5. Write]
 ```
 
+Before step 1, read `.atk/overrides/convention.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
 ### 1. Read what exists
 
 Resolve where this project keeps its conventions, per Where the rules live in
