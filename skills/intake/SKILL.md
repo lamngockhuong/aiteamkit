@@ -78,7 +78,7 @@ Set `status: IN REVIEW` and name the approver. Do not mark anything `APPROVED` o
 
 ## Output
 
-Written to `docs/requirements/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. Sections:
+Written to `docs/records/requirements/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. Sections:
 front matter, original request, context and current behavior, user stories with acceptance criteria,
 out of scope, assumptions, open questions with owners, and impacted areas with file paths.
 

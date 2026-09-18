@@ -78,7 +78,7 @@ internal metrics and no individual names.
 
 ## Output
 
-Retro at `docs/retros/<sprint-or-date>.md` per `shared/artifact-paths.md`, with the status report as
+Retro at `docs/records/retros/<sprint-or-date>.md` per `shared/artifact-paths.md`, with the status report as
 a section or as its own file under `--report`.
 
 ## Ticket

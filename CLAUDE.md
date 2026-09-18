@@ -90,7 +90,7 @@ skill discovery.
 | File | Owns | Cited by |
 |------|------|----------|
 | `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the six rules every skill follows | all |
-| `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, and the shared YAML front matter block | all |
+| `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, the shared YAML front matter block, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
 | `shared/review-checklist.md` | The rule record format shared by `convention` (writes) and `review` (enforces), plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
@@ -291,6 +291,7 @@ relative path; adding or renaming one means doing the same on the other side.
 | File | Purpose |
 |------|---------|
 | `skills-overview.md` | Reader-facing explanation of every skill: what it produces, when to use, when not to |
+| `artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, and what each deletion costs |
 | `project-overview-pdr.md` | What atk is, goals, non-goals |
 | `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |

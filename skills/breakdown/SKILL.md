@@ -82,7 +82,7 @@ update elsewhere. "Code merged" alone is not a definition of done.
 
 ## Output
 
-Written to `docs/planning/breakdown-<epic>.md` per `shared/artifact-paths.md`. Sections: front
+Written to `docs/records/planning/breakdown-<epic>.md` per `shared/artifact-paths.md`. Sections: front
 matter, deliverable inventory, task table with ID, title, owner, depends-on, and DoD, a Mermaid
 dependency graph, parallel lanes with file ownership, and the serialization points.
 

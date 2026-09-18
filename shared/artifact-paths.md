@@ -16,24 +16,24 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | Skill | Default output |
 |-------|----------------|
 | `init` | `.atk/profile.md` (see the exception below) |
-| `intake` | `docs/requirements/<ticket-or-date>-<slug>.md` |
-| `catchup` | `docs/catchup/<ticket-or-date>-<slug>.md` |
-| `estimate` | `docs/planning/estimate-<sprint-or-date>.md` |
-| `design-doc` | `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
+| `intake` | `docs/records/requirements/<ticket-or-date>-<slug>.md` |
+| `catchup` | `docs/derived/catchup/<ticket-or-date>-<slug>.md` |
+| `estimate` | `docs/records/planning/estimate-<sprint-or-date>.md` |
+| `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
-| `breakdown` | `docs/planning/breakdown-<epic>.md` |
+| `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
 | `convention` | `docs/conventions.md` (and `CONTRIBUTING.md` when the project has one) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
-| `implement` | The code; the implementation record becomes the pull request body, and an optional file goes to `docs/implementation/<ticket-or-date>-<slug>.md` |
-| `fix` | `docs/fixes/<ticket-or-date>-<slug>.md` |
-| `review` | Review comments go to the pull request; an optional report goes to `docs/reviews/<pr>-<date>.md` |
+| `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
+| `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
+| `review` | Review comments go to the pull request; an optional copy goes to `docs/derived/reviews/<pr>-<date>.md` |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md` |
-| `verify` | `docs/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/verification/<ticket-or-date>-<slug>/` beside it |
-| `release` | `docs/releases/<version>.md` |
-| `incident` | `docs/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
-| `retro` | `docs/retros/<sprint-or-date>.md` |
+| `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
+| `release` | `docs/records/releases/<version>.md` |
+| `incident` | `docs/records/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
+| `retro` | `docs/records/retros/<sprint-or-date>.md` |
 | `onboard` | `docs/onboarding.md` |
-| `handover` | `docs/handover/<date>-<from>-to-<to>.md` |
+| `handover` | `docs/records/handover/<date>-<from>-to-<to>.md` |
 
 `--out <path>` overrides the default on every skill.
 
@@ -56,9 +56,10 @@ wins, exactly as the docs root rule works above.
 
 ### Named after the subject: `plan` is dated, `spec` is not
 
-`atk:spec` is the one skill whose file names carry neither a ticket nor a date. A reference document
-is named after the thing it describes, one file per resource, per table, or per feature, because the
-next person looks for the resource rather than for the sprint it was built in. The default kinds:
+`atk:spec` and `atk:qa` are the two skills whose file names carry neither a ticket nor a date. A
+reference document is named after the thing it describes, one file per resource, per table, or per
+feature, because the next person looks for the resource rather than for the sprint it was built in.
+The `spec` kinds:
 
 | Kind | Directory | One file per |
 |------|-----------|--------------|
@@ -72,22 +73,46 @@ the kit.
 
 ## Persistence
 
-Three groups, and the group decides what happens to a file after the work that produced it is merged.
+Three groups, and the group decides both what happens to a file after the work that produced it is
+merged and which directory it goes in.
 
-| Group | Which | After the merge |
-|-------|-------|-----------------|
-| Reference | the `spec` kinds, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/<slug>.md`, `.atk/profile.md` | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
-| Record | every row above named `<ticket-or-date>` or `<sprint-or-date>` | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Not a file | the implementation record, review comments | Lives on the pull request |
+| Group | Which | Directory | After the merge |
+|-------|-------|-----------|-----------------|
+| Reference | the `spec` kinds, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/<slug>.md`, `.atk/profile.md` | the top level of the docs root, and `.atk/` for the profile | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
+| Record | requirements, planning, design, fixes, verification, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
+| Derived | the implementation record, the review report, the catchup brief | `docs/derived/<kind>/` | Safe to delete. Nothing here is the only copy |
 
-Every file in the first two groups is committed, the same as `.atk/profile.md`. The kit writes no
-artifact meant to stay untracked.
+Three questions place a kind, in this order. Does something else already hold the original, or does
+re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
+its name says by carrying a ticket, a date, a sprint, or a version? Then it is a record. What is
+left describes the system as it currently is, and that is reference.
 
-The split is why `docs/design/<ticket>-<slug>.md` and `docs/api/<resource>.md` are two documents
-rather than one. A design argues for a change and cites the code as it stood before it; the day the
-change merges, that citation stops being true and the document becomes an account of a decision. The
-reference document begins where the design ends, and from then on it is the code that has to keep up
-with it, or it with the code.
+The question about the name is the one that settles the cases people argue about. `docs/qa/` is
+named after the feature rather than the sprint, and a regression suite is updated when the feature
+changes rather than written again, so test cases are reference and sit at the top level.
+
+One exception, and it is deliberate. ADRs stay at `docs/adr/` although they are records and are
+never edited, because people browse that directory the way they browse reference: numbered, one
+line per decision, the short permanent form of a design document that has grown long. Burying it
+one level down hides the thing most likely to be looked up.
+
+A project that already keeps these kinds at the top level of its docs root keeps them there. The
+grouping is the kit's default for an empty tree, not a move to perform on a project that has been
+writing to `docs/design/` for a year, and splitting a directory in half is worse than either shape.
+
+Every file in the first two groups is committed, the same as `.atk/profile.md`.
+
+`docs/derived/` is the only part of the tree a project may leave untracked, and nothing in the
+chain breaks if it does: the implementation record and the review report are copies of what lives on
+the pull request, and a catchup brief is rebuilt by running `atk:catchup` again. No skill reads any
+of the three. A team that wants a smaller repository adds one line to `.gitignore`; a team that
+wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
+
+The split is why `docs/records/design/<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
+documents rather than one. A design argues for a change and cites the code as it stood before it;
+the day the change merges, that citation stops being true and the document becomes an account of a
+decision. The reference document begins where the design ends, and from then on it is the code that
+has to keep up with it, or it with the code.
 
 ## Naming
 
@@ -131,3 +156,8 @@ A plan directory never collides, because its name carries the time, so updating 
 happen by accident there. Planning the same work again therefore has to supersede by hand: set the
 old index `status` to `SUPERSEDED`, link the new directory from it, and link back. Otherwise the
 project accumulates plans that all look current.
+
+Every record works this way, not only plans. A design that replaces an earlier design, a
+requirement document rewritten after the scope was renegotiated: the old file keeps its content,
+takes `SUPERSEDED`, and carries the link to what replaced it. Two files that both read as current
+is the failure this prevents, and it costs two links.

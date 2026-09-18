@@ -164,7 +164,7 @@ reader can paste. A flag that promises to change nothing must not leave a file b
 
 ## Output
 
-Written to `docs/fixes/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. The sections, and
+Written to `docs/records/fixes/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. The sections, and
 which of them `--investigate-only` drops, are in `references/report-template.md`.
 
 ## Ticket

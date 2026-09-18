@@ -80,7 +80,7 @@ is part of the output, not a leftover.
 
 ## Output
 
-Written to `docs/planning/estimate-<sprint-or-date>.md` per `shared/artifact-paths.md`. Sections:
+Written to `docs/records/planning/estimate-<sprint-or-date>.md` per `shared/artifact-paths.md`. Sections:
 front matter, scale and buffer policy, per-item estimate table with basis and confidence, capacity
 calculation showing every subtraction, sprint commitment, overflow, and estimation risks.
 

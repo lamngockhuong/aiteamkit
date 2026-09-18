@@ -81,7 +81,7 @@ rather than presenting a release as ready.
 
 ## Output
 
-Written to `docs/releases/<version>.md` per `shared/artifact-paths.md`. Sections: front matter,
+Written to `docs/records/releases/<version>.md` per `shared/artifact-paths.md`. Sections: front matter,
 scope and change list, internal notes, client notes, migrations and config, checklist with owners,
 rollback plan, sign-offs, and known issues shipping with the release.
 

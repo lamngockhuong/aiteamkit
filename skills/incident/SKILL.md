@@ -84,7 +84,7 @@ Actions with no owner do not go in the document.
 
 ## Output
 
-Incident at `docs/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md`, per
+Incident at `docs/records/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md`, per
 `shared/artifact-paths.md`. Sections: front matter, summary, impact, timeline, root cause with
 evidence, detection gap, mitigation, follow-up actions, and lessons.
 

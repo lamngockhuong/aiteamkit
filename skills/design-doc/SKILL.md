@@ -86,12 +86,19 @@ from the existing `docs/adr/` directory. Set `status: IN REVIEW` and list the re
 
 ## Output
 
-Design at `docs/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
+Design at `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
 `shared/artifact-paths.md`. Both are records of a moment and neither is edited afterwards; the data
 model and the API contract specified in step 4 reach their lasting form in `docs/api/` and
-`docs/database/`, written by `atk:spec` once the change is real. Diagrams are inline Mermaid so they stay readable in a pull request,
-drawn per `shared/diagram-conventions.md`: a sequence or component diagram beside the option it
-belongs to, and nothing the prose does not also say.
+`docs/database/`, written by `atk:spec` once the change is real.
+
+When this design replaces an earlier one for the same area, retire the earlier one in the same pull
+request: `status: SUPERSEDED`, a link to this design from it, and a link back. Nothing marks it
+automatically, and a directory where two designs both read as current sends the next reader to the
+wrong one. The rule is at the end of `shared/artifact-paths.md`.
+
+Diagrams are inline Mermaid so they stay readable in a pull request, drawn per
+`shared/diagram-conventions.md`: a sequence or component diagram beside the option it belongs to,
+and nothing the prose does not also say.
 
 ## Ticket
 
@@ -105,3 +112,4 @@ front matter.
 - [ ] Rollback and backward compatibility are answered, including as an explicit `N/A`.
 - [ ] Every acceptance criterion maps to something in the design.
 - [ ] The ADR states what was rejected and why, not only what was chosen.
+- [ ] Any earlier design this one replaces is marked `SUPERSEDED` and linked in both directions.
