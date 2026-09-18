@@ -7,7 +7,7 @@
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
 | 2. Độ phủ skill | XONG | 19 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
 | 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Tám skill đã có, mười một skill gốc chưa |
-| 4. Eval trigger | ĐANG LÀM | `evals/trigger_evals.json` cho từng skill. Bảy skill đã có, mười hai skill còn lại chưa. Vẫn thiếu bộ chạy |
+| 4. Eval trigger | ĐANG LÀM | `evals/trigger_evals.json` cho từng skill. Tám skill đã có, mười hai skill còn lại chưa. Chạy bằng công cụ ngoài kit; kit không kèm bộ chạy nào |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
 
@@ -19,10 +19,10 @@ release-please chạy khi push lên `main`, cùng các template issue và pull r
 
 ## Phase 2: Độ phủ skill (xong)
 
-Mười chín skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục: frontmatter với
+Hai mươi skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục: frontmatter với
 trigger đa ngôn ngữ, scope, roles, invocation, workflow, output, ticket và definition of done.
 
-Mười hai skill phủ phần quy trình mà một team chạy quanh mã nguồn. Bảy skill thêm về sau để kit phủ
+Mười hai skill phủ phần quy trình mà một team chạy quanh mã nguồn. Tám skill thêm về sau để kit phủ
 luôn phần làm việc trên chính mã nguồn, và để kit dừng ở chỗ một vai trò nắm quyền quyết chứ không
 dừng ở chỗ phải nhường cho kit khác: `init` ghi lại dự án này là gì, `catchup` giúp một người nắm
 được phần việc họ không tham gia từ đầu, `plan` cắt một phần việc thành các phase có thể đem ra
@@ -40,7 +40,7 @@ cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để t�
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Bảy skill đã có sẵn `references/`. Mười một skill gốc còn lại thì chưa. Với những skill có output là
+Chín skill đã có sẵn `references/`. Mười một skill gốc còn lại thì chưa. Với những skill có output là
 tài liệu bố cục cố định, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |

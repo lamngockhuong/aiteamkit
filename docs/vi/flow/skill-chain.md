@@ -51,8 +51,9 @@ Ba skill đứng bên cạnh chuỗi chứ không nằm trong nó, vì chúng đ
 `catchup` tóm tắt bất kỳ artifact nào cho người mới, `onboard` dẫn thành viên mới đi qua repo, và
 `handover` ghi lại trạng thái thật của mọi việc còn dở.
 
-Hai skill nữa nuôi chuỗi mà không do chuỗi sinh ra: `init` viết profile mà mọi skill đụng code đều
-đọc, còn `convention` viết ra bộ quy tắc `implement` tuân theo và `review` soi.
+Ba skill nữa nuôi chuỗi mà không do chuỗi sinh ra: `init` viết profile mà mọi skill đụng code đều
+đọc, `convention` viết ra bộ quy tắc `implement` tuân theo và `review` soi, còn `tailor` viết file
+ghi đè mà mỗi skill đọc trước bước đầu tiên của mình.
 
 `spec` là nút duy nhất mà chuỗi quay về chứ không đi ngang qua. Tài liệu của nó vừa là đầu vào cho
 thiết kế kế tiếp và test plan kế tiếp, vừa là đầu ra của mọi thay đổi đụng tới hợp đồng. Đó là lý do
@@ -63,6 +64,7 @@ mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết 
 | Skill | Đọc | Sinh ra | Skill dùng tiếp |
 |-------|-----|---------|-----------------|
 | `init` | Repo | Profile của dự án | Mọi skill có chạy lệnh |
+| `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi | File ghi đè cho skill đó | Chính skill mang tên file đó |
 | `intake` | Một yêu cầu thô | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa` |
 | `catchup` | Một epic hoặc một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài | Con người, không phải skill |
 | `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |

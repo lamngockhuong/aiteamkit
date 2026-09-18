@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
-OpenAI Codex CLI. It packages 19 skills covering the delivery lifecycle of a company project team
-(`init`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`, `convention`, `plan`,
+OpenAI Codex CLI. It packages 20 skills covering the delivery lifecycle of a company project team
+(`init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`, `convention`, `plan`,
 `implement`, `fix`, `review`, `qa`, `verify`, `release`, `incident`, `retro`, `onboard`,
 `handover`), each invocable as a slash command by its own name (`/atk:intake`, `/atk:estimate`, and
 so on). That is the lifecycle order; use it for every list of skills in the repository.
@@ -64,7 +64,7 @@ skills/<name>/
 ```
 
 Eleven of the twelve original skills are still skeletons: `SKILL.md` only, around 95 to 105 lines
-each, with no `references/` or `evals/`. The seven added since (`init`, `catchup`, `plan`,
+each, with no `references/` or `evals/`. The eight added since (`init`, `tailor`, `catchup`, `plan`,
 `implement`, `fix`, `verify`, `spec`) carry both. `review` sits between the two: it grew a `references/` file for parallel
 review and still has no `evals/`. Deepening a skill means adding `references/` files and pointing at them from
 the relevant workflow step, not growing `SKILL.md` past 300 lines.
@@ -231,7 +231,7 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
    `shared/` layer or the profile is for
 9. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
    all three `docs/vi/flow/` mirrors.
-   Each names all 19 skills: the phase table and the consumes/produces table respectively
+   Each names all 20 skills: the phase table and the consumes/produces table respectively
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -312,7 +312,7 @@ relative path; adding or renaming one means doing the same on the other side.
 | `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `flow/project-flow.md` | The 19 skills placed in delivery phases, with the author and approver of each artifact |
+| `flow/project-flow.md` | The 20 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 
@@ -388,6 +388,11 @@ for event in json.load(open('hooks/hooks.json'))['hooks'].values():
         for h in group['hooks']:
             assert h['command']=='node' and 'args' in h, 'hook must stay in exec form'
 print('OK exec form')"
+
+# Trigger evals parse. The kit ships no runner: run them with a skill-eval tool from outside it
+for f in skills/*/evals/trigger_evals.json; do
+  python3 -c "import json,sys; d=json.load(open('$f')); assert isinstance(d,list) and d" || echo "FAIL $f"
+done; echo "OK evals"
 
 # Version agreement across the 6 version-bearing files
 grep -h '"version"' package.json .claude-plugin/plugin.json .cursor-plugin/plugin.json \

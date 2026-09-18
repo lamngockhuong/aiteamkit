@@ -52,8 +52,9 @@ Three skills sit beside the chain rather than in it, because they read the whole
 one link: `catchup` summarises any of these for a newcomer, `onboard` walks a new member through the
 repository, and `handover` records the true state of everything still in flight.
 
-Two more feed the chain without being produced by it: `init` writes the profile every code-touching
-skill reads, and `convention` writes the rules `implement` follows and `review` enforces.
+Three more feed the chain without being produced by it: `init` writes the profile every
+code-touching skill reads, `convention` writes the rules `implement` follows and `review` enforces,
+and `tailor` writes the override file each skill reads before its first step.
 
 `spec` is the one node the chain returns to rather than passes through. Its documents are an input to
 the next design and the next test plan, and an output of every change that alters a contract, which
@@ -64,6 +65,7 @@ is why the arrow into them comes from the code rather than from the design that 
 | Skill | Reads | Produces | Next skill that uses it |
 |-------|-------|----------|-------------------------|
 | `init` | The repository | Project profile | Every skill that runs a command |
+| `tailor` | A shipped `SKILL.md`, and what the team says it wants different | Project override for that skill | The skill it is named after |
 | `intake` | A raw request | Requirements with open questions | `estimate`, `design-doc`, `qa` |
 | `catchup` | An epic or a pull request | A brief plus an understanding check | The person, not a skill |
 | `estimate` | Requirements or an epic | Sizes, capacity, sprint commitment | `breakdown` |

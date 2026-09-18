@@ -7,7 +7,7 @@ removed, or renamed; update it in the same commit.
 
 | File | Purpose |
 |------|---------|
-| `README.md` | Public entry point: lifecycle diagram, the 19-skill table, invocation block, output convention, install instructions |
+| `README.md` | Public entry point: lifecycle diagram, the 20-skill table, invocation block, output convention, install instructions |
 | `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `shared/` DRY rule, cross-file sync list, em-dash policy, release flow, verification commands |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, no scripts; exists to carry the version and repository metadata |
@@ -45,17 +45,22 @@ removed, or renamed; update it in the same commit.
 
 | File | Purpose |
 |------|---------|
-| `hooks/hooks.json` | Registers one `SessionStart` hook for Claude Code, in exec form so no shell is involved on any platform: `"command": "node"` plus `${CLAUDE_PLUGIN_ROOT}` in `args` |
-| `hooks/check-profile.mjs` | Node ESM, so it behaves the same on Linux, macOS, and Windows. Prints one reminder when a git repository has no `.atk/profile.md`, once per project, and exits 0 on every path. Never blocks, never writes into the user's repository. Codex and Cursor have no wrapper yet |
+| `hooks/hooks.json` | Registers two Claude Code hooks, both in exec form so no shell is involved on any platform: `"command": "node"` plus `${CLAUDE_PLUGIN_ROOT}` in `args` |
+| `hooks/check-profile.mjs` | `SessionStart`. Node ESM, so it behaves the same on Linux, macOS, and Windows. Prints one reminder when a git repository has no `.atk/profile.md`, once per project, and exits 0 on every path. Never blocks, never writes into the user's repository. Codex and Cursor have no wrapper yet |
+| `hooks/load-overrides.mjs` | `PreToolUse` with matcher `Skill`. Puts `.atk/overrides/<skill>.md` in front of the skill that owns it, saving a read and nothing more. Prints an empty object for another tool, a missing file, a name with a path separator, or malformed input, and names rather than inlines a file past 4096 characters. Every skill opens the file itself where no hook ran |
 
 ## Skills
 
-Each skill is one `SKILL.md`. Seven skills also carry `references/` and `evals/`.
+Each skill is one `SKILL.md`. Eight skills also carry `references/` and `evals/`.
 `review` carries `references/` alone; the other eleven original skills carry neither yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
 | `skills/init/SKILL.md` | Setup | `.atk/profile.md`: commands, layers, docs roots, tracker, team, and how to verify at runtime |
+| `skills/tailor/SKILL.md` | Setup | `.atk/overrides/<skill>.md`: what this team wants one skill to do differently, with the owning role as approver |
+| `skills/tailor/references/interview.md` | Setup | The five groups of question, the filter that sends an answer to `init` or `convention` instead, and a worked example per group |
+| `skills/tailor/references/audit.md` | Setup | The three `--audit` checks, why a conflict is a fact and a stale anchor is a question, and the rule that it changes nothing |
+| `skills/tailor/evals/trigger_evals.json` | Setup | 25 trigger cases, including the `convention` and `init` pairs it must not steal |
 | `skills/intake/SKILL.md` | Requirement | User stories, acceptance criteria, non-goals, open questions with owners |
 | `skills/catchup/SKILL.md` | Requirement | A brief for someone who was not in the conversation, plus the understanding check for an epic |
 | `skills/estimate/SKILL.md` | Planning | Sizes with basis and confidence, capacity, sprint commitment, overflow |
@@ -136,7 +141,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, what each deletion costs, and the three policies a team can choose between |
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
-| `docs/flow/project-flow.md` | The 19 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
+| `docs/flow/project-flow.md` | The 20 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/vi/**/*.md` | Vietnamese mirror of the eight files above, at the same relative paths |
@@ -148,5 +153,5 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 19 skills, plus the profile, the shared layer, and the hook |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 20 skills, plus the profile, the overrides, the shared layer, and the hooks |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |

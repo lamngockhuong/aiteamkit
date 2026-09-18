@@ -1,6 +1,6 @@
 # Skills Overview
 
-Nineteen skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+Twenty skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
 to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
@@ -9,7 +9,7 @@ Read this before adopting the kit: every skill works alone, and a team can start
 
 ```mermaid
 flowchart LR
-    I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
+    I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
     E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
     R -.->|Blocking findings| IM
@@ -44,6 +44,31 @@ project and is committed with it; the kit itself holds no project facts.
 **The habit that matters.** It reads the repository before it asks. A question the package manifest,
 the CI workflow, or the test directory could have answered is a question it does not put to a
 person. What no file can answer becomes `TBD` with the name of whoever owes it, never a guess.
+
+---
+
+## `atk:tailor`
+
+**Produces.** `.atk/overrides/<skill>.md` in the project: what this team wants one skill to do
+differently, as a `## Before` section, an `## After` section, or both, with the role that owns the
+skill's output named as approver.
+
+**Use when.** The team keeps making the same correction to what a skill produces, a client or an
+internal standard adds a step the kit does not know about, or an override written earlier no longer
+matches the skill it belongs to. `--audit` checks every override file in the project and changes
+nothing.
+
+**Do not use when.** The rule is about the code rather than about the skill. "Every pull request
+needs a test" is checkable by a person with no kit installed, so it is a `CONV-NNN` row that
+`atk:convention` writes and `atk:review` enforces. "`atk:review` should also check our i18n helper"
+is about the skill and belongs here. When both readings fit, the rule about the code wins.
+
+**The habit that matters.** It refuses. Seven things an override may never remove are listed in
+`shared/project-overrides.md`, and the approver line, the rule that a skill does not decide what a
+role owns, and the consent line before anything leaves the local repository are three of them. A
+refused instruction is not dropped in silence: the skill says which of the seven it breaks and
+offers the nearest thing that does not, which is usually an instruction that surfaces the decision
+earlier rather than one that takes it.
 
 ---
 

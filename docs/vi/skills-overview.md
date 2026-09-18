@@ -1,6 +1,6 @@
 # Tổng quan các skill
 
-Mười chín skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+Hai mươi skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
 dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
@@ -10,7 +10,7 @@ với một skill.
 
 ```mermaid
 flowchart LR
-    I["init"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
+    I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
     E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
     R -.->|Có phát hiện chặn| IM
@@ -44,6 +44,29 @@ và được commit cùng dự án đó; bản thân kit không giữ sự thậ
 **Thói quen tạo ra khác biệt.** Nó đọc repo trước khi hỏi. Câu nào mà file manifest, workflow CI hay
 thư mục test đã trả lời được thì nó không đem ra hỏi người. Phần không file nào trả lời được sẽ thành
 `TBD` kèm tên người nợ câu trả lời, chứ không thành một phỏng đoán.
+
+---
+
+## `atk:tailor`
+
+**Sinh ra.** File `.atk/overrides/<skill>.md` trong dự án: điều team này muốn một skill làm khác đi,
+viết thành mục `## Before`, mục `## After`, hoặc cả hai, kèm tên vai trò sở hữu thứ skill đó sinh ra
+đứng ở dòng người duyệt.
+
+**Dùng khi.** Team cứ phải sửa đi sửa lại cùng một chỗ trong kết quả của một skill, khi khách hàng
+hoặc một chuẩn nội bộ thêm một bước mà kit không biết, hoặc khi một file ghi đè viết từ trước không
+còn khớp với skill nó thuộc về. Cờ `--audit` duyệt mọi file ghi đè trong dự án và không sửa gì.
+
+**Không dùng khi.** Luật nói về mã nguồn chứ không nói về skill. "Mọi pull request phải có test" là
+thứ một người không cài kit vẫn kiểm được, nên nó là một dòng `CONV-NNN` do `atk:convention` viết và
+`atk:review` thi hành. "`atk:review` nên kiểm thêm phần i18n của đội mình" là luật về skill và thuộc
+về đây. Khi cả hai cách đọc đều hợp, luật về mã nguồn thắng.
+
+**Thói quen tạo ra khác biệt.** Nó biết từ chối. `shared/project-overrides.md` liệt kê bảy thứ phần
+ghi đè không bao giờ được gỡ, trong đó có dòng người duyệt, luật một skill không quyết thứ mà một vai
+sở hữu, và ranh giới xin phép trước khi bất cứ gì rời khỏi repo cục bộ. Chỉ dẫn bị từ chối không bị
+bỏ trong im lặng: skill nói rõ nó phạm điều nào trong bảy điều, rồi đề nghị thứ gần nhất mà không
+phạm, thường là một chỉ dẫn đưa quyết định ra sớm hơn thay vì một chỉ dẫn tự quyết.
 
 ---
 

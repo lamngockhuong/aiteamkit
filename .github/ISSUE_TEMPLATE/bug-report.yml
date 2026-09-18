@@ -28,6 +28,7 @@ body:
       description: Which part of atk is affected?
       options:
         - Skill - atk:init
+        - Skill - atk:tailor
         - Skill - atk:intake
         - Skill - atk:catchup
         - Skill - atk:estimate
@@ -47,8 +48,9 @@ body:
         - Skill - atk:onboard
         - Skill - atk:handover
         - Project profile (.atk/profile.md)
+        - Project overrides (.atk/overrides/)
         - Shared references (shared/)
-        - Session start hook (hooks/)
+        - Hooks (hooks/)
         - Plugin manifest / installation
         - Documentation
         - Other / unsure
