@@ -116,7 +116,7 @@ Convention checking is the `rules` round, and it runs off `shared/review-checkli
 project's conventions document per Where the rules live in that file, read its review checklist
 section, check each `REVIEWED` rule, and cite the rule ID with its text quoted verbatim so the
 author can dispute the rule rather than the reviewer. When the project has no recorded conventions,
-say so in the review and check this round's own baseline item anyway: the round never falls silent
+say so in the review and check this round's own baseline items anyway: the round never falls silent
 there. The other baseline items stay with the rounds that hold them, per
 `references/review-rounds.md`. Do not invent project-specific rules mid-review; report the gap so
 `atk:convention` can record it.
