@@ -125,8 +125,9 @@ two. From six to twenty changed files, one agent holds all four comparing rounds
 split them in two. Below six nothing is spawned at all, so there is nothing to combine.
 
 Combining changes the number of agents, never the number of rounds: from 6 to 20 files, 11 round
-runs land in 8 agents, and above 20, 16 round runs land in 14. Those two numbers are what a report
-can be checked against, which is the reason the band is fixed rather than left to judgement. Each
+runs land in 8 agents, and above 20, 16 round runs land in 14. The closing sweep adds one more agent
+of its own, so a run comes to 9 and 15. Those two numbers are what a report can be checked against,
+which is the reason the band is fixed rather than left to judgement. Each
 round still reports under its own name, and a combined agent returns its rounds separately rather
 than as one pile. For the dispatch rule below, a combined agent counts as one round, because it is
 issued once and returns once.
@@ -212,15 +213,29 @@ no other agent was ever asked the question.
 
 ## The sweep
 
-Step 5 of the skill closes with one pass over the gaps, run once the verified list exists. Run it in
-the calling agent, after the last round has closed and before the renumbering.
+Step 5 of the skill closes with one pass over the gaps, run once the verified list exists, after
+the last round has closed and before the renumbering.
+
+Give it its own agent, and hand it the list. The calling agent has driven every round, holds every
+finding and has read the diff many times over; it is the most loaded context in the run, and the
+sweep is the one job that asks for a fresh reading of that diff against that list. The two compete,
+and on a large change the sweep is what loses. An agent that starts with the list and nothing else
+does the same job with none of that behind it.
+
+Below six changed files nothing is spawned at all, so the sweep runs in the calling agent like
+everything else.
 
 It is not a round. It ran last, with every round's findings in front of it, so its candidates carry
 neither `[k/N]` nor a round name and are labelled as coming from the sweep. Tagging one `[1/N]` would
 tell the author that other agents looked at it and stayed silent, when in truth none of them saw it.
 
-Never run the sweep as one more round in parallel. A pass that cannot see the list cannot look for
-what the list is missing, and what comes back is one more opinion rather than a search for the gaps.
+Its candidates come back as candidates. The verdicts in step 5 and the cap in step 6 stay with the
+calling agent, because what is delegated is the search and never the judgement.
+
+Its own agent is not the same as one more round. A round runs alongside its copies and is handed no
+list; the sweep runs alone, after every round has closed, and the list is the whole of what it is
+given. Dispatch it with the others and it becomes one more opinion, because a pass that cannot see
+the list cannot look for what the list is missing.
 
 ## What the report adds
 
