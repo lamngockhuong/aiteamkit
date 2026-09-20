@@ -83,18 +83,21 @@ nothing, or that the host has no such capability.
 
 ## Independent reviewers, in parallel
 
-`atk:review` may put several reviewers over the same diff and reconcile what they return. The
-procedure, including how the width is chosen and how findings are merged, is in
-`skills/review/references/parallel-review.md`.
+`atk:review` may put several agents over the same diff and reconcile what they return. The
+procedure, including which rounds run, how many copies each runs, and how findings are merged, is in
+`skills/review/references/review-rounds.md`.
 
 What stays here is the policy the procedure may not overrule:
 
-- The width is bounded by the machine, never by ambition. A reviewer killed halfway through reports
-  fewer findings rather than failing loudly, which reads as a clean review.
-- Every reviewer receives the same scope. Reviewers split by file agree trivially and prove nothing;
-  the point of the width is independent passes over one diff.
+- The number of agents running at once inside a round is bounded by the machine, never by ambition.
+  It bounds concurrency, not the review's total number of passes, which follows from the round list.
+  An agent killed halfway through reports fewer findings rather than failing loudly, which reads as
+  a clean review.
+- Every agent within a round receives the same scope. Agents split by file agree trivially and prove
+  nothing; the point of running copies is independent passes over one diff. Scope differs between
+  rounds on purpose, because each round is a different question over that same whole diff.
 - Synthesis, severity, and the report stay with the calling agent. A reviewer sees one pass and
   cannot judge whether a finding is consensus or noise.
 - A finding only one reviewer raised is checked against the code before it reaches the report.
 - None of it is an approval. Several reviewers agreeing is several passes by the same model, not a
-  colleague reading the change. `shared/team-roles.md` rule 2 is unaffected by the width.
+  colleague reading the change. `shared/team-roles.md` rule 2 is unaffected by how many passes ran.

@@ -269,8 +269,9 @@ dọn dẹp cả file xung quanh thì không revert gọn được vào ngày c�
 ## `atk:review`
 
 **Sinh ra.** Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới
-một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể. Có thể đăng thẳng thành
-comment inline trên PR.
+một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể. Nhiều nhất mười phát hiện,
+hoặc hai mươi khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Có thể đăng
+thẳng thành comment inline trên PR.
 
 **Dùng khi.** Trước khi approve một pull request, hoặc khi cần một ý kiến thứ hai.
 
@@ -282,11 +283,23 @@ phát từ diff, và nó tách lỗi chặn merge khỏi ý kiến sở thích, 
 cảm nhận là công bằng. Một phát hiện về quy ước sẽ trích nguyên văn quy tắc kèm ID, để tác giả tranh
 luận với quy tắc chứ không tranh luận với người review.
 
-Thay đổi lớn hơn năm file sẽ được đọc nhiều lượt độc lập trên cùng một diff, khi harness chạy được
-nhiều agent song song, và mỗi phát hiện mang theo con số bao nhiêu lượt đã nêu nó. Số lượt bị chặn
-trên bởi bộ nhớ của máy, và ép được bằng `--parallel <N>`; phát hiện chỉ một lượt nêu ra phải được
-đối chiếu lại với mã trước khi vào báo cáo. Nhiều lượt cùng nói một điều vẫn là công việc của một mô
-hình, không thay được người đồng nghiệp đọc thay đổi rồi phê duyệt.
+Không phát hiện nào vào danh sách mà chưa qua thẩm tra. Một phát hiện là `CONFIRMED` khi gọi được tên
+đầu vào làm nó xảy ra, và là `PLAUSIBLE` khi cơ chế có thật nhưng điều kiện kích hoạt còn tuỳ thời
+điểm, môi trường hay cấu hình; phát hiện `PLAUSIBLE` mang theo đúng một phép kiểm tra đủ để kết luận,
+nhờ vậy tác giả đóng được nó trong một phút. Chỉ bỏ một ứng viên khi chính mã chỉ ra chỗ nó sai,
+không bao giờ bỏ vì cho rằng khó xảy ra: đó mới là thói quen giữ lỗi race condition và lỗi trên nhánh
+hiếm nằm lại trong bản review thay vì trôi ra production. Có danh sách đó rồi thì thêm một lượt đọc
+lại diff, chỉ đi tìm thứ chưa nằm trong danh sách, và thà trả về rỗng còn hơn độn thêm cho đủ. Khi
+trần cắt bớt danh sách, lỗi đúng sai đứng trên lỗi quy ước và chỗ mã khó đọc, và bản review nói rõ
+đã bỏ bao nhiêu phát hiện, ở mức nào.
+
+Bản review chạy theo chín vòng, mỗi vòng một việc, nên không lượt nào phải ôm hết mọi thứ cần để ý
+cùng lúc, và cũng không lượt nào bỏ sót đúng một vùng vì cùng một lý do. Vòng phải đi lục thì chạy
+nhiều bản, khi harness cho chạy nhiều agent song song, vì một lượt đọc diff đơn lẻ không đủ tin, và
+mỗi phát hiện của nó mang theo con số bao nhiêu bản đã nêu; vòng chỉ đối chiếu diff với một danh
+sách có sẵn thì chạy một lượt và báo dưới tên vòng. `--parallel <N>` ép con số nhân bản đó, và phát
+hiện chỉ một bản nêu ra phải được đối chiếu lại với mã trước khi vào báo cáo. Nhiều bản cùng nói một
+điều vẫn là công việc của một mô hình, không thay được người đồng nghiệp đọc thay đổi rồi phê duyệt.
 
 ---
 

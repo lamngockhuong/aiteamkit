@@ -19,9 +19,10 @@ because mixing them is what makes reviews feel arbitrary.
 
 ## Scope
 
-Handles: reading the diff in the context of the requirement, design, and conventions, deciding how
-many independent passes the change is worth, finding correctness and regression risks, checking test
-coverage of the changed behavior, and writing review comments that a person can act on.
+Handles: reading the diff in the context of the requirement, design, and conventions, deciding which
+review rounds the change is worth and how many copies each of them runs, finding correctness and
+regression risks, checking test coverage of the changed behavior, and writing review comments that a
+person can act on.
 
 Does NOT handle: approving or merging, which is a human act; rewriting the code, which the author
 does with `atk:implement` or `atk:fix`; or deciding whether the requirement itself is right
@@ -41,14 +42,14 @@ reviews test adequacy. See `shared/team-roles.md`.
 /atk:review --against <design-path>       # Review against a specific design document
 /atk:review --comment                     # Post findings as inline PR comments
 /atk:review --strict                      # Include low-severity and stylistic findings
-/atk:review --parallel 5                  # Force the number of independent passes over the diff
+/atk:review --parallel 5                  # Force how many copies the searching rounds run
 /atk:review --out <path>                  # Write a review report as well
 ```
 
 ## Workflow
 
 ```
-[1. Establish intent] -> [2. Read diff in context] -> [3. Choose the width] -> [4. Find]
+[1. Establish intent] -> [2. Read diff in context] -> [3. Choose the rounds] -> [4. Find]
   -> [5. Verify] -> [6. Rank and write]
 ```
 
@@ -65,40 +66,66 @@ Open the surrounding files, not only the changed lines. Most real defects live i
 implies elsewhere: a caller not updated, an enum case not handled, a migration without a backfill,
 a cache not invalidated.
 
-### 3. Choose the width
+### 3. Choose the rounds
 
-A change large enough to be worth more than one pass gets more than one, using the host's ability to
-run agents in parallel per `shared/host-capabilities.md`. `references/parallel-review.md` holds the
-width table, the memory cap that bounds it, what every reviewer is given, and how the findings are
-merged back into one list.
+The review runs as nine rounds, one job each, using the host's ability to run agents in parallel per
+`shared/host-capabilities.md`. `references/review-rounds.md` holds the round list, how many copies
+each round runs, which rounds may share an agent, the memory cap, what each agent is given, how the
+calling agent drives them, and how the findings become one list. Three questions settle the shape of
+a run:
 
-Five files or fewer stay in this agent, and `--parallel <N>` overrides the table but not the cap. The
-reviewers all read the same diff: independence is the point, so splitting the files between them
-would produce agreement that means nothing.
+**Which rounds run.** All nine, minus the ones whose subject the diff does not contain: no deleted
+lines, no signature change, no behavior change. That is different from a round that ran and found
+nothing, and the report keeps the two apart. The list comes from step 4 below and is not a second
+list alongside it.
 
-Steps 1, 5, and 6 are never delegated. Intent is what the passes are measured against, and ranking
-one list out of several needs all of them in one context.
+**How many copies each runs.** A round that has to go looking runs several; a round that only
+compares the diff against a list that already exists runs once, because copies of a comparison
+return the same answer. The size of the change turns that number up and down, not the round list.
+Five files or fewer run all nine rounds in this agent and spawn nothing, as before. `--parallel <N>`
+overrides the searching rounds, not the total, which is now a consequence of the round list.
 
-Where the harness cannot spawn agents, one pass runs and the report says so.
+**Which rounds share an agent.** Comparing rounds may be combined; searching rounds never are,
+because combining them rebuilds the agent that forgets its earlier concerns.
+
+Every agent in a round reads the same diff: independence is the point, so splitting the files
+between them would produce agreement that means nothing. Rounds divide the question, never the
+files.
+
+Steps 1, 5, and 6 are never delegated. Intent is what the rounds are measured against, ranking one
+list out of many needs all of them in one context, and the calling agent also drives the rounds.
+
+Where the harness cannot spawn agents, the nine rounds run one after another in this agent and the
+report says the review had no copies.
 
 ### 4. Find
 
-Look for, in this order: behavior that contradicts an acceptance criterion, correctness bugs and
-regressions, missing error and edge-case handling, security and data exposure, untested new
-behavior, a public contract changed without its reference document, convention violations, then
-readability.
+Eight things to look for, ranked here in the order step 6 reports them: behavior that contradicts an
+acceptance criterion, correctness bugs and regressions, missing error and edge-case handling,
+security and data exposure, untested new behavior, a public contract changed without its reference
+document, convention violations, then readability.
 
-Convention checking runs off `shared/review-checklist.md`: resolve the project's conventions
-document per Where the rules live in that file, read its review checklist section, check each
-`REVIEWED` rule, and cite the rule ID with its text quoted verbatim so the author can dispute the
-rule rather than the reviewer. When the project has no recorded conventions, use the baseline items
-in that file and say so in the review. Do not invent
-project-specific rules mid-review; report the gap so `atk:convention` can record it.
+This list is what the nine rounds are made of, not a separate list running beside them. Six of the
+eight become one round each; item 2 becomes three, `lines`, `removed`, and `callers`, because that
+is where defects hide and the three open different things; readability becomes no round at all, for
+the reason `references/review-rounds.md` gives. The order above is how step 6 ranks what comes back,
+not the order the rounds run in: the calling agent dispatches one round ahead of the one it is
+synthesizing, and never all nine at once, per the same file.
 
-The reference-document check is the sync obligation in `shared/spec-docs.md`, which lists the five
-kinds of change that trigger it. Raise a `BLOCKING` finding when a contract moved and neither the
-document nor a stated skip came with it. Where the pull request says what is stale and who will fix
-it, the obligation was met and there is no finding.
+Convention checking is the `rules` round, and it runs off `shared/review-checklist.md`: resolve the
+project's conventions document per Where the rules live in that file, read its review checklist
+section, check each `REVIEWED` rule, and cite the rule ID with its text quoted verbatim so the
+author can dispute the rule rather than the reviewer. When the project has no recorded conventions,
+say so in the review and check this round's own baseline item anyway: the round never falls silent
+there. The other baseline items stay with the rounds that hold them, per
+`references/review-rounds.md`. Do not invent project-specific rules mid-review; report the gap so
+`atk:convention` can record it.
+
+The reference-document check is the `contract` round, and the sync obligation in
+`shared/spec-docs.md`, which lists the five kinds of change that trigger it and so decides whether
+the round runs at all. Raise a `BLOCKING` finding when a contract moved and neither the document nor
+a stated skip came with it. Where the pull request says what is stale and who will fix it, the
+obligation was met and there is no finding.
 
 Do not fix the document as the reviewer. That moves the work to the wrong person and teaches the next
 author that the rule is optional. Something the document never settled is an open question, not
@@ -106,8 +133,43 @@ drift, per the same file.
 
 ### 5. Verify before reporting
 
-Every finding must survive a check: trace the code path, or state the concrete input that produces
-the wrong output. A finding you cannot make concrete is dropped, not softened into a question.
+Every candidate gets one verdict, decided against the code rather than against how confident it
+sounds.
+
+| Verdict | The candidate | What happens to it |
+|---------|---------------|--------------------|
+| `CONFIRMED` | Names the input or state that triggers it, and the wrong result | Reported. Eligible for any severity |
+| `PLAUSIBLE` | Names the mechanism, but the trigger depends on timing, environment, or configuration | Reported at `SHOULD FIX` or below, carrying the one check that would settle it |
+| `REFUTED` | Rests on something the code does not do | Dropped, silently |
+
+`PLAUSIBLE` is what a candidate gets when nothing refutes it. Do not refute one for being
+speculative, or for depending on state at run time, when that state is one the system reaches:
+two callers racing, `nil` on a rare but reachable path such as an error handler or a cold cache, an
+absent optional field, a falsy zero read as missing, an off-by-one on a boundary the code does not
+exclude, a retry storm, a partial failure, an anchor lost from a pattern.
+
+Refute only on something the code shows: the real line says otherwise, a type or a constant or an
+invariant makes it impossible, the same diff already guards it, or it is style with no observable
+effect. A verdict resting on "unlikely" is none of these, and dropping a finding that way is how a
+race condition ships.
+
+This does not license the question dressed up as a finding. `PLAUSIBLE` still needs a named
+mechanism and a named trigger; what is uncertain is only whether that trigger occurs. A candidate
+naming neither is not plausible, it is unexamined, and it is dropped.
+
+Then take one more pass, once, with the verified list in hand. Read the diff and the code around it
+looking only for what is not on that list: the job is the gaps, not a second opinion on what has
+already been found. Surface at most eight new candidates, and return nothing at all when there is
+nothing new. A padded sweep costs the author the attention that makes the rest of the list worth
+reading.
+
+What a first pass misses is predictable, so start there: code moved or extracted that left a guard or
+an anchor behind, setup and teardown that stopped matching each other in a test, a default flipped in
+configuration, a predicate that turns out to have a side effect, and a lock whose scope quietly
+shrank.
+
+New candidates go through the verdicts above like any other, and then through the cap in step 6.
+They are labelled apart from every round's findings, per `references/review-rounds.md`.
 
 ### 6. Rank and write
 
@@ -117,12 +179,22 @@ the wrong output. A finding you cannot make concrete is dropped, not softened in
 | `SHOULD FIX` | Real problem, safe to fix in a follow-up if the author agrees |
 | `NIT` | Preference. Never blocks. Say so in the comment |
 
-Where several reviewers ran, each finding carries how many of them raised it, and a finding only one
-reviewer raised was checked against the code before it reached this list. The report says which width
-ran. It never presents a count of agreeing reviewers as agreement between people.
+Where a round ran several copies, each of its findings carries how many of them raised it, and a
+finding only one copy raised was checked against the code before it reached this list. That count
+means something only between copies of one round; a round that ran once carries its round name
+instead, never `[1/1]`, which would suggest other agents looked and disagreed when none was asked.
+The report says which rounds ran and which returned empty. It never presents a count of agreeing
+copies as agreement between people.
 
 A convention violation takes the severity recorded against its rule. Raise it only when the concrete
 failure is worse than the rule anticipated, and say why.
+
+Report at most ten findings, or twenty under `--strict`, ranked with `BLOCKING` first. Where the cap
+cuts, correctness outranks convention and readability: drop `NIT` first, then `SHOULD FIX`, and say
+how many went and at what severity, so the author knows a second pass is owed rather than reading the
+list as the whole of it. A `BLOCKING` finding is never cut. Where blocking findings alone exceed the
+cap, report them all and say so: what to do with a change in that state is the Tech Lead's call, not
+a trimming decision the reviewer makes quietly.
 
 Each comment: the file and line, what goes wrong, and a concrete suggestion. Address the code, never
 the author. State what the change does well in one line; a review with only negatives teaches
@@ -143,13 +215,22 @@ line it cites, and the summary as one review comment. Post nothing before showin
 
 - [ ] The requirement or design the change was reviewed against is named, or its absence is stated.
 - [ ] Every `BLOCKING` finding names a concrete failing input or broken contract.
+- [ ] Every reported finding was verified, and a `PLAUSIBLE` one names the check that would settle it.
+- [ ] Nothing was refuted for being unlikely: every drop rests on a line, a type, a guard, or the
+      absence of any observable effect.
 - [ ] Preferences are labelled `NIT` and do not block.
+- [ ] The list is within the cap, and a cut says how many findings went and at what severity.
+- [ ] A sweep for gaps ran once against the verified list, and returned nothing rather than padding
+      when it found nothing new.
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.
-- [ ] The width that ran is stated, and a width the machine forced down says so.
-- [ ] Every reviewer received the same scope, and a finding only one of them raised was checked
-      against the code before it was reported.
+- [ ] The rounds that ran are stated, along with any that returned empty and why, and a copy count
+      the machine forced down says so.
+- [ ] Every agent within a round received the same scope, and a finding only one copy of a round
+      raised was checked against the code before it was reported.
+- [ ] No spawned round was shown what an earlier round found, the closing sweep excepted. Where
+      every round ran in the calling agent, only the deduplicated list was carried between them.
 - [ ] A change touching a public contract either carried its reference document or stated the skip,
       and neither was silently fixed by the reviewer.
 - [ ] No comment addresses the author rather than the code.
