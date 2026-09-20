@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.3](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.2...v0.0.3) (2026-09-20)
+
+
+### Features
+
+* add atk:git, one road from finished work to the repository ([#19](https://github.com/lamngockhuong/aiteamkit/issues/19)) ([d282a91](https://github.com/lamngockhuong/aiteamkit/commit/d282a919d0e80004f00cbaea5fabd96552762b8f))
+* fill the project's own pull request template instead of replacing it ([#25](https://github.com/lamngockhuong/aiteamkit/issues/25)) ([81e0053](https://github.com/lamngockhuong/aiteamkit/commit/81e005361fd1f186dce1bfbbd1033ef7abc1133e))
+* offer the collaboration files a project has none of, in atk:convention ([#26](https://github.com/lamngockhuong/aiteamkit/issues/26)) ([89d3fa3](https://github.com/lamngockhuong/aiteamkit/commit/89d3fa3a5b324a8afbdc3e1e4b586a55bc86cfae))
+
+
+### Bug Fixes
+
+* measure what is left to carry, and correct the summary counts ([#24](https://github.com/lamngockhuong/aiteamkit/issues/24)) ([17ad6a9](https://github.com/lamngockhuong/aiteamkit/commit/17ad6a90f6da8ed148ee8c6ea477bf758bfecbca))
+* three review findings, two open questions, and the sweep's own agent ([#23](https://github.com/lamngockhuong/aiteamkit/issues/23)) ([da3a7c1](https://github.com/lamngockhuong/aiteamkit/commit/da3a7c126721ddf118de680040e6b0c7c09a740f))
+
 ## [0.0.2](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.1...v0.0.2) (2026-09-20)
 
 
