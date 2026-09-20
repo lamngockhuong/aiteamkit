@@ -266,7 +266,8 @@ a tidy-up of the surrounding file cannot be reverted cleanly.
 ## `atk:review`
 
 **Produces.** Review findings ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each citing a line, stating
-the failure it causes, and suggesting a concrete change. Optionally posted as inline PR comments.
+the failure it causes, and suggesting a concrete change. At most ten of them, or twenty under
+`--strict`, with the blocking ones never cut. Optionally posted as inline PR comments.
 
 **Use when.** Before approving a pull request, or when a review needs a second opinion.
 
@@ -278,11 +279,24 @@ and it separates blocking defects from preferences, which is what makes a review
 convention finding quotes the rule and cites its ID, so the author can dispute the rule rather than
 the reviewer.
 
-A change of more than five files gets several independent passes over the same diff where the
-harness can run agents in parallel, and each finding carries how many of those passes raised it. The
-width is bounded by the machine and can be forced with `--parallel <N>`; a finding only one pass
-raised is checked against the code before it is reported. Agreement between passes is still one
-model's work, never a stand-in for the colleague who approves.
+Nothing reaches the list unverified. A finding is confirmed when the input that triggers it can be
+named, and plausible when the mechanism is real but the trigger depends on timing, environment, or
+configuration; a plausible one carries the single check that would settle it, which is what lets the
+author close it in a minute. A candidate is dropped only on something the code shows, never for
+being unlikely, because the second habit is what keeps races and rare-path failures in a review
+instead of in production. Once that list exists, one more pass reads the diff looking only for what
+is not on it, and comes back empty rather than padded when there is nothing new. Where the cap cuts
+the list, correctness outranks convention and readability, and the review says how many findings went
+and at what severity.
+
+The review runs as nine rounds, one job each, so no pass has to hold every concern at once and none
+of them skips the same ground for the same reason. A round that has to go looking runs several
+copies where the harness can run agents in parallel, because one pass over a diff is not reliable on
+its own, and each of its findings carries how many copies raised it; a round that only checks the
+diff against a list that already exists runs once and reports under its own name. `--parallel <N>`
+forces the copy count, and a finding only one copy raised is checked against the code before it is
+reported. Several copies agreeing is still one model's work, never a stand-in for the colleague who
+approves.
 
 ---
 

@@ -69,7 +69,7 @@ skills/<name>/
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
 neighbours it must not steal. `references/` is where they still differ: the eight added after the
 first twelve (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`) carry one,
-`review` grew one for parallel review, and the other eleven are still `SKILL.md` alone. Deepening a
+`review` grew one for its round model, and the other eleven are still `SKILL.md` alone. Deepening a
 skill means adding `references/` files and pointing at them from the relevant workflow step, not
 growing `SKILL.md` past 300 lines.
 
