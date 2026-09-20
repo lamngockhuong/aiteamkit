@@ -83,6 +83,11 @@ internal metrics and no individual names.
 Retro at `docs/records/retros/<sprint-or-date>.md` per `shared/artifact-paths.md`, with the status report as
 a section or as its own file under `--report`.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Each action becomes one issue so the next retro can verify it.

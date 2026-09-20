@@ -70,9 +70,10 @@ flowchart TD
     end
 
     subgraph S5["5. Làm"]
-        M0["atk:implement<br/><small>Dev</small>"] --> M1["atk:review<br/><small>người review không bao giờ là tác giả</small>"]
+        M0["atk:implement<br/><small>Dev</small>"] --> MG["atk:git<br/><small>commit, push, pull request</small>"]
+        MG --> M1["atk:review<br/><small>người review không bao giờ là tác giả</small>"]
         M1 -->|Có lỗi chặn| M0
-        M1 -->|Đã duyệt| M2["Đã merge"]
+        M1 -->|Đã duyệt| M2["Đã merge<br/><small>atk:git, gọi đúng số PR</small>"]
     end
 
     subgraph S6["6. Kiểm chứng"]
@@ -125,6 +126,7 @@ flowchart TD
 | 4. Quy ước | `atk:convention` | TL | Cả đội đồng thuận, ghi theo từng quy tắc | `IN REVIEW` sang `APPROVED` |
 | 5. Làm | `atk:implement` | Dev | Người review ở dòng dưới | không có |
 | 5. Làm | `atk:review` | Người review, không bao giờ là tác giả | TL, khi vòng lặp chạm trần | không có |
+| 5. Làm | `atk:git` | Dev | Người review, người duyệt pull request mà nó mở | không có |
 | 6. Kiểm chứng | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm chứng | `atk:verify` | Dev hoặc QA | QA ký nhận trước khi ticket chuyển trạng thái | `DRAFT` |
 | 7. Phát hành | `atk:release` | PM cùng SRE | Stakeholder hoặc PM ra quyết định phát hành | `IN REVIEW` sang `APPROVED` |
@@ -144,6 +146,10 @@ flowchart LR
 
 `atk:fix` là skill duy nhất thò tay ngược vào chu trình: lỗi bắt ở pha 6 thì sửa xong quay lại pha 6,
 còn lỗi lộ ra sau khi phát hành thì mở thẳng pha 8.
+
+`atk:git` vẽ ở pha 5 vì đó là nơi phần lớn công việc đi tới một pull request, nhưng nó không gắn với
+pha nào. Mọi skill làm xong việc đều giao lại cho nó, nên một artifact viết ở pha 1 và một bản vá làm
+ở pha 8 đều đóng lại theo cùng một đường.
 
 `atk:spec` vẽ ở pha 3 vì đó là lúc một đội lần đầu viết ra vùng này làm gì, nhưng cạnh nét đứt đi từ
 chỗ merge mới là cạnh chạy thường xuyên nhất. Thay đổi nào đụng tới hợp đồng thì mang theo tài liệu

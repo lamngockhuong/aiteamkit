@@ -341,6 +341,28 @@ chạy dài vẫn là thay đổi có người phải review.
 
 ---
 
+## `atk:git`
+
+**Sinh ra.** Nhánh, các commit, và pull request. Diff được đọc trước khi bất cứ thứ gì được stage,
+phần đã stage được quét tìm thông tin đăng nhập và dữ liệu riêng tư, thay đổi được chia sao cho mỗi
+commit revert được một mình, và push, pull request, merge đều chờ một lời đồng ý dành riêng cho hành
+động đó.
+
+**Dùng khi.** Một skill hoặc một người đã làm xong và kiểm chứng xong một phần việc, và nó cần đi vào
+repository. Cũng dùng khi một nhánh đã tụt lại sau nhánh gốc, khi có conflict chắn đường, hoặc khi
+một chồng pull request phụ thuộc nhau cần dịch chuyển.
+
+**Không dùng khi.** Việc chưa xong. Skill này không quyết định giúp bạn chuyện đó, việc ấy thuộc về
+người đã làm. Với một lệnh lẻ dùng ngay, gọi thẳng agent của harness nhanh hơn.
+
+**Thói quen tạo ra khác biệt.** Nó không bao giờ stage thứ nó chưa đọc, và một thông tin đăng nhập
+nằm trong phần đã stage sẽ chặn cả lượt chạy, chứ không phải được báo rồi commit vòng qua. Một lần
+merge chỉ xảy ra với pull request mà một người đã gọi tên, trong chính lượt chạy đó, và chỉ sau một
+cửa kiểm tra biết từ chối khi có conflict, có kiểm tra đang hỏng, hoặc có người yêu cầu sửa, kèm câu
+nói rõ cái nào trong ba cái đã từ chối.
+
+---
+
 ## `atk:release`
 
 **Sinh ra.** Danh sách thay đổi lấy từ khoảng commit, ghi chú nội bộ và ghi chú cho khách tách bạch,

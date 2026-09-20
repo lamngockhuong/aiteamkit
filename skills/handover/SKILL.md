@@ -91,6 +91,11 @@ Written to `docs/records/handover/<date>-<from>-to-<to>.md` per `shared/artifact
 matter, scope, work inventory with true state, decisions, traps, access and duties, contacts, open
 questions, and the receiver's validation checklist.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Reassign in-flight tickets only after the receiver accepts, and

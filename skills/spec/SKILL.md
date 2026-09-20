@@ -131,6 +131,11 @@ or a state machine is genuinely hard to read as prose.
 
 `--check` writes nothing unless `--out` is given.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Link the document from the ticket that changed it, and record the

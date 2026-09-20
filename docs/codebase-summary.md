@@ -34,7 +34,7 @@ removed, or renamed; update it in the same commit.
 | `shared/review-checklist.md` | The order that resolves where a project keeps its conventions, the rule that a project which already writes them keeps its own shape, the `CONV-NNN` rule record format that `convention` writes and `review` cites, what each skill does with it, the eight baseline items with default severities, and the rule for retiring a stale rule. Cited by `convention`, `review` and `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` holds in the target project, why it lives there rather than in the kit, and the three-group rule deciding whether a skill stops, degrades, or ignores a missing profile |
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` holds in the target project, why one file per skill rather than several, the `## Before` and `## After` sections, the seven things an override may never remove, and the line it makes a skill print when it skips one. Reached from rule 7 of `shared/team-roles.md`, so every skill honours it |
-| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross. Cited by `fix`, `implement`, `verify`, and `tailor` for the consent line alone |
+| `shared/finalize-steps.md` | The closing sequence for any finished work: the reference documents it owes, branch, commit, merge, and the consent line every action past the commit has to cross. `atk:git` carries it out; this file is the contract. Cited by every skill that finishes something |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not. Cited by `fix`, `implement`, and `verify`, so all three say the same thing about the same result |
 | `shared/diagram-conventions.md` | When a diagram earns its place in an artifact, the four shapes the kit draws (approval flow, dependency graph, sequence, causal chain), and the rules that keep them readable: Mermaid only, `<br/>` not a literal newline, roles instead of names, both branches on every decision, no hardcoded fill colours. Cited by `catchup`, `design-doc`, `plan`, `breakdown`, and `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use and how to name one, the rule that a command from another kit still may not be named, what to do on a harness that has neither, the four rules of the tidy step, and the policy bounding how many reviewers a round runs at once. Cited by `fix`, `implement`, `verify`, and `review` |
@@ -81,6 +81,7 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Nine 
 | `skills/review/SKILL.md` | Development | Findings ranked blocking / should fix / nit, optionally posted to the PR |
 | `skills/qa/SKILL.md` | Verification | Test plan, traced test cases, regression matrix, entry and exit criteria |
 | `skills/verify/SKILL.md` | Verification | The running system exercised, side effects asserted in data, escalation after three rounds |
+| `skills/git/SKILL.md` | Version control | The diff read before staging, a scan that stops on a credential, commits that revert alone, and push, pull request and merge each behind their own yes |
 | `skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, rollback, sign-offs |
 | `skills/incident/SKILL.md` | Operation | Timeline, proven root cause, blameless postmortem, actions, runbook |
 | `skills/retro/SKILL.md` | Improvement | Previous actions verified, sprint evidence, three actions, status report |
@@ -116,6 +117,10 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/verify/references/runtime-checks.md` | Bringing the application up, exercising it, asserting a real side effect, and cleaning up |
 | `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
 | `skills/verify/references/report-template.md` | The verification report, naming what was proven and what was not |
+| `skills/git/references/secret-scan.md` | The patterns scanned for in the staged diff, the paths that are a finding on their own, and why a hit stops the whole run |
+| `skills/git/references/commit-craft.md` | Where one commit ends and the next begins, the formatting sweep trap, and what evidence the body carries |
+| `skills/git/references/repair.md` | Rebase, conflict resolution and fixup, with the three checks that come before any rewrite of remote history |
+| `skills/git/references/stacked.md` | The stacked pull request lifecycle, and where to stop: one consent and one readiness gate per layer |
 
 ### Trigger evals
 
@@ -139,6 +144,7 @@ all three trigger languages. The kit ships no runner; see `docs/project-roadmap.
 | `skills/review/evals/trigger_evals.json` | Reading a diff, against `qa`, `verify`, `fix`, and `catchup` |
 | `skills/qa/evals/trigger_evals.json` | Written cases and plans, against `verify` and automated test code |
 | `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
+| `skills/git/evals/trigger_evals.json` | Commits, pull requests and rebases, against `review`, `release` and `implement` |
 | `skills/release/evals/trigger_evals.json` | Notes and the deploy checklist, against `incident` and `qa` |
 | `skills/incident/evals/trigger_evals.json` | An outage and its postmortem, against `fix` and `release` |
 | `skills/retro/evals/trigger_evals.json` | Sprint evidence and the status report, against `estimate` and `handover` |

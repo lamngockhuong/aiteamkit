@@ -94,6 +94,11 @@ The timeline stays a table, because a reader checks it against a log line by lin
 diagram goes under the root cause, per `shared/diagram-conventions.md`, showing what led to what and
 where detection should have fired.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Each follow-up action becomes one issue linked to the incident.

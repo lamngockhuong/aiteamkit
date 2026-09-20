@@ -1,6 +1,6 @@
 # AI Team Kit (`atk`)
 
-Twenty skills covering the software delivery lifecycle of a **company project team**. Every skill
+Twenty-one skills covering the software delivery lifecycle of a **company project team**. Every skill
 assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read
 by someone who was not in the conversation that produced them. Those are roles rather than a
 headcount: a solo developer holding all of them gets the same gates, and still approves by hand.
@@ -56,6 +56,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences. |
 | `atk:qa` | A test plan, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria. |
 | `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |
+| `atk:git` | Finished work carried into the repository: the diff read before anything is staged, a scan that stops on a credential, commits that revert one at a time, and push, pull request and merge each behind a yes given for that action. |
 | `atk:release` | Release notes per audience, a checklist with an owner per step, migration reversibility, and a rollback path written before the deploy. |
 | `atk:incident` | A timestamped incident timeline, a root cause supported by evidence, a blameless postmortem, follow-up actions with owners, and the runbook. |
 | `atk:retro` | Last retro's actions verified first, sprint evidence from git and the tracker, at most three new actions, and the status report. |
@@ -82,6 +83,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:review <pr|branch|paths>             # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature>             # --plan|--cases|--regression --lang --out
 /atk:verify <module|paths|ticket>         # --ui --report-only --out
+/atk:git                                  # --commit|--pr|--merge|--rebase|--resolve|--stack --lang --out
 /atk:release <version|range>              # --notes|--checklist --audience --env --out
 /atk:incident                             # --live|--postmortem|--runbook --out
 /atk:retro <sprint|range>                 # --data-only|--report --audience --lang --out

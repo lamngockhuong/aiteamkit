@@ -22,6 +22,7 @@ flowchart LR
     A4["Task list<br/><small>owners, lanes, dependencies</small>"]
     A5["Plan<br/><small>phases and steps</small>"]
     A6["Code + implementation record"]
+    A6b["Pull request<br/><small>the record as its body</small>"]
     A7["Review findings"]
     A8["Test plan and cases"]
     A9["Verification report"]
@@ -37,7 +38,8 @@ flowchart LR
     A3b -->|design-doc| A3
     A4 -->|plan| A5
     A5 -->|implement| A6
-    A6 -->|review| A7
+    A6 -->|git| A6b
+    A6b -->|review| A7
     A7 -->|implement| A6
     A6 -->|spec --sync| A3b
     A3b -->|qa| A8
@@ -79,6 +81,7 @@ is why the arrow into them comes from the code rather than from the design that 
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit | `implement`, `fix` |
 | `qa` | Acceptance criteria and the change | Test plan, cases, regression matrix | `verify` |
 | `verify` | The running system | What was proven, and what was not | `release` |
+| `git` | A finished change or artifact, and the record the calling skill wrote | Commits, a branch, and the pull request that carries the record | `review`, then the approver |
 | `release` | The diff since the last version | Notes, checklist, rollback path | `incident`, `retro` |
 | `incident` | Logs, metrics, the timeline | Postmortem plus runbook | `retro`, `fix` |
 | `retro` | Git, the tracker, the team | Verified actions, evidence, status report | The next cycle |

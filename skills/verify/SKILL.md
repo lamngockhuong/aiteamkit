@@ -165,7 +165,9 @@ that was failing is re-run after it: a clean-up that puts that case back to red 
 than debugged, and the report says so. A run whose rounds changed nothing skips this and the
 paragraph below with it.
 
-Then close it through `shared/finalize-steps.md` like any other change the kit makes: the reference documents the change owes, the branch, the commit, and the consent line that everything past the commit has to cross. A
+Then close it by handing off to `atk:git`, like any other change the kit makes: the reference
+documents the change owes, the branch, the commit, and the consent line that everything past the
+commit has to cross, all of it the contract in `shared/finalize-steps.md`. A
 verification that ends with edited files sitting in the working tree and no decision about them is
 how a fix made at six o'clock gets committed by somebody else tomorrow, inside a commit about
 something else. A run that changed nothing skips this and says so.

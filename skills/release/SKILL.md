@@ -87,6 +87,11 @@ Written to `docs/records/releases/<version>.md` per `shared/artifact-paths.md`. 
 scope and change list, internal notes, client notes, migrations and config, checklist with owners,
 rollback plan, sign-offs, and known issues shipping with the release.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Map the release to the tracker's release, fix version, or

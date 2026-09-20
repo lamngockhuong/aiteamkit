@@ -161,9 +161,10 @@ record is the same as a review that never happened and was never missed.
 
 ### 6. Finalize
 
-Follow `shared/finalize-steps.md` for the reference documents the change owes, the branch, the
-commit, and every action past it. The consent line in that file is what keeps this skill from
-pushing, opening a pull request, or touching the ticket because it assumed a yes.
+Hand off to `atk:git` for the branch, the commit, and every action past it, with the implementation
+record as the pull request body. `shared/finalize-steps.md` is the contract that skill carries out,
+and it opens with the reference documents the change owes. The consent line in that file is what
+keeps a push, a pull request, or a ticket comment from happening on an assumed yes.
 
 Its first step is the one this skill reaches most often: a change that altered an endpoint, a
 response, an error code, a column, or an enum carries its reference document in the same commit, per

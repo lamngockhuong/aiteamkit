@@ -42,6 +42,7 @@ body:
         - Skill - atk:review
         - Skill - atk:qa
         - Skill - atk:verify
+        - Skill - atk:git
         - Skill - atk:release
         - Skill - atk:incident
         - Skill - atk:retro

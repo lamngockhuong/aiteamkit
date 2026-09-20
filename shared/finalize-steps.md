@@ -1,12 +1,22 @@
 # Finalize steps
 
-Shared closing sequence for every `atk` skill that changes code. Referenced from
+Shared closing sequence for every `atk` skill that finishes a piece of work. Referenced from
 `skills/<name>/SKILL.md` as `shared/finalize-steps.md`, which is `../../shared/finalize-steps.md`
 relative to a skill file.
 
-Cited by `fix`, `implement`, and `verify`. Reaching this file means the change is finished and
-verified by whatever the calling skill counts as verification. What is left is the document the
-change owes, then putting it where the team can see it, in the order that keeps it reviewable.
+Reaching this file means the work is finished and verified by whatever the calling skill counts as
+verification. What is left is the document the work owes, then putting it where the team can see it,
+in the order that keeps it reviewable.
+
+`atk:git` is the skill that carries this sequence out, and it is where the commands, the repair
+cases, and the stacked pull request lifecycle live. This file stays the contract: what is allowed,
+what is asked for, and what never happens. A skill that has finished its work hands off to
+`atk:git` rather than running git itself, so there is one road to a commit instead of one per
+skill.
+
+Two kinds of work reach here. A change to the code is the first, and everything below is written for
+it. The second is a change that produces only an artifact, which every skill that writes a document
+into the docs root produces; the section at the end says what is different about it.
 
 ## The consent line
 
@@ -22,6 +32,8 @@ ago on a different change.
 | Open a pull request | yes |
 | Comment on the issue | yes |
 | Move the ticket or assign a reviewer | yes |
+| Merge a pull request | yes, for that merge, every time |
+| Rewrite history already on the remote | yes, and only where the section below allows it |
 
 A pull request nobody asked for is the failure this table exists to prevent. It notifies the team,
 starts a review clock, and cannot be withdrawn quietly.
@@ -81,10 +93,59 @@ ways: the artifact front matter carries the ticket, the ticket carries the artif
 Move the ticket to the status the team's flow calls "in review" or its local equivalent. Do not move
 it to done. Done is the approver's word, and this skill is the author.
 
+## 6. Merge
+
+A merge happens only when a person asks for that merge. The decision is theirs; what the skill
+contributes is refusing to carry it out when the pull request is not ready.
+
+Three conditions, and none of them is optional:
+
+- **Consent for this merge.** Asked every time, never inherited from a yes given earlier in the run
+  or on another pull request. A pull request opened moments ago is not merged in the same breath.
+- **A readiness gate.** Refuse on a conflict, on a check that is failing, and on a review that
+  requested changes. Say which of the three refused it, because "not ready" sends the user to look
+  for the reason the skill already knows.
+- **Never as a side effect.** No merge follows from a push, from a green build, or from the user
+  saying yes to something else.
+
+A merge with checks still running is a different thing from a merge with checks passed. Where the
+host offers to merge once they pass, say that is what is being set up, and never describe it as
+merged until it is.
+
+## What happens only where it is allowed
+
+Rewriting history that is already on the remote is allowed on a branch that belongs to this work and
+nowhere else, after the user has asked for that rewrite. The cases are a rebase onto the base branch,
+a fixup of commits in the branch under review, and keeping a stacked pull request in line with the
+layer below it.
+
+Never on the default branch, on a release branch, or on a branch someone else is working on. Never
+to tidy history for its own sake. Before rewriting anything that is on the remote, say what will stop
+existing and confirm no one else has the branch checked out; a colleague who pulled it loses work
+that no reflog of yours can return.
+
 ## What never happens here
 
-- Force push, or any rewrite of history that is already on the remote.
-- Merging the pull request, including when the author has the permission to.
+- Force push to the default branch, a release branch, or any branch outside this work.
+- Rewriting remote history that nobody asked for, including as a tidy-up before a review.
 - Closing the issue. The person who reported it confirms it is fixed.
 - Pushing to the default branch directly.
+- Merging a pull request the user has not asked to merge, on this run, by its number.
 - Any of the above done quietly because the user is expected to want it.
+
+## When the work produced only an artifact
+
+A skill that writes a document into the docs root and changes no code reaches here too. Steps 2, 3
+and 5 hold as written: the branch, the commit, and the ticket link. Three things differ.
+
+Step 1 does not apply, because a document owes no other document.
+
+Step 4 is a judgement rather than a rule. A requirement document or a design belongs in a pull
+request, because its whole purpose is to be reviewed by the role that approves it, and the approval
+state in its front matter says as much. A catchup brief or a feedback record written for one reader
+does not, and offering one is noise. Ask when it is genuinely unclear; the front matter is the tell,
+since an artifact naming an approver is an artifact somebody has to see.
+
+The commit carries the artifact and the approval state it opened with. Do not commit an artifact and
+then move it to `APPROVED` in the same breath: the approval is a person's act, and a commit that
+contains both leaves no record that anyone read it.

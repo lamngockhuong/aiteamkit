@@ -143,9 +143,10 @@ file changed.
 
 ### 6. Report and finalize
 
-Write the report from `references/report-template.md`, then follow `shared/finalize-steps.md` for the
-reference documents the change owes, the branch, the commit, and anything that leaves the local
-repository.
+Write the report from `references/report-template.md`, then hand off to `atk:git` for the branch, the
+commit, and anything that leaves the local repository. `shared/finalize-steps.md` is the contract it
+carries out, and it opens with the reference documents the change owes. The report is the pull
+request body.
 
 A fix reaches that first step less often than an implementation does, and the case that matters is
 the one where the document was right all along and the code was wrong. Fixing the code closes the

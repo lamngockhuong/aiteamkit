@@ -30,6 +30,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `review` | Review comments go to the pull request; an optional copy goes to `docs/derived/reviews/<pr>-<date>.md` |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md` |
 | `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
+| `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
 | `release` | `docs/records/releases/<version>.md` |
 | `incident` | `docs/records/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
 | `retro` | `docs/records/retros/<sprint-or-date>.md` |
@@ -86,7 +87,7 @@ merged and which directory it goes in.
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Derived | the implementation record, the review report, the catchup brief, the skill feedback record | `docs/derived/<kind>/` | Safe to delete. Nothing here is the only copy |
+| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record | `docs/derived/<kind>/` | Safe to delete. Nothing here is the only copy |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -109,9 +110,9 @@ writing to `docs/design/` for a year, and splitting a directory in half is worse
 Every file in the first two groups is committed, the same as `.atk/profile.md`.
 
 `docs/derived/` is the only part of the tree a project may leave untracked, and nothing in the
-chain breaks if it does: the implementation record and the review report are copies of what lives on
-the pull request, a catchup brief is rebuilt by running `atk:catchup` again, and a feedback record
-is a copy of what was filed on the kit repository. No skill reads any of the four. A team that wants a smaller repository adds one line to `.gitignore`; a team that
+chain breaks if it does: the implementation record, the review report and the shipping record are
+copies of what lives on the pull request, a catchup brief is rebuilt by running `atk:catchup` again,
+and a feedback record is a copy of what was filed on the kit repository. No skill reads any of the four. A team that wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
 
 The split is why `docs/records/design/<ticket>-<slug>.md` and `docs/api/<resource>.md` are two

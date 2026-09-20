@@ -21,6 +21,7 @@ flowchart LR
     A4["Danh sách task<br/><small>chủ sở hữu, làn, phụ thuộc</small>"]
     A5["Kế hoạch<br/><small>pha và bước</small>"]
     A6["Code + bản ghi thực thi"]
+    A6b["Pull request<br/><small>bản ghi làm phần thân</small>"]
     A7["Kết quả review"]
     A8["Kế hoạch và test case"]
     A9["Báo cáo kiểm chứng"]
@@ -36,7 +37,8 @@ flowchart LR
     A3b -->|design-doc| A3
     A4 -->|plan| A5
     A5 -->|implement| A6
-    A6 -->|review| A7
+    A6 -->|git| A6b
+    A6b -->|review| A7
     A7 -->|implement| A6
     A6 -->|spec --sync| A3b
     A3b -->|qa| A8
@@ -78,6 +80,7 @@ mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết 
 | `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt | `implement`, `fix` |
 | `qa` | Tiêu chí nghiệm thu và thay đổi | Kế hoạch test, test case, ma trận hồi quy | `verify` |
 | `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | `release` |
+| `git` | Một thay đổi hoặc artifact đã xong, cùng bản ghi mà skill gọi nó đã viết | Các commit, một nhánh, và pull request mang bản ghi đó | `review`, rồi tới người duyệt |
 | `release` | Diff kể từ phiên bản trước | Ghi chú, checklist, đường lui | `incident`, `retro` |
 | `incident` | Log, số đo, dòng thời gian | Postmortem kèm runbook | `retro`, `fix` |
 | `retro` | Git, tracker, cả đội | Hành động đã kiểm, bằng chứng, báo cáo trạng thái | Chu kỳ sau |

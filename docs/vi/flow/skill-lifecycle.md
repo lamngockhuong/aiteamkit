@@ -76,7 +76,7 @@ Có năm loại, và chỉ bốn loại đầu xảy ra lúc chạy.
 
 | Loại | Công việc đi đâu | Xuất hiện ở |
 |------|------------------|-------------|
-| Gọi rồi đi tiếp | Skill kia chạy, trả kết quả về, skill này chạy tiếp | `implement` sang `plan`, `implement` sang `review`, `implement` sang `spec` |
+| Gọi rồi đi tiếp | Skill kia chạy, trả kết quả về, skill này chạy tiếp | `implement` sang `plan`, `implement` sang `review`, `implement` sang `spec`, và mọi skill làm xong việc sang `git` |
 | Dừng và giao lại | Skill này không đổi thêm gì nữa; công việc chuyển đi | `implement` sang `design-doc`, `implement` sang `fix`, `plan` sang `design-doc` |
 | Đề nghị và chờ một tiếng đồng ý | Có thể không xảy ra, và bản ghi nói rõ là đã xảy ra hay chưa | `implement` sang `verify` |
 | Gửi ngược một phát hiện | Skill này chạy tiếp; skill kia mới là nơi ghi lại phát hiện đó | `review` sang `convention`, `verify` sang `qa` |
@@ -93,6 +93,7 @@ flowchart TD
     QA["atk:qa"]
     CNV["atk:convention"]
     SPC["atk:spec"]
+    GIT["atk:git"]
 
     IMP -->|"gọi: phần việc cỡ vừa"| PLN
     IMP -->|"gọi: rồi sửa thứ bị chặn"| REV
@@ -100,6 +101,7 @@ flowchart TD
     IMP -->|"dừng: đầu vào là một lỗi"| FIX
     PLN -->|"dừng: có hai phương án cần so"| DSG
     IMP -->|"gọi: hợp đồng vừa đổi"| SPC
+    IMP -->|"gọi: phần việc đã xong"| GIT
     IMP -.->|"đề nghị: cần một tiếng đồng ý"| VER
     REV -.->|"gửi ngược khoảng trống quy ước"| CNV
     VER -.->|"gửi ngược ca chưa ai nghĩ tới"| QA
