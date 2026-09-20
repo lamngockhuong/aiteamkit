@@ -67,11 +67,11 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: the eight added after the
-first twelve (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`) carry one,
-`review` grew one for its round model, and the other eleven are still `SKILL.md` alone. Deepening a
-skill means adding `references/` files and pointing at them from the relevant workflow step, not
-growing `SKILL.md` past 300 lines.
+neighbours it must not steal. `references/` is where they still differ: ten of them carry
+one (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`, `git`),
+and the other eleven are still `SKILL.md` alone. `git` holds the most, five, because the closing
+sequence has more cases than its workflow line names. Deepening a skill means adding `references/`
+files and pointing at them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
