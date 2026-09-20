@@ -3,7 +3,9 @@
 Shared output convention for every `atk` skill. Referenced from `skills/<name>/SKILL.md` as
 `shared/artifact-paths.md`, which is `../../shared/artifact-paths.md` relative to a skill file.
 
-Every skill writes Markdown into the **target project**, never into the atk kit itself.
+Every skill writes Markdown into the **target project**, never into the atk kit itself. The one
+exception is `atk:convention`, which may also write the project's own collaboration files, one of
+which is not Markdown; the paragraph after the table says what they are.
 
 ## Root
 
@@ -23,7 +25,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
-| `convention` | `docs/conventions.md` (and `CONTRIBUTING.md` when the project has one) |
+| `convention` | `docs/conventions.md`; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
@@ -39,9 +41,21 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 
 `--out <path>` overrides the default on every skill.
 
+`atk:convention` may also write `CONTRIBUTING.md`, the pull request template, and `CODEOWNERS`, each
+at the location its host reads, per `shared/host-file-locations.md`, and never into the docs tree
+this file governs. They are the project's own collaboration files rather than artifacts of this kit:
+none carries the front matter block, `CODEOWNERS` is not Markdown at all, and the persistence groups
+below do not classify them. What they do share with every group is that they are **committed**: the
+team owns them afterwards the way it owns its linter config, and updates them the way it updates
+one. `--out` does not move them, because a host reads them where it reads them and nowhere else.
+`skills/convention/references/collaboration-files.md` holds the rest, including that they are
+offered and picked rather than created.
+
 ### The exceptions: `init`, `tailor`, and `plan`
 
-Three skills write outside the docs root, for two different reasons.
+Three skills write **artifacts** outside the docs root, for two different reasons. The collaboration
+files above are a separate case and not counted here: they are the project's files rather than this
+kit's, and where they go is the host's decision rather than ours.
 
 `atk:init` writes to `.atk/profile.md` and `atk:tailor` writes to `.atk/overrides/<skill>.md`. Every
 other artifact here is prose a person reads and reviews; these two are read by a skill, and mixing

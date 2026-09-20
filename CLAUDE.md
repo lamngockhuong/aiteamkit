@@ -67,10 +67,10 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: ten of them carry
-one (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`, `git`),
-and the other eleven are still `SKILL.md` alone. `git` holds the most, five, because the closing
-sequence has more cases than its workflow line names. Deepening a skill means adding `references/`
+neighbours it must not steal. `references/` is where they still differ: eleven of them carry
+one (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`, `git`,
+`convention`), and the other ten are still `SKILL.md` alone. `git` holds the most, five, because
+the closing sequence has more cases than its workflow line names. Deepening a skill means adding `references/`
 files and pointing at them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
@@ -87,7 +87,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Twelve files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Thirteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -105,6 +105,7 @@ skill discovery.
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers | `fix`, `implement`, `verify`, `review` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
+| `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.

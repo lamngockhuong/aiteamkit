@@ -185,10 +185,14 @@ phân loại `ENFORCED` (công cụ chặn), `REVIEWED` (người kiểm trong r
 ai kiểm), kèm công cụ có thể tự động hóa những quy tắc đang phải kiểm bằng tay. Một team đã có sẵn
 bộ tài liệu chuẩn thì phần phân loại đó được viết vào chính bộ tài liệu ấy, theo đúng hình dạng team
 đang dùng: `docs/conventions.md` là giá trị mặc định của kit, không phải địa chỉ mà mọi dự án phải
-chuyển sang.
+chuyển sang. Nếu dự án chưa có `CONTRIBUTING.md`, template pull request hay `CODEOWNERS`, skill đề
+nghị soạn và chỉ ghi những file bạn chọn; cờ `--scaffold` đưa ra đề nghị đó mà không chạy lại cả
+lượt rút quy ước. File bạn đã có thì để yên, trừ khi chạy `--sync`: lúc đó skill chỉ ra chỗ
+checklist hay danh sách người sở hữu đã tụt lại và đề nghị đúng phần thay đổi đó.
 
-**Dùng khi.** Chưa có quy ước viết ra, quy ước đã viết không còn khớp với code, hoặc review cứ lặp
-đi lặp lại cùng một comment.
+**Dùng khi.** Chưa có quy ước viết ra, quy ước đã viết không còn khớp với code, review cứ lặp đi
+lặp lại cùng một comment, hoặc repo chưa có `CONTRIBUTING.md`, template pull request và
+`CODEOWNERS`.
 
 **Không dùng khi.** Bạn muốn bê một style guide từ nơi khác về. Skill này ghi lại thứ team đang làm,
 không phải thứ một tài liệu bên ngoài khuyến nghị.

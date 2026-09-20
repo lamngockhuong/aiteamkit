@@ -64,13 +64,13 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Twelve files hold what skills would otherwise repeat. The first three are cited by all 20:
+Thirteen files hold what skills would otherwise repeat. The first three are cited by all 21:
 
 - `shared/team-roles.md`: the role table and the seven rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
-Seven are contracts between a named handful of skills rather than kit-wide rules:
+Eight are contracts between a named handful of skills rather than kit-wide rules:
 
 - `shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
@@ -116,6 +116,12 @@ Seven are contracts between a named handful of skills rather than kit-wide rules
   `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave them true. It is
   the widest of these contracts, because `shared/finalize-steps.md` now opens with its obligation,
   which makes every code-changing skill a party to it.
+- `shared/host-file-locations.md`: how the code host is detected, every location each host reads
+  `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one of them counts as
+  present. Cited by `atk:convention`, which decides from it whether a file is missing and therefore
+  worth offering to draft, and by `atk:git`, which finds the template it has to fill. The two ask
+  the same question from opposite ends, and a narrower answer in either one is how a repository
+  ends up with a second template that outranks the team's own.
 
 The last two describe files that do not ship with the kit at all:
 

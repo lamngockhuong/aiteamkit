@@ -6,7 +6,7 @@
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
 | 2. Độ phủ skill | XONG | 20 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Chín skill đã có, mười một skill gốc chưa |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười một skill đã có, mười skill còn lại chưa |
 | 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 20 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
@@ -40,7 +40,7 @@ cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để t�
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Chín skill đã có sẵn `references/`. Mười một skill gốc còn lại thì chưa. Với những skill có output là
+Mười một skill đã có sẵn `references/`. Mười skill còn lại thì chưa. Với những skill có output là
 tài liệu bố cục cố định, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |

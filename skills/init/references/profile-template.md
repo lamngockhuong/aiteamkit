@@ -67,17 +67,20 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 ## Team
 
-| Role | Name | Approves |
-|------|------|----------|
-| PM | <name, or "TBD (ask <person>)"> | <what this person signs off> |
-| BrSE / BA | <name, or "TBD (ask <person>)"> | |
-| Tech Lead | <name, or "TBD (ask <person>)"> | |
-| QA | <name, or "TBD (ask <person>)"> | |
-| SRE | <name, or "TBD (ask <person>)"> | |
+| Role | Name | Host identifier | Approves |
+|------|------|-----------------|----------|
+| PM | <name, or "TBD (ask <person>)"> | <@handle, @org/team, or an email> | <what this person signs off> |
+| BrSE / BA | <name, or "TBD (ask <person>)"> | | |
+| Tech Lead | <name, or "TBD (ask <person>)"> | | |
+| QA | <name, or "TBD (ask <person>)"> | | |
+| SRE | <name, or "TBD (ask <person>)"> | | |
 
 - Working language: <language the team writes artifacts in>
 
 <!-- Roles the team does not have are omitted, not filled with a placeholder person. -->
+<!-- The host identifier is what a code host knows the person by, and it is what a CODEOWNERS
+     entry or a review request has to carry. A real name is not one. Leave it empty where the
+     person has not given it; never take one from commit metadata. -->
 <!-- The issue reference format is not recorded here; shared/ticket-adapters.md owns it. -->
 
 ## Verify

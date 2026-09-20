@@ -40,6 +40,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `shared/diagram-conventions.md` | Khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình kit vẽ (luồng duyệt, đồ thị phụ thuộc, sequence, chuỗi nhân quả), và các quy tắc giữ cho chúng dễ đọc: chỉ Mermaid, xuống dòng bằng `<br/>` chứ không bằng ký tự xuống dòng thô, gọi vai trò thay vì gọi tên người, hình thoi nào cũng có đủ hai nhánh, không đặt màu nền cứng. `catchup`, `design-doc`, `plan`, `breakdown` và `incident` trích dẫn |
 | `shared/host-capabilities.md` | Skill được dùng những khả năng nào của agent chủ và gọi tên chúng ra sao, nguyên tắc vẫn cấm gọi tên lệnh của một kit khác, cách xử lý trên harness không có khả năng đó, bốn quy tắc của bước dọn mã, và phần chính sách chặn số agent review chạy đồng thời trong một vòng. `fix`, `implement`, `verify` và `review` trích dẫn |
 | `shared/spec-docs.md` | Điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, nguyên tắc hình dạng tài liệu sẵn có của dự án thắng template của kit, năm loại thay đổi buộc pull request phải mang theo tài liệu tham chiếu, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `spec`, `design-doc`, `implement`, `fix`, `verify` và `review` trích dẫn |
+| `shared/host-file-locations.md` | Cách nhận ra code host theo thứ tự riêng, các vị trí mà GitHub và GitLab đọc `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, cả hai cách viết hoa thường, và luật một file có mặt ở bất kỳ vị trí nào thì coi như đã có, kể cả vì sao một file rỗng ruột vẫn tính là chưa có. `convention` dùng để biết thiếu gì, `git` dùng để tìm template phải điền |
 | `shared/tidy-pass.md` | Nội dung của bước dọn mã: ba lăng kính (tái dùng, sáng rõ, hiệu năng), phần được sửa, phần không bao giờ đụng, và những gì phải soi lại trong diff sau đó. `fix`, `implement` và `verify` trích dẫn thông qua `host-capabilities.md`, và đây là lý do kit không có skill `simplify` |
 
 ## Hook
@@ -62,8 +63,8 @@ Kit tự áp lên mình. Do `atk:init` và `atk:tailor` viết ra ngay trong rep
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Chín skill có thêm `references/`;
-mười một skill gốc còn lại thì chưa.
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười một skill có thêm `references/`;
+mười skill còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
@@ -102,6 +103,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/tailor/references/feedback.md` | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, và hai thứ nó không bao giờ được chứa |
 | `skills/catchup/references/brief-template.md` | Một khung chung cho hai chế độ, phần khác nhau giữa epic và pull request được đánh dấu theo từng mục |
 | `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, bảng phân loại kiểu tính năng, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
+| `skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |
 | `skills/plan/references/step-ordering.md` | Hai lần cắt, theo phase và theo bước, mỗi lần một quy tắc riêng |
 | `skills/plan/references/plan-template.md` | Trang chỉ mục của kế hoạch và một file phase |
 | `skills/implement/references/plan-gate.md` | Ba mức quyết định một phần việc cần bao nhiêu đồng thuận trước khi viết dòng mã đầu tiên |

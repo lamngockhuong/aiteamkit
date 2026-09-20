@@ -40,6 +40,7 @@ removed, or renamed; update it in the same commit.
 | `shared/diagram-conventions.md` | When a diagram earns its place in an artifact, the four shapes the kit draws (approval flow, dependency graph, sequence, causal chain), and the rules that keep them readable: Mermaid only, `<br/>` not a literal newline, roles instead of names, both branches on every decision, no hardcoded fill colours. Cited by `catchup`, `design-doc`, `plan`, `breakdown`, and `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use and how to name one, the rule that a command from another kit still may not be named, what to do on a harness that has neither, the four rules of the tidy step, and the policy bounding how many reviewers a round runs at once. Cited by `fix`, `implement`, `verify`, and `review` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, the rule that the project's own document shape wins over a kit template, the five kinds of change that oblige a pull request to carry its reference document, and the line between drift and a question nobody has answered. Cited by `spec`, `design-doc`, `implement`, `fix`, `verify`, and `review` |
+| `shared/host-file-locations.md` | Host detection in its own order, the locations GitHub and GitLab read `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, both spellings, and the rule that a file present at any of them is present, including why a stub counts as absent. Cited by `convention` to decide what is missing and by `git` to find the template it fills |
 | `shared/tidy-pass.md` | The content of the tidy step: three lenses (reuse, clarity, efficiency), what may be changed, what is never touched, and what to read in the diff afterwards. Cited by `fix`, `implement`, and `verify` through `host-capabilities.md`, and the reason the kit ships no `simplify` skill |
 
 ## Hooks
@@ -62,8 +63,8 @@ skills at the top of their workflow, and committed so the next maintainer inheri
 
 ## Skills
 
-Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Nine also carry
-`references/`; the eleven original ones do not yet.
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Eleven also carry
+`references/`; the other ten do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
@@ -102,6 +103,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/tailor/references/feedback.md` | The three-way fork a bad run splits into, what the `--feedback` record holds, and the two things it may never hold |
 | `skills/catchup/references/brief-template.md` | One skeleton for both modes, with the epic and pull-request differences marked per section |
 | `skills/catchup/references/understanding-check.md` | The fixed questions, the feature type table, and the two rules deciding whether the check is worth anything |
+| `skills/convention/references/collaboration-files.md` | What `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` each carry, where each host keeps them, and why an owner never comes from git history |
 | `skills/plan/references/step-ordering.md` | The two cuts, phase and step, and the rule for each |
 | `skills/plan/references/plan-template.md` | The plan index and the phase file |
 | `skills/implement/references/plan-gate.md` | The three settings deciding how much agreement the work needs before code is written |

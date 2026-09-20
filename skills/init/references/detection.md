@@ -174,6 +174,7 @@ Ask these, and nothing else:
 | Fact | Why no file holds it |
 |------|----------------------|
 | Role to real name | Git history shows who commits, not who is Tech Lead |
+| A person's host identifier | Commit metadata carries the address that wrote a commit, which is neither the handle the host knows them by nor a statement that they own anything |
 | Who approves what | An approval rule is an agreement, not a file |
 | Working language | The repository may be English while the team works in another language |
 | Where the spec lives | Often a wiki, a drive, or a chat channel outside the repository |
@@ -184,8 +185,9 @@ detected value is shown for confirmation in one pass, not to the interview.
 ## The question budget
 
 The unit is **one turn asking the user**, not one fact. Four turns are fixed: the team table (all
-roles and their approvals in a single question, never one question per role), the working language,
-where the spec lives, and who approves the profile.
+roles, their host identifiers and their approvals in a single question, never one question per role
+and never a second turn for the identifiers), the working language, where the spec lives, and who
+approves the profile.
 
 That leaves four turns for the ambiguities the section above can raise: two lock files, a watch-mode
 test script, a command that needs another command first, a member list that does not group cleanly,
