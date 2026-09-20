@@ -186,8 +186,9 @@ the kit's default, not an address every project has to move to. Where the projec
 `CONTRIBUTING.md`, pull request template or `CODEOWNERS`, it offers to draft them and writes only
 the ones you pick; `--scaffold` offers them without a full derivation pass.
 
-**Use when.** There is no written convention, the written one no longer matches the code, or reviews
-keep repeating the same comment.
+**Use when.** There is no written convention, the written one no longer matches the code, reviews
+keep repeating the same comment, or the repository has no `CONTRIBUTING.md`, pull request template
+or `CODEOWNERS`.
 
 **Do not use when.** You want a style guide imported from elsewhere. This skill documents what the
 team does, not what an external guide recommends.

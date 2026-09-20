@@ -87,7 +87,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Twelve files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Thirteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -105,6 +105,7 @@ skill discovery.
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers | `fix`, `implement`, `verify`, `review` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
+| `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.

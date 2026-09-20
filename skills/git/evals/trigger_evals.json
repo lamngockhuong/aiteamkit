@@ -14,7 +14,6 @@
   { "query": "コミットメッセージを書いてコミットして", "should_trigger": true },
   { "query": "プルリクエストを作成して", "should_trigger": true },
   { "query": "このブランチをリベースして", "should_trigger": true },
-
   { "query": "review the changes on this pull request", "should_trigger": false },
   { "query": "review giúp tôi PR này", "should_trigger": false },
   { "query": "このPRをレビューして", "should_trigger": false },
@@ -24,5 +23,7 @@
   { "query": "fix this failing test", "should_trigger": false },
   { "query": "verify the fix works in the running app", "should_trigger": false },
   { "query": "write the coding conventions document", "should_trigger": false },
-  { "query": "hand over my work to another developer", "should_trigger": false }
+  { "query": "hand over my work to another developer", "should_trigger": false },
+  { "query": "draft a pull request template for this repo", "should_trigger": false },
+  { "query": "viết file CODEOWNERS cho dự án", "should_trigger": false }
 ]

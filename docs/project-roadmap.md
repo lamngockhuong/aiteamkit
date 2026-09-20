@@ -6,7 +6,7 @@
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
 | 2. Skill coverage | DONE | 20 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for nine, pending for the eleven original ones |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for eleven, pending for the other ten |
 | 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 20 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
@@ -41,7 +41,7 @@ five skills that have to leave its documents true, and `project-profile.md`, whi
 
 ## Phase 3: Reference depth (in progress)
 
-Nine skills ship with `references/` already. The eleven original ones without them do not. For those
+Eleven skills ship with `references/` already. The other ten do not. For those
 whose output is a document with a fixed shape, the template is re-derived on every run:
 
 | Skill | Reference to add |

@@ -4,10 +4,16 @@ description: >
   Extract, record, and enforce the coding conventions a team actually follows: branch and commit
   rules, naming, layering, error handling, test layout, review etiquette, and the tooling that
   enforces each rule automatically.
-  Use when a team has no written convention, when the written one no longer matches the code, or
-  when reviews keep repeating the same comment.
+  Also offers to draft the collaboration files the project has none of, `CONTRIBUTING.md`, the
+  pull request template, and `CODEOWNERS`, writing only the ones the team picks.
+  Use when a team has no written convention, when the written one no longer matches the code, when
+  reviews keep repeating the same comment, or when the repository has no contribution guide, pull
+  request template, or owners file.
   Triggers on: "convention", "coding standard", "quy ước code", "coding rule", "style guide",
-  "branch strategy", "commit convention", "コーディング規約", "our team rules", "/atk:convention".
+  "branch strategy", "commit convention", "コーディング規約", "our team rules", "CONTRIBUTING.md",
+  "CODEOWNERS", "contribution guide", "set up a pull request template", "tạo CONTRIBUTING",
+  "file CODEOWNERS", "mẫu pull request cho dự án", "コントリビューションガイド",
+  "プルリクエストのテンプレートを作成", "/atk:convention".
 argument-hint: "[--audit|--init|--sync|--scaffold] [--scope <paths>] [--lang <code>] [--out <path>]"
 ---
 
@@ -41,7 +47,7 @@ team agreeing is a proposal, marked as such. See `shared/team-roles.md`.
 /atk:convention --scaffold        # Offer the collaboration files the project lacks; write only the ones picked
 /atk:convention --scope src/api   # Limit derivation to given paths
 /atk:convention --lang vi         # Write the document and the report in Vietnamese
-/atk:convention --out <path>      # Override the default output path
+/atk:convention --out <path>      # Override the conventions document path; never the step 6 files
 ```
 
 ## Workflow
@@ -66,8 +72,10 @@ first file in it.
 
 Read `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, `.editorconfig`, linter and formatter configs,
 `CODEOWNERS`, and PR templates as well, and record which of them exist: a convention nobody read is
-reported as absent rather than as followed. The absent ones are what step 6 offers. Do not duplicate
-what a config file already states: link to it. A rule the project has already written is not
+reported as absent rather than as followed. Of these, the three that step 6 offers are
+`CONTRIBUTING.md`, the pull request template, and `CODEOWNERS`; resolve whether each exists through
+`shared/host-file-locations.md`, which lists every location its host reads. The rest are read here
+and never drafted. Do not duplicate what a config file already states: link to it. A rule the project has already written is not
 rewritten here either; it is classified in step 3 and cited where it lives.
 
 ### 2. Derive from the code
@@ -126,10 +134,17 @@ is an answer and ends the step. Never write one because a project of this shape 
 three files bind everyone who opens a pull request here, including people who never installed this
 kit, so which of them exists is the Tech Lead's call under rule 3 of `shared/team-roles.md`.
 
-`references/collaboration-files.md` holds what each file carries, where it lives on a host that is
-not GitHub, and why an owner is never derived from who touched a file last. A file the project
-already has is left alone; where it disagrees with what this run found, that is an open question
-carrying a name, never a rewrite.
+`references/collaboration-files.md` holds what each file carries, what a drafted `CODEOWNERS` needs
+before it may be offered at all, and why an owner is never derived from who touched a file last.
+Where each file lives is `shared/host-file-locations.md`, and a file present at any of its locations
+is left alone; where it disagrees with what this run found, that is an open question carrying a
+name, never a rewrite.
+
+A written file is a proposal until the Tech Lead accepts the pull request carrying it, the same as
+every rule `--init` writes. Record who picked it and which role approves it where this run's other
+output goes, and name the paths written so the Docs section of `.atk/profile.md` records them, as
+step 5 does for the checklist. Under `--scope`, say which part of the repository the run actually
+read, because these three files bind all of it.
 
 ### `--audit`
 
@@ -174,9 +189,15 @@ Runs step 1 and step 6 and nothing else. It is for a team that has its conventio
 and wants the files that carry them into daily work, without a full derivation pass rewriting the
 document on the way.
 
-The drafts are built from what step 1 read. Where the project has recorded no rules, say so and
-offer the files with the sections a rule would have filled left out, rather than borrowing a
-checklist from elsewhere.
+The drafts are built from what step 1 read. A conventions document written by hand carries rules
+with no bucket against them, and this flag does not classify them, because that is step 3 and it is
+the Tech Lead's output. Such a rule gets no checkbox: list them in the template as a link to the
+document and say how many were left unclassified, or run the skill without the flag to have them
+classified first.
+
+Where the project has recorded no rules at all, say so and draft the template with the baseline
+items alone, per `references/collaboration-files.md`. Where nothing is missing, say that too; a run
+that found all three present has an answer rather than no output.
 
 ## Output
 
@@ -192,11 +213,12 @@ For a project that already keeps conventions, the same content goes into the sha
 and the two sections it will not have are the review checklist and the enforcement table. Those are
 the addition; the rest is classification of what is already written.
 
-The files from step 6 go to the repository root or to the host's own directory, never under the docs
-root, and they are the project's own collaboration files rather than artifacts of this kit: none of
-them carries the front matter block or an approval state, per `references/collaboration-files.md`.
+The files the user picked in step 6 go where their host reads them, per
+`shared/host-file-locations.md`, and not into the docs tree `shared/artifact-paths.md` governs. They
+are the project's own collaboration files rather than artifacts of this kit: none carries the front
+matter block, and they are committed like the project's linter config.
 
-Putting it where the team can see it is `atk:git`, which follows the artifact section of
+Putting the conventions document where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
 in a pull request for its approver to read. Whether it is committed at all is the persistence group
 it falls into, per `shared/artifact-paths.md`.
@@ -218,6 +240,7 @@ only when the user asks.
 - [ ] `--sync` left the wording of every rule the code still matches untouched.
 - [ ] Rules the team has not agreed to are marked as proposals.
 - [ ] The review checklist section carries only `REVIEWED` rules, each with an ID and a default severity.
-- [ ] Every missing collaboration file was offered and none was written unpicked, and a file the
-      project already had was left as it was.
-- [ ] No owner in a drafted `CODEOWNERS` came from who touched a file last.
+- [ ] On a run reaching step 6, every missing collaboration file was offered, none was written
+      unpicked, and a file the project already had at any of its host's locations was left alone.
+- [ ] A drafted `CODEOWNERS` was offered only where the Team section named owners with host
+      identifiers, and no owner came from git history or from commit metadata.

@@ -189,8 +189,9 @@ chuyển sang. Nếu dự án chưa có `CONTRIBUTING.md`, template pull request
 nghị soạn và chỉ ghi những file bạn chọn; cờ `--scaffold` đưa ra đề nghị đó mà không chạy lại cả
 lượt rút quy ước.
 
-**Dùng khi.** Chưa có quy ước viết ra, quy ước đã viết không còn khớp với code, hoặc review cứ lặp
-đi lặp lại cùng một comment.
+**Dùng khi.** Chưa có quy ước viết ra, quy ước đã viết không còn khớp với code, review cứ lặp đi
+lặp lại cùng một comment, hoặc repo chưa có `CONTRIBUTING.md`, template pull request và
+`CODEOWNERS`.
 
 **Không dùng khi.** Bạn muốn bê một style guide từ nơi khác về. Skill này ghi lại thứ team đang làm,
 không phải thứ một tài liệu bên ngoài khuyến nghị.

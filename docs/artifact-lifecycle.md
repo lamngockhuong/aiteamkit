@@ -1,6 +1,6 @@
 # Artifact Lifecycle
 
-Every skill in this kit writes Markdown into your repository. A team adopting `atk` asks two
+Every skill in this kit writes Markdown into your repository, with one exception named at the end. A team adopting `atk` asks two
 questions in its first week: do we commit all of this, and may we delete any of it later. This
 document answers both and says what each answer costs, so the team decides rather than guesses.
 
@@ -34,6 +34,18 @@ flowchart TB
 | Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes | Always, in place | No. It is the only statement of what the system does today |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead | Only as a decision somebody owns, never as a blanket rule |
 | Derived | everything under `docs/derived/` | Optional | Run the skill again | Yes, freely |
+
+## The three files that are not in any group
+
+`atk:convention` can draft `CONTRIBUTING.md`, a pull request template, and `CODEOWNERS`, and only
+when you pick them. These are not artifacts of the kit and no group above classifies them. They are
+your project's own collaboration files, the way your linter config is: your code host reads them,
+people who never installed `atk` are bound by them, and one of them is not Markdown.
+
+What that means in practice is short. **Commit them**, always. Change them whenever the team decides
+to, in place, by hand or through another run of the skill that drafted them. Deleting one costs
+whatever the host stops doing for you: no template means reviewers see a diff and nothing else, and
+no `CODEOWNERS` means reviews stop routing themselves.
 
 ## What deleting each one costs
 

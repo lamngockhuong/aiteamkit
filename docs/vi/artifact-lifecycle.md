@@ -1,6 +1,6 @@
 # Vòng đời artifact
 
-Mọi skill trong kit đều ghi Markdown vào repo của bạn. Tuần đầu tiên dùng `atk`, đội nào cũng hỏi
+Mọi skill trong kit đều ghi Markdown vào repo của bạn, trừ một ngoại lệ nói ở cuối trang. Tuần đầu tiên dùng `atk`, đội nào cũng hỏi
 hai câu: có phải commit hết không, và sau này có được xóa bớt không. Tài liệu này trả lời cả hai và
 nói rõ mỗi lựa chọn mất gì, để đội tự quyết thay vì đoán.
 
@@ -34,6 +34,18 @@ flowchart TB
 | Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì |
 | Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
 | Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội | Chạy lại skill | Được, thoải mái |
+
+## Ba file không thuộc nhóm nào
+
+`atk:convention` có thể soạn `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, và chỉ soạn
+khi bạn chọn. Chúng không phải artifact của kit và không nhóm nào ở trên xếp chỗ cho chúng. Chúng là
+file cộng tác của chính dự án bạn, giống như file cấu hình linter: code host đọc chúng, người chưa
+từng cài `atk` vẫn bị chúng ràng buộc, và một trong ba file không phải Markdown.
+
+Nói gọn thì thế này. **Luôn commit chúng.** Sửa bất cứ lúc nào đội quyết sửa, sửa tại chỗ, bằng tay
+hoặc bằng một lượt chạy khác của skill đã soạn ra chúng. Xóa một file thì mất đúng phần việc host
+thôi làm giúp: không có template thì reviewer chỉ còn nhìn diff, không có `CODEOWNERS` thì review
+thôi tự động định tuyến.
 
 ## Xóa mỗi nhóm thì mất gì
 

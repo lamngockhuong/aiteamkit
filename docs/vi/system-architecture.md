@@ -63,13 +63,13 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười hai file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 20 skill trích dẫn:
+Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 21 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và bảy nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
-Bảy file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -114,6 +114,11 @@ Bảy file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   `atk:verify` có nghĩa vụ để chúng đúng. Đây là hợp đồng rộng nhất trong nhóm, vì
   `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi skill đổi mã nguồn đều là
   một bên của nó.
+- `shared/host-file-locations.md`: cách nhận ra code host, mọi vị trí mà từng host đọc
+  `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, cùng lúc nào một file được tính là đã
+  có. `atk:convention` dựa vào đó để biết file nào thiếu mà đề nghị soạn, `atk:git` dựa vào đó để
+  tìm template phải điền. Hai skill hỏi cùng một câu từ hai đầu, và chỉ cần một bên trả lời hẹp hơn
+  là repo có thêm một template thứ hai đè lên template của chính đội.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

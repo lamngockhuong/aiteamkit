@@ -9,7 +9,6 @@
   { "query": "our style guide no longer matches the code, sync it", "should_trigger": true },
   { "query": "/atk:convention --sync --scope src/api", "should_trigger": true },
   { "query": "kiểm tra xem code còn khớp với quy ước đã viết không", "should_trigger": true },
-
   { "query": "review this pull request", "should_trigger": false },
   { "query": "duyệt code giúp tôi", "should_trigger": false },
   { "query": "viết tài liệu đặc tả cho API orders", "should_trigger": false },
@@ -19,5 +18,12 @@
   { "query": "khởi tạo profile dự án cho atk", "should_trigger": false },
   { "query": "team này muốn atk:review làm khác đi một chút", "should_trigger": false },
   { "query": "choose the framework for the new service", "should_trigger": false },
-  { "query": "テストケースを書いて", "should_trigger": false }
+  { "query": "テストケースを書いて", "should_trigger": false },
+  { "query": "this repo has no CONTRIBUTING.md, write one", "should_trigger": true },
+  { "query": "set up CODEOWNERS for the repository", "should_trigger": true },
+  { "query": "tạo file CODEOWNERS cho repo này", "should_trigger": true },
+  { "query": "CODEOWNERSを作成して", "should_trigger": true },
+  { "query": "/atk:convention --scaffold", "should_trigger": true },
+  { "query": "open a pull request for this branch", "should_trigger": false },
+  { "query": "fill in the pull request template and open the PR", "should_trigger": false }
 ]

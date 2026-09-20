@@ -21,18 +21,10 @@ The same holds for the API and for every other host that fills a template client
 
 ## Where the template lives
 
-Look in this order and stop at the first hit:
-
-1. `.github/PULL_REQUEST_TEMPLATE.md`
-2. `.github/pull_request_template.md`
-3. `PULL_REQUEST_TEMPLATE.md` at the repository root
-4. `docs/PULL_REQUEST_TEMPLATE.md`
-5. A `PULL_REQUEST_TEMPLATE/` directory beside any of the three locations above, holding several
-
-Both cases and both spellings, because GitHub accepts either and a case-sensitive check finds
-nothing on a repository that chose the other one. A host that is not GitHub keeps its templates
-somewhere else, `.gitlab/merge_request_templates/` on GitLab among them; resolve it the same way,
-and where the location cannot be established, say so rather than assuming there is none.
+`shared/host-file-locations.md` holds the resolution: how the host is detected, every location each
+host reads, both spellings, and when a file counts as present. It is shared because `atk:convention`
+decides from the same list whether the project has a template at all, and two answers to that
+question is how a repository ends up with two templates.
 
 Several templates in a directory is a choice the team made deliberately, so ask which one applies
 and never pick by name order. No template anywhere is the normal case, and then the artifact is the
