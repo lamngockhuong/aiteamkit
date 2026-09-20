@@ -49,9 +49,9 @@ client asks what shipped in version 1.4.2; an auditor asks for the postmortem an
 actions; the person who handed over left six months ago and their handover file was the only thing
 that survived them.
 
-**Derived.** Nothing. The implementation record and the review report are copies of what lives on
-the pull request, and a catchup brief is rebuilt by running `atk:catchup` again. No skill reads any
-of the three.
+**Derived.** Nothing. The implementation record, the review report and the shipping record are
+copies of what lives on the pull request, and a catchup brief is rebuilt by running `atk:catchup`
+again. No skill reads any of the four.
 
 ## Git history is not a fallback
 
