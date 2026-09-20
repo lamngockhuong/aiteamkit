@@ -20,6 +20,10 @@ the lifecycle a team runs, so they are part of the kit. What separates them from
 assistant is where they stop: at the point a role owns the decision, and never before a reviewer has
 something to read.
 
+That is a statement about where a skill stops, not about how many people a project has. One person
+holding every role is supported, and the gates do not soften: they approve by hand, as any approver
+does. `shared/team-roles.md` holds the rule.
+
 ## The problem it addresses
 
 Most AI coding assistance is built for one developer working alone. A company project team has
@@ -56,7 +60,8 @@ different failure modes, and they are process failures, not coding failures:
   would hit a dead end.
 - **Replacing a tracker or a test management tool.** `atk` produces the content; the tool stores it.
 - **Deciding for the team.** No skill approves its own output, commits the team, or declares a
-  release ready.
+  release ready. This holds on a solo project too, where the same person is author and approver and
+  the approval is still theirs to give.
 - **Performance evaluation.** No skill produces a judgement about an individual, and the
   retrospective explicitly forbids it.
 - **Enforcing one methodology.** The vocabulary leans Scrum-like (sprint, story, points) but every

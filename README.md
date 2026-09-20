@@ -1,8 +1,9 @@
 # AI Team Kit (`atk`)
 
-Twenty skills covering the software delivery lifecycle of a **company project team**, not a solo
-developer. Every skill assumes work has an author and a separate reviewer, decisions have an owner,
-and artifacts are read by someone who was not in the conversation that produced them.
+Twenty skills covering the software delivery lifecycle of a **company project team**. Every skill
+assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read
+by someone who was not in the conversation that produced them. Those are roles rather than a
+headcount: a solo developer holding all of them gets the same gates, and still approves by hand.
 
 Compatible with Claude Code, Cursor, and OpenAI Codex CLI.
 

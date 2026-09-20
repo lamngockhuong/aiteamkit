@@ -19,6 +19,10 @@ Số còn lại sửa thẳng vào code. Làm một ticket, sửa một bug, ki�
 làm một mình là chỗ chúng dừng lại: dừng ở ranh giới mà một vai trò nắm quyền quyết, và không bao
 giờ kết thúc trước khi người review có thứ để đọc.
 
+Đó là câu nói về chỗ một skill dừng lại, không phải câu nói về dự án có bao nhiêu người. Một người
+giữ mọi vai trò vẫn được hỗ trợ, và các cửa kiểm soát không vì thế mà nới ra: họ tự tay duyệt, như
+bất kỳ người duyệt nào khác. Luật nằm ở `shared/team-roles.md`.
+
 ## Vấn đề mà atk giải quyết
 
 Phần lớn công cụ AI hỗ trợ lập trình được thiết kế cho một người làm việc một mình. Một team dự án
@@ -36,8 +40,8 @@ trong công ty gặp những kiểu hỏng khác, và chúng là hỏng về quy
 
 ## Mục tiêu
 
-1. **Mặc định theo hình dạng của team.** Người viết và người duyệt là hai người khác nhau. Artifact
-   mang trạng thái phê duyệt. Câu hỏi còn treo ghi tên người phải trả lời.
+1. **Mặc định theo hình dạng của team.** Người viết và người duyệt là hai vai trò tách biệt.
+   Artifact mang trạng thái phê duyệt. Câu hỏi còn treo ghi tên người phải trả lời.
 2. **Bằng chứng trước khi khẳng định.** Skill đọc repo, lịch sử git, CI và tracker trước khi hỏi, và
    trích dẫn những gì tìm thấy.
 3. **Quyết định thuộc về người sở hữu nó.** Skill soạn thảo và so sánh; phạm vi, độ ưu tiên, deadline,
@@ -55,7 +59,8 @@ trong công ty gặp những kiểu hỏng khác, và chúng là hỏng về quy
   sẽ đi vào ngõ cụt.
 - **Thay thế tracker hay công cụ quản lý test.** `atk` tạo nội dung; công cụ lưu nội dung đó.
 - **Quyết định thay team.** Không skill nào tự duyệt output của chính nó, tự cam kết thay team, hay
-  tự tuyên bố một bản release đã sẵn sàng.
+  tự tuyên bố một bản release đã sẵn sàng. Điều này đúng cả với dự án một người, nơi cùng một người
+  vừa là tác giả vừa là người duyệt và quyền duyệt vẫn thuộc về họ.
 - **Đánh giá nhân sự.** Không skill nào sinh ra nhận định về một cá nhân, và skill retro cấm điều đó
   một cách tường minh.
 - **Ép một phương pháp luận.** Từ vựng nghiêng về Scrum (sprint, story, point) nhưng mọi skill đều
