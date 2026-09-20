@@ -51,7 +51,7 @@ a section to delete.
 | Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
 | Docs | Docs root, where conventions live and which of those documents carries the review checklist, where designs live, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release |
-| Team | Role mapped to a real name, who approves what, and the language the team writes artifacts in | all |
+| Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, and the language the team writes artifacts in | all |
 | Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to clean up, how to be sure the target is local | verify |
 
 Every entry is a pointer or a command, never prose copied from elsewhere. A section that runs long
