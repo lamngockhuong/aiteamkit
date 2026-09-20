@@ -81,7 +81,11 @@ Say what was found before acting on it, in one block: the branch, how many files
 work is code, artifacts, or both. That last one decides which half of `shared/finalize-steps.md`
 applies.
 
-Nothing to commit is a clean exit, not an error. Say so and stop.
+A clean exit needs both halves: nothing to commit and nothing committed that has not been carried
+where it was going. A clean tree on a branch holding an unpushed commit is work in the middle, not
+work finished, and `--pr` reaching that state has a pull request still to open. Measure what is left
+to carry, not what is left to stage. Where both halves are empty, say so and stop; that is a clean
+exit, not an error.
 
 ### 2. Stage and scan
 
