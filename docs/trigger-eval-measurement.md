@@ -56,7 +56,7 @@ The hook script, the settings file and the seed live outside the repository, bec
 no runner and adding one would make every team carry a maintainer's tool. Everything needed to
 rebuild it is here.
 
-A hook that logs every tool call to a file named by `HOOK_LOG`:
+A hook that logs the tool calls it is given, to a file named by `HOOK_LOG`:
 
 ```javascript
 import { readFileSync, appendFileSync } from "node:fs";
@@ -74,7 +74,7 @@ The settings file that registers it, passed with `--settings`:
 {
   "hooks": {
     "PreToolUse": [
-      { "matcher": "*", "hooks": [{ "type": "command", "command": "node /path/to/hooklog.mjs" }] }
+      { "matcher": "Skill", "hooks": [{ "type": "command", "command": "node /path/to/hooklog.mjs" }] }
     ]
   }
 }

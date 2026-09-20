@@ -42,18 +42,20 @@ items in `shared/review-checklist.md` it carries.
 | `removed` | 2 | The deleted lines alone | The diff deletes nothing | |
 | `callers` | 2 | Call sites and callees of what changed | No signature, return type, raised error, exported name, or documented meaning of an exported symbol changed | Every caller of a changed signature or contract is updated |
 | `boundary` | 3 | Inputs and states, not lines | Never | Error paths and edge cases are handled |
-| `exposure` | 4 | The surfaces in and out: logs, responses, URLs, storage, migrations | The diff touches no input, output, storage, log, or schema, and adds no literal that could be a credential | No secret in the diff; input crossing a trust boundary is validated; a migration is reversible or says it is not |
+| `exposure` | 4 | The surfaces in and out: logs, responses, URLs, storage, migrations | The diff touches no input, output, storage, log, or schema | Input crossing a trust boundary is validated; a migration is reversible or says it is not |
 | `tests` | 5 | The test tree | The diff changes no behavior | New or changed behavior has a test that fails without the change |
 | `contract` | 6 | The five triggers in `shared/spec-docs.md` | None of the five fired | Public behavior change is reflected in the docs that describe it |
-| `rules` | 7 | The resolved conventions document, its checklist section | No rule and no baseline item is violated. There is no structural stop: see below | No debug statement, no commented-out code, no `TODO` without a ticket |
+| `rules` | 7 | The resolved conventions document, its checklist section | No rule and no baseline item is violated. There is no structural stop: see below | No secret, token, key, or credential in the diff; no debug statement, no commented-out code, no `TODO` without a ticket |
 
 **Assigning a baseline item to a round.** An item goes to the round whose *method* is what finds it,
-and stays in `rules` when no method beyond comparing the diff against a written rule is needed. Seven
+and stays in `rules` when no method beyond comparing the diff against a written rule is needed. Six
 of the eight need a method of their own: knowing whether every caller was updated means going and
-grepping for them, which reading the diff will never tell you. The eighth, debug statements and
-commented-out code, needs nothing but the comparison, and the comparison is what `rules` already
-does. Someone adding a ninth item applies the same test rather than deriving it again. It is also why
-`rules` runs once: multiplying a mechanical scan buys nothing.
+grepping for them, which reading the diff will never tell you. The other two, a debug statement left
+behind and a credential literal in the diff, need nothing but the comparison, and the comparison is
+what `rules` already does. Both are scans that read the same lines and answer yes or no, so neither
+belongs to a round that has to go looking. Someone adding a ninth item applies the same test rather
+than deriving it again. It is also why `rules` runs once: multiplying a mechanical scan buys
+nothing.
 
 **`rules` does not switch itself off.** A project that has recorded no conventions is exactly the
 case `shared/review-checklist.md` covers: `atk:review` checks the baseline anyway and reports that
@@ -118,16 +120,17 @@ Only comparing rounds, and only when every round being combined is a comparison.
 searching rounds: doing that recreates the agent that forgets its earlier concerns, which is the
 whole reason the rounds exist.
 
-From six to nine changed files, one agent holds all four comparing rounds. Above twenty, split them
-in two. Between those, either is defensible; take one agent when the lists are short and two when
-the conventions document is long. Below six nothing is spawned at all, so there is nothing to
-combine.
+The threshold is the one the copy table already uses, so the file carries one set of bands and not
+two. From six to twenty changed files, one agent holds all four comparing rounds. Above twenty,
+split them in two. Below six nothing is spawned at all, so there is nothing to combine.
 
 Combining changes the number of agents, never the number of rounds: from 6 to 20 files, 11 round
-runs land in 8 agents where one agent holds the comparing rounds and 9 where two do, and above 20,
-16 round runs land in 14. Each round still reports under its own name, and a combined agent returns
-its rounds separately rather than as one pile. For the dispatch rule below, a combined agent counts
-as one round, because it is issued once and returns once.
+runs land in 8 agents, and above 20, 16 round runs land in 14. The closing sweep adds one more agent
+of its own, so a run comes to 9 and 15. Those two numbers are what a report can be checked against,
+which is the reason the band is fixed rather than left to judgement. Each
+round still reports under its own name, and a combined agent returns its rounds separately rather
+than as one pile. For the dispatch rule below, a combined agent counts as one round, because it is
+issued once and returns once.
 
 ## How the calling agent drives them
 
@@ -210,15 +213,29 @@ no other agent was ever asked the question.
 
 ## The sweep
 
-Step 5 of the skill closes with one pass over the gaps, run once the verified list exists. Run it in
-the calling agent, after the last round has closed and before the renumbering.
+Step 5 of the skill closes with one pass over the gaps, run once the verified list exists, after
+the last round has closed and before the renumbering.
+
+Give it its own agent, and hand it the list. The calling agent has driven every round, holds every
+finding and has read the diff many times over; it is the most loaded context in the run, and the
+sweep is the one job that asks for a fresh reading of that diff against that list. The two compete,
+and on a large change the sweep is what loses. An agent that starts with the list and nothing else
+does the same job with none of that behind it.
+
+Below six changed files nothing is spawned at all, so the sweep runs in the calling agent like
+everything else.
 
 It is not a round. It ran last, with every round's findings in front of it, so its candidates carry
 neither `[k/N]` nor a round name and are labelled as coming from the sweep. Tagging one `[1/N]` would
 tell the author that other agents looked at it and stayed silent, when in truth none of them saw it.
 
-Never run the sweep as one more round in parallel. A pass that cannot see the list cannot look for
-what the list is missing, and what comes back is one more opinion rather than a search for the gaps.
+Its candidates come back as candidates. The verdicts in step 5 and the cap in step 6 stay with the
+calling agent, because what is delegated is the search and never the judgement.
+
+Its own agent is not the same as one more round. A round runs alongside its copies and is handed no
+list; the sweep runs alone, after every round has closed, and the list is the whole of what it is
+given. Dispatch it with the others and it becomes one more opinion, because a pass that cannot see
+the list cannot look for what the list is missing.
 
 ## What the report adds
 

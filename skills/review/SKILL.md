@@ -92,8 +92,10 @@ Every agent in a round reads the same diff: independence is the point, so splitt
 between them would produce agreement that means nothing. Rounds divide the question, never the
 files.
 
-Steps 1, 5, and 6 are never delegated. Intent is what the rounds are measured against, ranking one
-list out of many needs all of them in one context, and the calling agent also drives the rounds.
+Steps 1, 5, and 6 keep their judgement here. Intent is what the rounds are measured against,
+ranking one list out of many needs all of them in one context, and the calling agent also drives the
+rounds. The one search inside them that is delegated is the closing sweep of step 5, which gets its
+own agent and hands its candidates back for the verdicts; `references/review-rounds.md` says why.
 
 Where the harness cannot spawn agents, the nine rounds run one after another in this agent and the
 report says the review had no copies.
@@ -116,7 +118,7 @@ Convention checking is the `rules` round, and it runs off `shared/review-checkli
 project's conventions document per Where the rules live in that file, read its review checklist
 section, check each `REVIEWED` rule, and cite the rule ID with its text quoted verbatim so the
 author can dispute the rule rather than the reviewer. When the project has no recorded conventions,
-say so in the review and check this round's own baseline item anyway: the round never falls silent
+say so in the review and check this round's own baseline items anyway: the round never falls silent
 there. The other baseline items stay with the rounds that hold them, per
 `references/review-rounds.md`. Do not invent project-specific rules mid-review; report the gap so
 `atk:convention` can record it.
@@ -157,11 +159,11 @@ This does not license the question dressed up as a finding. `PLAUSIBLE` still ne
 mechanism and a named trigger; what is uncertain is only whether that trigger occurs. A candidate
 naming neither is not plausible, it is unexamined, and it is dropped.
 
-Then take one more pass, once, with the verified list in hand. Read the diff and the code around it
-looking only for what is not on that list: the job is the gaps, not a second opinion on what has
-already been found. Surface at most eight new candidates, and return nothing at all when there is
-nothing new. A padded sweep costs the author the attention that makes the rest of the list worth
-reading.
+Then take one more pass, once, with the verified list in hand, in an agent of its own where one can
+be spawned. Read the diff and the code around it looking only for what is not on that list: the job
+is the gaps, not a second opinion on what has already been found. Surface at most eight new
+candidates, and return nothing at all when there is nothing new. A padded sweep costs the author
+the attention that makes the rest of the list worth reading.
 
 What a first pass misses is predictable, so start there: code moved or extracted that left a guard or
 an anchor behind, setup and teardown that stopped matching each other in a test, a default flipped in
@@ -220,8 +222,8 @@ line it cites, and the summary as one review comment. Post nothing before showin
       absence of any observable effect.
 - [ ] Preferences are labelled `NIT` and do not block.
 - [ ] The list is within the cap, and a cut says how many findings went and at what severity.
-- [ ] A sweep for gaps ran once against the verified list, and returned nothing rather than padding
-      when it found nothing new.
+- [ ] A sweep for gaps ran once against the verified list, in its own agent where one could be
+      spawned, and returned nothing rather than padding when it found nothing new.
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.

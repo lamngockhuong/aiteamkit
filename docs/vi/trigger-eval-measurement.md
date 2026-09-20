@@ -56,7 +56,7 @@ Script hook, file settings và dự án mồi đều nằm ngoài repository, v�
 thêm một bộ vào đây là bắt mọi team mang theo công cụ của người bảo trì. Những gì cần để dựng lại
 đều nằm dưới đây.
 
-Một hook ghi mọi lượt gọi tool vào file mà `HOOK_LOG` chỉ tới:
+Một hook ghi lại những lượt gọi tool mà nó nhận được, vào file mà `HOOK_LOG` chỉ tới:
 
 ```javascript
 import { readFileSync, appendFileSync } from "node:fs";
@@ -74,7 +74,7 @@ File settings đăng ký nó, truyền vào bằng `--settings`:
 {
   "hooks": {
     "PreToolUse": [
-      { "matcher": "*", "hooks": [{ "type": "command", "command": "node /path/to/hooklog.mjs" }] }
+      { "matcher": "Skill", "hooks": [{ "type": "command", "command": "node /path/to/hooklog.mjs" }] }
     ]
   }
 }
