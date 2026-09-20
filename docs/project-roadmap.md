@@ -61,8 +61,10 @@ The constraint stays: `SKILL.md` under 300 lines, detail moves to `references/`.
 
 ## Phase 4: Trigger evals (done)
 
-One `evals/trigger_evals.json` per skill, each an array of `{query, should_trigger}`, 20 to 22 cases
-split between phrasings that must trigger the skill and phrasings that must not. The cases that earn
+One `evals/trigger_evals.json` per skill, each an array of `{query, should_trigger}` split between
+phrasings that must trigger the skill and phrasings that must not. The twelve written last carry 20
+to 22 cases each; the eight written earlier range from 16 to 31, because they were sized one at a
+time as each skill landed. The cases that earn
 their place are the near-misses between neighbours, and every pair now has a file on both sides:
 `intake` against `design-doc`, `plan` against `breakdown`, `fix` against `incident`, `review`
 against `qa`, `qa` against `verify`, `onboard` against `handover`. Each file also covers the three

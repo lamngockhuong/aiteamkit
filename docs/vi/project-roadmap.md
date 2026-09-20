@@ -60,8 +60,10 @@ Ràng buộc giữ nguyên: `SKILL.md` dưới 300 dòng, chi tiết chuyển v�
 
 ## Phase 4: Eval trigger (xong)
 
-Mỗi skill một `evals/trigger_evals.json`, là mảng các `{query, should_trigger}`, từ 20 đến 22 case
-chia làm hai phần: cách nói phải gọi đúng skill đó, và cách nói không được gọi nó. Những case đáng
+Mỗi skill một `evals/trigger_evals.json`, là mảng các `{query, should_trigger}` chia làm hai phần:
+cách nói phải gọi đúng skill đó, và cách nói không được gọi nó. Mười hai file viết sau mang từ 20
+đến 22 case; tám file viết trước trải từ 16 tới 31, vì chúng được cân từng cái một theo lúc skill
+tương ứng ra đời. Những case đáng
 giá là các cặp dễ nhầm giữa skill kề nhau, và giờ cặp nào cũng có file ở cả hai phía: `intake` với
 `design-doc`, `plan` với `breakdown`, `fix` với `incident`, `review` với `qa`, `qa` với `verify`,
 `onboard` với `handover`. Mỗi file đều phủ cả ba ngôn ngữ trigger, nên bỏ phần tiếng Việt hoặc tiếng
