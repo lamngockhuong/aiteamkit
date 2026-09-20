@@ -76,7 +76,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:design-doc <requirement|topic>       # --adr|--no-adr --options --lang --out
 /atk:spec [subject]                       # --kind --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
-/atk:convention                           # --audit|--init|--sync --scope --lang --out
+/atk:convention                           # --audit|--init|--sync|--scaffold --scope --lang --out
 /atk:plan <ticket|design|description>     # --inline --layer --out
 /atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
 /atk:fix <issue|report|description>       # --layer --investigate-only --out

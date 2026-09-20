@@ -36,7 +36,9 @@ and where the location cannot be established, say so rather than assuming there 
 
 Several templates in a directory is a choice the team made deliberately, so ask which one applies
 and never pick by name order. No template anywhere is the normal case, and then the artifact is the
-body, which is what this skill did before templates were read at all.
+body, which is what this skill did before templates were read at all. Say once that the project has
+none and that `atk:convention` drafts one on request; do not draft it here, where the user is
+shipping something else.
 
 ## Filling it
 

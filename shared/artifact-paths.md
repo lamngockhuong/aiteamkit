@@ -23,7 +23,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
-| `convention` | `docs/conventions.md` (and `CONTRIBUTING.md` when the project has one) |
+| `convention` | `docs/conventions.md`; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
@@ -38,6 +38,13 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `handover` | `docs/records/handover/<date>-<from>-to-<to>.md` |
 
 `--out <path>` overrides the default on every skill.
+
+`atk:convention` may also write `CONTRIBUTING.md`, the pull request template, and `CODEOWNERS`, each
+where its host expects it and never under the docs root. They are the project's own collaboration
+files rather than artifacts of this kit: none of them carries the front matter block, none has an
+approval state, and the persistence groups below do not classify them. The team owns them afterwards
+the way it owns its linter config. `skills/convention/references/collaboration-files.md` holds the
+rest, including that they are offered and picked rather than created.
 
 ### The exceptions: `init`, `tailor`, and `plan`
 

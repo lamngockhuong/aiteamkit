@@ -102,6 +102,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/tailor/references/feedback.md` | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, và hai thứ nó không bao giờ được chứa |
 | `skills/catchup/references/brief-template.md` | Một khung chung cho hai chế độ, phần khác nhau giữa epic và pull request được đánh dấu theo từng mục |
 | `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, bảng phân loại kiểu tính năng, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
+| `skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |
 | `skills/plan/references/step-ordering.md` | Hai lần cắt, theo phase và theo bước, mỗi lần một quy tắc riêng |
 | `skills/plan/references/plan-template.md` | Trang chỉ mục của kế hoạch và một file phase |
 | `skills/implement/references/plan-gate.md` | Ba mức quyết định một phần việc cần bao nhiêu đồng thuận trước khi viết dòng mã đầu tiên |
