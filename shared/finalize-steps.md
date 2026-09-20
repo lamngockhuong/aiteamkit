@@ -93,6 +93,12 @@ ways: the artifact front matter carries the ticket, the ticket carries the artif
 Move the ticket to the status the team's flow calls "in review" or its local equivalent. Do not move
 it to done. Done is the approver's word, and this skill is the author.
 
+Where there is no ticket, and where the project has no tracker at all, this step is `N/A`. Say that;
+do not pass over it in silence. A step that did not run and a step that had nothing to run are
+different facts, and only the second one is safe to read as nothing missing. The artifact's front
+matter already carries `ticket: none` per `shared/ticket-adapters.md`, and this is the same fact
+stated where the reader of the closing sequence will look for it.
+
 ## 6. Merge
 
 A merge happens only when a person asks for that merge. The decision is theirs; what the skill

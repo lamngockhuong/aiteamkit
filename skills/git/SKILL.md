@@ -117,7 +117,9 @@ Reviewers come from the Team section of `.atk/profile.md`. Never assign a person
 named, and never request a review from whoever touched the file last.
 
 Then the ticket, per `shared/ticket-adapters.md`: show the comment, post it on a yes, link both
-ways, and move the ticket to the team's "in review" state. Never to done.
+ways, and move the ticket to the team's "in review" state. Never to done. With no ticket behind the
+change, report the step as `N/A` rather than skipping it quietly, per step 5 of
+`shared/finalize-steps.md`.
 
 ### 5. Merge
 
@@ -154,6 +156,8 @@ ticket, per `shared/finalize-steps.md`.
 - [ ] The commit convention came from the project, and the source was named.
 - [ ] Nothing was committed onto the default branch.
 - [ ] Push, pull request, ticket comment, and merge were each asked for, every time.
+- [ ] A step with nothing to run, the ticket step above all, was reported as `N/A` rather than
+      passed over in silence.
 - [ ] The readiness gate ran before any merge, and a refusal said which of the three caused it.
 - [ ] No pull request opened in this run was merged in the same run without a separate yes.
 - [ ] No history already on the remote was rewritten outside the cases in `shared/finalize-steps.md`.
