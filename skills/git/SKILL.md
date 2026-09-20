@@ -117,6 +117,12 @@ Both are asked for, every time, and the request shows what will be pushed. On a 
 the pull request with the artifact the calling skill produced as the body, so the reviewer reads the
 evidence and not the diff alone.
 
+Where the project keeps a pull request template, it is the shape of that body and the artifact fills
+it, per `references/pr-body.md`, which also holds where the template is found. Passing the artifact
+straight to `--body-file` drops the template without saying so, which is the failure that reference
+exists to stop. Tick only what this run verified, leave the rest and say which, and show the body
+before the pull request is opened.
+
 Reviewers come from the Team section of `.atk/profile.md`. Never assign a person the team has not
 named, and never request a review from whoever touched the file last.
 
@@ -160,6 +166,8 @@ ticket, per `shared/finalize-steps.md`.
 - [ ] The commit convention came from the project, and the source was named.
 - [ ] Nothing was committed onto the default branch.
 - [ ] Push, pull request, ticket comment, and merge were each asked for, every time.
+- [ ] The project's pull request template, where it has one, shaped the body, and no checklist item
+      was ticked that this run did not verify.
 - [ ] A step with nothing to run, the ticket step above all, was reported as `N/A` rather than
       passed over in silence.
 - [ ] The readiness gate ran before any merge, and a refusal said which of the three caused it.

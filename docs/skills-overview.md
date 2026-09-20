@@ -342,7 +342,8 @@ still a change somebody has to review.
 **Produces.** The branch, the commits, and the pull request. The diff is read before anything is
 staged, what is staged is scanned for credentials and private data, the change is split so each
 commit reverts on its own, and push, pull request and merge each wait for a yes given for that
-action.
+action. Where the project keeps a pull request template, that template is the shape of the body and
+the artifact fills it, with only the checklist items this run verified ticked.
 
 **Use when.** A skill or a person has finished and verified a piece of work and it needs to reach the
 repository. Also when a branch has fallen behind its base, when a conflict is in the way, or when a
