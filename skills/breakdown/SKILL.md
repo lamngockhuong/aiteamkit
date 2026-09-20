@@ -91,6 +91,11 @@ dependency graph, parallel lanes with file ownership, and the serialization poin
 The graph follows `shared/diagram-conventions.md` and reuses the task IDs from the table, so the two
 can be checked against each other. It never carries an owner or a date the table does not.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Map epic to epic and task to issue or sub-task. Show the full

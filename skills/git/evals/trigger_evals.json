@@ -1,0 +1,28 @@
+[
+  { "query": "commit these changes", "should_trigger": true },
+  { "query": "/atk:git", "should_trigger": true },
+  { "query": "push the branch and open a pull request", "should_trigger": true },
+  { "query": "split this into separate commits", "should_trigger": true },
+  { "query": "merge PR 42", "should_trigger": true },
+  { "query": "rebase my branch onto main", "should_trigger": true },
+  { "query": "there is a conflict, help me resolve it", "should_trigger": true },
+  { "query": "set up stacked PRs for this change", "should_trigger": true },
+  { "query": "commit giúp tôi với message chuẩn", "should_trigger": true },
+  { "query": "đẩy code lên và mở pull request", "should_trigger": true },
+  { "query": "gỡ conflict khi rebase nhánh này", "should_trigger": true },
+  { "query": "chia thay đổi này thành nhiều commit", "should_trigger": true },
+  { "query": "コミットメッセージを書いてコミットして", "should_trigger": true },
+  { "query": "プルリクエストを作成して", "should_trigger": true },
+  { "query": "このブランチをリベースして", "should_trigger": true },
+
+  { "query": "review the changes on this pull request", "should_trigger": false },
+  { "query": "review giúp tôi PR này", "should_trigger": false },
+  { "query": "このPRをレビューして", "should_trigger": false },
+  { "query": "cut the 1.4.0 release and write the release notes", "should_trigger": false },
+  { "query": "viết release note cho bản 1.4.0", "should_trigger": false },
+  { "query": "implement the login ticket", "should_trigger": false },
+  { "query": "fix this failing test", "should_trigger": false },
+  { "query": "verify the fix works in the running app", "should_trigger": false },
+  { "query": "write the coding conventions document", "should_trigger": false },
+  { "query": "hand over my work to another developer", "should_trigger": false }
+]

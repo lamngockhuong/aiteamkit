@@ -86,6 +86,11 @@ Test plan at `docs/qa/test-plan-<slug>.md` and cases at `docs/qa/test-cases-<slu
 `shared/artifact-paths.md`. Cases are a Markdown table so they paste into a spreadsheet or a test
 management tool without rewriting.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Bugs found during execution become issues linked to the case ID

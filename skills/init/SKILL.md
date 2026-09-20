@@ -131,6 +131,11 @@ Written to `.atk/profile.md` in the target project, not under `docs/`, and not i
 `shared/project-profile.md` for what each section holds and `shared/artifact-paths.md` for why this
 skill is one of the three exceptions to the docs-root rule.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. A profile with `TBD` sections can become one issue listing them

@@ -337,6 +337,27 @@ still a change somebody has to review.
 
 ---
 
+## `atk:git`
+
+**Produces.** The branch, the commits, and the pull request. The diff is read before anything is
+staged, what is staged is scanned for credentials and private data, the change is split so each
+commit reverts on its own, and push, pull request and merge each wait for a yes given for that
+action.
+
+**Use when.** A skill or a person has finished and verified a piece of work and it needs to reach the
+repository. Also when a branch has fallen behind its base, when a conflict is in the way, or when a
+stack of dependent pull requests needs moving.
+
+**Do not use when.** The work is not finished. This skill decides nothing about whether it is: that
+belongs to whoever did it. For a single ad-hoc command, the host agent is faster.
+
+**The habit that matters.** It never stages what it has not read, and a credential in the staged diff
+stops the whole run rather than being reported and committed around. A merge happens only for a pull
+request a person named, on that run, and only after a gate that refuses on a conflict, a failing
+check, or a requested change, saying which of the three refused it.
+
+---
+
 ## `atk:release`
 
 **Produces.** A change list from the commit range, internal and client-facing notes kept separate,

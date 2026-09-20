@@ -183,6 +183,10 @@ the old one looking current: set its index `status` to `SUPERSEDED` and link the
 the rule at the end of `shared/artifact-paths.md`. Two live plans for one piece of work is worse
 than none, because each reader picks a different one.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Under `--inline` there is no directory to commit.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. The index is offered as a comment on the ticket, shown first and

@@ -144,6 +144,11 @@ leaves it.
 Where the feature crosses roles or services, one diagram in the scope section earns its place, drawn
 per `shared/diagram-conventions.md`. A feature that lives in one module does not get one.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Offer the questions for the spec author as a comment on the epic

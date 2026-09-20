@@ -169,6 +169,11 @@ A `--feedback` record goes to `docs/derived/feedback/<skill>-<date>.md` instead.
 `shared/artifact-paths.md`, because once it reaches the kit repository that issue holds the
 original, the same reason a review report is derived from the pull request that holds it.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. An override that a role other than the author must approve can

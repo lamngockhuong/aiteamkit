@@ -81,11 +81,13 @@ Seven are contracts between a named handful of skills rather than kit-wide rules
   report a team with a directory of standards documents as having recorded nothing.
   `atk:implement` reads the file for that resolution and for the baseline items, which it falls back
   to when a project really has recorded no conventions of its own.
-- `shared/finalize-steps.md`: the closing sequence for a code change, and the consent line that
-  every action past the commit has to cross. Cited by `atk:fix`, `atk:implement`, and `atk:verify`,
-  the three skills that change code, and by `atk:tailor` for the consent line alone, because a
-  `--feedback` record is sent to a repository the team does not own. Nothing leaves the local
-  repository without being asked for.
+- `shared/finalize-steps.md`: the closing sequence for a finished piece of work, and the consent
+  line that every action past the commit has to cross. `atk:git` is what carries it out; this file
+  stays the contract, which is what lets the code-changing skills and the artifact-writing ones
+  close the same way. Cited by `atk:fix`, `atk:implement` and `atk:verify`, which hand off to
+  `atk:git`, by `atk:plan` and `atk:tailor` for the consent line alone, and by every skill that
+  writes an artifact for the section about a change that produced only a document. Nothing leaves
+  the local repository without being asked for.
 - `shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
   proves, and what it does not. Cited by the same three. Each of them runs a check and then has to
   say what the result means, and the second half of that answer has to be identical in all three.

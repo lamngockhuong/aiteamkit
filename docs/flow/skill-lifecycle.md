@@ -75,7 +75,7 @@ only the first four happen at run time.
 
 | Kind | What happens to the work | Where it appears |
 |------|--------------------------|------------------|
-| Calls, and carries on | The other skill runs, returns, and this one continues | `implement` to `plan`, `implement` to `review`, `implement` to `spec` |
+| Calls, and carries on | The other skill runs, returns, and this one continues | `implement` to `plan`, `implement` to `review`, `implement` to `spec`, and every finishing skill to `git` |
 | Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc` |
 | Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
@@ -92,6 +92,7 @@ flowchart TD
     QA["atk:qa"]
     CNV["atk:convention"]
     SPC["atk:spec"]
+    GIT["atk:git"]
 
     IMP -->|"calls: work is medium sized"| PLN
     IMP -->|"calls: then fixes what blocks"| REV
@@ -99,6 +100,7 @@ flowchart TD
     IMP -->|"stops: the input was a defect"| FIX
     PLN -->|"stops: options need comparing"| DSG
     IMP -->|"calls: a contract moved"| SPC
+    IMP -->|"calls: the work is finished"| GIT
     IMP -.->|"offers: needs a yes"| VER
     REV -.->|"sends the convention gap back"| CNV
     VER -.->|"sends the untested case back"| QA

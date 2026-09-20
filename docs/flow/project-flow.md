@@ -69,9 +69,10 @@ flowchart TD
     end
 
     subgraph S5["5. Build"]
-        M0["atk:implement<br/><small>Dev</small>"] --> M1["atk:review<br/><small>reviewer is never the author</small>"]
+        M0["atk:implement<br/><small>Dev</small>"] --> MG["atk:git<br/><small>commit, push, pull request</small>"]
+        MG --> M1["atk:review<br/><small>reviewer is never the author</small>"]
         M1 -->|Blocking findings| M0
-        M1 -->|Approved| M2["Merged"]
+        M1 -->|Approved| M2["Merged<br/><small>atk:git, asked for by number</small>"]
     end
 
     subgraph S6["6. Verify"]
@@ -124,6 +125,7 @@ flowchart TD
 | 4. Rules | `atk:convention` | TL | Team agreement, recorded per rule | `IN REVIEW` to `APPROVED` |
 | 5. Build | `atk:implement` | Dev | The reviewer, in the next row | n/a |
 | 5. Build | `atk:review` | Reviewer, never the author | TL when the loop hits its ceiling | n/a |
+| 5. Build | `atk:git` | Dev | The reviewer, who approves the pull request it opens | n/a |
 | 6. Verify | `atk:qa` | QA | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | 6. Verify | `atk:verify` | Dev or QA | QA sign-off before the ticket moves | `DRAFT` |
 | 7. Release | `atk:release` | PM with SRE | Stakeholder or PM gives the go decision | `IN REVIEW` to `APPROVED` |
@@ -143,6 +145,10 @@ flowchart LR
 
 `atk:fix` is the one that reaches back into the cycle: a defect found in phase 6 returns to phase 6
 after the fix, and one found after release opens phase 8 instead.
+
+`atk:git` is drawn in phase 5 because that is where most work reaches a pull request, but it is not
+tied to the phase. Every skill that finishes something hands off to it, so an artifact written in
+phase 1 and a fix made in phase 8 both close the same way.
 
 `atk:spec` is drawn in phase 3 because that is where a team first writes down what an area does, but
 the dotted edge from the merge is the one that fires most often. A change altering a contract carries

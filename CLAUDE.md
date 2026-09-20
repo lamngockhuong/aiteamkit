@@ -5,9 +5,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
-OpenAI Codex CLI. It packages 20 skills covering the delivery lifecycle of a company project team
+OpenAI Codex CLI. It packages 21 skills covering the delivery lifecycle of a company project team
 (`init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`, `convention`, `plan`,
-`implement`, `fix`, `review`, `qa`, `verify`, `release`, `incident`, `retro`, `onboard`,
+`implement`, `fix`, `review`, `qa`, `verify`, `git`, `release`, `incident`, `retro`, `onboard`,
 `handover`), each invocable as a slash command by its own name (`/atk:intake`, `/atk:estimate`, and
 so on). That is the lifecycle order; use it for every list of skills in the repository.
 
@@ -231,13 +231,13 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
 5. `shared/artifact-paths.md` (the default output path row)
 6. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 20
+7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 21
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 8. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
 9. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
    all three `docs/vi/flow/` mirrors.
-   Each names all 20 skills: the phase table and the consumes/produces table respectively
+   Each names all 21 skills: the phase table and the consumes/produces table respectively
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -318,7 +318,7 @@ relative path; adding or renaming one means doing the same on the other side.
 | `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `flow/project-flow.md` | The 20 skills placed in delivery phases, with the author and approver of each artifact |
+| `flow/project-flow.md` | The 21 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 

@@ -102,6 +102,11 @@ Diagrams are inline Mermaid so they stay readable in a pull request, drawn per
 `shared/diagram-conventions.md`: a sequence or component diagram beside the option it belongs to,
 and nothing the prose does not also say.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Link the design from the epic, and link the epic from the design

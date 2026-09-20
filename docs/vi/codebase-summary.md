@@ -34,7 +34,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `shared/review-checklist.md` | Thứ tự tra ra nơi một dự án đặt quy ước, luật rằng dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, định dạng bản ghi quy tắc `CONV-NNN` mà `convention` viết ra và `review` trích dẫn, vai trò của từng skill với nó, tám mục nền kèm mức nghiêm trọng mặc định, và quy tắc loại bỏ quy tắc đã cũ. `convention`, `review` và `implement` trích dẫn |
 | `shared/project-profile.md` | Nội dung của `.atk/profile.md` trong dự án đích, lý do nó nằm ở đó chứ không nằm trong kit, và quy tắc ba nhóm quyết định skill nào dừng, skill nào giảm chất lượng, skill nào bỏ qua khi thiếu profile |
 | `shared/project-overrides.md` | Nội dung của `.atk/overrides/<skill>.md` trong dự án đích, vì sao mỗi skill một file thay vì nhiều file, hai mục `## Before` và `## After`, bảy thứ mà phần ghi đè không bao giờ được gỡ, và dòng skill phải in ra khi bỏ qua một chỉ dẫn. Vào qua nguyên tắc 7 của `shared/team-roles.md`, nên mọi skill đều tuân theo |
-| `shared/finalize-steps.md` | Trình tự khép lại một thay đổi mã nguồn: tài liệu tham chiếu mà thay đổi đó mắc nợ, nhánh, commit, và ranh giới xin phép mà mọi hành động sau commit phải vượt qua. `fix`, `implement` và `verify` trích dẫn, còn `tailor` chỉ trích ranh giới xin phép |
+| `shared/finalize-steps.md` | Trình tự khép lại một phần việc đã xong: tài liệu tham chiếu mà nó mắc nợ, nhánh, commit, merge, và ranh giới xin phép mà mọi hành động sau commit phải vượt qua. `atk:git` thi hành nó; file này là hợp đồng. Mọi skill làm xong việc đều trích dẫn |
 | `shared/layer-verification.md` | Bảng năm tầng: chạy gì cho một tầng, một lượt đạt chứng minh được gì, và không chứng minh được gì. `fix`, `implement` và `verify` trích dẫn, để cả ba nói cùng một điều về cùng một kết quả |
 | `shared/diagram-conventions.md` | Khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình kit vẽ (luồng duyệt, đồ thị phụ thuộc, sequence, chuỗi nhân quả), và các quy tắc giữ cho chúng dễ đọc: chỉ Mermaid, xuống dòng bằng `<br/>` chứ không bằng ký tự xuống dòng thô, gọi vai trò thay vì gọi tên người, hình thoi nào cũng có đủ hai nhánh, không đặt màu nền cứng. `catchup`, `design-doc`, `plan`, `breakdown` và `incident` trích dẫn |
 | `shared/host-capabilities.md` | Skill được dùng những khả năng nào của agent chủ và gọi tên chúng ra sao, nguyên tắc vẫn cấm gọi tên lệnh của một kit khác, cách xử lý trên harness không có khả năng đó, bốn quy tắc của bước dọn mã, và phần chính sách chặn số agent review chạy đồng thời trong một vòng. `fix`, `implement`, `verify` và `review` trích dẫn |
@@ -81,6 +81,7 @@ mười một skill gốc còn lại thì chưa.
 | `skills/review/SKILL.md` | Phát triển | Phát hiện xếp hạng blocking / should fix / nit, có thể đăng lên PR |
 | `skills/qa/SKILL.md` | Kiểm thử | Test plan, test case có truy vết, ma trận regression, tiêu chí vào và ra |
 | `skills/verify/SKILL.md` | Kiểm thử | Hệ thống chạy thật, khẳng định tác động trong dữ liệu, báo lên người có tên sau ba vòng |
+| `skills/git/SKILL.md` | Quản lý phiên bản | Đọc diff trước khi stage, quét dừng lại khi gặp thông tin đăng nhập, commit revert được một mình, và push, pull request, merge đều chờ lời đồng ý riêng |
 | `skills/release/SKILL.md` | Bàn giao | Ghi chú theo đối tượng, checklist có người phụ trách, migration, rollback, phê duyệt |
 | `skills/incident/SKILL.md` | Vận hành | Timeline, nguyên nhân gốc có bằng chứng, postmortem, hành động, runbook |
 | `skills/retro/SKILL.md` | Cải tiến | Kiểm chứng hành động cũ, bằng chứng sprint, ba hành động mới, báo cáo |
@@ -116,6 +117,10 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/verify/references/runtime-checks.md` | Dựng ứng dụng lên, tác động vào nó, khẳng định một tác động thật, và dọn dẹp sau đó |
 | `skills/verify/references/ui-checks.md` | Lượt chạy `--ui`: đối chiếu màn hình với bản thiết kế |
 | `skills/verify/references/report-template.md` | Báo cáo kiểm chứng, nêu rõ đã chứng minh được gì và chưa chứng minh được gì |
+| `skills/git/references/secret-scan.md` | Các mẫu quét trong phần đã stage, những đường dẫn tự nó đã là phát hiện, và vì sao một lần trúng chặn cả lượt chạy |
+| `skills/git/references/commit-craft.md` | Chỗ một commit kết thúc và commit sau bắt đầu, cái bẫy format toàn file, và phần thân commit mang bằng chứng gì |
+| `skills/git/references/repair.md` | Rebase, gỡ conflict và fixup, cùng ba lần kiểm tra phải làm trước khi viết lại lịch sử đã có trên remote |
+| `skills/git/references/stacked.md` | Vòng đời chồng pull request, và chỗ phải dừng: mỗi tầng một lời đồng ý và một cửa kiểm tra riêng |
 
 ### Thư mục `evals/`
 
@@ -139,6 +144,7 @@ bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 tro
 | `skills/review/evals/trigger_evals.json` | Đọc một diff, đối lại `qa`, `verify`, `fix` và `catchup` |
 | `skills/qa/evals/trigger_evals.json` | Test case và test plan viết ra, đối lại `verify` và việc viết mã test tự động |
 | `skills/verify/evals/trigger_evals.json` | Kiểm chứng lúc chạy, đối lại `qa` và `review` |
+| `skills/git/evals/trigger_evals.json` | Commit, pull request và rebase, đối lại `review`, `release` và `implement` |
 | `skills/release/evals/trigger_evals.json` | Ghi chú và checklist deploy, đối lại `incident` và `qa` |
 | `skills/incident/evals/trigger_evals.json` | Một sự cố và postmortem của nó, đối lại `fix` và `release` |
 | `skills/retro/evals/trigger_evals.json` | Bằng chứng sprint và báo cáo tình hình, đối lại `estimate` và `handover` |

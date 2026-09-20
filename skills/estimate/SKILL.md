@@ -86,6 +86,11 @@ Written to `docs/records/planning/estimate-<sprint-or-date>.md` per `shared/arti
 front matter, scale and buffer policy, per-item estimate table with basis and confidence, capacity
 calculation showing every subtraction, sprint commitment, overflow, and estimation risks.
 
+Putting it where the team can see it is `atk:git`, which follows the artifact section of
+`shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
+in a pull request for its approver to read. Whether it is committed at all is the persistence group
+it falls into, per `shared/artifact-paths.md`.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Estimates map to the tracker estimate field and the sprint field.
