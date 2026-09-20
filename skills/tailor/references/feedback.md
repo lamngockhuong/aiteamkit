@@ -48,11 +48,36 @@ come back with a question.
 not the `shared/` layer behind it, so a proposed line has a good chance of restating a rule that
 already lives there or contradicting one. Two of the three shared rules a proposed line usually
 collides with are invisible from the skill file alone. Report what happened; the author writes the
-line with the whole kit in view.
+line with the whole kit in view. The exception is the section below, where the reporter is the
+author and does have the whole kit in view.
 
 **A score.** A percentage computed from the run by the agent that just made the run is self-grading,
-and the kit's own premise is that the author and the approver are different people. Count what is
+and the kit's own premise is that the author and the approver are separate roles, whoever fills
+them. Count what is
 countable, such as how many steps ran, and leave the judgement to the person reading.
+
+## When the reporter is the kit author
+
+A maintainer of `atk` running the skills on their own projects has nobody to send a record to. The
+fork above still does its work, because sorting the findings is what it is for, and the second row
+keeps its meaning: the finding belongs to the shipped file rather than to one project.
+
+Three things change, and only at the end.
+
+The record stays where it was written and is not offered to anyone. There is no issue to open, since
+the person who would read it wrote it; skip the offer rather than making it and answering it.
+
+The shipped file can be edited directly, which the second row normally cannot reach. Say so, and keep
+the record as the account of why, because a commit message carries the change and not the run that
+found it.
+
+A proposal may go in the record, under a heading of its own, despite the rule above. The reason that
+rule exists is that the reporter cannot see the `shared/` layer, and here they can. Keep it in its own
+section rather than mixed into the findings, so a reader can still tell the account of the run from
+the argument about what to do next.
+
+What does not change: the fork is still asked per finding, the third row still goes nowhere, and a
+record with no name behind it is still a complaint.
 
 ## Sending it
 

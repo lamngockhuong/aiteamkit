@@ -18,16 +18,19 @@ in sync. See "Common verification commands" at the bottom.
 
 ## The team premise (why this kit exists)
 
-Every skill assumes a team, not a solo developer. This is the one thing to preserve when editing:
+Every skill assumes work done the way a team does it. This is the one thing to preserve when editing:
 
-- Author and approver are different people, and artifacts carry an approval state.
+- Author and approver are different roles, and artifacts carry an approval state. One person may hold
+  both, and on a solo project all of them; what never happens is a skill entering the state itself.
 - A skill drafts and gathers evidence; it never makes a decision that a role owns (scope, priority,
   deadline, pricing, compliance, go or no-go).
 - Artifacts are written for a reader who was not in the conversation.
 - Open questions carry the name of the person who must answer them, never "the team".
 
 A change that makes a skill act like a solo assistant, deciding on the team's behalf or leaving an
-artifact with no owner, is a regression even if it reads more helpfully.
+artifact with no owner, is a regression even if it reads more helpfully. Supporting a solo developer
+is a different thing and is in scope: one person holding every role still gets the gates, and still
+approves by hand. `shared/team-roles.md` owns that distinction.
 
 ## Multi-manifest layout (non-obvious)
 
