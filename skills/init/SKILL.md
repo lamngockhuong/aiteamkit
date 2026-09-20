@@ -40,7 +40,7 @@ matter accepts it. See `shared/team-roles.md`.
 ## Invocation
 
 ```bash
-/atk:init                    # Detect, confirm, interview, and write .atk/profile.md
+/atk:init                    # Detect, confirm, interview, and write or update .atk/profile.md
 /atk:init --audit            # Compare an existing profile against the repository, change nothing
 /atk:init --lang vi          # Write the profile in Vietnamese
 /atk:init --out <path>       # Override the default output path
@@ -88,7 +88,8 @@ on; `--audit` picks those up later. Never leave a field blank, and never invent 
 ### 4. Write
 
 Write `.atk/profile.md` from `references/profile-template.md`: seven sections, front matter with an
-owner and an approver, `status: DRAFT`. Keep every entry a pointer or a command. A section that
+owner and an approver, `status: DRAFT`. Against a profile that already exists, the subsection after
+step 5 says what changes instead. Keep every entry a pointer or a command. A section that
 grows past five lines has usually started copying a document instead of linking to it.
 
 The file is committed. Say so, because the team's instinct with a dot directory is to ignore it.
@@ -98,6 +99,21 @@ The file is committed. Say so, because the team's instinct with a dot directory 
 Print which skills are now unblocked, reading the three-group table in `shared/project-profile.md`
 rather than composing a list from memory. Then the sections still marked `TBD` with who owes each
 one, and who must approve the profile before it stops being a draft.
+
+### Re-running against an existing profile
+
+Detection runs the same way. Before step 2, compare each detected value against the one the profile
+records, and present the two groups separately: what still matches, and what has drifted. A drifted
+entry shows both values and both sources, the same shape `--audit` reports.
+
+A value that matches what the profile already records is confirmed by that agreement. Ask only about
+drift and about fields still marked `TBD`. That is what shrinks the interview: of the four fixed
+turns in `references/detection.md`, only the ones the existing file leaves unanswered are still owed.
+
+Update the file in place. Keep `created:`, move `updated:`, and keep the order of the sections so a
+diff shows the change and nothing else. Where the rewrite changes what the profile promises, move
+`status` back to `IN REVIEW`, per `shared/artifact-paths.md`; a run that only refreshes a source
+comment leaves it alone.
 
 ### `--audit`
 
@@ -126,8 +142,10 @@ the repository and the tracker holds a pointer.
 - [ ] Every detectable value was detected, not asked.
 - [ ] Every detected value was shown with its source file and confirmed by the user before writing.
 - [ ] No more than eight questions were asked.
-- [ ] Front matter names an owner and an approver, and `status` is `DRAFT`.
+- [ ] Front matter names an owner and an approver, and a newly created profile opens at `status: DRAFT`.
 - [ ] Every unanswered field says `TBD` and names the person who owes the answer.
 - [ ] No credential, token, or connection string appears in the profile.
 - [ ] The profile was written into the target project and the user was told it is committed.
+- [ ] On a re-run, `created:` survived, only drifted and `TBD` fields were asked about, and `status`
+      moved only because what the profile promises changed.
 - [ ] Under `--audit`, no file was modified.

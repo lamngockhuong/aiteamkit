@@ -32,7 +32,8 @@ How the phases map to roles and approval gates: [docs/flow/project-flow.md](docs
 [docs/flow/skill-lifecycle.md](docs/flow/skill-lifecycle.md)
 ([Tiếng Việt](docs/vi/flow/skill-lifecycle.md)).
 
-Run `/atk:init` once per project. It writes `.atk/profile.md`, the file the skills that touch code
+Run `/atk:init` when a team first installs the kit in a project, and again when the project has
+moved on from what the profile says. It writes `.atk/profile.md`, the file the skills that touch code
 read to learn this project's test, build and lint commands, its layer layout, and who approves what.
 
 ## Skills

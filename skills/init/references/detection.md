@@ -196,6 +196,15 @@ write the rest as `TBD` with an owner for `--audit` to pick up.
 
 Eight is a ceiling, not a target. Most projects raise no ambiguity at all and finish in four.
 
+## The budget on a re-run
+
+The four fixed turns assume there is no profile yet. Against one that already exists, three of them
+are usually answered in the file being re-read, and asking again is the defect step 1 exists to
+prevent. Owe only the fixed turns the existing profile leaves unanswered, plus the ambiguities the
+comparison raises, and count a value that matches what the profile records as already confirmed.
+`SKILL.md`, under "Re-running against an existing profile", owns that rule; this is its half of the
+budget.
+
 ## Recording a source
 
 Every detected value carries the file it came from, as a repository-relative path with a line number
