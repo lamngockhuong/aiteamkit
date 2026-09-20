@@ -184,7 +184,9 @@ enforce the ones currently checked by hand. A team that already keeps standards 
 classification written into the set it has, in the shape it already uses: `docs/conventions.md` is
 the kit's default, not an address every project has to move to. Where the project has no
 `CONTRIBUTING.md`, pull request template or `CODEOWNERS`, it offers to draft them and writes only
-the ones you pick; `--scaffold` offers them without a full derivation pass.
+the ones you pick; `--scaffold` offers them without a full derivation pass. A file you already have
+is left alone, except under `--sync`, which shows what the checklist or the owner list has fallen
+behind and offers that change.
 
 **Use when.** There is no written convention, the written one no longer matches the code, reviews
 keep repeating the same comment, or the repository has no `CONTRIBUTING.md`, pull request template

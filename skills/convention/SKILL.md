@@ -43,7 +43,7 @@ team agreeing is a proposal, marked as such. See `shared/team-roles.md`.
 /atk:convention                   # Derive from the codebase and write or update the document
 /atk:convention --audit           # Report where the code and the document disagree; writes no project file
 /atk:convention --init            # Bootstrap a document for a project with no conventions yet
-/atk:convention --sync            # Update the document to match what the code now does
+/atk:convention --sync            # Update the document, and offer the step 6 files whose source moved
 /atk:convention --scaffold        # Offer the collaboration files the project lacks; write only the ones picked
 /atk:convention --scope src/api   # Limit derivation to given paths
 /atk:convention --lang vi         # Write the document and the report in Vietnamese
@@ -137,8 +137,12 @@ kit, so which of them exists is the Tech Lead's call under rule 3 of `shared/tea
 `references/collaboration-files.md` holds what each file carries, what a drafted `CODEOWNERS` needs
 before it may be offered at all, and why an owner is never derived from who touched a file last.
 Where each file lives is `shared/host-file-locations.md`, and a file present at any of its locations
-is left alone; where it disagrees with what this run found, that is an open question carrying a
-name, never a rewrite.
+is left alone on every run but one. A drafted file is built from something that keeps moving, the
+enforcement table for the template and the Team section for `CODEOWNERS`, so under `--sync` this
+step also says which of them the source has moved under, shows what would change, and writes only
+what the user picks. What it shows is the change, never a fresh draft laid over the file, so a
+person can see whether their own edits are in the way. Outside `--sync`, a disagreement is an open
+question carrying a name and nothing more.
 
 A written file is a proposal until the Tech Lead accepts the pull request carrying it, the same as
 every rule `--init` writes. Record who picked it and which role approves it where this run's other
@@ -152,7 +156,7 @@ Runs steps 1 to 4 and stops. It writes nothing into the project: the report come
 session, and goes to a file only under `--out`, because an audit records one moment while the
 conventions document is the thing meant to last.
 
-It reports four things, in this order:
+It reports five things, in this order:
 
 1. Which document the resolution in step 1 landed on, and which one carries the review checklist.
    Where the resolution came up empty, say the project has recorded no conventions rather than
@@ -164,7 +168,10 @@ It reports four things, in this order:
 3. Every `ASPIRATIONAL` rule with the tool that could enforce it, or `none` where there is none, and
    every checklist rule no recent review has cited, per Keeping them in step in
    `shared/review-checklist.md`.
-4. One line naming the rules checked and found clean, so "checked, no drift" reads as different from
+4. Which of the three collaboration files the project has, which are missing, and which carry a
+   checklist or an owner list the enforcement table and the Team section no longer agree with. It
+   reports them and writes nothing, which is what separates this flag from `--sync`.
+5. One line naming the rules checked and found clean, so "checked, no drift" reads as different from
    "not checked".
 
 Findings cite `path:line`, never `CONV-NNN`. An ID is assigned when a rule is written into the
@@ -180,14 +187,18 @@ Roles section above.
 
 `--sync` is for a document that has fallen behind the code. It changes only the rules the code
 contradicts and the buckets that moved, and leaves the wording of every rule the code still matches
-exactly as it is. A disagreement it cannot settle becomes an open question carrying the name of
+exactly as it is. It is also the one mode where step 6 looks at a file the project already has: a
+template whose checklist no longer matches the enforcement table, or a `CODEOWNERS` whose names the
+Team section has moved past, is offered as the change it would make. `--init` and a plain run offer
+the missing files only. A disagreement it cannot settle becomes an open question carrying the name of
 whoever can answer it, never a silent rewrite.
 
 ### `--scaffold`
 
-Runs step 1 and step 6 and nothing else. It is for a team that has its conventions written already
-and wants the files that carry them into daily work, without a full derivation pass rewriting the
-document on the way.
+Runs step 1 and step 6 and nothing else, and offers the missing files only; bringing a file that
+already exists back in step with its source is `--sync`. It is for a team that has its conventions
+written already and wants the files that carry them into daily work, without a full derivation pass
+rewriting the document on the way.
 
 The drafts are built from what step 1 read. A conventions document written by hand carries rules
 with no bucket against them, and this flag does not classify them, because that is step 3 and it is
@@ -240,7 +251,8 @@ only when the user asks.
 - [ ] `--sync` left the wording of every rule the code still matches untouched.
 - [ ] Rules the team has not agreed to are marked as proposals.
 - [ ] The review checklist section carries only `REVIEWED` rules, each with an ID and a default severity.
-- [ ] On a run reaching step 6, every missing collaboration file was offered, none was written
-      unpicked, and a file the project already had at any of its host's locations was left alone.
+- [ ] On a run reaching step 6, every missing collaboration file was offered and none was written
+      unpicked. A file the project already had was left alone, except under `--sync`, where the
+      change was shown and picked before anything was written.
 - [ ] A drafted `CODEOWNERS` was offered only where the Team section named owners with host
       identifiers, and no owner came from git history or from commit metadata.

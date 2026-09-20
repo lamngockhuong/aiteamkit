@@ -95,14 +95,34 @@ bite.
 ## What the step never does
 
 - Overwrite a file the project already has, at any of the locations in
-  `shared/host-file-locations.md`. Where an existing file disagrees with what this run found, that is
-  an open question for the owner, per rule 3 of `shared/team-roles.md`.
+  `shared/host-file-locations.md`. Outside `--sync` a disagreement is an open question for the
+  owner, per rule 3 of `shared/team-roles.md`; under `--sync` it is a change shown and picked, which
+  is the section below. Neither is a rewrite nobody asked for.
 - Write any of these as a side effect of another run. They are offered, picked, and written, in that
   order, every time. Where no user is reachable to pick, nothing is written.
 - Add a rule the conventions document does not carry. A file that quietly introduces a rule is how a
   team ends up bound by something nobody agreed to.
 - Install or configure tooling to make a drafted check pass, which step 4 already proposes rather
   than does.
+
+## Keeping a file in step, under `--sync`
+
+Two of the three are built from something that keeps moving, so a file written months ago can be
+wrong without anyone touching it:
+
+| File | The source moved when |
+|------|-----------------------|
+| The pull request template | The enforcement table gained, lost, or reclassified a rule the checklist carries |
+| `CODEOWNERS` | The Team section named someone new, dropped someone, or changed an identifier |
+| `CONTRIBUTING.md` | The conventions document moved, or the command it links to is no longer what the profile says |
+
+Show the change, not a new draft. A fresh draft laid over the file hides whatever the team wrote by
+hand in the meantime, and the person deciding cannot see what they are about to lose. Name what
+moved and in which direction, show the lines that would change, and write only what is picked.
+
+Where the file has been edited by hand into something the source no longer explains, that is not
+drift and not a change to offer. Say what disagrees and who can settle it, and leave the file
+alone: the team meant that edit.
 
 ## Approval, and what happens to the files
 
