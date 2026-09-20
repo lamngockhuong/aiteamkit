@@ -122,6 +122,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/git/references/commit-craft.md` | Where one commit ends and the next begins, the formatting sweep trap, and what evidence the body carries |
 | `skills/git/references/repair.md` | Rebase, conflict resolution and fixup, with the three checks that come before any rewrite of remote history |
 | `skills/git/references/stacked.md` | The stacked pull request lifecycle, and where to stop: one consent and one readiness gate per layer |
+| `skills/git/references/pr-body.md` | Where a project's pull request template is found, how the artifact fills it, and why a ticked checkbox is a claim rather than decoration |
 
 ### Trigger evals
 

@@ -67,11 +67,11 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: the eight added after the
-first twelve (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`) carry one,
-`review` grew one for its round model, and the other eleven are still `SKILL.md` alone. Deepening a
-skill means adding `references/` files and pointing at them from the relevant workflow step, not
-growing `SKILL.md` past 300 lines.
+neighbours it must not steal. `references/` is where they still differ: ten of them carry
+one (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`, `git`),
+and the other eleven are still `SKILL.md` alone. `git` holds the most, five, because the closing
+sequence has more cases than its workflow line names. Deepening a skill means adding `references/`
+files and pointing at them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
@@ -99,7 +99,7 @@ skill discovery.
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, the two sections it may hold, and the seven things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
-| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify`, `tailor` |
+| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify`, `tailor` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers | `fix`, `implement`, `verify`, `review` |

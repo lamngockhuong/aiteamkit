@@ -122,6 +122,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/git/references/commit-craft.md` | Chỗ một commit kết thúc và commit sau bắt đầu, cái bẫy format toàn file, và phần thân commit mang bằng chứng gì |
 | `skills/git/references/repair.md` | Rebase, gỡ conflict và fixup, cùng ba lần kiểm tra phải làm trước khi viết lại lịch sử đã có trên remote |
 | `skills/git/references/stacked.md` | Vòng đời chồng pull request, và chỗ phải dừng: mỗi tầng một lời đồng ý và một cửa kiểm tra riêng |
+| `skills/git/references/pr-body.md` | Tìm template pull request của dự án ở đâu, artifact điền vào nó thế nào, và vì sao một ô tick là một lời khẳng định chứ không phải để trang trí |
 
 ### Thư mục `evals/`
 

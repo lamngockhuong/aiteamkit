@@ -346,7 +346,8 @@ chạy dài vẫn là thay đổi có người phải review.
 **Sinh ra.** Nhánh, các commit, và pull request. Diff được đọc trước khi bất cứ thứ gì được stage,
 phần đã stage được quét tìm thông tin đăng nhập và dữ liệu riêng tư, thay đổi được chia sao cho mỗi
 commit revert được một mình, và push, pull request, merge đều chờ một lời đồng ý dành riêng cho hành
-động đó.
+động đó. Nếu dự án có template pull request, template đó là hình dạng của phần thân và artifact điền
+vào, chỉ tick những mục checklist mà lượt chạy này thực sự kiểm chứng.
 
 **Dùng khi.** Một skill hoặc một người đã làm xong và kiểm chứng xong một phần việc, và nó cần đi vào
 repository. Cũng dùng khi một nhánh đã tụt lại sau nhánh gốc, khi có conflict chắn đường, hoặc khi

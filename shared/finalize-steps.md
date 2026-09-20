@@ -82,6 +82,12 @@ Ask first, both of them, and show what will be pushed. On a yes: push the branch
 request with the artifact this skill produced as the body, so the reviewer reads the evidence rather
 than the diff alone.
 
+Where the project keeps a pull request template, that template is the shape of the body and the
+artifact fills it. A team that wrote a template wrote down what its reviewers need to see, and a
+body that quietly replaces it has overruled a decision belonging to that team. Tick only what this
+run verified, name what is left open, and keep the artifact linked by its path. Where a template is
+found and how each section is filled are `atk:git`'s, in `skills/git/references/pr-body.md`.
+
 Reviewers come from the Team section of `.atk/profile.md`. Never assign a person the team has not
 named, and never request a review from someone because they touched the file last.
 

@@ -39,8 +39,12 @@ Check in this order, stop at the first hit, and say which one you picked:
 ```bash
 gh issue create --title "<title>" --body-file <artifact.md> --label <label> --assignee <user>
 gh issue comment <number> --body-file <artifact.md>
-gh pr create --title "<title>" --body-file <artifact.md>
+gh pr create --title "<title>" --body-file <body.md>
 ```
+
+`--body-file` on the last one takes the body built per `skills/git/references/pr-body.md`, not the
+artifact as it stands: a project with a pull request template has that template as the shape, and
+handing the artifact straight to the flag drops it silently.
 
 **Jira, Backlog, Redmine**: use a configured MCP server or REST call if one exists. If none does,
 do not shell out to `curl` with a token found in the environment. Print the field-by-field mapping
