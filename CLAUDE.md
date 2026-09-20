@@ -230,14 +230,17 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 3. `docs/skills-overview.md` and `docs/vi/skills-overview.md`
 4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
 5. `shared/artifact-paths.md` (the default output path row)
-6. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-7. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 21
+6. `docs/artifact-lifecycle.md` and `docs/vi/artifact-lifecycle.md`, if the skill produces a kind of
+   artifact the tree did not hold before. The per-group paragraphs name the kinds and count them, so
+   a new one leaves two files disagreeing about what is safe to delete
+7. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
+8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 21
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
-8. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
+9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
-9. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
-   all three `docs/vi/flow/` mirrors.
-   Each names all 21 skills: the phase table and the consumes/produces table respectively
+10. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
+    all three `docs/vi/flow/` mirrors.
+    Each names all 21 skills: the phase table and the consumes/produces table respectively
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -364,7 +367,7 @@ not a second set of rules. The `source` column says where the prose lives.
 
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
-| `CONV-001` | Adding, renaming, or removing a skill touches all nine groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-001` | Adding, renaming, or removing a skill touches all ten groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
@@ -380,7 +383,7 @@ deleted, so a review that cited it stays readable.
 Two things worth automating, proposed and not installed. A CI job running the block below would move
 most of this table to `ENFORCED` and stop a reviewer spending attention on it. `CONV-001` is the one
 that would need writing rather than wiring: a check that a diff touching `skills/` also touches the
-nine groups. Neither is done here, and both belong to whoever owns the repository's tooling.
+ten groups. Neither is done here, and both belong to whoever owns the repository's tooling.
 
 ## Common verification commands
 
