@@ -12,6 +12,12 @@
   { "query": "this feature is about three weeks of work, plan it out in stages for me", "should_trigger": true },
   { "query": "chia việc này thành các giai đoạn, mỗi giai đoạn merge được riêng", "should_trigger": true },
   { "query": "段階に分けて実装計画を立てて", "should_trigger": true },
+  { "query": "review this plan before I start building from it", "should_trigger": true },
+  { "query": "soát lại bản kế hoạch này xem có sai sót gì không", "should_trigger": true },
+  { "query": "check the plan in this PR against what the repo actually has", "should_trigger": true },
+  { "query": "/atk:plan plans/260921-0940-csv-export/ --review", "should_trigger": true },
+  { "query": "この実装計画をレビューして", "should_trigger": true },
+  { "query": "plan này có phase nào thiếu bước kiểm không", "should_trigger": true },
 
   { "query": "split this epic into tasks and assign them across the team", "should_trigger": false },
   { "query": "chia epic này cho bốn người làm song song", "should_trigger": false },
@@ -25,5 +31,9 @@
   { "query": "fix the bug where the export drops the last row", "should_trigger": false },
   { "query": "estimate how many days this ticket takes", "should_trigger": false },
   { "query": "write test cases for this ticket", "should_trigger": false },
-  { "query": "this epic is three weeks of work, split it so four people can work in parallel", "should_trigger": false }
+  { "query": "this epic is three weeks of work, split it so four people can work in parallel", "should_trigger": false },
+  { "query": "review this pull request before I approve it", "should_trigger": false },
+  { "query": "duyệt code của bạn kia giúp tôi", "should_trigger": false },
+  { "query": "このPRをレビューして", "should_trigger": false },
+  { "query": "check this diff against the requirement and our conventions", "should_trigger": false }
 ]

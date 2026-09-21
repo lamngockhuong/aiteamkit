@@ -96,7 +96,7 @@ skill discovery.
 | `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the seven rules every skill follows | all |
 | `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, the shared YAML front matter block, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
-| `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement` |
+| `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement`, `git`, `plan` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, the two sections it may hold, and the seven things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify`, `tailor` |
@@ -169,13 +169,20 @@ agents. `shared/host-capabilities.md` owns the rules: name the capability before
 resolve that name from the harness at the time of use, and degrade into doing the work by hand,
 recorded as such, on a harness that has none. No skill stops because a host capability is missing.
 
-After edits, verify:
+After edits, verify. The two excluded subtrees are the ones CONV-002 also excludes, and for the same
+reason: they hold what a skill wrote, not what this repository authors. A fix report that lists the
+`ak:` check among the checks that run is quoting this rule rather than breaking it, and a record is
+left alone once written.
+
+The exclusion is anchored to those two paths, not to the directory names. `--exclude-dir=records`
+would drop any directory called `records` at any depth, including one under `skills/`, and quietly
+take it out of a `BLOCKING` check.
 
 ```bash
-grep -rn "\bak:" skills/ shared/ README.md docs/
+grep -rn "\bak:" skills/ shared/ README.md docs/ | grep -v -E '^docs/(records|derived)/'
 ```
 
-Should print nothing (`grep` exits 1).
+Should print nothing (the second `grep` exits 1).
 
 ## `.atk/` in the target project
 
@@ -388,7 +395,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-001` | Adding, renaming, or removing a skill touches all ten groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
-| `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
+| `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |

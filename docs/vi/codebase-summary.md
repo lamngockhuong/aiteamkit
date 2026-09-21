@@ -31,7 +31,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 |------|----------|
 | `shared/team-roles.md` | Bảng vai trò (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) và bảy nguyên tắc mọi skill tuân theo: chỉ tên người chứ không chỉ tên team, tách người viết khỏi người duyệt, không quyết thay vai trò sở hữu, viết cho người vắng mặt, chỉ hỏi thứ repo không trả lời được, theo ngôn ngữ làm việc của team, tôn trọng phần ghi đè của dự án |
 | `shared/artifact-paths.md` | Cách xác định thư mục docs gốc, đường dẫn output mặc định theo skill, quy tắc đặt tên `YYMMDD`, bảng các loại tài liệu tham chiếu, ba nhóm độ bền và nhóm nào được commit, cách đánh số ADR, khối front matter dùng chung, và nguyên tắc không ghi đè bản ghi đã `APPROVED` |
-| `shared/ticket-adapters.md` | Thứ tự phát hiện tracker, bảng ánh xạ từ vựng atk sang GitHub Issues, Jira, Backlog và Redmine, các lệnh đẩy bằng `gh`, và quy tắc liên kết hai chiều |
+| `shared/ticket-adapters.md` | Thứ tự phát hiện tracker, bảng ánh xạ từ vựng atk sang GitHub Issues, Jira, Backlog và Redmine, các lệnh `gh` để đẩy lên tracker và để đọc một pull request, và quy tắc liên kết hai chiều |
 | `shared/review-checklist.md` | Thứ tự tra ra nơi một dự án đặt quy ước, luật rằng dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, định dạng bản ghi quy tắc `CONV-NNN` mà `convention` viết ra và `review` trích dẫn, vai trò của từng skill với nó, tám mục nền kèm mức nghiêm trọng mặc định, và quy tắc loại bỏ quy tắc đã cũ. `convention`, `review` và `implement` trích dẫn |
 | `shared/project-profile.md` | Nội dung của `.atk/profile.md` trong dự án đích, lý do nó nằm ở đó chứ không nằm trong kit, và quy tắc ba nhóm quyết định skill nào dừng, skill nào giảm chất lượng, skill nào bỏ qua khi thiếu profile |
 | `shared/project-overrides.md` | Nội dung của `.atk/overrides/<skill>.md` trong dự án đích, vì sao mỗi skill một file thay vì nhiều file, hai mục `## Before` và `## After`, bảy thứ mà phần ghi đè không bao giờ được gỡ, và dòng skill phải in ra khi bỏ qua một chỉ dẫn. Vào qua nguyên tắc 7 của `shared/team-roles.md`, nên mọi skill đều tuân theo |
@@ -79,7 +79,7 @@ mười skill còn lại thì chưa.
 | `skills/spec/SKILL.md` | Thiết kế | Tài liệu tham chiếu cho API, schema và tính năng, ghi đè tại chỗ, kèm chế độ dò lệch |
 | `skills/breakdown/SKILL.md` | Lập kế hoạch | Task có người nhận, đồ thị phụ thuộc, làn song song kèm quyền sở hữu file |
 | `skills/convention/SKILL.md` | Phát triển | Quy ước team phân loại enforced / reviewed / aspirational |
-| `skills/plan/SKILL.md` | Phát triển | Phase kết thúc bằng thứ đem duyệt được, bước giữ cây mã chạy được, ranh giới phạm vi |
+| `skills/plan/SKILL.md` | Phát triển | Phase kết thúc bằng thứ đem duyệt được, bước giữ cây mã chạy được, ranh giới phạm vi; với `--review` là danh sách phát hiện về bản kế hoạch do người khác viết |
 | `skills/implement/SKILL.md` | Phát triển | Mã nguồn, kiểm chứng theo tầng, kèm bản ghi trở thành phần mô tả pull request |
 | `skills/fix/SKILL.md` | Phát triển | Nguyên nhân đã chứng minh, thay đổi nhỏ nhất gỡ được nó, và báo cáo đã kiểm những gì |
 | `skills/review/SKILL.md` | Phát triển | Phát hiện xếp hạng blocking / should fix / nit, có thể đăng lên PR |
@@ -108,7 +108,9 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |
 | `skills/plan/references/step-ordering.md` | Hai lần cắt, theo phase và theo bước, mỗi lần một quy tắc riêng |
 | `skills/plan/references/plan-template.md` | Trang chỉ mục của kế hoạch và một file phase |
-| `skills/implement/references/plan-gate.md` | Ba mức quyết định một phần việc cần bao nhiêu đồng thuận trước khi viết dòng mã đầu tiên |
+| `skills/plan/references/plan-self-review.md` | Sáu điều một bản kế hoạch khẳng định, cách mở lại từng điều để đối chiếu với kho mã, và xử lý ra sao với mỗi kết quả |
+| `skills/plan/references/plan-review-mode.md` | Soát bản kế hoạch do người khác viết: các dạng đầu vào, cách quy đổi từng kết quả, thang mức độ, và hình dạng báo cáo |
+| `skills/implement/references/plan-gate.md` | Ba mức quyết định một phần việc cần bao nhiêu đồng thuận trước khi viết dòng mã đầu tiên, và xử lý ra sao với câu hỏi mở cùng nhánh rẽ thiết kế mà bản kế hoạch trả về |
 | `skills/implement/references/verification.md` | Thứ tự chạy các phép kiểm, phạm vi cần với tới, và lúc nào dừng |
 | `skills/implement/references/review-fix-loop.md` | Vòng gọi review team lên chính output của skill, và trần chặn vòng lặp che đi một vấn đề thiết kế |
 | `skills/fix/references/investigate.md` | Chứng minh nguyên nhân, kiểm xem hành vi hiện tại có phải chủ ý, và cổng quyết định có được sửa hay không |

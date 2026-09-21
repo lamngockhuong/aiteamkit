@@ -20,5 +20,10 @@
   { "query": "write down our review etiquette as a team rule", "should_trigger": false },
   { "query": "ghi lại quy ước review của team", "should_trigger": false },
   { "query": "summarise this pull request for someone who does not know the area", "should_trigger": false },
-  { "query": "このPRの背景を知らない人向けにまとめて", "should_trigger": false }
+  { "query": "このPRの背景を知らない人向けにまとめて", "should_trigger": false },
+  { "query": "review the implementation plan in this PR", "should_trigger": false },
+  { "query": "soát lại bản kế hoạch trước khi ai đó bắt tay vào code", "should_trigger": false },
+  { "query": "この実装計画をレビューして", "should_trigger": false },
+  { "query": "check the plan in this PR against what the repo actually has", "should_trigger": false },
+  { "query": "soát lại các phase trong bản kế hoạch này", "should_trigger": false }
 ]

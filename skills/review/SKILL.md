@@ -25,8 +25,9 @@ regression risks, checking test coverage of the changed behavior, and writing re
 person can act on.
 
 Does NOT handle: approving or merging, which is a human act; rewriting the code, which the author
-does with `atk:implement` or `atk:fix`; or deciding whether the requirement itself is right
-(`atk:intake`).
+does with `atk:implement` or `atk:fix`; deciding whether the requirement itself is right
+(`atk:intake`); or reviewing a plan, which is `atk:plan --review`, because a plan is checked against
+the repository it assumes rather than against a diff.
 
 ## Roles
 

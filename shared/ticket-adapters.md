@@ -42,7 +42,23 @@ gh issue comment <number> --body-file <artifact.md>
 gh pr create --title "<title>" --body-file <body.md>
 ```
 
-`--body-file` on the last one takes the body built per `skills/git/references/pr-body.md`, not the
+A skill that has to read a pull request rather than write to one, which `atk:review` and
+`atk:plan --review` both do, reads it this way:
+
+```bash
+gh pr view <number> --json files,headRefName,headRepository   # which files, and which ref
+gh pr diff <number>                                           # the hunks
+gh pr checkout <number>                                       # the files themselves, at the head
+```
+
+The first two give paths, counts, and hunks, never whole files. A skill that has to open a file the
+change touches, rather than read what changed in it, needs the third: on a pull request that edits an
+existing document, the hunks alone show a fraction of it, and everything outside them looks absent.
+
+Where the pull request belongs to a repository other than this checkout, say so and stop rather than
+reading the local tree as though it were the one the change was written against.
+
+`--body-file` on `gh pr create` takes the body built per `skills/git/references/pr-body.md`, not the
 artifact as it stands: a project with a pull request template has that template as the shape, and
 handing the artifact straight to the flag drops it silently.
 

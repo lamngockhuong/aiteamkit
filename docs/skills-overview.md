@@ -214,14 +214,20 @@ it is checked, what is deliberately out of scope, and what is still unclear with
 must answer.
 
 **Use when.** Before starting work large enough to need stages, or when picking up something
-somebody else designed and the steps are not obvious.
+somebody else designed and the steps are not obvious. `--review` points the same reading at a plan
+that is already written, including one in a pull request, and writes a report to
+`docs/derived/reviews/plan-<slug>-<date>.md` instead of a plan; `--comment` posts its results on the
+pull request that carries the plan, shown first and posted on a yes.
 
 **Do not use when.** The work has to be shared across several people, which is `atk:breakdown`; or
-it is one change in one file, where the plan costs more than the work.
+it is one change in one file, where the plan costs more than the work. Reviewing the code that came
+out of a plan is `atk:review`.
 
 **The habit that matters.** A phase that cannot end in something reviewable is not a phase, it is a
 pause. Steps are ordered so the tree still works at every boundary, which is what makes it safe to
-stop halfway.
+stop halfway. And the plan is read back before it is handed over: every path it cites is opened,
+every library it assumes is confirmed from the repository, and what neither can settle becomes an
+open question with a name rather than quietly disappearing.
 
 ---
 
@@ -284,8 +290,9 @@ posts the findings as inline PR comments.
 
 **Use when.** Before approving a pull request, or when a review needs a second opinion.
 
-**Do not use when.** You want the code fixed rather than reviewed, or you want the requirement itself
-questioned (`atk:intake`).
+**Do not use when.** You want the code fixed rather than reviewed, you want the requirement itself
+questioned (`atk:intake`), or what you want read is a plan rather than a change, which is
+`atk:plan --review`: a plan is checked against the repository it assumes, not against a diff.
 
 **The habit that matters.** It starts from what the change was supposed to do, not from the diff,
 and it separates blocking defects from preferences, which is what makes a review feel fair. A

@@ -26,7 +26,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
 | `convention` | `docs/conventions.md`; on request, the collaboration files the project lacks (see below) |
-| `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below) |
+| `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below); under `--review` no plan file at all, and a report at `docs/derived/reviews/plan-<slug>-<date>.md` |
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
@@ -71,6 +71,10 @@ names it `<YYMMDD-HHMM>-<slug>` rather than by ticket. Both choices exist so the
 other planning tools in the ecosystem already look, and so a project that has a `plans/` tree does
 not end up with two of them. The ticket is not lost: it stays in the `ticket:` field of the index
 front matter, which is where every other artifact carries it anyway.
+
+A project whose `.gitignore` already covers that directory is saying it does not keep plans, and a
+plan written there is a record the rest of the kit believes exists and nobody will ever read. Say so
+before writing one, and let the team decide whether to track it or to put it elsewhere.
 
 A project that keeps its plans somewhere else says so in its `CLAUDE.md` or `AGENTS.md`, and that
 wins, exactly as the docs root rule works above.
@@ -126,7 +130,8 @@ Every file in the first two groups is committed, the same as `.atk/profile.md`.
 `docs/derived/` is the only part of the tree a project may leave untracked, and nothing in the
 chain breaks if it does: the implementation record and the shipping record are copies of what lives
 on the pull request, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
-running `atk:review` again, and a feedback record is a copy of what was filed on the kit repository.
+running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, and a feedback
+record is a copy of what was filed on the kit repository.
 A review run without `--comment` posts nothing, so its report is the only written copy until it is
 rebuilt; that is a reason to keep the directory rather than a break in the chain. No skill reads any
 of the five. A team that wants a smaller repository adds one line to `.gitignore`; a team that

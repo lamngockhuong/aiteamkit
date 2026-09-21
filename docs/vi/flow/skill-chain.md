@@ -74,7 +74,7 @@ mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết 
 | `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/` | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `implement`, `review` |
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
 | `convention` | Code và lịch sử của nó | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
-| `plan` | Ticket, thiết kế, hoặc mô tả | Pha và bước | `implement` |
+| `plan` | Ticket, thiết kế, hoặc mô tả; với `--review` thì là một bản kế hoạch đã viết | Pha và bước, hoặc danh sách phát hiện về một bản kế hoạch | `implement`; với `--review` là người viết bản kế hoạch đó |
 | `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR | `review`, `qa` |
 | `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
 | `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt | `implement`, `fix` |

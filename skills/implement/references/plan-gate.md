@@ -13,6 +13,7 @@ because the decision inside it was never visible as a decision.
 | Input | Handling |
 |-------|----------|
 | An existing plan directory or phase file | Run it. No scoring: somebody already did this |
+| One whose index is at `status: SUPERSEDED` | Not run. It was retired, and building from it rebuilds what somebody stopped. Say so and ask |
 | An approved design document | Score it, but a large signal the design already covers does not fire the gate |
 | A ticket URL or a free description | Score it, then take one of the three levels below |
 
@@ -78,6 +79,15 @@ the plan directory, summarises the phases, and hands back instead of stopping as
 That skill shows the directory path and the ordered phase list and takes the one confirmation
 itself, so do not ask again: a second prompt about the same plan, one line after the first, is how a
 consent prompt stops being read. Start writing code on the yes.
+
+It also hands back the open questions its read-back raised, each naming a person and the phase it
+blocks. Those phases wait, and so does anything whose `Depends on` names one of them, directly or
+transitively: a phase with no question of its own is not clear if it builds on one that is held.
+Work the phases that are clear and unblocked, and say which are held and on whose answer. A question
+the whole plan rests on blocks every phase, and stops the run rather than holding one part of it.
+
+A handback carrying a design fork instead of a plan is the large gate firing late. It is neither a
+yes nor a no: change no file, name `atk:design-doc` and whoever owns the fork, and stop.
 
 A no is an instruction to revise, not to abandon. Send the plan back for rework, and let that skill
 ask again. Only the person ends the run.

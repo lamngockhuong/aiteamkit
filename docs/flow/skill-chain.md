@@ -75,7 +75,7 @@ is why the arrow into them comes from the code rather than from the design that 
 | `spec` | The code, and the documents already in `docs/api/`, `docs/database/`, `docs/features/` | Reference documents kept current, or a drift report | `design-doc`, `qa`, `implement`, `review` |
 | `breakdown` | A design or an epic | Owned tasks, lanes, dependency graph | `plan`, `implement` |
 | `convention` | The code and its history | Conventions classified by how they are enforced | `implement`, `review` |
-| `plan` | A ticket, design, or description | Phases and steps | `implement` |
+| `plan` | A ticket, design, or description; under `--review`, a plan already written | Phases and steps, or findings about a plan | `implement`; under `--review`, the plan's author |
 | `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body | `review`, `qa` |
 | `fix` | A defect report | A proven cause and the smallest change | `verify`, `review` |
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit | `implement`, `fix` |
