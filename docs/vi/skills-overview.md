@@ -277,10 +277,12 @@ dọn dẹp cả file xung quanh thì không revert gọn được vào ngày c�
 
 ## `atk:review`
 
-**Sinh ra.** Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới
-một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể. Nhiều nhất mười phát hiện,
-hoặc hai mươi khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Có thể đăng
-thẳng thành comment inline trên PR.
+**Sinh ra.** Một báo cáo review ở `docs/derived/reviews/<pr>-<date>.md`, lần chạy nào cũng viết, kèm
+một bản tóm tắt trong phiên nói có bao nhiêu phát hiện ở mỗi mức, nêu tên những phát hiện chặn merge,
+và trỏ tới file. Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới
+một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể; nhiều nhất mười phát hiện, hoặc
+hai mươi khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Cờ `--out` đổi chỗ
+file, cờ `--comment` đăng phát hiện thành comment inline trên PR.
 
 **Dùng khi.** Trước khi approve một pull request, hoặc khi cần một ý kiến thứ hai.
 
