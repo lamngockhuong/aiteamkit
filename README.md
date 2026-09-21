@@ -109,12 +109,13 @@ Jira, Backlog, and Redmine, and no skill creates tickets without showing the lis
 
 The role vocabulary every skill shares is in [shared/team-roles.md](shared/team-roles.md).
 
-The skills that touch code read one file that the kit does not ship: `.atk/profile.md`, written by
-`/atk:init` into the target project and committed with it. `atk:implement`, `atk:fix` and
-`atk:verify` stop without it rather than guess a test command. `atk:plan` continues and says in the
-artifact which commands and paths it had to infer. Every other skill runs without it. What the
-profile holds, and which skills are meant to degrade rather than stop, is in
-[shared/project-profile.md](shared/project-profile.md).
+The skills that touch code read one file that the kit does not ship for the project it is installed
+into: `.atk/profile.md`, written by `/atk:init` into the target project and committed with it.
+`atk:implement`, `atk:fix` and `atk:verify` stop without it rather than guess a test command.
+`atk:plan` continues and says in the artifact which commands and paths it had to infer. Every other
+skill runs without it. What the profile holds, which skills are meant to degrade rather than stop,
+and why the kit's own copy of that file travels with an install without ever being read for your
+project, is in [shared/project-profile.md](shared/project-profile.md).
 
 `atk:convention` and `atk:review` share one more file,
 [shared/review-checklist.md](shared/review-checklist.md), so a team rule is written once and

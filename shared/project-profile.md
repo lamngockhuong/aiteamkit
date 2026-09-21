@@ -12,8 +12,14 @@ This file lives in the kit and describes the shape of a second file that does no
 | `shared/project-profile.md` | the `atk` kit | the kit maintainer | whoever writes a skill |
 | `.atk/profile.md` | the **target project** | `atk:init`, then the team | every skill that needs project facts |
 
-The kit ships no profile. A freshly installed `atk` knows nothing about the project it was installed
-into, and that is the gap `.atk/profile.md` closes.
+A freshly installed `atk` knows nothing about the project it was installed into, and that is the gap
+`.atk/profile.md` closes. The kit ships no profile of that project.
+
+It does ship one of its own. The kit is a project too and runs these skills on itself, so
+`.atk/profile.md` sits at the root of the kit repository, and a plugin install copies the repository
+whole and carries it along. It describes `aiteamkit` and nothing else. Nothing reads it for another
+project: the citation rule below resolves `.atk/` from the root of the target project, never from
+the kit directory.
 
 `.atk/` is not only the profile. `.atk/overrides/<skill>.md` holds instructions a team adds to one
 skill, and `shared/project-overrides.md` defines it, including the line between the two files: this
@@ -21,8 +27,8 @@ one records what the project **is**, an override records what a skill should **d
 
 ## Why `.atk/` and not somewhere else
 
-- Not inside the kit: the plugin directory is read-only and shared across every project on the
-  machine, while a profile is true of exactly one project.
+- Not inside the kit, for another project's facts: the plugin directory is read-only and shared
+  across every project on the machine, while a profile is true of exactly one project.
 - Not under `.claude/`: that ties the file to one harness. `atk` runs on three, and `.atk/` reads
   the same on all of them.
 - Not under `docs/`: `docs/` holds artifacts a person reads, per `shared/artifact-paths.md`. A

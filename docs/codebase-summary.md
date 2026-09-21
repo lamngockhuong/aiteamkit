@@ -54,7 +54,9 @@ removed, or renamed; update it in the same commit.
 ## `.atk/` in this repository
 
 The kit applied to itself. Written by `atk:init` and `atk:tailor` in this repository, read by the
-skills at the top of their workflow, and committed so the next maintainer inherits both.
+skills at the top of their workflow, and committed so the next maintainer inherits both. A plugin
+install copies the repository whole, so both files reach anyone who installs `atk`. Each says in its
+first line that it belongs to this repository, and no skill reads either for another project.
 
 | File | Purpose |
 |------|---------|

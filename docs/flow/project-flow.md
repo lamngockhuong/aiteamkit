@@ -1,6 +1,6 @@
 # Project Flow
 
-How the 20 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
+How the 21 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,

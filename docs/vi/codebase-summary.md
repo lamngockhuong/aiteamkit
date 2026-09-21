@@ -54,7 +54,9 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 ## `.atk/` của chính repo này
 
 Kit tự áp lên mình. Do `atk:init` và `atk:tailor` viết ra ngay trong repo này, được các skill đọc ở
-đầu workflow, và được commit để người bảo trì sau thừa hưởng cả hai.
+đầu workflow, và được commit để người bảo trì sau thừa hưởng cả hai. Bản cài plugin sao nguyên repo
+nên cả hai file đến tay mọi người cài `atk`. Mỗi file đều nói ngay dòng đầu rằng nó thuộc về repo
+này, và không skill nào đọc chúng cho dự án khác.
 
 | File | Mục đích |
 |------|----------|

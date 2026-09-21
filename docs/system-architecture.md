@@ -10,19 +10,25 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-  skills/<name>/SKILL.md        20 skills, one folder each
+  skills/<name>/SKILL.md        21 skills, one folder each
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
   skills/<name>/evals/*.json    trigger cases for the description
   shared/*.md                   DRY layer shared by the skills that cite it
   hooks/                        profile reminder and override loader, Claude Code only
   assets/*.svg                  icon and logo for marketplace listings
   docs/, docs/vi/               bilingual project documentation
+  .atk/                         the kit's own profile and overrides, for running its skills on itself
 ```
 
 Nothing in this tree describes the project the kit is installed into. That lives in one file in the
 **target project**, `.atk/profile.md`, written by `atk:init` and committed with the project. The
 plugin directory is read-only and shared by every project on the machine, so it is the wrong place
 for a fact that is true of one of them.
+
+The `.atk/` in the tree above is the kit's own, true of `aiteamkit` alone, and it is there because
+the kit runs its own skills on itself. An install copies the repository whole, and no manifest field
+filters files out, so it reaches everyone who installs the plugin. No skill reads it for their
+project: every citation of `.atk/` resolves from the root of the target project.
 
 ## One content tree, three manifests
 
@@ -56,7 +62,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for all 20 skills | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for all 21 skills | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `shared/*.md` | Only when a skill cites it | Small, since several skills may open it |

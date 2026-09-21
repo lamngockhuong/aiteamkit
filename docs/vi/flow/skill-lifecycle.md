@@ -70,9 +70,10 @@ commit đều phải hỏi, hỏi lại từng lần.
 
 ## Một skill với sang skill khác thế nào
 
-Trong hai mươi file, một skill gọi tên skill khác chín mươi lượt, thành năm mươi bảy cặp khác nhau,
-nghe như một đồ thị dày đặc. Thực ra không: phần lớn trong số đó là ranh giới chứ không phải cạnh.
-Có năm loại, và chỉ bốn loại đầu xảy ra lúc chạy.
+Trong hai mươi mốt thân file `SKILL.md`, đếm những lần nhắc `atk:`, một skill gọi tên skill khác một
+trăm mười lăm lượt, thành bảy mươi chín cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
+phần lớn trong số đó là ranh giới chứ không phải cạnh. Có năm loại, và chỉ bốn loại đầu xảy ra lúc
+chạy.
 
 | Loại | Công việc đi đâu | Xuất hiện ở |
 |------|------------------|-------------|
