@@ -1,7 +1,9 @@
 # Step ordering
 
-Loaded by `atk:plan` in step 3. The work is cut twice, at two sizes, and each cut has its own rule.
-Getting either wrong produces a plan that is technically complete and useless in practice.
+Loaded by `atk:plan` in step 3, and by `references/plan-review-mode.md`, which also runs the
+backward test below on a plan somebody else wrote. The work is cut twice, at two sizes, and each
+cut has its own rule. Getting either wrong produces a plan that is technically complete and useless
+in practice.
 
 | Cut | A unit ends where | Failure when it is wrong |
 |-----|-------------------|--------------------------|

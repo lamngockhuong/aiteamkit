@@ -61,9 +61,11 @@ tên được; khách hàng hỏi bản 1.4.2 có những gì; bên kiểm toán
 khắc phục; người bàn giao đã đi sáu tháng trước và file bàn giao là thứ duy nhất còn lại.
 
 **Dẫn xuất.** Không mất gì. Bản ghi triển khai và bản ghi chuyển giao đều là bản sao của thứ nằm
-trên pull request, bản tóm tắt của `atk:catchup` chạy lại là có, báo cáo review cũng vậy. Một lần
-review không kèm `--comment` thì không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của
-nó là bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Không skill nào
+trên pull request, bản tóm tắt của `atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại
+`atk:review`, hoặc
+`atk:plan --review` nếu thứ được soát là một bản kế hoạch. Cả hai, khi chạy mà không kèm `--comment`
+của chúng, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là bản viết duy
+nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Không skill nào
 đọc cả bốn.
 
 ## Lịch sử git không phải đường lùi

@@ -31,7 +31,7 @@ removed, or renamed; update it in the same commit.
 |------|---------|
 | `shared/team-roles.md` | Role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the seven rules every skill follows: name an owner, separate author from approver, do not decide what a role owns, write for the absent reader, ask only what the repository cannot answer, follow the team's language, honour the project's overrides |
 | `shared/artifact-paths.md` | Docs root resolution, the default output path per skill, `YYMMDD` naming, the reference-document kinds table, the three persistence groups and which of them are committed, ADR numbering, the shared YAML front matter block, and the rule against overwriting an `APPROVED` record |
-| `shared/ticket-adapters.md` | Tracker detection order, the atk-to-tracker vocabulary map for GitHub Issues, Jira, Backlog, and Redmine, the `gh` push commands, and the two-way linking rule |
+| `shared/ticket-adapters.md` | Tracker detection order, the atk-to-tracker vocabulary map for GitHub Issues, Jira, Backlog, and Redmine, the `gh` commands for pushing to a tracker and for reading a pull request, and the two-way linking rule |
 | `shared/review-checklist.md` | The order that resolves where a project keeps its conventions, the rule that a project which already writes them keeps its own shape, the `CONV-NNN` rule record format that `convention` writes and `review` cites, what each skill does with it, the eight baseline items with default severities, and the rule for retiring a stale rule. Cited by `convention`, `review` and `implement` |
 | `shared/project-profile.md` | What `.atk/profile.md` holds in the target project, why it lives there rather than in the kit, and the three-group rule deciding whether a skill stops, degrades, or ignores a missing profile |
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` holds in the target project, why one file per skill rather than several, the `## Before` and `## After` sections, the seven things an override may never remove, and the line it makes a skill print when it skips one. Reached from rule 7 of `shared/team-roles.md`, so every skill honours it |
@@ -79,7 +79,7 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Eleve
 | `skills/spec/SKILL.md` | Design | Reference documents for API, schema, and feature, updated in place, plus the drift check |
 | `skills/breakdown/SKILL.md` | Planning | Owned tasks, dependency graph, parallel lanes with file ownership |
 | `skills/convention/SKILL.md` | Development | Team conventions classified enforced / reviewed / aspirational |
-| `skills/plan/SKILL.md` | Development | Phases ending in something reviewable, steps that leave the tree working, scope boundary |
+| `skills/plan/SKILL.md` | Development | Phases ending in something reviewable, steps that leave the tree working, scope boundary; under `--review`, findings about a plan somebody else wrote |
 | `skills/implement/SKILL.md` | Development | The code, verified by layer, plus the record that becomes the pull request body |
 | `skills/fix/SKILL.md` | Development | A proven cause, the smallest change removing it, and a report of what was checked |
 | `skills/review/SKILL.md` | Development | Findings ranked blocking / should fix / nit, optionally posted to the PR |
@@ -108,7 +108,9 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/convention/references/collaboration-files.md` | What `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` each carry, where each host keeps them, and why an owner never comes from git history |
 | `skills/plan/references/step-ordering.md` | The two cuts, phase and step, and the rule for each |
 | `skills/plan/references/plan-template.md` | The plan index and the phase file |
-| `skills/implement/references/plan-gate.md` | The three settings deciding how much agreement the work needs before code is written |
+| `skills/plan/references/plan-self-review.md` | The six claims a plan makes, how to reopen each against the repository, and what to do with each result |
+| `skills/plan/references/plan-review-mode.md` | Reviewing a plan somebody else wrote: the inputs, how each result converts, the severities, and the report |
+| `skills/implement/references/plan-gate.md` | The three settings deciding how much agreement the work needs before code is written, and what to do with the open questions and the design fork a plan hands back |
 | `skills/implement/references/verification.md` | The order to run checks in, how far to reach, and when to stop |
 | `skills/implement/references/review-fix-loop.md` | The team review run against the skill's own output, and the ceiling that stops the loop hiding a design problem |
 | `skills/fix/references/investigate.md` | Proving the cause, the intent check, and the gate that decides whether a fix may happen at all |

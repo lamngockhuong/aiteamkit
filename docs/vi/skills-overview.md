@@ -216,14 +216,20 @@ bước động vào đâu và được kiểm bằng gì; phần cố ý để 
 phải trả lời.
 
 **Dùng khi.** Trước khi bắt đầu một phần việc đủ lớn để cần chia chặng, hoặc khi tiếp quản thứ do
-người khác thiết kế mà các bước không hiển nhiên.
+người khác thiết kế mà các bước không hiển nhiên. Cờ `--review` hướng đúng cách đọc đó vào một bản
+kế hoạch đã viết sẵn, kể cả bản nằm trong pull request, và ghi báo cáo ra
+`docs/derived/reviews/plan-<slug>-<date>.md` thay vì một bản kế hoạch mới; cờ `--comment` đăng kết quả
+lên pull request mang bản kế hoạch đó, đưa danh sách ra trước rồi đăng khi được đồng ý.
 
 **Không dùng khi.** Việc phải chia cho nhiều người, đó là `atk:breakdown`; hoặc việc chỉ là một thay
-đổi trong một file, khi bản kế hoạch tốn hơn chính phần việc.
+đổi trong một file, khi bản kế hoạch tốn hơn chính phần việc. Soát phần mã sinh ra từ một bản kế
+hoạch là việc của `atk:review`.
 
 **Thói quen tạo ra khác biệt.** Một phase không kết thúc được bằng thứ đem duyệt được thì không phải
 phase, mà là một quãng nghỉ. Các bước được xếp sao cho cây mã vẫn chạy ở mọi ranh giới, và chính điều
-đó khiến việc dừng giữa chừng trở nên an toàn.
+đó khiến việc dừng giữa chừng trở nên an toàn. Và bản kế hoạch được đọc lại trước khi bàn giao: mở
+từng đường dẫn nó trích, đối chiếu từng thư viện nó giả định là đã có với chính kho mã, còn thứ cả
+hai không xác nhận nổi thì thành câu hỏi mở kèm tên người, thay vì lặng lẽ biến mất.
 
 ---
 
@@ -286,8 +292,9 @@ file, cờ `--comment` đăng phát hiện thành comment inline trên PR.
 
 **Dùng khi.** Trước khi approve một pull request, hoặc khi cần một ý kiến thứ hai.
 
-**Không dùng khi.** Bạn muốn code được sửa chứ không phải được review, hoặc muốn chất vấn chính bản
-yêu cầu (`atk:intake`).
+**Không dùng khi.** Bạn muốn code được sửa chứ không phải được review, muốn chất vấn chính bản yêu
+cầu (`atk:intake`), hoặc thứ cần đọc là một bản kế hoạch chứ không phải một thay đổi, khi đó dùng
+`atk:plan --review`: kế hoạch được đối chiếu với kho mã mà nó giả định, không phải với một diff.
 
 **Thói quen tạo ra khác biệt.** Nó xuất phát từ việc thay đổi này lẽ ra phải làm gì, chứ không xuất
 phát từ diff, và nó tách lỗi chặn merge khỏi ý kiến sở thích, đó là thứ khiến một lần review được

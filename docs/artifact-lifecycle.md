@@ -63,9 +63,10 @@ that survived them.
 
 **Derived.** Nothing. The implementation record and the shipping record are copies of what lives on
 the pull request, a catchup brief is rebuilt by running `atk:catchup` again, and a review report by
-running `atk:review` again. A review run without `--comment` posts nothing to the pull request, so
-until it is rebuilt its report is the only written copy: a reason to keep the directory, not a
-reason to fear deleting it. No skill reads any of the four.
+running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan. Either of
+those, run without its `--comment`, posts nothing to the pull request, so until it is rebuilt its
+report is the only written copy: a reason to keep the directory, not a reason to fear deleting it.
+No skill reads any of the four.
 
 ## Git history is not a fallback
 

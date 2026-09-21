@@ -50,7 +50,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, updated in place and checked against the code for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, each classified as enforced by tooling, checked in review, or merely aspirational. Offers to draft the collaboration files the project has none of, and writes only the ones you pick. |
-| `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. |
+| `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. Reads the written plan back against the repository, and reviews one somebody else wrote. |
 | `atk:implement` | The code, written to the project's own conventions and reference modules, verified layer by layer with the project's own commands, and put through review before handover. |
 | `atk:fix` | The failure captured verbatim, the cause proven before a line changes, a stop after three ruled-out hypotheses rather than a guess, the smallest change that removes it, and a report of what was checked and what was not. |
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences, written to a report and summarised in the session. |
@@ -77,7 +77,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:spec [subject]                       # --kind --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
 /atk:convention                           # --audit|--init|--sync|--scaffold --scope --lang --out
-/atk:plan <ticket|design|description>     # --inline --layer --out
+/atk:plan <ticket|design|text|plan-path>  # --inline --review --comment --layer --out
 /atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
 /atk:fix <issue|report|description>       # --layer --investigate-only --out
 /atk:review <pr|branch|paths>             # --against --comment --strict --parallel --out
