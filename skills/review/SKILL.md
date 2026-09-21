@@ -43,7 +43,7 @@ reviews test adequacy. See `shared/team-roles.md`.
 /atk:review --comment                     # Post findings as inline PR comments
 /atk:review --strict                      # Include low-severity and stylistic findings
 /atk:review --parallel 5                  # Force how many copies the searching rounds run
-/atk:review --out <path>                  # Write a review report as well
+/atk:review --out <path>                  # Write the report somewhere other than the default
 ```
 
 ## Workflow
@@ -193,7 +193,7 @@ copies as agreement between people.
 A convention violation takes the severity recorded against its rule. Raise it only when the concrete
 failure is worse than the rule anticipated, and say why.
 
-Report at most ten findings, or twenty under `--strict`, ranked with `BLOCKING` first. Where the cap
+The report carries at most ten findings, or twenty under `--strict`, ranked with `BLOCKING` first. Where the cap
 cuts, correctness outranks convention and readability: drop `NIT` first, then `SHOULD FIX`, and say
 how many went and at what severity, so the author knows a second pass is owed rather than reading the
 list as the whole of it. A `BLOCKING` finding is never cut. Where blocking findings alone exceed the
@@ -206,8 +206,18 @@ nothing about what to repeat.
 
 ## Output
 
-By default the findings are reported in the session, grouped by severity. Under `--out`, a report is
-written to `docs/derived/reviews/<pr>-<date>.md` per `shared/artifact-paths.md`.
+Every run writes a report to `docs/derived/reviews/<pr>-<date>.md` per `shared/artifact-paths.md`,
+asked for or not. A review costs more to produce than to keep, and the run that is only spoken into
+a session is gone the moment the terminal scrolls. It is derived: safe to delete, and rebuilt by
+running the review again. Where the target is not a pull request the name carries what was reviewed
+instead of the number, the branch, the short commit, or a slug of the paths.
+
+The session gets the summary, not the report: how many findings at each severity, the `BLOCKING`
+ones in one line each, how many the cap cut and at what severity, and the path to the file. Whoever
+has just watched the review run needs to know whether they are blocked and where to read the rest;
+the argument behind each finding is what the file is for.
+
+`--out <path>` moves the file. It no longer decides whether one is written.
 
 ## Ticket
 
@@ -237,4 +247,6 @@ line it cites, and the summary as one review comment. Post nothing before showin
       every round ran in the calling agent, only the deduplicated list was carried between them.
 - [ ] A change touching a public contract either carried its reference document or stated the skip,
       and neither was silently fixed by the reviewer.
+- [ ] The report was written, to the default path or to `--out`, and the session carried the
+      summary and that path rather than the whole list.
 - [ ] No comment addresses the author rather than the code.

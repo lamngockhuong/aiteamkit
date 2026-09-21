@@ -275,9 +275,12 @@ a tidy-up of the surrounding file cannot be reverted cleanly.
 
 ## `atk:review`
 
-**Produces.** Review findings ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each citing a line, stating
-the failure it causes, and suggesting a concrete change. At most ten of them, or twenty under
-`--strict`, with the blocking ones never cut. Optionally posted as inline PR comments.
+**Produces.** A review report at `docs/derived/reviews/<pr>-<date>.md`, written on every run, and a
+summary in the session that says how many findings there are at each severity, names the blocking
+ones, and points at the file. The findings are ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each
+citing a line, stating the failure it causes, and suggesting a concrete change; at most ten of them,
+or twenty under `--strict`, with the blocking ones never cut. `--out` moves the file, `--comment`
+posts the findings as inline PR comments.
 
 **Use when.** Before approving a pull request, or when a review needs a second opinion.
 

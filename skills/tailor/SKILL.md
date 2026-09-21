@@ -189,7 +189,8 @@ kit. See `shared/project-overrides.md` for the format and the seven exclusions, 
 
 A `--feedback` record goes to `docs/derived/feedback/<skill>-<date>.md` instead. It is derived under
 `shared/artifact-paths.md`, because once it reaches the kit repository that issue holds the
-original, the same reason a review report is derived from the pull request that holds it.
+original, the same reason an implementation record is derived from the pull request that carries
+it.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
