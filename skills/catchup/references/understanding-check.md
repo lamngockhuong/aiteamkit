@@ -13,8 +13,10 @@ So, two hard constraints:
 
 1. **Every reference answer is folded.** It goes inside `<details>`, collapsed, under the question
    it belongs to. Never beside it, never in a table column, never in a list below the group.
-2. **The last question is never answered.** Not in any group, not in a folded block, not as a hint.
-   It belongs to the developer alone.
+2. **Question 10 is never answered.** Not in any group, not in a folded block, not as a hint. It
+   belongs to the developer alone. It also closes the group: nothing goes after it, whatever else
+   the group gained. The rule names the question rather than its position, because a group that
+   picks up extra questions still has to leave this one unanswered and last.
 
 ## Grouping
 
@@ -52,6 +54,11 @@ Question 10 is the one that matters. The other nine exist to make it answerable.
 Classify each group, then add at most three questions from its row. Adding all of them everywhere
 returns the section to a checklist nobody reads.
 
+They go between question 9 and question 10, numbered `9a`, `9b`, `9c`. Lettered rather than counted
+on, so that `question 10` names the same question in every group whether that group gained three of
+these or none. That is the question constraint 2 above is stated against, and a group where it has
+drifted to number 13 is a group where the constraint is easy to lose.
+
 | Feature type | Extra questions |
 |--------------|-----------------|
 | CRUD screen | What is validated on the client, on the server, and in the database? What happens to related records on delete? What does the user see after a successful write? |
@@ -86,6 +93,8 @@ classification anywhere in the kit.
    </details>
 
 ... questions 2 to 9 in the same shape ...
+
+9a. <question from the feature type row, up to three, same folded shape>
 
 10. Which of the questions above could you not answer from the spec?
 

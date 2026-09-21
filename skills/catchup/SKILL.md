@@ -112,12 +112,13 @@ is worse than no brief, because the reader stops asking.
 
 Load `references/understanding-check.md`. Group the questions per screen or per functional unit, one
 group each, never one set for the whole epic. Ten fixed questions per group, plus at most three
-drawn from the feature type.
+drawn from the feature type, which sit between question 9 and question 10 and are lettered rather
+than counted on.
 
 Every reference answer is folded inside a `<details>` block, so answering first and comparing after
-is the default path rather than a matter of willpower. The last question never has a reference
-answer, in any group. An answer written under its question leaves the section looking complete while
-removing the only thing in it that was worth anything.
+is the default path rather than a matter of willpower. Question 10 closes every group and never has
+a reference answer. An answer written under it leaves the section looking complete while removing
+the only thing in it that was worth anything.
 
 ### 6. Questions for the spec author
 
@@ -161,7 +162,7 @@ the exercise back into reading.
 - [ ] The mode was stated, with its evidence, before the brief was written.
 - [ ] Pull request mode produced no understanding check.
 - [ ] Epic mode: every reference answer sits inside a folded `<details>` block.
-- [ ] Epic mode: the last question has no reference answer, in every group.
+- [ ] Epic mode: question 10 closes every group and has no reference answer.
 - [ ] Epic mode: questions are grouped per screen or functional unit, not one set for the epic.
 - [ ] The questions for the spec author fit in at most ten lines.
 - [ ] Every one of those lines carries its question, the sources already searched, and a person.
