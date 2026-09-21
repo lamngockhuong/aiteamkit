@@ -69,9 +69,10 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another ninety times across the twenty files, in fifty-seven distinct pairs, which
-sounds like a dense graph. It is not: most of those are boundaries rather than edges. Five kinds, and
-only the first four happen at run time.
+One skill names another a hundred and fifteen times across the twenty-one `SKILL.md` bodies,
+counting the `atk:` mentions, in seventy-nine ordered pairs, which sounds like a dense graph. It is
+not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at
+run time.
 
 | Kind | What happens to the work | Where it appears |
 |------|--------------------------|------------------|

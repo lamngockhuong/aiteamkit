@@ -1,6 +1,6 @@
 # Luồng dự án
 
-20 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
+21 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,

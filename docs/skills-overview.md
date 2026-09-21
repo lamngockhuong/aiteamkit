@@ -1,6 +1,6 @@
 # Skills Overview
 
-Twenty skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+Twenty-one skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
 to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.

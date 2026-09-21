@@ -7,7 +7,7 @@
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
 | 2. Độ phủ skill | XONG | 20 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
 | 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười một skill đã có, mười skill còn lại chưa |
-| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 20 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
+| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 21 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
 
@@ -19,8 +19,9 @@ release-please chạy khi push lên `main`, cùng các template issue và pull r
 
 ## Phase 2: Độ phủ skill (xong)
 
-Hai mươi skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục: frontmatter với
-trigger đa ngôn ngữ, scope, roles, invocation, workflow, output, ticket và definition of done.
+Hai mươi mốt skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục:
+frontmatter với trigger đa ngôn ngữ, scope, roles, invocation, workflow, output, ticket và
+definition of done.
 
 Mười hai skill phủ phần quy trình mà một team chạy quanh mã nguồn. Tám skill thêm về sau để kit phủ
 luôn phần làm việc trên chính mã nguồn, và để kit dừng ở chỗ một vai trò nắm quyền quyết chứ không
@@ -30,13 +31,17 @@ duyệt, `implement` viết mã, `fix` chứng minh nguyên nhân của lỗi tr
 chạy thật hệ thống lên để đối chứng, và `spec` giữ những tài liệu nói API, schema và từng tính năng
 hôm nay làm gì.
 
-Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi lần: từ vựng vai trò, quy ước đường dẫn
-artifact và các adapter tracker, đều được mọi skill trích dẫn. Tám file còn lại là hợp đồng giữa
+Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi mốt lần: từ vựng vai trò, quy ước đường dẫn
+artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười file còn lại là hợp đồng giữa
 những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa năm skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
-cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng, và
-`project-profile.md` mô tả `.atk/profile.md`, một file nằm trong dự án đích chứ không nằm trong kit.
+cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng,
+`host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không, và
+`git`, skill phải tìm ra template pull request, `project-profile.md` mô tả `.atk/profile.md`, một
+file nằm trong dự án đích chứ không nằm trong kit, và `project-overrides.md` mô tả
+`.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ
+được trích dẫn thẳng.
 
 ## Phase 3: Bổ sung reference (đang làm)
 
