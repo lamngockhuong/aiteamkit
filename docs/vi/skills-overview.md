@@ -57,7 +57,9 @@ viết thành mục `## Before`, mục `## After`, hoặc cả hai, kèm tên va
 hoặc một chuẩn nội bộ thêm một bước mà kit không biết, hoặc khi một file ghi đè viết từ trước không
 còn khớp với skill nó thuộc về. Cờ `--audit` duyệt mọi file ghi đè trong dự án và không sửa gì. Cờ
 `--feedback` nhận một lần chạy hỏng rồi xếp từng phát hiện vào một trong ba chỗ: file ghi đè của
-team này, bản ghi gửi tác giả kit, hoặc không chỗ nào; bản ghi chỉ rời khỏi dự án khi được hỏi.
+team này, bản ghi gửi tác giả kit, hoặc không chỗ nào; bản ghi chỉ rời khỏi dự án khi được hỏi. Gọi
+`--feedback` mà không kèm tên skill thì nó lấy skill từ phiên làm việc, và hỏi lại khi trong phiên
+có nhiều skill đã chạy.
 
 **Không dùng khi.** Luật nói về mã nguồn chứ không nói về skill. "Mọi pull request phải có test" là
 thứ một người không cài kit vẫn kiểm được, nên nó là một dòng `CONV-NNN` do `atk:convention` viết và
@@ -93,7 +95,8 @@ hoặc một câu hỏi còn treo.
 ## `atk:catchup`
 
 **Sinh ra.** Với một epic: công việc là gì và làm cho ai, vì sao làm lúc này, cái gì trong và ngoài
-phạm vi, ai quyết cái gì, những thuật ngữ người mới sẽ không hiểu, những chỗ dễ làm sai, và phần tự
+phạm vi, một bảng liệt kê từng thứ công việc chạm tới kèm đường dẫn nó nằm và những vai chạm được
+tới nó, ai quyết cái gì, những thuật ngữ người mới sẽ không hiểu, những chỗ dễ làm sai, và phần tự
 kiểm hiểu bài mà dev phải trả lời trước khi viết dòng mã nào. Với một pull request: cùng bản
 tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm.
 
@@ -101,7 +104,9 @@ tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm.
 phải review một pull request ở mảng họ không nắm.
 
 **Không dùng khi.** Người đó mới với cả dự án chứ không riêng phần việc đang làm (`atk:onboard`),
-hoặc bản thân yêu cầu còn mập mờ chứ không chỉ là lạ lẫm (`atk:intake`).
+bản thân yêu cầu còn mập mờ chứ không chỉ là lạ lẫm (`atk:intake`), hoặc thứ cần là một tài liệu ghi
+lại phần việc đã merge nay làm những gì: đó là `atk:spec`, và nó phải còn đúng rất lâu sau khi bản
+tóm tắt bị vứt đi.
 
 **Thói quen tạo ra khác biệt.** Phần tự kiểm do dev trả lời, không phải do skill điền sẵn. Một bản
 tóm tắt không bắt ai phản hồi là bản tóm tắt không ai đọc.

@@ -58,6 +58,8 @@ internal standard adds a step the kit does not know about, or an override writte
 matches the skill it belongs to. `--audit` checks every override file in the project and changes
 nothing. `--feedback` takes a run that went wrong and sorts each finding into an override for this
 team, a record for the kit author, or neither, and the record leaves the project only when asked.
+Run without a skill name, `--feedback` takes the skill from the session and asks which one when
+more than one has run.
 
 **Do not use when.** The rule is about the code rather than about the skill. "Every pull request
 needs a test" is checkable by a person with no kit installed, so it is a `CONV-NNN` row that
@@ -92,7 +94,8 @@ accepted quietly. They become a number, a state, a visible result, or an open qu
 
 ## `atk:catchup`
 
-**Produces.** For an epic: what the work is and for whom, why now, scope in and out, who decides
+**Produces.** For an epic: what the work is and for whom, why now, scope in and out, a table of
+every unit the work touches with the path it lives at and the roles that reach it, who decides
 what, the terms a newcomer will not know, the places it is easy to go wrong, and an understanding
 check the developer answers before writing any code. For a pull request: the same brief scoped to
 the diff, without the check.
@@ -101,7 +104,9 @@ the diff, without the check.
 to review a pull request in an area they do not know.
 
 **Do not use when.** The person is new to the project rather than to this piece of work
-(`atk:onboard`), or the requirement itself is unclear rather than unfamiliar (`atk:intake`).
+(`atk:onboard`), the requirement itself is unclear rather than unfamiliar (`atk:intake`), or what is
+wanted is a document of what the merged work now does, which is `atk:spec` and has to stay true long
+after a brief is thrown away.
 
 **The habit that matters.** The understanding check is answered by the developer, not filled in by
 the skill. A brief nobody has to respond to is a brief nobody has read.

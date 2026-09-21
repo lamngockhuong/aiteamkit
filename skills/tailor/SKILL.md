@@ -11,7 +11,7 @@ description: >
   Triggers on: "tailor", "customise a skill", "customize skill", "override a skill", "tùy biến
   skill", "sửa skill theo đội", "thêm bước cho skill", "ghi đè skill", "スキルをカスタマイズ",
   "チーム独自のルール", "our team does this differently", "make the skill always", "/atk:tailor".
-argument-hint: "<skill> [--audit|--feedback] [--out <path>]"
+argument-hint: "[<skill>] [--audit|--feedback] [--out <path>]"
 ---
 
 # Skill Tailoring (`atk:tailor`)
@@ -55,6 +55,7 @@ who must decide, and never guess. See `shared/team-roles.md`.
 /atk:tailor --audit            # Check every override file in the project, change nothing
 /atk:tailor --audit <skill>    # Check one override file
 /atk:tailor --feedback <skill> # Turn a run that went wrong into an override or a record
+/atk:tailor --feedback         # Same, with the skill taken from this session
 /atk:tailor <skill> --out <path>   # Override the default output path
 ```
 
@@ -75,6 +76,11 @@ already does, and the team has to say "it does that" three times before anything
 
 Resolve the skill name with or without the `atk:` prefix, and with no prefix at all. When the name
 matches nothing, list the skills that exist and ask. Do not guess at the nearest one.
+
+A name that is missing is not the same as a name that is wrong, and it is not guessed either.
+`--audit` already means every override file in the project when no skill is named, and `--feedback`
+resolves one from the session per the rules below. Those rules end where every other mode starts:
+asking which skill this is about.
 
 Note what the skill already covers in the area the user is asking about. That note is what step 2
 opens with.
@@ -151,6 +157,22 @@ of more than one kind, and sorting them is the work. A finding that lands on the
 rejoins step 2 above and is written like any other. A finding that belongs to the author goes into
 `docs/derived/feedback/<skill>-<date>.md` and stops there.
 
+With no skill named, four rules settle which one this is about:
+
+1. Take it from the session: the skill that ran in it.
+2. Where more than one ran, ask which of them this feedback is for, or whether it is for all of
+   them. Do not pick one. A run that went wrong rarely went wrong in one skill, and the one nobody
+   named is the one nobody looks at. All of them means one record each, because the file is named
+   after a single skill and a record covering two gets read as covering neither.
+3. Only a skill of the `atk` kit is in scope. A skill belonging to the project or to another kit is
+   not tailored here and gets no record, because this kit can neither read its definition nor
+   change it. Name it, say so, and fall to rule 4 rather than stopping.
+4. Where the session leaves nothing, ask. A session that ran no `atk` skill is the ordinary way a
+   record gets filed, a day after the run it is about, so treat it as such: list the skills the kit
+   has and ask which one. Where the user has handed over a record that names its skill in the first
+   line, confirm that name instead of asking blind. What no rule here permits is picking one from
+   the surrounding conversation and carrying on.
+
 A finding whose cause is that the run ignored something the skill states plainly changes nothing in
 either place. Say so, and say which line of the skill already covers it, so the team can tell a
 definition that is wrong apart from a run that was.
@@ -197,5 +219,8 @@ the user asks. One record is one issue: a form listing four unrelated findings g
 - [ ] The user was told the file is committed.
 - [ ] Under `--audit`, no file was modified.
 - [ ] Under `--feedback`, every finding was sorted one at a time into an override, a record, or neither.
+- [ ] Under `--feedback` with no skill named, the skill came from the session or from the user, and
+      where the session held more than one `atk` skill or none, the user chose rather than the skill
+      guessing.
 - [ ] A feedback record names the person reporting and proposes no replacement wording for the skill.
 - [ ] Nothing was sent to the kit repository without being asked.

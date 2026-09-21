@@ -13,18 +13,29 @@ So, two hard constraints:
 
 1. **Every reference answer is folded.** It goes inside `<details>`, collapsed, under the question
    it belongs to. Never beside it, never in a table column, never in a list below the group.
-2. **The last question is never answered.** Not in any group, not in a folded block, not as a hint.
-   It belongs to the developer alone.
+2. **Question 10 is never answered.** Not in any group, not in a folded block, not as a hint. It
+   belongs to the developer alone. It also closes the group: nothing goes after it, whatever else
+   the group gained. The rule names the question rather than its position, because a group that
+   picks up extra questions still has to leave this one unanswered and last.
 
 ## Grouping
 
-One group per screen, or per functional unit where the work has no screens: an endpoint, a job, an
-integration. Never one group for the whole epic. An epic-wide set of questions gets epic-wide
-answers, which are the answers that sound right and mean nothing.
+The units are already written down by the time this file is loaded: they are the rows of section 4
+of the brief, from `references/brief-template.md`. Take the groups from that table rather than
+listing the units again, so the two sections are checkable against each other. No group is anything
+but a row there.
 
-A unit the spec mentions only in passing, with no fields, no actions, and no states described, is
-not a group. Fold it into the nearest one that has them, rather than producing ten questions about a
-sentence.
+Not every row is a group, though, and this file owns which ones are. A row folds into another when
+its ten questions would be answered twice:
+
+- an endpoint, a job or an entity that one screen reaches folds into that screen, because the
+  screen is where a person meets it. One that several screens reach, or none, stays its own group;
+- a unit the spec mentions only in passing, with no fields, no actions and no states described,
+  folds into the nearest row that has them, rather than producing ten questions about a sentence.
+
+What is left after the folding is the groups. Never one group for the whole epic: an epic-wide set
+of questions gets epic-wide answers, which are the answers that sound right and mean nothing. An
+epic that reaches one unit has one group, and that group is the unit rather than the epic.
 
 ## The ten fixed questions
 
@@ -51,6 +62,11 @@ Question 10 is the one that matters. The other nine exist to make it answerable.
 
 Classify each group, then add at most three questions from its row. Adding all of them everywhere
 returns the section to a checklist nobody reads.
+
+They go between question 9 and question 10, numbered `9a`, `9b`, `9c`. Lettered rather than counted
+on, so that `question 10` names the same question in every group whether that group gained three of
+these or none. That is the question constraint 2 above is stated against, and a group where it has
+drifted to number 13 is a group where the constraint is easy to lose.
 
 | Feature type | Extra questions |
 |--------------|-----------------|
@@ -86,6 +102,8 @@ classification anywhere in the kit.
    </details>
 
 ... questions 2 to 9 in the same shape ...
+
+9a. <question from the feature type row, up to three, same folded shape>
 
 10. Which of the questions above could you not answer from the spec?
 

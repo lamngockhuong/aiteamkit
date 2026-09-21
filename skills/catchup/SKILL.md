@@ -31,8 +31,9 @@ person.
 
 Does NOT handle: turning a raw request into requirements, which is `atk:intake` and starts from
 unstructured input while this skill starts from an epic that already exists; splitting an epic into
-owned tasks (`atk:breakdown`); judging whether a pull request is correct (`atk:review`); or
-answering the understanding check on the developer's behalf.
+owned tasks (`atk:breakdown`); judging whether a pull request is correct (`atk:review`); recording
+what merged work now does as a document that has to stay true, which is `atk:spec` and outlives the
+brief; or answering the understanding check on the developer's behalf.
 
 ## Roles
 
@@ -72,6 +73,13 @@ A bare ticket id says nothing about which kind of object it points at, so guessi
 is how a pull request ends up carrying an understanding check for code that is already merged. State
 the mode and what settled it, in one line, before writing anything.
 
+An epic whose code is already merged is still epic mode. Say so in the same line, and carry it into
+section 1 of the brief per `references/brief-template.md`: which linked pull requests merged and
+when, and what is still open. Said in this step alone it reaches the person running the skill; the
+reader it matters to is the one who opens the brief afterwards. It is not a third mode, because delivery is rarely all or nothing, and an epic with its
+front end merged and its back end open would have to be sorted into one by a skill that knows less
+about it than the person reading.
+
 Pull request mode has no understanding check. Not shorter, not optional: absent. Questions about how
 a feature should behave are asked before the code is written, and a pull request is past that point.
 `--no-check` drops the section in epic mode too, for a reader who only needs the summary.
@@ -79,7 +87,8 @@ a feature should behave are asked before the code is written, and a pull request
 ### 2. Read the source
 
 Resolve the tracker through `shared/ticket-adapters.md`. Read the epic body, its comments, its
-linked issues, and any design document it points at. In pull request mode read the description, the
+linked issues, its linked pull requests and whether each has merged, and any design document it
+points at. In pull request mode read the description, the
 diff, and the issue it closes.
 
 Quote a decision verbatim with a link to where it was made. A paraphrased decision loses who made
@@ -88,8 +97,14 @@ it, and who made it is the part a newcomer needs.
 ### 3. Trace the code
 
 Find what the work touches: the modules, the entities, the endpoints, the screens. Cite file paths
-so the reader can open them. In pull request mode this is the diff plus every caller of what the
+so the reader can open them. What the work has still to build traces to where it will sit, the
+module it will join or the endpoint that will host it; a unit with no code yet is still a unit. In pull request mode this is the diff plus every caller of what the
 diff changed.
+
+All of it lands in one place, section 4 of the brief, one row per unit. Spreading a traced path
+across whichever prose section it seemed to fit leaves the reader assembling the map that step 4 was
+supposed to hand them. Where the work behaves differently for different roles, that belongs in the
+same section, which `references/brief-template.md` says how to shape.
 
 ### 4. Write the brief
 
@@ -100,6 +115,7 @@ Use `references/brief-template.md`. The sections differ by mode:
 | What this is, and for whom | yes | yes |
 | Why now | yes | yes |
 | Scope and out of scope | yes | reduced to what the diff changes |
+| What it touches | yes | yes, the diff and its callers |
 | Who is involved and who decides | yes | yes |
 | Unfamiliar terms | yes | yes |
 | Risks and easy mistakes | yes | yes |
@@ -110,14 +126,19 @@ is worse than no brief, because the reader stops asking.
 
 ### 5. Understanding check (epic mode)
 
-Load `references/understanding-check.md`. Group the questions per screen or per functional unit, one
-group each, never one set for the whole epic. Ten fixed questions per group, plus at most three
-drawn from the feature type.
+Load `references/understanding-check.md`. The groups come from the rows of section 4, folded per
+the grouping rule in that file, and never one set for the whole epic. Ten fixed questions per group, plus at most three drawn from the feature type, which sit
+between question 9 and question 10 and are lettered rather than counted on.
 
 Every reference answer is folded inside a `<details>` block, so answering first and comparing after
-is the default path rather than a matter of willpower. The last question never has a reference
-answer, in any group. An answer written under its question leaves the section looking complete while
-removing the only thing in it that was worth anything.
+is the default path rather than a matter of willpower. Question 10 closes every group and never has
+a reference answer. An answer written under it leaves the section looking complete while removing
+the only thing in it that was worth anything.
+
+Where the code is already merged, the section still belongs in the brief and the questions do not
+change. Say who it is for now: whoever takes over the work that is still open, and whoever writes
+the test scenarios. Dropping it is a call for the person reading, and `--no-check` is how they
+make it.
 
 ### 6. Questions for the spec author
 
@@ -159,10 +180,14 @@ the exercise back into reading.
 ## Definition of done
 
 - [ ] The mode was stated, with its evidence, before the brief was written.
+- [ ] Where any linked pull request had merged, section 1 of the brief says what is delivered and
+      what is still open.
 - [ ] Pull request mode produced no understanding check.
 - [ ] Epic mode: every reference answer sits inside a folded `<details>` block.
-- [ ] Epic mode: the last question has no reference answer, in every group.
-- [ ] Epic mode: questions are grouped per screen or functional unit, not one set for the epic.
+- [ ] Epic mode: question 10 closes every group and has no reference answer.
+- [ ] Epic mode: every group is a row of section 4, every row not folded under the grouping rule
+      has one, and no group is the epic.
+- [ ] Everything step 3 traced is in section 4, not spread across the prose sections.
 - [ ] The questions for the spec author fit in at most ten lines.
 - [ ] Every one of those lines carries its question, the sources already searched, and a person.
 - [ ] The brief links to the requirement and the design instead of restating them.
