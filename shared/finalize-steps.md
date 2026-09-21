@@ -72,6 +72,11 @@ One commit per logical change. The subject says what changed, the body says why 
 stands behind it: the failure removed, or the requirement met. Never name the tool that produced the
 change.
 
+That rule stops at the commit. It covers the subject, the body, a trailer, and anything the host
+would otherwise append to it, and it covers nothing further: the pull request body of step 4 and the
+issue comment of step 5 are outside it. A team whose own policy puts an authorship marker on what it
+posts to the host is following that policy, not overruling this one.
+
 Read what is staged before committing. A fix that drags an unrelated formatting sweep into the same
 commit cannot be reverted without reverting the sweep, which is how a one line fix becomes
 unrevertable. Never stage a credential, a dotenv file, a token, a key, or a dump of real user data.

@@ -37,6 +37,14 @@ shipping something else.
 Every section of the template is answered, in the template's own order, from the artifact the
 calling skill produced and from what this run actually did.
 
+**No artifact** is the mirror of no template, and it is the more common of the two: a person types
+`/atk:git` after a change they made by hand, and no skill wrote anything for this run to carry.
+Then the sections are answered from the diff, from the verification this run did or saw, and from
+what the user said while it ran. Say in the body that it was built that way, because a reviewer who
+knows the evidence came from the diff reads it differently from one who believes a skill produced
+it. The link bullet below then has nothing to link, and is dropped rather than pointed at a path
+that does not exist.
+
 - **A section the artifact cannot answer** keeps its heading and gets one line saying what is
   missing and who can answer it, named per rule 1 of `shared/team-roles.md`. Never invent the
   content, never delete the section, and never leave the placeholder text standing as though it were
