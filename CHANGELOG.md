@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.5](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.4...v0.0.5) (2026-09-21)
+
+
+### Features
+
+* an exception for an untracked .atk/, and a rule for text from outside the conversation ([#35](https://github.com/lamngockhuong/aiteamkit/issues/35)) ([9a37292](https://github.com/lamngockhuong/aiteamkit/commit/9a372924fd304d64ff6a6507bd05329352964fbc))
+* read a plan back against the repository, and review one somebody wrote ([#33](https://github.com/lamngockhuong/aiteamkit/issues/33)) ([c3290f0](https://github.com/lamngockhuong/aiteamkit/commit/c3290f02da13da56f99a6b957a8ce96c95c279e4))
+* take feedback on a skill the kit does not ship ([#36](https://github.com/lamngockhuong/aiteamkit/issues/36)) ([e282edf](https://github.com/lamngockhuong/aiteamkit/commit/e282edfcd423eb98f70dab5ecc8cc6137fc65228))
+
 ## [0.0.4](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.3...v0.0.4) (2026-09-21)
 
 
