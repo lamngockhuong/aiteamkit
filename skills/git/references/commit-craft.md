@@ -48,8 +48,9 @@ Write for the absent reader, per rule 4 of `shared/team-roles.md`: the ticket li
 spelled out once, the file path cited. Somebody reading `git log` in a year has neither the
 conversation nor the pull request open.
 
-**Never name the tool that produced the change.** `shared/finalize-steps.md` holds that rule. It
-applies to the body, to a trailer, and to anything a host would otherwise append.
+**Never name the tool that produced the change.** `shared/finalize-steps.md` holds that rule and
+holds where it stops: this commit and nothing past it. The pull request body written in step 4 is
+outside it.
 
 ## Language
 

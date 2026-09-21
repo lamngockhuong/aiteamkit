@@ -179,15 +179,27 @@ Ask these, and nothing else:
 | Working language | The repository may be English while the team works in another language |
 | Where the spec lives | Often a wiki, a drive, or a chat channel outside the repository |
 
+**Except where the project wrote it down.** A stated value is detected with its source and not
+asked for, the same way the Commands section above takes a cell out of `CLAUDE.md` when that is the
+only place the project recorded it. Two rows meet this in practice: `CODEOWNERS` states a person's
+host identifier and the paths they own, and an agent instruction file sometimes states where the
+spec lives. `shared/host-file-locations.md` holds where each host reads `CODEOWNERS` from and when
+one counts as present.
+
+What `CODEOWNERS` never states is the role name. A line giving `@handle` ownership of `apps/api`
+says nothing about whether that person is the Tech Lead or the BrSE, so take the handles and their
+scope from the file and leave the role mapping to the fixed turn that owns it.
+
 Whether a detected value is still current is not on this list. That belongs to step 2, where every
 detected value is shown for confirmation in one pass, not to the interview.
 
 ## The question budget
 
-The unit is **one turn asking the user**, not one fact. Four turns are fixed: the team table (all
-roles, their host identifiers and their approvals in a single question, never one question per role
-and never a second turn for the identifiers), the working language, where the spec lives, and who
-approves the profile.
+The unit is **one turn asking the user**, not one fact, and a harness that carries several questions
+in a single prompt spends one turn on that prompt, per Several questions in one prompt in
+`shared/host-capabilities.md`. Four turns are fixed: the team table (all roles, their host
+identifiers and their approvals in a single question, never one question per role and never a second
+turn for the identifiers), the working language, where the spec lives, and who approves the profile.
 
 That leaves four turns for the ambiguities the section above can raise: two lock files, a watch-mode
 test script, a command that needs another command first, a member list that does not group cleanly,

@@ -102,10 +102,12 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
   artifact, và không phải commit thêm file ảnh nào.
 - `shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
   dùng, và cách xử lý trên harness không có chúng. Được `atk:fix`, `atk:implement` và `atk:verify`
-  trích dẫn cho bước dọn mã ngay sau lượt kiểm chứng đạt, và `atk:review` trích dẫn cho những lượt
-  đọc độc lập chạy song song. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo một chiều: khả
-  năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về một kit khác thì
-  không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai thì không.
+  trích dẫn cho bước dọn mã ngay sau lượt kiểm chứng đạt, `atk:review` trích dẫn cho những lượt đọc
+  độc lập chạy song song, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
+  gửi được nhiều câu hỏi trong cùng một lần. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo
+  một chiều: khả năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về
+  một kit khác thì không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai
+  thì không.
 - `shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
   phần không bao giờ đụng tới. Cùng ba skill sửa mã đó trích dẫn, thông qua `host-capabilities.md`.
   Nó tồn tại để bước dọn mã cho ra cùng một kết quả trên harness có sẵn khả năng dọn và trên harness
@@ -123,8 +125,9 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
 - `shared/host-file-locations.md`: cách nhận ra code host, mọi vị trí mà từng host đọc
   `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, cùng lúc nào một file được tính là đã
   có. `atk:convention` dựa vào đó để biết file nào thiếu mà đề nghị soạn, `atk:git` dựa vào đó để
-  tìm template phải điền. Hai skill hỏi cùng một câu từ hai đầu, và chỉ cần một bên trả lời hẹp hơn
-  là repo có thêm một template thứ hai đè lên template của chính đội.
+  tìm template phải điền, còn `atk:init` dựa vào đó để đọc định danh host của cả đội trong
+  `CODEOWNERS` thay vì tiêu một lượt hỏi. Hai skill đầu hỏi cùng một câu từ hai đầu, và chỉ cần một
+  bên trả lời hẹp hơn là repo có thêm một template thứ hai đè lên template của chính đội.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

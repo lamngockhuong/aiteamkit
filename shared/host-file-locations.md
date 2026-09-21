@@ -5,12 +5,14 @@ template, and `CODEOWNERS`. Referenced from `skills/<name>/SKILL.md` as
 `shared/host-file-locations.md`, which is `../../shared/host-file-locations.md` relative to a skill
 file.
 
-Two skills need this and need the same answer. `atk:convention` asks whether the project has one of
-these files, because a file it believes absent is a file it offers to draft. `atk:git` asks where the
-pull request template is, because that template is the shape of a pull request body. A narrower
-answer in either place produces the same failure from two directions: a second file lands beside the
-team's own, the host picks one by its own precedence, and the team believes it is covered by the one
-the host ignored.
+Three skills need this and need the same answer. `atk:convention` asks whether the project has one
+of these files, because a file it believes absent is a file it offers to draft. `atk:git` asks where
+the pull request template is, because that template is the shape of a pull request body. `atk:init`
+asks where `CODEOWNERS` is, because the handles in it are host identifiers the interview would
+otherwise spend a turn asking for. A narrower answer in any of the three produces the same failure
+from three directions: a second file lands beside the team's own, the host picks one by its own
+precedence, and the team believes it is covered by the one the host ignored. For `atk:init` the
+failure is quieter and no less real: a team asked for what a tracked file already states.
 
 ## Detect the host first
 

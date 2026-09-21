@@ -71,6 +71,10 @@ Before step 1, read `.atk/overrides/git.md` when it exists, per rule 7 of `share
 `--rebase`, `--resolve` and `--stack` leave this line for `references/repair.md` and
 `references/stacked.md`, and rejoin it at the step their work lands in.
 
+`--commit` ends the run after step 3, and `--pr` after step 4. A step the flag stopped short of did
+not fail and is not missing, so name the flag that ended the run. A reader checking this line
+against what ran otherwise goes looking for a step that was never going to happen.
+
 ### 1. Read the state
 
 `git status --short`, the current branch, its base, and whether the branch exists on the remote.

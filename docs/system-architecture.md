@@ -104,10 +104,12 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
   and nothing has to be committed as an image.
 - `shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
   does on a harness that has none. Cited by `atk:fix`, `atk:implement`, and `atk:verify` for the
-  tidy step that follows a green verification, and by `atk:review` for independent passes run in
-  parallel. It draws the line the kit had drawn only one way before: a capability the harness itself
-  ships may be named and used, a command belonging to another kit may not, because the first is
-  there for everyone who installed atk on that harness and the second is not.
+  tidy step that follows a green verification, by `atk:review` for independent passes run in
+  parallel, and by `atk:init` for what one turn of an interview counts as where the harness carries
+  several questions in a single prompt. It draws the line the kit had drawn only one way before: a
+  capability the harness itself ships may be named and used, a command belonging to another kit may
+  not, because the first is there for everyone who installed atk on that harness and the second is
+  not.
 - `shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one
@@ -125,9 +127,10 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
 - `shared/host-file-locations.md`: how the code host is detected, every location each host reads
   `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one of them counts as
   present. Cited by `atk:convention`, which decides from it whether a file is missing and therefore
-  worth offering to draft, and by `atk:git`, which finds the template it has to fill. The two ask
-  the same question from opposite ends, and a narrower answer in either one is how a repository
-  ends up with a second template that outranks the team's own.
+  worth offering to draft, by `atk:git`, which finds the template it has to fill, and by `atk:init`,
+  which reads the team's host identifiers out of `CODEOWNERS` instead of spending an interview turn
+  on them. The first two ask the same question from opposite ends, and a narrower answer in either
+  one is how a repository ends up with a second template that outranks the team's own.
 
 The last two describe files that do not ship with the kit at all:
 
