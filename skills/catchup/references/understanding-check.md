@@ -20,17 +20,22 @@ So, two hard constraints:
 
 ## Grouping
 
-One group per screen, or per functional unit where the work has no screens: an endpoint, a job, an
-integration. Never one group for the whole epic. An epic-wide set of questions gets epic-wide
-answers, which are the answers that sound right and mean nothing.
-
-Those units are already written down by the time this file is loaded: they are the rows of section 4
+The units are already written down by the time this file is loaded: they are the rows of section 4
 of the brief, from `references/brief-template.md`. Take the groups from that table rather than
-listing the units again, so the two sections are checkable against each other.
+listing the units again, so the two sections are checkable against each other. No group is anything
+but a row there.
 
-A unit the spec mentions only in passing, with no fields, no actions, and no states described, is
-not a group. Fold it into the nearest one that has them, rather than producing ten questions about a
-sentence.
+Not every row is a group, though, and this file owns which ones are. A row folds into another when
+its ten questions would be answered twice:
+
+- an endpoint, a job or an entity that one screen reaches folds into that screen, because the
+  screen is where a person meets it. One that several screens reach, or none, stays its own group;
+- a unit the spec mentions only in passing, with no fields, no actions and no states described,
+  folds into the nearest row that has them, rather than producing ten questions about a sentence.
+
+What is left after the folding is the groups. Never one group for the whole epic: an epic-wide set
+of questions gets epic-wide answers, which are the answers that sound right and mean nothing. An
+epic that reaches one unit has one group, and that group is the unit rather than the epic.
 
 ## The ten fixed questions
 

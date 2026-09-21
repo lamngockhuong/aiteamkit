@@ -73,9 +73,10 @@ A bare ticket id says nothing about which kind of object it points at, so guessi
 is how a pull request ends up carrying an understanding check for code that is already merged. State
 the mode and what settled it, in one line, before writing anything.
 
-An epic whose code is already merged is still epic mode. State that too, in the same line: which
-linked pull requests merged and when, so the reader learns it from the brief rather than from the
-tracker. It is not a third mode, because delivery is rarely all or nothing, and an epic with its
+An epic whose code is already merged is still epic mode. Say so in the same line, and carry it into
+section 1 of the brief per `references/brief-template.md`: which linked pull requests merged and
+when, and what is still open. Said in this step alone it reaches the person running the skill; the
+reader it matters to is the one who opens the brief afterwards. It is not a third mode, because delivery is rarely all or nothing, and an epic with its
 front end merged and its back end open would have to be sorted into one by a skill that knows less
 about it than the person reading.
 
@@ -86,7 +87,8 @@ a feature should behave are asked before the code is written, and a pull request
 ### 2. Read the source
 
 Resolve the tracker through `shared/ticket-adapters.md`. Read the epic body, its comments, its
-linked issues, and any design document it points at. In pull request mode read the description, the
+linked issues, its linked pull requests and whether each has merged, and any design document it
+points at. In pull request mode read the description, the
 diff, and the issue it closes.
 
 Quote a decision verbatim with a link to where it was made. A paraphrased decision loses who made
@@ -95,7 +97,8 @@ it, and who made it is the part a newcomer needs.
 ### 3. Trace the code
 
 Find what the work touches: the modules, the entities, the endpoints, the screens. Cite file paths
-so the reader can open them. In pull request mode this is the diff plus every caller of what the
+so the reader can open them. What the work has still to build traces to where it will sit, the
+module it will join or the endpoint that will host it; a unit with no code yet is still a unit. In pull request mode this is the diff plus every caller of what the
 diff changed.
 
 All of it lands in one place, section 4 of the brief, one row per unit. Spreading a traced path
@@ -123,8 +126,8 @@ is worse than no brief, because the reader stops asking.
 
 ### 5. Understanding check (epic mode)
 
-Load `references/understanding-check.md`. One group per row of section 4, never one set for the
-whole epic. Ten fixed questions per group, plus at most three drawn from the feature type, which sit
+Load `references/understanding-check.md`. The groups come from the rows of section 4, folded per
+the grouping rule in that file, and never one set for the whole epic. Ten fixed questions per group, plus at most three drawn from the feature type, which sit
 between question 9 and question 10 and are lettered rather than counted on.
 
 Every reference answer is folded inside a `<details>` block, so answering first and comparing after
@@ -176,12 +179,14 @@ the exercise back into reading.
 
 ## Definition of done
 
-- [ ] The mode was stated, with its evidence, before the brief was written, and so was the delivery
-      state when the epic's code had already merged.
+- [ ] The mode was stated, with its evidence, before the brief was written.
+- [ ] Where any linked pull request had merged, section 1 of the brief says what is delivered and
+      what is still open.
 - [ ] Pull request mode produced no understanding check.
 - [ ] Epic mode: every reference answer sits inside a folded `<details>` block.
 - [ ] Epic mode: question 10 closes every group and has no reference answer.
-- [ ] Epic mode: one group per row of section 4, not one set for the epic.
+- [ ] Epic mode: every group is a row of section 4, every row not folded under the grouping rule
+      has one, and no group is the epic.
 - [ ] Everything step 3 traced is in section 4, not spread across the prose sections.
 - [ ] The questions for the spec author fit in at most ten lines.
 - [ ] Every one of those lines carries its question, the sources already searched, and a person.

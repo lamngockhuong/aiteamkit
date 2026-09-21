@@ -32,6 +32,11 @@ page that was read by no one in particular.
 Two or three sentences. The user, the thing they can do afterwards, and the surface it appears on.
 Write it so a person who has never opened the tracker understands it without following a link.
 
+Where any linked pull request has already merged, close this section with one line saying what is
+already delivered and what is still open, naming the pull requests and when they merged. A reader
+taking over the open half has to know which half that is before anything else in the brief means
+what it appears to.
+
 **Pull request mode:** what the change does, stated as the behaviour difference a user or a caller
 would notice, not as a list of files.
 
@@ -58,6 +63,11 @@ deliberately leaves alone.
 One row per unit of the work: a screen, an endpoint, a job, an entity. This is where step 3 of the
 skill puts what it traced; nothing it found is left to be scattered through the prose sections.
 
+A unit the work has still to build gets a row like any other. Its third column says where it will
+sit, the module or the file it will join, marked as not built yet. `Nothing found` belongs to work
+that touches nothing at all, which on an epic means the trace failed rather than that there is
+nothing there.
+
 | Unit | Kind | Where it is in the code | Who reaches it |
 |------|------|-------------------------|----------------|
 | <name the reader will recognise> | screen / endpoint / job / entity | <the path, and the route or the endpoint> | <the roles, or "everyone who reaches the feature"> |
@@ -70,9 +80,9 @@ generated, that cell stops being able to hold it: give the roles a table of thei
 one row per role and one column per thing that differs. A brief that hides three-way branching in a
 comma-separated cell is a brief the reader has to rebuild.
 
-These rows are also the groups of the understanding check in section 8, per the grouping rule in
-`references/understanding-check.md`. A row may be folded into a neighbouring group under that rule,
-but no group appears that is not a row here.
+**Epic mode:** the groups of the understanding check in section 8 are drawn from these rows, per
+the grouping rule in `references/understanding-check.md`. No group is anything but a row here, and
+which rows fold into which is that rule's business rather than this table's.
 
 ## 5. Who is involved and who decides
 
@@ -100,8 +110,8 @@ buried in it.
 
 ## 8. Understanding check
 
-**Epic mode only.** Generated per `references/understanding-check.md`, one group per row of section
-4, answers folded, question 10 last and unanswered.
+**Epic mode only.** Generated per `references/understanding-check.md`: the groups drawn from the
+rows of section 4 and folded per the rule there, answers folded, question 10 last and unanswered.
 
 **Pull request mode:** the section does not appear. Do not replace it with a shortened version.
 
