@@ -57,9 +57,11 @@ skill's output named as approver.
 internal standard adds a step the kit does not know about, or an override written earlier no longer
 matches the skill it belongs to. `--audit` checks every override file in the project and changes
 nothing. `--feedback` takes a run that went wrong and sorts each finding into an override for this
-team, a record for the kit author, or neither, and the record leaves the project only when asked.
-Run without a skill name, `--feedback` takes the skill from the session, asks which one when more
-than one `atk` skill has run, and asks outright when none has.
+team, a record for whoever wrote the skill, or neither, and the record leaves the project only when
+asked. The skill need not be one of the kit's: a run of the project's own skill or of another kit's
+is recorded the same way, minus the override, which only an `atk` skill would read. Run without a
+skill name, `--feedback` takes the skill from the session, asks which one when more than one of the
+kit's skills has run, and asks outright when none has.
 
 **Do not use when.** The rule is about the code rather than about the skill. "Every pull request
 needs a test" is checkable by a person with no kit installed, so it is a `CONV-NNN` row that

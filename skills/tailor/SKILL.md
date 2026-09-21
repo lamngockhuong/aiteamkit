@@ -28,12 +28,13 @@ exists, it just lives in somebody's head.
 Handles: reading a shipped skill to see what it already does, interviewing for what the team wants
 different, refusing the instructions an override may not carry, writing or updating
 `.atk/overrides/<skill>.md`, auditing existing override files against the skills they belong to, and
-turning a run that went wrong into either an override or a record the kit author can act on.
+turning a run that went wrong into an override for this team or into a record for the author of the
+skill. A run of a skill this kit does not ship reaches the record and not the override.
 
-Does NOT handle: editing anything inside the kit, which nothing in atk does; recording the team's
-coding rules, which is `atk:convention` and lands in the conventions document rather than here;
-recording project facts such as build commands or the docs root, which is `atk:init` and lands in
-`.atk/profile.md`.
+Does NOT handle: editing anything inside the kit, which nothing in atk does; writing an override for
+a skill this kit does not ship, because nothing would read it; recording the team's coding rules,
+which is `atk:convention` and lands in the conventions document rather than here; recording project
+facts such as build commands or the docs root, which is `atk:init` and lands in `.atk/profile.md`.
 
 The line against `atk:convention` is the one teams get wrong. "Every pull request needs a test" is a
 rule about the code, so it is a `CONV-NNN` row that `atk:review` enforces. "`atk:review` should also
@@ -76,6 +77,19 @@ already does, and the team has to say "it does that" three times before anything
 
 Resolve the skill name with or without the `atk:` prefix, and with no prefix at all. When the name
 matches nothing, list the skills that exist and ask. Do not guess at the nearest one.
+
+Under `--feedback` a name that matches no skill of this kit is not yet wrong, because that mode
+also takes a skill from outside it. Its definition lives somewhere else: the project's own skill
+directory, another installed kit, wherever the harness keeps them. Look there, and ask the user for
+the path when looking finds nothing. A definition that cannot be read at all does not stop the
+mode; `references/feedback.md` holds what the record loses without it.
+
+The reverse case is the dangerous one. This kit's skill names are ordinary words, so a bare `review`
+or `plan` may mean a skill of the same name from somewhere else, and under `--feedback` that name no
+longer has one possible owner. Where a skill of that name from outside the kit also ran in the
+session, or the user names one, confirm which is meant before opening any definition. Everything
+after this point is decided against the file that opens: a record sorted against a definition that
+never ran is aimed at a maintainer who cannot act on it.
 
 A name that is missing is not the same as a name that is wrong, and it is not guessed either.
 `--audit` already means every override file in the project when no skill is named, and `--feedback`
@@ -152,32 +166,42 @@ With no override files in the project, say so and stop rather than offering to c
 ### `--feedback`
 
 Takes a run that went wrong and reaches the right one of three outcomes: an override for this team,
-a record for the kit author, or neither. `references/feedback.md` holds the question that separates
-them, what the record carries, and the two things it must never carry.
+a record for whoever wrote the skill, or neither. `references/feedback.md` holds the question that
+separates them, what the record carries, and the two things it must never carry.
 
 Ask that question once per finding rather than once per run. One bad run usually produces findings
 of more than one kind, and sorting them is the work. A finding that lands on the override side
 rejoins step 2 above and is written like any other. A finding that belongs to the author goes into
 `docs/derived/feedback/<skill>-<date>.md` and stops there.
 
-With no skill named, four rules settle which one this is about. They run before step 1, which
+The skill need not be one of this kit's, and a skill kept in the project or in another kit gets a
+record and no override. The first of the three outcomes is closed to it: `.atk/overrides/<skill>.md`
+is opened by the `atk` skill named after it and by nothing else, so a file written there for any
+other skill is read by nobody while looking like a rule the team agreed on. Say that instead of
+writing it, and carry the finding into the record under a section of its own, apart from the
+findings the author is being asked to act on. `references/feedback.md` holds the two other things
+that change: what the record loses where the definition cannot be read at all, and who it names in
+place of this kit's issue form.
+
+With no skill named, three rules settle which one this is about. They run before step 1, which
 cannot open a skill file without a name, and the run returns to that step once the name exists:
 
-1. Take it from the session: the skill that ran in it.
-2. Where more than one `atk` skill ran, ask which of them this feedback is for, or whether it is
-   for all of them. Do not pick one. A run that went wrong rarely went wrong in one skill, and the
-   one nobody named is the one nobody looks at. All of them means one record each, because the file
-   is named after a single skill and a record covering two gets read as covering neither. With more
-   than one record, `--out` names the directory they go in; a single file path is refused rather
-   than made to hold them all.
-3. Only a skill of the `atk` kit is in scope. A skill belonging to the project or to another kit is
-   not tailored here and gets no record, because this kit can neither read its definition nor
-   change it. Name it, say so, and fall to rule 4 rather than stopping.
-4. Where the session leaves nothing, ask. A session that ran no `atk` skill is the ordinary way a
-   record gets filed, a day after the run it is about, so treat it as such: list the skills the kit
-   has and ask which one. Where the user has handed over a record that names its skill in the first
-   line, confirm that name instead of asking blind. What no rule here permits is picking one from
-   the surrounding conversation and carrying on.
+1. Take it from the session: the skill of this kit that ran in it.
+2. Where more than one of them ran, ask which this feedback is for, or whether it is for all
+   of them. A skill from outside the kit joins that count only where the user names it: a harness
+   runs skills of its own alongside a run, `atk:implement` reaches for the host's clean-up
+   capability by design, and counting those would put the question in front of the user in every
+   ordinary session. Do not pick one. A run that went wrong rarely went wrong in one skill, and
+   the one nobody named is the one nobody looks at. All of them means one record each, because the
+   file is named after a single skill and a record covering two gets read as covering neither. With
+   more than one record, `--out` names the directory they go in; a single file path is refused
+   rather than made to hold them all.
+3. Where the session leaves nothing, ask. A session that ran no skill of this kit is the
+   ordinary way a record gets filed, a day after the run it is about, so treat it as such: list the
+   skills this kit has, and say that a skill from outside it can be named instead. Where the user
+   has handed over a record that names its skill in the first line, confirm that name instead of
+   asking blind. What no rule here permits is picking one from the surrounding conversation and
+   carrying on.
 
 A finding whose cause is that the run ignored something the skill states plainly changes nothing in
 either place. Say so, and say which line of the skill already covers it, so the team can tell a
@@ -185,7 +209,9 @@ definition that is wrong apart from a run that was.
 
 The record leaves the repository only when the user asks, per the consent line in
 `shared/finalize-steps.md`. Offer it, name the issue form it fits, and wait. Never open the issue as
-a side effect of writing the record.
+a side effect of writing the record. The form belongs to this kit's repository, so it is named for
+this kit's skills alone; for any other skill, name who owns it and leave the sending to the user,
+who knows where their own skills are reported and this skill does not.
 
 ## Output
 
@@ -194,9 +220,10 @@ kit. See `shared/project-overrides.md` for the format and the seven exclusions, 
 `shared/artifact-paths.md` for why this skill is one of the three exceptions to the docs-root rule.
 
 A `--feedback` record goes to `docs/derived/feedback/<skill>-<date>.md` instead. It is derived under
-`shared/artifact-paths.md`, because once it reaches the kit repository that issue holds the
-original, the same reason an implementation record is derived from the pull request that carries
-it.
+`shared/artifact-paths.md`, because once it is filed the issue holds the original, the same reason
+an implementation record is derived from the pull request that carries it. Until somebody files it
+the record is the only copy, which is a reason to keep the directory rather than a reason to place
+it elsewhere.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
@@ -209,8 +236,10 @@ Follow `shared/ticket-adapters.md`. An override that a role other than the autho
 become one issue carrying the proposed file and the name of the approver, when the user asks. The
 file itself lives in the repository; the tracker holds a pointer to it.
 
-A `--feedback` record goes to the kit repository rather than the project's tracker, and only when
-the user asks. One record is one issue: a form listing four unrelated findings gets triaged as one.
+A `--feedback` record about a skill of this kit goes to the kit repository rather than the
+project's tracker, and only when the user asks. A record about any other skill goes wherever that
+skill's owner takes reports, which is the user's to know, so the record names the owner and stops
+there. One record is one issue: a form listing four unrelated findings gets triaged as one.
 
 ## Definition of done
 
@@ -228,7 +257,12 @@ the user asks. One record is one issue: a form listing four unrelated findings g
 - [ ] Under `--audit`, no file was modified.
 - [ ] Under `--feedback`, every finding was sorted one at a time into an override, a record, or neither.
 - [ ] Under `--feedback` with no skill named, the skill came from the session or from the user, and
-      where the session held more than one `atk` skill or none, the user chose rather than the skill
-      guessing.
+      where the session held more than one skill of this kit or none, the user chose rather than
+      the skill guessing.
+- [ ] Under `--feedback` on a skill from outside this kit, no override file was written, the finding
+      that would have been one went into a section of the record of its own, and the record named
+      that skill's owner rather than this kit's issue form.
+- [ ] A bare name that could mean a skill of this kit or one from outside it was confirmed with the
+      user before any definition was opened.
 - [ ] A feedback record names the person reporting and proposes no replacement wording for the skill.
-- [ ] Nothing was sent to the kit repository without being asked.
+- [ ] Nothing left the project without being asked.
