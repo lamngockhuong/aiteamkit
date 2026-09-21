@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.4](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.3...v0.0.4) (2026-09-21)
+
+
+### Features
+
+* close four gaps atk:catchup left a run to guess ([#27](https://github.com/lamngockhuong/aiteamkit/issues/27)) ([6a754a5](https://github.com/lamngockhuong/aiteamkit/commit/6a754a51c0237073b7a889dd017a347d1f69d43b))
+* write the atk:review report by default, and size the run by what it reads ([#29](https://github.com/lamngockhuong/aiteamkit/issues/29)) ([dd63c85](https://github.com/lamngockhuong/aiteamkit/commit/dd63c851acf9e4070a877a5dbed95ad8de6eb969))
+
+
+### Bug Fixes
+
+* close five silences two skill runs reported in atk:git and atk:init ([#32](https://github.com/lamngockhuong/aiteamkit/issues/32)) ([446b0ee](https://github.com/lamngockhuong/aiteamkit/commit/446b0ee87d416a21948289972827cc4086bff86a))
+* close ten findings the PR 27 review left open ([#30](https://github.com/lamngockhuong/aiteamkit/issues/30)) ([7fc6a05](https://github.com/lamngockhuong/aiteamkit/commit/7fc6a05b907d6b80ae1fcb688d62135188c6ee86))
+
 ## [0.0.3](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.2...v0.0.3) (2026-09-20)
 
 
