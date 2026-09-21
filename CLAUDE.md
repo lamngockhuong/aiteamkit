@@ -314,6 +314,13 @@ theme, which is most of them on a tracker.
 subdirectories included. Every `docs/**/*.md` must have a `docs/vi/**/*.md` counterpart at the same
 relative path; adding or renaming one means doing the same on the other side.
 
+Two subtrees are outside this rule, because they are artifacts a skill wrote rather than docs this
+repository authors. `docs/derived/` is skill output and is gitignored. `docs/records/` is skill
+output that is committed: a fix report, a design record, a release record, each one an account of a
+moment, in the language of the run that produced it. Translating one would be translating history,
+and the person who needs it reads the pull request it belongs to. `.atk/profile.md` says the same in
+its Layers table, and the mirror check below excludes both paths.
+
 | File | Purpose |
 |------|---------|
 | `skills-overview.md` | Reader-facing explanation of every skill: what it produces, when to use, when not to |
@@ -370,7 +377,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
 | `CONV-001` | Adding, renaming, or removing a skill touches all ten groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
-| `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
+| `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
@@ -403,7 +410,8 @@ for d in skills/*/; do
 done
 
 # docs/ and docs/vi/ are mirrored
-diff <(cd docs && find . -name '*.md' -not -path './vi/*' | sort) \
+diff <(cd docs && find . -name '*.md' -not -path './vi/*' \
+              -not -path './derived/*' -not -path './records/*' | sort) \
      <(cd docs/vi && find . -name '*.md' | sort)
 
 # Both hooks parse and are valid Node; check-profile stays silent where a profile exists
