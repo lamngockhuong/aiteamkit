@@ -6,8 +6,8 @@ from `skills/<name>/SKILL.md` as `shared/project-overrides.md`, which is
 
 The behaviour is rule 7 of `shared/team-roles.md`, written once. Every `SKILL.md` carries one line at
 the top of its `## Workflow` naming its own override file and pointing at that rule, because a shared
-file is only read when something makes a skill open it. The rule lives in one place; 19 files hold a
-pointer to it, not a copy of it.
+file is only read when something makes a skill open it. The rule lives in one place; every
+`SKILL.md` holds a pointer to it, not a copy of it.
 
 ## Two different files
 
