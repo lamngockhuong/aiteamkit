@@ -4,7 +4,7 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-17
-updated: 2026-09-20
+updated: 2026-09-21
 ticket: none
 ---
 
@@ -33,8 +33,11 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
      and a 300-line ceiling. A docs edit is always two files, English and its `docs/vi/` mirror, with
      no frontmatter and no ceiling. A hook edit is executable Node whose standards are about runtime
      shape: exec form, silent when it has nothing to say. -->
-<!-- Skill-generated documents under `docs/derived/` are not part of the docs layer. They are output,
-     their shape belongs to the skill that writes them, and this project does not commit them. -->
+<!-- Skill-generated documents under `docs/derived/` and `docs/records/` are not part of the docs
+     layer. They are output, and their shape belongs to the skill that writes them. `docs/derived/`
+     is gitignored; `docs/records/` is committed, because a record is the only account of what was
+     true at a moment. Neither is mirrored in `docs/vi/`: translating a record would be translating
+     history. CLAUDE.md, section "Docs are bilingual", carries the same exclusion. -->
 
 ## Commands
 
@@ -57,7 +60,8 @@ Two further checks live outside that section, each beside the rule it enforces:
 
 ## Docs
 
-- Docs root: `docs/`, mirrored file-for-file in `docs/vi/`, subdirectories included <!-- source: existing directory -->
+- Docs root: `docs/`, mirrored file-for-file in `docs/vi/`, subdirectories included, except
+  `docs/derived/` and `docs/records/` <!-- source: existing directory -->
 - Conventions: `CLAUDE.md` <!-- source: no CONTRIBUTING.md, no .editorconfig -->
 - Review checklist: `CLAUDE.md`, section "Review checklist" <!-- source: written by /atk:convention on 2026-09-18 -->
 - Designs: `docs/system-architecture.md`

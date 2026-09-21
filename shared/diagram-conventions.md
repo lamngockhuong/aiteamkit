@@ -83,7 +83,7 @@ flowchart LR
 
 | Skill | Diagram | Where |
 |-------|---------|-------|
-| `catchup` | Approval flow or sequence, only where the feature crosses roles or services | In the brief, under the scope section |
+| `catchup` | Approval flow or sequence, only where the feature crosses roles or services | In the brief, under section 4 |
 | `design-doc` | Sequence and component diagrams for the chosen option | Beside the option it belongs to |
 | `plan` | Phase order, only when phases are not a straight line | In the plan index, not in a phase file |
 | `breakdown` | Dependency graph, with the task ids from the table | After the task table |

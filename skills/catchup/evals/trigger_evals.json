@@ -21,5 +21,7 @@
   { "query": "write the technical design for this epic", "should_trigger": false },
   { "query": "write test cases for this feature", "should_trigger": false },
   { "query": "onboard the new developer who joins on Monday", "should_trigger": false },
-  { "query": "summarize what changed in the last sprint", "should_trigger": false }
+  { "query": "summarize what changed in the last sprint", "should_trigger": false },
+  { "query": "document what the merged work now does so the API doc stays true", "should_trigger": false },
+  { "query": "viết tài liệu mô tả tính năng đã merge để về sau còn tra", "should_trigger": false }
 ]

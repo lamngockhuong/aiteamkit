@@ -80,6 +80,14 @@ generated, that cell stops being able to hold it: give the roles a table of thei
 one row per role and one column per thing that differs. A brief that hides three-way branching in a
 comma-separated cell is a brief the reader has to rebuild.
 
+Where no person reaches a unit at all, a scheduled job or one job another job calls, that column
+names what triggers it instead of a role.
+
+In epic mode that sub-table is also the reference answer to question 2 of the understanding check,
+four sections before the question is asked. `references/understanding-check.md` holds what the
+check does about it; nothing is folded or withheld here, because the brief is a reading aid and
+hiding the map to protect a question would cost the reader more than the question is worth.
+
 **Epic mode:** the groups of the understanding check in section 8 are drawn from these rows, per
 the grouping rule in `references/understanding-check.md`. No group is anything but a row here, and
 which rows fold into which is that rule's business rather than this table's.

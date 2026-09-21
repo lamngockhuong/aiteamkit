@@ -82,6 +82,9 @@ A name that is missing is not the same as a name that is wrong, and it is not gu
 resolves one from the session per the rules below. Those rules end where every other mode starts:
 asking which skill this is about.
 
+Under `--feedback` with no name those rules run before this step, per the `--feedback` section
+below. Asked before any skill file has been read, the disambiguating question is asked blind.
+
 Note what the skill already covers in the area the user is asking about. That note is what step 2
 opens with.
 
@@ -157,13 +160,16 @@ of more than one kind, and sorting them is the work. A finding that lands on the
 rejoins step 2 above and is written like any other. A finding that belongs to the author goes into
 `docs/derived/feedback/<skill>-<date>.md` and stops there.
 
-With no skill named, four rules settle which one this is about:
+With no skill named, four rules settle which one this is about. They run before step 1, which
+cannot open a skill file without a name, and the run returns to that step once the name exists:
 
 1. Take it from the session: the skill that ran in it.
-2. Where more than one ran, ask which of them this feedback is for, or whether it is for all of
-   them. Do not pick one. A run that went wrong rarely went wrong in one skill, and the one nobody
-   named is the one nobody looks at. All of them means one record each, because the file is named
-   after a single skill and a record covering two gets read as covering neither.
+2. Where more than one `atk` skill ran, ask which of them this feedback is for, or whether it is
+   for all of them. Do not pick one. A run that went wrong rarely went wrong in one skill, and the
+   one nobody named is the one nobody looks at. All of them means one record each, because the file
+   is named after a single skill and a record covering two gets read as covering neither. With more
+   than one record, `--out` names the directory they go in; a single file path is refused rather
+   than made to hold them all.
 3. Only a skill of the `atk` kit is in scope. A skill belonging to the project or to another kit is
    not tailored here and gets no record, because this kit can neither read its definition nor
    change it. Name it, say so, and fall to rule 4 rather than stopping.
@@ -210,7 +216,8 @@ the user asks. One record is one issue: a form listing four unrelated findings g
 
 - [ ] The shipped `SKILL.md` was read before any question was asked.
 - [ ] Any existing override file was read and updated in place rather than replaced.
-- [ ] No more than eight questions were asked.
+- [ ] No more than eight questions were asked in the step 2 interview. The one-per-finding sort
+      under `--feedback` is a different count and is not measured against it.
 - [ ] Every proposed instruction was checked against the seven exclusions before writing.
 - [ ] A refused instruction was reported with which of the seven it breaks and what was offered instead.
 - [ ] An answer that belongs to `atk:init` or `atk:convention` was sent there instead of written here.
