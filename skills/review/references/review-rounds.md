@@ -57,6 +57,20 @@ belongs to a round that has to go looking. Someone adding a ninth item applies t
 than deriving it again. It is also why `rules` runs once: multiplying a mechanical scan buys
 nothing.
 
+**A repository with no running code.** `atk` is one, and so is any documentation, content, or
+prompt project: what ships is Markdown that an agent reads. Four rounds name a code surface, and
+each has one substitution, so the analogy stops being invented once per run:
+
+| Round | What it opens where nothing runs |
+|---|---|
+| `exposure` | What the changed instructions cause to be written, sent, posted or published, and where that lands |
+| `tests` | Whatever the repository can check without a person: its evals, its schemas, its verification commands. New behaviour none of them can catch is the finding |
+| `contract` | The repository's own synchronisation rules, the ones naming which files must change together |
+| `callers` | Every other file citing what changed: by section number, heading, flag, rule id, or count |
+
+A round whose substitution finds nothing to open returns empty and names the substitution it looked
+for, the same as any other empty round.
+
 **`rules` does not switch itself off.** A project that has recorded no conventions is exactly the
 case `shared/review-checklist.md` covers: `atk:review` checks the baseline anyway and reports that
 the project has recorded nothing. A `rules` round that fell silent there would go quiet at the one
@@ -88,18 +102,29 @@ return the same answer three times.
 | Half and half | `removed`, `callers`, `exposure` | A bounded surface to open, then reading it for defects |
 | Comparing | `criteria`, `contract`, `rules`, `tests` | Checking the diff against a list that already exists |
 
-The size of the change no longer picks the rounds. It only turns N up and down:
+The size of the change no longer picks the rounds. It only turns N up and down, and what measures
+that size is **changed lines**, both sides of the diff counted:
 
-| Changed files | Searching | Half and half | Comparing | Round runs |
+| Changed lines | Searching | Half and half | Comparing | Round runs |
 |---|---|---|---|---|
-| 5 or fewer | 1 | 1 | 1 | 9, all in the calling agent, nothing spawned |
-| 6 to 20 | 2 | 1 | 1 | 11 |
-| more than 20 | 3 | 2 | 1 | 16 |
+| 200 or fewer | 1 | 1 | 1 | 9, all in the calling agent, nothing spawned |
+| 201 to 1000 | 2 | 1 | 1 | 11 |
+| more than 1000 | 3 | 2 | 1 | 16 |
 
-The first row is the existing rule from the skill's step 3 carried over, not a new one: below six
-files the synthesis costs more than the second opinion is worth, and the calling agent has read the
-whole diff already. The last row costs 16 runs where a flat N of 3 would cost 27, and gives up
-nothing, because everything cut was a copy of a job that produces the same answer each time.
+Lines rather than files, because lines are what an agent has to read and files are only where they
+sit. Seven files holding 112 lines of prose and seven files holding four thousand lines of code are
+one number apart under a file count and two bands apart under this one, and it is the second answer
+that is right. Changed files keep one job: **more than twenty of them raises the band by one**,
+never past the third, because a change spread that wide costs attention even where each file gained
+a line.
+
+The first row is the existing rule from the skill's step 3, re-keyed rather than replaced: on a
+small change the synthesis costs more than the second opinion is worth, and the calling agent has
+read the whole diff already. The last row costs 16 runs where a flat N of 3 would cost 27, and gives
+up nothing, because everything cut was a copy of a job that produces the same answer each time.
+
+A run that spawns says which band it was in and what put it there, so a reader who thinks the review
+was too thin, or too expensive, can see the number that decided it.
 
 Then cap it by the machine, before spawning anything. Read the available memory (`free -m` on Linux,
 `vm_stat` with `sysctl hw.memsize` on macOS, `systeminfo` on Windows) and allow roughly 1.5 GB per
@@ -121,11 +146,11 @@ searching rounds: doing that recreates the agent that forgets its earlier concer
 whole reason the rounds exist.
 
 The threshold is the one the copy table already uses, so the file carries one set of bands and not
-two. From six to twenty changed files, one agent holds all four comparing rounds. Above twenty,
-split them in two. Below six nothing is spawned at all, so there is nothing to combine.
+two. In the second band one agent holds all four comparing rounds. In the third, split them in two.
+In the first nothing is spawned at all, so there is nothing to combine.
 
-Combining changes the number of agents, never the number of rounds: from 6 to 20 files, 11 round
-runs land in 8 agents, and above 20, 16 round runs land in 14. The closing sweep adds one more agent
+Combining changes the number of agents, never the number of rounds: in the second band 11 round runs
+land in 8 agents, and in the third 16 round runs land in 14. The closing sweep adds one more agent
 of its own, so a run comes to 9 and 15. Those two numbers are what a report can be checked against,
 which is the reason the band is fixed rather than left to judgement. Each
 round still reports under its own name, and a combined agent returns its rounds separately rather
@@ -145,8 +170,8 @@ rounds do different jobs, so duplicate reports are rare, and the ones that happe
 synthesis. The one pass that must see the list is the sweep at the end, whose job is finding what
 the list is missing; it is not a round, and the section below says why.
 
-The rule binds what is handed to a spawned round. Where nothing is spawned, at five files or fewer
-and on a harness with no parallel agents, one context necessarily holds everything: run the rounds
+The rule binds what is handed to a spawned round. Where nothing is spawned, in the first band and
+on a harness with no parallel agents, one context necessarily holds everything: run the rounds
 in order and keep only the deduplicated list between them, which is the next rule and is as close
 to the blindfold as one agent can get.
 
@@ -222,8 +247,8 @@ sweep is the one job that asks for a fresh reading of that diff against that lis
 and on a large change the sweep is what loses. An agent that starts with the list and nothing else
 does the same job with none of that behind it.
 
-Below six changed files nothing is spawned at all, so the sweep runs in the calling agent like
-everything else.
+In the first band nothing is spawned at all, so the sweep runs in the calling agent like everything
+else.
 
 It is not a round. It ran last, with every round's findings in front of it, so its candidates carry
 neither `[k/N]` nor a round name and are labelled as coming from the sweep. Tagging one `[1/N]` would
@@ -239,10 +264,12 @@ the list cannot look for what the list is missing.
 
 ## What the report adds
 
-Two things, and no more: which rounds ran, which returned empty and why, and a `[k/N]` tag on each
-finding a replicated round raised, with a round name on the rest and the sweep's own findings
-labelled as coming from the sweep. A reader who knows three of three copies raised something reads
-the list differently from one who does not.
+Three things, and no more: the band the change fell in and the line count that put it there; which
+rounds ran, which returned empty and why; and a `[k/N]` tag on each finding a replicated round
+raised, with a round name on the rest and the sweep's own findings labelled as coming from the
+sweep. A reader who knows three of three copies raised something reads the list differently from one
+who does not, and a reader who thinks the review was thin can see the number that decided how wide
+it went.
 
 The review is still one model's work, and the report never presents a count as agreement between
 people. `shared/team-roles.md` rule 2 holds at any number of rounds: the reviewer is a person, and

@@ -81,9 +81,11 @@ list alongside it.
 
 **How many copies each runs.** A round that has to go looking runs several; a round that only
 compares the diff against a list that already exists runs once, because copies of a comparison
-return the same answer. The size of the change turns that number up and down, not the round list.
-Five files or fewer run all nine rounds in this agent and spawn nothing, as before. `--parallel <N>`
-overrides the searching rounds, not the total, which is now a consequence of the round list.
+return the same answer. The size of the change turns that number up and down, not the round list,
+and it is measured in changed lines rather than in changed files: 200 lines or fewer run all nine
+rounds in this agent and spawn nothing. Say which band the run is in and what put it there.
+`--parallel <N>` overrides the searching rounds, not the total, which is now a consequence of the
+round list.
 
 **Which rounds share an agent.** Comparing rounds may be combined; searching rounds never are,
 because combining them rebuilds the agent that forgets its earlier concerns.
@@ -227,8 +229,8 @@ line it cites, and the summary as one review comment. Post nothing before showin
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.
-- [ ] The rounds that ran are stated, along with any that returned empty and why, and a copy count
-      the machine forced down says so.
+- [ ] The band and the line count that put the change in it are stated, along with the rounds that
+      ran, any that returned empty and why, and a copy count the machine forced down.
 - [ ] Every agent within a round received the same scope, and a finding only one copy of a round
       raised was checked against the code before it was reported.
 - [ ] No spawned round was shown what an earlier round found, the closing sweep excepted. Where
