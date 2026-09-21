@@ -57,7 +57,9 @@ viết thành mục `## Before`, mục `## After`, hoặc cả hai, kèm tên va
 hoặc một chuẩn nội bộ thêm một bước mà kit không biết, hoặc khi một file ghi đè viết từ trước không
 còn khớp với skill nó thuộc về. Cờ `--audit` duyệt mọi file ghi đè trong dự án và không sửa gì. Cờ
 `--feedback` nhận một lần chạy hỏng rồi xếp từng phát hiện vào một trong ba chỗ: file ghi đè của
-team này, bản ghi gửi tác giả kit, hoặc không chỗ nào; bản ghi chỉ rời khỏi dự án khi được hỏi.
+team này, bản ghi gửi tác giả kit, hoặc không chỗ nào; bản ghi chỉ rời khỏi dự án khi được hỏi. Gọi
+`--feedback` mà không kèm tên skill thì nó lấy skill từ phiên làm việc, và hỏi lại khi trong phiên
+có nhiều skill đã chạy.
 
 **Không dùng khi.** Luật nói về mã nguồn chứ không nói về skill. "Mọi pull request phải có test" là
 thứ một người không cài kit vẫn kiểm được, nên nó là một dòng `CONV-NNN` do `atk:convention` viết và
