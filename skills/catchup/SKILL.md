@@ -2,11 +2,13 @@
 name: catchup
 description: >
   Summarise an epic or a pull request for someone who was not in the conversation that produced it:
-  what the work is and for whom, why now, what is in and out of scope, who decides, the unfamiliar
-  terms, and where it is easy to go wrong. For an epic it also produces the understanding check the
-  developer answers before writing any code.
+  what the work is and for whom, why now, what is in and out of scope, what the work touches and
+  where each unit sits in the code, who decides, the unfamiliar terms, and where it is easy to go
+  wrong. For an epic it also produces the understanding check the developer answers before writing
+  any code.
   Use when a person joins work already in flight, picks up an epic they did not help write, or has
-  to review a pull request in an area they do not know.
+  to review a pull request in an area they do not know. A document of what the merged work now does
+  is `atk:spec` instead, and outlives the brief.
   Triggers on: "catchup", "summarize issue", "summarize PR", "tóm tắt issue", "tóm tắt PR",
   "giải thích epic", "hiểu epic này", "キャッチアップ", "ブリーフ", "/atk:catchup".
 argument-hint: "[epic-url|pr-url] [--no-check] [--lang <code>] [--out <path>]"
@@ -39,7 +41,8 @@ brief; or answering the understanding check on the developer's behalf.
 
 The reader is a Dev or a QA joining work in flight. The questions the brief collects go back to the
 BrSE/BA or the PM who wrote the spec, by name. The understanding check belongs to the person who
-will write the code, and nobody answers it for them. See `shared/team-roles.md`.
+will write the code, and nobody answers it for them. Where the code has already merged, step 5 says
+who inherits it, on the same terms. See `shared/team-roles.md`.
 
 ## Invocation
 
@@ -96,10 +99,12 @@ it, and who made it is the part a newcomer needs.
 
 ### 3. Trace the code
 
-Find what the work touches: the modules, the entities, the endpoints, the screens. Cite file paths
-so the reader can open them. What the work has still to build traces to where it will sit, the
-module it will join or the endpoint that will host it; a unit with no code yet is still a unit. In pull request mode this is the diff plus every caller of what the
-diff changed.
+Find what the work touches: the screens, the endpoints, the jobs, the entities, which are the four
+kinds section 4 of the brief has a row for. Cite file paths so the reader can open them; the module
+a unit sits in is that path rather than a unit of its own. What the work has still to build traces
+to where it will sit, the module it will join or the endpoint that will host it; a unit with no code
+yet is still a unit. In pull request mode this is the diff plus every caller of what the diff
+changed.
 
 All of it lands in one place, section 4 of the brief, one row per unit. Spreading a traced path
 across whichever prose section it seemed to fit leaves the reader assembling the map that step 4 was
@@ -162,8 +167,9 @@ the shared front matter block: the sections from the mode table in step 4, then 
 the spec author from step 6, which closes the artifact in both modes because it is the part that
 leaves it.
 
-Where the feature crosses roles or services, one diagram in the scope section earns its place, drawn
-per `shared/diagram-conventions.md`. A feature that lives in one module does not get one.
+Where the feature crosses roles or services, one diagram under section 4 earns its place, drawn per
+`shared/diagram-conventions.md`. That is where the units and the roles are, so the diagram sits with
+what it draws. A feature that lives in one module does not get one.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
@@ -174,8 +180,8 @@ it falls into, per `shared/artifact-paths.md`.
 
 Follow `shared/ticket-adapters.md`. Offer the questions for the spec author as a comment on the epic
 or the pull request; show it first and post nothing without a yes. Never post the understanding
-check to the tracker: the answers belong to the developer who wrote them, and publishing them turns
-the exercise back into reading.
+check to the tracker: the answers belong to whoever wrote them, and publishing them turns the
+exercise back into reading.
 
 ## Definition of done
 
@@ -187,7 +193,8 @@ the exercise back into reading.
 - [ ] Epic mode: question 10 closes every group and has no reference answer.
 - [ ] Epic mode: every group is a row of section 4, every row not folded under the grouping rule
       has one, and no group is the epic.
-- [ ] Everything step 3 traced is in section 4, not spread across the prose sections.
+- [ ] Every unit step 3 traced has a row in section 4 rather than in a prose section. A file cited
+      in section 6 or section 7 is not a unit and does not move.
 - [ ] The questions for the spec author fit in at most ten lines.
 - [ ] Every one of those lines carries its question, the sources already searched, and a person.
 - [ ] The brief links to the requirement and the design instead of restating them.

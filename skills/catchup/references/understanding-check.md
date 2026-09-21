@@ -58,15 +58,29 @@ step 6 is where it becomes a person.
 
 Question 10 is the one that matters. The other nine exist to make it answerable.
 
+Question 2 is the one section 4 of the brief can answer ahead of it, through the role sub-table
+`references/brief-template.md` asks for. Where that table exists, the folded block under question 2
+points at it rather than restating it, and the question is still asked: reading a table of five
+roles is not writing down which of them reach this unit, and that difference is what this whole
+file rests on.
+
 ## Feature type questions
 
 Classify each group, then add at most three questions from its row. Adding all of them everywhere
 returns the section to a checklist nobody reads.
 
-They go between question 9 and question 10, numbered `9a`, `9b`, `9c`. Lettered rather than counted
-on, so that `question 10` names the same question in every group whether that group gained three of
-these or none. That is the question constraint 2 above is stated against, and a group where it has
-drifted to number 13 is a group where the constraint is easy to lose.
+A group no row describes adds none. An entity that reaches no screen is the usual case: it takes
+the ten fixed questions and stops there, which makes it a shorter group rather than a wrong one.
+Pushing it into the nearest row asks it three questions about a screen it does not have.
+
+The extra questions go between question 9 and question 10, labelled `9a`, `9b`, `9c`. Lettered
+rather than counted on, so that `question 10` names the same question in every group whether that
+group gained three of these or none. That is the question constraint 2 above is stated against, and
+a group where it has drifted to number 13 is a group where the constraint is easy to lose.
+
+Write the label in bold, as its own paragraph, never as a list marker. `9a.` is not one under
+CommonMark or GFM: a renderer ends the numbered list at question 9, prints the label as plain text,
+and leaves the folded block below it with no list item to belong to.
 
 | Feature type | Extra questions |
 |--------------|-----------------|
@@ -103,7 +117,7 @@ classification anywhere in the kit.
 
 ... questions 2 to 9 in the same shape ...
 
-9a. <question from the feature type row, up to three, same folded shape>
+**9a.** <question from the feature type row, up to three, same folded shape>
 
 10. Which of the questions above could you not answer from the spec?
 
