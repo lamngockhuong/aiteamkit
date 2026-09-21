@@ -183,7 +183,16 @@ Skills that need project facts (build commands, layer layout, where the spec liv
 `.atk/profile.md` from the root of the **target project**, never from the kit. `atk:init` creates
 it; `shared/project-profile.md` defines what it holds and what each skill does when it is missing.
 
-The kit ships no profile, and no skill writes project facts into the kit itself.
+No skill writes another project's facts into the kit. The kit's own `.atk/` at the repository root
+is not that: it describes `aiteamkit`, because the kit runs its own skills on itself. End users
+receive it, and that is accepted rather than worked around. No field of `plugin.json` or of a
+marketplace entry excludes files, and the install copies the plugin directory as it stands, so
+`"source": "./"` ships the whole repository. Only the source shape changes what ships, and every
+option costs more than it saves here: `git-subdir` or a subdirectory path means moving `skills/`,
+`shared/`, `hooks/` and `assets/` down one level and rewriting every path in the docs, while `npm`
+and `archive` mean a publish step this repository does not have. Nothing reads `.atk/` for the
+user's project, because every citation resolves it from the root of the target project, and both
+files say as much in their first line.
 
 ## `hooks/` never holds a rule, and is never the only road to a behavior
 

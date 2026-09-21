@@ -17,11 +17,17 @@ aiteamkit/
   hooks/                        lời nhắc profile và bộ nạp file ghi đè, chỉ Claude Code
   assets/*.svg                  icon và logo cho trang marketplace
   docs/, docs/vi/               tài liệu dự án song ngữ
+  .atk/                         hồ sơ và file ghi đè của chính kit, để kit chạy skill lên chính mình
 ```
 
 Không chỗ nào trong cây này mô tả dự án mà kit được cài vào. Phần đó nằm trong một file thuộc **dự án
 đích**, là `.atk/profile.md`, do `atk:init` viết ra và được commit cùng dự án. Thư mục plugin chỉ đọc
 và dùng chung cho mọi dự án trên máy, nên nó là chỗ sai để giữ một sự thật chỉ đúng với một dự án.
+
+`.atk/` trong cây trên là của chính kit, chỉ đúng với `aiteamkit`, và nó nằm đó vì kit chạy skill của
+mình lên chính mình. Bản cài sao nguyên repo, không manifest nào có ô để loại file ra, nên nó đến tay
+mọi người cài plugin. Không skill nào đọc nó cho dự án của họ: mọi chỗ trích dẫn `.atk/` đều giải
+đường dẫn từ gốc dự án đích.
 
 ## Một cây nội dung, ba manifest
 

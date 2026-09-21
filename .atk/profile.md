@@ -10,6 +10,11 @@ ticket: none
 
 # atk project profile
 
+This is the profile of the `aiteamkit` repository itself, not of your project. A plugin install
+copies the repository whole, so this file arrives with the kit; no skill reads it for another
+project, because every citation of `.atk/profile.md` resolves from the root of the project being
+worked on. Run `/atk:init` there to write your own.
+
 Written by `/atk:init`. Read by the atk skills that need project facts. Committed on purpose: the
 next person on the team inherits it. Re-check it with `/atk:init --audit`.
 

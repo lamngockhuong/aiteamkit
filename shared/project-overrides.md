@@ -18,9 +18,14 @@ This file lives in the kit and describes the shape of a second file that does no
 | `shared/project-overrides.md` | the `atk` kit | the kit maintainer | whoever writes a skill |
 | `.atk/overrides/<skill>.md` | the **target project** | the team, by hand or through `atk:tailor` | the skill it is named after |
 
-The kit ships no overrides. A freshly installed `atk` behaves the same in every project, and that is
-the gap these files close: a team that needs one more step, one more section in an artifact, or one
-more constraint writes it down once and every run picks it up.
+A freshly installed `atk` behaves the same in every project, and that is the gap these files close:
+a team that needs one more step, one more section in an artifact, or one more constraint writes it
+down once and every run picks it up. The kit ships no overrides for that project.
+
+It does carry one of its own, `.atk/overrides/review.md`, for the reason
+`shared/project-profile.md` gives about the profile: the kit runs these skills on itself, and a
+plugin install copies the repository whole. It binds runs inside the kit repository and nowhere
+else.
 
 ## Why `.atk/` and not somewhere else
 

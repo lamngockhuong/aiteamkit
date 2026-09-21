@@ -17,12 +17,18 @@ aiteamkit/
   hooks/                        profile reminder and override loader, Claude Code only
   assets/*.svg                  icon and logo for marketplace listings
   docs/, docs/vi/               bilingual project documentation
+  .atk/                         the kit's own profile and overrides, for running its skills on itself
 ```
 
 Nothing in this tree describes the project the kit is installed into. That lives in one file in the
 **target project**, `.atk/profile.md`, written by `atk:init` and committed with the project. The
 plugin directory is read-only and shared by every project on the machine, so it is the wrong place
 for a fact that is true of one of them.
+
+The `.atk/` in the tree above is the kit's own, true of `aiteamkit` alone, and it is there because
+the kit runs its own skills on itself. An install copies the repository whole, and no manifest field
+filters files out, so it reaches everyone who installs the plugin. No skill reads it for their
+project: every citation of `.atk/` resolves from the root of the target project.
 
 ## One content tree, three manifests
 
