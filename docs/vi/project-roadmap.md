@@ -37,9 +37,10 @@ những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa năm skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
 cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng,
-`host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không, và
-`git`, skill phải tìm ra template pull request, `project-profile.md` mô tả `.atk/profile.md`, một
-file nằm trong dự án đích chứ không nằm trong kit, và `project-overrides.md` mô tả
+`host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không,
+`git`, skill phải tìm ra template pull request, và `init`, skill đọc định danh của cả đội trong
+`CODEOWNERS`, `project-profile.md` mô tả `.atk/profile.md`, một file nằm trong dự án đích chứ không
+nằm trong kit, và `project-overrides.md` mô tả
 `.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ
 được trích dẫn thẳng.
 

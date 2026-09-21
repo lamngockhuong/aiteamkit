@@ -4,9 +4,9 @@ What a skill may use from the agent it runs inside, and what it does when that a
 it. Referenced from `skills/<name>/SKILL.md` as `shared/host-capabilities.md`, which is
 `../../shared/host-capabilities.md` relative to a skill file.
 
-Cited by `implement`, `fix`, and `verify` for the tidy step, and by `review` for parallel reviewers.
-What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever way the
-step runs.
+Cited by `implement`, `fix`, and `verify` for the tidy step, by `review` for parallel reviewers, and
+by `init`, and through it `tailor`, for what counts as one turn of an interview. What the tidy step
+looks for is in `shared/tidy-pass.md`, which is the same list whichever way the step runs.
 
 ## What may be named
 
@@ -45,6 +45,20 @@ No skill stops for a missing host capability. Every capability below improves wo
 owns; none of them is a precondition for it. That is the opposite of `.atk/profile.md`, whose
 absence does stop three skills, and the difference is that the profile carries facts nobody else can
 supply.
+
+## Several questions in one prompt
+
+Claude Code ships this as a single prompt carrying up to four questions, which the user answers in
+one action.
+
+A skill that budgets what its interview costs counts **round trips, not facts**. One prompt answered
+once is one turn, however many questions it carried. `atk:init` sets that budget in
+`skills/init/references/detection.md`, and `atk:tailor` works to the same one.
+
+Where the harness asks one question at a time, the questions that would have shared a prompt still
+count as the one turn they stand for, and they are still sent together in one message. Otherwise the
+same interview scores differently on three harnesses, and a team is charged for a capability its
+harness does not have.
 
 ## Tidy the change, after it is verified and before it is reviewed
 

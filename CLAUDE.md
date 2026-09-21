@@ -102,10 +102,10 @@ skill discovery.
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, and the consent line every action past the commit has to cross | `fix`, `implement`, `verify`, `tailor` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
-| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers | `fix`, `implement`, `verify`, `review` |
+| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, and what counts as one turn of an interview | `fix`, `implement`, `verify`, `review`, `init` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
-| `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template) |
+| `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
