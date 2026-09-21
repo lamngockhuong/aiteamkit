@@ -40,7 +40,9 @@ what a skill should **do** differently here. A build command belongs in the prof
 one skill reads it; an instruction belongs in an override even when it names a command.
 
 Overrides are committed. A file that is not committed is a team where each machine runs a different
-rule, and nobody can tell why two people got two different reviews.
+rule, and nobody can tell why two people got two different reviews. A repository that will not take
+the file at all is the one exception, and `shared/project-profile.md` holds it under "When the
+repository will not take the file", together with what it costs.
 
 ## One file per skill
 
