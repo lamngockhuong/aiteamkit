@@ -18,7 +18,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | Skill | Default output |
 |-------|----------------|
 | `init` | `.atk/profile.md` (see the exception below) |
-| `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md` |
+| `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
 | `intake` | `docs/records/requirements/<ticket-or-date>-<slug>.md` |
 | `catchup` | `docs/derived/catchup/<ticket-or-date>-<slug>.md` |
 | `estimate` | `docs/records/planning/estimate-<sprint-or-date>.md` |
@@ -131,9 +131,10 @@ Every file in the first two groups is committed, the same as `.atk/profile.md`.
 chain breaks if it does: the implementation record and the shipping record are copies of what lives
 on the pull request, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
 running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, and a feedback
-record is a copy of what was filed on the kit repository.
-A review run without `--comment` posts nothing, so its report is the only written copy until it is
-rebuilt; that is a reason to keep the directory rather than a break in the chain. No skill reads any
+record is a copy of what was filed with whoever owns the skill it is about.
+A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
+nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
+directory rather than a break in the chain. No skill reads any
 of the five. A team that wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
 

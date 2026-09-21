@@ -102,7 +102,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/init/references/profile-template.md` | The shape of `.atk/profile.md` that `init` fills in |
 | `skills/tailor/references/interview.md` | The five groups of question, the filter that sends an answer to `init` or `convention` instead, and a worked example per group |
 | `skills/tailor/references/audit.md` | The three `--audit` checks, why a conflict is a fact and a stale anchor is a question, and the rule that it changes nothing |
-| `skills/tailor/references/feedback.md` | The three-way fork a bad run splits into, what the `--feedback` record holds, and the two things it may never hold |
+| `skills/tailor/references/feedback.md` | The three-way fork a bad run splits into, what the `--feedback` record holds, the two things it may never hold, and how the mode changes for a skill that is not one of the kit's |
 | `skills/catchup/references/brief-template.md` | One skeleton for both modes, with the epic and pull-request differences marked per section |
 | `skills/catchup/references/understanding-check.md` | The fixed questions, the feature type table, and the two rules deciding whether the check is worth anything |
 | `skills/convention/references/collaboration-files.md` | What `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` each carry, where each host keeps them, and why an owner never comes from git history |
