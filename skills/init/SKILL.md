@@ -93,6 +93,11 @@ step 5 says what changes instead. Keep every entry a pointer or a command. A sec
 grows past five lines has usually started copying a document instead of linking to it.
 
 The file is committed. Say so, because the team's instinct with a dot directory is to ignore it.
+Where the user says the repository will not take it, a client repository that accepts no tooling
+files being the usual case, follow "When the repository will not take the file" in
+`shared/project-profile.md`: the file stays on disk, the exclusion goes in `.git/info/exclude`
+rather than in `.gitignore`, and what that costs the rest of the team is said out loud. Never
+raise it unasked; a profile nobody inherits is the worse default.
 
 ### 5. Hand off
 
@@ -150,7 +155,8 @@ the repository and the tracker holds a pointer.
 - [ ] Front matter names an owner and an approver, and a newly created profile opens at `status: DRAFT`.
 - [ ] Every unanswered field says `TBD` and names the person who owes the answer.
 - [ ] No credential, token, or connection string appears in the profile.
-- [ ] The profile was written into the target project and the user was told it is committed.
+- [ ] The profile was written into the target project and the user was told it is committed, or,
+      where the repository will not take it, was pointed at the exception and told its cost.
 - [ ] On a re-run, `created:` survived, only drifted and `TBD` fields were asked about, and `status`
       moved only because what the profile promises changed.
 - [ ] Under `--audit`, no file was modified.

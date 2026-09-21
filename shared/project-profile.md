@@ -36,6 +36,36 @@ one records what the project **is**, an override records what a skill should **d
 
 The profile is committed. The whole point is that the next person on the team inherits it.
 
+## When the repository will not take the file
+
+Some projects are not the team's to shape. A client repository may accept no tooling files at all,
+and a vendor repository may put every added path through a review that is not worth spending on a
+profile. The skills still need the file: the Required group below stops without it, whoever owns the
+repository.
+
+Keep the profile on disk and exclude it on the machine instead of in the project, by adding one line
+to `.git/info/exclude`:
+
+```
+.atk/
+```
+
+That file is part of the local clone and is never committed or pushed, so the exclusion binds one
+machine and adds nothing to the repository. A line in `.gitignore` would be the tracked change the
+repository refused in the first place, and it would impose the choice on everyone else working in
+the repository, including the people who own it.
+
+This is for a repository the team does not own. A team that owns its repository and leaves `.atk/`
+untracked anyway pays the same price for nothing.
+
+The price, worth naming before choosing it. Everyone who works on the project runs `/atk:init`
+separately, and their answers drift apart with nothing to reconcile them. Anyone who has not run it
+gets a hard stop from the Required group, and a hedged artifact from the Required-soft one. Overrides
+drift the same way and more quietly, since a skill with no override file behaves exactly as shipped,
+so two people review the same pull request under two different rules and neither has a way to see
+why. Keep the answers somewhere the team does share, the team's own wiki or the ticket that set the
+project up, so that the next person fills the profile from a record rather than from memory.
+
 ## How a skill cites it
 
 Write the path as `.atk/profile.md`, resolved from the root of the target project, never relative to
