@@ -31,8 +31,9 @@ person.
 
 Does NOT handle: turning a raw request into requirements, which is `atk:intake` and starts from
 unstructured input while this skill starts from an epic that already exists; splitting an epic into
-owned tasks (`atk:breakdown`); judging whether a pull request is correct (`atk:review`); or
-answering the understanding check on the developer's behalf.
+owned tasks (`atk:breakdown`); judging whether a pull request is correct (`atk:review`); recording
+what merged work now does as a document that has to stay true, which is `atk:spec` and outlives the
+brief; or answering the understanding check on the developer's behalf.
 
 ## Roles
 
@@ -71,6 +72,12 @@ mode.
 A bare ticket id says nothing about which kind of object it points at, so guessing from the string
 is how a pull request ends up carrying an understanding check for code that is already merged. State
 the mode and what settled it, in one line, before writing anything.
+
+An epic whose code is already merged is still epic mode. State that too, in the same line: which
+linked pull requests merged and when, so the reader learns it from the brief rather than from the
+tracker. It is not a third mode, because delivery is rarely all or nothing, and an epic with its
+front end merged and its back end open would have to be sorted into one by a skill that knows less
+about it than the person reading.
 
 Pull request mode has no understanding check. Not shorter, not optional: absent. Questions about how
 a feature should behave are asked before the code is written, and a pull request is past that point.
@@ -125,6 +132,11 @@ is the default path rather than a matter of willpower. Question 10 closes every 
 a reference answer. An answer written under it leaves the section looking complete while removing
 the only thing in it that was worth anything.
 
+Where the code is already merged, the section still belongs in the brief and the questions do not
+change. Say who it is for now: whoever takes over the work that is still open, and whoever writes
+the test scenarios. Dropping it is a call for the person reading, and `--no-check` is how they
+make it.
+
 ### 6. Questions for the spec author
 
 Collect what the spec does not answer into one block the reader pastes as a comment. Each line
@@ -164,7 +176,8 @@ the exercise back into reading.
 
 ## Definition of done
 
-- [ ] The mode was stated, with its evidence, before the brief was written.
+- [ ] The mode was stated, with its evidence, before the brief was written, and so was the delivery
+      state when the epic's code had already merged.
 - [ ] Pull request mode produced no understanding check.
 - [ ] Epic mode: every reference answer sits inside a folded `<details>` block.
 - [ ] Epic mode: question 10 closes every group and has no reference answer.

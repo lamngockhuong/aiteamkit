@@ -102,7 +102,9 @@ tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm.
 phải review một pull request ở mảng họ không nắm.
 
 **Không dùng khi.** Người đó mới với cả dự án chứ không riêng phần việc đang làm (`atk:onboard`),
-hoặc bản thân yêu cầu còn mập mờ chứ không chỉ là lạ lẫm (`atk:intake`).
+bản thân yêu cầu còn mập mờ chứ không chỉ là lạ lẫm (`atk:intake`), hoặc thứ cần là một tài liệu ghi
+lại phần việc đã merge nay làm những gì: đó là `atk:spec`, và nó phải còn đúng rất lâu sau khi bản
+tóm tắt bị vứt đi.
 
 **Thói quen tạo ra khác biệt.** Phần tự kiểm do dev trả lời, không phải do skill điền sẵn. Một bản
 tóm tắt không bắt ai phản hồi là bản tóm tắt không ai đọc.

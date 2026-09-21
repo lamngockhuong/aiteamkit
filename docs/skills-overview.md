@@ -102,7 +102,9 @@ the diff, without the check.
 to review a pull request in an area they do not know.
 
 **Do not use when.** The person is new to the project rather than to this piece of work
-(`atk:onboard`), or the requirement itself is unclear rather than unfamiliar (`atk:intake`).
+(`atk:onboard`), the requirement itself is unclear rather than unfamiliar (`atk:intake`), or what is
+wanted is a document of what the merged work now does, which is `atk:spec` and has to stay true long
+after a brief is thrown away.
 
 **The habit that matters.** The understanding check is answered by the developer, not filled in by
 the skill. A brief nobody has to respond to is a brief nobody has read.
