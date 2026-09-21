@@ -92,7 +92,8 @@ accepted quietly. They become a number, a state, a visible result, or an open qu
 
 ## `atk:catchup`
 
-**Produces.** For an epic: what the work is and for whom, why now, scope in and out, who decides
+**Produces.** For an epic: what the work is and for whom, why now, scope in and out, a table of
+every unit the work touches with the path it lives at and the roles that reach it, who decides
 what, the terms a newcomer will not know, the places it is easy to go wrong, and an understanding
 check the developer answers before writing any code. For a pull request: the same brief scoped to
 the diff, without the check.

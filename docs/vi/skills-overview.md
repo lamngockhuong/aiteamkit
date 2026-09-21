@@ -93,7 +93,8 @@ hoặc một câu hỏi còn treo.
 ## `atk:catchup`
 
 **Sinh ra.** Với một epic: công việc là gì và làm cho ai, vì sao làm lúc này, cái gì trong và ngoài
-phạm vi, ai quyết cái gì, những thuật ngữ người mới sẽ không hiểu, những chỗ dễ làm sai, và phần tự
+phạm vi, một bảng liệt kê từng thứ công việc chạm tới kèm đường dẫn nó nằm và những vai chạm được
+tới nó, ai quyết cái gì, những thuật ngữ người mới sẽ không hiểu, những chỗ dễ làm sai, và phần tự
 kiểm hiểu bài mà dev phải trả lời trước khi viết dòng mã nào. Với một pull request: cùng bản
 tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm.
 

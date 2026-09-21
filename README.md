@@ -44,7 +44,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
 | `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
 | `atk:intake` | A raw request turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
-| `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
+| `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, what the work touches and where it is in the code, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
 | `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. |
 | `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, updated in place and checked against the code for drift. |

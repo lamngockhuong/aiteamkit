@@ -24,6 +24,10 @@ One group per screen, or per functional unit where the work has no screens: an e
 integration. Never one group for the whole epic. An epic-wide set of questions gets epic-wide
 answers, which are the answers that sound right and mean nothing.
 
+Those units are already written down by the time this file is loaded: they are the rows of section 4
+of the brief, from `references/brief-template.md`. Take the groups from that table rather than
+listing the units again, so the two sections are checkable against each other.
+
 A unit the spec mentions only in passing, with no fields, no actions, and no states described, is
 not a group. Fold it into the nearest one that has them, rather than producing ten questions about a
 sentence.

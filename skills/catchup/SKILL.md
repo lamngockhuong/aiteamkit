@@ -91,6 +91,11 @@ Find what the work touches: the modules, the entities, the endpoints, the screen
 so the reader can open them. In pull request mode this is the diff plus every caller of what the
 diff changed.
 
+All of it lands in one place, section 4 of the brief, one row per unit. Spreading a traced path
+across whichever prose section it seemed to fit leaves the reader assembling the map that step 4 was
+supposed to hand them. Where the work behaves differently for different roles, that belongs in the
+same section, which `references/brief-template.md` says how to shape.
+
 ### 4. Write the brief
 
 Use `references/brief-template.md`. The sections differ by mode:
@@ -100,6 +105,7 @@ Use `references/brief-template.md`. The sections differ by mode:
 | What this is, and for whom | yes | yes |
 | Why now | yes | yes |
 | Scope and out of scope | yes | reduced to what the diff changes |
+| What it touches | yes | yes, the diff and its callers |
 | Who is involved and who decides | yes | yes |
 | Unfamiliar terms | yes | yes |
 | Risks and easy mistakes | yes | yes |
@@ -110,10 +116,9 @@ is worse than no brief, because the reader stops asking.
 
 ### 5. Understanding check (epic mode)
 
-Load `references/understanding-check.md`. Group the questions per screen or per functional unit, one
-group each, never one set for the whole epic. Ten fixed questions per group, plus at most three
-drawn from the feature type, which sit between question 9 and question 10 and are lettered rather
-than counted on.
+Load `references/understanding-check.md`. One group per row of section 4, never one set for the
+whole epic. Ten fixed questions per group, plus at most three drawn from the feature type, which sit
+between question 9 and question 10 and are lettered rather than counted on.
 
 Every reference answer is folded inside a `<details>` block, so answering first and comparing after
 is the default path rather than a matter of willpower. Question 10 closes every group and never has
@@ -163,7 +168,8 @@ the exercise back into reading.
 - [ ] Pull request mode produced no understanding check.
 - [ ] Epic mode: every reference answer sits inside a folded `<details>` block.
 - [ ] Epic mode: question 10 closes every group and has no reference answer.
-- [ ] Epic mode: questions are grouped per screen or functional unit, not one set for the epic.
+- [ ] Epic mode: one group per row of section 4, not one set for the epic.
+- [ ] Everything step 3 traced is in section 4, not spread across the prose sections.
 - [ ] The questions for the spec author fit in at most ten lines.
 - [ ] Every one of those lines carries its question, the sources already searched, and a person.
 - [ ] The brief links to the requirement and the design instead of restating them.
