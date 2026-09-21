@@ -1,25 +1,28 @@
 ---
 title: atk:review overrides
-status: IN REVIEW
+status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-18
-updated: 2026-09-18
+updated: 2026-09-21
 ticket: none
 ---
 
-Chỉ đúng với repo này, không mang sang dự án khác.
+This override belongs to the `aiteamkit` repository itself, not to your project. A plugin install
+copies the repository whole, so it arrives with the kit; `atk:review` reads only the override at the
+root of the project being worked on. Run `/atk:tailor review` there to write your own.
 
-Các luật về nội dung repo không nằm ở đây. Chúng là những dòng `CONV-NNN` trong mục "Review
-checklist" của `CLAUDE.md`, do `/atk:convention` ghi, và `atk:review` đã đọc mục đó theo
-`shared/review-checklist.md`. File này chỉ giữ phần nói về cách skill làm việc, thứ không ai kiểm
-được nếu không cài kit.
+The rules about this repository's content are not here. They are the `CONV-NNN` rows in the "Review
+checklist" section of `CLAUDE.md`, written by `/atk:convention`, and `atk:review` has already read
+that section per `shared/review-checklist.md`. This file holds only what is true of the way the
+skill works, which nobody can check without the kit installed.
 
 ## After
 
-Diff chạm khối lệnh kiểm tra trong `CLAUDE.md` thì phải chạy thử đúng khối đó, không đọc bằng mắt
-rồi kết luận. Một khối lệnh sai cú pháp trông vẫn hợp lý trên màn hình, và người tin nó là người
-sau. Lệnh không chạy được ghi ở mức BLOCKING, gắn nhãn `[atk-kit]`.
+A diff that touches a verification command block in `CLAUDE.md` has to be checked by running that
+block, not by reading it and calling it correct. A block with a syntax error still looks reasonable
+on screen, and the person who trusts it is the next one. A command that does not run is reported at
+BLOCKING, labelled `[atk-kit]`.
 
-Điều này áp cho cả những lệnh mà một dòng `CONV-NNN` trỏ tới: dòng đó nói luật, còn đây nói rằng
-kiểm nó bằng cách chạy chứ không bằng cách đọc.
+This holds for the commands a `CONV-NNN` row points at as well: the row states the rule, this says
+to check it by running it rather than by reading it.
