@@ -66,3 +66,30 @@ the editor, and the user all left things, and the commit takes whatever is there
 Three things that show up this way and are worth stopping for: a file staged by an earlier run that
 the user then reverted in the working tree, a lock file updated by an install nobody meant to commit,
 and a debug line left in from the work that has just been verified.
+
+## A hook that writes
+
+A pre-commit hook that only checks leaves the commit as it was read. One that writes does not: a
+formatter run with `--write`, a lint step that fixes, a generator that stamps a file, each of them
+re-stages content produced after the read, and what lands in the commit is not what step 2 scanned.
+The secret scan is the check this matters to most, because it ran over the earlier content.
+
+Find out which kind the project has before the first commit, by reading its hook configuration:
+`.husky/`, `.pre-commit-config.yaml`, `.git/hooks/`, or whatever the project's own tooling installs.
+A hook that writes is ordinary and is not a reason to skip it or to pass `--no-verify`.
+
+Where one writes, re-run the secret scan of step 2 over what was committed, every time. It is one
+pass of the patterns in `references/secret-scan.md` over `git show`, so its cost does not grow with
+the diff, and it is the one check whose answer cannot be deferred: step 2 is built on stopping before
+the commit exists, and a credential the hook wrote into the commit is already in the history. A hit
+here is reported to the user at once, with what it takes to get it out of the history, because the
+run can no longer prevent it.
+
+For the reading of the diff itself, do one of two things after each commit and say which:
+
+- re-read what was committed, `git show --stat` then the diff, and confirm what step 2 read still
+  holds; or
+- name the check that no longer covers what shipped, so the reviewer knows which one to repeat.
+
+The second is the honest answer where the diff is too large to re-read, and it is still better than
+the silence that reads as a commit nobody has looked at since the hook rewrote it.
