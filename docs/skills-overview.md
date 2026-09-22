@@ -51,7 +51,10 @@ person. What no file can answer becomes `TBD` with the name of whoever owes it, 
 
 **Produces.** `.atk/overrides/<skill>.md` in the project: what this team wants one skill to do
 differently, as a `## Before` section, an `## After` section, or both, with the role that owns the
-skill's output named as approver.
+skill's output named as approver. Under `--feedback` it produces a record instead, at
+`docs/derived/feedback/<skill>-<date>.md`, in a fixed shape: the run in a table, the findings counted
+and split by where each one lands, one row per finding carrying a severity and the line of the
+definition it cites, a section per finding, and which steps of the skill ran out of how many.
 
 **Use when.** The team keeps making the same correction to what a skill produces, a client or an
 internal standard adds a step the kit does not know about, or an override written earlier no longer
