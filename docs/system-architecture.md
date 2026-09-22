@@ -74,9 +74,11 @@ Thirteen files hold what skills would otherwise repeat. The first three are cite
 
 - `shared/team-roles.md`: the role table and the eight rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
-  root moves it, naming rules, and front matter.
-- `shared/ticket-adapters.md`: tracker detection, the vocabulary map, which trackers store a
-  sprint's dates, and what to report where field history is missing.
+  root moves it, which repository an artifact lands in where the project spans several, naming
+  rules, and front matter.
+- `shared/ticket-adapters.md`: tracker detection and its three outcomes, including the one where a
+  tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
+  dates, and what to report where field history is missing.
 
 Eight are contracts between a named handful of skills rather than kit-wide rules:
 
@@ -89,8 +91,9 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
   report a team with a directory of standards documents as having recorded nothing.
   `atk:implement` reads the file for that resolution and for the baseline items, which it falls back
   to when a project really has recorded no conventions of its own.
-- `shared/finalize-steps.md`: the closing sequence for a finished piece of work, and the consent
-  line that every action past the commit has to cross. `atk:git` is what carries it out; this file
+- `shared/finalize-steps.md`: the closing sequence for a finished piece of work, the consent
+  line that every action past the commit has to cross, and the order a change spanning several
+  repositories is carried in. `atk:git` is what carries it out; this file
   stays the contract, which is what lets the code-changing skills and the artifact-writing ones
   close the same way. Cited by `atk:fix`, `atk:implement` and `atk:verify`, which hand off to
   `atk:git`, by `atk:plan` and `atk:tailor` for the consent line alone, and by every skill that
@@ -121,7 +124,8 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
 
 - `shared/spec-docs.md`: what separates a reference document from a design document, whose shape
   wins when a project already keeps documents of its own, the five kinds of change that oblige a
-  pull request to carry its reference document, and the line between drift and a question nobody
+  pull request to carry its reference document, what that obligation becomes when the document
+  lives in a repository other than the code's, and the line between drift and a question nobody
   has answered. Cited by `atk:spec`, which writes those documents, and by `atk:design-doc`,
   `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave them true. It is
   the widest of these contracts, because `shared/finalize-steps.md` now opens with its obligation,
@@ -136,13 +140,16 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
 
 The last two describe files that do not ship with the kit at all:
 
-- `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, and what each
+- `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, where the
+  project root is and how a skill walks up to it, the four shapes a project can have with what a
+  parent holding member repositories and a workspace holding none of its own each cost, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message ignore it entirely.
   `atk:init` writes the profile, so it belongs to no group.
 
 - `shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
-  the two sections it may carry, and the seven things an override may never remove. The seven
+  where the directory sits when a project spans several repositories, the two sections it may carry,
+  and the seven things an override may never remove. The seven
   exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
   skill that skips part of an override says so in its artifact rather than silently.
 
@@ -162,7 +169,9 @@ because it is not part of the kit.
 ## The session-start hook
 
 `hooks/hooks.json` registers one `SessionStart` hook that runs `hooks/check-profile.mjs`. It answers
-a single question, "does this project have a profile yet", and it reminds without blocking.
+a single question, "does this project have a profile yet", reading the project the way
+`shared/project-profile.md` does, which is the nearest profile at or above the directory the session
+opened in, and it reminds without blocking.
 
 The boundary is the point. A hook that blocked would put the rule in two places, and the rule is not
 uniform anyway: ten skills need no profile, and a hook that stopped everything would stop

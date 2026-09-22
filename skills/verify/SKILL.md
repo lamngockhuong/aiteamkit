@@ -69,6 +69,12 @@ Stop when either is missing, and use the matching sentence from `shared/project-
 first one when there is no profile, the second when the profile is there but its `Verify` section is
 absent or still `TBD`. Change nothing, start nothing.
 
+Where the shape names member repositories, the section's `Runs from` field says which repository each
+block belongs to, and every command in that block runs from that repository's path. A block with no
+`Runs from` in such a project is the same hole as a missing command: stop and send the user to
+`/atk:init --audit`, because a start command run from the wrong directory fails in a way that reads
+like the application being broken.
+
 The `Commands` and `Layers` sections are read too, for the suite commands a retry re-runs and for
 the names the report uses.
 

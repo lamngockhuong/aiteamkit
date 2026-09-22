@@ -130,7 +130,10 @@ it: `CONTRIBUTING.md`, the pull request template, and `CODEOWNERS`. Step 1 alrea
 them this project does not have.
 
 Say which are missing, offer a draft of each, and write only the ones the user picks. Picking none
-is an answer and ends the step. Never write one because a project of this shape usually has it: the
+is an answer and ends the step. A code host reads these three per repository, so in a project whose
+shape names members the question is asked per repository and the answer may differ: a parent that
+carries `CONTRIBUTING.md` for everyone and members that carry their own `CODEOWNERS` is an ordinary
+answer, and one set written at the parent is one the members' hosts never read. Never write one because a project of this shape usually has it: the
 three files bind everyone who opens a pull request here, including people who never installed this
 kit, so which of them exists is the Tech Lead's call under rule 3 of `shared/team-roles.md`.
 

@@ -73,9 +73,11 @@ Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đ
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
-  ngôn ngữ dời đường dẫn ấy, quy tắc đặt tên, front matter.
-- `shared/ticket-adapters.md`: cách phát hiện tracker, bảng ánh xạ từ vựng, tracker nào lưu ngày
-  mở và ngày đóng của một sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
+  ngôn ngữ dời đường dẫn ấy, artifact rơi vào repository nào khi dự án trải trên nhiều repository,
+  quy tắc đặt tên, front matter.
+- `shared/ticket-adapters.md`: cách phát hiện tracker và ba kết cục của nó, gồm cả kết cục tracker
+  đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
+  sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
 Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
@@ -87,8 +89,9 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
   giá trị mặc định chứ không phải địa chỉ, nên một skill đọc thẳng vào đó sẽ báo rằng một team có cả
   một thư mục tài liệu chuẩn là chưa ghi quy ước nào. `atk:implement` đọc file này để lấy thứ tự tra
   ấy và các mục nền, dùng khi dự án thật sự chưa ghi quy ước nào của riêng mình.
-- `shared/finalize-steps.md`: trình tự khép lại một phần việc đã xong, gồm nhánh, commit, và ranh
-  giới xin phép mà mọi hành động sau commit phải vượt qua. `atk:git` là thứ thi hành nó; file này
+- `shared/finalize-steps.md`: trình tự khép lại một phần việc đã xong, gồm nhánh, commit, ranh
+  giới xin phép mà mọi hành động sau commit phải vượt qua, và thứ tự tiến hành một thay đổi trải
+  trên nhiều repository. `atk:git` là thứ thi hành nó; file này
   vẫn là hợp đồng, và chính điều đó khiến nhóm skill sửa mã với nhóm skill viết tài liệu khép lại
   theo cùng một đường. Được `atk:fix`, `atk:implement` và `atk:verify` trích dẫn, ba skill giao việc
   cho `atk:git`; được `atk:plan` và `atk:tailor` trích riêng phần ranh giới xin phép; và được mọi
@@ -119,7 +122,8 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
 
 - `shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, hình dạng
   của ai thắng khi dự án đã giữ sẵn tài liệu của mình, năm loại thay đổi buộc pull request phải
-  mang theo tài liệu tham chiếu, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
+  mang theo tài liệu tham chiếu, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác với
+  code, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
   viết ra những tài liệu đó, còn `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và
   `atk:verify` có nghĩa vụ để chúng đúng. Đây là hợp đồng rộng nhất trong nhóm, vì
   `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi skill đổi mã nguồn đều là
@@ -133,13 +137,16 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
 
 Hai file cuối mô tả những file không đi kèm kit:
 
-- `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, và cách từng
+- `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, gốc dự án
+  nằm ở đâu và skill đi ngược lên tìm nó ra sao, bốn hình dạng một dự án có thể mang cùng cái giá
+  của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không nhắc tới.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
 - `shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
-  hai mục mà file đó được phép mang, và bảy thứ phần ghi đè không bao giờ được gỡ. Bảy điều loại trừ
+  chỗ thư mục này nằm khi dự án trải trên nhiều repository, hai mục mà file đó được phép mang, và
+  bảy thứ phần ghi đè không bao giờ được gỡ. Bảy điều loại trừ
   là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
   qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng.
 
@@ -159,7 +166,9 @@ có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại l
 ## Hook lúc mở phiên
 
 `hooks/hooks.json` đăng ký một hook `SessionStart` chạy `hooks/check-profile.mjs`. Script trả lời
-đúng một câu hỏi, "dự án này đã có profile chưa", và nó nhắc chứ không chặn.
+đúng một câu hỏi, "dự án này đã có profile chưa", hiểu chữ dự án theo đúng cách
+`shared/project-profile.md` hiểu, tức là profile gần nhất ở chính thư mục phiên mở lên hoặc ở trên
+nó, và nó nhắc chứ không chặn.
 
 Ranh giới đó là toàn bộ vấn đề. Hook mà chặn thì luật nằm ở hai chỗ, mà luật này vốn không đồng nhất:
 mười skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn

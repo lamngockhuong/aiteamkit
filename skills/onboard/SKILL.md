@@ -110,7 +110,15 @@ change for a developer and something of that role's own for everyone else. Where
 request names a role, ask which one before step 3 rather than picking one quietly. Day one is
 environment plus a
 read-only tour. The starter task is real, small, reviewed normally, and picked from the tracker
-rather than invented. `--role` moves the ending and nothing else about the week. State the
+rather than invented. `--role` moves the ending and nothing else about the week.
+
+Where the tracker cannot be read, per Detected is not reachable in `shared/ticket-adapters.md`, the
+starter task is the one thing in this document the repository cannot supply. Do not invent one, and
+do not let the day disappear: a week that quietly ends a day early reads as a week that was meant
+to. Write the task as `TBD (ask <buddy>)`, keep the rest of the plan as it stands, say in the
+session that the document promises a contribution it cannot yet name, and leave the front matter at
+`DRAFT` until the buddy fills it in. The same route holds where the tracker answers and holds
+nothing small enough to start on: either way a person picks the task, not this skill. State the
 team's working agreements too: ceremony times, core hours, review turnaround, how to ask for help
 and after how long, and the definition of done.
 
@@ -145,7 +153,8 @@ to go, because the report holding it may sit in an untracked directory.
 - [ ] Every access item names who grants it and whether it blocks day one.
 - [ ] Each code area names an owner and an entry-point file.
 - [ ] The first-week plan ends in the contribution `references/roles.md` names for the role, and a
-      buddy is named.
+      buddy is named. Where no starter task could be read from the tracker, the day names who owes
+      it, no task was invented, and the session said the document is unfinished until it lands.
 - [ ] Every defect found in step 2 is in the report, and none of them is in the onboarding document.
 - [ ] The session was told where the defect report is and whether the project tracks that path.
 - [ ] Under `--audit`, no file was modified.

@@ -30,7 +30,8 @@ suy đoán. Những skill còn lại chạy mà không cần tới nó.
 
 ## `atk:init`
 
-**Sinh ra.** File `.atk/profile.md` trong dự án. Nó ghi lệnh test, build và lint của từng app, bố
+**Sinh ra.** File `.atk/profile.md` trong dự án. Nó ghi hình dạng của dự án, kèm bảng các repo thành
+viên khi dự án trải trên nhiều repository; lệnh test, build và lint của từng app, bố
 cục các tầng kèm tài liệu chuẩn và module mẫu cho mỗi tầng, các thư mục docs, tracker và nơi đặt tài
 liệu đặc tả, cùng ai duyệt cái gì. Mục cuối nói cách khởi động ứng dụng và cách xác nhận một tác động
 đã thật sự xảy ra trong dữ liệu.
@@ -43,7 +44,10 @@ và được commit cùng dự án đó; bản thân kit không giữ sự thậ
 
 **Thói quen tạo ra khác biệt.** Nó đọc repo trước khi hỏi. Câu nào mà file manifest, workflow CI hay
 thư mục test đã trả lời được thì nó không đem ra hỏi người. Phần không file nào trả lời được sẽ thành
-`TBD` kèm tên người nợ câu trả lời, chứ không thành một phỏng đoán.
+`TBD` kèm tên người nợ câu trả lời, chứ không thành một phỏng đoán. Nó cũng xác định gốc dự án trước
+khi đọc bất cứ thứ gì, nên một parent repository chứa nhiều repo của các team, và một thư mục không
+thuộc repository nào, đều được nói thẳng ra kèm việc profile đặt ở đó làm được gì và không làm được
+gì, trước khi file được ghi.
 
 ---
 
@@ -388,7 +392,10 @@ người đã làm. Với một lệnh lẻ dùng ngay, gọi thẳng agent củ
 nằm trong phần đã stage sẽ chặn cả lượt chạy, chứ không phải được báo rồi commit vòng qua. Một lần
 merge chỉ xảy ra với pull request mà một người đã gọi tên, trong chính lượt chạy đó, và chỉ sau một
 cửa kiểm tra biết từ chối khi có conflict, có kiểm tra đang hỏng, hoặc có người yêu cầu sửa, kèm câu
-nói rõ cái nào trong ba cái đã từ chối.
+nói rõ cái nào trong ba cái đã từ chối. Một thay đổi chạm tới nhiều hơn một repository chạy đúng
+trình tự ấy một lần cho mỗi repository, theo thứ tự giữ cho con trỏ submodule không trỏ vào commit
+không ai fetch được, và hỏi đồng ý cho từng lần push, từng pull request, từng lần merge kèm tên
+repository.
 
 ---
 
@@ -462,7 +469,8 @@ người sở hữu đoạn script hỏng.
 
 **Thói quen tạo ra khác biệt.** Không một credential nào lọt vào tài liệu nào trong hai tệp, chỉ
 ghi nơi lưu và người cấp; và một bước cài đặt không kiểm chứng được thì nói thẳng ra thay vì làm
-như nó chạy tốt.
+như nó chạy tốt. Phần đóng góp mở đầu mà tracker không cung cấp được, vì không ai đọc nổi tracker, được để
+lại cho một người có tên chọn, chứ không bịa ra và cũng không lặng lẽ bỏ đi.
 
 ---
 

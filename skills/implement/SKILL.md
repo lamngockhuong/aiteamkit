@@ -116,7 +116,7 @@ written. A test written after the code and never seen red proves that it passes,
 
 `shared/layer-verification.md` gives what to run per layer and what each run actually proves.
 `references/verification.md` adds the order to run things in, how far to reach, and what to do with a
-check that was already red. Every command name comes from the Commands section of `.atk/profile.md`.
+check that was already red. Every command name comes from the Commands section of `.atk/profile.md`. A row's `Repository` column names where it runs from, per What the Repositories table holds in `shared/project-profile.md`; a project of one repository has one place to run everything.
 
 Then walk the blast radius: everything that calls what changed. Run what covers it, and state
 plainly what could not be verified and why. An unverified area named in the record is a known gap;

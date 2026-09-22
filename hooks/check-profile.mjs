@@ -18,9 +18,9 @@
 // say, and let every failure end in silence rather than in a message the user did
 // not ask for.
 
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 
 // Where the "already reminded" marker lives. The plugin's own data directory when
 // the harness provides one, the user's state directory otherwise. Never a
@@ -53,14 +53,71 @@ function markerKey(path) {
   return h.toString(36);
 }
 
+// The profile can sit above this directory. A project may span several
+// repositories, and shared/project-profile.md puts the profile at the project
+// root, which is then an ancestor of the repository a session opens in. Walk up
+// the way that rule says a skill does, so a member repository of a project that
+// already has a profile is not told to go and create a second one.
+//
+// Proximity is not membership, which is the other half of that same rule: a
+// profile found above this directory counts only when it names this directory,
+// or when it is this directory's own. Two unrelated repositories under one
+// parent folder is an ordinary layout, and without this check the first one to
+// get a profile would silence the reminder for every sibling underneath.
+function namesMember(profilePath, root, start) {
+  let text;
+  try {
+    text = readFileSync(profilePath, 'utf8');
+  } catch {
+    return true; // unreadable: stay quiet rather than nag about a file that is there
+  }
+  const rel = relative(root, start).split(sep).join('/');
+  return rel === '' || text.includes(rel);
+}
+
+function hasProfile(start) {
+  const stop = homedir();
+  let dir = start;
+  // A depth cap rather than a trust in the stop conditions: homedir() can come
+  // back empty, and a walk that only ends at the filesystem root would then read
+  // every directory between here and it.
+  for (let depth = 0; depth < 64; depth++) {
+    const candidate = join(dir, '.atk', 'profile.md');
+    if (existsSync(candidate) && namesMember(candidate, dir, start)) return true;
+    if (stop && dir === stop) return false;
+    const parent = dirname(dir);
+    if (parent === dir) return false;
+    dir = parent;
+  }
+  return false;
+}
+
+// A workspace root is a directory holding several repositories and belonging to
+// none of them, which is one of the four shapes in shared/project-profile.md. It
+// has no git entry of its own, so the test below would walk past the one shape
+// that most needs the reminder. One level of children answers it, and a plain
+// directory with no repository under it still says nothing.
+function looksLikeSource(dir) {
+  if (existsSync(join(dir, '.git'))) return true;
+  try {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory() || entry.name.startsWith('.')) continue;
+      if (existsSync(join(dir, entry.name, '.git'))) return true;
+    }
+  } catch {
+    return false;
+  }
+  return false;
+}
+
 function main() {
   const project = process.env.CLAUDE_PROJECT_DIR || process.cwd();
 
   // Only speak inside something that looks like a source repository. A plain
   // directory is not a project that forgot to run /atk:init. In a worktree the
   // git entry is a file rather than a directory, and existsSync accepts either.
-  if (!existsSync(join(project, '.git'))) return;
-  if (existsSync(join(project, '.atk', 'profile.md'))) return;
+  if (!looksLikeSource(project)) return;
+  if (hasProfile(project)) return;
 
   const root = markerRoot();
   if (!root) return;

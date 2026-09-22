@@ -34,7 +34,7 @@ artifact goes back to its author, which is the loop each phase is drawn with.
 ```mermaid
 flowchart TD
     subgraph S0["0. Setup"]
-        I0["atk:init<br/><small>Dev or TL</small>"] --> I1[".atk/profile.md committed"]
+        I0["atk:init<br/><small>Dev or TL</small>"] --> I1[".atk/profile.md<br/><small>committed, unless the project root is in no repository</small>"]
         I1 --> I2["atk:tailor<br/><small>optional, TL or the owning role</small>"]
         I2 --> I3[".atk/overrides/&lt;skill&gt;.md committed"]
     end
@@ -113,7 +113,7 @@ flowchart TD
 
 | Phase | Skill | Author | Accepted by | Artifact state at the gate |
 |-------|-------|--------|-------------|-----------------------------|
-| 0. Setup | `atk:init` | Dev or TL | Committed with the repository, no separate approval | n/a |
+| 0. Setup | `atk:init` | Dev or TL | Committed with the repository, no separate approval; under a `workspace` shape there is no repository to commit it to | n/a |
 | 0. Setup | `atk:tailor` | TL, or whoever owns the skill's output | The role that owns what the tailored skill produces | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:intake` | BrSE/BA | Stakeholder, on scope and criteria | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:catchup` | Whoever joins | Nobody; the understanding check is self-marked | `DRAFT` |

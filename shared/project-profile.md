@@ -36,6 +36,90 @@ one records what the project **is**, an override records what a skill should **d
 
 The profile is committed. The whole point is that the next person on the team inherits it.
 
+## Where the project root is
+
+The project root is the directory that holds `.atk/`. Every path a skill resolves against the target
+project resolves against it: the docs root, the plans directory, and the paths the profile itself
+records.
+
+Finding it is a walk rather than an assumption. Start at the working directory and go up until a
+`.atk/profile.md` appears, stopping at the home directory or the file system root, whichever comes
+first. A repository boundary does not stop the walk, because a project may span several
+repositories and the profile then sits above the one the work is in.
+
+The nearest profile wins. A member repository carrying one of its own is read from that file rather
+than from the one above it, which is what a team that clones its own repository alone ends up with.
+
+**A profile found above the work is checked before it is used.** Where its shape names member
+repositories, the directory the walk started in has to appear in its Repositories table, matched by
+path from the project root or by remote. Where it does not, keep walking, and where nothing else
+answers, report no profile found and let the three-group rule below take over.
+
+Without that check the walk is proximity and nothing else, and proximity is not membership. Two
+unrelated repositories under one directory is the ordinary layout of a developer machine, so a
+profile written for one of them would be read as the other's: its docs root, its tracker, its team,
+its commands. An artifact would land in a tree belonging to another project, and `atk:git` would be
+working in a repository nobody named. A profile whose shape names no members needs no check, because
+it sits at the root of the one repository it describes.
+
+## Projects that span several repositories
+
+The `Shape` field of the Project section records which of four a project is. The first two are one
+repository, and everything above is already true of them.
+
+| Shape | What it is | Where the profile lives |
+|-------|------------|-------------------------|
+| `single repo` | One repository, one application | Its root |
+| `monorepo` | One repository, several packages | Its root |
+| `parent + members` | A repository holding the shared specification and the documents, with the member repositories inside it, each a repository of its own, linked as a submodule or cloned in place | The parent's root |
+| `workspace` | A directory holding several repositories and belonging to none of them | The workspace root, where nothing tracks it |
+
+The last two each carry a cost the first two do not, and the cost is said before the profile is
+written rather than found afterwards.
+
+**`parent + members`.** The profile is committed in the parent, so whoever clones the parent
+inherits it. Whoever clones one member alone inherits nothing: the walk above finds no profile, and
+every skill in the Required group below stops for them. That is a real team rather than an edge
+case, usually the one that works in its own repository and nowhere else. Two ways out, and the
+parent's team decides which: clone the parent, or run `/atk:init` inside the member and keep a
+second profile covering that repository alone. The second costs drift, because nothing reconciles
+the two files, and Docs, Tracker and Team are the sections that drift first.
+
+**`workspace`.** The root belongs to no repository, so nothing tracks the profile written there. It
+cannot be committed, cannot be pushed, and cannot be inherited: it is one file on one machine for
+one person. That is the same price as When the repository will not take the file below, arriving
+without anybody having chosen it, which is why the run names it before writing instead of after.
+What ends it for good is making the workspace root a repository, and that is the team's decision
+rather than a skill's.
+
+### What the Repositories table holds
+
+A profile whose shape names member repositories carries a table of them in the Project section: the
+name, the path from the project root, the remote, the team that owns it, and how it is linked, which
+is `submodule` or `clone`. Those are the two ways detection can tell a member apart, so they are the
+two values the column takes. The parent has no row: it is the project root, which every path in the
+table is already written from.
+
+**A name in that table is unique.** It is what the Tracker section names a member by and what a
+consent question in `skills/git/references/multi-repo.md` names a repository by, so two members
+called `frontend` turn "push `frontend`" into a question with two answers. Where two members share a
+directory name, disambiguate with the segment above it and use that name everywhere.
+
+That table is also what disambiguates every other path in the profile. A Layers row naming
+`backend/` says nothing about whether that is a package of one repository or a repository of its own,
+and the table answers it: a path under a member's path belongs to that member, so a change to a file
+under it is a change in that member's repository.
+
+A Commands row carries a name rather than a path, so it cannot be matched that way. In a project
+whose shape names members, every Commands row and every entry of the Verify section names the
+repository it runs from, and `skills/init/references/profile-template.md` holds the column and the
+field that carry it. A command with no repository beside it is a command run from wherever the
+session happens to be, which in a parent is a directory with no manifest in it, and the failure that
+produces reads exactly like a failing test.
+
+`single repo` and `monorepo` carry no such table. A project with one repository has nothing to
+disambiguate, and a one-row table is noise.
+
 ## When the repository will not take the file
 
 Some projects are not the team's to shape. A client repository may accept no tooling files at all,
@@ -72,6 +156,11 @@ Write the path as `.atk/profile.md`, resolved from the root of the target projec
 the skill file. This is deliberately unlike the other kit-side shared files, which a skill cites as
 `shared/<file>.md`: those ship with the kit, this one does not.
 
+The root of the target project is the one Where the project root is defines above, and that section
+holds both halves of finding it: the walk, and the check that the profile it lands on is this
+project's. Find it by walking up from the working directory; do not take the top level of the current repository for it,
+which is a different directory in two of the four shapes.
+
 Read the profile once at the start of a run. Do not re-read it per step, and do not cache values
 across runs.
 
@@ -82,10 +171,10 @@ a section to delete.
 
 | Section | Holds | Read by |
 |---------|-------|---------|
-| Project | Name, repository, single repo or monorepo, package manager | all |
+| Project | Name, repository, the shape from the four above, package manager, and, where the shape names them, the member repositories with their paths, remotes, owning teams, and how each is linked | all |
 | Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify |
 | Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
-| Docs | Docs root, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
+| Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release |
 | Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, and the language the team writes artifacts in | all |
 | Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to clean up, how to be sure the target is local | verify |

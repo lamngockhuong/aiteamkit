@@ -12,11 +12,68 @@ list first and getting a yes.
 Check in this order, stop at the first hit, and say which one you picked:
 
 1. The user named one in the request.
-2. The project `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` names one.
-3. Ticket IDs in recent git log: `ABC-123` suggests Jira, `#123` suggests GitHub Issues,
+2. Where the work is inside a member repository and the Tracker section of `.atk/profile.md` carries
+   a line for that member, that line. A member tracking its own work is unusual, and the profile is
+   the only place it is written down, so a run that skipped this step would post to the project's
+   tracker instead of the member's.
+3. The project `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` names one.
+4. Ticket IDs in recent git log: `ABC-123` suggests Jira, `#123` suggests GitHub Issues,
    `PROJ-123` also appears in Backlog.
-4. A configured CLI or MCP server is available: `gh`, a Jira MCP, an Atlassian connector.
-5. Otherwise: stay in Markdown and tell the user no tracker was detected.
+5. A configured CLI or MCP server is available: `gh`, a Jira MCP, an Atlassian connector. Available
+   is what makes this a hit; whether it answers is a separate question, and the next section is how
+   to ask it.
+6. Otherwise: stay in Markdown and tell the user no tracker was detected.
+
+Detection and reachability are two steps on purpose. Folding "and it answers" into step 5 would send
+a project whose only signal is an unauthenticated CLI down to step 6, which reports no tracker at
+all, and that is the outcome the next section exists to prevent.
+
+### Detected is not reachable
+
+The tracker a project uses and the tracker this run can read are two different facts. A run that
+treats them as one writes an artifact claiming the second while only the first is true.
+
+Before the first read that matters, spend one cheap call proving access: `gh auth status` for
+GitHub, the cheapest list or identity call the server offers for an MCP server, and for a REST
+integration the endpoint that names the current user. Once per run, and once per distinct tracker
+the run will read, which in a project where a member tracks its own work is two.
+
+Three outcomes, and each has a sentence of its own:
+
+| Outcome | What the artifact and the session say |
+|---------|---------------------------------------|
+| No tracker detected | No tracker was found, so the Markdown artifact is the only record |
+| Detected and reachable | Which tracker, and what was read from it |
+| Detected but unreachable | Which tracker, that it could not be read, what class of failure it was, and what is missing from the artifact as a result |
+
+The third is not the first. A team whose tracker nobody could reach still has a tracker, and telling
+them none was found sends them to set up what they already have.
+
+A proof that succeeded does not make every later read succeed. A call that fails afterwards, a wrong
+project key, a permission covering part of the board, a request that times out, puts that one item in
+the third row rather than ending the run: the tracker is reachable and this reading of it was not.
+Treat it as the third outcome for that item alone and carry on with the rest.
+
+**Say what failed, not what the tool printed.** Name the class of failure, authentication expired,
+host unreachable, forbidden, not found, and keep the tool's own error text out of the session and out
+of the artifact. An MCP server or a REST client can put a key, a token, or a connection string into a
+failure message, and the artifact this run writes is committed and travels in a pull request.
+`skills/git/references/secret-scan.md` holds what a secret in a file costs; this is the same rule
+arriving from the other direction.
+
+Two things never happen on the third. Inventing the value the tracker would have given is the first:
+an issue number, a sprint window, a status, a starter task. Dropping the item that needed it is the
+second, because a document silently missing a section reads as a document that did not need one.
+Write `TBD (ask <person>)` in its place, naming whoever can supply it, and say in the session which
+part of the artifact stays unfinished until it arrives.
+
+Who that person is comes from the run where the run knows it: the buddy in an onboarding document,
+the assignee of the ticket in hand. Where it does not, the Tracker section of `.atk/profile.md` names
+a repository owner and that is the default. Where there is no profile either, ask the user for the
+name rather than writing a bare `TBD`, which is a hole nobody owns.
+
+No run reads a credential out of the environment to get around this, and no run asks the user to
+paste a token. Re-authenticating is the user's own command to run, and naming it is enough.
 
 ## Vocabulary map
 

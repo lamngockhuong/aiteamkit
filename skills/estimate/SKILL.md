@@ -57,7 +57,7 @@ open question that changes its size, is marked `NEEDS INTAKE` and excluded rathe
 
 ### 2. Find comparables
 
-Search the repository and git history for similar past work: a similar endpoint, a similar
+Search the repository, or every repository the work touches where the project has several, and the git history for similar past work: a similar endpoint, a similar
 migration, a similar screen. A comparable with a real elapsed time beats an opinion. Cite it.
 
 ### 3. Size

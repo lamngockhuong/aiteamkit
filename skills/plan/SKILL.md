@@ -226,7 +226,7 @@ back. A phase left at `pending` after its work is done is a plan nobody will tru
 
 ## Output
 
-Written to `plans/<YYMMDD-HHMM>-<slug>/` at the repository root per `shared/artifact-paths.md`:
+Written to `plans/<YYMMDD-HHMM>-<slug>/` at the project root per `shared/artifact-paths.md`:
 `plan.md` plus one file per phase. Both templates are in `references/plan-template.md`.
 
 Phases that are not a straight line get a Mermaid diagram in the index, per

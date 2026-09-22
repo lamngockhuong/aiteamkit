@@ -81,7 +81,9 @@ earlier: which test, alert, or review would have caught it and did not exist.
 ### 5. Postmortem and runbook
 
 Blameless means the analysis targets the system, not the person. Write "the deploy had no staging
-rehearsal", never "X forgot to rehearse". Every follow-up action gets an owner, a date, and a ticket.
+rehearsal", never "X forgot to rehearse". Every follow-up action gets an owner, a date, and a ticket,
+or `TBD (ask <person>)` in place of the ticket where the tracker was detected and could not be read,
+per Detected is not reachable in `shared/ticket-adapters.md`.
 Actions with no owner do not go in the document.
 
 ## Output
@@ -109,5 +111,6 @@ Follow `shared/ticket-adapters.md`. Each follow-up action becomes one issue link
 - [ ] The timeline has timestamps, actors, and outcomes, not a narrative.
 - [ ] The root cause cites evidence; rejected hypotheses are listed with why they were rejected.
 - [ ] The detection gap is answered: what should have caught this.
-- [ ] Every follow-up action has an owner, a date, and a ticket.
+- [ ] Every follow-up action has an owner, a date, and a ticket, or `TBD (ask <person>)` where the
+      tracker could not be read.
 - [ ] No sentence in the postmortem names a person as the cause.

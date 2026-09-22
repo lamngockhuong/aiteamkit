@@ -36,12 +36,17 @@ reissued. Decide the severity, then number.
 ```markdown
 ### B1. Short title naming the problem, not the file
 
-**File:** `path/to/file.ts:32-40`, `path/to/other.ts:118`
-**Rule:** `CONV-004` - "the rule, quoted exactly as the project wrote it"
-**Issue:** What goes wrong, and the input or state that triggers it.
-**Fix:** The concrete change, naming the function, file or pattern to use.
-**Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`
+- **File:** `path/to/file.ts:32-40`, `path/to/other.ts:118`
+- **Rule:** `CONV-004` - "the rule, quoted exactly as the project wrote it"
+- **Issue:** What goes wrong, and the input or state that triggers it.
+- **Fix:** The concrete change, naming the function, file or pattern to use.
+- **Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`
 ```
+
+Each label is a list item, and a label that runs onto a second line indents its continuation by two
+spaces. Without the list, Markdown joins the five consecutive lines into one paragraph, and a reader
+previewing the report gets a wall of bold labels run together, which is the one thing the structure
+exists to prevent.
 
 - **Title.** The problem, in a phrase. Not the path, which is on the next line.
 - **File.** Every location the finding touches, on one line. A finding spanning four files is one

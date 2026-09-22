@@ -122,7 +122,8 @@ impossible on the day it is needed.
 `shared/layer-verification.md` gives, per layer, what to run and what the run proves.
 `references/layer-playbooks.md` adds what is this skill's own: where the cause hides, how to
 reproduce it, and what belongs in the commit. Every command name comes from the Commands section of
-`.atk/profile.md`.
+`.atk/profile.md`, and a row's `Repository` column names where it runs from, per What the
+Repositories table holds in `shared/project-profile.md`.
 
 Re-run the reproduction captured in step 1 and show that it no longer reproduces. That comparison is
 the point of having captured it verbatim.

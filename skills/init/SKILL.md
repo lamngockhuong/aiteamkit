@@ -23,7 +23,8 @@ their repository.
 
 ## Scope
 
-Handles: detecting project facts from manifests, lock files, CI workflows, and the git remote;
+Handles: resolving the project root and whether the project is one repository or several; detecting
+project facts from manifests, lock files, CI workflows, and the git remote;
 confirming each detected value with the user; interviewing for the few facts no file holds; writing
 `.atk/profile.md`; and re-checking an existing profile against the current repository.
 
@@ -56,7 +57,12 @@ Before step 1, read `.atk/overrides/init.md` when it exists, per rule 7 of `shar
 
 ### 1. Detect
 
-Read the repository before asking anything. `references/detection.md` gives the command per
+Resolve the repository boundary first, per Repository shape in `references/detection.md`: which
+directory is the project root, which of the four shapes the project has, and which repositories it
+holds. Everything below is written from that root, so a run that assumes it records paths that
+resolve to nothing.
+
+Then read the repository before asking anything. `references/detection.md` gives the command per
 ecosystem; the short version is package manifests and lock files for the package manager and the
 scripts, workspace files for the layer layout, the CI workflow for what the project actually runs,
 the git remote for the tracker, and the existing docs tree for the docs root.
@@ -87,12 +93,19 @@ on; `--audit` picks those up later. Never leave a field blank, and never invent 
 
 ### 4. Write
 
-Write `.atk/profile.md` from `references/profile-template.md`: seven sections, front matter with an
-owner and an approver, `status: DRAFT`. Against a profile that already exists, the subsection after
-step 5 says what changes instead. Keep every entry a pointer or a command. A section that
-grows past five lines has usually started copying a document instead of linking to it.
+Say where the file is going before writing it. The file is committed, which is worth saying because
+the team's instinct with a dot directory is to ignore it, and which repository commits it comes from
+the shape step 1 resolved, per Projects that span several repositories in
+`shared/project-profile.md`: the parent's root under `parent + members`, and no repository at all
+under `workspace`, where the root belongs to none. A profile nothing tracks is still worth writing,
+and a team told at the commit that nobody will inherit it has been told too late to decide anything
+about it.
 
-The file is committed. Say so, because the team's instinct with a dot directory is to ignore it.
+Then write `.atk/profile.md` from `references/profile-template.md`: seven sections, front matter with
+an owner and an approver, `status: DRAFT`. Against a profile that already exists, the subsection after
+step 5 says what changes instead. Keep every entry a pointer or a command. A section that grows past
+five lines has usually started copying a document instead of linking to it.
+
 Where the user says the repository will not take it, a client repository that accepts no tooling
 files being the usual case, follow "When the repository will not take the file" in
 `shared/project-profile.md`: the file stays on disk, the exclusion goes in `.git/info/exclude`
@@ -104,6 +117,11 @@ raise it unasked; a profile nobody inherits is the worse default.
 Print which skills are now unblocked, reading the three-group table in `shared/project-profile.md`
 rather than composing a list from memory. Then the sections still marked `TBD` with who owes each
 one, and who must approve the profile before it stops being a draft.
+
+Under a shape that names members, say which repositories this profile covers, and that a team
+cloning one member alone finds no profile and gets the hard stop the Required group gives. Whoever
+owns the parent decides what those teams do about it; the two answers are in the same section of
+`shared/project-profile.md`.
 
 ### Re-running against an existing profile
 
@@ -149,14 +167,16 @@ the repository and the tracker holds a pointer.
 
 ## Definition of done
 
+- [ ] The project root and the shape were resolved before anything else was detected, and both were
+      said to the user with what they were read from.
 - [ ] Every detectable value was detected, not asked.
 - [ ] Every detected value was shown with its source file and confirmed by the user before writing.
 - [ ] No more than eight questions were asked.
 - [ ] Front matter names an owner and an approver, and a newly created profile opens at `status: DRAFT`.
 - [ ] Every unanswered field says `TBD` and names the person who owes the answer.
 - [ ] No credential, token, or connection string appears in the profile.
-- [ ] The profile was written into the target project and the user was told it is committed, or,
-      where the repository will not take it, was pointed at the exception and told its cost.
+- [ ] Before the file was written, the user was told which repository commits it, or that no
+      repository will take it and what that costs. Both cases are said first, not after the write.
 - [ ] On a re-run, `created:` survived, only drifted and `TBD` fields were asked about, and `status`
       moved only because what the profile promises changed.
 - [ ] Under `--audit`, no file was modified.
