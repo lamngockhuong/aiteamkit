@@ -84,7 +84,9 @@ list alongside it.
 compares the diff against a list that already exists runs once, because copies of a comparison
 return the same answer. The size of the change turns that number up and down, not the round list,
 and it is measured in changed lines rather than in changed files: 200 lines or fewer run all nine
-rounds in this agent and spawn nothing. Say which band the run is in and what put it there.
+rounds in this agent and spawn nothing. A file the repository regenerates counts toward neither the
+lines nor the files, on the evidence `references/review-rounds.md` requires, and is still read by
+the rounds that have a reason to open it. Say which band the run is in and what put it there.
 `--parallel <N>` overrides the searching rounds, not the total, which is now a consequence of the
 round list.
 
@@ -174,7 +176,9 @@ configuration, a predicate that turns out to have a side effect, and a lock whos
 shrank.
 
 New candidates go through the verdicts above like any other, and then through the cap in step 6.
-They are labelled apart from every round's findings, per `references/review-rounds.md`.
+They are labelled apart from every round's findings, per `references/review-rounds.md`. A sweep that
+died before it reported is re-run once, per the same file, and a review that ships without one says
+so: the run that quietly lost it reads exactly like the run that found nothing.
 
 ### 6. Rank and write
 
@@ -188,7 +192,8 @@ Where a round ran several copies, each of its findings carries how many of them 
 finding only one copy raised was checked against the code before it reached this list. That count
 means something only between copies of one round; a round that ran once carries its round name
 instead, never `[1/1]`, which would suggest other agents looked and disagreed when none was asked.
-The report says which rounds ran and which returned empty. It never presents a count of agreeing
+The report says which rounds ran, which were skipped, which came back empty and which died, per
+`references/review-rounds.md`, which names those three states. It never presents a count of agreeing
 copies as agreement between people.
 
 A convention violation takes the severity recorded against its rule. Raise it only when the concrete
@@ -205,6 +210,10 @@ Each comment: the file and line, what goes wrong, and a concrete suggestion. Add
 the author. State what the change does well in one line; a review with only negatives teaches
 nothing about what to repeat.
 
+Every finding carries an identifier prefixed by its severity, `B1`, `S1`, `N1`, numbered within that
+severity rather than across the three. It is the only part of a review that survives being spoken in
+a stand-up. `references/report-format.md` holds it, and the shape of everything around it.
+
 ## Output
 
 Every run writes a report to `docs/derived/reviews/<pr>-<date>.md` per `shared/artifact-paths.md`,
@@ -217,6 +226,17 @@ The session gets the summary, not the report: how many findings at each severity
 ones in one line each, how many the cap cut and at what severity, and the path to the file. Whoever
 has just watched the review run needs to know whether they are blocked and where to read the rest;
 the argument behind each finding is what the file is for.
+
+`references/report-format.md` holds what that file looks like: the finding identifiers, the labels
+under each finding, the round table, and the sections in order. This section decides where the
+report goes and what reaches the session; that file decides its shape, so a report does not get
+rebuilt from nothing once per run.
+
+Read the report already at that path before writing, when one is there. A second review of the same
+target reuses the identifiers of the first, so an author asked to fix `B1` finds `B1` again;
+`references/report-format.md` holds what happens when a finding changes severity, and what to do
+when no earlier report exists. This is the one case in the kit where a skill reads a derived
+artifact, and `shared/artifact-paths.md` records it as such.
 
 `--out <path>` moves the file. It no longer decides whether one is written.
 
@@ -240,8 +260,14 @@ line it cites, and the summary as one review comment. Post nothing before showin
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.
-- [ ] The band and the line count that put the change in it are stated, along with the rounds that
-      ran, any that returned empty and why, and a copy count the machine forced down.
+- [ ] The band and the line count that put the change in it are stated, net of any generated file
+      the count excluded and naming it, along with the agent count the band asks for, the rounds
+      that ran, any skipped and why, any that came back empty, any that died, and a copy count the
+      machine forced down.
+- [ ] A round or a sweep that died was re-run once or reported as not run, and neither was left to
+      read as a round that looked and found nothing.
+- [ ] Every finding carries a severity-prefixed identifier, carried over from the earlier report on
+      the same target where there is one, and the report follows `references/report-format.md`.
 - [ ] Every agent within a round received the same scope, and a finding only one copy of a round
       raised was checked against the code before it was reported.
 - [ ] No spawned round was shown what an earlier round found, the closing sweep excepted. Where

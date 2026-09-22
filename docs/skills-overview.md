@@ -290,7 +290,11 @@ a tidy-up of the surrounding file cannot be reverted cleanly.
 summary in the session that says how many findings there are at each severity, names the blocking
 ones, and points at the file. The findings are ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each
 citing a line, stating the failure it causes, and suggesting a concrete change; at most ten of them,
-or twenty under `--strict`, with the blocking ones never cut. `--out` moves the file, `--comment`
+or twenty under `--strict`, with the blocking ones never cut. Each one carries an identifier prefixed
+by its severity, `B1`, `S1`, `N1`, which is what lets a team name a single finding in a stand-up or a
+pull request thread, and a second review of the same pull request reads the first report to keep
+those identifiers pointing at the same findings. The report has a fixed shape rather than one rebuilt per run, and it carries no
+score of any kind, because the reviewer is not the approver. `--out` moves the file, `--comment`
 posts the findings as inline PR comments.
 
 **Use when.** Before approving a pull request, or when a review needs a second opinion.

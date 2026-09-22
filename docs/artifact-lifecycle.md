@@ -67,8 +67,10 @@ brief is rebuilt by running `atk:catchup` again, a review report by running `atk
 `atk:plan --review` where what was reviewed was a plan, and a setup-defect report by running
 `atk:onboard` again against the repository as it stands then. Either of those review runs, made
 without its `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
-only written copy: a reason to keep the directory, not a reason to fear deleting it. No skill reads
-any of the six.
+only written copy: a reason to keep the directory, not a reason to fear deleting it. One skill reads
+one of the six: a second `atk:review` over the same target reads the report already there, to carry
+its finding identifiers forward, and numbers from 1 and says so when there is none. Deleting that
+report costs the next review a set of identifiers, not a step in the chain.
 
 ## Git history is not a fallback
 
