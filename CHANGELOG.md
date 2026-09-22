@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.8](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.7...v0.0.8) (2026-09-22)
+
+
+### Features
+
+* teach the kit that a project can span several repositories ([#45](https://github.com/lamngockhuong/aiteamkit/issues/45)) ([c7615a5](https://github.com/lamngockhuong/aiteamkit/commit/c7615a5899c977288c626452cfdbd69bb7cd85f9))
+
+
+### Bug Fixes
+
+* close two findings a skill run reported against atk:fix ([#43](https://github.com/lamngockhuong/aiteamkit/issues/43)) ([1b94732](https://github.com/lamngockhuong/aiteamkit/commit/1b947323644e1a1486e4399c130b7a9db2160754))
+
 ## [0.0.7](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.6...v0.0.7) (2026-09-22)
 
 
