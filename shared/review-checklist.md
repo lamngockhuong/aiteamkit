@@ -91,5 +91,14 @@ project has recorded nothing. They carry no `CONV-` ID because they are not the 
 
 A rule the reviewer keeps repeating by hand belongs in the conventions document: `atk:review`
 reports it as a convention gap rather than writing it there itself, because adding a team rule is
-the Tech Lead's call. A rule in the checklist that no review has cited in a long time is a candidate for
-retirement, which `atk:convention --audit` reports.
+the Tech Lead's call.
+
+That report is the route between the two skills, and it only works if somebody walks it. `atk:review`
+writes its gaps into the `Convention gaps` section of its report, per
+`skills/review/references/report-format.md`. `atk:convention` reads that section out of the review
+reports already written for this project, in step 1, alongside everything else it reads, and brings
+each gap to the Tech Lead as a candidate rule. A gap nobody carries across dies in a derived file,
+and the next review finds it again from nothing.
+
+A rule in the checklist that no review has cited in a long time is a candidate for retirement, which
+`atk:convention --audit` reports.

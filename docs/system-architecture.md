@@ -84,7 +84,8 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
 
 - `shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
-  that a project which already writes conventions keeps its own shape, and the baseline items that
+  that a project which already writes conventions keeps its own shape, the route that carries a
+  convention gap out of a review report and back to `atk:convention`, and the baseline items that
   hold in any project. It exists so a convention is written once and checked in the same words,
   instead of being restated in both skills and drifting. The resolution is here for the same reason:
   `docs/conventions.md` is a default and not an address, so a reader that went straight to it would
@@ -100,8 +101,10 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
   writes an artifact for the section about a change that produced only a document. Nothing leaves
   the local repository without being asked for.
 - `shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
-  proves, and what it does not. Cited by the same three. Each of them runs a check and then has to
-  say what the result means, and the second half of that answer has to be identical in all three.
+  proves, and what it does not, and the gate rule: which CI job judges a layer, and what a local
+  command weaker than that job leaves unverified. Cited by the same three. Each of them runs a check
+  and then has to say what the result means, and the second half of that answer has to be identical
+  in all three.
 - `shared/diagram-conventions.md`: when a diagram earns its place in an artifact, the four shapes
   the kit draws, and the rules that keep them readable in a pull request on either theme. Cited by
   `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, and `atk:incident`, the five skills

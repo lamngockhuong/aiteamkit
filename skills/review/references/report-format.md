@@ -167,6 +167,12 @@ The line above the table carries the agent count as well as the band, because th
 in the per-round rows, so the count is stated rather than left to be added up, and any deviation
 from it, a round re-run, a copy the machine held down, is named in the `Note` column that caused it.
 
+The same line carries what the run was told it would cost before it spawned anything, or that it
+spawned nothing at all, and any deviation the machine forced: a cap that held the copies down, and a cap that held the run to one
+round at a time instead of one round ahead, per `references/review-rounds.md`. A review that took
+twice the wall clock for that reason is not a slow review, it is a review on a small machine, and
+the two read identically without the line.
+
 A table because those numbers exist to be checked against, and prose cannot be checked against
 anything. A round that did not run, one that ran and returned
 nothing, and one that died are three different rows and are never collapsed. Close the section with

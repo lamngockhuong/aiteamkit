@@ -93,6 +93,11 @@ round list.
 **Which rounds share an agent.** Comparing rounds may be combined; searching rounds never are,
 because combining them rebuilds the agent that forgets its earlier concerns.
 
+All three are settled before anything is spawned, so the run says what it will cost first: the round
+runs, the agents, and the concurrency the machine's memory allows. The cap is measured, not assumed,
+and it outranks the dispatch rule of step 4 rather than the copy count, per
+`references/review-rounds.md`. Stating the cost is what leaves the choice to pay it with the person.
+
 Every agent in a round reads the same diff: independence is the point, so splitting the files
 between them would produce agreement that means nothing. Rounds divide the question, never the
 files.
@@ -235,8 +240,9 @@ rebuilt from nothing once per run.
 Read the report already at that path before writing, when one is there. A second review of the same
 target reuses the identifiers of the first, so an author asked to fix `B1` finds `B1` again;
 `references/report-format.md` holds what happens when a finding changes severity, and what to do
-when no earlier report exists. This is the one case in the kit where a skill reads a derived
-artifact, and `shared/artifact-paths.md` records it as such.
+when no earlier report exists. This report is the one derived artifact the kit reads rather than only
+writes, here and in step 1 of `atk:convention`, which takes its `Convention gaps` section;
+`shared/artifact-paths.md` records both readers.
 
 `--out <path>` moves the file. It no longer decides whether one is written.
 
@@ -260,6 +266,8 @@ line it cites, and the summary as one review comment. Post nothing before showin
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.
+- [ ] The cost was stated before the first agent was spawned, or the run said it spawned nothing, and
+      a run the cap held to one round at a time instead of one round ahead says so.
 - [ ] The band and the line count that put the change in it are stated, net of any generated file
       the count excluded and naming it, along with the agent count the band asks for, the rounds
       that ran, any skipped and why, any that came back empty, any that died, and a copy count the

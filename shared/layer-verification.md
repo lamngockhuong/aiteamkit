@@ -21,8 +21,34 @@ Every command below is a blank, filled from the `Commands` section of `.atk/prof
 come from its `Layers` section. A tool name written into this file would be right for one repository
 and wrong for every other, and would be copied anyway because a written command looks authoritative.
 
+One command does not come from there, and it is named as the exception it is: the gate's own, below.
+It comes from the project's CI configuration, because that is the only place it exists until somebody
+records it, and a run that names where it read it has not guessed. Everything else stays a blank
+filled from the profile.
+
 The five layers are the common shape. A project with other layers uses its own names and the same
 four columns.
+
+## The gate, not only the command
+
+The profile names a command. The project names a gate: a job in its own CI that runs on the pull
+request and can fail it. The two are not always the same command, and where they differ the gate is
+what the change will be judged by.
+
+So for every layer this change touched, establish which CI job gates that layer and what that job
+runs, by reading the project's CI configuration rather than assuming the profile's command is what
+runs there. A gate that adds a coverage threshold, a wider scope, or a second command is stricter
+than the local run, and the difference is the part nobody has checked yet.
+
+| What was found | What the run does |
+|---|---|
+| The gate runs what the profile names | Say so once. The local pass is the gate's answer |
+| The gate is stricter | Run the gate's own command where it can be run locally. Where it cannot, the difference belongs in the fourth column as an unverified area, named by the job that will find it |
+| No CI gate covers that layer | Say so. The local run is then the only check there is, which is worth knowing before the change ships |
+
+A local pass reported without this reads to a reviewer as a claim that CI will be green, and that is
+the claim most likely to be contradicted an hour after the pull request is open, by the one job the
+run never looked at.
 
 ## Per layer
 

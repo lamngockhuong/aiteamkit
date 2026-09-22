@@ -83,8 +83,8 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
 
 - `shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
-  dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, cộng với các mục nền đúng với mọi dự
-  án. Nó tồn tại để một quy ước chỉ viết một lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép
+  dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, đường đưa một khoảng trống quy ước từ
+  báo cáo review về lại `atk:convention`, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép
   lại ở cả hai skill rồi lệch nhau. Thứ tự tra nằm ở đây cũng vì lý do ấy: `docs/conventions.md` là
   giá trị mặc định chứ không phải địa chỉ, nên một skill đọc thẳng vào đó sẽ báo rằng một team có cả
   một thư mục tài liệu chuẩn là chưa ghi quy ước nào. `atk:implement` đọc file này để lấy thứ tự tra
@@ -98,8 +98,10 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
   skill sinh artifact trích phần nói về thay đổi chỉ tạo ra một tài liệu. Không gì rời khỏi repo cục
   bộ mà chưa được hỏi.
 - `shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
-  minh được điều gì, và không chứng minh được điều gì. Cùng ba skill đó trích dẫn. Mỗi skill chạy một
-  phép kiểm rồi phải nói kết quả có nghĩa gì, và vế thứ hai đó buộc phải giống hệt nhau ở cả ba.
+  minh được điều gì, và không chứng minh được điều gì, cùng luật về cổng: job CI nào gác một tầng, và
+  một lệnh chạy ở máy yếu hơn job đó thì để lại phần nào chưa được kiểm chứng. Cùng ba skill đó trích
+  dẫn. Mỗi skill chạy một phép kiểm rồi phải nói kết quả có nghĩa gì, và vế thứ hai đó buộc phải
+  giống hệt nhau ở cả ba.
 - `shared/diagram-conventions.md`: khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình
   mà kit vẽ, và các quy tắc giữ cho chúng dễ đọc trong một pull request ở cả nền sáng lẫn nền tối.
   Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown` và `atk:incident` trích dẫn, tức
