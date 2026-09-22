@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.9](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.8...v0.0.9) (2026-09-22)
+
+
+### Features
+
+* make verification prove the CI gate, and a review state its cost ([#46](https://github.com/lamngockhuong/aiteamkit/issues/46)) ([3896e1f](https://github.com/lamngockhuong/aiteamkit/commit/3896e1f95c54f321cc266695995be9416f3168f5))
+
+
+### Bug Fixes
+
+* close six findings three skill runs reported against the kit ([#49](https://github.com/lamngockhuong/aiteamkit/issues/49)) ([2c10be8](https://github.com/lamngockhuong/aiteamkit/commit/2c10be8613cc028b1976c8d57fe9d62ad9506130))
+
 ## [0.0.8](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.7...v0.0.8) (2026-09-22)
 
 
