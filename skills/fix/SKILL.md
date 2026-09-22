@@ -58,6 +58,12 @@ reads its layer layout, so the Commands and Layers sections are its inputs rathe
 convenience. With no profile, stop and use the sentence in `shared/project-profile.md`. Never guess
 a test command: a guessed command that passes is worse evidence than no command at all.
 
+The same holds for an argument appended to a command that is correct. A package script whose own
+definition ends in `--` swallows the filter that follows it: the whole suite runs, exits zero, and
+prints the targeted test among the rest, so it reads exactly like the narrow run the report is about
+to call it. Take the narrowing syntax from the profile as well, or run the command as the profile
+gives it and say in the report which one was run.
+
 ## Workflow
 
 ```

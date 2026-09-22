@@ -140,9 +140,9 @@ other planning tools in the ecosystem already look, and so a project that has a 
 not end up with two of them. The ticket is not lost: it stays in the `ticket:` field of the index
 front matter, which is where every other artifact carries it anyway.
 
-A project whose `.gitignore` already covers that directory is saying it does not keep plans, and a
-plan written there is a record the rest of the kit believes exists and nobody will ever read. Say so
-before writing one, and let the team decide whether to track it or to put it elsewhere.
+A project whose `.gitignore` already covers that directory is saying it does not keep plans. That is
+the general case under Persistence below, and a plan is the sharpest instance of it, because a plan
+the rest of the kit believes exists is one every later skill reads from and nobody will ever find.
 
 A project that keeps its plans somewhere else says so in its `CLAUDE.md` or `AGENTS.md`, and that
 wins, exactly as the docs root rule works above.
@@ -194,6 +194,18 @@ grouping is the kit's default for an empty tree, not a move to perform on a proj
 writing to `docs/design/` for a year, and splitting a directory in half is worse than either shape.
 
 Every file in the first two groups is committed, the same as `.atk/profile.md`.
+
+A project whose `.gitignore` covers the directory an artifact is bound for overrules that. The group
+is this kit's default for where a file should end up; whether this repository keeps it is the
+project's decision, and it wins here the same way it wins over the docs root above. What may not
+happen is the team learning it afterwards. Name the directory before writing the file, say that the
+artifact will not be staged and will not travel in the pull request, and let the team decide whether
+to track it, to put it elsewhere, or to write it there anyway. A run that discovers it at the commit
+has already made that choice on the team's behalf, and the artifact it wrote is a record the rest of
+the kit believes exists and nobody will ever read.
+
+Only the first two groups raise the question. A project that has ignored `docs/derived/` is doing
+what the next paragraph already allows, so there is nothing to say and nothing to ask.
 
 `docs/derived/` is the only part of the tree a project may leave untracked, and nothing in the
 chain breaks if it does: the implementation record and the shipping record are copies of what lives
