@@ -1,11 +1,31 @@
 # Repair
 
-Loaded by `atk:git` for `--rebase` and `--resolve`. Bringing a branch back into a state where it can
-be reviewed, without destroying work.
+Loaded by `atk:git` for `--rebase` and `--resolve`, and by step 1 of any run that finds the branch
+diverged from its remote. Bringing a branch back into a state where it can be reviewed, without destroying
+work.
 
 `shared/finalize-steps.md` owns the boundary: rewriting history already on the remote is allowed on a
 branch that belongs to this work, after the user asks for that rewrite, and nowhere else. This file
 is how it is done inside that boundary.
+
+## Which kind of divergence
+
+A branch both ahead and behind got there one of two ways, and the answer decides everything below.
+Hashes cannot tell them apart after a rebase, so compare content:
+
+```bash
+git cherry HEAD origin/<branch>
+```
+
+Every line prefixed `-` is a commit the remote holds that already exists here under another hash.
+All of them prefixed `-` means an earlier session rebased this branch and never pushed: the remote's
+copies are the pre-rebase originals, nothing stops existing that is not also here, and this is the
+only divergence a force may resolve. There is nothing to rebase in that case, so the route is the
+checks below and then the pinned lease under "Rebase onto the base", not the rebase itself.
+
+A line prefixed `+` is a commit the remote holds that exists nowhere here. The remote moved on, that
+work belongs to somebody, and a force destroys it. This is a rebase onto the remote branch and never
+a force, whatever was asked for.
 
 ## Before any rewrite
 
@@ -40,6 +60,13 @@ wins, as it does everywhere else in the kit.
 Push a rebased branch with `--force-with-lease`, never plain `--force`. The lease is what refuses
 when the remote moved under you, which is exactly the case where a plain force destroys somebody
 else's commit.
+
+Pin it to what the remote held before this run looked:
+`--force-with-lease=<branch>:<the hash step 1 noted before its fetch>`. A bare lease is measured
+against this clone's remote-tracking ref, and every fetch since rewrites that ref, the one step 1
+makes in order to compare included. The lease then agrees with whatever the remote holds and refuses
+nothing except a remote that moved in the seconds after, which is not the check the paragraph above
+promises.
 
 ## Resolving a conflict
 

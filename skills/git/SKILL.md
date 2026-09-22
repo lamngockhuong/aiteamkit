@@ -82,8 +82,28 @@ against what ran otherwise goes looking for a step that was never going to happe
 ### 1. Read the state
 
 `git status --short`, the current branch, its base, and whether the branch exists on the remote.
+Where it does, note `git rev-parse origin/<branch>` before anything refreshes it, then `git fetch`,
+then how far the two have moved apart:
+`git rev-list --left-right --count HEAD...origin/<branch>`. Existence is not agreement, the pair of
+counts is what decides whether step 4 is a push, a rewrite, or neither, and without the fetch both
+are as old as whenever this clone last heard from the remote. Keep the noted hash: it is what step 4
+leases against, for the reason `references/repair.md` gives.
 Read the diff before touching anything: a skill that stages what it has not read is how an unrelated
 change reaches a commit nobody meant to make.
+
+Both counts above zero is a diverged branch, and it does not reach step 4 as a plain push. Two
+different things produce that state and only one of them may ever be forced: an earlier session that
+rebased and never pushed, leaving the remote holding pre-rebase twins of commits that are also here,
+or the remote moving on while this work sat locally. `references/repair.md` separates the two and
+says what each is owed; take the branch through it whether or not a repair flag was passed. A run
+that reads only whether the branch exists arrives at a push the remote refuses, where the obvious
+next move is a force nobody has checked is safe.
+
+Behind with nothing ahead is a branch that is merely out of date, with nothing to push yet. Say so
+with both counts and stop rather than fast-forwarding it: the user asked for a closing sequence, and
+pulling moves the tree under the change they are about to commit. `/atk:git --rebase` is where that
+goes. Read the counts again after step 3, because the commit it makes turns this state into the
+second kind of divergence above, which is a rebase and never a force.
 
 Say what was found before acting on it, in one block: the repository, the branch, how many files,
 and whether the work is code, artifacts, or both. That last one decides which half of
@@ -141,9 +161,20 @@ the check that no longer covers what shipped.
 
 ### 4. Push and pull request
 
-Both are asked for, every time, and the request shows what will be pushed. On a yes, push, then open
-the pull request with the artifact the calling skill produced as the body, so the reviewer reads the
-evidence and not the diff alone.
+Both are asked for, every time, and the request shows what will be pushed. Where the branch
+diverged and `references/repair.md` found the remote holding nothing that is not also here, the
+request shows which commits stop existing and the evidence that each has a twin in what replaces
+them, and the push carries the pinned lease that file specifies rather than a plain `--force`. Where
+it found anything else, there is no force to ask for. On a yes, push.
+
+Then the pull request, and `gh pr list --state open --head <branch>` says which case this is before
+anything is written. `gh pr view` is the wrong question: it answers with the branch's most relevant
+pull request whatever state that one is in, so a merged or closed one reads as open and this run's
+evidence lands on a thread nobody will reopen. With none open for the branch, open it with the
+artifact the calling skill produced as the body, so the reviewer reads the evidence and not the diff
+alone. With one already open, leave the body alone and offer the artifact as a comment instead: the
+body is what the reviewer has already read, and replacing it takes back the version they are holding
+without telling them. Never open a second pull request for a branch that has one.
 
 Where the project keeps a pull request template, it is the shape of that body and the artifact fills
 it, per `references/pr-body.md`, which also holds where the template is found. Passing the artifact
@@ -202,9 +233,14 @@ ticket, per `shared/finalize-steps.md`.
 - [ ] No submodule pointer was staged naming a commit that is not on the submodule's remote.
 - [ ] The project's pull request template, where it has one, shaped the body, and no checklist item
       was ticked that this run did not verify.
+- [ ] No second pull request was opened for a branch that already had one, and an open body was left
+      as its reviewer last read it.
 - [ ] A step with nothing to run, the ticket step above all, was reported as `N/A` rather than
       passed over in silence.
 - [ ] The readiness gate ran before any merge, and a refusal said which of the three caused it.
 - [ ] No pull request opened in this run was merged in the same run without a separate yes.
+- [ ] How far the branch and its remote had moved apart was read in step 1, after noting what the
+      remote held before the fetch, and a diverged branch was separated into the kind that may be
+      forced and the kind that may not before any push was offered.
 - [ ] No history already on the remote was rewritten outside the cases in `shared/finalize-steps.md`.
 - [ ] The issue was not closed and the ticket was not moved to done.
