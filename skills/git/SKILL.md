@@ -117,12 +117,27 @@ Resolve the convention from the project, never from this file: the conventions d
 the rules live in `shared/review-checklist.md`, then the shape of recent commits in `git log`.
 Absent any convention, Conventional Commits. Say which source decided it.
 
+Where the document and the history disagree, the document wins and the disagreement is reported:
+name what the document asks for, how many of the recent commits carry it, and leave it there. The
+order is not a tie-break, because a written rule the whole history contradicts means one of the two
+is stale and neither this skill nor this run knows which. Following the document keeps the new
+commits consistent with the rule a reviewer can be pointed at; reporting the conflict is what gets
+the stale side fixed by whoever owns it. Watch for the shapes that only look like the rule: a
+`(#1234)` that a squash merge appended is the host's, not the team's.
+
 Split the work per `references/commit-craft.md`, which also holds what the body carries. The
 subject says what changed; the body says why, and names the evidence: the failure that is gone, the
 requirement met, the check that ran. Never name the tool that produced the change.
 
-Never commit onto the default branch. Where the work has already started there, create the branch
-now and carry the changes across, per step 2 of `shared/finalize-steps.md`.
+Never commit onto the default branch, and check the current branch name against the rule just
+resolved before committing onto it either. Both cases are step 2 of `shared/finalize-steps.md`:
+create the conforming branch now and carry the changes across, rather than finding out at the push
+question that four commits sit on a name the project will not take.
+
+A write-mode pre-commit hook changes what the commit holds after step 2 read it.
+`references/commit-craft.md` holds which hooks do this and how to find out: the secret scan is re-run
+over what was committed either way, and for the rest of the diff the run either re-reads it or names
+the check that no longer covers what shipped.
 
 ### 4. Push and pull request
 
@@ -176,8 +191,12 @@ ticket, per `shared/finalize-steps.md`.
 
 - [ ] The diff was read before anything was staged, and unrelated edits were left alone.
 - [ ] What is staged was scanned, and a hit stopped the run rather than being reported and committed.
-- [ ] The commit convention came from the project, and the source was named.
-- [ ] Nothing was committed onto the default branch.
+- [ ] The commit convention came from the project, and the source was named. Where the document and
+      the history disagreed, the document decided and the conflict was reported.
+- [ ] Nothing was committed onto the default branch, and a branch name that does not match the
+      project's rule was corrected before the first commit rather than at the push question.
+- [ ] Where a pre-commit hook writes, the secret scan was re-run over what was committed, and the
+      rest of the diff was re-read or the check that no longer covers it was named.
 - [ ] Push, pull request, ticket comment, and merge were each asked for, every time, and once per
       repository where the change touched more than one.
 - [ ] No submodule pointer was staged naming a commit that is not on the submodule's remote.

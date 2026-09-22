@@ -254,10 +254,13 @@ record is a copy of what was filed with whoever owns the skill it is about, and 
 report is rebuilt by running `atk:onboard` again against the repository as it stands then.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
-directory rather than a break in the chain. One skill reads one of the six: a second `atk:review`
-over the same target reads the report already at that path, to carry its finding identifiers
-forward, and starts numbering at 1 and says so when there is none. Nothing else reads any of them,
-and losing that one report costs a set of identifiers rather than a step in the chain. A team that
+directory rather than a break in the chain. Two skills read one of the six, and both read the review
+report: a second `atk:review` over the same target reads the one already at that path, to carry its
+finding identifiers forward, and starts numbering at 1 and says so when there is none; and
+`atk:convention` reads the `Convention gaps` section of the reports written for the project, per
+Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the six, and losing a
+report costs a set of identifiers and a list of gaps the next review raises again, rather than a step
+in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
 

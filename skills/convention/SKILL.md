@@ -70,6 +70,14 @@ Resolve where this project keeps its conventions, per Where the rules live in
 rather than one file has its conventions across all of those documents, so read the set, not the
 first file in it.
 
+Read the convention gaps that reviews have already reported, from the `Convention gaps` section of
+the review reports under the reviews path in `shared/artifact-paths.md`. That section is where
+`atk:review` puts a rule it wanted and the project has not recorded, and this is the step that
+carries it across, per Keeping them in step in `shared/review-checklist.md`. Each one enters step 3
+as a candidate like any other rule, with the review that raised it as its source, and is offered to
+the Tech Lead rather than written in as agreed. Where the reports are gone, or the project keeps
+them outside version control, nothing is lost here that the next review will not raise again.
+
 Read `CONTRIBUTING.md`, `CLAUDE.md`, `AGENTS.md`, `.editorconfig`, linter and formatter configs,
 `CODEOWNERS`, and PR templates as well, and record which of them exist: a convention nobody read is
 reported as absent rather than as followed. Of these, the three that step 6 offers are
@@ -250,6 +258,8 @@ only when the user asks.
 - [ ] A project that already keeps conventions still has its own shape afterwards.
 - [ ] The document carrying the checklist is named to the user, for the profile to record.
 - [ ] Every file listed in step 1 was checked, and the absent ones were reported as absent.
+- [ ] Convention gaps already reported by a review were read and carried in as candidates, each
+      naming the review that raised it, or the run said no review report was there to read.
 - [ ] `--audit` changed no file and cited `path:line` rather than assigning an ID.
 - [ ] `--sync` left the wording of every rule the code still matches untouched.
 - [ ] Rules the team has not agreed to are marked as proposals.

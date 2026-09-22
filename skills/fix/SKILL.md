@@ -132,6 +132,11 @@ Then walk the blast radius from the investigation: every other caller of the cod
 Run what covers them. State plainly what could not be verified and why. An unverified area named in
 the report is a known gap; the same area left out is a claim that it was checked.
 
+Last, the gate: which CI job judges the layers this fix touched, and what that job runs, per The
+gate, not only the command in `shared/layer-verification.md`. A fix that passes here and fails the
+job that gates the same layer is the failure this step exists to catch, and it is the likeliest of
+the three skills to hit it, because a fix adds code to a surface the project already gates.
+
 ### 5. Tidy the fix
 
 With the verification green, hand the change to the host's code clean-up capability, `/simplify` in
@@ -197,6 +202,8 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
 - [ ] The tidy step stayed inside the lines the fix touched, the reproduction was re-run after it,
       and the report says what it changed or that the harness has no such capability.
 - [ ] Every caller in the blast radius was either exercised or named as unverified.
+- [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
+      difference recorded as unverified.
 - [ ] The report says whether the fix changed a public contract, and if it did, which reference
       document moved with it, per `shared/spec-docs.md`.
 - [ ] The report says what could not be verified.

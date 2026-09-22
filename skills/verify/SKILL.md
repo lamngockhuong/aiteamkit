@@ -140,6 +140,11 @@ Each round: one change addressing one identified cause, re-run the narrowest thi
 per `shared/layer-verification.md`, then re-run the failed case in full. A round that changes several
 things at once destroys the evidence about which one mattered.
 
+Code a round changed is code like any other, so the gate applies to it too, per The gate, not only
+the command in `shared/layer-verification.md`: name the CI job that judges the layer the round
+touched, and record what the local re-run did not cover. Once, at the end, over everything the rounds
+changed, rather than inside each round.
+
 Past the third round the run stops. The escalation carries four things and is not complete without
 the fourth:
 
@@ -237,6 +242,8 @@ distance between those two is the whole reason the kit separates the roles.
 - [ ] Every case has at least one side-effect assertion, or a stated reason why it has none.
 - [ ] No status code is reported as an assertion on its own.
 - [ ] The retry count is recorded, and no run exceeded three rounds.
+- [ ] Where a round changed code, the CI gate for each layer it touched is named, and a local
+      command weaker than it left the difference recorded as unverified.
 - [ ] A run that hit the ceiling escalated with all four parts, including a person's name.
 - [ ] Code changed during a round was tidied per `shared/host-capabilities.md`, with the failing case
       re-run afterwards, and the report says what the clean-up changed or why it did not run.

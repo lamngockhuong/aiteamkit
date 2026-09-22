@@ -112,6 +112,12 @@ be reverted.
 Under `--tdd`, each step writes its test first and the test is seen failing before the code is
 written. A test written after the code and never seen red proves that it passes, not that it checks.
 
+A plan that prescribes it asks for the same thing, and gets it. Where an accepted plan's own steps
+say the test comes first, those steps are written test-first whether or not the flag was passed, and
+the record says the plan asked rather than the flag. The plan is what somebody agreed to; the flag is
+how a run without a plan asks for the same discipline. Half a change written one way and half the
+other is the outcome no source asked for.
+
 ### 3. Verify by layer
 
 `shared/layer-verification.md` gives what to run per layer and what each run actually proves.
@@ -121,6 +127,11 @@ check that was already red. Every command name comes from the Commands section o
 Then walk the blast radius: everything that calls what changed. Run what covers it, and state
 plainly what could not be verified and why. An unverified area named in the record is a known gap;
 the same area left unmentioned is a claim that it was checked.
+
+Last, the gate: which CI job judges each layer this change touched, and what that job runs, per The
+gate, not only the command in `shared/layer-verification.md`. A local command weaker than the gate's
+leaves the difference unverified, and it is named as such rather than covered by the word green. The
+profile says what this project runs; only the project's CI says what will fail the pull request.
 
 ### 4. Tidy the change
 
@@ -137,6 +148,12 @@ The record says what it changed, or that it changed nothing, or that the harness
 capability. A clean-up nobody can see in the record is indistinguishable from one that never ran.
 
 ### 5. Review and fix
+
+Say what the review will cost before calling it: the band the change falls in, and the round runs
+and agents that band asks for, per `skills/review/references/review-rounds.md` and the stated-total
+rule in `shared/host-capabilities.md`. Add what step 4 already spent. A person who sees the number
+can take it, ask for a review with fewer copies per round, or say the change is small enough to read
+by hand; a person who does not see it finds out when the session stops halfway through.
 
 `references/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
 `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work, re-run the
@@ -179,9 +196,10 @@ session by default, which becomes the body of the pull request per `shared/final
 
 The record holds: what was built and against which acceptance criteria; which plan gate level fired
 and why; the files changed by layer; which conventions source was used, naming it as the project's
-own or as the baseline; what was verified with which command and what each run proved; what could
-not be verified and why; what the tidy step changed, or that it did not run and why; the review
-findings, which were fixed and which were deliberately kept;
+own or as the baseline; what was verified with which command and what each run proved; which CI gate
+judges each layer touched and whether the local run matched it; what could not be verified and why;
+what the tidy step changed, or that it did not run and why; the review findings, which were fixed and
+which were deliberately kept;
 whether `atk:verify` ran on the change, and if not, that nobody has yet seen it run; and anything
 noticed but deliberately not done.
 
@@ -206,14 +224,20 @@ done: this skill is the author, and done is the approver's word.
 - [ ] A plan that was run has no phase left at `pending`, in the phase file and in the index
       table alike.
 - [ ] The conventions source is named, and a project with none says the baseline was used.
-- [ ] Every command run came from the Commands section of `.atk/profile.md`.
+- [ ] Every command run came from the Commands section of `.atk/profile.md`, the gate's own excepted,
+      which came from the project's CI configuration and is recorded as having done so.
+- [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
+      difference recorded as unverified.
 - [ ] The blast radius was walked, and anything unverified is named as unverified.
 - [ ] The tidy step ran after a green verification, touched only this change, and was re-verified;
       the record says what it changed, or that the harness has no such capability.
+- [ ] What the review would cost was said before it was called.
 - [ ] `atk:review` was called, or `--no-review` was passed and the record says who must review.
 - [ ] Every `BLOCKING` finding is fixed or escalated by name, and no `NIT` was fixed silently.
 - [ ] The review loop ran at most twice before escalating.
 - [ ] The record says whether `atk:verify` ran, and a change nobody has run is named as one.
+- [ ] A plan whose steps prescribe test-first was followed that way for those steps, and the record
+      says the plan asked for it.
 - [ ] Anything noticed outside the scope is listed rather than done.
 - [ ] A change touching a public contract carried its reference document, or the record names what is
       stale and who will fix it, per `shared/spec-docs.md`.

@@ -163,10 +163,23 @@ was too thin, or too expensive, can see the number that decided it.
 
 Then cap it by the machine, before spawning anything. Read the available memory (`free -m` on Linux,
 `vm_stat` with `sysctl hw.memsize` on macOS, `systeminfo` on Windows) and allow roughly 1.5 GB per
-concurrent agent. The cap applies to the agents running at once inside one round, which is at most
-three unless `--parallel` raises it, so on any machine that can run the review at all it will rarely
-bite. Where the memory cannot be read, hold the searching rounds at 2 and the half-and-half rounds
-at 1.
+concurrent agent. The cap counts every agent in flight at once, which is not one round's worth: the
+dispatch rule below keeps a second round running while the first is synthesized, so at band 3 it is
+two rounds of up to three copies, about 9 GB. The cap bites on an ordinary laptop, and it is meant
+to: it is the number that decides what the run may do, and the table above is only what the run
+would ask for. Where the memory cannot be read, hold the searching rounds at 2 and the half-and-half
+rounds at 1.
+
+**Say what it will cost before the first agent is spawned.** The round list, the copy table and the
+cap are all known by this point, so the run states the three numbers it has derived: how many round
+runs, how many agents, and the concurrency the machine allows. `shared/host-capabilities.md` holds
+why, and the rule is not local to this file: the total of a run is stated rather than bounded,
+because a person who can see it can stop it, lower it with `--parallel`, or pay it. A review that
+announces its cost after a rate limit has stopped it has told the person nothing they could use.
+
+A run that spawns nothing, the first band and any harness with no parallel agents, says that instead:
+nine rounds in this agent and no cost to weigh. The sentence is not skipped there, because a reader
+who finds no cost stated cannot tell a run that owed none from a run that owed one and kept quiet.
 
 `--parallel <N>` overrides the searching column, and the other two columns follow it downward but
 never upward. It overrides the table, never the cap: an N above what the machine allows drops to the
@@ -228,6 +241,14 @@ issued once and returns once.
 synthesis hides behind the next round's run time instead of adding up nine times. Never dispatch all
 nine at once: sixteen runs landing in one place puts the calling agent into exactly the forgetting
 that this model spares the subagents. One round ahead, no more.
+
+**The cap wins over the dispatch rule**, which is the order `shared/host-capabilities.md` sets. Both
+rounds in flight are counted against the memory the machine reported, and where the two together
+exceed it, the round ahead is what yields: run one round at a time and say so in the report's
+run-shape section. Dropping copies to keep the second
+round in flight is the wrong trade, because copies are what a searching round finds with and the
+dispatch rule only buys back wall clock. A run that yields here is slower and is still the review
+the band asked for.
 
 **A round does not see what earlier rounds found.** Shown the list, an agent works toward it, and the
 union of independent passes, which is what the whole design rests on, shrinks to a re-reading.
@@ -353,15 +374,16 @@ the list cannot look for what the list is missing.
 
 ## What the report adds
 
-Three things, and no more: the band the change fell in and the counts that put it there, gross,
-net of what the repository regenerates, and naming the files that came out between them; which
+Four things, and no more: the band the change fell in and the counts that put it there, gross,
+net of what the repository regenerates, and naming the files that came out between them; the cost
+stated before anything was spawned, and any deviation the cap forced on it; which
 rounds ran, which were skipped and why, which came back empty, and which died; and a `[k/N]` tag on each
 finding a replicated round raised, every tag kept where more than one round raised it, with a round
 name on the rest and the sweep's own findings labelled as coming from the sweep. A reader who knows three of three copies raised something reads
 the list differently from one who does not, and a reader who thinks the review was thin can see the
 number that decided how wide it went.
 
-Three things is what the rounds owe the report. The report holds more than three sections, and
+Four things is what the rounds owe the report. The report holds more than three sections, and
 `references/report-format.md` is where the rest of them and their order live.
 
 The review is still one model's work, and the report never presents a count as agreement between

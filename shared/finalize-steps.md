@@ -63,6 +63,14 @@ source decided it: the conventions document, resolved per Where the rules live i
 Never commit onto the default branch. When the work has already started there, create the branch now
 and carry the changes across, which is cheaper than the conversation that follows a direct push.
 
+Check the name the work is already sitting on, before the first commit rather than at the push
+question. A branch is often named by something other than the person doing the work: a worktree
+tool, a ticket import, an earlier run. Where that name does not match the rule just resolved, say so
+now and create the conforming branch before anything is committed. Carrying four commits across
+afterwards costs nothing in git and leaves two names pointing at one piece of work, which is the
+part nobody cleans up. A name that cannot be resolved against any rule, because the project has
+none, is not a finding: say which source was checked and carry on.
+
 ## 3. Commit
 
 Same source order as the branch rule decides the commit convention. Absent any convention, use

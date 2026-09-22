@@ -73,11 +73,11 @@ mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết 
 | `design-doc` | Yêu cầu, và tài liệu tham chiếu của vùng sắp đổi | Thiết kế kèm ADR | `breakdown`, `plan`, `implement` |
 | `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/` | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `implement`, `review` |
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
-| `convention` | Code và lịch sử của nó | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
+| `convention` | Code và lịch sử của nó, cùng những khoảng trống quy ước trong các báo cáo review đã viết | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
 | `plan` | Ticket, thiết kế, hoặc mô tả; với `--review` thì là một bản kế hoạch đã viết | Pha và bước, hoặc danh sách phát hiện về một bản kế hoạch | `implement`; với `--review` là người viết bản kế hoạch đó |
 | `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR | `review`, `qa` |
 | `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
-| `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt | `implement`, `fix` |
+| `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt, cùng những khoảng trống quy ước đứng sau chúng | `implement`, `fix`, `convention` |
 | `qa` | Tiêu chí nghiệm thu và thay đổi | Kế hoạch test, test case, ma trận hồi quy | `verify` |
 | `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | `release` |
 | `git` | Một thay đổi hoặc artifact đã xong, cùng bản ghi mà skill gọi nó đã viết | Các commit, một nhánh, và pull request mang bản ghi đó | `review`, rồi tới người duyệt |
