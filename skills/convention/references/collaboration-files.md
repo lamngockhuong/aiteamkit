@@ -26,10 +26,12 @@ The flow a person follows: how to set the project up, how to branch, how to comm
 pull request, and what happens to it afterwards. The build and test commands come from
 `.atk/profile.md`, and the branch and commit rules from the conventions document.
 
-Link, do not copy. That holds for the conventions document, and equally for `docs/onboarding.md`
+Link, do not copy. That holds for the conventions document, and equally for the onboarding document
 where `atk:onboard` has written one: two files stating the same setup drift apart, and the reader
-cannot tell which of them lost. Read the onboarding document before drafting, and where it already
-carries the setup, the draft points at it and covers only what it does not.
+cannot tell which of them lost. Read it before drafting, and where it already carries the setup, the
+draft points at it and covers only what it does not. A project that onboards several roles holds one
+such document per role, per `shared/artifact-paths.md`. The setup section is the part that does not
+vary by role, so any of them answers this.
 
 Name a variable, never its value. A profile's commands can carry an internal registry, a staging
 host, or a seeding command with a credential in it, and `CONTRIBUTING.md` at the repository root is

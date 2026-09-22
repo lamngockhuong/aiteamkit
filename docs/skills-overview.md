@@ -431,14 +431,17 @@ never closes its actions does not need another list of them.
 
 **Produces.** Setup steps derived from the repository and marked `UNVERIFIED` where they could not be
 checked, an access list naming who grants what and whether it blocks day one, a code map by owner,
-the team's working agreements, and a first week ending in a real merged change.
+the team's working agreements, and a first week ending in the real, reviewed contribution the
+joiner's role makes, which differs per role and is listed in `skills/onboard/references/roles.md`.
+One document per role. A run that finds the repository wrong about its own setup leaves a second
+file too, a defect report for whoever owns the broken script.
 
 **Use when.** Someone joins, moves between teams, or returns after a long absence.
 
 **Do not use when.** You want business domain training. That belongs in the project's domain docs.
 
-**The habit that matters.** No credential ever enters the document, only its location and who grants
-it; and a setup step that cannot be verified says so instead of pretending.
+**The habit that matters.** No credential ever enters either document, only its location and who
+grants it; and a setup step that cannot be verified says so instead of pretending.
 
 ---
 

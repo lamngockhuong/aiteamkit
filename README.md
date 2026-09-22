@@ -60,7 +60,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:release` | Release notes per audience, a checklist with an owner per step, migration reversibility, and a rollback path written before the deploy. |
 | `atk:incident` | A timestamped incident timeline, a root cause supported by evidence, a blameless postmortem, follow-up actions with owners, and the runbook. |
 | `atk:retro` | Last retro's actions verified first, sprint evidence from git and the tracker, at most three new actions, and the status report. |
-| `atk:onboard` | Setup verified against the repository, an access list with who grants what, a code map by owner, and a first week ending in a merged change. |
+| `atk:onboard` | Setup verified against the repository, an access list with who grants what, a code map by owner, and a first week ending in the contribution the joiner's role makes. |
 | `atk:handover` | In-flight work with its true state, the decisions and traps that live in one head, access transfer, and a receiver who validates before signing. |
 
 ## Invocation

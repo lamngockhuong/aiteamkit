@@ -73,7 +73,8 @@ This produces the size discipline in the kit:
 Thirteen files hold what skills would otherwise repeat. The first three are cited by all 21:
 
 - `shared/team-roles.md`: the role table and the eight rules every skill follows.
-- `shared/artifact-paths.md`: the default output path per skill, naming rules, and front matter.
+- `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
+  root moves it, naming rules, and front matter.
 - `shared/ticket-adapters.md`: tracker detection and the vocabulary map.
 
 Eight are contracts between a named handful of skills rather than kit-wide rules:

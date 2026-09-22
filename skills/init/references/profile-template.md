@@ -55,6 +55,8 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 ## Docs
 
 - Docs root: `<path>`
+- Authored language: `<code>` or `TBD (ask <person>)`
+- Language mirrors: `<paths>` or `none`
 - Conventions: `<path>` or `TBD (ask <person>)`
 - Designs: `<path>` or `TBD (ask <person>)`
 - Agent instructions: `<CLAUDE.md, AGENTS.md, or none>`

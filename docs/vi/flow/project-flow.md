@@ -140,7 +140,7 @@ Ba skill đáp lại một sự kiện chứ không thuộc pha nào, và có th
 ```mermaid
 flowchart LR
     X1["Có báo lỗi"] --> X2["atk:fix<br/><small>chứng minh nguyên nhân trước khi sửa một dòng</small>"]
-    X3["Có người vào đội"] --> X4["atk:onboard<br/><small>tuần đầu kết thúc bằng một thay đổi đã merge</small>"]
+    X3["Có người vào đội"] --> X4["atk:onboard<br/><small>tuần đầu kết thúc bằng đóng góp của vai trò</small>"]
     X5["Có người rời đi,<br/>hoặc một pha khép lại"] --> X6["atk:handover<br/><small>người nhận kiểm lại rồi mới ký</small>"]
 ```
 

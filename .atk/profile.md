@@ -65,8 +65,10 @@ Two further checks live outside that section, each beside the rule it enforces:
 
 ## Docs
 
-- Docs root: `docs/`, mirrored file-for-file in `docs/vi/`, subdirectories included, except
-  `docs/derived/` and `docs/records/` <!-- source: existing directory -->
+- Docs root: `docs/` <!-- source: existing directory -->
+- Authored language: `en` <!-- source: CLAUDE.md, section "Docs are bilingual" -->
+- Language mirrors: `docs/vi/`, file-for-file including subdirectories, except `docs/derived/` and
+  `docs/records/`
 - Conventions: `CLAUDE.md` <!-- source: no CONTRIBUTING.md, no .editorconfig -->
 - Review checklist: `CLAUDE.md`, section "Review checklist" <!-- source: written by /atk:convention on 2026-09-18 -->
 - Designs: `docs/system-architecture.md`
@@ -86,7 +88,7 @@ Two further checks live outside that section, each beside the rule it enforces:
 | Tech Lead | Lam Ngoc Khuong | layers, commands, the profile itself |
 | PM        | Lam Ngoc Khuong | tracker and team sections            |
 
-- Working language: English. `docs/vi/` mirrors `docs/` but English is the source.
+- Working language: English
 
 <!-- QA, SRE and BrSE rows deleted: this project has no one in those roles today. -->
 <!-- One maintainer holds both roles. The kit's own premise is that author and approver differ, so

@@ -143,6 +143,21 @@ First that exists: a docs path named in `CLAUDE.md` or `AGENTS.md`, then an exis
 directory, then `documentation/`, then nothing. Never create a second tree beside one that already
 exists; `shared/artifact-paths.md` owns this rule and this is only its detection half.
 
+Then whether that root is partitioned by language: a directory named with a language code that
+shares at least one `.md` filename with the branch beside it. Overlap, not an equal set, because
+the authored branch also holds the language directories themselves and whatever the mirrors have
+not caught up with; a half-translated tree is the normal case. A subject directory such as
+`docs/api/` is not one of these.
+
+Where the root holds documents of its own beside the language directories, the root is the authored
+branch and the rest are mirrors. Where every branch carries a language code and the root holds
+nothing of its own, nothing in the tree says which one is the source, so ask rather than infer: the
+answer decides where every reference document the team writes from now on lands. Nobody to ask yet
+means `TBD` plus their name, as everywhere else, not a guess.
+
+Most projects have no language directory at all. Record `none` as the mirrors and the working
+language as the authored one, and move on; this is two lines, not an interview.
+
 Where conventions live: a convention document, a directory of standards documents split by topic or
 by side of the stack, `CONTRIBUTING.md`, `.editorconfig`, or the linter config. Record every one
 found; they are different kinds of rule. Where the project keeps a set of documents rather than one,

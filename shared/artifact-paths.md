@@ -13,6 +13,74 @@ The docs root is `docs/` unless the project says otherwise. Before writing, chec
 use the first that exists: the project `CLAUDE.md` or `AGENTS.md`, an existing docs folder with the
 same shape, then `docs/`. Never create a second parallel tree beside one that already exists.
 
+### A root partitioned by language
+
+Some projects split the docs root by language: `docs/` beside `docs/ja/` and `docs/vi/`, holding
+the same documents in the same subdirectories. Recognise it by both halves of that, a directory
+whose name is a language code, and at least one `.md` filename it shares with the branch beside it.
+A directory named after a subject is not this, which is why `docs/api/` never qualifies.
+
+Overlap rather than equality, because the two sides are never equal. The authored branch also holds
+the language directories themselves, and it holds whatever the mirrors leave out, which for this
+kit is `docs/derived/` and `docs/records/`. A translation that has covered four documents out of
+thirty is the ordinary state of a bilingual tree, not a tree that has stopped being one.
+
+Which language the tree is authored in has three sources. Check in this order and use the first
+that answers, the same order the docs root itself resolves in: the project `CLAUDE.md` or
+`AGENTS.md`, then the `Authored language` line in the `Docs` section of `.atk/profile.md`, then the
+tree, where the authored branch is the one the mirrors copy from, which is the root itself.
+
+Where every branch carries a language code and the root holds no documents of its own, which is
+what Docusaurus and Astro Starlight lay out by default, there is no unmarked branch to read the
+answer off. Ask which language the tree is authored in. Guessing there writes a third sibling
+outside every branch, which is the shape this rule exists to prevent.
+
+That question is about the directory layout, not about the profile, and it is asked whenever no
+source above answers it. A skill in the `Not needed` group of `shared/project-profile.md` may
+therefore ask it without leaving its group: the group forbids requiring the profile, degrading
+without it, or mentioning it, and asking where a document goes does none of the three. Ask about
+the tree, never about the file.
+
+In a partitioned tree the language a run writes in chooses the branch, rather than changing the language
+of the file at one fixed path. A run writing Vietnamese puts it at `docs/vi/onboarding.md`; it does
+not write Vietnamese to `docs/onboarding.md`, which is the path that tree reserves for the authored
+language. Doing the latter leaves one document that matches no other document in the tree, and the
+next person to run the skill cannot tell whether that was a decision or an accident.
+
+The language of a run is not always a flag, and this is where the rule is easiest to lose. `--lang`
+sets it when it is passed. When it is not, rule 6 of `shared/team-roles.md` sets it: artifacts
+follow the team's working language, which defaults to the language the user writes in. A team
+working in Vietnamese therefore reaches `docs/vi/` on a bare invocation, with no flag anywhere to
+point at afterwards. Read the language off the run, not off the argument list.
+
+The authored-language file is the one the tree expects to exist. A mirror written without it is
+half a pair, and the run still writes the mirror: it then names the authored-language path that is
+now missing and lets the team decide whether to write it. Do not write a language nobody asked for
+in order to fill the gap.
+
+An explicit `--lang` overrides the working language for this run and does not have to agree with
+it. What neither of them may do is move a language onto another language's path.
+
+A project that wrote its artifact before any of this already has a file at the unpartitioned path,
+and the run that now lands in a branch leaves it behind. Say so rather than walking past it: name
+the older file, say that the tree expects the document at the branch path from now on, and let the
+team move it or mark it `SUPERSEDED`. Silence there leaves two documents that both read as current,
+and the stale one sits at the path people still look in.
+
+Only Reference-group artifacts that sit under the docs root are mirrored this way. `.atk/profile.md`
+and `.atk/overrides/<skill>.md` are Reference and live outside it, so the language of the run
+decides what they are written in and never moves them. A record and a derived artifact describe a
+moment, in the language of the run that produced it, and translating one would be translating
+history; they are never mirrored.
+
+Not mirrored is not the same as having no branch. `docs/records/` and `docs/derived/` sit in the
+authored branch, once, whatever language each file inside them happens to be in, and where every
+branch carries a language code they sit in the branch the answer above named. Leaving them at the
+bare root there would create the third sibling this section exists to prevent, and it would do it
+to `docs/adr/` as well.
+
+`--out` still wins over all of this.
+
 ## Default paths
 
 | Skill | Default output |
@@ -36,7 +104,7 @@ same shape, then `docs/`. Never create a second parallel tree beside one that al
 | `release` | `docs/records/releases/<version>.md` |
 | `incident` | `docs/records/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
 | `retro` | `docs/records/retros/<sprint-or-date>.md` |
-| `onboard` | `docs/onboarding.md` |
+| `onboard` | `docs/onboarding-<role>.md` under `--role`, `docs/onboarding.md` without it; a defect found while verifying a setup step at `docs/derived/onboarding/setup-defects.md` |
 | `handover` | `docs/records/handover/<date>-<from>-to-<to>.md` |
 
 `--out <path>` overrides the default on every skill.
@@ -81,8 +149,8 @@ wins, exactly as the docs root rule works above.
 
 ### Named after the subject: `plan` is dated, `spec` is not
 
-`atk:spec`, `atk:qa` and `atk:tailor` are the three skills whose file names carry neither a ticket
-nor a date. A reference document is named after the thing it describes, one file per resource, per
+`atk:spec`, `atk:qa`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither
+a ticket nor a date. A reference document is named after the thing it describes, one file per resource, per
 table, per feature, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
 
@@ -103,9 +171,9 @@ merged and which directory it goes in.
 
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
-| Reference | the `spec` kinds, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
+| Reference | the `spec` kinds, `docs/qa/`, `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
+| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -130,12 +198,13 @@ Every file in the first two groups is committed, the same as `.atk/profile.md`.
 `docs/derived/` is the only part of the tree a project may leave untracked, and nothing in the
 chain breaks if it does: the implementation record and the shipping record are copies of what lives
 on the pull request, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
-running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, and a feedback
-record is a copy of what was filed with whoever owns the skill it is about.
+running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, a feedback
+record is a copy of what was filed with whoever owns the skill it is about, and a setup-defect
+report is rebuilt by running `atk:onboard` again against the repository as it stands then.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. No skill reads any
-of the five. A team that wants a smaller repository adds one line to `.gitignore`; a team that
+of the six. A team that wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
 
 The split is why `docs/records/design/<ticket>-<slug>.md` and `docs/api/<resource>.md` are two

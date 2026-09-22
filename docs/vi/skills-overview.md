@@ -436,15 +436,19 @@ team không bao giờ đóng được hành động của mình thì không cầ
 
 **Sinh ra.** Các bước cài đặt rút ra từ chính repo và được đánh dấu `UNVERIFIED` ở chỗ không kiểm
 chứng được, danh sách quyền truy cập ghi rõ ai cấp và có chặn ngày đầu không, bản đồ codebase theo
-người sở hữu, các thỏa thuận làm việc của team, và kế hoạch tuần đầu kết thúc bằng một thay đổi thật
-đã được merge.
+người sở hữu, các thỏa thuận làm việc của team, và kế hoạch tuần đầu kết thúc bằng đúng phần đóng
+góp thật mà vai trò của người mới tạo ra, đã qua review; phần đóng góp ấy khác nhau theo vai trò và
+được liệt kê trong `skills/onboard/references/roles.md`. Mỗi vai trò một tài liệu. Lượt chạy nào
+phát hiện kho mã nói sai về chính phần cài đặt của nó thì để lại thêm một tệp nữa, báo cáo lỗi gửi
+người sở hữu đoạn script hỏng.
 
 **Dùng khi.** Có người mới vào, chuyển team, hoặc quay lại sau thời gian dài vắng.
 
 **Không dùng khi.** Bạn cần đào tạo nghiệp vụ. Phần đó thuộc tài liệu domain của dự án.
 
-**Thói quen tạo ra khác biệt.** Không một credential nào lọt vào tài liệu, chỉ ghi nơi lưu và người
-cấp; và một bước cài đặt không kiểm chứng được thì nói thẳng ra thay vì làm như nó chạy tốt.
+**Thói quen tạo ra khác biệt.** Không một credential nào lọt vào tài liệu nào trong hai tệp, chỉ
+ghi nơi lưu và người cấp; và một bước cài đặt không kiểm chứng được thì nói thẳng ra thay vì làm
+như nó chạy tốt.
 
 ---
 

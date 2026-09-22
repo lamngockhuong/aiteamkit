@@ -3,12 +3,13 @@
   { "query": "/atk:onboard --role qa", "should_trigger": true },
   { "query": "hướng dẫn cho thành viên mới vào dự án", "should_trigger": true },
   { "query": "người mới cần những quyền gì và cài môi trường ra sao", "should_trigger": true },
-  { "query": "the new joiner needs a first week ending in a real merged change", "should_trigger": true },
+  { "query": "the new joiner needs a first week ending in a real reviewed contribution", "should_trigger": true },
   { "query": "オンボーディング資料を作って", "should_trigger": true },
   { "query": "新メンバー向けに、環境構築とコードの地図をまとめて", "should_trigger": true },
   { "query": "someone returns after six months, refresh their setup guide", "should_trigger": true },
   { "query": "map the codebase by area and owner for someone new", "should_trigger": true },
   { "query": "/atk:onboard --audit", "should_trigger": true },
+  { "query": "người mới là QA, tuần đầu của bạn ấy nên kết thúc bằng gì", "should_trigger": true },
 
   { "query": "bàn giao việc của tôi trước khi nghỉ", "should_trigger": false },
   { "query": "hand this work over to the client team", "should_trigger": false },
@@ -19,5 +20,6 @@
   { "query": "summarise this epic for someone who was not in the conversation", "should_trigger": false },
   { "query": "tóm tắt epic này cho bạn mới nhận việc", "should_trigger": false },
   { "query": "review this pull request", "should_trigger": false },
-  { "query": "set up the CI pipeline", "should_trigger": false }
+  { "query": "set up the CI pipeline", "should_trigger": false },
+  { "query": "sửa cái script cài đặt hỏng mà báo cáo onboarding chỉ ra", "should_trigger": false }
 ]

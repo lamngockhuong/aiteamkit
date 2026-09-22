@@ -72,7 +72,8 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 21 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
-- `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, quy tắc đặt tên, front matter.
+- `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
+  ngôn ngữ dời đường dẫn ấy, quy tắc đặt tên, front matter.
 - `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
 
 Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
