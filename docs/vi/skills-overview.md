@@ -293,8 +293,12 @@ dọn dẹp cả file xung quanh thì không revert gọn được vào ngày c�
 một bản tóm tắt trong phiên nói có bao nhiêu phát hiện ở mỗi mức, nêu tên những phát hiện chặn merge,
 và trỏ tới file. Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới
 một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể; nhiều nhất mười phát hiện, hoặc
-hai mươi khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Cờ `--out` đổi chỗ
-file, cờ `--comment` đăng phát hiện thành comment inline trên PR.
+hai mươi khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Mỗi phát hiện mang một
+mã định danh có tiền tố theo mức nghiêm trọng, `B1`, `S1`, `N1`, nhờ đó cả nhóm gọi tên được một phát
+hiện trong buổi họp nhanh hay trong một luồng trao đổi trên pull request; lượt review thứ hai trên
+cùng pull request đọc lại báo cáo đầu để những mã ấy vẫn trỏ đúng vào các phát hiện cũ. Báo cáo có hình dạng cố định
+chứ không phải mỗi lần chạy dựng lại một kiểu, và không mang điểm số nào, vì người review không phải
+người duyệt. Cờ `--out` đổi chỗ file, cờ `--comment` đăng phát hiện thành comment inline trên PR.
 
 **Dùng khi.** Trước khi approve một pull request, hoặc khi cần một ý kiến thứ hai.
 

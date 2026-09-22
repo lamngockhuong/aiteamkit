@@ -35,7 +35,7 @@ that is where defects hide and the three read different things; readability beco
 Each round says what it opens first, what makes it return nothing, and which of the eight baseline
 items in `shared/review-checklist.md` it carries.
 
-| Round | Step 4 item | Opens first | Returns empty when | Baseline item it holds |
+| Round | Step 4 item | Opens first | Skipped when | Baseline item it holds |
 |---|---|---|---|---|
 | `criteria` | 1 | The requirement and design from step 1 | Step 1 found neither a requirement nor a design | |
 | `lines` | 2 | Each hunk, then the function around it | Never | |
@@ -45,7 +45,7 @@ items in `shared/review-checklist.md` it carries.
 | `exposure` | 4 | The surfaces in and out: logs, responses, URLs, storage, migrations | The diff touches no input, output, storage, log, or schema | Input crossing a trust boundary is validated; a migration is reversible or says it is not |
 | `tests` | 5 | The test tree | The diff changes no behavior | New or changed behavior has a test that fails without the change |
 | `contract` | 6 | The five triggers in `shared/spec-docs.md` | None of the five fired | Public behavior change is reflected in the docs that describe it |
-| `rules` | 7 | The resolved conventions document, its checklist section | No rule and no baseline item is violated. There is no structural stop: see below | No secret, token, key, or credential in the diff; no debug statement, no commented-out code, no `TODO` without a ticket |
+| `rules` | 7 | The resolved conventions document, its checklist section | Never. There is no structural stop: see below | No secret, token, key, or credential in the diff; no debug statement, no commented-out code, no `TODO` without a ticket |
 
 **Assigning a baseline item to a round.** An item goes to the round whose *method* is what finds it,
 and stays in `rules` when no method beyond comparing the diff against a written rule is needed. Six
@@ -68,13 +68,13 @@ each has one substitution, so the analogy stops being invented once per run:
 | `contract` | The repository's own synchronisation rules, the ones naming which files must change together |
 | `callers` | Every other file citing what changed: by section number, heading, flag, rule id, or count |
 
-A round whose substitution finds nothing to open returns empty and names the substitution it looked
-for, the same as any other empty round.
+A round whose substitution finds nothing to open is skipped and names the substitution it looked
+for, the same as any other skipped round.
 
 **`rules` does not switch itself off.** A project that has recorded no conventions is exactly the
 case `shared/review-checklist.md` covers: `atk:review` checks the baseline anyway and reports that
 the project has recorded nothing. A `rules` round that fell silent there would go quiet at the one
-moment it has something to say. Its empty condition is about findings, not about inputs.
+moment it has something to say. It is never skipped; it can only come back empty.
 
 **Why `removed` is not part of `lines`.** Deleted code leaves nothing in the file to read past, so a
 single general instruction skips it every time rather than sometimes. The only way to look at it is
@@ -118,6 +118,41 @@ that is right. Changed files keep one job: **more than twenty of them raises the
 never past the third, because a change spread that wide costs attention even where each file gained
 a line.
 
+**A generated file counts toward neither number.** A file the repository regenerates is not read line
+by line by anybody; it is an artifact of its source, checked by reading that source and the command
+that writes it. Counting it measures work nobody does, and it takes very little of it to move a
+change up a band: in one run 515 of 1,864 changed lines were an `openapi.yaml` and an
+`api-types.generated.ts`, 28% of the number that chose the band.
+
+Exclude a file only on evidence that the repository regenerates it: a header line saying so, a
+codegen configuration or command that writes it, or a build step that emits it. The usual shapes, a
+`.generated.` infix, a `generated/` or `__generated__` directory, a client or schema emitted from a
+specification, are where to look and never the proof, because a project that hand-writes its
+`openapi.yaml` is holding source there. Where the evidence is absent, count the file.
+
+**For a file the diff touches, the evidence has to come from outside that file.** A header line is
+text the change under review can add, so taking it at face value lets an author decide how closely
+their own work is read: one line at the top of six hundred hand-written ones, and those lines leave
+the count, possibly drop a band, and are never read closely. Require a codegen configuration, a
+command, or a build step that names the path, and read it at the base of the diff. A header line on
+its own is enough only for a file the diff does not touch.
+
+The report carries both numbers and the files that came out between them, per
+`references/report-format.md`, so a reader who disagrees with an exclusion can see it rather than
+re-derive it. The >20-file rule reads the same net list, so the two counts cannot disagree.
+
+**Out of the count is not out of the review.** The exclusion takes a file out of two numbers and
+out of nothing else. Every round still opens it when its own job needs it, and three do: `contract`
+and `exposure`, because a diff in a generated file is evidence that its source moved; and `callers`,
+because a generated client or type is exactly where an exported signature changes while the code
+calling it is written by hand. A `callers` round that treated the exclusion as a smaller diff would
+find no signature change, close as skipped, and leave nobody checking that the callers were updated.
+The mechanical scans of `rules`, for a credential or a debug statement, read the whole diff for the
+same reason: a secret committed inside a generated file is committed.
+
+What the exclusion says is that reading a generated file line by line is not work. It never says a
+contract may move unwatched.
+
 The first row is the existing rule from the skill's step 3, re-keyed rather than replaced: on a
 small change the synthesis costs more than the second opinion is worth, and the calling agent has
 read the whole diff already. The last row costs 16 runs where a flat N of 3 would cost 27, and gives
@@ -138,6 +173,36 @@ never upward. It overrides the table, never the cap: an N above what the machine
 measured value, and the review says so in one line. It no longer forces a total, because under this
 model the total is a consequence of the round list rather than a number anyone picks. `--parallel 1`
 still forces one run per round, which is what it always did.
+
+## When an agent does not come back
+
+An agent that dies halfway returns what it had, or nothing at all, and neither is distinguishable
+from a pass that looked and found nothing. `shared/host-capabilities.md` names that as the reason to
+bound concurrency; this is what to do once it has happened anyway.
+
+Three states, named once and used everywhere after this, because a report has to keep them apart and
+two of them used to share a word:
+
+| State | What happened |
+|---|---|
+| `skipped` | The round's subject is not in the diff, so it never ran. The `Skipped when` column above says what that condition is for each round |
+| `empty` | It ran, opened its subject, and reported nothing. That is a result |
+| `dead` | It did not come back: the harness reported it killed, it ended mid-sentence, or it returned neither findings nor any statement of what it opened |
+
+The three are never merged, and the report carries them as three different rows.
+
+| What died | What to do | What the report says |
+|---|---|---|
+| Some, not all, copies of a replicated round | Close the round on the copies that returned, and count `[k/N]` over those, never over the number dispatched. Where only one copy comes back, its findings carry the round name rather than `[1/1]`, exactly as a round that only ever ran once does | How many copies returned, of how many were dispatched, and why the rest are missing |
+| A whole round: no copy of it returned, or it had only one | Re-run it once | That it was re-run, or, if the second run died too, that the round could not be run |
+| The closing sweep | Re-run it once. It has no copies, and what it looks for is what nothing else in the run is looking at | That it died and was re-run, or that the review shipped without a sweep |
+
+Re-run once, not until it works. A second death is usually the first cause again, and a review that
+keeps paying for it is spending the author's time on the harness rather than on the diff.
+
+A review missing a round or a sweep is still a review, and it says so: name the question nobody
+asked, so the author reads the list for what it is. What is not allowed is the silence, a review
+carrying nine rounds' worth of confidence on eight.
 
 ## Which rounds may share an agent
 
@@ -165,10 +230,21 @@ nine at once: sixteen runs landing in one place puts the calling agent into exac
 that this model spares the subagents. One round ahead, no more.
 
 **A round does not see what earlier rounds found.** Shown the list, an agent works toward it, and the
-union of independent passes, which is what the whole design rests on, shrinks to a re-reading. The
-rounds do different jobs, so duplicate reports are rare, and the ones that happen are deduplicated at
-synthesis. The one pass that must see the list is the sweep at the end, whose job is finding what
-the list is missing; it is not a round, and the section below says why.
+union of independent passes, which is what the whole design rests on, shrinks to a re-reading.
+Duplicates between rounds are ordinary rather than rare, and synthesis deduplicates them. The one
+pass that must see the list is the sweep at the end, whose job is finding what the list is missing;
+it is not a round, and the section below says why.
+
+**Which rounds overlap, and which earn their place.** The five that start from the diff, `lines`,
+`removed`, `boundary`, `callers` and `exposure`, converge hard: on one 1,864-line change a single
+finding came back from 11 of 13 agents, and the five most-reported findings from 6 or more. The four
+comparing rounds behaved the way the split intends, at one run each: `criteria`, `contract`, `rules`
+and `tests` each brought back something no other round saw.
+
+So a high count says a finding is easy to see from the diff. It does not say the finding matters,
+and ranking by it would put the obvious ahead of the absent, which is the one thing `criteria`
+exists to catch. Severity comes from the failure a finding causes, never from how many agents
+noticed it.
 
 The rule binds what is handed to a spawned round. Where nothing is spawned, in the first band and
 on a harness with no parallel agents, one context necessarily holds everything: run the rounds
@@ -229,8 +305,21 @@ Per round, as the round closes, not once for the whole review:
 5. **Reconcile severity.** The majority severity wins. A tie takes the higher one and says in the
    finding why it was raised. A verdict of `PLAUSIBLE` holds the result at `SHOULD FIX` or below,
    whatever the majority said.
-6. **Renumber** once every round has closed, in the skill's own order, severity first. The cap in the
-   skill's step 6 applies to that final merged list, never to one round's and never to one copy's.
+Then once, after the last round has closed, across rounds:
+
+7. **Deduplicate again**, by the same test as step 2. Duplicates between rounds are ordinary, so this
+   pass is not a formality.
+8. **Keep every tag.** A finding two rounds raised carries both, in the order the rounds ran:
+   `[3/3 lines] [2/2 boundary]`. Dropping one would hide that two different questions reached the
+   same line.
+9. **Take the highest severity, not the majority.** Across rounds the majority rule of step 5 does
+   not apply: the number of rounds that noticed something is not evidence about it, and a round
+   that saw the worse consequence is not outvoted by two that saw a milder one. Say in the finding
+   which round set the severity.
+10. **Renumber** in the skill's own order, severity first, into the severity-prefixed identifiers of
+    `references/report-format.md`: `B`, `S`, `N`, from 1 within each severity, never one sequence
+    across the three. The cap in the skill's step 6 applies to that final merged list, never to one
+    round's and never to one copy's.
 
 `[k/N]` means something only between copies of one round. A round that ran once carries its round
 name instead: `[1/1]` would invite the reader to think eight other agents looked and disagreed, when
@@ -264,12 +353,16 @@ the list cannot look for what the list is missing.
 
 ## What the report adds
 
-Three things, and no more: the band the change fell in and the line count that put it there; which
-rounds ran, which returned empty and why; and a `[k/N]` tag on each finding a replicated round
-raised, with a round name on the rest and the sweep's own findings labelled as coming from the
-sweep. A reader who knows three of three copies raised something reads the list differently from one
-who does not, and a reader who thinks the review was thin can see the number that decided how wide
-it went.
+Three things, and no more: the band the change fell in and the counts that put it there, gross,
+net of what the repository regenerates, and naming the files that came out between them; which
+rounds ran, which were skipped and why, which came back empty, and which died; and a `[k/N]` tag on each
+finding a replicated round raised, every tag kept where more than one round raised it, with a round
+name on the rest and the sweep's own findings labelled as coming from the sweep. A reader who knows three of three copies raised something reads
+the list differently from one who does not, and a reader who thinks the review was thin can see the
+number that decided how wide it went.
+
+Three things is what the rounds owe the report. The report holds more than three sections, and
+`references/report-format.md` is where the rest of them and their order live.
 
 The review is still one model's work, and the report never presents a count as agreement between
 people. `shared/team-roles.md` rule 2 holds at any number of rounds: the reviewer is a person, and

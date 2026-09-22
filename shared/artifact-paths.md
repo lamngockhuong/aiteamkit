@@ -203,8 +203,11 @@ record is a copy of what was filed with whoever owns the skill it is about, and 
 report is rebuilt by running `atk:onboard` again against the repository as it stands then.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
-directory rather than a break in the chain. No skill reads any
-of the six. A team that wants a smaller repository adds one line to `.gitignore`; a team that
+directory rather than a break in the chain. One skill reads one of the six: a second `atk:review`
+over the same target reads the report already at that path, to carry its finding identifiers
+forward, and starts numbering at 1 and says so when there is none. Nothing else reads any of them,
+and losing that one report costs a set of identifiers rather than a step in the chain. A team that
+wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
 
 The split is why `docs/records/design/<ticket>-<slug>.md` and `docs/api/<resource>.md` are two

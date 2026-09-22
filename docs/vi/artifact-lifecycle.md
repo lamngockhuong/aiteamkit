@@ -66,8 +66,10 @@ trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi 
 `atk:plan --review` nếu thứ được soát là một bản kế hoạch; còn báo cáo lỗi thiết lập thì chạy lại
 `atk:onboard` trên kho mã ở trạng thái lúc đó. Hai lượt review ấy, khi chạy mà không kèm
 `--comment` của chúng, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
-bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Không skill nào đọc cả
-sáu.
+bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có đúng một skill đọc
+một trong sáu loại: lượt `atk:review` thứ hai trên cùng một đối tượng đọc báo cáo đang nằm sẵn ở đó
+để giữ lại mã định danh của các phát hiện, và khi không có báo cáo nào thì đánh số lại từ 1 và nói
+rõ điều đó. Xóa báo cáo ấy làm lượt review sau mất một bộ mã định danh, chứ không đứt mắt xích nào.
 
 ## Lịch sử git không phải đường lùi
 
