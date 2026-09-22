@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.6](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.5...v0.0.6) (2026-09-22)
+
+
+### Bug Fixes
+
+* close three findings a skill run reported against atk:onboard ([#37](https://github.com/lamngockhuong/aiteamkit/issues/37)) ([eb75731](https://github.com/lamngockhuong/aiteamkit/commit/eb757316933f5b7bda688e8fdd546e453f1f9641))
+* resolve the sprint window before atk:retro gathers anything ([#39](https://github.com/lamngockhuong/aiteamkit/issues/39)) ([e14a047](https://github.com/lamngockhuong/aiteamkit/commit/e14a04715808987ae0c6e1ec47c81bd1c907b11a))
+
 ## [0.0.5](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.4...v0.0.5) (2026-09-21)
 
 
