@@ -122,7 +122,9 @@ follow-up message.
 ### When a harness loaded it already
 
 A harness may put the file in front of the skill before the skill starts. Claude Code does, through
-`hooks/load-overrides.mjs`; Cursor and Codex have no equivalent event and the skill opens the file
+`hooks/load-overrides.mjs`. Codex registers the same script through `hooks/codex-hooks.json`, and
+whether its event names a skill invocation the way the matcher expects has not been confirmed on a
+running session. Cursor has no equivalent event. Wherever nothing arrives, the skill opens the file
 itself, one read slower and with the same result.
 
 Check for it before reading. Loaded content arrives introduced by this sentence, and the words are
@@ -136,8 +138,8 @@ A file too long to put in front of the skill is named instead of quoted, and tha
 shared/team-roles.md.` Then read it.
 
 Nothing else changes. The hook decides nothing, skips nothing, and reports nothing; what it saves is
-one file read. A skill that finds no such sentence opens the file, which is what happens on two of
-the three harnesses and on the third whenever the hook is turned off.
+one file read. A skill that finds no such sentence opens the file, which is what happens on any
+harness the hook does not reach and on Claude Code whenever the hook is turned off.
 
 ## What an override cannot change
 

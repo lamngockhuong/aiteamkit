@@ -34,6 +34,7 @@
     "handover"
   ],
   "skills": "./skills/",
+  "hooks": "./hooks/codex-hooks.json",
   "interface": {
     "displayName": "AI Team Kit",
     "shortDescription": "Run the delivery lifecycle of a project team: intake, estimate, design, breakdown, plan, implement, fix, review, QA, verify, release, incident, retro",

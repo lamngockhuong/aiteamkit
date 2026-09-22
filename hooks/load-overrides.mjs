@@ -3,9 +3,10 @@
 // This hook saves a file read. It is not where the override mechanism lives, and
 // nothing breaks without it: rule 7 of shared/team-roles.md is the behaviour, every
 // SKILL.md names its own override file at the top of its workflow, and a skill that
-// does not find the content already in front of it opens the file itself. Cursor and
-// Codex have no equivalent event and behave identically, one read slower. Keep it
-// that way. The moment this script decides something the skill cannot decide on its
+// does not find the content already in front of it opens the file itself. Cursor has
+// no equivalent event, and Codex, which registers this script through
+// hooks/codex-hooks.json, may never name a skill invocation the way the matcher
+// expects; both behave identically, one read slower. Keep it that way. The moment this script decides something the skill cannot decide on its
 // own, the rule exists in two places and the copy in shared/project-overrides.md is
 // the one that is correct.
 //

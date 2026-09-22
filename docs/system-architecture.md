@@ -14,7 +14,7 @@ aiteamkit/
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
   skills/<name>/evals/*.json    trigger cases for the description
   shared/*.md                   DRY layer shared by the skills that cite it
-  hooks/                        profile reminder and override loader, Claude Code only
+  hooks/                        profile reminder and override loader, Claude Code and Codex
   assets/*.svg                  icon and logo for marketplace listings
   docs/, docs/vi/               bilingual project documentation
   .atk/                         the kit's own profile and overrides, for running its skills on itself
@@ -172,10 +172,11 @@ because it is not part of the kit.
 
 ## The session-start hook
 
-`hooks/hooks.json` registers one `SessionStart` hook that runs `hooks/check-profile.mjs`. It answers
-a single question, "does this project have a profile yet", reading the project the way
-`shared/project-profile.md` does, which is the nearest profile at or above the directory the session
-opened in, and it reminds without blocking.
+`hooks/hooks.json` registers one `SessionStart` hook that runs `hooks/check-profile.mjs`, and
+`hooks/codex-hooks.json` registers the same script on Codex. It answers a single question, "does
+this project have a profile yet", reading the project the way `shared/project-profile.md` does,
+which is the nearest profile at or above the directory the session opened in, and it reminds without
+blocking.
 
 The boundary is the point. A hook that blocked would put the rule in two places, and the rule is not
 uniform anyway: ten skills need no profile, and a hook that stopped everything would stop
@@ -206,12 +207,35 @@ session shows `Failed with non-blocking status code` with the interpreter's mess
 operating-system condition, so a second PowerShell copy could not be registered without firing on
 Linux and macOS too. One portable interpreter is what lets the three platforms behave alike.
 
-One limit, accepted:
+### Why Codex has a registration file of its own
 
-- **Claude Code only.** Codex and Cursor can package hooks too, but each uses its own event names
-  and output contract, and neither could be tested here. The reminder is a convenience; the gate
-  that matters is in the skills, and it runs identically on all three harnesses. The other two
-  wrappers wait until someone can verify them against a running harness.
+Codex reads `hooks/hooks.json` from a plugin root by default, so the exec-form entry above was not
+ignored there: it was run with its path unresolved, and every Codex session opened on a failed
+startup hook. The two harnesses resolve the plugin root at different moments. Claude Code substitutes
+`${CLAUDE_PLUGIN_ROOT}` in `args` itself; Codex substitutes `${PLUGIN_ROOT}` and `${CLAUDE_PLUGIN_ROOT}`
+in the `command` string and substitutes nothing in `args`, so Node received the literal
+`${CLAUDE_PLUGIN_ROOT}/hooks/check-profile.mjs`, resolved it against the workspace, and exited with
+`MODULE_NOT_FOUND`.
+
+`hooks/codex-hooks.json` carries the same two hooks with the path inside `command`, and the `hooks`
+key in `.codex-plugin/plugin.json` points Codex at it, which is also what stops Codex reading the
+Claude Code file. Nothing about the scripts changes: they are the same two Node files, they read the
+same environment, and neither registration file holds a rule. Measured against codex-cli 0.155.1: a
+repository with no profile gets the reminder and the hook completes, a repository with one stays
+silent, and the marker lands in the plugin data directory Codex provides as `CLAUDE_PLUGIN_DATA`.
+Codex sets no `CLAUDE_PROJECT_DIR`, which costs nothing, because both scripts already fall back to
+the working directory and Codex runs a hook from the workspace root.
+
+Two limits, accepted:
+
+- **No Cursor wrapper.** Cursor can package hooks too, but its event contract could not be tested
+  here, and Cursor does not read either file. The reminder is a convenience; the gate that matters is
+  in the skills, and it runs identically on all three harnesses. That wrapper waits until someone can
+  verify it against a running harness.
+- **The Codex `PreToolUse` entry is registered, not observed.** Codex's own tool name for a skill
+  invocation was not confirmed against a running session, so the override loader may never match
+  there. That is the degradation `load-overrides.mjs` is built for: every skill opens its own
+  override file when nothing put it in front of it.
 
 ### Why a hook may only save work, never do it
 
