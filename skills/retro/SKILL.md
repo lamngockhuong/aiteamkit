@@ -50,6 +50,25 @@ named owner. See `shared/team-roles.md`.
 
 Before step 1, read `.atk/overrides/retro.md` when it exists, per rule 7 of `shared/team-roles.md`.
 
+### The window comes first
+
+`<sprint>` is a name, not a date range. Resolve it to a start and an end before step 2 runs a single
+query, and record which source gave it.
+
+`shared/ticket-adapters.md` says which trackers store sprint dates and which store only a name. Where
+this one carries both, that is the answer and there is nothing to ask. Where it carries one or
+neither, ask the person running the sprint for the rest. Do not infer the window from a cadence document, a merge date, or a pair
+of release markers: a sprint that slipped or was extended defeats all three, and the wrong window is
+not a small error, because every number in step 2 is computed from it and a correction runs the whole
+step again.
+
+An explicit date range on the command line is already the answer. A run given neither a sprint nor a
+range has the same question to settle and one less clue to settle it with, `--data-only` before a
+meeting being the usual case, so ask there rather than reaching for the last fortnight.
+
+Say which window is in use however it was reached, and carry it into the artifact so the next retro
+can be compared against this one.
+
 ### 1. Check the previous retro
 
 Read the last retro record and report each action as `DONE`, `IN PROGRESS`, or `NOT STARTED`, with
@@ -60,6 +79,11 @@ evidence. Open this retro with that result. A repeated `NOT STARTED` is itself t
 From the tracker: committed versus completed, items added mid-sprint, items carried over, bug count
 by origin. From git: PR count, review turnaround, PR size, revert count. From CI: failure rate and
 pipeline duration. Present numbers as observations, never as a verdict on a person.
+
+The first three need a history of field changes that not every tracker keeps. Where this one does
+not, take the substitute named in `shared/ticket-adapters.md`, label it in the artifact as a
+substitute, and say what it measures instead. Never print one under the name of the number it stands
+in for: the PM reads it as the real figure and commits the next sprint against it.
 
 ### 3. Structure the discussion
 
@@ -95,7 +119,10 @@ Follow `shared/ticket-adapters.md`. Each action becomes one issue so the next re
 ## Definition of done
 
 - [ ] The previous retro's actions are reported with evidence before anything new is discussed.
-- [ ] Every metric states its source.
+- [ ] The sprint window was resolved before any evidence was gathered, and the artifact carries it
+      with the source it came from.
+- [ ] Every metric states its source, and any metric the tracker cannot produce is labelled as a
+      substitute and says what it measures instead.
 - [ ] Evidence and team opinion are in separate sections.
 - [ ] At most three actions, each with one owner, a date, and a completion signal.
 - [ ] No individual is named in a way that reads as a performance judgement.

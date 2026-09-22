@@ -427,6 +427,12 @@ báo cáo tình hình cho đối tượng nội bộ hoặc khách hàng.
 
 **Không dùng khi.** Bạn muốn đánh giá một cá nhân. Skill sẽ không tạo ra thứ đó.
 
+**Nó hỏi những gì.** Số hiệu sprint là một cái tên, không phải một khoảng ngày. Khi tracker không lưu
+ngày mở và ngày đóng của sprint, skill hỏi khoảng thời gian trước khi thu thập bất cứ thứ gì, thay vì
+tự suy ra rồi tính lại toàn bộ con số lúc phát hiện suy luận sai. Chỉ số nào tracker không sinh ra
+được, chẳng hạn cam kết so với hoàn thành trên một bảng không lưu lịch sử thay đổi trường, xuất hiện
+dưới dạng một số thay thế có tên, kèm câu nói rõ nó đo cái gì.
+
 **Thói quen tạo ra khác biệt.** Nó mở đầu bằng câu hỏi các hành động của retro trước đã làm chưa. Một
 team không bao giờ đóng được hành động của mình thì không cần thêm một danh sách hành động nữa.
 

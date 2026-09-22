@@ -422,6 +422,12 @@ the status report for an internal or client audience.
 
 **Do not use when.** You want an individual assessed. The skill will not produce it.
 
+**What it asks for.** A sprint number is a name, not a date range. Where the tracker does not store
+the sprint's start and end, the skill asks for the window before gathering anything, rather than
+inferring one and recomputing every number once the inference turns out wrong. A metric the tracker
+cannot produce, such as committed versus completed on a board that keeps no history of field
+changes, appears as a named substitute that says what it measures instead.
+
 **The habit that matters.** It opens with whether the last retro's actions happened. A team that
 never closes its actions does not need another list of them.
 
