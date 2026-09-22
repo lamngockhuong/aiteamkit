@@ -51,7 +51,11 @@ thư mục test đã trả lời được thì nó không đem ra hỏi người
 
 **Sinh ra.** File `.atk/overrides/<skill>.md` trong dự án: điều team này muốn một skill làm khác đi,
 viết thành mục `## Before`, mục `## After`, hoặc cả hai, kèm tên vai trò sở hữu thứ skill đó sinh ra
-đứng ở dòng người duyệt.
+đứng ở dòng người duyệt. Với cờ `--feedback` thì thứ sinh ra là một bản ghi, đặt tại
+`docs/derived/feedback/<skill>-<date>.md`, theo một bộ khung cố định: lần chạy nằm trong một bảng,
+các phát hiện được đếm và chia theo chỗ mỗi phát hiện thuộc về, mỗi phát hiện một dòng mang mức
+nghiêm trọng và dòng định nghĩa nó dẫn ra, một mục riêng cho từng phát hiện, và số bước của skill đã
+chạy trên tổng số bước.
 
 **Dùng khi.** Team cứ phải sửa đi sửa lại cùng một chỗ trong kết quả của một skill, khi khách hàng
 hoặc một chuẩn nội bộ thêm một bước mà kit không biết, hoặc khi một file ghi đè viết từ trước không

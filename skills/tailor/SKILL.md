@@ -167,7 +167,13 @@ With no override files in the project, say so and stop rather than offering to c
 
 Takes a run that went wrong and reaches the right one of three outcomes: an override for this team,
 a record for whoever wrote the skill, or neither. `references/feedback.md` holds the question that
-separates them, what the record carries, and the two things it must never carry.
+separates them, the shape the record is written in, and the two things it must never carry.
+
+The record has a fixed shape, in `references/feedback.md`: the run in a table, the findings counted
+and split across the three rows of the fork, one row per finding carrying a severity and either a
+`path:line` in the definition or the word silent, a section per finding under it, and which steps of
+the skill ran out of how many it has. Written as prose instead, it leaves its reader counting
+paragraphs to work out how much is wrong and reading all of them to find what is worst.
 
 Ask that question once per finding rather than once per run. One bad run usually produces findings
 of more than one kind, and sorting them is the work. A finding that lands on the override side
@@ -179,9 +185,11 @@ record and no override. The first of the three outcomes is closed to it: `.atk/o
 is opened by the `atk` skill named after it and by nothing else, so a file written there for any
 other skill is read by nobody while looking like a rule the team agreed on. Say that instead of
 writing it, and carry the finding into the record under a section of its own, apart from the
-findings the author is being asked to act on. `references/feedback.md` holds the two other things
-that change: what the record loses where the definition cannot be read at all, and who it names in
-place of this kit's issue form.
+findings the author is being asked to act on. Where the team itself owns that definition, which is
+the ordinary case for a skill kept in the project, the record may also propose the change owed, in a
+section of its own. `references/feedback.md` holds when that applies, along with the two other
+things that change: what the record loses where the definition cannot be read at all, and who it
+names in place of this kit's issue form.
 
 With no skill named, three rules settle which one this is about. They run before step 1, which
 cannot open a skill file without a name, and the run returns to that step once the name exists:
@@ -264,5 +272,10 @@ there. One record is one issue: a form listing four unrelated findings gets tria
       that skill's owner rather than this kit's issue form.
 - [ ] A bare name that could mean a skill of this kit or one from outside it was confirmed with the
       user before any definition was opened.
-- [ ] A feedback record names the person reporting and proposes no replacement wording for the skill.
+- [ ] A feedback record follows the shape in `references/feedback.md`: every finding carries a
+      severity and either a `path:line` in the definition or the word silent, and the record states
+      how many findings there are, how they split across the three rows of the fork, and how many
+      steps of the skill ran out of how many it has.
+- [ ] A feedback record names the person reporting, and proposes no wording for a definition its
+      reader does not own.
 - [ ] Nothing left the project without being asked.

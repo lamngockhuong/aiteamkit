@@ -31,31 +31,121 @@ installed the kit, and the ones it does not fit have to override it back.
 
 ## What the record holds
 
-1. The skill, where its definition came from and at what version, the flags passed, and what was
-   asked of it.
-2. Which steps of `SKILL.md` ran, which did not, and in what order. A step that did not run is
-   stated as a fact. Why it did not run is raised as a question, for the reason
-   `references/audit.md` gives: the reader can answer it and the record cannot.
-3. Every place the run had to guess because the skill is silent, citing the skill as `path:line`.
-4. Every place a person corrected the output by hand, in that person's own words.
-5. What the team expected instead, and what it cost them that the skill did something else.
+Somebody who was not in the run reads this to decide whether a definition changes. It answers four
+things in order: how many findings there are, how bad each one is, where in the definition each one
+lands, and what the run actually did. The sections below are fixed, so two records about two
+different skills are read the same way.
+
+### The shape
+
+```markdown
+---
+title: "Feedback on <skill>: <slug>"
+status: DRAFT | IN REVIEW
+owner: <the person reporting>
+approver: <who owns the skill definition, or "TBD (ask <person>)">
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+ticket: <id or URL, or none>
+---
+
+# Feedback: <skill>
+
+## The run
+
+| | |
+|---|---|
+| Skill | `<skill as invoked>` |
+| Definition | `<path>`, version `<version>`, or "not readable" and why |
+| Flags | `<flags>`, or none |
+| Harness | `<harness and version>` |
+| Asked of it | <one line> |
+| Reported by | <person> |
+
+## Findings
+
+<N> findings: <n> for the definition, <n> local to this project, <n> the definition already covers.
+Steps of `SKILL.md`: <n> of <total> ran.
+
+| # | Finding | Severity | Where it lands | Cites |
+|---|---------|----------|----------------|-------|
+| 1 | <one line: what the skill failed to make the run do> | `BLOCKING` | The definition | `<path>:<line>` |
+| 2 | <one line> | `SHOULD FIX` | Local to this project | silent |
+
+### 1. <title>
+
+- **What the skill says**: `<path>:<line>`, quoted. Or: silent, nothing in it covers <X>.
+- **What the run did**: <the behaviour as it happened>
+- **What the team expected**: <the outcome owed, not the wording that would produce it>
+- **What it cost**: <the rework, the wrong direction taken, the time>
+- **Corrected by hand**: <what a person fixed afterwards, in that person's own words>, or none
+
+### 2. <title, same five lines>
+
+## Steps that ran
+
+| Step of `SKILL.md` | Ran | Note |
+|---|---|---|
+| 1. <name> | yes | |
+| 2. <name> | no | <a question for the reader, not a guess at why> |
+
+## Open questions
+
+At most three, each with the name of the person who must answer it.
+
+## Not in here
+
+<the exclusions below, named, so the reader can tell a rule from an omission>
+```
+
+A finding with no row in the table is invisible, and a row with no section under it cannot be acted
+on. Both, for every finding.
+
+The headings are written in the language of the run, per rule 6 of `shared/team-roles.md`. Nothing
+reads this file by its headings, which is what makes it differ from the two in an override file, so
+what matters is that its reader can read it.
+
+### Severity
+
+Per finding, and about what the run cost rather than about how good the skill is. The three values
+are the ones `atk:review` ranks by, per `shared/review-checklist.md`, so one word means one thing
+across the kit:
+
+| Severity | A finding about a skill run |
+|----------|-----------------------------|
+| `BLOCKING` | The run reached a wrong conclusion, or produced an artifact its approver has to reject |
+| `SHOULD FIX` | The artifact was usable and a person had to redo part of it by hand |
+| `NIT` | The result was right and the route to it was wasteful, or a line reads two ways and the run picked one |
+
+Severity is not the score the next section forbids. It grades one finding, which the reader checks
+against the citation beside it; a score grades the run as a whole, and nothing in the record lets
+anyone check it.
+
+### What it counts
+
+Two counts, both stated rather than left to be added up. How many findings there are and how they
+split across the three rows of the fork, and how many steps of `SKILL.md` ran out of how many it
+has. A reader who sees "5 of 7" knows what to ask about next; a reader who sees five paragraphs
+cannot tell whether two steps were skipped or never existed.
 
 Name the person reporting. A record with no name behind it is a complaint, and the author cannot
 come back with a question.
 
 ## What it must never hold
 
-**Replacement wording for `SKILL.md`.** The team reporting has the skill file in front of them and
-not the `shared/` layer behind it, so a proposed line has a good chance of restating a rule that
-already lives there or contradicting one. Two of the three shared rules a proposed line usually
-collides with are invisible from the skill file alone. Report what happened; the author writes the
-line with the whole kit in view. The exception is the section below, where the reporter is the
-author and does have the whole kit in view.
+**Replacement wording for `SKILL.md`, unless the person who will read the record wrote it.** A team
+reporting on a skill somebody else ships has that skill file in front of them and not the `shared/`
+layer behind it, so a proposed line has a good chance of restating a rule that already lives there
+or contradicting one. Two of the three shared rules a proposed line usually collides with are
+invisible from the skill file alone. Report what happened; the author writes the line with the whole
+kit in view. Where the reporter does hold the whole definition, the rule has nothing left to
+protect, and the section "When the reporter owns the definition" below says what changes.
 
 **A score.** A percentage computed from the run by the agent that just made the run is self-grading,
 and the kit's own premise is that the author and the approver are separate roles, whoever fills
-them. Count what is
-countable, such as how many steps ran, and leave the judgement to the person reading.
+them. Count what is countable, per "What it counts" above, and leave the judgement to the person
+reading. Severity is not that judgement: it is one claim per finding, checkable against the
+citation next to it.
 
 ## When the skill is not one of this kit's
 
@@ -85,29 +175,41 @@ It goes to a different reader. Name who owns the skill, this project or another 
 there. The `Skill run report` form belongs to this kit's repository and fits a record about this
 kit's skills, so offering it here would aim a report at a maintainer who cannot act on it.
 
+Where that reader is the reporting team itself, which is the ordinary case for a skill kept in the
+project's own skill directory, the section below applies and the record may propose what to change.
+Check who owns the definition before deciding that: a skill from another kit has an owner elsewhere
+however local its file looks once installed.
+
 What does not change: the fork is asked per finding, the third row still goes nowhere wherever the
 definition can be read, the record names the person reporting, and nothing leaves the project
 without being asked.
 
-## When the reporter is the kit author
+## When the reporter owns the definition
 
-A maintainer of `atk` running the skills on their own projects has nobody to send a record to. The
-fork above still does its work, because sorting the findings is what it is for, and the second row
-keeps its meaning: the finding belongs to the shipped file rather than to one project.
+Two runs land here. A maintainer of `atk` running the skills on their own projects, and a team
+reporting on a skill it keeps in its own project, whose definition nobody outside the team ships.
+Both have nobody to send a record to, and both hold every file the definition is made of, which is
+the condition the rule against proposing wording rests on.
+
+The fork above still does its work, because sorting the findings is what it is for, and the second
+row keeps its meaning: the finding belongs to the definition rather than to one run.
 
 Three things change, and only at the end.
 
 The record stays where it was written and is not offered to anyone. There is no issue to open, since
 the person who would read it wrote it; skip the offer rather than making it and answering it.
 
-The shipped file can be edited directly, which the second row normally cannot reach. Say so, and keep
+The definition can be edited directly, which the second row normally cannot reach. Say so, and keep
 the record as the account of why, because a commit message carries the change and not the run that
-found it.
+found it. Editing it is a separate decision and a separate run: this mode writes the record and
+stops, because the person who owns the definition is the person who approves a change to it, even
+where that is the same person.
 
 A proposal may go in the record, under a heading of its own, despite the rule above. The reason that
-rule exists is that the reporter cannot see the `shared/` layer, and here they can. Keep it in its own
-section rather than mixed into the findings, so a reader can still tell the account of the run from
-the argument about what to do next.
+rule exists is that the reporter cannot see the layer behind the skill, and here they can. Keep it in
+its own section rather than mixed into the findings, so a reader can still tell the account of the
+run from the argument about what to do next, and write it as the change owed rather than as finished
+wording: which line, what it fails to require, and what it has to require instead.
 
 What does not change: the fork is still asked per finding, the third row still goes nowhere, and a
 record with no name behind it is still a complaint.
