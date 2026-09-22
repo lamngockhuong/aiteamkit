@@ -6,7 +6,7 @@
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
 | 2. Skill coverage | DONE | 20 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for eleven, pending for the other ten |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for twelve, pending for the other nine |
 | 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 21 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
@@ -46,8 +46,9 @@ through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Eleven skills ship with `references/` already. The other ten do not. For those
-whose output is a document with a fixed shape, the template is re-derived on every run:
+Twelve skills ship with `references/` already. The other nine do not. Where the output is a
+document with a fixed shape and no reference holds that shape, the template is re-derived on every
+run:
 
 | Skill | Reference to add |
 |-------|------------------|
@@ -60,7 +61,7 @@ whose output is a document with a fixed shape, the template is re-derived on eve
 | `incident` | Severity rubric, timeline format, postmortem template |
 | `retro` | The evidence-gathering command set for git, CI, and each tracker |
 | `convention` | The derivation heuristics per language and framework |
-| `onboard`, `handover` | Document templates and the interview banks |
+| `handover` | Document templates and the interview bank |
 
 The constraint stays: `SKILL.md` under 300 lines, detail moves to `references/`.
 

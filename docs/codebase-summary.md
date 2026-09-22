@@ -65,8 +65,8 @@ first line that it belongs to this repository, and no skill reads either for ano
 
 ## Skills
 
-Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Eleven also carry
-`references/`; the other ten do not yet.
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Twelve also carry
+`references/`; the other nine do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
@@ -89,7 +89,7 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Eleve
 | `skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, rollback, sign-offs |
 | `skills/incident/SKILL.md` | Operation | Timeline, proven root cause, blameless postmortem, actions, runbook |
 | `skills/retro/SKILL.md` | Improvement | Previous actions verified, sprint evidence, three actions, status report |
-| `skills/onboard/SKILL.md` | Team | Verified setup, access list, code map, first week ending in a merged change |
+| `skills/onboard/SKILL.md` | Team | Verified setup, access list, code map, first week ending in the contribution the role makes |
 | `skills/handover/SKILL.md` | Team | True state of in-flight work, decisions, traps, access transfer, receiver sign-off |
 
 ### References
@@ -129,6 +129,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/git/references/repair.md` | Rebase, conflict resolution and fixup, with the three checks that come before any rewrite of remote history |
 | `skills/git/references/stacked.md` | The stacked pull request lifecycle, and where to stop: one consent and one readiness gate per layer |
 | `skills/git/references/pr-body.md` | Where a project's pull request template is found, how the artifact fills it, and why a ticked checkbox is a claim rather than decoration |
+| `skills/onboard/references/roles.md` | What `--role` changes, which is the blocking column of the access list and what the first week ends in, and the three steps it leaves alone so two runs stay comparable |
 
 ### Trigger evals
 

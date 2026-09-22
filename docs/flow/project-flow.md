@@ -139,7 +139,7 @@ Three skills answer an event rather than a phase, and can fire at any point abov
 ```mermaid
 flowchart LR
     X1["Defect reported"] --> X2["atk:fix<br/><small>prove the cause before changing a line</small>"]
-    X3["Someone joins"] --> X4["atk:onboard<br/><small>first week ends in a merged change</small>"]
+    X3["Someone joins"] --> X4["atk:onboard<br/><small>first week ends in the role's contribution</small>"]
     X5["Someone leaves,<br/>or a phase ends"] --> X6["atk:handover<br/><small>receiver validates before signing</small>"]
 ```
 

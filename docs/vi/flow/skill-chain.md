@@ -84,7 +84,7 @@ mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết 
 | `release` | Diff kể từ phiên bản trước | Ghi chú, checklist, đường lui | `incident`, `retro` |
 | `incident` | Log, số đo, dòng thời gian | Postmortem kèm runbook | `retro`, `fix` |
 | `retro` | Git, tracker, cả đội | Hành động đã kiểm, bằng chứng, báo cáo trạng thái | Chu kỳ sau |
-| `onboard` | Repo và danh sách quyền truy cập | Thiết lập, bản đồ code, tuần đầu | Thành viên mới |
+| `onboard` | Repo và danh sách quyền truy cập | Thiết lập, bản đồ code, tuần đầu, và báo cáo mọi lỗi thiết lập tìm được | Thành viên mới, và người sở hữu lỗi được báo |
 | `handover` | Mọi việc còn dở | Trạng thái, quyết định, cạm bẫy, chuyển quyền | Người nhận |
 
 ## Chỗ chuỗi đứt

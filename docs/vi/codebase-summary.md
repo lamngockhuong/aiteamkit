@@ -65,8 +65,8 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười một skill có thêm `references/`;
-mười skill còn lại thì chưa.
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười hai skill có thêm `references/`;
+chín skill còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
@@ -89,7 +89,7 @@ mười skill còn lại thì chưa.
 | `skills/release/SKILL.md` | Bàn giao | Ghi chú theo đối tượng, checklist có người phụ trách, migration, rollback, phê duyệt |
 | `skills/incident/SKILL.md` | Vận hành | Timeline, nguyên nhân gốc có bằng chứng, postmortem, hành động, runbook |
 | `skills/retro/SKILL.md` | Cải tiến | Kiểm chứng hành động cũ, bằng chứng sprint, ba hành động mới, báo cáo |
-| `skills/onboard/SKILL.md` | Con người | Cài đặt đã kiểm chứng, danh sách quyền, bản đồ code, tuần đầu kết thúc bằng một merge |
+| `skills/onboard/SKILL.md` | Con người | Cài đặt đã kiểm chứng, danh sách quyền, bản đồ code, tuần đầu kết thúc bằng phần đóng góp của vai trò |
 | `skills/handover/SKILL.md` | Con người | Trạng thái thật của việc dở, quyết định, bẫy, chuyển giao quyền, người nhận ký |
 
 ### Thư mục `references/`
@@ -129,6 +129,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/git/references/repair.md` | Rebase, gỡ conflict và fixup, cùng ba lần kiểm tra phải làm trước khi viết lại lịch sử đã có trên remote |
 | `skills/git/references/stacked.md` | Vòng đời chồng pull request, và chỗ phải dừng: mỗi tầng một lời đồng ý và một cửa kiểm tra riêng |
 | `skills/git/references/pr-body.md` | Tìm template pull request của dự án ở đâu, artifact điền vào nó thế nào, và vì sao một ô tick là một lời khẳng định chứ không phải để trang trí |
+| `skills/onboard/references/roles.md` | `--role` đổi những gì, tức là cột chặn ngày đầu của danh sách quyền và thứ mà tuần đầu kết thúc bằng, cùng ba bước nó không đụng tới để hai lượt chạy còn so được với nhau |
 
 ### Thư mục `evals/`
 

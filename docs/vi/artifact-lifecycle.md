@@ -31,7 +31,7 @@ flowchart TB
 
 | Nhóm | Gồm những gì | Commit | Sửa về sau | Xóa về sau |
 |------|--------------|--------|------------|------------|
-| Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì |
+| Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, các tài liệu onboarding, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì |
 | Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
 | Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội | Chạy lại skill | Được, thoải mái |
 
@@ -61,12 +61,13 @@ tên được; khách hàng hỏi bản 1.4.2 có những gì; bên kiểm toán
 khắc phục; người bàn giao đã đi sáu tháng trước và file bàn giao là thứ duy nhất còn lại.
 
 **Dẫn xuất.** Không mất gì. Bản ghi triển khai và bản ghi chuyển giao đều là bản sao của thứ nằm
-trên pull request, bản tóm tắt của `atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại
-`atk:review`, hoặc
-`atk:plan --review` nếu thứ được soát là một bản kế hoạch. Cả hai, khi chạy mà không kèm `--comment`
-của chúng, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là bản viết duy
-nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Không skill nào
-đọc cả bốn.
+trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi lên repo của kit, bản tóm tắt của
+`atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại `atk:review`, hoặc
+`atk:plan --review` nếu thứ được soát là một bản kế hoạch; còn báo cáo lỗi thiết lập thì chạy lại
+`atk:onboard` trên kho mã ở trạng thái lúc đó. Hai lượt review ấy, khi chạy mà không kèm
+`--comment` của chúng, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
+bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Không skill nào đọc cả
+sáu.
 
 ## Lịch sử git không phải đường lùi
 

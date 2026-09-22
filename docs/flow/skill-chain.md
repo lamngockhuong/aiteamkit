@@ -85,7 +85,7 @@ is why the arrow into them comes from the code rather than from the design that 
 | `release` | The diff since the last version | Notes, checklist, rollback path | `incident`, `retro` |
 | `incident` | Logs, metrics, the timeline | Postmortem plus runbook | `retro`, `fix` |
 | `retro` | Git, the tracker, the team | Verified actions, evidence, status report | The next cycle |
-| `onboard` | The repository and the access list | Setup, code map, first week | The new member |
+| `onboard` | The repository and the access list | Setup, code map, first week, and a report of any setup defect found | The new member, and whoever owns a reported defect |
 | `handover` | Everything in flight | State, decisions, traps, access transfer | The receiver |
 
 ## Where a chain breaks

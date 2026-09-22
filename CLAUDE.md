@@ -67,9 +67,9 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: eleven of them carry
+neighbours it must not steal. `references/` is where they still differ: twelve of them carry
 one (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`, `git`,
-`convention`), and the other ten are still `SKILL.md` alone. `git` holds the most, five, because
+`convention`, `onboard`), and the other nine are still `SKILL.md` alone. `git` holds the most, five, because
 the closing sequence has more cases than its workflow line names. Deepening a skill means adding `references/`
 files and pointing at them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
@@ -94,7 +94,7 @@ skill discovery.
 | File | Owns | Cited by |
 |------|------|----------|
 | `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the eight rules every skill follows | all |
-| `shared/artifact-paths.md` | Default output path per skill, `YYMMDD` naming, the shared YAML front matter block, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
+| `shared/artifact-paths.md` | Default output path per skill, how a docs root partitioned by language moves that path, `YYMMDD` naming, the shared YAML front matter block, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
 | `shared/ticket-adapters.md` | Tracker detection order and the GitHub / Jira / Backlog / Redmine vocabulary map | all |
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement`, `git`, `plan` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, and which skills stop, degrade, or ignore it when that file is missing | the skills that need project facts |

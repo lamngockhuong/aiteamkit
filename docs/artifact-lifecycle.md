@@ -31,7 +31,7 @@ flowchart TB
 
 | Group | What is in it | Commit | Change it later | Delete it later |
 |-------|---------------|--------|-----------------|-----------------|
-| Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, `docs/onboarding.md`, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes | Always, in place | No. It is the only statement of what the system does today |
+| Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/qa/`, `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes | Always, in place | No. It is the only statement of what the system does today |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead | Only as a decision somebody owns, never as a blanket rule |
 | Derived | everything under `docs/derived/` | Optional | Run the skill again | Yes, freely |
 
@@ -62,11 +62,13 @@ actions; the person who handed over left six months ago and their handover file 
 that survived them.
 
 **Derived.** Nothing. The implementation record and the shipping record are copies of what lives on
-the pull request, a catchup brief is rebuilt by running `atk:catchup` again, and a review report by
-running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan. Either of
-those, run without its `--comment`, posts nothing to the pull request, so until it is rebuilt its
-report is the only written copy: a reason to keep the directory, not a reason to fear deleting it.
-No skill reads any of the four.
+the pull request, a feedback record is a copy of what was filed on the kit repository, a catchup
+brief is rebuilt by running `atk:catchup` again, a review report by running `atk:review` again, or
+`atk:plan --review` where what was reviewed was a plan, and a setup-defect report by running
+`atk:onboard` again against the repository as it stands then. Either of those review runs, made
+without its `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
+only written copy: a reason to keep the directory, not a reason to fear deleting it. No skill reads
+any of the six.
 
 ## Git history is not a fallback
 
