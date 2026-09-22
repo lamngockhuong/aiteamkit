@@ -42,8 +42,16 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    once, link the ticket, cite the file path.
 5. **Ask only what the repository cannot answer.** Scan code, docs, git history, and tickets first.
    Interview for judgment, context, and agreements, not for facts already on disk.
-6. **Language.** Artifacts follow the team's working language. Default to the language the user
-   writes in; keep code identifiers, commands, and file paths in their original form.
+6. **Language.** Artifacts follow the team's working language, and three sources can name it, in
+   this order. A `--lang` flag passed to the run wins, because it is the only one of the three a
+   person chose for this run. Failing that, the working language recorded in the Team section of
+   `.atk/profile.md`, where the project has recorded one. Failing both, the language the user writes
+   in. Keep code identifiers, commands, and file paths in their original form.
+
+   This rule resolves the language prose is written in, and stops there. What that language then
+   does to the path, in a docs tree partitioned by language, belongs to `shared/artifact-paths.md`.
+   What it never does is change the authored language of that tree, which is a fact about the
+   directory layout and stays true whatever this rule resolves to.
 7. **Honour the project's overrides.** Read `.atk/overrides/<this skill>.md` when it exists: `## Before`
    applies to the first workflow step, `## After` to the result before the artifact is written. Skip
    any instruction that breaks rules 1 to 3, or one of the four safety limits a skill owes its team,
