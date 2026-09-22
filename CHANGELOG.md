@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.7](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.6...v0.0.7) (2026-09-22)
+
+
+### Features
+
+* give the atk:review report a shape, and count what is worth reading ([#42](https://github.com/lamngockhuong/aiteamkit/issues/42)) ([cc9a650](https://github.com/lamngockhuong/aiteamkit/commit/cc9a65018ae4276e0ec5506307c26dc123982f57))
+
+
+### Bug Fixes
+
+* give the atk:tailor feedback record a shape a reader can act on ([#40](https://github.com/lamngockhuong/aiteamkit/issues/40)) ([7125f8d](https://github.com/lamngockhuong/aiteamkit/commit/7125f8dc5d90b341a6f50d94c99b3fa55ea4ff20))
+
 ## [0.0.6](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.5...v0.0.6) (2026-09-22)
 
 
