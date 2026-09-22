@@ -209,7 +209,8 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
       done.
 - [ ] The captured reproduction was re-run and no longer reproduces.
 - [ ] The tidy step stayed inside the lines the fix touched, the reproduction was re-run after it,
-      and the report says what it changed or that the harness has no such capability.
+      and the report says what the host's capability changed, or that the harness ships none and
+      the pass was run by hand per `shared/tidy-pass.md`.
 - [ ] Every caller in the blast radius was either exercised or named as unverified.
 - [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
       difference recorded as unverified.

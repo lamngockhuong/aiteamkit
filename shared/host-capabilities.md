@@ -70,6 +70,11 @@ Where the harness ships no such capability, the skill runs the pass itself, work
 why the degradation is a real step rather than a good intention. It applies to the host capability
 too, as the standard the result is read against.
 
+Where the harness does ship one, the handoff is not a judgement call. A run does not read the diff
+itself instead because the capability looks heavier than the change deserves: how this capability
+goes about its work inside itself is the harness's business rather than this kit's, and a step that
+may be reasoned away is a step that will be, on every diff, since no diff argues for its own size.
+
 Cited by `implement`, `fix`, and `verify`, under four rules that hold in all three:
 
 1. **Only after the verification for that change has passed.** Tidying code that does not work yet
@@ -92,8 +97,9 @@ Two skills narrow it further, for reasons their own files explain:
 - `atk:verify` applies it only to code its retry rounds changed, and re-runs the case that was
   failing after it.
 
-The record carries one line either way: what the clean-up changed, or that it ran and changed
-nothing, or that the host has no such capability.
+The record carries one line either way: what the capability changed, or that it ran and changed
+nothing, or that the harness ships none and the pass was run by hand. There is no fourth thing to
+write, which is the point: a run that read the diff itself instead has nothing true to put here.
 
 ## Independent reviewers, in parallel
 
