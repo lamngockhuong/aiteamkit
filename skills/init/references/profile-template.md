@@ -22,8 +22,21 @@ ticket: none
 
 # atk project profile
 
-Written by `/atk:init`. Read by the atk skills that need project facts. Committed on purpose: the
-next person on the team inherits it. Re-check it with `/atk:init --audit`.
+Written by `/atk:init`. Read by the atk skills that need project facts. Re-check it with
+`/atk:init --audit`.
+
+<!-- Persistence line. Keep exactly one of the three blocks below, whichever matches how this
+     profile is actually stored, and delete the other two. This is the line `/atk:init --audit`
+     re-checks against the repository. -->
+
+Committed on purpose: the next person on the team inherits it.
+
+Not committed: this repository will not take the file, so `.atk/` sits in `.git/info/exclude`.
+Nobody inherits this profile. Everyone working here runs `/atk:init` for themselves and their
+answers drift apart with nothing to reconcile them, so keep the answers somewhere the team shares.
+
+Not committed: under the `workspace` shape this root belongs to no repository, so nothing tracks
+this file and there is nowhere to commit it. It costs what the excluded form above costs.
 
 ## Project
 

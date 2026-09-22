@@ -21,7 +21,8 @@ aiteamkit/
 ```
 
 Không chỗ nào trong cây này mô tả dự án mà kit được cài vào. Phần đó nằm trong một file thuộc **dự án
-đích**, là `.atk/profile.md`, do `atk:init` viết ra và được commit cùng dự án. Thư mục plugin chỉ đọc
+đích**, là `.atk/profile.md`, do `atk:init` viết ra và thường được commit cùng dự án;
+`shared/project-profile.md` giữ hai hình dạng mà không gì theo dõi nó. Thư mục plugin chỉ đọc
 và dùng chung cho mọi dự án trên máy, nên nó là chỗ sai để giữ một sự thật chỉ đúng với một dự án.
 
 `.atk/` trong cây trên là của chính kit, chỉ đúng với `aiteamkit`, và nó nằm đó vì kit chạy skill của

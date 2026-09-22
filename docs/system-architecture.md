@@ -21,7 +21,8 @@ aiteamkit/
 ```
 
 Nothing in this tree describes the project the kit is installed into. That lives in one file in the
-**target project**, `.atk/profile.md`, written by `atk:init` and committed with the project. The
+**target project**, `.atk/profile.md`, written by `atk:init` and, in the ordinary case, committed
+with the project; `shared/project-profile.md` holds the two shapes where nothing tracks it. The
 plugin directory is read-only and shared by every project on the machine, so it is the wrong place
 for a fact that is true of one of them.
 

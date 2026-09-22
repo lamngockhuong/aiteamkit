@@ -34,7 +34,9 @@ one records what the project **is**, an override records what a skill should **d
 - Not under `docs/`: `docs/` holds artifacts a person reads, per `shared/artifact-paths.md`. A
   profile is data a skill reads. Mixing them makes the docs tree noisy.
 
-The profile is committed. The whole point is that the next person on the team inherits it.
+The profile is committed, and the whole point is that the next person on the team inherits it.
+Two shapes do not reach that: a repository that will not take the file, which the section of that
+name below holds, and `workspace`, where the root belongs to no repository at all.
 
 ## Where the project root is
 
@@ -138,6 +140,11 @@ That file is part of the local clone and is never committed or pushed, so the ex
 machine and adds nothing to the repository. A line in `.gitignore` would be the tracked change the
 repository refused in the first place, and it would impose the choice on everyone else working in
 the repository, including the people who own it.
+
+The profile says how it is stored in the persistence line of its header, and
+`skills/init/references/profile-template.md` carries a form for each of the three ways that can go.
+That line is what `--audit` re-checks against the repository, so a profile carrying the wrong form
+is the drift that hides the rest.
 
 This is for a repository the team does not own. A team that owns its repository and leaves `.atk/`
 untracked anyway pays the same price for nothing.
