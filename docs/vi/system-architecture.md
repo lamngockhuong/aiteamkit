@@ -74,7 +74,8 @@ Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đ
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
   ngôn ngữ dời đường dẫn ấy, quy tắc đặt tên, front matter.
-- `shared/ticket-adapters.md`: cách phát hiện tracker và bảng ánh xạ từ vựng.
+- `shared/ticket-adapters.md`: cách phát hiện tracker, bảng ánh xạ từ vựng, tracker nào lưu ngày
+  mở và ngày đóng của một sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
 Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
