@@ -191,8 +191,15 @@ out.
 
 Rewriting history that is already on the remote is allowed on a branch that belongs to this work and
 nowhere else, after the user has asked for that rewrite. The cases are a rebase onto the base branch,
-a fixup of commits in the branch under review, and keeping a stacked pull request in line with the
-layer below it.
+a fixup of commits in the branch under review, keeping a stacked pull request in line with the layer
+below it, and pushing a rewrite an earlier session already performed here, where the remote holds
+nothing that is not also here.
+
+The last is the only one a run reaches without a flag, because the branch was left in that state
+before the run began and the closing sequence walks into it. There the consent question stands in
+for the request the other three carry, which makes what that question shows the whole of the
+protection: the commits that stop existing, and the evidence that each has a twin in what replaces
+it.
 
 Never on the default branch, on a release branch, or on a branch someone else is working on. Never
 to tidy history for its own sake. Before rewriting anything that is on the remote, say what will stop

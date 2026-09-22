@@ -246,7 +246,8 @@ distance between those two is the whole reason the kit separates the roles.
       command weaker than it left the difference recorded as unverified.
 - [ ] A run that hit the ceiling escalated with all four parts, including a person's name.
 - [ ] Code changed during a round was tidied per `shared/host-capabilities.md`, with the failing case
-      re-run afterwards, and the report says what the clean-up changed or why it did not run.
+      re-run afterwards, and the report says what the host's capability changed, or that the
+      harness ships none and the pass was run by hand per `shared/tidy-pass.md`.
 - [ ] Code changed during a round went through `shared/finalize-steps.md`, and a run that changed
       nothing says so.
 - [ ] A round that changed a public contract carried its reference document, per

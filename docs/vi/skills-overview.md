@@ -395,7 +395,9 @@ cửa kiểm tra biết từ chối khi có conflict, có kiểm tra đang hỏn
 nói rõ cái nào trong ba cái đã từ chối. Một thay đổi chạm tới nhiều hơn một repository chạy đúng
 trình tự ấy một lần cho mỗi repository, theo thứ tự giữ cho con trỏ submodule không trỏ vào commit
 không ai fetch được, và hỏi đồng ý cho từng lần push, từng pull request, từng lần merge kèm tên
-repository.
+repository. Một nhánh đã lệch khỏi bản trên remote được xác định ngay từ đầu, trước khi push được
+đưa ra hỏi, chứ không phải tới lúc remote từ chối mới lộ ra; và một pull request đang mở giữ nguyên
+phần thân mà người review đã đọc, bằng chứng của lượt chạy này tới dưới dạng comment.
 
 ---
 

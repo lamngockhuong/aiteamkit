@@ -144,6 +144,13 @@ Re-run step 1 against an existing profile and report per section: matches, drift
 drifted entry shows both values and their sources. Change nothing, and do not reorder the file. The
 output is a list the Tech Lead can act on, not a patch.
 
+Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
+persistence line of the profile header names which of the three forms in
+`references/profile-template.md` this file was written in; `git ls-files`, `git check-ignore` and
+the project shape say which is true today. This one leads the report because a profile that claims
+to be inherited and is not hides every other line: the sections under it can all match and still
+reach nobody.
+
 With no profile to audit, say so and stop. Do not fall through into the writing flow: a flag that
 promises to change nothing must not create a file. Point at `/atk:init` and let the user choose.
 Under `--out <path>`, audit the profile at that path rather than the default one.
@@ -179,4 +186,7 @@ the repository and the tracker holds a pointer.
       repository will take it and what that costs. Both cases are said first, not after the write.
 - [ ] On a re-run, `created:` survived, only drifted and `TBD` fields were asked about, and `status`
       moved only because what the profile promises changed.
-- [ ] Under `--audit`, no file was modified.
+- [ ] Exactly one of the template's three persistence blocks survived the write, and it is the one
+      matching how the file is actually stored.
+- [ ] Under `--audit`, no file was modified, and how the profile is stored was reported ahead of the
+      sections.

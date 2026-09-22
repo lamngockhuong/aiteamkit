@@ -166,8 +166,10 @@ kit's, and where they go is the host's decision rather than ours.
 `atk:init` writes to `.atk/profile.md` and `atk:tailor` writes to `.atk/overrides/<skill>.md`. Every
 other artifact here is prose a person reads and reviews; these two are read by a skill, and mixing
 the two kinds makes the docs tree noisy. Both are committed, except under the `workspace` shape, where the project root belongs to no
-repository and nothing tracks either of them. `shared/project-profile.md` and
-`shared/project-overrides.md` explain the rest, including what separates the two files.
+repository and nothing tracks either of them, and except where the repository refuses the file.
+`shared/project-profile.md` and `shared/project-overrides.md` explain the rest, including what
+separates the two files and, under "When the repository will not take the file", what a refusal
+costs.
 
 The override file is named after the skill it belongs to, with no date and no ticket, for the reason
 the next section gives: the next person looks for the skill, not for the sprint in which somebody
@@ -203,6 +205,13 @@ A project overrides a row, or adds a row of its own, in the `Docs` section of `.
 kind name is also the value of `--kind`, so a kind the project declared is invocable without touching
 the kit.
 
+A `Docs` row names where a kind of document lives, and that is all it does. It cannot move an
+artifact out of the persistence group Persistence below puts it in, and it cannot send one into a
+directory the project ignores, whatever the row says. A row that reads like a home for reports,
+`plans/reports/` being the usual one, is usually the second of those: it is the project's own
+working tree, ignored as often as not, and a Record-group artifact written there is a record the
+rest of the kit believes exists and nobody can read.
+
 ## Persistence
 
 Three groups, and the group decides both what happens to a file after the work that produced it is
@@ -232,7 +241,8 @@ A project that already keeps these kinds at the top level of its docs root keeps
 grouping is the kit's default for an empty tree, not a move to perform on a project that has been
 writing to `docs/design/` for a year, and splitting a directory in half is worse than either shape.
 
-Every file in the first two groups is committed, the same as `.atk/profile.md`.
+Every file in the first two groups is committed, the same as `.atk/profile.md` and under the same
+two exceptions.
 
 A project whose `.gitignore` covers the directory an artifact is bound for overrules that. The group
 is this kit's default for where a file should end up; whether this repository keeps it is the

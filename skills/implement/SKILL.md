@@ -230,7 +230,8 @@ done: this skill is the author, and done is the approver's word.
       difference recorded as unverified.
 - [ ] The blast radius was walked, and anything unverified is named as unverified.
 - [ ] The tidy step ran after a green verification, touched only this change, and was re-verified;
-      the record says what it changed, or that the harness has no such capability.
+      the record says what the host's capability changed, or that the harness ships none and the
+      pass was run by hand per `shared/tidy-pass.md`.
 - [ ] What the review would cost was said before it was called.
 - [ ] `atk:review` was called, or `--no-review` was passed and the record says who must review.
 - [ ] Every `BLOCKING` finding is fixed or escalated by name, and no `NIT` was fixed silently.

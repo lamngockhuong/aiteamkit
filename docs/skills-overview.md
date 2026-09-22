@@ -391,10 +391,9 @@ request a person named, on that run, and only after a gate that refuses on a con
 check, or a requested change, saying which of the three refused it. A change touching more than one
 repository runs the same sequence once per repository, in the order that keeps a submodule pointer
 from naming a commit nobody can fetch, and asks for each push, pull request and merge by the name of
-the repository it belongs to. A change touching more than one
-repository runs the same sequence once per repository, in the order that keeps a submodule pointer
-from naming a commit nobody can fetch, and asks for each push, pull request and merge by the name of
-the repository it belongs to.
+the repository it belongs to. A branch that has moved apart from its remote is established as such
+before the push is offered rather than discovered when the remote refuses it, and a pull request
+already open keeps the body its reviewer last read, with this run's evidence arriving as a comment.
 
 ---
 

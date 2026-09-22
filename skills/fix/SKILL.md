@@ -182,6 +182,15 @@ reader can paste. A flag that promises to change nothing must not leave a file b
 Written to `docs/records/fixes/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. The sections, and
 which of them `--investigate-only` drops, are in `references/report-template.md`.
 
+Check whether the project ignores that directory before writing the file, with
+`git check-ignore -v <dir>`, per Persistence in `shared/artifact-paths.md`, and say so there and
+then where it does. Tracked is the wrong question: a project writing its first fix report has an
+untracked `docs/records/fixes/` that nothing ignores, and a project that excluded a path through its
+own clone rather than through `.gitignore` passes a check of that file and still loses the report.
+This report becomes the pull request body at step 6, so one written into an ignored directory is a
+body that never reaches the pull request, and the team hears about it while it can still choose
+where the file goes.
+
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. The report is the body of the comment on the bug, posted after a
@@ -200,11 +209,14 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
       done.
 - [ ] The captured reproduction was re-run and no longer reproduces.
 - [ ] The tidy step stayed inside the lines the fix touched, the reproduction was re-run after it,
-      and the report says what it changed or that the harness has no such capability.
+      and the report says what the host's capability changed, or that the harness ships none and
+      the pass was run by hand per `shared/tidy-pass.md`.
 - [ ] Every caller in the blast radius was either exercised or named as unverified.
 - [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
       difference recorded as unverified.
 - [ ] The report says whether the fix changed a public contract, and if it did, which reference
       document moved with it, per `shared/spec-docs.md`.
+- [ ] The report's directory was checked with `git check-ignore` before the file was written, and
+      one the project ignores was named to the team then rather than at the commit.
 - [ ] The report says what could not be verified.
 - [ ] Under `--investigate-only`, `git status` shows the working tree untouched.
