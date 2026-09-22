@@ -10,6 +10,7 @@
   { "query": "map the codebase by area and owner for someone new", "should_trigger": true },
   { "query": "/atk:onboard --audit", "should_trigger": true },
   { "query": "người mới là QA, tuần đầu của bạn ấy nên kết thúc bằng gì", "should_trigger": true },
+  { "query": "the tracker is down, what do I give the new hire on day one", "should_trigger": true },
 
   { "query": "bàn giao việc của tôi trước khi nghỉ", "should_trigger": false },
   { "query": "hand this work over to the client team", "should_trigger": false },

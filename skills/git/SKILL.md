@@ -27,7 +27,8 @@ disagree, the contract wins and the disagreement is a defect here.
 
 ## Scope
 
-Handles: reading the working tree and the branch it sits on; staging with a scan for credentials and
+Handles: reading the working tree and the branch it sits on, in every repository the project holds;
+staging with a scan for credentials and
 private data; splitting a change into commits that revert independently; branching and committing to
 the project's own convention; pushing, opening a pull request, and linking the ticket, each on
 consent; merging a pull request a person has asked to merge and that passes the readiness gate; and
@@ -71,6 +72,9 @@ Before step 1, read `.atk/overrides/git.md` when it exists, per rule 7 of `share
 `--rebase`, `--resolve` and `--stack` leave this line for `references/repair.md` and
 `references/stacked.md`, and rejoin it at the step their work lands in.
 
+A change touching more than one repository runs this same line once per repository, in the order
+`references/multi-repo.md` sets, under the contract in `shared/finalize-steps.md`.
+
 `--commit` ends the run after step 3, and `--pr` after step 4. A step the flag stopped short of did
 not fail and is not missing, so name the flag that ended the run. A reader checking this line
 against what ran otherwise goes looking for a step that was never going to happen.
@@ -81,9 +85,14 @@ against what ran otherwise goes looking for a step that was never going to happe
 Read the diff before touching anything: a skill that stages what it has not read is how an unrelated
 change reaches a commit nobody meant to make.
 
-Say what was found before acting on it, in one block: the branch, how many files, and whether the
-work is code, artifacts, or both. That last one decides which half of `shared/finalize-steps.md`
-applies.
+Say what was found before acting on it, in one block: the repository, the branch, how many files,
+and whether the work is code, artifacts, or both. That last one decides which half of
+`shared/finalize-steps.md` applies.
+
+Name the repository because it is not always the only one. Where the shape in `.atk/profile.md`
+names member repositories, read the state of each of them and of the parent, per
+`references/multi-repo.md`, and say which ones this change touches. A member left dirty is the half
+of a change nobody notices until the other half is already merged.
 
 A clean exit needs both halves: nothing to commit and nothing committed that has not been carried
 where it was going. A clean tree on a branch holding an unpushed commit is work in the middle, not
@@ -169,7 +178,9 @@ ticket, per `shared/finalize-steps.md`.
 - [ ] What is staged was scanned, and a hit stopped the run rather than being reported and committed.
 - [ ] The commit convention came from the project, and the source was named.
 - [ ] Nothing was committed onto the default branch.
-- [ ] Push, pull request, ticket comment, and merge were each asked for, every time.
+- [ ] Push, pull request, ticket comment, and merge were each asked for, every time, and once per
+      repository where the change touched more than one.
+- [ ] No submodule pointer was staged naming a commit that is not on the submodule's remote.
 - [ ] The project's pull request template, where it has one, shaped the body, and no checklist item
       was ticked that this run did not verify.
 - [ ] A step with nothing to run, the ticket step above all, was reported as `N/A` rather than

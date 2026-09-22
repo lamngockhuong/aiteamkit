@@ -52,6 +52,13 @@ things count as altering a public contract:
 Nothing else triggers the obligation. A refactor behind an unchanged contract does not, and neither
 does a change to a comment, a test, or a name the document was never allowed to mention.
 
+A document living in another repository, which is the ordinary case where a parent holds the
+specification for member repositories, is not an exception to this. It is a pair of pull requests
+opened together and cross-linked, per A change that spans more than one repository in
+`shared/finalize-steps.md`, and the obligation is met when both are open and the document's one
+merges no later than the code's. Both open is not the end of it: a document pull request left behind
+after the code merged is the stale document this rule exists to prevent, arriving by a longer road.
+
 Where the document cannot be updated in the same pull request, the pull request body says so in one
 line: what is now stale, and who will fix it. The line is the whole point. A team learns to distrust
 its documents from skips nobody announced, not from ones they can see and schedule.

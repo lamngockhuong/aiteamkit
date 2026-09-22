@@ -69,6 +69,11 @@ The kind comes from `--kind`, or from the subject when it is unambiguous: a rout
 means `api`, a table name means `db`, a named capability means `feature`. Ask when two kinds fit and
 the answer changes which directory is written.
 
+Where the subject belongs to one member repository and that member keeps a docs tree of its own,
+resolve the directory there: the document then travels in the same pull request as the code, which is
+what the sync obligation asks for. A contract two members share belongs to the project docs root.
+`shared/artifact-paths.md` owns the split.
+
 Resolve the directory from the `Docs` section of `.atk/profile.md`, falling back to the three default
 kinds in `shared/artifact-paths.md`. A kind the project declared there is as valid as the three that
 ship with the kit.

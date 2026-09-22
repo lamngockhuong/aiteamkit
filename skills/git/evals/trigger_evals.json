@@ -14,6 +14,8 @@
   { "query": "コミットメッセージを書いてコミットして", "should_trigger": true },
   { "query": "プルリクエストを作成して", "should_trigger": true },
   { "query": "このブランチをリベースして", "should_trigger": true },
+  { "query": "push the submodule and then the parent pointer, open both pull requests", "should_trigger": true },
+  { "query": "thay đổi này nằm ở cả repo cha lẫn repo con, commit và mở PR giúp", "should_trigger": true },
   { "query": "review the changes on this pull request", "should_trigger": false },
   { "query": "review giúp tôi PR này", "should_trigger": false },
   { "query": "このPRをレビューして", "should_trigger": false },

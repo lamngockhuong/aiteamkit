@@ -52,6 +52,9 @@ task is still real, still small, still picked from the tracker rather than inven
 reviewed the way the team reviews anything. The role decides what the week ends in, and that is the
 line the Definition of done checks.
 
+A tracker that cannot be read changes none of that. It moves who names the task, not what the task
+has to be, and `SKILL.md` step 5 holds the route.
+
 ## A run that names no role
 
 `--role` is optional, and the most common invocation is the bare one. It has no row here, and it

@@ -8,6 +8,94 @@ about something on disk is a defect here, not a question.
 
 ## What is detectable
 
+### Repository shape
+
+Resolve this before reading anything else. Every path the rest of this file produces hangs off the
+project root, and a run that assumed the root records citations that resolve to nothing.
+
+Six commands, in order:
+
+1. `git rev-parse --show-toplevel` in the target directory. It prints the target where the target is
+   a repository root, and prints a directory above it where the target is a subdirectory of one;
+   there the repository top level is the candidate root rather than the directory the run started
+   in. It fails where the directory is in no repository, and then the candidate root is the target
+   directory itself. Say which of the three happened.
+
+   A failure has two causes that are not the same fact. There is no repository here, and there is one
+   git refuses to open: a permissions error, a `dubious ownership` refusal, a corrupt repository
+   directory. Read what git printed and tell them apart, because the second is something to fix
+   rather than a project that never had a repository, and a run that folds it into the first writes a
+   profile nobody will ever be able to commit without saying why.
+2. `git rev-parse --verify HEAD`, where step 1 found a top level. A repository with no commit yet is
+   still a repository, and the profile can be its first commit. This separates that case from step
+   1's failure and nothing else is concluded from it.
+3. `.gitmodules` at the top level. Every entry is a member repository linked as a submodule.
+4. Members that are not submodules: for each directory one and two levels below the candidate root,
+   `git -C <dir> rev-parse --show-toplevel`. A directory that prints itself is a repository of its
+   own; one that prints the candidate root is an ordinary directory inside it. Compare resolved
+   paths, not the strings: git prints the real path, so a member reached through a symlink prints
+   neither the scanned path nor the candidate root, and a string comparison puts it in no bucket at
+   all. Two levels, because `apps/backend` is as ordinary as `backend`. Deeper than that, ask rather
+   than walk the tree.
+
+   Skip what a project does not author: `node_modules`, `vendor`, `third_party`, `.venv`, `dist`,
+   `build`, and anything already ignored by git. A vendored library cloned instead of installed is a
+   repository by this test and a member by nothing else, and treating it as one flips the shape,
+   invents a docs root, and turns on the multi-repository commit sequence for something nobody
+   ships.
+5. `git remote get-url origin` per repository found, members included, falling back to `git -C <dir>
+   remote` where `origin` is not the name. A member with no remote at all is a clone somebody made
+   locally and never pushed, which is worth saying out loud.
+6. Upward, once: is the target itself inside something larger?
+   `git rev-parse --show-superproject-working-tree` names the superproject when the target is a
+   submodule, and a `.atk/profile.md` in a directory above the candidate root names a project that
+   may already list it. Either one is what raises the question below; without this step a run started
+   inside one member can only ever see a single repository, and the question has no way to fire.
+
+A member repository outside the project root's directory tree is not found by any of this, and that
+is a limit rather than an oversight: the walk that finds the profile also only goes up. Where the
+user names one, record it with its path as given and say that a profile is inherited by whoever
+clones the project root, which that clone is not under.
+
+The four shapes:
+
+| What those commands found | Shape |
+|---------------------------|-------|
+| One repository, no members, one package | `single repo` |
+| One repository, no members, a workspace file or several packages | `monorepo` |
+| A repository at the root, with member repositories inside it | `parent + members` |
+| No repository at the root, with member repositories inside it | `workspace` |
+
+A target in no repository that holds no members either is recorded as `single repo`, because that
+is what it is on its way to being, with a note that no repository was found. The profile written
+there is tracked by nothing, which is the `workspace` cost with one directory instead of several,
+and it is stated the same way.
+
+`shared/project-profile.md` holds what each shape costs and where the profile goes under it. The
+last two have a cost to state before the profile is written rather than after, which is step 4 of
+`SKILL.md`.
+
+One question this can raise, and it counts against the budget below: step 6 found a superproject or
+a profile above the target, so the target is one member among several and the user may have meant the
+whole project. Ask which directory is the project root, showing what step 6 found. Never widen a run
+to a parent directory the user did not name, and never narrow one either.
+
+Detection then runs once per repository. The package manager, the commands, the layers, how to start
+the app, and whether the member keeps a docs tree of its own are per repository in the last two
+shapes, and every source path is recorded from the project root, so a citation says which repository
+it came from. A member with its own docs tree gets a line in the profile's `Docs` section, because
+`shared/artifact-paths.md` sends that member's fix reports and verification records there rather than
+to the project docs root.
+
+A submodule of a submodule is the inner repository's own business and gets no row here. The parent
+records its direct members, each member records its own, and a profile that reached two levels down
+would be describing a project it does not own.
+
+A member the run cannot read, an uninitialised submodule being the ordinary case, is recorded as a
+member with its cells `TBD` and the reason. `git submodule status` prefixes such an entry with `-`.
+Do not clone or initialise one to fill the cells in: that changes the working tree of a project this
+run was asked to read.
+
 ### Package manager
 
 The lock file decides, not the manifest.
@@ -127,7 +215,7 @@ Three traps worth a question rather than a guess:
 
 ### Layers
 
-A monorepo if any of these exist: `pnpm-workspace.yaml`, a `workspaces` key in `package.json`,
+Inside one repository, a monorepo if any of these exist: `pnpm-workspace.yaml`, a `workspaces` key in `package.json`,
 `go.work`, `Cargo.toml` with `[workspace]`, `lerna.json`, `nx.json`. Read the globs to get the
 member list rather than listing directories by hand. `turbo.json` is a weak signal on its own: it
 appears in single-package repositories too, so confirm it against one of the others.
@@ -136,6 +224,10 @@ Otherwise a single repo with one layer.
 
 Ask when the member list does not group cleanly. Twelve packages that split into backend, frontend,
 and shared is a judgment the repository does not record.
+
+Members of a multi-repository project are decided by Repository shape above and not here. A layer
+row in one of those projects carries a path from the project root, and which repository that path
+falls in is what the Repositories table of the profile answers.
 
 ### Docs root
 
@@ -172,6 +264,11 @@ once.
 
 The remote only proves where the code lives. A team that hosts code on GitHub and tracks work in
 Jira or Backlog is ordinary, so confirm rather than conclude.
+
+Where the shape names member repositories, read the remote of each one. Members usually share a
+tracker and sometimes do not, a backend repository with its own issue list beside a project board
+being the ordinary exception, so record the project tracker in the Tracker section and name the
+member whose tracker differs on a line of its own.
 
 ### How to start the app
 
@@ -216,12 +313,13 @@ in a single prompt spends one turn on that prompt, per Several questions in one 
 identifiers and their approvals in a single question, never one question per role and never a second
 turn for the identifiers), the working language, where the spec lives, and who approves the profile.
 
-That leaves four turns for the ambiguities the section above can raise: two lock files, a watch-mode
-test script, a command that needs another command first, a member list that does not group cleanly,
-a tracker that may not match the git host, and more than one way to start the app. Six possible
-ambiguities, four turns. When more than four appear, ask about the ones that would break a later
-skill (the test command and how to start the app come first, because `atk:verify` runs both), and
-write the rest as `TBD` with an owner for `--audit` to pick up.
+That leaves four turns for the ambiguities the section above can raise: which directory is the
+project root, two lock files, a watch-mode test script, a command that needs another command first,
+a member list that does not group cleanly, a tracker that may not match the git host, and more than
+one way to start the app. Seven possible ambiguities, four turns. When more than four appear, ask
+about the ones that would break a later skill, and the project root comes before all of them,
+because every path in the profile is written from it; then the test command and how to start the
+app, because `atk:verify` runs both. Write the rest as `TBD` with an owner for `--audit` to pick up.
 
 Eight is a ceiling, not a target. Most projects raise no ambiguity at all and finish in four.
 

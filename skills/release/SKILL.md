@@ -50,7 +50,10 @@ Before step 1, read `.atk/overrides/release.md` when it exists, per rule 7 of `s
 
 ### 1. Collect the changes
 
-Read the commit range and the linked tickets. Group by user-visible feature, fix, and internal
+Read the commit range and the linked tickets. Where the shape in `.atk/profile.md` names member
+repositories, there is no single range: read one per repository in the Repositories table, say which
+repository each change came from, and name any member whose range could not be read rather than
+leaving it out of the notes. Group by user-visible feature, fix, and internal
 change. A commit with no ticket and no clear user effect is listed under internal and flagged, not
 dropped.
 

@@ -29,7 +29,8 @@ skill runs without it.
 
 ## `atk:init`
 
-**Produces.** `.atk/profile.md` in the project: the test, build, and lint command per app, the layer
+**Produces.** `.atk/profile.md` in the project: the shape of the project, with the table of member
+repositories where it spans several; the test, build, and lint command per app, the layer
 layout with a standards document and a reference module for each, the docs roots, the tracker and
 where the spec lives, who approves what, and how to start the application and confirm a side effect
 in its data.
@@ -44,6 +45,9 @@ project and is committed with it; the kit itself holds no project facts.
 **The habit that matters.** It reads the repository before it asks. A question the package manifest,
 the CI workflow, or the test directory could have answered is a question it does not put to a
 person. What no file can answer becomes `TBD` with the name of whoever owes it, never a guess.
+It also resolves where the project root is before reading anything, so a parent repository holding
+several team repositories, and a directory belonging to no repository at all, are both named out
+loud with what the profile there can and cannot be, before the file is written.
 
 ---
 
@@ -384,7 +388,13 @@ belongs to whoever did it. For a single ad-hoc command, the host agent is faster
 **The habit that matters.** It never stages what it has not read, and a credential in the staged diff
 stops the whole run rather than being reported and committed around. A merge happens only for a pull
 request a person named, on that run, and only after a gate that refuses on a conflict, a failing
-check, or a requested change, saying which of the three refused it.
+check, or a requested change, saying which of the three refused it. A change touching more than one
+repository runs the same sequence once per repository, in the order that keeps a submodule pointer
+from naming a commit nobody can fetch, and asks for each push, pull request and merge by the name of
+the repository it belongs to. A change touching more than one
+repository runs the same sequence once per repository, in the order that keeps a submodule pointer
+from naming a commit nobody can fetch, and asks for each push, pull request and merge by the name of
+the repository it belongs to.
 
 ---
 
@@ -454,7 +464,9 @@ file too, a defect report for whoever owns the broken script.
 **Do not use when.** You want business domain training. That belongs in the project's domain docs.
 
 **The habit that matters.** No credential ever enters either document, only its location and who
-grants it; and a setup step that cannot be verified says so instead of pretending.
+grants it; and a setup step that cannot be verified says so instead of pretending. A starter task the
+tracker cannot supply, because nobody could reach it, is left as a named person's to pick rather
+than invented or quietly dropped.
 
 ---
 

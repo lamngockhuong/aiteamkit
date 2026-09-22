@@ -7,6 +7,8 @@
   { "query": "I just installed the kit, what do I run first", "should_trigger": true },
   { "query": "check whether our atk profile is still accurate", "should_trigger": true },
   { "query": "the build command in the profile is wrong, re-detect it", "should_trigger": true },
+  { "query": "our project is a parent repo with backend and frontend repos inside, set atk up for it", "should_trigger": true },
+  { "query": "dự án có repo cha chứa mấy repo con, cấu hình atk giúp", "should_trigger": true },
 
   { "query": "onboard a new developer joining the team", "should_trigger": false },
   { "query": "viết tài liệu hướng dẫn cho thành viên mới", "should_trigger": false },

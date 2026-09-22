@@ -74,7 +74,7 @@ that unblock the most others so they get started first.
 
 Group tasks into lanes that can run in parallel. Each lane declares the files and modules it owns.
 Two lanes must not own the same file, the same migration sequence, or the same shared config; when
-they must, serialize them and say so. Propose an owner per lane based on the codebase history and
+they must, serialize them and say so. Propose an owner per lane based on the history of the repository that lane touches and
 the named members, and mark it `PROPOSED` until the PM confirms.
 
 ### 5. Definition of done per task

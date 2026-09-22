@@ -29,8 +29,21 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 - Name: <name>
 - Repository: <owner/repo>
-- Shape: <single repo | monorepo>
+- Shape: <single repo | monorepo | parent + members | workspace>
 - Package manager: <name>  <!-- source: <lock file> -->
+
+### Repositories
+
+| Repository | Path | Remote | Team | Linked as |
+|------------|------|--------|------|-----------|
+| <name> | `<path from the project root>` | <remote name and owner/repo, or none> | <team that owns it> | <submodule, or clone> |
+
+<!-- Only under a shape that names members. A single repo and a monorepo delete this subsection. -->
+<!-- The parent has no row. It is the project root, which every Path above is written from. -->
+<!-- A name is unique: the Commands, Verify and Tracker entries below name a repository by it, and
+     so does every consent question atk:git asks. Two members called `frontend` get the segment
+     above them in the name. -->
+<!-- A Layers path under a member's path is a change in that member's repository. -->
 
 ## Layers
 
@@ -42,11 +55,14 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 ## Commands
 
-| App or package | Test | Build | Lint | Extra |
-|----------------|------|-------|------|-------|
-| <name> | `<command>` | `<command>` | `<command>` | `<codegen, migration, or none>` |
+| App or package | Repository | Test | Build | Lint | Extra |
+|----------------|------------|------|-------|------|-------|
+| <name> | <repository name, or "-" in a single repository> | `<command>` | `<command>` | `<command>` | `<codegen, migration, or none>` |
 
 - Setup: `<command that installs dependencies>` or none
+
+<!-- Repository names a row of the Repositories table, and the command is run from that row's Path.
+     A single repo and a monorepo put "-" there: there is one place to run everything. -->
 
 <!-- source: <CI workflow path, or manifest path> -->
 <!-- Commands come from CI with local-unsafe flags stripped; see references/detection.md. -->
@@ -55,6 +71,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 ## Docs
 
 - Docs root: `<path>`
+- Docs root for <member>: `<path>`  <!-- one line per member that keeps a docs tree of its own -->
 - Authored language: `<code>` or `TBD (ask <person>)`
 - Language mirrors: `<paths>` or `none`
 - Conventions: `<path>` or `TBD (ask <person>)`
@@ -66,6 +83,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 - Tracker: <GitHub Issues | Jira | Backlog | Redmine | other>
 - Repository owner: <owner>
 - Spec lives in: <where the requirement text actually is>
+- Tracker for <member>: <tracker>  <!-- one line per member that does not use the project tracker -->
 
 ## Team
 
@@ -87,15 +105,30 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 ## Verify
 
+- Runs from: <repository name, or "-" in a single repository>
 - Start: `<command that runs the app locally>`
 - Ready when: <the log line, port, or health check that proves it started>
 - Logs: `<path or how to read them>`
 - Data check: `<read-only command to confirm a side effect>`
 - Cleanup: `<how to stop what was started>`
 - Local only: <how to be sure this points at a local environment>
+
+<!-- One block per app. A project whose apps live in different repositories has one block each, and
+     `Runs from` is what says which. -->
 ````
 
 ## Filling rules
+
+**Paths are written from the project root.** In a project of one repository that is its root and
+nothing changes. Where the shape names members, a path such as `backend/src/` says which repository
+it belongs to only through the Repositories table, so the table is what a reader resolves it
+against, and a row whose repository is not in that table is a row pointing nowhere.
+
+**A command says where it runs from.** A Commands row carries a name rather than a path, so the
+`Repository` column is the only thing that can place it, and the Verify block says the same through
+`Runs from`. A command with neither runs wherever the session happens to be, which in a parent is a
+directory with no manifest, and what that produces reads like a failing test rather than a profile
+with a hole in it.
 
 **`TBD` names a person.** `approver: TBD` is a hole nobody owns. Write `approver: TBD (ask Minh)`.
 Every skill that meets a `TBD` repeats the name, so the hole stays attached to whoever can close it.

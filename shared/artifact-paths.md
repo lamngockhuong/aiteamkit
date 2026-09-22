@@ -13,6 +13,44 @@ The docs root is `docs/` unless the project says otherwise. Before writing, chec
 use the first that exists: the project `CLAUDE.md` or `AGENTS.md`, an existing docs folder with the
 same shape, then `docs/`. Never create a second parallel tree beside one that already exists.
 
+The root that path hangs off is the project root, defined per Where the project root is in
+`shared/project-profile.md`. In a project of one repository the project root and the repository root
+are the same directory, and the next subsection changes nothing.
+
+### A project that spans several repositories
+
+Where the shape in `.atk/profile.md` names member repositories, the docs root hangs off the project
+root, and that is where an artifact about the project goes: the requirements, the design and its ADR,
+the breakdown, the estimate, the retro, the release record, the incident record, the runbook, the
+onboarding documents, the conventions, and the reference document of any contract two members share.
+One tree, read by every team.
+
+Under `parent + members` that tree is in the parent repository, which is what the parent repository
+is for, and it is committed like any other document. Under `workspace` the project root belongs to no
+repository, so the tree there is tracked by nothing: the same price the profile pays under that
+shape, per Projects that span several repositories in `shared/project-profile.md`. Name it before
+writing rather than after, and say the same thing the profile's own paragraph says, that a workspace
+root made into a repository ends it for good. Do not quietly promote one member's docs tree into the
+project's: a document about the whole project sitting in one team's repository is a document the
+other teams will not think to look in.
+
+An artifact that is the evidence for one change is the exception, because it travels in the pull
+request carrying that change and a pull request cannot reach outside its own repository. The
+implementation record, the fix report, the verification record, the review report and the shipping
+record are written into the docs root of the repository the change is in, resolved there by the same
+order as above.
+
+A member with a docs root of its own, recorded in the `Docs` section of the profile, uses it. A
+member with none falls back to the project docs root rather than creating a tree the team never asked
+for, which replaces the last step of the order above for that member. Say what the fallback costs
+before writing rather than after: the artifact lands in a second repository, so it cannot be in the
+pull request the reviewer is reading, and only a link joins them. `shared/finalize-steps.md` owns
+that link.
+
+`atk:plan` writes under `plans/` at the project root and not at the member's, because one plan may
+cover several members. Each step names the repository it touches, which is the same information a
+per-member directory would carry and in the place the step is read.
+
 ### A root partitioned by language
 
 Some projects split the docs root by language: `docs/` beside `docs/ja/` and `docs/vi/`, holding
@@ -127,14 +165,15 @@ kit's, and where they go is the host's decision rather than ours.
 
 `atk:init` writes to `.atk/profile.md` and `atk:tailor` writes to `.atk/overrides/<skill>.md`. Every
 other artifact here is prose a person reads and reviews; these two are read by a skill, and mixing
-the two kinds makes the docs tree noisy. Both are still committed. `shared/project-profile.md` and
+the two kinds makes the docs tree noisy. Both are committed, except under the `workspace` shape, where the project root belongs to no
+repository and nothing tracks either of them. `shared/project-profile.md` and
 `shared/project-overrides.md` explain the rest, including what separates the two files.
 
 The override file is named after the skill it belongs to, with no date and no ticket, for the reason
 the next section gives: the next person looks for the skill, not for the sprint in which somebody
 decided to change it.
 
-`atk:plan` writes a directory under `plans/` at the repository root, not under the docs root, and
+`atk:plan` writes a directory under `plans/` at the project root, not under the docs root, and
 names it `<YYMMDD-HHMM>-<slug>` rather than by ticket. Both choices exist so the output sits where
 other planning tools in the ecosystem already look, and so a project that has a `plans/` tree does
 not end up with two of them. The ticket is not lost: it stays in the `ticket:` field of the index

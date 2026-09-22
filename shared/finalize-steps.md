@@ -129,6 +129,56 @@ A merge with checks still running is a different thing from a merge with checks 
 host offers to merge once they pass, say that is what is being set up, and never describe it as
 merged until it is.
 
+## A change that spans more than one repository
+
+A project whose shape in `.atk/profile.md` names member repositories can be changed in two of them
+at once: the contract in the parent and the code in the member, or two members either side of an
+interface. The sequence above then runs once per repository, in an order, and the order is the part
+that is not obvious. `skills/git/references/multi-repo.md` holds how; this is what.
+
+**The repository the other one points at goes first.** Branch, commit, push and open its pull
+request before the repository that depends on it. A reviewer who opens the dependent half first is
+reading it against code that is not there yet.
+
+**A submodule pointer is the sharp case of that.** The superproject records a commit id of the
+submodule, so a pointer pushed before the submodule commit reaches its own remote hands everyone a
+reference they cannot fetch, and the clone that breaks is somebody else's. Push the submodule, then
+commit the pointer. Never stage a pointer naming a commit that exists only locally.
+
+**One branch name in every repository the change touches.** It is what lets a reviewer, or the
+person bisecting this in six months, find the other half at all.
+
+**One pull request per repository, cross-linked, each body saying which merges first.** One change
+arriving as two pull requests is a fact to carry rather than to hide.
+
+**Consent is per repository.** A yes to push the member is not a yes to push the parent: ask again,
+naming the repository. Step 6 holds the same way, per pull request.
+
+**The secret scan of step 3 runs per repository**, over what is staged in that one.
+
+**Step 5 runs once per ticket, not once per repository.** One change usually has one ticket, and a
+comment posted from each repository leaves the same ticket carrying two of them and a status moved
+twice. Post once, naming every pull request the change opened, and say which repository each belongs
+to. Where the repositories genuinely have separate tickets, which happens when a member tracks its
+own work, each ticket gets the comment for its own half and a link to the other.
+
+Where `shared/artifact-paths.md` put an artifact in a repository other than the one holding the
+code, the pull request carrying the code names the artifact's path and its pull request, and the
+artifact names the code's. Nothing else joins them, which is why that link is not optional.
+
+Step 1 is the case that meets this most often. A reference document kept in the parent and the code
+that changed its contract cannot be one commit, so the obligation becomes the pair above: the same
+branch name, both pull requests open at once, each naming the other, and the document's one merging
+no later than the code's. What the obligation never becomes is a promise to update the document
+afterwards, which is the second pull request nobody opens.
+
+That is the one place where the merge order above does not decide. The order exists because a commit
+has to be fetchable before anything points at it, which is a fact about git and holds for a submodule
+pointer. A document points at nothing git can fetch, so what governs it is the sync obligation: the
+document does not arrive after the behaviour it describes. Where the two would disagree, say which
+one you are following and why, in the pull request bodies, so the reviewer is not left to work it
+out.
+
 ## What happens only where it is allowed
 
 Rewriting history that is already on the remote is allowed on a branch that belongs to this work and
