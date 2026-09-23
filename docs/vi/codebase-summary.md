@@ -114,6 +114,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/plan/references/plan-template.md` | Trang chỉ mục của kế hoạch và một file phase |
 | `skills/plan/references/plan-self-review.md` | Sáu điều một bản kế hoạch khẳng định, cách mở lại từng điều để đối chiếu với kho mã, và xử lý ra sao với mỗi kết quả |
 | `skills/plan/references/plan-review-mode.md` | Soát bản kế hoạch do người khác viết: các dạng đầu vào, cách quy đổi từng kết quả, thang mức độ, và hình dạng báo cáo |
+| `skills/plan/references/report-format.md` | Hình dạng báo cáo soát kế hoạch: mã định danh kết quả mang tiền tố mức nghiêm trọng và cách nó được giữ sang lượt soát sau trên cùng bản kế hoạch, các nhãn dưới mỗi kết quả và vì sao không nhãn nào nêu cách sửa, bảng xếp kết quả theo từng phase, thứ tự các mục, và vì sao không mục nào trong đó có kết luận hay điểm số |
 | `skills/implement/references/plan-gate.md` | Ba mức quyết định một phần việc cần bao nhiêu đồng thuận trước khi viết dòng mã đầu tiên, và xử lý ra sao với câu hỏi mở cùng nhánh rẽ thiết kế mà bản kế hoạch trả về |
 | `skills/implement/references/verification.md` | Thứ tự chạy các phép kiểm, phạm vi cần với tới, và lúc nào dừng |
 | `skills/implement/references/review-fix-loop.md` | Vòng gọi review team lên chính output của skill, và trần chặn vòng lặp che đi một vấn đề thiết kế |
