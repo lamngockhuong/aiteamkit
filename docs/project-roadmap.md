@@ -6,7 +6,7 @@
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
 | 2. Skill coverage | DONE | 20 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for twelve, pending for the other nine |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for thirteen, pending for the other eight |
 | 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 21 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
@@ -46,13 +46,13 @@ through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Twelve skills ship with `references/` already. The other nine do not. Where the output is a
+Thirteen skills ship with `references/` already. The other eight do not. Where the output is a
 document with a fixed shape and no reference holds that shape, the template is re-derived on every
 run:
 
 | Skill | Reference to add |
 |-------|------------------|
-| `intake` | Story and acceptance-criteria templates, an interview question bank |
+| `intake` | An interview question bank. The requirement template is done: `skills/intake/references/requirement-template.md` |
 | `estimate` | The sizing scales with one worked example each, and the capacity worksheet |
 | `design-doc` | Design document template, ADR template, the option-comparison criteria set |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |

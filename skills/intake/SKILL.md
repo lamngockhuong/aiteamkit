@@ -74,6 +74,9 @@ be checkable by a person who did not write it. Vague criteria such as "works cor
 are rejected: replace them with a number, a state, or a visible result, or move them to open
 questions.
 
+Write the artifact in the shape `references/requirement-template.md` fixes: the story sentence, the
+`AC N.M` IDs that later skills cite, and the columns of the open-questions table.
+
 ### 5. Review gate
 
 Set `status: IN REVIEW` and name the approver. Do not mark anything `APPROVED` on the team's behalf.
@@ -82,7 +85,8 @@ Set `status: IN REVIEW` and name the approver. Do not mark anything `APPROVED` o
 
 Written to `docs/records/requirements/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. Sections:
 front matter, original request, context and current behavior, user stories with acceptance criteria,
-out of scope, assumptions, open questions with owners, and impacted areas with file paths.
+out of scope, assumptions, open questions with owners, and impacted areas with file paths. The
+headings, their order, and the shape of each section are in `references/requirement-template.md`.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs

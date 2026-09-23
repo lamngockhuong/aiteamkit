@@ -68,11 +68,12 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: twelve of them carry
-one (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`, `git`,
-`convention`, `onboard`), and the other nine are still `SKILL.md` alone. `git` holds the most, six, because
-the closing sequence has more cases than its workflow line names. Deepening a skill means adding `references/`
-files and pointing at them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
+neighbours it must not steal. `references/` is where they still differ: thirteen of them carry
+one (`init`, `tailor`, `intake`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`,
+`git`, `convention`, `onboard`), and the other eight are still `SKILL.md` alone. `git` holds the
+most, six, because the closing sequence has more cases than its workflow line names. Deepening a
+skill means adding `references/` files and pointing at them from the relevant workflow step, not
+growing `SKILL.md` past 300 lines.
 
 A reference is Markdown, with one exception: a list that grows one record at a time, whose fields a
 check can count. `convention` keeps its standard sources in `references/standard-sources.tsv` for
