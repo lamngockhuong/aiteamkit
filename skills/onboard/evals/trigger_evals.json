@@ -22,5 +22,6 @@
   { "query": "tóm tắt epic này cho bạn mới nhận việc", "should_trigger": false },
   { "query": "review this pull request", "should_trigger": false },
   { "query": "set up the CI pipeline", "should_trigger": false },
-  { "query": "sửa cái script cài đặt hỏng mà báo cáo onboarding chỉ ra", "should_trigger": false }
+  { "query": "sửa cái script cài đặt hỏng mà báo cáo onboarding chỉ ra", "should_trigger": false },
+  { "query": "tôi cần skill nào của atk cho việc này", "should_trigger": false }
 ]

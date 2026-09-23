@@ -1,6 +1,6 @@
 # Skills Overview
 
-Twenty-one skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+Twenty-two skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
 to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
@@ -18,12 +18,33 @@ flowchart LR
 ```
 
 Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
-`onboard` when someone joins; `handover` when someone leaves or a phase ends.
+`onboard` when someone joins; `handover` when someone leaves or a phase ends. `help` answers a
+question instead: which of the others to run, read from the state of the project.
 
 `atk:init` runs once per project. It writes `.atk/profile.md`, which tells the skills that touch
 code how this project is tested, built, and laid out. `atk:implement`, `atk:fix` and `atk:verify`
 stop without it. `atk:plan` continues and says in the artifact which parts it inferred. Every other
 skill runs without it.
+
+---
+
+## `atk:help`
+
+**Produces.** No file. An answer in the session: the skill to run next with the line to type, the
+evidence in the project behind it, what that skill needs first, who approves what it produces, and
+every artifact still waiting on a named approver.
+
+**Use when.** You do not know which skill fits, you want to know what the project is waiting on and
+what comes next, or you want to know what one skill is for before running it. `/atk:help <skill>` explains
+one skill; a question routes that situation to one skill.
+
+**Do not use when.** You already know the work. "Help me fix this bug" is `atk:fix`, and a new
+member getting started on the project is `atk:onboard`, which writes the document they follow.
+
+**The habit that matters.** It reads the approval state, not the file list. A requirement at
+`IN REVIEW` is not one to design against, so the answer names the person it waits on rather than the
+next skill. It reads the kit's own skills at run time, so it never recommends from a stale copy, and
+it never runs what it recommends: which skill runs is the asker's call.
 
 ---
 
@@ -501,8 +522,9 @@ it, never declared complete by the person leaving.
 
 ## Adopting the kit
 
-Start with the stage that hurts. Five common entry points:
+Start with the stage that hurts. Six common entry points:
 
+- Not sure where to start: `atk:help`, which reads the project and names one skill.
 - Requests arrive unclear: `atk:intake`, then `atk:qa` once criteria exist.
 - Reviews are inconsistent: `atk:convention`, then `atk:review` against it.
 - Knowledge keeps walking out the door: `atk:handover` and `atk:onboard`.

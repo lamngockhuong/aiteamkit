@@ -10,7 +10,7 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-  skills/<name>/SKILL.md        21 skill, mỗi skill một thư mục
+  skills/<name>/SKILL.md        22 skill, mỗi skill một thư mục
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
   skills/<name>/references/*.tsv danh sách do một file tham chiếu quản, mỗi dòng một bản ghi
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
@@ -63,7 +63,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho cả 21 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho cả 22 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
@@ -72,7 +72,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 21 skill trích dẫn:
+Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 22 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo

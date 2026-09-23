@@ -5,9 +5,9 @@
 | Phase | State | Summary |
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
-| 2. Skill coverage | DONE | 20 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for thirteen, pending for the other eight |
-| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 21 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
+| 2. Skill coverage | DONE | 22 `SKILL.md` files covering the lifecycle, sharing one section contract |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for fourteen, pending for the other eight |
+| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 22 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
 
@@ -19,7 +19,7 @@ Repository layout mirroring a working multi-harness plugin: `.claude-plugin/`, `
 
 ## Phase 2: Skill coverage (done)
 
-Twenty-one skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
+Twenty-two skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
 with multilingual triggers, scope, roles, invocation, workflow, output, ticket, and a definition of
 done.
 
@@ -31,7 +31,10 @@ phases, `implement` writes the code, `fix` proves a defect's cause before changi
 exercises the running system, and `spec` keeps the documents that say what the API, the schema and
 each feature do today.
 
-The `shared/` layer holds what would otherwise be repeated twenty-one times: the role vocabulary,
+`help` came last. It writes nothing and answers which of the others to run, read from the state of
+the project rather than from a list, so a skill added later is one it already knows.
+
+The `shared/` layer holds what would otherwise be repeated twenty-two times: the role vocabulary,
 the artifact path convention, and the tracker adapters, cited by every skill. Ten more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
@@ -46,7 +49,7 @@ through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Thirteen skills ship with `references/` already. The other eight do not. Where the output is a
+Fourteen skills ship with `references/` already. The other eight do not. Where the output is a
 document with a fixed shape and no reference holds that shape, the template is re-derived on every
 run:
 

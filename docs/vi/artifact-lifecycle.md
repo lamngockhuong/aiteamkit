@@ -1,6 +1,7 @@
 # Vòng đời artifact
 
-Mọi skill trong kit đều ghi Markdown vào repo của bạn, trừ một ngoại lệ nói ở cuối trang. Tuần đầu tiên dùng `atk`, đội nào cũng hỏi
+Mọi skill trong kit có ghi file đều ghi Markdown vào repo của bạn, trừ một ngoại lệ nói bên dưới;
+`atk:help` không ghi gì, vì nó trả lời ngay trong phiên. Tuần đầu tiên dùng `atk`, đội nào cũng hỏi
 hai câu: có phải commit hết không, và sau này có được xóa bớt không. Tài liệu này trả lời cả hai và
 nói rõ mỗi lựa chọn mất gì, để đội tự quyết thay vì đoán.
 

@@ -1,6 +1,6 @@
 # Luồng dự án
 
-21 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
+22 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,
@@ -135,14 +135,20 @@ flowchart TD
 
 ## Nằm ngoài chu trình
 
-Ba skill đáp lại một sự kiện chứ không thuộc pha nào, và có thể chạy ở bất kỳ điểm nào bên trên.
+Ba skill đáp lại một sự kiện chứ không thuộc pha nào, và một skill đáp lại một câu hỏi. Cả bốn đều có
+thể chạy ở bất kỳ điểm nào bên trên.
 
 ```mermaid
 flowchart LR
     X1["Có báo lỗi"] --> X2["atk:fix<br/><small>chứng minh nguyên nhân trước khi sửa một dòng</small>"]
     X3["Có người vào đội"] --> X4["atk:onboard<br/><small>tuần đầu kết thúc bằng đóng góp của vai trò</small>"]
     X5["Có người rời đi,<br/>hoặc một pha khép lại"] --> X6["atk:handover<br/><small>người nhận kiểm lại rồi mới ký</small>"]
+    X7["Không chắc bước<br/>tiếp theo là gì"] --> X8["atk:help<br/><small>đọc dự án, gọi tên một skill</small>"]
 ```
+
+`atk:help` không có cửa kiểm soát và không có người duyệt, vì nó không viết artifact nào. Thay vào
+đó nó đọc các cửa kiểm soát bên trên: một artifact còn ở `IN REVIEW` được báo là đang chờ người duyệt
+của nó, không bao giờ được báo là đã sẵn sàng cho pha kế tiếp.
 
 `atk:fix` là skill duy nhất thò tay ngược vào chu trình: lỗi bắt ở pha 6 thì sửa xong quay lại pha 6,
 còn lỗi lộ ra sau khi phát hành thì mở thẳng pha 8.

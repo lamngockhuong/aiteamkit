@@ -49,8 +49,8 @@ flowchart LR
     A10 -->|retro| A12
 ```
 
-Ba skill đứng bên cạnh chuỗi chứ không nằm trong nó, vì chúng đọc cả chuỗi thay vì một mắt xích:
-`catchup` tóm tắt bất kỳ artifact nào cho người mới, `onboard` dẫn thành viên mới đi qua repo, và
+Bốn skill đứng bên cạnh chuỗi chứ không nằm trong nó, vì chúng đọc cả chuỗi thay vì một mắt xích:
+`help` đọc trạng thái của mọi mắt xích để nói mắt xích nào tới lượt, `catchup` tóm tắt bất kỳ artifact nào cho người mới, `onboard` dẫn thành viên mới đi qua repo, và
 `handover` ghi lại trạng thái thật của mọi việc còn dở.
 
 Ba skill nữa nuôi chuỗi mà không do chuỗi sinh ra: `init` viết profile mà mọi skill đụng code đều
@@ -65,6 +65,7 @@ mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết 
 
 | Skill | Đọc | Sinh ra | Skill dùng tiếp |
 |-------|-----|---------|-----------------|
+| `help` | Các skill của chính kit, cùng profile, front matter của artifact, kế hoạch và branch của dự án | Một câu trả lời trong phiên, không có file | Skill nó gọi tên, do người hỏi chạy |
 | `init` | Repo | Profile của dự án | Mọi skill có chạy lệnh |
 | `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi | File ghi đè cho skill đó | Chính skill mang tên file đó |
 | `intake` | Một yêu cầu thô | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa` |

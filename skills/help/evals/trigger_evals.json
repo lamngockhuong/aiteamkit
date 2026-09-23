@@ -1,0 +1,26 @@
+[
+  { "query": "which atk skill should I use for this?", "should_trigger": true },
+  { "query": "/atk:help", "should_trigger": true },
+  { "query": "what should I run next with atk in this repo", "should_trigger": true },
+  { "query": "tôi cần skill nào để làm tiếp", "should_trigger": true },
+  { "query": "atk có những skill nào, nên dùng cái gì bây giờ", "should_trigger": true },
+  { "query": "bước tiếp theo với atk là gì", "should_trigger": true },
+  { "query": "どのスキルを使えばいいですか", "should_trigger": true },
+  { "query": "次に何を実行すればいい？", "should_trigger": true },
+  { "query": "/atk:help review", "should_trigger": true },
+  { "query": "what is atk:spec for and when do I use it instead of design-doc", "should_trigger": true },
+  { "query": "is anything in this project waiting on someone's approval before I can move on", "should_trigger": true },
+  { "query": "client just sent a feature request, which atk command do I start with", "should_trigger": true },
+  { "query": "back after two weeks, which atk skill do I run now", "should_trigger": true },
+
+  { "query": "help me fix this failing test", "should_trigger": false },
+  { "query": "onboard a new developer joining next week", "should_trigger": false },
+  { "query": "hướng dẫn cho thành viên mới vào dự án", "should_trigger": false },
+  { "query": "set up atk in this project", "should_trigger": false },
+  { "query": "khởi tạo atk cho repo này", "should_trigger": false },
+  { "query": "summarise this epic for someone who was not in the conversation", "should_trigger": false },
+  { "query": "make atk:review also check our i18n helper", "should_trigger": false },
+  { "query": "help me write the release notes for 2.3", "should_trigger": false },
+  { "query": "review this pull request", "should_trigger": false },
+  { "query": "リリースノートを書いて", "should_trigger": false }
+]

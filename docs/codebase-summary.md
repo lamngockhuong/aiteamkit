@@ -7,7 +7,7 @@ removed, or renamed; update it in the same commit.
 
 | File | Purpose |
 |------|---------|
-| `README.md` | Public entry point: lifecycle diagram, the 21-skill table, invocation block, output convention, install instructions |
+| `README.md` | Public entry point: lifecycle diagram, the 22-skill table, invocation block, output convention, install instructions |
 | `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `shared/` DRY rule, cross-file sync list, em-dash policy, the `CONV-NNN` review checklist this repository is held to, release flow, verification commands |
 | `CHANGELOG.md` | Written by release-please from the commit types, never by hand. `feat:` and `fix:` appear; the other types are silent |
 | `LICENSE` | MIT |
@@ -66,11 +66,12 @@ first line that it belongs to this repository, and no skill reads either for ano
 
 ## Skills
 
-Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Thirteen also carry
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Fourteen also carry
 `references/`; the other eight do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
+| `skills/help/SKILL.md` | Any point | No file: the skill to run next from the project's state, the evidence behind it, and what waits on whom |
 | `skills/init/SKILL.md` | Setup | `.atk/profile.md`: commands, layers, docs roots, tracker, team, and how to verify at runtime |
 | `skills/tailor/SKILL.md` | Setup | `.atk/overrides/<skill>.md`: what this team wants one skill to do differently, with the owning role as approver |
 | `skills/intake/SKILL.md` | Requirement | User stories, acceptance criteria, non-goals, open questions with owners |
@@ -99,6 +100,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 
 | File | Purpose |
 |------|---------|
+| `skills/help/references/state-signals.md` | Which artifacts gate the next skill while they wait for approval, the evidence on disk that names that skill, in the order to check it, and how the artifacts waiting on a person are collected |
 | `skills/init/references/detection.md` | How the project root and the repository shape are resolved before anything else, where to look for each profile field, and what to do when the repository gives several answers or none |
 | `skills/init/references/profile-template.md` | The shape of `.atk/profile.md` that `init` fills in, the Repositories table a multi-repository project carries, and the rule that every path is written from the project root |
 | `skills/tailor/references/interview.md` | The five groups of question, the filter that sends an answer to `init` or `convention` instead, and a worked example per group |
@@ -146,6 +148,7 @@ all three trigger languages. The kit ships no runner; see `docs/project-roadmap.
 
 | File | Purpose |
 |------|---------|
+| `skills/help/evals/trigger_evals.json` | Asking which skill fits, against `onboard`, `init`, `catchup`, `tailor`, and requests for work that merely say help |
 | `skills/init/evals/trigger_evals.json` | Setup phrasing against project configuration requests that are not `init` |
 | `skills/tailor/evals/trigger_evals.json` | Tailoring a skill, against the `convention` and `init` pairs it must not steal |
 | `skills/intake/evals/trigger_evals.json` | A raw request becoming stories, against `design-doc`, `estimate`, and `breakdown` |
@@ -188,7 +191,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
 | `docs/trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`: why a generic harness reports a vacuous score, the `PreToolUse` hook that does measure selection, the three conditions a run needs, and the cases nothing can observe |
-| `docs/flow/project-flow.md` | The 21 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
+| `docs/flow/project-flow.md` | The 22 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/vi/**/*.md` | Vietnamese mirror of the ten files above, at the same relative paths |
@@ -200,6 +203,6 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 21 skills, plus the profile, the overrides, the shared layer, and the hooks |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 22 skills, plus the profile, the overrides, the shared layer, and the hooks |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Skill run form taking a `--feedback` record: what was asked, which steps ran, where the skill was silent, and what the team expected |
