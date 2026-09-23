@@ -62,7 +62,8 @@ mã.
 
 **Artifact.** Một file Markdown ở đường dẫn trong `shared/artifact-paths.md`, mở đầu bằng khối front
 matter mang chủ sở hữu, người duyệt, và trạng thái phê duyệt. Viết cho người không có mặt trong cuộc
-trao đổi.
+trao đổi. `atk:help` là skill duy nhất không có artifact: mọi người mà câu trả lời của nó hướng tới
+đều đang có mặt.
 
 **Bàn giao.** Artifact được đề nghị đẩy lên tracker, không bao giờ đăng trước khi cho xem. Với một
 thay đổi mã, `shared/finalize-steps.md` vạch ranh giới: mọi thứ tới hết commit ở lại máy, mọi thứ sau
@@ -70,8 +71,8 @@ commit đều phải hỏi, hỏi lại từng lần.
 
 ## Một skill với sang skill khác thế nào
 
-Trong hai mươi mốt thân file `SKILL.md`, đếm những lần nhắc `atk:`, một skill gọi tên skill khác một
-trăm mười lăm lượt, thành bảy mươi chín cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
+Trong hai mươi hai file `SKILL.md`, đếm những lần nhắc `atk:`, một skill gọi tên skill khác một trăm
+ba mươi mốt lượt, thành tám mươi chín cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
 phần lớn trong số đó là ranh giới chứ không phải cạnh. Có năm loại, và chỉ bốn loại đầu xảy ra lúc
 chạy.
 

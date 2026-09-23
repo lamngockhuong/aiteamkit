@@ -1,7 +1,8 @@
 # Artifact Lifecycle
 
-Every skill in this kit writes Markdown into your repository, with one exception named at the end. A team adopting `atk` asks two
-questions in its first week: do we commit all of this, and may we delete any of it later. This
+Every skill in this kit that writes a file writes Markdown into your repository, with one exception
+named below; `atk:help` writes nothing, because it answers in the session. A team adopting `atk`
+asks two questions in its first week: do we commit all of this, and may we delete any of it later. This
 document answers both and says what each answer costs, so the team decides rather than guesses.
 
 Where each artifact is written is in [shared/artifact-paths.md](../shared/artifact-paths.md), and

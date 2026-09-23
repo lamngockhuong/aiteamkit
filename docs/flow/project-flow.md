@@ -1,6 +1,6 @@
 # Project Flow
 
-How the 21 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
+How the 22 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,
@@ -134,14 +134,20 @@ flowchart TD
 
 ## Outside the cycle
 
-Three skills answer an event rather than a phase, and can fire at any point above.
+Three skills answer an event rather than a phase, and one answers a question. All four can fire at
+any point above.
 
 ```mermaid
 flowchart LR
     X1["Defect reported"] --> X2["atk:fix<br/><small>prove the cause before changing a line</small>"]
     X3["Someone joins"] --> X4["atk:onboard<br/><small>first week ends in the role's contribution</small>"]
     X5["Someone leaves,<br/>or a phase ends"] --> X6["atk:handover<br/><small>receiver validates before signing</small>"]
+    X7["Not sure what<br/>comes next"] --> X8["atk:help<br/><small>reads the project, names one skill</small>"]
 ```
+
+`atk:help` has no gate and no approver, because it writes no artifact. It reads the gates above
+instead: an artifact still `IN REVIEW` is reported as waiting on its approver, never as ready for the
+next phase.
 
 `atk:fix` is the one that reaches back into the cycle: a defect found in phase 6 returns to phase 6
 after the fix, and one found after release opens phase 8 instead.

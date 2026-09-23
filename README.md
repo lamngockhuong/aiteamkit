@@ -1,6 +1,6 @@
 # AI Team Kit (`atk`)
 
-Twenty-one skills covering the software delivery lifecycle of a **company project team**. Every skill
+Twenty-two skills covering the software delivery lifecycle of a **company project team**. Every skill
 assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read
 by someone who was not in the conversation that produced them. Those are roles rather than a
 headcount: a solo developer holding all of them gets the same gates, and still approves by hand.
@@ -24,7 +24,8 @@ flowchart LR
 ```
 
 Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
-`onboard` when someone joins; `handover` when someone leaves or a phase ends.
+`onboard` when someone joins; `handover` when someone leaves or a phase ends. `help` answers a
+question instead: which of the others to run, read from the state of the project.
 
 How the phases map to roles and approval gates: [docs/flow/project-flow.md](docs/flow/project-flow.md)
 ([Tiếng Việt](docs/vi/flow/project-flow.md)). What each skill consumes and produces:
@@ -41,6 +42,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 
 | Skill | What it produces |
 |-------|------------------|
+| `atk:help` | No file: the skill to run next with the line to type, the evidence in the project behind it, what that skill needs first, who approves what it produces, and what is still waiting on a named approver. Also routes a question to one skill, or explains one skill. |
 | `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
 | `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
 | `atk:intake` | A raw request turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
@@ -68,6 +70,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 Every skill is its own slash command, namespaced `atk:`. There is no separate command layer.
 
 ```bash
+/atk:help [question|skill]                # --lang
 /atk:init                                 # --audit --lang --out
 /atk:tailor [<skill>]                     # --audit --feedback --out
 /atk:intake <request-file|ticket|text>    # --interview|--no-interview --lang --out

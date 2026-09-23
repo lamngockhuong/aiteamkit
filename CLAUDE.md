@@ -5,11 +5,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
-OpenAI Codex CLI. It packages 21 skills covering the delivery lifecycle of a company project team
-(`init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`, `convention`, `plan`,
-`implement`, `fix`, `review`, `qa`, `verify`, `git`, `release`, `incident`, `retro`, `onboard`,
-`handover`), each invocable as a slash command by its own name (`/atk:intake`, `/atk:estimate`, and
-so on). That is the lifecycle order; use it for every list of skills in the repository.
+OpenAI Codex CLI. It packages 22 skills covering the delivery lifecycle of a company project team
+(`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`,
+`convention`, `plan`, `implement`, `fix`, `review`, `qa`, `verify`, `git`, `release`, `incident`,
+`retro`, `onboard`, `handover`), each invocable as a slash command by its own name
+(`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
 
 This is content plus manifests, not a runtime application: there is no build step, no bundler, no
 test suite, and `package.json` is `private: true` with no `scripts` block. "Validation" means JSON
@@ -68,9 +68,9 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: thirteen of them carry
-one (`init`, `tailor`, `intake`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, `review`,
-`git`, `convention`, `onboard`), and the other eight are still `SKILL.md` alone. `git` holds the
+neighbours it must not steal. `references/` is where they still differ: fourteen of them carry
+one (`help`, `init`, `tailor`, `intake`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`,
+`review`, `git`, `convention`, `onboard`), and the other eight are still `SKILL.md` alone. `git` holds the
 most, six, because the closing sequence has more cases than its workflow line names. Deepening a
 skill means adding `references/` files and pointing at them from the relevant workflow step, not
 growing `SKILL.md` past 300 lines.
@@ -273,13 +273,16 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
    artifact the tree did not hold before. The per-group paragraphs name the kinds and count them, so
    a new one leaves two files disagreeing about what is safe to delete
 7. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 21
+8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 22
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
 10. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
     all three `docs/vi/flow/` mirrors.
-    Each names all 21 skills: the phase table and the consumes/produces table respectively
+    Each names all 22 skills: the phase table and the consumes/produces table respectively
+11. `skills/help/references/state-signals.md`, if something on disk says the skill is the next one
+    to run. A skill that answers an event a person reports has no row there, because nothing on
+    disk announces the event
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -368,7 +371,7 @@ its Layers table, and the mirror check below excludes both paths.
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
-| `flow/project-flow.md` | The 21 skills placed in delivery phases, with the author and approver of each artifact |
+| `flow/project-flow.md` | The 22 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 
@@ -414,7 +417,7 @@ not a second set of rules. The `source` column says where the prose lives.
 
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
-| `CONV-001` | Adding, renaming, or removing a skill touches all ten groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-001` | Adding, renaming, or removing a skill touches all eleven groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
@@ -430,7 +433,7 @@ deleted, so a review that cited it stays readable.
 Three things worth automating, proposed and not installed. A CI job running the block below would
 move most of this table to `ENFORCED` and stop a reviewer spending attention on it. `CONV-001` is the
 one that would need writing rather than wiring: a check that a diff touching `skills/` also touches
-the ten groups. The third is a profile check, and it belongs to a project rather than to this
+the eleven groups. The third is a profile check, and it belongs to a project rather than to this
 repository: that a `.atk/profile.md` whose `Shape` names members carries a Repositories table, that
 one whose shape does not carries none, and that every path and every `Repository` cell elsewhere in
 the file resolves to a row of it. None is done here, and all three belong to whoever owns the

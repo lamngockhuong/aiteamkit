@@ -1,6 +1,6 @@
 # Tổng quan các skill
 
-Hai mươi mốt skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+Hai mươi hai skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
 dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
@@ -20,11 +20,33 @@ flowchart LR
 
 Ba skill đáp lại một sự kiện chứ không nằm trong phase nào: `fix` khi có lỗi được báo, ở bất kỳ
 điểm nào; `onboard` khi có người vào; `handover` khi có người rời đi, hoặc một phase kết thúc.
+`help` thì đáp lại một câu hỏi: nên chạy skill nào trong số còn lại, đọc từ trạng thái của dự án.
 
 `atk:init` chạy một lần cho mỗi dự án. Nó viết ra `.atk/profile.md`, file cho các skill có động tới
 mã nguồn biết dự án này test thế nào, build ra sao và chia tầng thế nào. `atk:implement`, `atk:fix`
 và `atk:verify` dừng nếu thiếu nó. `atk:plan` vẫn chạy tiếp nhưng nói rõ trong artifact phần nào là
 suy đoán. Những skill còn lại chạy mà không cần tới nó.
+
+---
+
+## `atk:help`
+
+**Sinh ra.** Không có file. Một câu trả lời trong phiên: skill nên chạy tiếp kèm dòng lệnh cần gõ,
+bằng chứng trong dự án đứng sau lựa chọn đó, skill ấy cần gì trước, ai duyệt thứ nó sinh ra, và mọi
+artifact còn đang chờ một người duyệt có tên.
+
+**Dùng khi.** Bạn không biết skill nào phù hợp, bạn muốn biết dự án đang chờ ai và việc gì đến tiếp
+theo, hoặc bạn muốn biết một skill dùng để làm gì trước khi chạy nó. `/atk:help <skill>` giải thích một
+skill; một câu hỏi thì đưa tình huống đó về một skill.
+
+**Không dùng khi.** Bạn đã biết việc cần làm. "Giúp tôi sửa bug này" là `atk:fix`, còn một thành
+viên mới bắt đầu vào dự án là `atk:onboard`, skill viết ra tài liệu họ sẽ làm theo.
+
+**Thói quen tạo ra khác biệt.** Nó đọc trạng thái phê duyệt, không đọc danh sách file. Một yêu cầu
+đang ở `IN REVIEW` thì chưa phải thứ để thiết kế dựa vào, nên câu trả lời gọi tên người nó đang chờ
+chứ không gọi tên skill tiếp theo. Nó đọc các skill của chính kit lúc chạy, nên không bao giờ gợi ý
+từ một bản sao đã cũ, và nó không bao giờ tự chạy thứ nó gợi ý: chạy skill nào là quyết định của
+người hỏi.
 
 ---
 
@@ -510,8 +532,9 @@ bởi người tiếp quản, không bao giờ do người rời đi tự tuyên
 
 ## Bắt đầu áp dụng
 
-Bắt đầu từ chặng đang đau nhất. Năm điểm vào thường gặp:
+Bắt đầu từ chặng đang đau nhất. Sáu điểm vào thường gặp:
 
+- Chưa biết bắt đầu từ đâu: `atk:help`, skill đọc dự án và gọi tên một skill.
 - Yêu cầu tới mập mờ: `atk:intake`, rồi `atk:qa` khi đã có tiêu chí.
 - Review thiếu nhất quán: `atk:convention`, rồi `atk:review` dựa trên nó.
 - Kiến thức cứ đi theo người: `atk:handover` và `atk:onboard`.

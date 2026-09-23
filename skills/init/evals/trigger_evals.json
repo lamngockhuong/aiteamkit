@@ -17,5 +17,6 @@
   { "query": "write down the branch and commit rules our team follows", "should_trigger": false },
   { "query": "set up the development environment on my machine", "should_trigger": false },
   { "query": "initialize a new git repository", "should_trigger": false },
-  { "query": "create the first sprint plan", "should_trigger": false }
+  { "query": "create the first sprint plan", "should_trigger": false },
+  { "query": "which atk skill should I run next?", "should_trigger": false }
 ]

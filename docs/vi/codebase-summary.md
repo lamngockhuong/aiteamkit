@@ -7,7 +7,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 
 | File | Mục đích |
 |------|----------|
-| `README.md` | Điểm vào công khai: sơ đồ vòng đời, bảng 21 skill, khối invocation, quy ước output, hướng dẫn cài đặt |
+| `README.md` | Điểm vào công khai: sơ đồ vòng đời, bảng 22 skill, khối invocation, quy ước output, hướng dẫn cài đặt |
 | `CLAUDE.md` | Hướng dẫn cho người bảo trì: tiền đề về team, bố cục ba manifest, giải phẫu skill, nguyên tắc DRY của `shared/`, danh sách file phải đồng bộ chéo, chính sách em-dash, mục review checklist `CONV-NNN` mà repo này bị soi theo, quy trình release, lệnh kiểm tra |
 | `CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay. `feat:` và `fix:` hiện lên; các loại khác im lặng |
 | `LICENSE` | MIT |
@@ -66,11 +66,12 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười ba skill có thêm `references/`;
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười bốn skill có thêm `references/`;
 tám skill còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
+| `skills/help/SKILL.md` | Bất kỳ lúc nào | Không có file: skill nên chạy tiếp theo suy ra từ trạng thái dự án, bằng chứng đứng sau nó, và việc gì đang chờ ai |
 | `skills/init/SKILL.md` | Khởi tạo | `.atk/profile.md`: lệnh, tầng, thư mục docs, tracker, team, và cách kiểm chứng lúc chạy |
 | `skills/tailor/SKILL.md` | Khởi tạo | `.atk/overrides/<skill>.md`: điều team này muốn một skill làm khác đi, người duyệt là vai sở hữu kết quả |
 | `skills/intake/SKILL.md` | Yêu cầu | User story, tiêu chí nghiệm thu, ngoài phạm vi, câu hỏi treo có người phụ trách |
@@ -99,6 +100,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 
 | File | Mục đích |
 |------|----------|
+| `skills/help/references/state-signals.md` | Những artifact nào chặn skill tiếp theo khi còn chờ duyệt, những bằng chứng trên đĩa gọi tên skill đó, theo thứ tự cần kiểm, và cách gom các artifact đang chờ một người |
 | `skills/init/references/detection.md` | Cách xác định gốc dự án và hình dạng repository trước mọi thứ khác, tìm từng trường của profile ở đâu, và làm gì khi repo cho nhiều đáp án hoặc không cho đáp án nào |
 | `skills/init/references/profile-template.md` | Bố cục của `.atk/profile.md` mà `init` điền vào, bảng Repositories của một dự án nhiều repository, và luật mọi đường dẫn đều viết từ gốc dự án |
 | `skills/tailor/references/interview.md` | Năm nhóm câu hỏi, bộ lọc đẩy câu trả lời sang `init` hoặc `convention`, và một ví dụ cho mỗi nhóm |
@@ -146,6 +148,7 @@ bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 tro
 
 | File | Mục đích |
 |------|----------|
+| `skills/help/evals/trigger_evals.json` | Hỏi skill nào phù hợp, đối lại `onboard`, `init`, `catchup`, `tailor`, và những yêu cầu làm việc chỉ tình cờ có chữ help |
 | `skills/init/evals/trigger_evals.json` | Cách nói về khởi tạo, đối lại những yêu cầu cấu hình dự án không thuộc `init` |
 | `skills/tailor/evals/trigger_evals.json` | Việc chỉnh một skill cho hợp team, đối lại cặp `convention` và `init` mà nó không được giành |
 | `skills/intake/evals/trigger_evals.json` | Một yêu cầu thô thành user story, đối lại `design-doc`, `estimate` và `breakdown` |
@@ -188,7 +191,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/codebase-summary.md` | Chính là file này |
 | `docs/project-roadmap.md` | Kế hoạch theo phase và trạng thái |
 | `docs/trigger-eval-measurement.md` | Cách lấy một số đo đúng từ `evals/trigger_evals.json`: vì sao một bộ chạy thông thường báo ra điểm số rỗng, hook `PreToolUse` đo được việc chọn skill, ba điều kiện một lượt chạy cần có, và những case không gì quan sát được |
-| `docs/flow/project-flow.md` | 21 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, và vòng quay lại khi artifact bị trả về |
+| `docs/flow/project-flow.md` | 22 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, và vòng quay lại khi artifact bị trả về |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
 | `docs/vi/**/*.md` | Bản tiếng Việt mirror mười file trên, đặt ở cùng đường dẫn tương đối |
@@ -200,6 +203,6 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `.github/workflows/release-please.yml` | Chạy release-please khi push lên `main` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Hướng dẫn Conventional Commit, harness bị ảnh hưởng, và checklist kiểm tra gồm cả các mục đồng bộ chéo |
 | `.github/ISSUE_TEMPLATE/config.yml` | Tắt issue trống, dẫn sang Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 21 skill, cộng profile, phần ghi đè, lớp dùng chung và các hook |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 22 skill, cộng profile, phần ghi đè, lớp dùng chung và các hook |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Form tính năng, hỏi tình huống của team trước khi hỏi năng lực đề xuất |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Form báo lần chạy skill, nhận bản ghi `--feedback`: đã yêu cầu gì, bước nào chạy, chỗ nào skill không nói, và team mong đợi gì |

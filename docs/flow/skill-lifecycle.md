@@ -61,7 +61,8 @@ what it does not is in `shared/layer-verification.md` for the three that change 
 
 **Artifact.** A Markdown file at the path in `shared/artifact-paths.md`, opening with the front
 matter that carries the owner, the approver, and the approval state. Written for somebody who was not
-in the conversation.
+in the conversation. `atk:help` is the one skill with no artifact: everyone its answer is for is
+present.
 
 **Handover.** The artifact is offered to the tracker, never posted before it is shown. For a code
 change, `shared/finalize-steps.md` draws the line: everything up to the commit stays local, and
@@ -69,8 +70,8 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another a hundred and fifteen times across the twenty-one `SKILL.md` bodies,
-counting the `atk:` mentions, in seventy-nine ordered pairs, which sounds like a dense graph. It is
+One skill names another a hundred and thirty-one times across the twenty-two `SKILL.md` files,
+counting the `atk:` mentions, in eighty-nine ordered pairs, which sounds like a dense graph. It is
 not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at
 run time.
 

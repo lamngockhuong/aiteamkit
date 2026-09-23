@@ -212,7 +212,9 @@ or incomplete.
 | Not needed | tailor, intake, catchup, estimate, design-doc, breakdown, incident, retro, onboard, handover | Never mention the profile. |
 
 `atk:init` is in no group. It is the skill that writes the profile, so a missing one is its input
-rather than its problem.
+rather than its problem. `atk:help` is in no group either, for a neighbouring reason: a missing
+profile is one of the states it reports, and it names `atk:init` when the skill it recommends would
+stop without one.
 
 The column describes the missing case only. A `Not needed` skill may still read a section that helps
 it when the profile happens to be there: `atk:catchup` reading Tracker to find the incoming specification

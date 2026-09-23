@@ -3,9 +3,10 @@
 Shared output convention for every `atk` skill. Referenced from `skills/<name>/SKILL.md` as
 `shared/artifact-paths.md`, which is `../../shared/artifact-paths.md` relative to a skill file.
 
-Every skill writes Markdown into the **target project**, never into the atk kit itself. The one
-exception is `atk:convention`, which may also write the project's own collaboration files, one of
-which is not Markdown; the paragraph after the table says what they are.
+Every skill that writes a file writes Markdown into the **target project**, never into the atk kit
+itself; `atk:help` writes none. The one exception is `atk:convention`, which may also write the
+project's own collaboration files, one of which is not Markdown; the paragraph after the table says
+what they are.
 
 ## Root
 
@@ -123,6 +124,7 @@ to `docs/adr/` as well.
 
 | Skill | Default output |
 |-------|----------------|
+| `help` | No file: the answer is given in the session, because everyone it is for is present |
 | `init` | `.atk/profile.md` (see the exception below) |
 | `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
 | `intake` | `docs/records/requirements/<ticket-or-date>-<slug>.md` |
@@ -145,7 +147,8 @@ to `docs/adr/` as well.
 | `onboard` | `docs/onboarding-<role>.md` under `--role`, `docs/onboarding.md` without it; a defect found while verifying a setup step at `docs/derived/onboarding/setup-defects.md` |
 | `handover` | `docs/records/handover/<date>-<from>-to-<to>.md` |
 
-`--out <path>` overrides the default on every skill.
+`--out <path>` overrides the default on every skill that writes a file, which is every skill but
+`help`.
 
 `atk:convention` may also write `CONTRIBUTING.md`, the pull request template, and `CODEOWNERS`, each
 at the location its host reads, per `shared/host-file-locations.md`, and never into the docs tree

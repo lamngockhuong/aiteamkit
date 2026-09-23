@@ -24,5 +24,6 @@
   { "query": "khởi tạo atk cho dự án này", "should_trigger": false },
   { "query": "review this pull request", "should_trigger": false },
   { "query": "create a new skill for our kit", "should_trigger": false },
-  { "query": "sửa giúp tôi lỗi trong file này", "should_trigger": false }
+  { "query": "sửa giúp tôi lỗi trong file này", "should_trigger": false },
+  { "query": "atk có skill nào để làm việc này không", "should_trigger": false }
 ]
