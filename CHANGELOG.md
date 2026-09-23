@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.10](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.9...v0.0.10) (2026-09-23)
+
+
+### Features
+
+* make atk:review cheap by default, and hand a small review to a fresh agent ([#50](https://github.com/lamngockhuong/aiteamkit/issues/50)) ([4e28085](https://github.com/lamngockhuong/aiteamkit/commit/4e28085aac6beb3a6179bc15b38caa7ee852ac43))
+
+
+### Bug Fixes
+
+* give Codex a hook registration it can resolve ([#48](https://github.com/lamngockhuong/aiteamkit/issues/48)) ([d4d5843](https://github.com/lamngockhuong/aiteamkit/commit/d4d5843edee47e0ce8aa7381cab610c42fae38ea))
+
 ## [0.0.9](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.8...v0.0.9) (2026-09-22)
 
 

@@ -2,7 +2,7 @@
   "name": "atk",
   "displayName": "AI Team Kit",
   "description": "Project profile setup, per-team skill overrides, requirement intake, catching up on work in flight, estimation, technical design, task breakdown, conventions, implementation planning, implementation, bug fixing, code review, QA, runtime verification, version control, release, incident response, retrospective, onboarding, and handover for a company project team",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "author": {
     "name": "Lam Ngoc Khuong",
     "email": "hi@khuong.dev"
