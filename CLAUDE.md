@@ -227,8 +227,9 @@ override for it twice, once with the `PreToolUse` entry in `hooks/hooks.json` an
 removed, and compare the two results. A difference means a behavior has moved into the hook, and
 every harness the hook does not reach has silently lost it.
 
-That is the bar for a third hook: it saves work a skill could do itself, and the kit behaves the
-same when it is missing.
+That is the bar for a third hook: it saves work a skill could do itself, the kit behaves the same
+when it is missing, and it is registered in both files rather than one, which the registration check
+below is what enforces.
 
 Claude Code's contract makes the boundary hold by construction: `SessionStart` cannot block, exit
 code 2 included. The script exits 0 on every path regardless, prints nothing when it has nothing to
@@ -412,7 +413,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | The five manifests and every `evals/*.json` parse, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
-| `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, and both stay Node | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
+| `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
@@ -485,23 +486,35 @@ done; echo "OK load-overrides quiet"
 
 # Each harness gets the registration it can read. Claude Code: exec form, since shell form would
 # break bare Windows. Codex: a string command, since Codex substitutes ${PLUGIN_ROOT} there and
-# nowhere else, and an args array would reach Node as a literal path that does not exist.
+# nowhere else, and an args array would reach Node as a literal path that does not exist. Every
+# assertion is inside the one program on purpose: a shell test that ends in `&& echo OK` prints
+# nothing when it fails, and nothing is what a block of twenty OK lines hides best.
 python3 -c "
-import json
-for event in json.load(open('hooks/hooks.json'))['hooks'].values():
-    for group in event:
-        for h in group['hooks']:
-            assert h['command']=='node' and 'args' in h, 'hook must stay in exec form'
-for event in json.load(open('hooks/codex-hooks.json'))['hooks'].values():
-    for group in event:
-        for h in group['hooks']:
-            assert 'args' not in h, 'codex hook must carry its path in command'
-            assert '\${PLUGIN_ROOT}' in h['command'], 'codex hook must use \${PLUGIN_ROOT}'
-            assert h['command'].startswith('node '), 'codex hook must stay Node'
-print('OK registration')"
-test "$(python3 -c "
-import json; print(json.load(open('.codex-plugin/plugin.json')).get('hooks'))")" \
-  = "./hooks/codex-hooks.json" && echo "OK codex manifest points at its own file"
+import json, os, re
+
+def claude(h):
+    assert h['command']=='node' and 'args' in h, 'hook must stay in exec form'
+    return h['args'][0].rsplit('/', 1)[-1]
+
+def codex(h):
+    assert 'args' not in h, 'codex hook must carry its path in command'
+    assert h['command'].startswith('node '), 'codex hook must stay Node'
+    assert '\${PLUGIN_ROOT}' in h['command'], 'codex hook must use \${PLUGIN_ROOT}'
+    return re.search('[^/]+[.]mjs', h['command']).group(0)
+
+def registered(path, script_of):
+    return {(event, group.get('matcher'), script_of(h))
+            for event, groups in json.load(open(path))['hooks'].items()
+            for group in groups for h in group['hooks']}
+
+a = registered('hooks/hooks.json', claude)
+b = registered('hooks/codex-hooks.json', codex)
+assert a == b, 'the two registrations have drifted apart: %s' % sorted(a ^ b)
+for event, matcher, script in sorted(a):
+    assert os.path.exists('hooks/' + script), 'no such hook script: hooks/' + script
+assert json.load(open('.codex-plugin/plugin.json')).get('hooks') == './hooks/codex-hooks.json', \
+    'the Codex manifest must point its hooks key at ./hooks/codex-hooks.json'
+print('OK registration, %d hooks in both files' % len(a))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow
