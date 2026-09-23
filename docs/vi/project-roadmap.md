@@ -6,7 +6,7 @@
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
 | 2. Độ phủ skill | XONG | 20 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười hai skill đã có, chín skill còn lại chưa |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười ba skill đã có, tám skill còn lại chưa |
 | 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 21 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
@@ -46,12 +46,12 @@ nằm trong kit, và `project-overrides.md` mô tả
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Mười hai skill đã có sẵn `references/`. Chín skill còn lại thì chưa. Chỗ nào output là tài liệu bố
+Mười ba skill đã có sẵn `references/`. Tám skill còn lại thì chưa. Chỗ nào output là tài liệu bố
 cục cố định mà chưa reference nào giữ bố cục ấy, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |
 |-------|--------------------|
-| `intake` | Template story và tiêu chí nghiệm thu, ngân hàng câu hỏi phỏng vấn |
+| `intake` | Ngân hàng câu hỏi phỏng vấn. Template requirement đã xong: `skills/intake/references/requirement-template.md` |
 | `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang, và bảng tính capacity |
 | `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án |
 | `breakdown` | Schema bảng task và luật sở hữu file cho các làn song song |
