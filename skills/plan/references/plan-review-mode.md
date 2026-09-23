@@ -124,9 +124,17 @@ number, in that order. Two reviews of one plan on one day write the same name, a
 replaces the first; that is acceptable in a derived directory and worth knowing before someone goes
 looking for the earlier one.
 
-It carries the plan it read and where that plan came from, the phases it found and their statuses,
-one section per phase with its results, and the table above for whatever could not be checked. Each
-result cites the file and the section it is in, states what goes wrong downstream, and stops there.
+**A review already written for this plan is read before this one is written.** Look it up by
+`<slug>`, since a review from an earlier day carries a different date and is about the same plan.
+A result it already raised is one the author has seen and not acted on, which is a different thing
+from a result a week of commits has just created, and a report that cannot tell them apart sends the
+approver to the wrong question. Reading it is all that happens: it is never rewritten, and a result
+it raised that the author declined is still a result here.
+
+`references/report-format.md` holds the shape of the file: the identifiers and how they carry from
+that earlier report into this one, the labels under each result, the sections in order, and the
+table that lets a reader find one phase without reading all three severity sections. Each result
+cites the file and the section it is in, states what goes wrong downstream, and stops there.
 
 The session gets the count at each severity, the `BLOCKING` ones in one line each, and the path.
 
@@ -163,6 +171,11 @@ belongs beside the plan.
 - [ ] Preferences are labelled `NIT` and are separated from what blocks.
 - [ ] Every claim that could not run is named in the report, with what would make it runnable.
 - [ ] A pull request was read at its head ref, or the report says which ref was read.
+- [ ] A review already written for this plan was read, its identifiers carried forward, and what it
+      raised and this run did not went into `## Closed since the last review`. Where there was none,
+      the report says so.
+- [ ] The report follows `references/report-format.md`: results grouped by severity, identifiers
+      prefixed by severity, and one table placing them per phase.
 - [ ] Where the run reached the pass, the report was written and the session carried the counts, the
       `BLOCKING` lines, and the path. Where it stopped earlier, the session carries the reason.
 - [ ] No verdict, score, or approval appears anywhere in the report, and nothing was posted as a

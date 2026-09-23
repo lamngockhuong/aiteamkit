@@ -114,6 +114,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/plan/references/plan-template.md` | The plan index and the phase file |
 | `skills/plan/references/plan-self-review.md` | The six claims a plan makes, how to reopen each against the repository, and what to do with each result |
 | `skills/plan/references/plan-review-mode.md` | Reviewing a plan somebody else wrote: the inputs, how each result converts, the severities, and the report |
+| `skills/plan/references/report-format.md` | The shape of the plan review report: severity-prefixed result identifiers and how they carry into a later review of the same plan, the labels under each result and why none of them names a fix, the table that places the results per phase, the sections in order, and why neither a verdict nor a score appears in any of them |
 | `skills/implement/references/plan-gate.md` | The three settings deciding how much agreement the work needs before code is written, and what to do with the open questions and the design fork a plan hands back |
 | `skills/implement/references/verification.md` | The order to run checks in, how far to reach, and when to stop |
 | `skills/implement/references/review-fix-loop.md` | The team review run against the skill's own output, and the ceiling that stops the loop hiding a design problem |
