@@ -1,8 +1,9 @@
 # Standard sources
 
 Loaded by `atk:convention` at the suggest step, and by `--audit` for the sources section of its
-report. It holds the list of published standards the kit knows, the rules for what a run may do with
-each one, and how a source is fetched without pulling a whole repository.
+report. The published standards the kit knows are listed in `references/standard-sources.tsv`; this
+file holds what each field means, what a run may do with each line, and how a source is fetched
+without pulling a whole repository.
 
 Everything this file leads to is a **proposal**, in the sense the record format in
 `shared/review-checklist.md` gives the word, and it never replaces a rule the code shows. That keeps
@@ -11,10 +12,11 @@ published guide is something the Tech Lead may adopt, one rule at a time.
 
 ## The list
 
-Plain text, one source per line, seven fields separated by a tab:
+The list is `references/standard-sources.tsv`: a header line, then one source per line, seven fields
+separated by a tab, in this order:
 
 ```
-<tech>  <name>  <repo>  <path>  <license>  <checked>  <note>
+tech  name  repo  path  license  checked  note
 ```
 
 - `tech` is the key from `references/stack-standards.md`, so a detected technology matches its
@@ -29,27 +31,11 @@ Plain text, one source per line, seven fields separated by a tab:
   the field stays empty and `note` says which one is missing.
 - `note` comes last because it is the only free prose.
 
-A line is added as a line. The list is meant to grow, and a table would make every `|` in a note a
-problem.
-
-```
-javascript	Airbnb JavaScript Style Guide	airbnb/javascript	README.md	MIT	2026-09-21	React part at react/README.md
-react	Bulletproof React	alan2207/bulletproof-react	docs/	MIT	2026-09-21	docs/project-standards.md is the one to read first
-node	Node.js Best Practices	goldbergyoni/nodebestpractices	README.md	CC-BY-SA-4.0	2026-09-21	repository 68 MB
-typescript	Google TypeScript Style Guide	google/styleguide	tsguide.html	NOASSERTION		LICENSE read 2026-09-23 as CC-BY-3.0, not yet confirmed by a person; HTML, not Markdown
-python	Google Python Style Guide	google/styleguide	pyguide.md	NOASSERTION		LICENSE read 2026-09-23 as CC-BY-3.0, not yet confirmed by a person; 118 KB
-go	Uber Go Style Guide	uber-go/guide	style.md	Apache-2.0	2026-09-21	one file, repository 282 KB
-java	Google Java Style Guide	google/styleguide	javaguide.html	NOASSERTION		LICENSE read 2026-09-23 as CC-BY-3.0, not yet confirmed by a person; HTML; no clean Markdown source exists for Java among the large guides, and the Alibaba one is a Chinese PDF
-kotlin	Kotlin coding conventions	JetBrains/kotlin-web-site	docs/topics/coding-conventions.md	Apache-2.0	2026-09-21	repository 1.2 GB; pushed after checked, re-check due
-swift	Airbnb Swift Style Guide	airbnb/swift	README.md	MIT	2026-09-21	pushed after checked, re-check due
-csharp	Google C# Style Guide	google/styleguide	csharp-style.md	NOASSERTION		LICENSE read 2026-09-23 as CC-BY-3.0, not yet confirmed by a person; 20 KB
-php	PSR-12 Extended Coding Style	php-fig/fig-standards	accepted/PSR-12-extended-coding-style-guide.md	NOASSERTION		LICENSE.md puts content under CC Attribution and code under MIT, LICENSE-CC.md is CC-BY-3.0, so PSR-12 read 2026-09-23 as CC-BY-3.0, not yet confirmed by a person; take this file and PSR-1 only
-rust	Rust API Guidelines	rust-lang/api-guidelines	src/	Apache-2.0 OR MIT	2026-09-21	15 Markdown files; LICENSE-APACHE and LICENSE-MIT both opened
-shell	Google Shell Style Guide	google/styleguide	shellguide.md	NOASSERTION		LICENSE read 2026-09-23 as CC-BY-3.0, not yet confirmed by a person; 40 KB
-sql	SQL Style Guide	treffynnon/sqlstyle.guide	_includes/sqlstyle.guide.md	NOASSERTION		LICENCE read 2026-09-23 as a one-line pointer to CC-BY-SA-4.0, not yet confirmed by a person; index.md is a 79-byte Jekyll stub; Vietnamese edition at _includes/sqlstyle.guide.vn.md
-rest-api	Zalando RESTful API Guidelines	zalando/restful-api-guidelines	chapters/	CC-BY-4.0	2026-09-21	AsciiDoc, repository 29 MB
-security	OWASP Cheat Sheet Series	OWASP/CheatSheetSeries	cheatsheets/	CC-BY-SA-4.0	2026-09-21	repository 2.5 GB; pushed after checked, re-check due
-```
+Tabs rather than commas because a note routinely holds a comma, and a comma-separated line would
+have to quote it; a quote forgotten by hand shifts `license` and `checked` one column over, and
+those two fields decide whether a line may be used at all. A new source is one more line, with no
+tab inside any field. `CLAUDE.md`, under "Common verification commands", checks the field count and
+the date of every line.
 
 Seven lines carry an empty `checked`, and all seven miss the same condition: their licence terms
 were read by an agent on 2026-09-23 and no person has confirmed them. The repository and `path`
@@ -84,7 +70,8 @@ format of `shared/review-checklist.md`.
 ## A team's own sources
 
 A team that follows a standard this list does not carry adds it in `.atk/overrides/convention.md`,
-inside its `## Before` section, as lines in the same seven fields in a code block. The kit's list is
+inside its `## Before` section, as lines in the same seven fields in a code block, with no header
+line. The kit's list is
 the default and the override is laid over it, per `shared/project-overrides.md`; no new kind of file
 under `.atk/` is created for it. A team line obeys the same rules as a kit line, `checked` included.
 

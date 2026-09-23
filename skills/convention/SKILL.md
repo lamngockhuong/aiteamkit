@@ -216,10 +216,11 @@ that found all three present has an answer rather than no output.
 ### `--suggest`
 
 Runs the whole workflow, and between step 3 and step 4 looks up each technology step 2 named in
-`references/standard-sources.md`, plus any source the override adds. It fetches each matching source
-sparsely, reads what its `path` holds, and draws candidate rules the code does not already settle,
-each shown with its link and with whether the code agrees, contradicts it, or is silent. Nothing is
-written before the user picks. The picked ones go into the proposals section of the conventions
+`references/standard-sources.tsv`, plus any source the override adds, under the rules in
+`references/standard-sources.md`. It fetches each matching source sparsely, reads what its `path`
+holds, and draws candidate rules the code does not already settle, each shown with its link and
+with whether the code agrees, contradicts it, or is silent. Nothing is written before the user
+picks. The picked ones go into the proposals section of the conventions
 document, with `source` as `<repo>/<path> fetched <date>` per `shared/review-checklist.md`, never
 into the review checklist. A source skipped for an empty `checked`, one that could not be fetched,
 and a technology with no source are each named in the report; the part derived from the code comes

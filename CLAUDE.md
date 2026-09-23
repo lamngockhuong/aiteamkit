@@ -63,6 +63,7 @@ shows up duplicated in the `/` menu, at a real always-on token cost for no behav
 skills/<name>/
   SKILL.md                    required; frontmatter + workflow, kept under 300 lines
   references/*.md             optional, lazily loaded detail (templates, checklists, schemas)
+  references/*.tsv            optional, a list a reference file governs, one record per line
   evals/trigger_evals.json    one per skill; array of {query, should_trigger} for description testing
 ```
 
@@ -72,6 +73,13 @@ one (`init`, `tailor`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`, 
 `convention`, `onboard`), and the other nine are still `SKILL.md` alone. `git` holds the most, six, because
 the closing sequence has more cases than its workflow line names. Deepening a skill means adding `references/`
 files and pointing at them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
+
+A reference is Markdown, with one exception: a list that grows one record at a time, whose fields a
+check can count. `convention` keeps its standard sources in `references/standard-sources.tsv` for
+that reason, and `references/standard-sources.md` beside it says what each field means and what a
+run may do with a line. The rules stay in Markdown; only the records move. Tabs rather than commas,
+because a free-text field routinely holds a comma and a quote forgotten by hand shifts every field
+after it.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
@@ -412,7 +420,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
-| `CONV-008` | The five manifests and every `evals/*.json` parse, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
+| `CONV-008` | The five manifests and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
@@ -522,6 +530,21 @@ print('OK registration, %d hooks in both files' % len(a))"
 for f in skills/*/evals/trigger_evals.json; do
   python3 -c "import json,sys; d=json.load(open('$f')); assert isinstance(d,list) and d" || echo "FAIL $f"
 done; echo "OK evals"
+
+# Every line of a references/*.tsv list carries the header's field count, and a `checked` column
+# holds a date or nothing
+python3 -c "
+import csv, glob, re
+for f in glob.glob('skills/*/references/*.tsv'):
+    rows = list(csv.reader(open(f, newline=''), delimiter='\t', quoting=csv.QUOTE_NONE))
+    head, body = rows[0], rows[1:]
+    assert body, f + ': no records'
+    for n, r in enumerate(body, 2):
+        assert len(r) == len(head), '%s:%d: %d fields, header has %d' % (f, n, len(r), len(head))
+        if 'checked' in head:
+            v = r[head.index('checked')]
+            assert v == '' or re.fullmatch(r'\d{4}-\d{2}-\d{2}', v), '%s:%d: checked is %r' % (f, n, v)
+    print('OK %s, %d records' % (f, len(body)))"
 
 # Version agreement across the 6 version-bearing files
 grep -h '"version"' package.json .claude-plugin/plugin.json .cursor-plugin/plugin.json \

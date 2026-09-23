@@ -103,7 +103,7 @@ are the same in every layer it spans keeps its single `<tech>.md`.
 
 `<tech>` is the lowercase key of the technology: `typescript`, `python`, `go`, `react`, `sql`,
 `rest-api`. Use a key that is safe as a file name, so `csharp` and `cpp` rather than `c#` and `c++`.
-The kit's source list in `references/standard-sources.md` uses the same keys, so a run can match a
+The kit's source list in `references/standard-sources.tsv` uses the same keys, so a run can match a
 document to its sources without translating names.
 
 `index.md` carries, in this order:

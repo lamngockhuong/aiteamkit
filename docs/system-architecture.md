@@ -12,6 +12,7 @@ aiteamkit/
   .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
   skills/<name>/SKILL.md        21 skills, one folder each
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
+  skills/<name>/references/*.tsv a list one reference file governs, one record per line
   skills/<name>/evals/*.json    trigger cases for the description
   shared/*.md                   DRY layer shared by the skills that cite it
   hooks/                        profile reminder and override loader, Claude Code and Codex
@@ -66,6 +67,7 @@ This produces the size discipline in the kit:
 | `description` frontmatter | Always, for all 21 skills | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
+| `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
 | `shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
 | `.atk/profile.md` | Once per run, in the skills that need project facts | A page of pointers and commands, never prose |
 
