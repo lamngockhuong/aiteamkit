@@ -12,13 +12,14 @@ hold in any project.
 
 ## Where the rules live
 
-`docs/conventions.md` is the default recorded in `shared/artifact-paths.md`, not an address.
-Resolve the conventions document in this order and use the first that answers:
+`docs/standards/index.md` is the default recorded in `shared/artifact-paths.md`, and
+`docs/conventions.md` the one earlier runs wrote; neither is an address. Resolve the conventions
+document in this order and use the first that answers:
 
 1. The Docs section of `.atk/profile.md`, which records where this project keeps its conventions.
 2. The project's `CLAUDE.md` or `AGENTS.md`, where it names the location.
 3. A convention document or standards directory already under the docs root, found by reading.
-4. `docs/conventions.md`.
+4. `docs/standards/index.md`, then `docs/conventions.md`.
 
 When every step comes up empty, the project has recorded no conventions and the skill says so. It
 does not invent an address, and it does not treat the default as a document that exists.
@@ -53,7 +54,13 @@ the shape, not a rewrite of it.
 | `bucket` | `ENFORCED`, `REVIEWED`, `ASPIRATIONAL` | Defined in `atk:convention` step 3 |
 | `tool` | Command or config path, or `none` | What fails the build for an `ENFORCED` rule |
 | `severity` | `BLOCKING`, `SHOULD FIX`, `NIT` | The default severity `atk:review` gives a violation |
-| `source` | `path:line` or `agreed <date>` | Where the rule came from |
+| `source` | `path:line`, `agreed <date>`, or `<repo>/<path> fetched <date>` | Where the rule came from |
+
+A rule whose `source` reads `<repo>/<path> fetched <date>` came from a published standard outside
+the project, not from its code, and it is a proposal. It sits in a proposals section of the
+conventions document, never in the review checklist section, so `atk:review` never enforces it.
+It moves into the checklist only when a person approves it, and its `source` then becomes
+`agreed <date>`, the date of that approval.
 
 ## What each skill does with it
 

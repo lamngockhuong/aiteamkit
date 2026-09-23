@@ -197,20 +197,28 @@ nói rõ ra, đó chính là thứ ngăn cú merge conflict mà không ai lườ
 
 **Sinh ra.** Quy ước của team được rút ra từ chính code và lịch sử git của team, mỗi quy tắc được
 phân loại `ENFORCED` (công cụ chặn), `REVIEWED` (người kiểm trong review) hay `ASPIRATIONAL` (không
-ai kiểm), kèm công cụ có thể tự động hóa những quy tắc đang phải kiểm bằng tay. Một team đã có sẵn
-bộ tài liệu chuẩn thì phần phân loại đó được viết vào chính bộ tài liệu ấy, theo đúng hình dạng team
-đang dùng: `docs/conventions.md` là giá trị mặc định của kit, không phải địa chỉ mà mọi dự án phải
-chuyển sang. Nếu dự án chưa có `CONTRIBUTING.md`, template pull request hay `CODEOWNERS`, skill đề
+ai kiểm), kèm công cụ có thể tự động hóa những quy tắc đang phải kiểm bằng tay. Trước đó skill nêu
+ra các ngôn ngữ và công nghệ repo dùng, mỗi cái kèm file làm bằng chứng, rồi xếp quy tắc theo từng
+cái. Dự án chưa ghi gì thì nhận `docs/standards/`: mỗi công nghệ một tài liệu, cộng một `index.md`
+mang review checklist. Một team đã có sẵn bộ tài liệu chuẩn thì phần phân loại đó được viết vào
+chính bộ tài liệu ấy, theo đúng hình dạng team đang dùng: `docs/standards/` và `docs/conventions.md`
+là giá trị mặc định của kit, không phải địa chỉ mà mọi dự án phải chuyển sang. Nếu dự án chưa có `CONTRIBUTING.md`, template pull request hay `CODEOWNERS`, skill đề
 nghị soạn và chỉ ghi những file bạn chọn; cờ `--scaffold` đưa ra đề nghị đó mà không chạy lại cả
 lượt rút quy ước. File bạn đã có thì để yên, trừ khi chạy `--sync`: lúc đó skill chỉ ra chỗ
-checklist hay danh sách người sở hữu đã tụt lại và đề nghị đúng phần thay đổi đó.
+checklist hay danh sách người sở hữu đã tụt lại và đề nghị đúng phần thay đổi đó. Cờ `--audit` còn
+báo về các nguồn đứng sau đề xuất: nguồn nào đã mất, nguồn nào đã đổi kể từ lần cuối có người kiểm,
+và đề xuất nào chưa ai duyệt; `--sync` đưa ra phần thay đổi mà một nguồn đã đổi sẽ gây ra, còn nguồn
+đã mất thì thành câu hỏi mở.
 
 **Dùng khi.** Chưa có quy ước viết ra, quy ước đã viết không còn khớp với code, review cứ lặp đi
 lặp lại cùng một comment, hoặc repo chưa có `CONTRIBUTING.md`, template pull request và
 `CODEOWNERS`.
 
-**Không dùng khi.** Bạn muốn bê một style guide từ nơi khác về. Skill này ghi lại thứ team đang làm,
-không phải thứ một tài liệu bên ngoài khuyến nghị.
+**Không dùng khi.** Bạn muốn một style guide được áp thẳng vào dự án mà không ai duyệt. Với
+`--suggest`, skill đề xuất quy tắc từ một danh sách các bộ chuẩn đã công bố cho stack nó nhận ra,
+kèm link tới từng nguồn và không bao giờ chép văn bản của nguồn, và mọi đề xuất nằm chờ trong mục
+đề xuất tới khi Tech Lead chấp nhận. Thứ code cho thấy và thứ một tài liệu bên ngoài khuyến nghị
+được giữ tách riêng.
 
 **Thói quen tạo ra khác biệt.** Nhóm `ASPIRATIONAL`. Một quy tắc không ai kiểm được gọi đúng tên như
 vậy, thay vì để nó trông như chính sách. Các quy tắc `REVIEWED` được viết theo định dạng bản ghi

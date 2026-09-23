@@ -89,10 +89,10 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
   convention gap out of a review report and back to `atk:convention`, and the baseline items that
   hold in any project. It exists so a convention is written once and checked in the same words,
   instead of being restated in both skills and drifting. The resolution is here for the same reason:
-  `docs/conventions.md` is a default and not an address, so a reader that went straight to it would
-  report a team with a directory of standards documents as having recorded nothing.
-  `atk:implement` reads the file for that resolution and for the baseline items, which it falls back
-  to when a project really has recorded no conventions of its own.
+  `docs/standards/index.md` and `docs/conventions.md` are defaults and not addresses, so a reader
+  that went straight to one would report a team with a directory of standards documents as having
+  recorded nothing. `atk:implement` reads the file for that resolution and for the baseline items,
+  which it falls back to when a project really has recorded no conventions of its own.
 - `shared/finalize-steps.md`: the closing sequence for a finished piece of work, the consent
   line that every action past the commit has to cross, and the order a change spanning several
   repositories is carried in. `atk:git` is what carries it out; this file

@@ -112,8 +112,8 @@ Both spellings appear in each shared file's header so an agent can resolve the p
 
 The first three are cited by every skill. The rule record format in `review-checklist.md` is a
 contract between exactly two: `convention` writes the rule rows and `review` cites their IDs. All
-three readers need the resolution that opens the same file, because `docs/conventions.md` is a
-default and not an address: a team that already keeps a standards directory keeps its rules there,
+three readers need the resolution that opens the same file, because `docs/standards/index.md` and
+`docs/conventions.md` are defaults and not addresses: a team that already keeps a standards directory keeps its rules there,
 and a skill that reads the default instead would report a project with thirty standards documents as
 having recorded no conventions. `implement` reads the file for that and for the baseline items,
 which it falls back to when the project really has recorded none. `finalize-steps.md` is cited by the three skills

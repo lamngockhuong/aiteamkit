@@ -25,5 +25,12 @@
   { "query": "CODEOWNERSを作成して", "should_trigger": true },
   { "query": "/atk:convention --scaffold", "should_trigger": true },
   { "query": "open a pull request for this branch", "should_trigger": false },
-  { "query": "fill in the pull request template and open the PR", "should_trigger": false }
+  { "query": "fill in the pull request template and open the PR", "should_trigger": false },
+  { "query": "generate a coding standard for the TypeScript in this project", "should_trigger": true },
+  { "query": "viết standard cho từng ngôn ngữ trong repo này", "should_trigger": true },
+  { "query": "このリポジトリの言語ごとの規約を作って", "should_trigger": true },
+  { "query": "chọn tech stack cho dự án mới", "should_trigger": false },
+  { "query": "suggest rules from a published style guide for the languages in this repo", "should_trigger": true },
+  { "query": "đề xuất quy tắc từ các bộ chuẩn có sẵn cho stack của dự án", "should_trigger": true },
+  { "query": "公開されているスタイルガイドからこのプロジェクトの規約を提案して", "should_trigger": true }
 ]

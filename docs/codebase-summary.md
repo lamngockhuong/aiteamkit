@@ -107,6 +107,8 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/catchup/references/brief-template.md` | One skeleton for both modes, with the epic and pull-request differences marked per section |
 | `skills/catchup/references/understanding-check.md` | The fixed questions, the feature type table, and the two rules deciding whether the check is worth anything |
 | `skills/convention/references/collaboration-files.md` | What `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` each carry, where each host keeps them, and why an owner never comes from git history |
+| `skills/convention/references/stack-standards.md` | How a language or technology is detected from what is on disk and in which order of trust, the threshold below which it is not the stack, how derived rules are grouped by technology, and the shape of the `docs/standards/` set |
+| `skills/convention/references/standard-sources.md` | The list of published standards per technology in seven tab-separated fields, what a `checked` date proves, what a run may draw from a line and what it may never copy, where a team adds its own sources, and the sparse fetch with its cache location and failure rule |
 | `skills/plan/references/step-ordering.md` | The two cuts, phase and step, and the rule for each |
 | `skills/plan/references/plan-template.md` | The plan index and the phase file |
 | `skills/plan/references/plan-self-review.md` | The six claims a plan makes, how to reopen each against the repository, and what to do with each result |
@@ -149,7 +151,7 @@ all three trigger languages. The kit ships no runner; see `docs/project-roadmap.
 | `skills/design-doc/evals/trigger_evals.json` | Choosing an approach, against `intake`, `spec`, and `plan` |
 | `skills/spec/evals/trigger_evals.json` | Reference documents against `design-doc`, `intake`, and code generation |
 | `skills/breakdown/evals/trigger_evals.json` | Dividing work between people, against `plan` and `estimate` |
-| `skills/convention/evals/trigger_evals.json` | Recording the team's rules, against `review`, `init`, and `tailor` |
+| `skills/convention/evals/trigger_evals.json` | Recording the team's rules and the standards per technology, against `review`, `init`, `tailor`, and `design-doc` |
 | `skills/plan/evals/trigger_evals.json` | Planning one person's work against `breakdown` and `design-doc` |
 | `skills/implement/evals/trigger_evals.json` | Building against planning and reviewing |
 | `skills/fix/evals/trigger_evals.json` | A defect against `incident` and ordinary implementation |
