@@ -100,9 +100,11 @@ pre-1.0 by dropping the two `bump-*-pre-major` flags in `release-please-config.j
   vocabulary map plus manual paste enough?
 - Is a further skill for daily and weekly reporting worth it, or does `atk:retro --report` already
   cover the need at a lower cadence?
-- Both hooks run only on Claude Code. Codex and Cursor can package hooks too; is either worth
-  maintaining three times, given that the reminder is a convenience and the override loader only
-  saves a file read the skill would otherwise do itself?
+- The session-start hook now runs on Claude Code and on Codex, which reach the same script through
+  two registration files. The override loader is registered on Codex too, and has never been observed
+  matching a skill invocation there. Cursor can package hooks too; is a third registration worth
+  maintaining, given that the reminder is a convenience and the override loader only saves a file
+  read the skill would otherwise do itself?
 - `shared/project-profile.md` puts `review`, `qa`, `release` and `convention` in the Required-soft
   group, meant to continue without a profile and say so in the artifact. `plan` and `convention`
   implement it; `review`, `qa` and `release` do not cite the profile at all, so for them nothing

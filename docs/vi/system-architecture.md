@@ -14,7 +14,7 @@ aiteamkit/
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
   shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
-  hooks/                        lời nhắc profile và bộ nạp file ghi đè, chỉ Claude Code
+  hooks/                        lời nhắc profile và bộ nạp file ghi đè, Claude Code và Codex
   assets/*.svg                  icon và logo cho trang marketplace
   docs/, docs/vi/               tài liệu dự án song ngữ
   .atk/                         hồ sơ và file ghi đè của chính kit, để kit chạy skill lên chính mình
@@ -168,10 +168,10 @@ có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại l
 
 ## Hook lúc mở phiên
 
-`hooks/hooks.json` đăng ký một hook `SessionStart` chạy `hooks/check-profile.mjs`. Script trả lời
-đúng một câu hỏi, "dự án này đã có profile chưa", hiểu chữ dự án theo đúng cách
-`shared/project-profile.md` hiểu, tức là profile gần nhất ở chính thư mục phiên mở lên hoặc ở trên
-nó, và nó nhắc chứ không chặn.
+`hooks/hooks.json` đăng ký một hook `SessionStart` chạy `hooks/check-profile.mjs`, còn
+`hooks/codex-hooks.json` đăng ký đúng script đó trên Codex. Script trả lời đúng một câu hỏi,
+"dự án này đã có profile chưa", hiểu chữ dự án theo đúng cách `shared/project-profile.md` hiểu, tức
+là profile gần nhất ở chính thư mục phiên mở lên hoặc ở trên nó, và nó nhắc chứ không chặn.
 
 Ranh giới đó là toàn bộ vấn đề. Hook mà chặn thì luật nằm ở hai chỗ, mà luật này vốn không đồng nhất:
 mười skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn
@@ -189,9 +189,11 @@ không, và không bao giờ ghi vào repo của người dùng hay vào một t
 
 Mục này là nơi giữ lý do. `CLAUDE.md` và phần chú thích đầu script trỏ về đây chứ không chép lại.
 
-Hook được đăng ký ở **dạng exec**: `"command": "node"` kèm mảng `args`. Claude Code ghi rõ dạng exec
-tìm file thực thi trên `PATH` rồi gọi thẳng, tự thay `${CLAUDE_PLUGIN_ROOT}`, và không có shell nào
-tham gia trên bất kỳ nền nào.
+Trong `hooks/hooks.json`, tức bản đăng ký mà Claude Code đọc, hook nằm ở **dạng exec**:
+`"command": "node"` kèm mảng `args`. Claude Code ghi rõ dạng exec tìm file thực thi trên `PATH` rồi
+gọi thẳng, tự thay `${CLAUDE_PLUGIN_ROOT}`, và không có shell nào tham gia trên bất kỳ nền nào. Codex
+cần hình dạng ngược lại, vì lý do mục kế tiếp nêu dưới tiêu đề "Vì sao Codex có file đăng ký riêng";
+script thì vẫn là một.
 
 Điều đó quan trọng vì dạng shell không cư xử giống nhau ở mọi nơi. Claude Code chạy hook dạng shell
 bằng bash, trừ trên Windows không có Git Bash thì lùi về PowerShell. Một script shell POSIX vì thế sẽ
@@ -200,12 +202,34 @@ không khởi động được ở đó, mà hook không khởi động được
 kiện theo hệ điều hành, nên không thể đăng ký thêm một bản PowerShell mà nó không cùng lúc chạy trên
 Linux và macOS. Một trình thông dịch chạy được mọi nơi là thứ duy nhất khiến ba nền cư xử như nhau.
 
-Một giới hạn, được chấp nhận:
+### Vì sao Codex có file đăng ký riêng
 
-- **Chỉ Claude Code.** Codex và Cursor cũng đóng gói hook được, nhưng mỗi bên một bộ tên sự kiện và
-  một hợp đồng đầu ra riêng, và không bên nào thử được ở đây. Lời nhắc chỉ là tiện nghi; cổng thật
-  nằm trong skill và chạy y hệt nhau trên cả ba harness. Hai lớp vỏ còn lại chờ tới khi có người
-  kiểm được chúng trên một harness đang chạy.
+Mặc định Codex vẫn đọc `hooks/hooks.json` trong thư mục gốc của plugin, nên mục dạng exec ở trên
+không hề bị bỏ qua ở đó: nó được chạy với đường dẫn chưa được thay, và mọi phiên Codex đều mở ra
+bằng một hook khởi động hỏng. Hai harness thay gốc plugin ở hai thời điểm khác nhau. Claude Code tự
+thay `${CLAUDE_PLUGIN_ROOT}` trong `args`; Codex thay `${PLUGIN_ROOT}` và `${CLAUDE_PLUGIN_ROOT}`
+trong chuỗi `command` và không thay gì trong `args`, nên Node nhận đúng chuỗi
+`${CLAUDE_PLUGIN_ROOT}/hooks/check-profile.mjs`, hiểu nó là đường dẫn tương đối so với thư mục làm
+việc, rồi thoát với `MODULE_NOT_FOUND`.
+
+`hooks/codex-hooks.json` giữ đúng hai hook đó với đường dẫn nằm trong `command`, và khóa `hooks`
+trong `.codex-plugin/plugin.json` trỏ Codex tới file này, cũng chính là thứ khiến Codex thôi đọc file
+của Claude Code. Phần script không đổi: vẫn hai file Node đó, vẫn đọc cùng một bộ biến môi trường, và
+không file đăng ký nào mang luật. Đo trên codex-cli 0.155.1: repo chưa có profile thì nhận được lời
+nhắc và hook chạy xong, repo đã có thì im lặng, và dấu "đã nhắc" ghi vào thư mục dữ liệu plugin mà
+Codex cấp qua `CLAUDE_PLUGIN_DATA`. Codex không đặt `CLAUDE_PROJECT_DIR`, và điều đó không mất gì, vì
+cả hai script vốn lùi về thư mục làm việc còn Codex chạy hook từ gốc workspace.
+
+Hai giới hạn, được chấp nhận:
+
+- **Chưa có lớp vỏ cho Cursor.** Cursor cũng đóng gói hook được, nhưng hợp đồng sự kiện của nó không
+  thử được ở đây, và Cursor không đọc file nào trong hai file trên. Lời nhắc chỉ là tiện nghi; cổng
+  thật nằm trong skill và chạy y hệt nhau trên cả ba harness. Lớp vỏ đó chờ tới khi có người kiểm
+  được nó trên một harness đang chạy.
+- **Mục `PreToolUse` cho Codex mới là đăng ký, chưa quan sát được.** Chưa xác nhận được trên một
+  phiên đang chạy rằng Codex gọi tên công cụ nào khi gọi skill, nên bộ nạp file ghi đè có thể không
+  bao giờ khớp ở đó. Đúng đó là mức lùi mà `load-overrides.mjs` được dựng cho: mỗi skill tự mở file
+  ghi đè của mình khi không có gì đặt sẵn trước nó.
 
 ### Vì sao một hook chỉ được làm đỡ việc, không bao giờ được làm thay
 
@@ -213,8 +237,10 @@ Kit chạy hai hook và sẽ nhận hook thứ ba với đúng một điều ki�
 
 `hooks/load-overrides.mjs` là trường hợp làm điều kiện ấy thành cụ thể. Nó chạy ở `PreToolUse` với
 matcher `Skill` và đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó. Mỗi skill cũng gọi
-tên chính file ấy ở đầu mục `## Workflow` của mình và tự mở khi không có gì đặt sẵn, nên Cursor và
-Codex, vốn không có sự kiện tương ứng, cho ra cùng một kết quả, chỉ chậm hơn một lượt đọc file.
+tên chính file ấy ở đầu mục `## Workflow` của mình và tự mở khi không có gì đặt sẵn, nên harness nào
+hook không với tới được cũng cho ra cùng một kết quả, chỉ chậm hơn một lượt đọc file. Cursor không có
+sự kiện tương ứng; Codex có mục này trong `hooks/codex-hooks.json` nhưng chưa ai thấy nó khớp một lần
+gọi skill nào, đúng như phần giới hạn đã chấp nhận ở trên ghi lại.
 
 Hướng còn lại đã có sẵn và đã bị loại. Đặt trọn cơ chế ghi đè vào hook thì không phải sửa `SKILL.md`
 nào, đổi lại hai trong ba harness không có gì cả. `shared/project-profile.md` đã từ chối đúng nước
