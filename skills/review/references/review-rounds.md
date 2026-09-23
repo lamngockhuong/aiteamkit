@@ -12,7 +12,8 @@ number of passes turning a review into an approval.
 
 One pass over a diff finds what that pass happens to look at. Run it again and it finds something
 else, so the union of several passes catches materially more than any one of them. That observation
-is what this file is built on, and nothing below weakens it.
+still holds, and `--parallel` is how a review buys it. What the runs of this kit showed is its price,
+which is why the default does not pay it; the section on copies below gives the numbers.
 
 What copies of one instruction cannot do is cover ground the instruction never pointed at. Give five
 agents the same "read the diff and find every kind of defect" and they read the same part of it and
@@ -22,9 +23,9 @@ second failure is drift: an agent told to hold eight concerns at once stops hold
 the twentieth file.
 
 So the work is cut twice. A **round** is one review job, and the rounds together cover what one
-general instruction leaves out. **Copies** are N identical runs of that one job inside a round, and
-they are what the union of passes still buys. Merging and vote counting happen inside a round, never
-across them.
+general instruction leaves out, and they run on every review. **Copies** are N identical runs of
+that one job inside a round, run only when a person asks for them, and they are what the union of
+passes still buys. Merging and vote counting happen inside a round, never across them.
 
 ## The nine rounds
 
@@ -91,10 +92,21 @@ trips over it, and no round hunts for.
 
 ## How many copies a round runs
 
-One sentence: **a round that has to go looking runs several copies; a round that only has to compare
-against a list runs once.** Copies buy independence, and independence is only worth paying for where
-the agent does not know in advance how many things there are to find. Three copies of a comparison
-return the same answer three times.
+By default, one. Every round runs exactly once, and copies are what `--parallel <N>` asks for.
+
+Copies still buy what they always did: a second pass over the same question finds some of what the
+first missed. What the runs of this kit showed is how little of that they buy on the rounds that
+start from the diff, and what it costs. On one 1,864-line change a single finding came back from 11
+of 13 agents, and the five most-reported findings from 6 or more. On a 568-line change spread over
+22 files, the earlier table spent 15 agents. The copies were mostly paying for the same finding
+twice, and the bill landed on every review, including changes that only moved prose between files.
+So the default takes its coverage from the round list, which is where coverage lives, and leaves the
+copies to a person who asks for a deeper pass.
+
+When copies are asked for, the rule on which rounds get them still holds: **a round that has to go
+looking runs several copies; a round that only has to compare against a list runs once.** Copies buy
+independence, and independence is only worth paying for where the agent does not know in advance
+how many things there are to find. Three copies of a comparison return the same answer three times.
 
 | Group | Rounds | What the agent is doing |
 |---|---|---|
@@ -102,21 +114,46 @@ return the same answer three times.
 | Half and half | `removed`, `callers`, `exposure` | A bounded surface to open, then reading it for defects |
 | Comparing | `criteria`, `contract`, `rules`, `tests` | Checking the diff against a list that already exists |
 
-The size of the change no longer picks the rounds. It only turns N up and down, and what measures
-that size is **changed lines**, both sides of the diff counted:
+### The band: how the rounds are spread over agents
 
-| Changed lines | Searching | Half and half | Comparing | Round runs |
-|---|---|---|---|---|
-| 200 or fewer | 1 | 1 | 1 | 9, all in the calling agent, nothing spawned |
-| 201 to 1000 | 2 | 1 | 1 | 11 |
-| more than 1000 | 3 | 2 | 1 | 16 |
+The size of the change decides one thing: whether all nine rounds run in one reviewer agent or each
+in an agent of its own. It picks neither the rounds nor the copies. What measures that size is
+**changed lines**, both sides of the diff counted:
+
+| Band | Changed lines | Where the rounds run | Agents |
+|---|---|---|---|
+| 1 | 500 or fewer | All nine rounds and the sweep, in one reviewer agent spawned for the whole review | 1 |
+| 2 | more than 500 | One agent per searching and half-and-half round, one agent holding the four comparing rounds, one for the sweep | 7 at most |
+
+**Band 1 hands the whole review to one agent.** The session that asked for the review is usually
+the one that wrote the change, and it carries every reason the author had. A reviewer holding those
+reasons reads the diff the way the author meant it, which is the one reading `shared/team-roles.md`
+rule 2 exists to prevent. It is also the most expensive context in the run: every tool call re-sends
+the whole session, and a review makes dozens of them. A fresh agent starts with neither.
+
+It is given the target, the paths to the requirement, plan or design, the conventions document, and
+the report already at the output path when there is one, and nothing from the conversation. It runs
+the skill from step 1 to step 6 as the calling agent of this file: it finds the intent from those
+paths, runs the rounds in order, takes the sweep and the verdicts itself, and writes the report. It
+returns the session summary of the skill's `## Output` and the report path, and the session that
+spawned it relays that and nothing more. Under `--comment` the reviewer agent posts nothing: the
+session shows the list from the report and posts on consent, per `## Ticket` of the skill. A harness
+whose spawned agents cannot spawn agents of their own is the reason this stops at band 1: above it
+the session has to dispatch the rounds itself.
 
 Lines rather than files, because lines are what an agent has to read and files are only where they
-sit. Seven files holding 112 lines of prose and seven files holding four thousand lines of code are
-one number apart under a file count and two bands apart under this one, and it is the second answer
-that is right. Changed files keep one job: **more than twenty of them raises the band by one**,
-never past the third, because a change spread that wide costs attention even where each file gained
-a line.
+sit. The number of files changes nothing. In this repository a change runs anywhere from 6 to 71
+lines per file, so a file count punishes the change that edits one paragraph in each of twenty
+documents and their mirrors, which is the cheapest kind of change to read. An earlier rule raised
+the band past twenty files; on forty measured changes it sent eight of them to the most expensive
+band that their line count alone would not have put there, and it is gone.
+
+Five hundred is where that history splits. Fixes and documentation changes sat at 450 lines or
+fewer, and what lay above 500 was almost all new skills and cross-cutting features, the changes
+worth a clean context per round. On those forty changes the band spawns 124 agents, 26 of them
+single reviewers, where the earlier table spawned 264. The number is a judgement, not a measurement
+of where one agent starts to drop concerns, which is why the report carries the band and the count
+behind it: the threshold moves on evidence, not on a feeling that a review was thin.
 
 **A generated file counts toward neither number.** A file the repository regenerates is not read line
 by line by anybody; it is an artifact of its source, checked by reading that source and the command
@@ -139,7 +176,7 @@ its own is enough only for a file the diff does not touch.
 
 The report carries both numbers and the files that came out between them, per
 `references/report-format.md`, so a reader who disagrees with an exclusion can see it rather than
-re-derive it. The >20-file rule reads the same net list, so the two counts cannot disagree.
+re-derive it.
 
 **Out of the count is not out of the review.** The exclusion takes a file out of two numbers and
 out of nothing else. Every round still opens it when its own job needs it, and three do: `contract`
@@ -153,39 +190,56 @@ same reason: a secret committed inside a generated file is committed.
 What the exclusion says is that reading a generated file line by line is not work. It never says a
 contract may move unwatched.
 
-The first row is the existing rule from the skill's step 3, re-keyed rather than replaced: on a
-small change the synthesis costs more than the second opinion is worth, and the calling agent has
-read the whole diff already. The last row costs 16 runs where a flat N of 3 would cost 27, and gives
-up nothing, because everything cut was a copy of a job that produces the same answer each time.
+A run says which band it was in and what put it there, so a reader who thinks the review was too
+thin, or too expensive, can see the number that decided it.
 
-A run that spawns says which band it was in and what put it there, so a reader who thinks the review
-was too thin, or too expensive, can see the number that decided it.
+### `--parallel <N>`: the deeper pass
 
-Then cap it by the machine, before spawning anything. Read the available memory (`free -m` on Linux,
+The flag works at any size. A person who types it on a 150-line change has asked for depth, and the
+band does not overrule them. Under the flag every round runs in an agent of its own, the four
+comparing rounds still share one, and the copies are:
+
+| Group | Copies |
+|---|---|
+| Searching | N |
+| Half and half | N - 1, never fewer than 1 |
+| Comparing | 1 |
+
+| `--parallel` | Round runs | Agents, sweep included |
+|---|---|---|
+| 1 | 9 | 7 |
+| 2 | 11 | 9 |
+| 3 | 16 | 14 |
+
+These are the most a run asks for; a skipped round takes its agents with it. `--parallel 1` is not a
+no-op: it spawns the rounds with no copies, for a person who wants a clean context per round on a
+change the band would have kept in one agent. The flag overrides the band, never the cap below: an N
+above what the machine allows drops to the measured value, and the review says so in one line.
+
+### The machine's cap, and the cost
+
+Cap the run by the machine before spawning anything. Read the available memory (`free -m` on Linux,
 `vm_stat` with `sysctl hw.memsize` on macOS, `systeminfo` on Windows) and allow roughly 1.5 GB per
 concurrent agent. The cap counts every agent in flight at once, which is not one round's worth: the
-dispatch rule below keeps a second round running while the first is synthesized, so at band 3 it is
-two rounds of up to three copies, about 9 GB. The cap bites on an ordinary laptop, and it is meant
-to: it is the number that decides what the run may do, and the table above is only what the run
-would ask for. Where the memory cannot be read, hold the searching rounds at 2 and the half-and-half
+dispatch rule below keeps a second round running while the first is synthesized. Without copies that
+is two agents, about 3 GB, and the cap rarely bites. Under `--parallel 3` it is two rounds of up to
+three copies, about 9 GB, and it bites on an ordinary laptop, as it is meant to: it is the number
+that decides what the run may do, and the tables above are only what the run would ask for. Where
+the memory cannot be read under the flag, hold the searching rounds at 2 and the half-and-half
 rounds at 1.
 
-**Say what it will cost before the first agent is spawned.** The round list, the copy table and the
-cap are all known by this point, so the run states the three numbers it has derived: how many round
-runs, how many agents, and the concurrency the machine allows. `shared/host-capabilities.md` holds
-why, and the rule is not local to this file: the total of a run is stated rather than bounded,
-because a person who can see it can stop it, lower it with `--parallel`, or pay it. A review that
-announces its cost after a rate limit has stopped it has told the person nothing they could use.
+**Say what it will cost before the first agent is spawned.** The round list, the band, the copies
+and the cap are all known by this point, so the run states the three numbers it has derived: how
+many round runs, how many agents, and the concurrency the machine allows.
+`shared/host-capabilities.md` holds why, and the rule is not local to this file: the total of a run
+is stated rather than bounded, because a person who can see it can stop it or pay it. The run does
+not wait for an answer; the line is there so that stopping it is possible. A review that announces
+its cost after a rate limit has stopped it has told the person nothing they could use.
 
-A run that spawns nothing, the first band and any harness with no parallel agents, says that instead:
-nine rounds in this agent and no cost to weigh. The sentence is not skipped there, because a reader
-who finds no cost stated cannot tell a run that owed none from a run that owed one and kept quiet.
-
-`--parallel <N>` overrides the searching column, and the other two columns follow it downward but
-never upward. It overrides the table, never the cap: an N above what the machine allows drops to the
-measured value, and the review says so in one line. It no longer forces a total, because under this
-model the total is a consequence of the round list rather than a number anyone picks. `--parallel 1`
-still forces one run per round, which is what it always did.
+Band 1 without `--parallel` states it in one line: one reviewer agent, nine rounds, nothing in
+parallel. A harness with no parallel agents says instead that it spawned nothing and ran the nine
+rounds in the session. Neither sentence is skipped, because a reader who finds no cost stated cannot
+tell a run that owed none from a run that owed one and kept quiet.
 
 ## When an agent does not come back
 
@@ -223,17 +277,17 @@ Only comparing rounds, and only when every round being combined is a comparison.
 searching rounds: doing that recreates the agent that forgets its earlier concerns, which is the
 whole reason the rounds exist.
 
-The threshold is the one the copy table already uses, so the file carries one set of bands and not
-two. In the second band one agent holds all four comparing rounds. In the third, split them in two.
-In the first nothing is spawned at all, so there is nothing to combine.
+Wherever the rounds are spawned, one agent holds all four comparing rounds; where nothing is
+spawned there is nothing to combine. They are not split further under `--parallel`, because they
+take no copies and four comparisons fit in one context.
 
-Combining changes the number of agents, never the number of rounds: in the second band 11 round runs
-land in 8 agents, and in the third 16 round runs land in 14. The closing sweep adds one more agent
-of its own, so a run comes to 9 and 15. Those two numbers are what a report can be checked against,
-which is the reason the band is fixed rather than left to judgement. Each
-round still reports under its own name, and a combined agent returns its rounds separately rather
-than as one pile. For the dispatch rule below, a combined agent counts as one round, because it is
-issued once and returns once.
+Combining changes the number of agents, never the number of rounds: by default above the band 9
+round runs land in 6 agents, under `--parallel 2` 11 land in 8, and under `--parallel 3` 16 land in
+13. The closing sweep adds one more agent of its own, so a run comes to 7, 9 and 14. Those numbers
+are what a report can be checked against, which is the reason they are fixed rather than left to
+judgement. Each round still reports under its own name, and a combined agent returns its rounds
+separately rather than as one pile. For the dispatch rule below, a combined agent counts as one
+round, because it is issued once and returns once.
 
 ## How the calling agent drives them
 
@@ -267,10 +321,10 @@ and ranking by it would put the obvious ahead of the absent, which is the one th
 exists to catch. Severity comes from the failure a finding causes, never from how many agents
 noticed it.
 
-The rule binds what is handed to a spawned round. Where nothing is spawned, in the first band and
-on a harness with no parallel agents, one context necessarily holds everything: run the rounds
-in order and keep only the deduplicated list between them, which is the next rule and is as close
-to the blindfold as one agent can get.
+The rule binds what is handed to a spawned round. Where one context runs every round, the band-1
+reviewer agent without the flag and a harness with no parallel agents, it necessarily holds
+everything: run the rounds in order and keep only the deduplicated list between them, which is the
+next rule and is as close to the blindfold as one agent can get.
 
 **What the calling agent keeps between rounds** is the deduplicated findings that have been through
 the verdicts in step 5 of the skill, and nothing else. Raw output is dropped as each round closes.
@@ -357,8 +411,9 @@ sweep is the one job that asks for a fresh reading of that diff against that lis
 and on a large change the sweep is what loses. An agent that starts with the list and nothing else
 does the same job with none of that behind it.
 
-In the first band nothing is spawned at all, so the sweep runs in the calling agent like everything
-else.
+In band 1 without `--parallel` the reviewer agent runs the sweep itself, like everything else. It
+started fresh, so the competition above is smaller there, and a spawned agent cannot always spawn
+another.
 
 It is not a round. It ran last, with every round's findings in front of it, so its candidates carry
 neither `[k/N]` nor a round name and are labelled as coming from the sweep. Tagging one `[1/N]` would
@@ -374,16 +429,19 @@ the list cannot look for what the list is missing.
 
 ## What the report adds
 
-Four things, and no more: the band the change fell in and the counts that put it there, gross,
+Five things, and no more: the band the change fell in and the counts that put it there, gross,
 net of what the repository regenerates, and naming the files that came out between them; the cost
-stated before anything was spawned, and any deviation the cap forced on it; which
-rounds ran, which were skipped and why, which came back empty, and which died; and a `[k/N]` tag on each
-finding a replicated round raised, every tag kept where more than one round raised it, with a round
-name on the rest and the sweep's own findings labelled as coming from the sweep. A reader who knows three of three copies raised something reads
-the list differently from one who does not, and a reader who thinks the review was thin can see the
-number that decided how wide it went.
+stated before anything was spawned, and any deviation the cap forced on it; whether the calling
+agent, which takes the verdicts and the ranking, was a fresh reviewer agent or the session that
+wrote the change, as it is above band 1, under `--parallel`, and on a harness that cannot spawn;
+which rounds ran, which were skipped and why, which came back empty, and which died; and a `[k/N]`
+tag on each finding a replicated round raised, every tag kept where more than one round raised it,
+with a round name on the rest and the sweep's own findings labelled as coming from the sweep. A
+reader who knows three of three copies raised something reads the list differently from one who
+does not, and a reader who thinks the review was thin can see the number that decided how wide it
+went.
 
-Four things is what the rounds owe the report. The report holds more than three sections, and
+Five things is what the rounds owe the report. The report holds more than three sections, and
 `references/report-format.md` is where the rest of them and their order live.
 
 The review is still one model's work, and the report never presents a count as agreement between
@@ -392,10 +450,12 @@ this is what that person reads before they start.
 
 ## When the host cannot spawn agents
 
-The nine rounds run one after another in the calling agent, and the report says the review had no
-copies because the harness offers no parallel agents. That is the degradation rule in
+The nine rounds run one after another in the session that asked for the review, and the report says
+so: that the reviewer shared the author's context, above the band that the rounds shared one context
+too, and under `--parallel` that the copies asked for were not run. That is the degradation rule in
 `shared/host-capabilities.md`.
 
 This is where the round model costs less than the one it replaced. Losing the ability to spawn loses
-the copies and nothing else: the coverage lives in the round list, and the round list runs in full on
-any harness.
+the reviewer's distance from the author, the separate context each round gets above the band, and
+any copies asked for, and nothing else: the coverage lives in the round list, and the round list
+runs in full on any harness.

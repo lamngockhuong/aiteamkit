@@ -20,9 +20,9 @@ because mixing them is what makes reviews feel arbitrary.
 ## Scope
 
 Handles: reading the diff in the context of the requirement, design, and conventions, deciding which
-review rounds the change is worth and how many copies each of them runs, finding correctness and
-regression risks, checking test coverage of the changed behavior, and writing review comments that a
-person can act on.
+review rounds the change is worth and whether they run in agents of their own, finding correctness
+and regression risks, checking test coverage of the changed behavior, and writing review comments
+that a person can act on.
 
 Does NOT handle: approving or merging, which is a human act; rewriting the code, which the author
 does with `atk:implement` or `atk:fix`; deciding whether the requirement itself is right
@@ -32,7 +32,9 @@ the repository it assumes rather than against a diff.
 ## Roles
 
 The reviewer is never the author. Tech Lead holds the final call on a disputed blocking finding. QA
-reviews test adequacy. See `shared/team-roles.md`.
+reviews test adequacy. See `shared/team-roles.md`. In band 1 without `--parallel`, the session that
+wrote a change hands the review to a fresh agent, per step 3; any other run where the author's
+session is the calling agent says so in the report.
 
 ## Invocation
 
@@ -43,7 +45,7 @@ reviews test adequacy. See `shared/team-roles.md`.
 /atk:review --against <design-path>       # Review against a specific design document
 /atk:review --comment                     # Post findings as inline PR comments
 /atk:review --strict                      # Include low-severity and stylistic findings
-/atk:review --parallel 5                  # Force how many copies the searching rounds run
+/atk:review --parallel 3                  # Deeper pass: a round that searches runs 3 copies
 /atk:review --out <path>                  # Write the report somewhere other than the default
 ```
 
@@ -54,7 +56,9 @@ reviews test adequacy. See `shared/team-roles.md`.
   -> [5. Verify] -> [6. Rank and write]
 ```
 
-Before step 1, read `.atk/overrides/review.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Before step 1, read `.atk/overrides/review.md` when it exists, per rule 7 of `shared/team-roles.md`,
+and count the changed lines per step 3. In band 1 without `--parallel`, spawn the reviewer agent at
+once with the target and the paths: it runs steps 1 to 6 and spawns no reviewer of its own.
 
 ### 1. Establish intent
 
@@ -80,15 +84,15 @@ lines, no signature change, no behavior change. That is different from a round t
 nothing, and the report keeps the two apart. The list comes from step 4 below and is not a second
 list alongside it.
 
-**How many copies each runs.** A round that has to go looking runs several; a round that only
-compares the diff against a list that already exists runs once, because copies of a comparison
-return the same answer. The size of the change turns that number up and down, not the round list,
-and it is measured in changed lines rather than in changed files: 200 lines or fewer run all nine
-rounds in this agent and spawn nothing. A file the repository regenerates counts toward neither the
-lines nor the files, on the evidence `references/review-rounds.md` requires, and is still read by
-the rounds that have a reason to open it. Say which band the run is in and what put it there.
-`--parallel <N>` overrides the searching rounds, not the total, which is now a consequence of the
-round list.
+**Where they run, and how many copies.** Every round runs once. The size of the change decides only
+where, measured in changed lines and never in files: 500 lines or fewer run all nine rounds and the
+sweep in one reviewer agent, handed the target and the paths to the intent and nothing of the
+conversation; above that the rounds get agents of their own, the comparing ones sharing one, seven
+at most. A file the repository regenerates counts toward neither number, on the evidence
+`references/review-rounds.md` requires, and is still read by the rounds that have a reason to open
+it. Say which band the run is in and what put it there. Copies come only from `--parallel <N>`, at
+any size: the rounds that have to go looking run N, and a round that only compares the diff against
+a list runs once, because copies of a comparison return the same answer.
 
 **Which rounds share an agent.** Comparing rounds may be combined; searching rounds never are,
 because combining them rebuilds the agent that forgets its earlier concerns.
@@ -102,13 +106,15 @@ Every agent in a round reads the same diff: independence is the point, so splitt
 between them would produce agreement that means nothing. Rounds divide the question, never the
 files.
 
-Steps 1, 5, and 6 keep their judgement here. Intent is what the rounds are measured against,
-ranking one list out of many needs all of them in one context, and the calling agent also drives the
-rounds. The one search inside them that is delegated is the closing sweep of step 5, which gets its
-own agent and hands its candidates back for the verdicts; `references/review-rounds.md` says why.
+Steps 1, 5, and 6 keep their judgement in the calling agent, which in band 1 is the reviewer agent,
+and it returns only the summary of `## Output` and the report path. Intent is what the rounds are
+measured against, ranking one list out of many needs all of them in one context, and the calling
+agent also drives the rounds. The one search inside them that is delegated is the closing sweep of
+step 5, which above band 1 gets its own agent and hands its candidates back for the verdicts;
+`references/review-rounds.md` says why.
 
-Where the harness cannot spawn agents, the nine rounds run one after another in this agent and the
-report says the review had no copies.
+Where the harness cannot spawn agents, the nine rounds run one after another in this session and the
+report says so, including that the reviewer shared the author's context.
 
 ### 4. Find
 
@@ -169,11 +175,12 @@ This does not license the question dressed up as a finding. `PLAUSIBLE` still ne
 mechanism and a named trigger; what is uncertain is only whether that trigger occurs. A candidate
 naming neither is not plausible, it is unexamined, and it is dropped.
 
-Then take one more pass, once, with the verified list in hand, in an agent of its own where one can
-be spawned. Read the diff and the code around it looking only for what is not on that list: the job
-is the gaps, not a second opinion on what has already been found. Surface at most eight new
-candidates, and return nothing at all when there is nothing new. A padded sweep costs the author
-the attention that makes the rest of the list worth reading.
+Then take one more pass, once, with the verified list in hand: in an agent of its own above band 1
+where one can be spawned, and in band 1 inside the reviewer agent. Read the diff and the code around
+it looking only for what is not on that list: the job is the gaps, not a second opinion on what has
+already been found. Surface at most eight new candidates, and return nothing at all when there is
+nothing new. A padded sweep costs the author the attention that makes the rest of the list worth
+reading.
 
 What a first pass misses is predictable, so start there: code moved or extracted that left a guard or
 an anchor behind, setup and teardown that stopped matching each other in a test, a default flipped in
@@ -249,8 +256,9 @@ writes, here and in step 1 of `atk:convention`, which takes its `Convention gaps
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Under `--comment`, post each finding as an inline comment on the
-line it cites, and the summary as one review comment. Post nothing before showing the list. A
-`BLOCKING` finding requests changes; `NIT` findings never do.
+line it cites, and the summary as one review comment. Post nothing before showing the list. In
+band 1 the reviewer agent only writes the report; the session shows the list from it and posts on
+consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
 
 ## Definition of done
 
@@ -261,17 +269,20 @@ line it cites, and the summary as one review comment. Post nothing before showin
       absence of any observable effect.
 - [ ] Preferences are labelled `NIT` and do not block.
 - [ ] The list is within the cap, and a cut says how many findings went and at what severity.
-- [ ] A sweep for gaps ran once against the verified list, in its own agent where one could be
-      spawned, and returned nothing rather than padding when it found nothing new.
+- [ ] A sweep for gaps ran once against the verified list, in its own agent above band 1 where one
+      could be spawned or inside the band-1 reviewer agent, and returned nothing rather than padding
+      when it found nothing new.
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.
+- [ ] A band-1 review without `--parallel` ran in a reviewer agent given no conversation; any other
+      run whose calling agent was the author's session says so in the report.
 - [ ] The cost was stated before the first agent was spawned, or the run said it spawned nothing, and
       a run the cap held to one round at a time instead of one round ahead says so.
 - [ ] The band and the line count that put the change in it are stated, net of any generated file
-      the count excluded and naming it, along with the agent count the band asks for, the rounds
-      that ran, any skipped and why, any that came back empty, any that died, and a copy count the
-      machine forced down.
+      the count excluded and naming it, along with the agent count the band and any `--parallel`
+      ask for, the rounds that ran, any skipped and why, any that came back empty, any that died,
+      and a copy count the machine forced down.
 - [ ] A round or a sweep that died was re-run once or reported as not run, and neither was left to
       read as a round that looked and found nothing.
 - [ ] Every finding carries a severity-prefixed identifier, carried over from the earlier report on

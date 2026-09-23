@@ -326,12 +326,16 @@ trần cắt bớt danh sách, lỗi đúng sai đứng trên lỗi quy ước v
 đã bỏ bao nhiêu phát hiện, ở mức nào.
 
 Bản review chạy theo chín vòng, mỗi vòng một việc, nên không lượt nào phải ôm hết mọi thứ cần để ý
-cùng lúc, và cũng không lượt nào bỏ sót đúng một vùng vì cùng một lý do. Vòng phải đi lục thì chạy
-nhiều bản, khi harness cho chạy nhiều agent song song, vì một lượt đọc diff đơn lẻ không đủ tin, và
-mỗi phát hiện của nó mang theo con số bao nhiêu bản đã nêu; vòng chỉ đối chiếu diff với một danh
-sách có sẵn thì chạy một lượt và báo dưới tên vòng. `--parallel <N>` ép con số nhân bản đó, và phát
-hiện chỉ một bản nêu ra phải được đối chiếu lại với mã trước khi vào báo cáo. Nhiều bản cùng nói một
-điều vẫn là công việc của một mô hình, không thay được người đồng nghiệp đọc thay đổi rồi phê duyệt.
+cùng lúc, và cũng không lượt nào bỏ sót đúng một vùng vì cùng một lý do. Mặc định mỗi vòng chạy
+đúng một lần. Thay đổi từ 500 dòng trở xuống chạy cả chín vòng trong một agent review mới, không
+mang theo gì từ phiên đã viết thay đổi, và chỉ trả về bản tóm tắt; thay đổi lớn hơn thì các vòng có
+agent riêng, tối đa bảy agent. Trên harness không tạo được agent, các vòng chạy ngay trong phiên, và
+báo cáo ghi rõ người review đã dùng chung ngữ cảnh với tác giả. `--parallel <N>` yêu cầu review
+sâu hơn ở mọi kích thước: vòng phải đi lục chạy N bản, mỗi phát hiện của nó mang theo con số bao
+nhiêu bản đã nêu, và phát hiện chỉ một bản nêu ra phải được đối chiếu lại với mã trước khi vào báo
+cáo. Vòng chỉ đối chiếu diff với một danh sách có sẵn thì trường hợp nào cũng chạy một lượt. Nhiều
+bản cùng nói một điều vẫn là công việc của một mô hình, không thay được người đồng nghiệp đọc thay
+đổi rồi phê duyệt.
 
 ---
 

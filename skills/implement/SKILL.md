@@ -152,7 +152,7 @@ capability. A clean-up nobody can see in the record is indistinguishable from on
 Say what the review will cost before calling it: the band the change falls in, and the round runs
 and agents that band asks for, per `skills/review/references/review-rounds.md` and the stated-total
 rule in `shared/host-capabilities.md`. Add what step 4 already spent. A person who sees the number
-can take it, ask for a review with fewer copies per round, or say the change is small enough to read
+can take it, ask for a deeper review under `--parallel`, or say the change is small enough to read
 by hand; a person who does not see it finds out when the session stops halfway through.
 
 `references/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
