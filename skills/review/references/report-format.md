@@ -139,8 +139,8 @@ pass, what is in it. The author has to know whether the list is the whole of it.
 **Rounds.** The band and the count that put the change in it, then one row per round:
 
 ```markdown
-Band **3**: 1,349 counted lines across 43 counted files. 16 round runs in 14 agents, plus the
-sweep: 15, which is what the band asks for.
+Band **2**, `--parallel 3`: 1,349 counted lines across 43 counted files. 16 round runs in 13
+agents, plus the sweep: 14, which is what the flag asks for.
 
 | Round | Copies | Findings | Note |
 |---|---|---|---|
@@ -160,12 +160,14 @@ would read as the `[1/1]` that both files ban. `Findings` counts what that round
 merged list after deduplication and before the cap, so the column will not add up to the number of
 findings in the report, and is not meant to.
 
-The line above the table carries the agent count as well as the band, because the two numbers
+The line above the table carries the agent count as well as the band, because the numbers
 `references/review-rounds.md` offers to be checked against are agents rather than round runs, and a
-`Copies` column alone cannot produce them: a band-2 run is 11 round runs in 8 agents plus the sweep,
-9 in total, and a band-3 run is 16 in 14 plus the sweep, 15. Combined comparing rounds are invisible
-in the per-round rows, so the count is stated rather than left to be added up, and any deviation
-from it, a round re-run, a copy the machine held down, is named in the `Note` column that caused it.
+`Copies` column alone cannot produce them: a band-1 run is 9 round runs and the sweep in 1 agent, a
+default run above the band is 9 round runs in 6 agents plus the sweep, 7 in total, `--parallel 2`
+is 11 in 8 plus the sweep, 9, and `--parallel 3` is 16 in 13 plus the sweep, 14. Combined comparing
+rounds are invisible in the per-round rows, so the count is stated rather than left to be added up,
+and any deviation from it, a round re-run, a copy the machine held down, is named in the `Note`
+column that caused it.
 
 The same line carries what the run was told it would cost before it spawned anything, or that it
 spawned nothing at all, and any deviation the machine forced: a cap that held the copies down, and a cap that held the run to one

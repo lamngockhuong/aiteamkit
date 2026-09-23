@@ -117,9 +117,9 @@ What stays here is the policy the procedure may not overrule:
   fewer findings rather than failing loudly, which reads as a clean review.
 - The total is not bounded, it is stated. A run knows how many passes and how many agents its round
   list asks for before it spawns the first one, so it says that number, and the measured cap, before
-  spawning rather than after. A person who can see the cost can stop it, lower it, or pay it; a
-  person who cannot see it finds out from the rate limit. The skill that calls the review says the
-  same number before it calls, since a run's cost is what its caller spends.
+  spawning rather than after. A person who can see the cost can stop it or pay it; a person who
+  cannot see it finds out from the rate limit. The skill that calls the review says the same number
+  before it calls, since a run's cost is what its caller spends.
 - Every agent within a round receives the same scope. Agents split by file agree trivially and prove
   nothing; the point of running copies is independent passes over one diff. Scope differs between
   rounds on purpose, because each round is a different question over that same whole diff.

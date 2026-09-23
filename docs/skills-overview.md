@@ -323,13 +323,16 @@ the list, correctness outranks convention and readability, and the review says h
 and at what severity.
 
 The review runs as nine rounds, one job each, so no pass has to hold every concern at once and none
-of them skips the same ground for the same reason. A round that has to go looking runs several
-copies where the harness can run agents in parallel, because one pass over a diff is not reliable on
-its own, and each of its findings carries how many copies raised it; a round that only checks the
-diff against a list that already exists runs once and reports under its own name. `--parallel <N>`
-forces the copy count, and a finding only one copy raised is checked against the code before it is
-reported. Several copies agreeing is still one model's work, never a stand-in for the colleague who
-approves.
+of them skips the same ground for the same reason. Every round runs once by default. A change of
+500 changed lines or fewer runs all nine in one fresh reviewer agent that carries nothing of the
+session that wrote the change and returns only its summary; a larger one gives the rounds agents of
+their own, seven at most. On a harness that cannot spawn agents they run in the session, and the
+report says the reviewer shared the author's context.
+`--parallel <N>` asks for a deeper pass at any size: a round that has to go looking runs N copies,
+each of its findings carries how many copies raised it, and a finding only one copy raised is
+checked against the code before it is reported. A round that only checks the diff against a list
+that already exists runs once either way. Several copies agreeing is still one model's work, never
+a stand-in for the colleague who approves.
 
 ---
 
