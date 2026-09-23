@@ -37,7 +37,8 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 <!-- Three rows because a change lands differently in each. A skill edit is one file with frontmatter
      and a 300-line ceiling. A docs edit is always two files, English and its `docs/vi/` mirror, with
      no frontmatter and no ceiling. A hook edit is executable Node whose standards are about runtime
-     shape: exec form, silent when it has nothing to say. -->
+     shape: exec form on Claude Code, a string command on Codex, silent when it has nothing to
+     say. -->
 <!-- Skill-generated documents under `docs/derived/` and `docs/records/` are not part of the docs
      layer. They are output, and their shape belongs to the skill that writes them. `docs/derived/`
      is gitignored; `docs/records/` is committed, because a record is the only account of what was

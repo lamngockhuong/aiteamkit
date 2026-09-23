@@ -10,9 +10,10 @@
 // own, the rule exists in two places and the copy in shared/project-overrides.md is
 // the one that is correct.
 //
-// It is Node, registered in exec form, for the reason check-profile.mjs gives and
-// docs/system-architecture.md records under "Why the hook is Node and not a shell
-// script".
+// It is Node, registered in exec form on Claude Code and as a string command on
+// Codex, for the reason check-profile.mjs gives and docs/system-architecture.md
+// records under "Why the hook is Node and not a shell script" and "Why Codex has a
+// registration file of its own".
 //
 // Fail-open on every path: a malformed payload, an unreadable file, a crash in here.
 // Printing an empty object lets the Skill call through untouched, and that is the

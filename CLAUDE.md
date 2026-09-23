@@ -219,11 +219,13 @@ into requirements.
 `PreToolUse` with matcher `Skill` runs `hooks/load-overrides.mjs`, which puts
 `.atk/overrides/<skill>.md` in front of the skill that owns it. It decides nothing and skips nothing;
 what it saves is one file read. Every skill names its own override file at the top of its
-`## Workflow` and opens it when no hook put it there, which is what happens on Cursor and Codex and
-on Claude Code with the hook turned off. The test that keeps this honest: run a skill against a
-project that has an override for it twice, once with the `PreToolUse` entry in `hooks/hooks.json`
-and once with it removed, and compare the two results. A difference means a behavior has moved into
-the hook and two harnesses have silently lost it.
+`## Workflow` and opens it when no hook put it there, which is what happens on any harness the hook
+does not reach: Cursor, which has no matching event; Codex, where the entry is registered through
+`hooks/codex-hooks.json` but has never been observed matching a skill invocation; and Claude Code
+with the hook turned off. The test that keeps this honest: run a skill against a project that has an
+override for it twice, once with the `PreToolUse` entry in `hooks/hooks.json` and once with it
+removed, and compare the two results. A difference means a behavior has moved into the hook, and
+every harness the hook does not reach has silently lost it.
 
 That is the bar for a third hook: it saves work a skill could do itself, and the kit behaves the
 same when it is missing.

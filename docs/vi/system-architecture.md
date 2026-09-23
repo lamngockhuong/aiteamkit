@@ -189,9 +189,11 @@ không, và không bao giờ ghi vào repo của người dùng hay vào một t
 
 Mục này là nơi giữ lý do. `CLAUDE.md` và phần chú thích đầu script trỏ về đây chứ không chép lại.
 
-Hook được đăng ký ở **dạng exec**: `"command": "node"` kèm mảng `args`. Claude Code ghi rõ dạng exec
-tìm file thực thi trên `PATH` rồi gọi thẳng, tự thay `${CLAUDE_PLUGIN_ROOT}`, và không có shell nào
-tham gia trên bất kỳ nền nào.
+Trong `hooks/hooks.json`, tức bản đăng ký mà Claude Code đọc, hook nằm ở **dạng exec**:
+`"command": "node"` kèm mảng `args`. Claude Code ghi rõ dạng exec tìm file thực thi trên `PATH` rồi
+gọi thẳng, tự thay `${CLAUDE_PLUGIN_ROOT}`, và không có shell nào tham gia trên bất kỳ nền nào. Codex
+cần hình dạng ngược lại, vì lý do mục kế tiếp nêu dưới tiêu đề "Vì sao Codex có file đăng ký riêng";
+script thì vẫn là một.
 
 Điều đó quan trọng vì dạng shell không cư xử giống nhau ở mọi nơi. Claude Code chạy hook dạng shell
 bằng bash, trừ trên Windows không có Git Bash thì lùi về PowerShell. Một script shell POSIX vì thế sẽ
@@ -235,8 +237,10 @@ Kit chạy hai hook và sẽ nhận hook thứ ba với đúng một điều ki�
 
 `hooks/load-overrides.mjs` là trường hợp làm điều kiện ấy thành cụ thể. Nó chạy ở `PreToolUse` với
 matcher `Skill` và đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó. Mỗi skill cũng gọi
-tên chính file ấy ở đầu mục `## Workflow` của mình và tự mở khi không có gì đặt sẵn, nên Cursor và
-Codex, vốn không có sự kiện tương ứng, cho ra cùng một kết quả, chỉ chậm hơn một lượt đọc file.
+tên chính file ấy ở đầu mục `## Workflow` của mình và tự mở khi không có gì đặt sẵn, nên harness nào
+hook không với tới được cũng cho ra cùng một kết quả, chỉ chậm hơn một lượt đọc file. Cursor không có
+sự kiện tương ứng; Codex có mục này trong `hooks/codex-hooks.json` nhưng chưa ai thấy nó khớp một lần
+gọi skill nào, đúng như phần giới hạn đã chấp nhận ở trên ghi lại.
 
 Hướng còn lại đã có sẵn và đã bị loại. Đặt trọn cơ chế ghi đè vào hook thì không phải sửa `SKILL.md`
 nào, đổi lại hai trong ba harness không có gì cả. `shared/project-profile.md` đã từ chối đúng nước

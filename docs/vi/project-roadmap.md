@@ -98,9 +98,10 @@ tiền 1.0 bằng cách bỏ hai cờ `bump-*-pre-major` trong `release-please-c
   copy tay là đủ?
 - Có đáng thêm một skill nữa cho báo cáo ngày và tuần không, hay `atk:retro --report` đã phủ
   nhu cầu đó ở tần suất thưa hơn?
-- Hook lúc mở phiên nay chạy trên Claude Code và trên Codex, hai file đăng ký cùng trỏ về hai script
-  đó. Cursor cũng đóng gói hook được; nuôi thêm một file đăng ký nữa có đáng không, khi cổng thật vốn
-  nằm trong skill?
+- Hook lúc mở phiên nay chạy trên Claude Code và trên Codex, hai file đăng ký cùng trỏ về một
+  script. Bộ nạp file ghi đè cũng đã đăng ký trên Codex, và chưa ai thấy nó khớp một lần gọi skill
+  nào ở đó. Cursor cũng đóng gói hook được; nuôi thêm một file đăng ký nữa có đáng không, khi cổng
+  thật vốn nằm trong skill?
 - `shared/project-profile.md` xếp `review`, `qa`, `release` và `convention` vào nhóm Required-soft,
   tức chạy tiếp khi thiếu profile và nói rõ điều đó trong artifact. `plan` và `convention` đã cài đặt
   luật này; `review`, `qa` và `release` không hề nhắc tới profile, nên với ba skill đó không có gì

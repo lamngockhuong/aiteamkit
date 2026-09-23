@@ -196,9 +196,11 @@ repository and never into a world-writable directory.
 This section is the reason of record. `CLAUDE.md` and the comment at the top of the script point
 here rather than restating it.
 
-The hook is registered in **exec form**: `"command": "node"` plus an `args` array. Claude Code
-documents exec form as resolving the executable on `PATH` and spawning it directly, substituting
-`${CLAUDE_PLUGIN_ROOT}` itself, with no shell involved on any platform.
+In `hooks/hooks.json`, which is the registration Claude Code reads, the hook is registered in
+**exec form**: `"command": "node"` plus an `args` array. Claude Code documents exec form as resolving
+the executable on `PATH` and spawning it directly, substituting `${CLAUDE_PLUGIN_ROOT}` itself, with
+no shell involved on any platform. Codex needs the opposite shape, for the reason the next section
+gives under "Why Codex has a registration file of its own"; the script is the same either way.
 
 That matters because shell form does not behave the same everywhere. Claude Code runs a shell-form
 hook under bash, except on Windows without Git Bash, where it falls back to PowerShell. A POSIX
@@ -245,7 +247,9 @@ missing.
 `hooks/load-overrides.mjs` is the case that makes the rule concrete. It fires on `PreToolUse` with
 matcher `Skill` and puts `.atk/overrides/<skill>.md` in front of the skill that owns it. Every skill
 also names that file at the top of its own `## Workflow` and opens it when nothing put it there, so
-Cursor and Codex, which have no matching event, produce the same result one file read slower.
+a harness the hook does not reach produces the same result one file read slower. Cursor has no
+matching event; Codex carries the entry in `hooks/codex-hooks.json` and has never been seen matching
+a skill invocation, which the accepted limits above record.
 
 The alternative was available and was rejected. Putting the override mechanism in the hook alone
 would have cost no edits to any `SKILL.md`, and it would have given two of the three harnesses
