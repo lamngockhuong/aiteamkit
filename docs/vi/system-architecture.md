@@ -125,14 +125,15 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
   này thuộc về ba skill đang chạy nó, không thuộc về một slash command chẳng sinh artifact và chẳng
   có ai duyệt.
 
-- `shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, hình dạng
-  của ai thắng khi dự án đã giữ sẵn tài liệu của mình, năm loại thay đổi buộc pull request phải
-  mang theo tài liệu tham chiếu, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác với
+- `shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
+  là gì khi profile của dự án ghi `Contract: first` cùng field `implemented` cho biết code của nó đã
+  có hay chưa, hình dạng của ai thắng khi dự án đã giữ sẵn tài liệu của mình, năm loại thay
+  đổi buộc pull request phải mang theo tài liệu tham chiếu, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác với
   code, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
-  viết ra những tài liệu đó, còn `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và
-  `atk:verify` có nghĩa vụ để chúng đúng. Đây là hợp đồng rộng nhất trong nhóm, vì
-  `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi skill đổi mã nguồn đều là
-  một bên của nó.
+  viết ra những tài liệu đó, `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và
+  `atk:verify` có nghĩa vụ để chúng đúng, còn `atk:qa` và `atk:help` đọc chúng. Đây là hợp đồng
+  rộng nhất trong nhóm, vì `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi
+  skill đổi mã nguồn đều là một bên của nó.
 - `shared/host-file-locations.md`: cách nhận ra code host, mọi vị trí mà từng host đọc
   `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, cùng lúc nào một file được tính là đã
   có. `atk:convention` dựa vào đó để biết file nào thiếu mà đề nghị soạn, `atk:git` dựa vào đó để
@@ -147,6 +148,8 @@ Hai file cuối mô tả những file không đi kèm kit:
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không nhắc tới.
+  Một mục trong Docs, `Contract`, đổi việc skill làm chứ không đổi chỗ nó ghi, và ý nghĩa của mục
+  đó nằm ở `shared/spec-docs.md`.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
 - `shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,

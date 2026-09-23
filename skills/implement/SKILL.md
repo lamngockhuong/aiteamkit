@@ -105,6 +105,11 @@ Shape comes from the reference module named for that layer in the Layers section
 `.atk/profile.md`. Read it before writing, and follow it. A change that is correct but shaped unlike
 everything around it costs the reviewer more than it saved the author.
 
+Where the Docs section says `Contract: first`, the contract comes from the reference documents the
+plan or design names, per `shared/spec-docs.md`, and the code is written to them. A change that
+needs the contract to be different is a question for the document's approver, named in the record;
+the document is not edited to fit the code, and the code does not quietly depart from the document.
+
 Stay inside the agreed scope. Anything else noticed on the way gets listed in the record, not done:
 a tidy-up carried in alongside the change is what makes the change unrevertable on the day it has to
 be reverted.

@@ -45,7 +45,7 @@ items in `shared/review-checklist.md` it carries.
 | `boundary` | 3 | Inputs and states, not lines | Never | Error paths and edge cases are handled |
 | `exposure` | 4 | The surfaces in and out: logs, responses, URLs, storage, migrations | The diff touches no input, output, storage, log, or schema | Input crossing a trust boundary is validated; a migration is reversible or says it is not |
 | `tests` | 5 | The test tree | The diff changes no behavior | New or changed behavior has a test that fails without the change |
-| `contract` | 6 | The five triggers in `shared/spec-docs.md` | None of the five fired | Public behavior change is reflected in the docs that describe it |
+| `contract` | 6 | The five triggers in `shared/spec-docs.md` | None of the five fired | Public behavior change is reflected in the docs that describe it; under `Contract: first`, see below |
 | `rules` | 7 | The resolved conventions document, its checklist section | Never. There is no structural stop: see below | No secret, token, key, or credential in the diff; no debug statement, no commented-out code, no `TODO` without a ticket |
 
 **Assigning a baseline item to a round.** An item goes to the round whose *method* is what finds it,
@@ -71,6 +71,16 @@ each has one substitution, so the analogy stops being invented once per run:
 
 A round whose substitution finds nothing to open is skipped and names the substitution it looked
 for, the same as any other skipped round.
+
+**`contract` under `Contract: first`.** Where the profile says `first`, the reference document is
+the agreed contract, per `shared/spec-docs.md`, and the round reads it the other way round: it checks
+the diff against the document as well as the document against the diff. A change that implements an
+item differently from the document is `BLOCKING`, unless the same change carries the document back
+to `IN REVIEW` for its approver, which moves the disagreement to the person who owns it. An item the
+document still counts as not implemented is no finding while the diff leaves its code alone, and
+neither is its old behaviour still running. Once the diff implements the item, the mark no longer
+shields it: code that departs from the item is `BLOCKING` as above, whether or not the mark is still
+on, and a mark the change should have taken off, because the code now agrees, is `SHOULD FIX`.
 
 **`rules` does not switch itself off.** A project that has recorded no conventions is exactly the
 case `shared/review-checklist.md` covers: `atk:review` checks the baseline anyway and reports that

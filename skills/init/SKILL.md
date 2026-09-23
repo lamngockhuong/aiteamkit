@@ -130,8 +130,9 @@ records, and present the two groups separately: what still matches, and what has
 entry shows both values and both sources, the same shape `--audit` reports.
 
 A value that matches what the profile already records is confirmed by that agreement. Ask only about
-drift and about fields still marked `TBD`. That is what shrinks the interview: of the four fixed
-turns in `references/detection.md`, only the ones the existing file leaves unanswered are still owed.
+drift, about fields still marked `TBD`, and about a fixed-turn field the profile lacks entirely. That
+is what shrinks the interview: of the four fixed turns in `references/detection.md`, only the ones the
+existing file leaves unanswered are still owed.
 
 Update the file in place. Keep `created:`, move `updated:`, and keep the order of the sections so a
 diff shows the change and nothing else. Where the rewrite changes what the profile promises, move
@@ -184,7 +185,7 @@ the repository and the tracker holds a pointer.
 - [ ] No credential, token, or connection string appears in the profile.
 - [ ] Before the file was written, the user was told which repository commits it, or that no
       repository will take it and what that costs. Both cases are said first, not after the write.
-- [ ] On a re-run, `created:` survived, only drifted and `TBD` fields were asked about, and `status`
+- [ ] On a re-run, `created:` survived, only drifted, `TBD`, and missing fixed-turn fields were asked about, and `status`
       moved only because what the profile promises changed.
 - [ ] Exactly one of the template's three persistence blocks survived the write, and it is the one
       matching how the file is actually stored.

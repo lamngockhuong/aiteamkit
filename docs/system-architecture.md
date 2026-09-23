@@ -128,14 +128,16 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
   its own: the content belongs to the skills that already run it, not to a slash command that would
   produce no artifact and answer to no approver.
 
-- `shared/spec-docs.md`: what separates a reference document from a design document, whose shape
-  wins when a project already keeps documents of its own, the five kinds of change that oblige a
-  pull request to carry its reference document, what that obligation becomes when the document
-  lives in a repository other than the code's, and the line between drift and a question nobody
-  has answered. Cited by `atk:spec`, which writes those documents, and by `atk:design-doc`,
-  `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave them true. It is
-  the widest of these contracts, because `shared/finalize-steps.md` now opens with its obligation,
-  which makes every code-changing skill a party to it.
+- `shared/spec-docs.md`: what separates a reference document from a design document, what one is
+  in a project whose profile says `Contract: first` and the `implemented` field that tracks whether
+  its code exists yet, whose shape wins when a project already keeps documents of its own, the five
+  kinds of change that oblige a pull request to carry its reference document, what that obligation
+  becomes when the document lives in a repository other than the code's, and the line between drift
+  and a question nobody has answered. Cited by `atk:spec`, which writes those documents, by
+  `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave
+  them true, and by `atk:qa` and `atk:help`, which read them. It is the widest of these contracts,
+  because `shared/finalize-steps.md` now opens with its obligation, which makes every code-changing
+  skill a party to it.
 - `shared/host-file-locations.md`: how the code host is detected, every location each host reads
   `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one of them counts as
   present. Cited by `atk:convention`, which decides from it whether a file is missing and therefore
@@ -151,6 +153,8 @@ The last two describe files that do not ship with the kit at all:
   parent holding member repositories and a workspace holding none of its own each cost, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message ignore it entirely.
+  One Docs entry, `Contract`, changes what a skill does rather than where it writes, and its meaning
+  lives in `shared/spec-docs.md`.
   `atk:init` writes the profile, so it belongs to no group.
 
 - `shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,

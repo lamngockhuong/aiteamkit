@@ -169,7 +169,9 @@ không học được gì từ nó.
 cách rollback, rủi ro, danh sách người phải review, cùng ADR tương ứng.
 
 **Dùng khi.** Trước khi implement bất cứ thứ gì đụng tới schema, một public contract, một module
-dùng chung, hoặc nhiều hơn một service.
+dùng chung, hoặc nhiều hơn một service. Khi profile ghi `Contract: first`, thiết kế nêu contract ở
+dạng tóm tắt và ghi tên các tài liệu tham chiếu mà `atk:spec --from` viết ra từ nó, thay vì chép mọi
+field hai lần.
 
 **Không dùng khi.** Thay đổi nhỏ, cục bộ và dễ quay lui. Viết design doc cho một sửa đổi hai file
 tốn hơn phần nhận lại.
@@ -188,10 +190,14 @@ chỗ. Cờ `--check` báo chỗ tài liệu và code không khớp nhau mà kh�
 
 **Dùng khi.** Dự án chưa có contract nào được viết ra, một thay đổi đã merge bỏ quên tài liệu, hoặc
 không ai còn tin vào tài liệu nữa. Cờ `--sync` gấp thay đổi trên nhánh hiện tại vào đúng những tài
-liệu mà nó đụng tới.
+liệu mà nó đụng tới. Với dự án có profile ghi `Contract: first`, còn dùng khi contract phải có trước
+code: `--from <design-path>` viết tài liệu từ một design đang được review, đánh dấu
+`implemented: no`, để frontend, backend và QA cùng làm theo một trang trong lúc code đuổi kịp.
 
 **Không dùng khi.** Câu hỏi vẫn là chọn hướng nào. Đó là việc của `atk:design-doc`, vốn so sánh
-phương án rồi dừng lại; skill này mô tả thứ đã thực sự làm.
+phương án rồi dừng lại; skill này mô tả thứ đã thực sự làm, hoặc, khi làm contract-first, thứ design
+đã thống nhất. Cũng không viết từ ticket hay từ design còn nháp: `--from` chỉ nhận design đang có
+người review.
 
 **Thói quen tạo ra khác biệt.** Hình dạng tài liệu lấy từ những tài liệu dự án đang giữ, không lấy
 từ kit. Một đội đang có 29 file API cùng một hình dạng là đã có quy ước, và file thứ ba mươi khác
@@ -379,7 +385,10 @@ các case âm và biên, và ma trận regression trong đó mỗi dòng đều 
 bảng hay chung endpoint.
 
 **Dùng khi.** Một tính năng chuyển sang QA, một bản release cần chạy regression, hoặc team chưa có
-test case viết ra.
+test case viết ra. Các case migration, rollback, rollout và performance lấy từ thiết kế. Khi `Contract: first`, giá trị
+mong đợi lấy từ tài liệu tham chiếu trong `docs/api/`, `docs/database/` và `docs/features/`, nên test
+case có thể viết trước khi có code; khi `code`, lấy từ thiết kế cho phần thay đổi sửa và từ tài liệu
+tham chiếu cho phần nó không đụng tới.
 
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.

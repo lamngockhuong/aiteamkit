@@ -17,6 +17,7 @@ approver: <Tech Lead>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ticket: <the ticket that last changed this, or none>
+implemented: no | partial | yes   # only where the profile says Contract: first; delete otherwise
 ---
 
 # <Resource> API
@@ -77,6 +78,8 @@ Each with the name of the person who must answer it.
 
 - Field constraints come from the code that enforces them, not from the ticket that requested them.
   A maximum that only the ticket mentions is not a rule, it is a wish, and belongs in open questions.
+  Under `Contract: first`, a constraint on an item not yet in code comes from the design instead,
+  and only from the design.
 - Error codes are listed by their code value. Do not transcribe the message text: messages get
   translated and reworded, and a document that copies them goes stale on a change nobody thinks of
   as a change.
@@ -85,3 +88,8 @@ Each with the name of the person who must answer it.
   is implemented today, and this document has to survive the day that changes.
 - An endpoint nobody may call yet is still documented, marked with the flag or the role that gates
   it.
+- Under `Contract: first` the unit that carries the not-implemented mark is the endpoint, per
+  `shared/spec-docs.md`, and only at `implemented: partial`. Its `<METHOD> /<path>` section opens with one line: `Not implemented yet.`,
+  or `Not implemented yet: <what the contract changes>.` for an endpoint that exists and is changing.
+  Until the mark comes off, the section cites the design section it came from, or the author who
+  proposed a detail the design left open, instead of the code.

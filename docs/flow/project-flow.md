@@ -57,7 +57,7 @@ flowchart TD
         D0 -->|Yes| D1["atk:design-doc<br/><small>TL or Dev drafts, ADR recorded</small>"]
         D1 --> D2{"TL approves"}
         D2 -->|Change requested| D1
-        D3["atk:spec<br/><small>what the area does today</small>"]
+        D3["atk:spec<br/><small>what the area does today, or is agreed to do</small>"]
     end
 
     subgraph S4["4. Split and sequence"]
@@ -102,6 +102,7 @@ flowchart TD
     B2 --> M0
     D0 -->|Yes| D3
     M2 -.->|Contract changed| D3
+    D1 -.->|Contract: first, spec --from| D3
     M2 --> V0
     V2 -->|Passed| L0
     L2 --> O0
@@ -159,7 +160,9 @@ phase 1 and a fix made in phase 8 both close the same way.
 `atk:spec` is drawn in phase 3 because that is where a team first writes down what an area does, but
 the dotted edge from the merge is the one that fires most often. A change altering a contract carries
 its reference document in the same pull request, per `shared/spec-docs.md`, which is why the document
-outlives the phase it was first written in.
+outlives the phase it was first written in. Under `Contract: first` phase 3 is also where it is
+written from the design while that design is in review, so the contract and the decision are
+reviewed together and the phases after it build against the same page.
 
 ## What this flow does not say
 

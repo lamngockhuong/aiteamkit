@@ -21,8 +21,16 @@ output with exactly one status:
 |--------|---------|
 | `checked` | Found in the code, and it agrees |
 | `drift` | Found in the code, and it disagrees |
-| `no implementation` | Nothing in the code corresponds to it |
+| `no implementation` | Nothing in the code corresponds to it, and the document claims something does |
+| `not implemented yet` | A contract-first document counts it as not implemented: the document is at `implemented: no`, or the item carries the mark |
 | `unanswered` | The document never settled it; see below |
+
+`not implemented yet` is the one status that is never a finding: it is the state a contract-first
+team planned for, per `shared/spec-docs.md`. It is listed so the reader sees how much of the contract
+is still to be built. It holds even where code for the item already runs, since an item the contract
+changes still runs its old behaviour until the change lands. The one finding such an item can raise
+is a stale mark, `minor`: its code exists and already agrees with the contract, so the mark should
+have come off. Under `Contract: code` the status does not occur.
 
 The list exists because the failure mode of this mode is silence. A check that reports four findings
 and says nothing about the other sixty items has not told the reader whether those sixty passed or
@@ -31,8 +39,9 @@ were never looked at, and the two are not the same.
 ## Drift is not the same as an unanswered question
 
 The rule is in `shared/spec-docs.md`, because `atk:review` has to answer it identically. Here it
-decides one thing: a point the document never settled is reported as `unanswered`, carrying the name
-the document already has against it, and never as `drift`.
+decides two things: a point the document never settled is reported as `unanswered`, carrying the name
+the document already has against it, and a point counted as not implemented as `not implemented yet`.
+Neither is ever `drift`.
 
 ## Each finding says which side moved
 

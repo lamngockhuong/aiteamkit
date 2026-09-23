@@ -115,9 +115,9 @@ applies to the pass and its `## After` to the report, since there are no numbere
 
 ### 1. Read the request
 
-Take the goal and the acceptance criteria from the ticket and the design it links to. Copy them; do
-not improve them. A criterion invented here is one nobody agreed to, and it will be implemented and
-reviewed as though somebody had.
+Take the goal and the acceptance criteria from the ticket and the design it links to, and under
+`Contract: first` the contract from the reference documents that design names. Copy them; do not
+improve them: a criterion invented here is implemented and reviewed as though somebody agreed to it.
 
 Where the request has no acceptance criteria at all, say so and name who must supply them. That gap
 belongs to `atk:intake`, and planning around it produces a plan that cannot be checked.

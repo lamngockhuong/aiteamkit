@@ -41,6 +41,7 @@ flowchart LR
     A6b -->|review| A7
     A7 -->|implement| A6
     A6 -->|spec --sync| A3b
+    A3 -.->|spec --from, Contract: first| A3b
     A3b -->|qa| A8
     A6 -->|qa| A8
     A8 -->|verify| A9
@@ -59,7 +60,10 @@ ghi đè mà mỗi skill đọc trước bước đầu tiên của mình.
 
 `spec` là nút duy nhất mà chuỗi quay về chứ không đi ngang qua. Tài liệu của nó vừa là đầu vào cho
 thiết kế kế tiếp và test plan kế tiếp, vừa là đầu ra của mọi thay đổi đụng tới hợp đồng. Đó là lý do
-mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết kế đề xuất ra nó.
+mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết kế đề xuất ra nó. Dự án có profile ghi
+`Contract: first` thêm một mũi tên thứ hai, từ thiết kế vào `spec`: contract được viết từ thiết kế
+ngay khi nó đang được review, để frontend, backend và QA làm theo nó trước khi có code, rồi mũi tên
+từ code chuyển từng mục sang code khi mục đó được làm xong, theo `shared/spec-docs.md`.
 
 ## Mỗi skill ăn vào gì
 
@@ -71,15 +75,15 @@ mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết 
 | `intake` | Một yêu cầu thô | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa` |
 | `catchup` | Một epic hoặc một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài | Con người, không phải skill |
 | `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |
-| `design-doc` | Yêu cầu, và tài liệu tham chiếu của vùng sắp đổi | Thiết kế kèm ADR | `breakdown`, `plan`, `implement` |
-| `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/` | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `implement`, `review` |
+| `design-doc` | Yêu cầu, và tài liệu tham chiếu của vùng sắp đổi | Thiết kế kèm ADR; khi `Contract: first` thì contract ở dạng tóm tắt, kèm tên các tài liệu tham chiếu | `breakdown`, `plan`, `implement`, và `spec` khi `Contract: first` |
+| `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/`; khi `Contract: first` thì cả thiết kế | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
 | `convention` | Code và lịch sử của nó, cùng những khoảng trống quy ước trong các báo cáo review đã viết | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
 | `plan` | Ticket, thiết kế, hoặc mô tả; với `--review` thì là một bản kế hoạch đã viết | Pha và bước, hoặc danh sách phát hiện về một bản kế hoạch | `implement`; với `--review` là người viết bản kế hoạch đó |
 | `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR | `review`, `qa` |
 | `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
 | `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt, cùng những khoảng trống quy ước đứng sau chúng | `implement`, `fix`, `convention` |
-| `qa` | Tiêu chí nghiệm thu và thay đổi | Kế hoạch test, test case, ma trận hồi quy | `verify` |
+| `qa` | Tiêu chí nghiệm thu, thay đổi, tài liệu tham chiếu cho giá trị mong đợi, và thiết kế cho migration, rollback và rollout | Kế hoạch test, test case, ma trận hồi quy | `verify` |
 | `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | `release` |
 | `git` | Một thay đổi hoặc artifact đã xong, cùng bản ghi mà skill gọi nó đã viết | Các commit, một nhánh, và pull request mang bản ghi đó | `review`, rồi tới người duyệt |
 | `release` | Diff kể từ phiên bản trước | Ghi chú, checklist, đường lui | `incident`, `retro` |
