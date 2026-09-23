@@ -96,7 +96,8 @@ its share, per `references/stack-standards.md`, then derive the rules for each o
 repository as a whole. Sample the code and recent git history to find the real patterns: directory
 layout, naming, error handling, logging, test file placement, import order, commit message shape,
 branch names, PR size and review turnaround. Record the dominant pattern and how dominant it is,
-for example "23 of 26 handlers", counted over the files of the technology the rule belongs to.
+for example "23 of 26 handlers", counted over the files of the technology the rule belongs to, and
+per layer where the profile names several, since one language often does two jobs.
 
 ### 3. Classify each rule
 
@@ -229,8 +230,8 @@ out the same either way. Beside `--audit` it writes nothing and lists the candid
 
 Written to the document resolved per `shared/review-checklist.md`. A project with nothing written
 yet gets `docs/standards/` under `shared/artifact-paths.md`: a `<tech>.md` per detected technology,
-carrying its code layout and naming, error handling and logging, and testing rules, and an
-`index.md` carrying the stack with its evidence, the branch and commit rules, the review checklist in
+and a `<layer>/<tech>.md` where its rules differ between the profile's layers, carrying its code
+layout and naming, error handling and logging, and testing rules, and an `index.md` carrying the stack with its evidence, the branch and commit rules, the review checklist in
 the `shared/review-checklist.md` record format, and the enforcement table mapping every rule to its
 bucket and tool. `references/stack-standards.md` holds the shape.
 

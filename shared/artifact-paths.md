@@ -131,7 +131,7 @@ to `docs/adr/` as well.
 | `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
-| `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |
+| `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology and a `<layer>/<tech>.md` where its rules differ by layer, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below); under `--review` no plan file at all, and a report at `docs/derived/reviews/plan-<slug>-<date>.md` |
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |

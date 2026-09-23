@@ -200,7 +200,10 @@ phân loại `ENFORCED` (công cụ chặn), `REVIEWED` (người kiểm trong r
 ai kiểm), kèm công cụ có thể tự động hóa những quy tắc đang phải kiểm bằng tay. Trước đó skill nêu
 ra các ngôn ngữ và công nghệ repo dùng, mỗi cái kèm file làm bằng chứng, rồi xếp quy tắc theo từng
 cái. Dự án chưa ghi gì thì nhận `docs/standards/`: mỗi công nghệ một tài liệu, cộng một `index.md`
-mang review checklist. Một team đã có sẵn bộ tài liệu chuẩn thì phần phân loại đó được viết vào
+mang review checklist. Khi một công nghệ làm hai việc khác nhau ở hai layer trong profile, chẳng hạn
+TypeScript ở client và ở server, các quy tắc khác nhau giữa hai bên được ghi vào
+`docs/standards/<layer>/<tech>.md`; layer là của chính dự án, không phải bộ backend, frontend,
+mobile cố định. Một team đã có sẵn bộ tài liệu chuẩn thì phần phân loại đó được viết vào
 chính bộ tài liệu ấy, theo đúng hình dạng team đang dùng: `docs/standards/` và `docs/conventions.md`
 là giá trị mặc định của kit, không phải địa chỉ mà mọi dự án phải chuyển sang. Nếu dự án chưa có `CONTRIBUTING.md`, template pull request hay `CODEOWNERS`, skill đề
 nghị soạn và chỉ ghi những file bạn chọn; cờ `--scaffold` đưa ra đề nghị đó mà không chạy lại cả

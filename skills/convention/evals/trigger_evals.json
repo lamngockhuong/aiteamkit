@@ -32,5 +32,7 @@
   { "query": "chọn tech stack cho dự án mới", "should_trigger": false },
   { "query": "suggest rules from a published style guide for the languages in this repo", "should_trigger": true },
   { "query": "đề xuất quy tắc từ các bộ chuẩn có sẵn cho stack của dự án", "should_trigger": true },
-  { "query": "公開されているスタイルガイドからこのプロジェクトの規約を提案して", "should_trigger": true }
+  { "query": "公開されているスタイルガイドからこのプロジェクトの規約を提案して", "should_trigger": true },
+  { "query": "tách coding standard riêng cho backend và frontend của repo này", "should_trigger": true },
+  { "query": "write separate TypeScript standards for our client and our server", "should_trigger": true }
 ]

@@ -107,7 +107,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/catchup/references/brief-template.md` | Một khung chung cho hai chế độ, phần khác nhau giữa epic và pull request được đánh dấu theo từng mục |
 | `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, bảng phân loại kiểu tính năng, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
 | `skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |
-| `skills/convention/references/stack-standards.md` | Cách nhận ra một ngôn ngữ hay công nghệ từ những gì có trên đĩa và theo thứ tự tin cậy nào, ngưỡng mà dưới đó nó không tính là stack, cách nhóm rule suy ra theo công nghệ, và hình dạng bộ `docs/standards/` |
+| `skills/convention/references/stack-standards.md` | Cách nhận ra một ngôn ngữ hay công nghệ từ những gì có trên đĩa và theo thứ tự tin cậy nào, ngưỡng mà dưới đó nó không tính là stack, cách nhóm rule suy ra theo công nghệ và, khi một công nghệ trải qua nhiều layer của profile, theo layer, và hình dạng bộ `docs/standards/` |
 | `skills/convention/references/standard-sources.md` | Danh sách các bộ chuẩn đã công bố theo từng công nghệ, bảy trường phân tách bằng tab, ngày `checked` chứng minh điều gì, một lần chạy được rút gì từ một dòng và không bao giờ được chép gì, team thêm nguồn riêng ở đâu, và cách clone thưa cùng chỗ đặt cache và luật khi lấy về hỏng |
 | `skills/plan/references/step-ordering.md` | Hai lần cắt, theo phase và theo bước, mỗi lần một quy tắc riêng |
 | `skills/plan/references/plan-template.md` | Trang chỉ mục của kế hoạch và một file phase |

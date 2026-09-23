@@ -61,6 +61,28 @@ Every rule step 2 derives lands in exactly one of two places:
 A rule does not appear under two technologies. Where TypeScript and JavaScript files follow the same
 naming rule, it is written once under the one that dominates and the other file links to it.
 
+### When one technology spans several layers
+
+A technology is often used on two sides of a project for two different jobs: TypeScript in a React
+client and in a NestJS server, Kotlin in an Android app and in a Spring service. Counted over all of
+its files at once, a pattern that dominates on each side can come out at 140 of 290 on the whole,
+and the rule each side actually follows is lost or written wrong.
+
+So where the Layers section of `.atk/profile.md` names more than one layer, count each technology's
+patterns per layer, over the files under that layer's directory. Then:
+
+- a rule that holds in every layer the technology spans is written once, for the technology;
+- a rule that holds in one layer only, or differs between them, is written for that layer.
+
+The layers are the profile's, never a fixed set such as backend, frontend, and mobile. A project
+names its own layers, a CLI or a library has one, and which directory is a client and which a server
+is something only the team can say, which is why the profile holds it and this file does not guess
+it. Where the shape names member repositories, each member is a layer for this purpose.
+
+No profile, or a profile with one layer: count over the technology's files as a whole and write the
+set flat. Say so in the index, because a layered project that ran without its profile gets rules
+counted across layers, and the reader should know that is why.
+
 ## The standards set
 
 For a project whose resolution in `shared/review-checklist.md` found nothing, the output is a
@@ -69,9 +91,15 @@ that directory, and the index sits inside it:
 
 ```
 docs/standards/
-  index.md       the stack, the cross-cutting rules, the checklist, the enforcement table, proposals
-  <tech>.md      one per technology that yielded at least one rule
+  index.md             stack, cross-cutting rules, checklist, enforcement table, proposals
+  <tech>.md            one per technology: the rules that hold wherever it is used
+  <layer>/<tech>.md    only where a technology's rules differ between layers
 ```
+
+The set is flat until some technology has a rule that holds in one layer and not another. From then
+on every such rule goes to `<layer>/<tech>.md`, named after the layer in the profile in lowercase
+with hyphens, and that file links to `<tech>.md` rather than repeating it. A technology whose rules
+are the same in every layer it spans keeps its single `<tech>.md`.
 
 `<tech>` is the lowercase key of the technology: `typescript`, `python`, `go`, `react`, `sql`,
 `rest-api`. Use a key that is safe as a file name, so `csharp` and `cpp` rather than `c#` and `c++`.
@@ -81,26 +109,31 @@ document to its sources without translating names.
 `index.md` carries, in this order:
 
 1. The front matter block from `shared/artifact-paths.md`.
-2. The stack table: each technology, the evidence path, the count, and the paths it applies to,
-   plus the technologies seen below the threshold and those that yielded no rule.
+2. The stack table: each technology, the evidence path, the count, the paths it applies to, and the
+   layers it spans, plus the technologies seen below the threshold and those that yielded no rule.
 3. The rules that hold across the repository: branch and commit, layout above one technology,
    review etiquette.
 4. The review checklist in the record format of `shared/review-checklist.md`, for every document in
    the set. `atk:review` reads exactly one checklist section, so the `REVIEWED` rows of every
    technology are here, not in the file they describe.
 5. The enforcement table mapping every rule in the set to its bucket and tool.
-6. A link to each `<tech>.md`.
+6. A link to each `<tech>.md` and each `<layer>/<tech>.md`, grouped by layer.
 7. Under `--suggest`, the proposals section: each rule drawn from a published standard and picked by
    the user, with its link, outside the checklist, per `references/standard-sources.md`.
 
-Each `<tech>.md` carries the front matter block, the evidence it was named from and the paths it
+Each `<tech>.md` and `<layer>/<tech>.md` carries the front matter block, the evidence it was named from and the paths it
 applies to, then the sections that technology has rules for: code layout and naming, error handling
 and logging, testing. A section with no derived rule is left out rather than written empty. Rules
 here are prose with their `source` as `path:line`; a rule that is also a checklist row names its
 `CONV-NNN` so a reader can find the row in `index.md`.
 
-`CONV-NNN` is sequential across the whole set, never per file. Two files each starting at
-`CONV-001` give `atk:review` two rules with one ID.
+`CONV-NNN` is sequential across the whole set, never per file or per layer. Two files each starting
+at `CONV-001` give `atk:review` two rules with one ID. A checklist row for a layer's rule names the
+layer, so a reviewer checking a diff under one directory knows which rows apply to it.
+
+Tell the user which document each layer's rules are in, so the `Standards` column of the Layers
+section of `.atk/profile.md` can point at it, the same way step 5 names the document carrying the
+checklist.
 
 ## Three rules the set never breaks
 

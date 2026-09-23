@@ -197,7 +197,10 @@ as `ENFORCED` by tooling, `REVIEWED` by a human, or `ASPIRATIONAL`, plus the too
 enforce the ones currently checked by hand. It first names the languages and technologies the
 repository is built with, each with the file that proves it, and groups the rules under them. A
 project with nothing written gets `docs/standards/`: one document per technology and an `index.md`
-carrying the review checklist. A team that already keeps standards documents gets that
+carrying the review checklist. Where one technology does different jobs in different layers of the
+profile, TypeScript in a client and in a server for instance, the rules that differ go to
+`docs/standards/<layer>/<tech>.md`; the layers are the project's own, never a fixed backend,
+frontend and mobile. A team that already keeps standards documents gets that
 classification written into the set it has, in the shape it already uses: `docs/standards/` and
 `docs/conventions.md` are the kit's defaults, not addresses every project has to move to. Where the project has no
 `CONTRIBUTING.md`, pull request template or `CODEOWNERS`, it offers to draft them and writes only
