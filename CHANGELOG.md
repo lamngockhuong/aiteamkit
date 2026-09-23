@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.11](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.10...v0.0.11) (2026-09-23)
+
+
+### Features
+
+* give atk:plan --review a report format of its own ([#54](https://github.com/lamngockhuong/aiteamkit/issues/54)) ([81c2308](https://github.com/lamngockhuong/aiteamkit/commit/81c23089be3ee797e71eeca42661ef5fbd7d31d4))
+* let atk:convention write standards per technology and propose rules from published guides ([#52](https://github.com/lamngockhuong/aiteamkit/issues/52)) ([3195eb0](https://github.com/lamngockhuong/aiteamkit/commit/3195eb04ae7d13d0038365ae3402a88f0ad31127))
+
 ## [0.0.10](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.9...v0.0.10) (2026-09-23)
 
 
