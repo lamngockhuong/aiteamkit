@@ -20,6 +20,17 @@ other written output, and notwithstanding that they are the project's files rath
 this kit. Where the repository already keeps its public-facing files in another language, that wins:
 an outside contributor reads what is already there, not what the profile says.
 
+## Who picks, and for which repository
+
+A code host reads these three per repository, so in a project whose shape names members the question
+is asked per repository and the answer may differ: a parent that carries `CONTRIBUTING.md` for
+everyone and members that carry their own `CODEOWNERS` is an ordinary answer, and one set written at
+the parent is one the members' hosts never read.
+
+Never write one because a project of this shape usually has it: the three files bind everyone who
+opens a pull request here, including people who never installed this kit, so which of them exists is
+the Tech Lead's call under rule 3 of `shared/team-roles.md`.
+
 ## `CONTRIBUTING.md`
 
 The flow a person follows: how to set the project up, how to branch, how to commit, how to open a
@@ -38,8 +49,8 @@ host, or a seeding command with a credential in it, and `CONTRIBUTING.md` at the
 the most widely read file in a repository and public on a public one.
 
 Where the project has recorded no conventions, the branch and commit sections say so and name who
-owes them, exactly as the `--audit` rule does. Never link to `docs/conventions.md` as though it
-existed.
+owes them, exactly as the `--audit` rule does. Never link to a default such as `docs/standards/`
+as though it existed.
 
 ## The pull request template
 
@@ -134,6 +145,10 @@ pull request template renders into every pull request, and `CODEOWNERS` is not M
 the draft is a proposal the same way an unagreed rule is, and the record of that lives where the
 run's other output lives: the conventions document under a full run, and the session report under
 `--scaffold`, naming who picked the file and which role approves it.
+
+Name the paths written so the Docs section of `.atk/profile.md` records them, as step 5 does for the
+checklist. Under `--scope`, say which part of the repository the run actually read, because these
+three files bind all of it.
 
 The approval itself is the Tech Lead accepting the pull request that carries them. Getting there is
 `atk:git`'s, under the consent line in `shared/finalize-steps.md`: the push and the pull request are

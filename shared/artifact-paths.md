@@ -131,7 +131,7 @@ to `docs/adr/` as well.
 | `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
-| `convention` | `docs/conventions.md`; on request, the collaboration files the project lacks (see below) |
+| `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology and a `<layer>/<tech>.md` where its rules differ by layer, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below); under `--review` no plan file at all, and a report at `docs/derived/reviews/plan-<slug>-<date>.md` |
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
@@ -219,7 +219,7 @@ merged and which directory it goes in.
 
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
-| Reference | the `spec` kinds, `docs/qa/`, `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
+| Reference | the `spec` kinds, `docs/qa/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
 | Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
 

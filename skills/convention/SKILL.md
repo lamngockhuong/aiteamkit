@@ -13,21 +13,23 @@ description: >
   "branch strategy", "commit convention", "コーディング規約", "our team rules", "CONTRIBUTING.md",
   "CODEOWNERS", "contribution guide", "set up a pull request template", "tạo CONTRIBUTING",
   "file CODEOWNERS", "mẫu pull request cho dự án", "コントリビューションガイド",
-  "プルリクエストのテンプレートを作成", "/atk:convention".
-argument-hint: "[--audit|--init|--sync|--scaffold] [--scope <paths>] [--lang <code>] [--out <path>]"
+  "プルリクエストのテンプレートを作成", "standards per language", "coding standard for each technology",
+  "viết standard cho từng ngôn ngữ", "言語ごとのコーディング規約", "/atk:convention".
+argument-hint: "[--audit|--init|--sync|--scaffold] [--suggest] [--scope <paths>] [--lang <code>] [--out <path>]"
 ---
 
 # Team Conventions (`atk:convention`)
 
-Writes down the rules a team already follows and enforces, rather than importing a style guide from
-elsewhere. A rule that no tool enforces and no reviewer checks is a wish; this skill labels it as
+Writes down the rules a team already follows and enforces. It can also suggest rules from published
+standards, and each one stays a proposal until the Tech Lead adopts it; nothing is imported on the
+team's behalf. A rule that no tool enforces and no reviewer checks is a wish; this skill labels it as
 one.
 
 ## Scope
 
 Handles: deriving conventions from the existing codebase and git history, recording them, mapping
-each rule to the tool that enforces it, auditing whether the code still matches the document, and
-offering to draft the collaboration files the project does not have yet.
+each rule to the tool that enforces it, auditing whether the code still matches the document, suggesting rules from
+the published standards for the detected stack as proposals, and offering to draft the collaboration files the project does not have yet.
 
 Does NOT handle: reviewing a specific change (`atk:review`), configuring CI pipelines beyond the
 lint and format layer, or choosing the tech stack.
@@ -45,15 +47,16 @@ team agreeing is a proposal, marked as such. See `shared/team-roles.md`.
 /atk:convention --init            # Bootstrap a document for a project with no conventions yet
 /atk:convention --sync            # Update the document, and offer the step 6 files whose source moved
 /atk:convention --scaffold        # Offer the collaboration files the project lacks; write only the ones picked
+/atk:convention --suggest         # Also propose rules from published standards for the detected stack
 /atk:convention --scope src/api   # Limit derivation to given paths
 /atk:convention --lang vi         # Write the document and the report in Vietnamese
-/atk:convention --out <path>      # Override the conventions document path; never the step 6 files
+/atk:convention --out <path>      # Override the conventions document, or the standards set's directory; never step 6
 ```
 
 ## Workflow
 
 ```
-[1. Read existing] -> [2. Derive from code] -> [3. Classify] -> [4. Map to tooling]
+[1. Read existing] -> [2. Detect stack, derive] -> [3. Classify] -> [4. Map to tooling]
   -> [5. Write] -> [6. Offer what is missing]
 ```
 
@@ -86,12 +89,15 @@ reported as absent rather than as followed. Of these, the three that step 6 offe
 and never drafted. Do not duplicate what a config file already states: link to it. A rule the project has already written is not
 rewritten here either; it is classified in step 3 and cited where it lives.
 
-### 2. Derive from the code
+### 2. Detect the stack, then derive from the code
 
-Sample the code and recent git history to find the real patterns: directory layout, naming, error
-handling, logging, test file placement, import order, commit message shape, branch names, PR size
-and review turnaround. Record the dominant pattern and how dominant it is, for example "23 of 26
-handlers".
+Name each language and technology the repository is built with, with the file that proves it and
+its share, per `references/stack-standards.md`, then derive the rules for each of them and for the
+repository as a whole. Sample the code and recent git history to find the real patterns: directory
+layout, naming, error handling, logging, test file placement, import order, commit message shape,
+branch names, PR size and review turnaround. Record the dominant pattern and how dominant it is,
+for example "23 of 26 handlers", counted over the files of the technology the rule belongs to, and
+per layer where the profile names several, since one language often does two jobs.
 
 ### 3. Classify each rule
 
@@ -114,10 +120,11 @@ the config change needed. Propose; do not silently install tooling or rewrite CI
 
 ### 5. Write
 
-Update the document resolved in step 1, in place. Its review checklist section holds the `REVIEWED`
-rules only, per `shared/review-checklist.md`; an `ENFORCED` rule is already checked by a tool and
-repeating it wastes a reviewer's attention, and `ASPIRATIONAL` rules are listed apart and marked
-unchecked.
+Update the document resolved in step 1, in place. Where step 1 resolved nothing, write the standards
+set in `references/stack-standards.md`: one document per technology and an index. The review
+checklist section holds the `REVIEWED` rules only, per `shared/review-checklist.md`; an `ENFORCED`
+rule is already checked by a tool and repeating it wastes a reviewer's attention, and
+`ASPIRATIONAL` rules are listed apart and marked unchecked.
 
 Where the project already keeps conventions, its shape wins, under the rule of that name in
 `shared/review-checklist.md`. Write into the set as it is arranged, put the checklist section in its
@@ -133,33 +140,14 @@ conventions rather than copying them.
 
 ### 6. Offer what is missing
 
-Three files decide how a change is proposed, what a reviewer is shown, and who is asked to look at
-it: `CONTRIBUTING.md`, the pull request template, and `CODEOWNERS`. Step 1 already knows which of
-them this project does not have.
+Step 1 already knows which of `CONTRIBUTING.md`, the pull request template, and `CODEOWNERS` this
+project lacks. Say which are missing, offer a draft of each, and write only the ones the user picks;
+picking none is an answer and ends the step. A file the project already has is left alone on every
+run but `--sync`, which shows the change its moved source would make and writes only what is picked.
 
-Say which are missing, offer a draft of each, and write only the ones the user picks. Picking none
-is an answer and ends the step. A code host reads these three per repository, so in a project whose
-shape names members the question is asked per repository and the answer may differ: a parent that
-carries `CONTRIBUTING.md` for everyone and members that carry their own `CODEOWNERS` is an ordinary
-answer, and one set written at the parent is one the members' hosts never read. Never write one because a project of this shape usually has it: the
-three files bind everyone who opens a pull request here, including people who never installed this
-kit, so which of them exists is the Tech Lead's call under rule 3 of `shared/team-roles.md`.
-
-`references/collaboration-files.md` holds what each file carries, what a drafted `CODEOWNERS` needs
-before it may be offered at all, and why an owner is never derived from who touched a file last.
-Where each file lives is `shared/host-file-locations.md`, and a file present at any of its locations
-is left alone on every run but one. A drafted file is built from something that keeps moving, the
-enforcement table for the template and the Team section for `CODEOWNERS`, so under `--sync` this
-step also says which of them the source has moved under, shows what would change, and writes only
-what the user picks. What it shows is the change, never a fresh draft laid over the file, so a
-person can see whether their own edits are in the way. Outside `--sync`, a disagreement is an open
-question carrying a name and nothing more.
-
-A written file is a proposal until the Tech Lead accepts the pull request carrying it, the same as
-every rule `--init` writes. Record who picked it and which role approves it where this run's other
-output goes, and name the paths written so the Docs section of `.atk/profile.md` records them, as
-step 5 does for the checklist. Under `--scope`, say which part of the repository the run actually
-read, because these three files bind all of it.
+`references/collaboration-files.md` holds the rest: what each file carries, the per-repository
+question on a project with members, what a drafted `CODEOWNERS` needs before it is offered, why an
+owner never comes from git history, what the step never does, and how a written file is approved.
 
 ### `--audit`
 
@@ -167,7 +155,7 @@ Runs steps 1 to 4 and stops. It writes nothing into the project: the report come
 session, and goes to a file only under `--out`, because an audit records one moment while the
 conventions document is the thing meant to last.
 
-It reports five things, in this order:
+It reports six things, in this order:
 
 1. Which document the resolution in step 1 landed on, and which one carries the review checklist.
    Where the resolution came up empty, say the project has recorded no conventions rather than
@@ -182,7 +170,10 @@ It reports five things, in this order:
 4. Which of the three collaboration files the project has, which are missing, and which carry a
    checklist or an owner list the enforcement table and the Team section no longer agree with. It
    reports them and writes nothing, which is what separates this flag from `--sync`.
-5. One line naming the rules checked and found clean, so "checked, no drift" reads as different from
+5. The sources behind the proposals: each one gone, each pushed since its `checked` date, each line
+   whose `checked` is empty with the condition its note names, and each proposal nobody has approved,
+   per `references/standard-sources.md`. A proposal is cited by repository, path, and fetch date.
+6. One line naming the rules checked and found clean, so "checked, no drift" reads as different from
    "not checked".
 
 Findings cite `path:line`, never `CONV-NNN`. An ID is assigned when a rule is written into the
@@ -202,7 +193,8 @@ exactly as it is. It is also the one mode where step 6 looks at a file the proje
 template whose checklist no longer matches the enforcement table, or a `CODEOWNERS` whose names the
 Team section has moved past, is offered as the change it would make. `--init` and a plain run offer
 the missing files only. A disagreement it cannot settle becomes an open question carrying the name of
-whoever can answer it, never a silent rewrite.
+whoever can answer it, never a silent rewrite. A source that moved since its proposals were fetched
+is shown the same way, as the change it would make; one that is gone becomes such a question.
 
 ### `--scaffold`
 
@@ -221,15 +213,28 @@ Where the project has recorded no rules at all, say so and draft the template wi
 items alone, per `references/collaboration-files.md`. Where nothing is missing, say that too; a run
 that found all three present has an answer rather than no output.
 
+### `--suggest`
+
+Runs the whole workflow, and between step 3 and step 4 looks up each technology step 2 named in
+`references/standard-sources.tsv`, plus any source the override adds, under the rules in
+`references/standard-sources.md`. It fetches each matching source sparsely, reads what its `path`
+holds, and draws candidate rules the code does not already settle, each shown with its link and
+with whether the code agrees, contradicts it, or is silent. Nothing is written before the user
+picks. The picked ones go into the proposals section of the conventions
+document, with `source` as `<repo>/<path> fetched <date>` per `shared/review-checklist.md`, never
+into the review checklist. A source skipped for an empty `checked`, one that could not be fetched,
+and a technology with no source are each named in the report; the part derived from the code comes
+out the same either way. Beside `--audit` it writes nothing and lists the candidates in the report;
+`--scaffold` runs no step 2, so it ignores the flag and says so.
+
 ## Output
 
-Written to the document resolved per `shared/review-checklist.md`, which is `docs/conventions.md`
-by default under `shared/artifact-paths.md`.
-
-For a project with nothing written yet, the sections are: front matter, branch and commit rules,
-code layout and naming, error handling and logging, testing rules, the review checklist in the
-`shared/review-checklist.md` record format, and the enforcement table mapping every rule to its
-bucket and tool.
+Written to the document resolved per `shared/review-checklist.md`. A project with nothing written
+yet gets `docs/standards/` under `shared/artifact-paths.md`: a `<tech>.md` per detected technology,
+and a `<layer>/<tech>.md` where its rules differ between the profile's layers, carrying its code
+layout and naming, error handling and logging, and testing rules, and an `index.md` carrying the stack with its evidence, the branch and commit rules, the review checklist in
+the `shared/review-checklist.md` record format, and the enforcement table mapping every rule to its
+bucket and tool. `references/stack-standards.md` holds the shape.
 
 For a project that already keeps conventions, the same content goes into the shape it already uses,
 and the two sections it will not have are the review checklist and the enforcement table. Those are
@@ -253,6 +258,10 @@ only when the user asks.
 ## Definition of done
 
 - [ ] Every rule is derived from the code or explicitly agreed, never imported unexamined.
+- [ ] Everything drawn from a published standard sits in the proposals section, carrying its
+      repository, its path, and the date it was fetched, and none of it is in the review checklist.
+- [ ] No block of a source's text was copied into a project document; each proposal is a rule
+      sentence in the team's words with a link to its source.
 - [ ] Every rule is classified `ENFORCED`, `REVIEWED`, or `ASPIRATIONAL`.
 - [ ] The document links to config files instead of restating their contents.
 - [ ] A project that already keeps conventions still has its own shape afterwards.
@@ -260,8 +269,10 @@ only when the user asks.
 - [ ] Every file listed in step 1 was checked, and the absent ones were reported as absent.
 - [ ] Convention gaps already reported by a review were read and carried in as candidates, each
       naming the review that raised it, or the run said no review report was there to read.
-- [ ] `--audit` changed no file and cited `path:line` rather than assigning an ID.
-- [ ] `--sync` left the wording of every rule the code still matches untouched.
+- [ ] `--audit` changed no file, cited `path:line` or a proposal's repository, path, and fetch date
+      rather than assigning an ID, and named every source gone, changed, or unconfirmed.
+- [ ] `--sync` left the wording of every rule the code still matches untouched, showed a moved
+      source as a change to pick, and turned a gone source into an open question.
 - [ ] Rules the team has not agreed to are marked as proposals.
 - [ ] The review checklist section carries only `REVIEWED` rules, each with an ID and a default severity.
 - [ ] On a run reaching step 6, every missing collaboration file was offered and none was written

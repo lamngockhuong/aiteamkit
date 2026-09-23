@@ -194,20 +194,31 @@ merge conflict nobody planned for.
 
 **Produces.** The team's conventions derived from its own code and git history, each rule classified
 as `ENFORCED` by tooling, `REVIEWED` by a human, or `ASPIRATIONAL`, plus the tooling that could
-enforce the ones currently checked by hand. A team that already keeps standards documents gets that
-classification written into the set it has, in the shape it already uses: `docs/conventions.md` is
-the kit's default, not an address every project has to move to. Where the project has no
+enforce the ones currently checked by hand. It first names the languages and technologies the
+repository is built with, each with the file that proves it, and groups the rules under them. A
+project with nothing written gets `docs/standards/`: one document per technology and an `index.md`
+carrying the review checklist. Where one technology does different jobs in different layers of the
+profile, TypeScript in a client and in a server for instance, the rules that differ go to
+`docs/standards/<layer>/<tech>.md`; the layers are the project's own, never a fixed backend,
+frontend and mobile. A team that already keeps standards documents gets that
+classification written into the set it has, in the shape it already uses: `docs/standards/` and
+`docs/conventions.md` are the kit's defaults, not addresses every project has to move to. Where the project has no
 `CONTRIBUTING.md`, pull request template or `CODEOWNERS`, it offers to draft them and writes only
 the ones you pick; `--scaffold` offers them without a full derivation pass. A file you already have
 is left alone, except under `--sync`, which shows what the checklist or the owner list has fallen
-behind and offers that change.
+behind and offers that change. `--audit` also reports the sources behind the proposals: which are
+gone, which changed since a person last checked them, and which proposals nobody has approved yet;
+`--sync` offers what a changed source would change, and turns a gone one into an open question.
 
 **Use when.** There is no written convention, the written one no longer matches the code, reviews
 keep repeating the same comment, or the repository has no `CONTRIBUTING.md`, pull request template
 or `CODEOWNERS`.
 
-**Do not use when.** You want a style guide imported from elsewhere. This skill documents what the
-team does, not what an external guide recommends.
+**Do not use when.** You want a style guide applied to the project without anyone approving it.
+Under `--suggest` the skill proposes rules from a list of published standards for the detected
+stack, with a link to each source and never a copy of its text, and every one of them waits in a
+proposals section until the Tech Lead adopts it. What the code shows and what a guide recommends
+stay apart.
 
 **The habit that matters.** The `ASPIRATIONAL` bucket. A rule nobody enforces is named as such
 rather than left to look like policy. The `REVIEWED` rules are written in the record format from

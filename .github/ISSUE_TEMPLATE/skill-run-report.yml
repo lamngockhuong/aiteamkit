@@ -57,7 +57,7 @@ body:
       description: The steps of SKILL.md that ran, the ones that did not, and the order they came in.
       placeholder: |
         1. Read what exists - ran, partly: skipped CODEOWNERS
-        2. Derive from the code - ran
+        2. Detect the stack, then derive from the code - ran
         3. Classify - ran, but not in the record format
     validations:
       required: true

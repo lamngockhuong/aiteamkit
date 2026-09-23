@@ -12,6 +12,7 @@ aiteamkit/
   .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
   skills/<name>/SKILL.md        21 skill, mỗi skill một thư mục
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
+  skills/<name>/references/*.tsv danh sách do một file tham chiếu quản, mỗi dòng một bản ghi
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
   shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
   hooks/                        lời nhắc profile và bộ nạp file ghi đè, Claude Code và Codex
@@ -65,6 +66,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 | frontmatter `description` | Luôn luôn, cho cả 21 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
+| `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
 | `shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
 | `.atk/profile.md` | Một lần mỗi lượt chạy, ở skill nào cần sự thật của dự án | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
 
@@ -86,8 +88,8 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
   dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, đường đưa một khoảng trống quy ước từ
   báo cáo review về lại `atk:convention`, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép
-  lại ở cả hai skill rồi lệch nhau. Thứ tự tra nằm ở đây cũng vì lý do ấy: `docs/conventions.md` là
-  giá trị mặc định chứ không phải địa chỉ, nên một skill đọc thẳng vào đó sẽ báo rằng một team có cả
+  lại ở cả hai skill rồi lệch nhau. Thứ tự tra nằm ở đây cũng vì lý do ấy: `docs/standards/index.md` và `docs/conventions.md`
+  là giá trị mặc định chứ không phải địa chỉ, nên một skill đọc thẳng vào đó sẽ báo rằng một team có cả
   một thư mục tài liệu chuẩn là chưa ghi quy ước nào. `atk:implement` đọc file này để lấy thứ tự tra
   ấy và các mục nền, dùng khi dự án thật sự chưa ghi quy ước nào của riêng mình.
 - `shared/finalize-steps.md`: trình tự khép lại một phần việc đã xong, gồm nhánh, commit, ranh
