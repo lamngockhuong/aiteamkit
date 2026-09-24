@@ -430,6 +430,9 @@ quantity, state, timing, failure, environment, data, integration, and rules, and
 gives no case is skipped with the assumption that makes it irrelevant. Named techniques, boundary
 values, equivalence classes, decision tables, state transitions and pairwise, decide how many cases
 each dimension gives, and a value no source states is marked `[ASSUMPTION]` and becomes a question.
+A checklist of eighteen common components, input, date, table, pagination, search, dialog, upload,
+import, sign-in, permission and more, adds the viewpoints those components tend to get wrong; a team
+that keeps its own checklist, a company one included, uses that instead.
 
 Cases follow a fixed template: the sections `ACCESSING`, `GUI` and `FUNCTION`, a testcase type, a
 source for every expected result, an ID never reused, and empty execution columns, with a CSV export

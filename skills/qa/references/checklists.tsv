@@ -1,0 +1,127 @@
+id	component	target	viewpoint	expected	dimension	technique
+input-01	input		Default display before any input: label, placeholder, default value, required mark	As the screen spec or design shows	4	
+input-02	input		Edit form opens with the stored value, not the placeholder	The stored value is shown and editable	4	
+input-03	input		Length at min-1, min, max, max+1	min and max accepted; min-1 and max+1 rejected with the stated message, or input stops at max	2	BVA
+input-04	input	required field	Empty, and whitespace only	Empty is rejected with the required message; whitespace only per spec	2	EP
+input-05	input		Leading and trailing spaces	Trimmed or kept, per spec; the saved value matches what the spec says	2	EG
+input-06	input		Full-width, half-width, multibyte, and emoji characters	Accepted or rejected per spec; how a multibyte character counts toward the limit per spec	2	EP
+input-07	input		HTML and script text such as <script>alert(1)</script>	Saved and shown as literal text, never executed	2	EG
+input-08	input		Value pasted rather than typed, including one longer than max	Handled the same as typed input	2	EG
+input-09	input		Characters outside the allowed set	Rejected with the stated message, next to the field	2	EP
+input-10	input	email	Invalid syntax: no @, two @, a dot at the end, an empty local or domain part	Rejected with the format message	2	EP
+input-11	input	email	Local part over 64 characters, whole address over the stated maximum	Rejected	2	BVA
+input-12	input	unique field	A value that already exists	Rejected with the duplicate message; case sensitivity per spec	8	
+input-13	input	numeric field	Zero, negative, decimal, leading zero, a value past the stated range	Accepted or rejected per spec; leading zeros kept or dropped per spec	2	BVA
+textarea-01	textarea		Length at max-1, max, max+1, and the counter if one is shown	The counter matches the length; max+1 is rejected or blocked	2	BVA
+textarea-02	textarea		Line breaks, blank lines, and trailing newlines	Kept or trimmed per spec, and shown the same way after saving	2	EG
+textarea-03	textarea		Line breaks counted toward the limit	Counted as the spec says, the same on screen and on the server	2	EG
+textarea-04	textarea		Very long word with no spaces	Wraps or scrolls without breaking the layout	7	EG
+textarea-05	textarea		HTML and script text	Shown as literal text, never executed	2	EG
+select-01	select		Default selected option, and the placeholder when nothing is selected	As the spec shows	4	
+select-02	select		Every option label and its order	Labels and order match the spec, including the label for each stored value	2	
+select-03	select		An option list with none, one, and many entries	Empty list shows the empty text; a long list scrolls	3	BVA
+select-04	select	required field	Submitting with nothing selected	Rejected with the required message	2	
+select-05	select	combo box	Typing to filter: partial match, no match, case, full-width text	Filtering per spec; no match shows the empty text	2	EP
+select-06	select		A stored value whose option has since been removed	Shown or flagged per spec, never silently replaced	8	EG
+select-07	select	dependent select	Changing the parent select	The child options reload; the old child value is kept or cleared per spec	4	DT
+choice-01	choice		Default checked state	As the spec shows	4	
+choice-02	choice		Clicking the label as well as the box	Toggles the value	7	
+choice-03	choice	required field	Submitting with none checked	Rejected with the required message	2	
+choice-04	choice	checkbox group	Select all, then unselect one, then select all again	The select-all state follows the members	4	ST
+choice-05	choice	radio group	Only one option can be selected at a time	Selecting one clears the other	4	
+choice-06	choice		Keyboard: tab to it and toggle with space	Focus is visible and space toggles	7	
+date-01	date		Default value and display format	As the spec shows	4	
+date-02	date		Typed dates: valid, invalid such as 2026/02/30, wrong format	Invalid and wrongly formatted dates rejected with the stated message	2	EP
+date-03	date		Minimum and maximum selectable date, and one day past each	Limits enforced on the picker and on the server	2	BVA
+date-04	date		Leap day, month end, year end	Accepted and saved as the same calendar date	10	EG
+date-05	date	date range	Start after end, start equal to end	Start after end rejected; equal accepted or rejected per spec	10	DT
+date-06	date		A user in a timezone other than the server's	The saved and shown date is the one the user picked	7	EG
+date-07	date		Clearing the date	Empty accepted or rejected per spec	2	
+table-01	table		Column headers, order, and the format of each value	As the spec shows, including the label for each stored value	4	
+table-02	table		No rows, one row, and many rows	No rows shows the empty text; many rows scroll or page	3	BVA
+table-03	table		Default sort order when the list opens	As the spec states, with a stable secondary order	3	
+table-04	table		A value longer than the column	Truncated or wrapped per spec, with the full value reachable	7	EG
+table-05	table		A deleted or hidden record	Not listed, or listed with its state, per spec	8	EP
+table-06	table		Rows another role or tenant owns	Listed only for the roles and tenants the permission table allows	1	DT
+table-07	table		A row edited by someone else while the list is open	Refresh shows the current value	5	EG
+sort-01	sort		Ascending then descending on each sortable column	Rows ordered by that column; the sort indicator matches	3	
+sort-02	sort		Equal values in the sorted column	A stable secondary order, the same on every load	3	EG
+sort-03	sort		Empty values, numbers stored as text, full-width and multibyte text	Ordered per spec, empty values always at the same end	8	EP
+sort-04	sort		Sort kept after paging, filtering, and returning from a detail screen	Kept or reset per spec	4	ST
+sort-05	sort		Sorting a column that shows a label for a stored code, such as a status	Ordered by the label or by the code, per spec	8	EP
+paging-01	paging		Row count at page size - 1, page size, page size + 1	The next page appears only when there is more than one page	3	BVA
+paging-02	paging		First, previous, next, last, and a page number	The right rows; controls disabled where they lead nowhere	3	
+paging-03	paging		The last page holding fewer rows than the page size	Shown correctly, with the right total	3	BVA
+paging-04	paging		A page number past the last page in the URL	Handled per spec, never an error screen	2	EG
+paging-05	paging		Rows added or deleted while paging	No row shown twice and none skipped, or per spec	5	EG
+paging-06	paging		Changing the page size	Returns to page 1 or keeps position, per spec	4	
+search-01	search		No condition, one condition, several conditions combined	Results match every condition, combined as the spec says (AND or OR)	10	DT
+search-02	search		Partial match, exact match, and case	As the spec states	2	EP
+search-03	search		Full-width and half-width forms of the same text	Treated the same or differently, per spec	2	EP
+search-04	search		Spaces before, after, and between keywords	Trimmed and split per spec	2	EG
+search-05	search		Special characters such as % _ \ and quotes	Treated as literal text, never as a pattern or query syntax	2	EG
+search-06	search		No results	The empty text, and the conditions kept on screen	3	
+search-07	search		Conditions kept after paging, returning from detail, and reloading	Kept or cleared per spec	4	ST
+search-08	search		Clear or reset	Every condition back to its default; the list shown afterwards per spec	4	
+search-09	search		Many filters at once	Pairs of filter values covered	2	PW
+dialog-01	dialog		Title, body text, and button labels	Exactly as the screen spec or design shows	4	
+dialog-02	dialog		Confirm, cancel, close icon, Escape, and a click outside	Each closes or stays as the spec says; only confirm runs the action	4	DT
+dialog-03	dialog		Confirm clicked twice quickly	The action runs once	5	EG
+dialog-04	dialog		The action failing after confirm	The error is shown and the dialog state is clear	6	
+dialog-05	dialog		Focus moves into the dialog and returns after closing	Focus is trapped while open and returns to the trigger	7	
+dialog-06	dialog		Page behind the dialog	Cannot be used while the dialog is open	4	
+file-01	file		Allowed and disallowed file types, including a renamed extension	Disallowed types rejected with the stated message, checked by content where the spec says	2	EP
+file-02	file		Size at max-1, max, max+1, and an empty file	Limits enforced with the stated message	2	BVA
+file-03	file		File name with spaces, multibyte characters, and a very long name	Uploaded and shown correctly	2	EG
+file-04	file		Upload interrupted or cancelled	No partial file is kept	6	EP
+file-05	file		Several files, and the maximum count	Count limit enforced	3	BVA
+file-06	file		Downloading a file another user or tenant owns by its URL	Refused	1	
+file-07	file		Downloaded file name and content	Name per spec; content identical to the uploaded file	8	
+import-01	import		A file with only the header, one row, and the maximum rows	Imported, with the count reported	3	BVA
+import-02	import		Wrong header, a missing column, an extra column	Rejected with the stated message	2	EP
+import-03	import		A row failing validation among valid rows	All rejected or only that row, per spec, with its line number reported	6	DT
+import-04	import		Encoding: UTF-8 with and without BOM, Shift_JIS where the spec allows	Read correctly or rejected per spec	7	EP
+import-05	import		Commas, quotes, and line breaks inside a cell	Parsed as one cell	2	EG
+import-06	import		A duplicate of an existing record	Updated, skipped, or rejected per spec	8	
+import-07	import		Importing the same file twice	Handled as import-06 says, per spec	9	EG
+import-08	import	export	Exported columns, order, encoding, and file name	As the spec states; the file opens in the spreadsheet the users have	8	
+import-09	import	export	Export with a filter applied, and with no rows	Only the filtered rows; no rows gives the header or the stated message	3	EP
+login-01	login		Correct credentials, wrong password, unknown account	The same message for wrong password and unknown account	1	EP
+login-02	login		Account locked, suspended, or not yet activated	Refused with the stated message	4	ST
+login-03	login		Repeated failures up to and past the lockout count	Locked at exactly the stated count	10	BVA
+login-04	login		A protected URL opened while signed out	Redirected to sign-in; returned to the URL afterwards or not, per spec	1	
+login-05	login		Session expiring during a form	Handled per spec, and the input is not silently lost	5	EG
+login-06	login		Signing out, then pressing back	Protected pages are not shown	4	EG
+login-07	login		Signing in on two browsers	Both kept or the older ended, per spec	5	
+password-01	password		Password rules: length, character classes, and one past each limit	Enforced with the stated message	2	BVA
+password-02	password		New password equal to the current or a recent one	Rejected or accepted per spec	10	EP
+password-03	password		Confirmation not matching	Rejected with the stated message	2	
+password-04	password		Reset link used twice, after expiry, and after a newer link was sent	Refused after use and after expiry; an older link after a newer one per spec	4	ST
+password-05	password		Forgot password for an unknown address	The same response as for a known one	1	
+password-06	password		Other sessions after a password change	Ended or kept per spec	4	
+password-07	password		Password shown in any field, log, or email	Never shown	2	EG
+crud-01	crud		Create with only the required fields, and with every field	Saved, and every field shown as entered	2	EP
+crud-02	crud		Save clicked twice quickly	One record created	5	EG
+crud-03	crud		Edit saved while someone else edited the same record	Refused or merged per spec, never silently overwritten	5	EG
+crud-04	crud		Cancel or leave the page with unsaved changes	Warned or discarded per spec	4	EP
+crud-05	crud		Delete: confirm, cancel, and a record others depend on	Deleted, kept, or refused per spec; soft or hard delete as the spec says	8	DT
+crud-06	crud		Opening a deleted record by its URL	Not found or its deleted state, per spec	4	
+crud-07	crud		Created and updated dates and author	Recorded and shown correctly	8	
+crud-08	crud		Stored data after each action	The table and columns the spec names hold the expected values	8	
+permission-01	permission		Each role in the permission table, for each action	Allowed or refused exactly as the table says	1	DT
+permission-02	permission		A refused action reached by URL or a direct API call	Refused on the server, not only hidden on screen	1	EP
+permission-03	permission		A record of another tenant or user reached by changing its ID	Refused	1	EG
+permission-04	permission		A role changed while the user is signed in	Takes effect per spec	5	
+permission-05	permission		Buttons and menu items per role	Shown, hidden, or disabled as the table says	1	DT
+notify-01	notify		Recipients: who receives it and who does not	Exactly the recipients the spec names	1	DT
+notify-02	notify		Subject, body, sender, and links	As the spec states, with the variables filled in	8	
+notify-03	notify		Triggered twice by a retry or double action	Sent once	9	EG
+notify-04	notify		Sending failing	Retried or logged per spec; whether the main action completes or rolls back per spec	6	
+notify-05	notify		A recipient with no address, or one who opted out	Skipped per spec	8	EP
+notify-06	notify		Read and unread state, and the count badge	Updated when read	4	ST
+nav-01	nav		Breadcrumb levels, labels, and each link	As the screen spec shows; each link goes to its screen	4	
+nav-02	nav		Page title and the highlighted menu item	Match the current screen	4	
+nav-03	nav		Browser back and forward after an action	Shows the right state and does not repeat the action	4	EG
+nav-04	nav		Reloading a screen reached through a flow	Shows the same screen or a clear message	4	EG
+nav-05	nav		Links that open in a new tab, and external links	As the spec states	7	EP
+nav-06	nav		Menu items per role	Only the ones the role may use	1	DT

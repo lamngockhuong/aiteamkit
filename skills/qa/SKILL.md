@@ -91,9 +91,13 @@ quantity, state, timing, failure, environment, data, integration, and rules. The
 file, equivalence partitioning, boundary values, decision tables, state transitions, and pairwise,
 decide how many cases each dimension produces. A dimension that gives no case is skipped with the
 assumption that makes it irrelevant, written beside the criterion, so a reader can tell a dimension
-that was asked from one nobody thought of. Then cover the concerns that
-span the feature: permissions by role, i18n and locale, timezone, and accessibility where the
-project requires it.
+that was asked from one nobody thought of.
+
+Then open the lines of `references/checklists.tsv` for the components the screen or flow has, per
+`references/checklists.md`, which also says when a checklist the override names takes their place.
+Each viewpoint that applies gives its cases, cited by the viewpoint ID in `Source`; one that does not
+is skipped with the reason. Then cover the concerns that span the feature: permissions by role, i18n and locale,
+timezone, and accessibility where the project requires it.
 
 ### 4. Regression matrix
 
@@ -144,3 +148,4 @@ and the criterion ID.
 - [ ] Every field with a stated limit has its boundary cases, and every validation rule has one
       accepted and one rejected case.
 - [ ] Every `[ASSUMPTION]` has an open question naming who answers it.
+- [ ] Every checklist viewpoint for a component the screen has gives a case or a reason it was skipped.
