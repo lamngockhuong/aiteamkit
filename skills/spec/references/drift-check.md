@@ -49,9 +49,10 @@ A `screen` document is checked against its design as well as its code, per The `
   document's own `design_node`. It is a status of the document rather than of an
   item, and the rows keep their own statuses from the code side. It is `major`: every row may still
   be right, but nobody can say which, and the digest cannot say which component moved, so the report
-  does not guess. Where the connection is not ready, or the images are no longer in that directory,
-  the report says in one line that the design side of that screen was not checked, and why. Silence
-  here would read as a match.
+  does not guess. Where `design_source` starts with `retired` there is no design side, and the
+  report says so rather than calling it checked. Where the connection is not ready, or the images
+  are no longer in that directory, the report says in one line that the design side of that screen
+  was not checked, and why. Silence here would read as a match.
 - **The code side.** Every row is an item on the coverage list above. A row the document counts as
   implemented is compared with the screen's code for its label, required mark, limits, and
   transition. A marked row is `not implemented yet`, and so is a row struck through as removed from

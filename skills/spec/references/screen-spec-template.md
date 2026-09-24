@@ -21,7 +21,7 @@ created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ticket: <the ticket that last changed this, or none>
 implemented: no | partial | yes
-design_source: <https://www.figma.com/design/<key>/<name>, or the image directory>
+design_source: <https://www.figma.com/design/<key>/<name>, the image directory, or retired (was <link>)>
 design_node: [<screen frame node ID>, <each state frame node ID>]   # or the image file names
 design_read: YYYY-MM-DD
 design_fingerprint: sha256:<16 hex characters>
@@ -115,6 +115,9 @@ five are folded into others, and each has its reason:
 
 ## Updating from a changed design
 
+A document whose `design_source` starts with `retired` follows the code instead, and nothing below applies
+to it: see When the design is retired in `shared/spec-docs.md`.
+
 A run against a document that exists reads the design from the document itself, never from the
 link it was given: the file in `design_source` and exactly the nodes, or the images, in
 `design_node`. A link given with `--design` is used only to add a frame the document does not yet
@@ -135,7 +138,9 @@ little history to answer, and is deepened, or the question asked, before any row
 ### What the approver has already answered
 
 An open question about the design stays in the Open questions table once it is answered, with the
-answer and who gave it, in two forms only: `Keep the document` or `Take the design`. A run reads
+answer and who gave it, in two forms only: `Keep the document` or `Take the design`. A question
+the sync raised because the code moved is answered `Keep the document` or `Take the code` instead,
+per When the code moves on its own in `shared/spec-docs.md`, and is not one this section reads. A run reads
 them before comparing anything:
 
 - `Take the design` is applied by the run: the row is rewritten from the design, and the question

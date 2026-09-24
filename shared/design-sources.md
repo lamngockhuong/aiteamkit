@@ -132,7 +132,9 @@ Every document written from a design carries four things about the read, so the 
   `https://www.figma.com/design/<key>/<name>`, every query parameter dropped, since a copied link
   carries sharing and tracking parameters that are nobody's business. An image directory is written
   relative to the project root, or by its name alone when it lies outside the project, so no
-  person's home directory is committed.
+  person's home directory is committed. A value that starts with `retired`, written as `retired (was
+  <the link>)` so the link survives, says the team no longer maintains the design, per The `screen`
+  kind in `shared/spec-docs.md`; the approver sets it, never a skill.
 - `design_node`: what this document was read from inside that file. The node IDs of its screen
   frame and of each state frame it records, or the image file names. A document written from a link
   to a section holds only its own frames here, which is what lets `--check` read one screen.

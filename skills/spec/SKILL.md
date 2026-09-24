@@ -110,7 +110,8 @@ fails, say which and change nothing.
 source of no other kind, per `shared/spec-docs.md`, and change nothing. `--from` is never a `screen`
 source, since a screen spec is written from its design, not from a design document: given with
 `--kind screen` or with `--design`, say so and change nothing. On a screen document that exists,
-the design is the one its `design_source` and `design_node` record, so a rerun needs no `--design`,
+the design is the one its `design_source` and `design_node` record, unless `design_source` starts
+with `retired`, so a rerun needs no `--design`,
 and `--check` and `--sync` take none: given one, say it is ignored and why. Under `--out`, a link
 holding several screens is refused, since one path cannot hold several documents.
 
@@ -124,7 +125,8 @@ which of the two happened, so a reviewer knows whether the shape was inherited o
 
 ### 3. Read the source
 
-A `screen` document takes its source differently from the next two paragraphs: the design, read
+A `screen` document takes its source differently from the next two paragraphs: the design, unless
+its `design_source` starts with `retired`, in which case the code, and otherwise read
 per `shared/design-sources.md`, which holds the three states of the Figma connection, the fallback
 to exported images, and what the read records. Each row cites its node ID. Where the screen's code
 already exists, compare each row with the screen's code for its label, required mark, limits, and
@@ -157,7 +159,11 @@ reports one as drift, and the sync never rewrites a contract to match the code.
 
 A `screen` document is synced the same way under either `Contract` line, with one difference: an
 implemented row keeps its node ID and gains its `path:line` beside it, per The `screen` kind in
-`shared/spec-docs.md`, and the sync sets `yes` when the last mark comes off.
+`shared/spec-docs.md`, and the sync sets `yes` when the last mark comes off. Where the diff changes
+what an implemented row promises, the sync reads the row, opens a question for the BrSE/BA with both
+versions, and sets `IN REVIEW`; where `design_source` starts with `retired`, it rewrites the row from
+the code instead. When the code moves on its own and When the design is retired, in that file, say
+why the two differ.
 
 ### 4. Write
 

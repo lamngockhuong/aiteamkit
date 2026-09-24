@@ -72,10 +72,11 @@ each has one substitution, so the analogy stops being invented once per run:
 A round whose substitution finds nothing to open is skipped and names the substitution it looked
 for, the same as any other skipped round.
 
-**`contract` under `Contract: first`, and on any `screen` document.** Where the profile says
-`first`, and for a `screen` document under either line, the reference document is the agreed
-contract, per `shared/spec-docs.md`, and the round reads it the other way round: it checks
-the diff against the document as well as the document against the diff. A change that implements an
+**`contract` under `Contract: first`, and on a `screen` document.** The reference document is the
+agreed contract where the profile says `first`, and for a `screen` document under either line, per
+`shared/spec-docs.md`. A `screen` document whose `design_source` starts with `retired` is the
+exception, since it follows the code. Where the document is the contract, the round reads it the
+other way round: it checks the diff against the document as well as the document against the diff. A change that implements an
 item differently from the document is `BLOCKING`, unless the same change carries the document back
 to `IN REVIEW` for its approver, which moves the disagreement to the person who owns it. An item the
 document still counts as not implemented is no finding while the diff leaves its code alone, and

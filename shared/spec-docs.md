@@ -139,6 +139,40 @@ from the document, and the two are reported apart:
   in a label, a required field, a limit, or a transition. That is drift as defined below, and which
   side moves is the approver's call as for any other kind.
 
+**When the code moves on its own.** A diff that changes what an implemented row promises, its
+label, required mark, limit, or where it leads, or that adds or removes a component the document
+lists, is a disagreement between the code and the row, and
+the sync never settles it by copying the code into a design-sourced row. It reads the row, not the
+design, and opens a question for the BrSE/BA carrying both versions, the row and what the code now
+does, answered `Keep the document`, which sends the code back, or `Take the code`, which the next
+sync or rerun applies by rewriting, adding, or striking the row from the code and closing the
+question. The design then differs from the row, and the question names the designer who has to
+bring it in line; until they do, a design rerun asks about that difference like any other. The document
+goes back to `IN REVIEW`, so the pull request carries it as the sync obligation asks. Such a
+question is about the code, not the design, and never holds the design fingerprint.
+
+**When the design is retired.** A project can stop maintaining its design, and then nobody will
+change it again and the code is the only place the screen still moves. The BrSE/BA says so by
+setting `design_source` to `retired (was <the link>)`, a decision a skill never takes. From then on
+the document follows the code whatever the `Contract` line says, as a document under
+`Contract: code` does. A sync rewrites an implemented row from the code, citing `path:line` beside
+the node ID, which stays as the row's key; a component the code adds gets a row with no node ID,
+keyed by its `No`, and a component the code removes is struck through as `Removed from the code on YYYY-MM-DD.`
+Nothing reads the design: `--check` has only a code side, the `design_*` fields stay as the last
+read left them and are not checked, and a run given `--design` says the design is retired and
+changes nothing.
+
+Retiring takes the same step as switching `Contract` back to `code`, over everything that was
+waiting on the design: each row still marked not implemented, every row of a document at
+`implemented: no`, each struck row whose removal is still pending, and each open question about a
+design difference. Each is removed, turned into a question about the code, or closed, the
+approver's call, since nothing will ever implement it from a design nobody keeps. Then
+`implemented` is set from the code. Bringing a design back is the reverse and equally the
+approver's: restore the link in `design_source`, and the next run reads the design as it would for
+a document already approved, so every difference becomes a question, and records a fresh
+`design_fingerprint` and `design_read` from that read, since the old ones describe a design the
+code has since moved past.
+
 **It splits with `feature` by where a rule holds.** A constraint that is true of one field on one
 screen, a maximum length, a format, a required mark, lives in the `screen` document. A business rule
 that holds on more than one screen, or that the server also enforces, lives in the `feature`
