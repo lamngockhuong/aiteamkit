@@ -69,9 +69,11 @@ List every schema migration with its duration estimate, its reversibility, and w
 downtime. List every new or changed config key and secret, and where it must be set per environment.
 Flag anything that cannot be rolled back, because that changes the go decision.
 
-Where a security record under `docs/records/security/` covers this range, link it, and carry each
-open Critical or High finding into the checklist as a blocking item, with its `Accepted by` cell as
-the record has it. An empty cell is an unchecked item, not an accepted risk.
+Where a security record under `docs/records/security/` that is not `SUPERSEDED` covers this range,
+link it, and carry each open Critical or High finding into the checklist as a blocking item by its
+ID, its severity, and its `Accepted by` cell as the record has it, never by its description. A
+release record reaches the client, and an unfixed vulnerability described there is disclosed to
+everyone who reads it. An empty `Accepted by` cell is an unchecked item, not an accepted risk.
 
 ### 4. Checklist
 

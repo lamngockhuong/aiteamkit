@@ -457,7 +457,7 @@ own IDs and wording, so the answers paste back into the sheet it came from.
 
 **Do not use when.** You want the finding fixed, which is `atk:fix` or `atk:implement`, or a deployed
 environment tested from outside, which is work for whoever the client authorises to do it. The skill
-reads code and runs local tools only.
+reads code and runs the project's own tools; it never probes a system it does not run locally.
 
 **The habit that matters.** A finding names the path from an entry point to an impact, or it is a
 worry, not a finding. The skill never fills the `Accepted by` cell of a risk that ships unfixed:

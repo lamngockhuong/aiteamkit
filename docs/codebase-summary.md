@@ -141,7 +141,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/verify/references/report-template.md` | The verification report, naming what was proven and what was not |
 | `skills/security/references/threat-checklist.md` | The order to find the project's audit commands in, the automated checks, the six STRIDE questions per trust boundary, the map to the OWASP Top 10, and the baseline checklist answered when nobody supplied one |
 | `skills/security/references/record-template.md` | The three verdicts and why a refuted candidate is kept, the four severities, the redaction rule, and the shapes of the security record and the threat model |
-| `skills/git/references/secret-scan.md` | The patterns scanned for in the staged diff, the paths that are a finding on their own, and why a hit stops the whole run |
+| `skills/git/references/secret-scan.md` | The patterns scanned for in the staged diff, the paths that are a finding on their own, and why a hit stops the whole run; `atk:security` reads the patterns and the paths alone, over tracked files |
 | `skills/git/references/commit-craft.md` | Where one commit ends and the next begins, the formatting sweep trap, and what evidence the body carries |
 | `skills/git/references/repair.md` | Rebase, conflict resolution and fixup, with the three checks that come before any rewrite of remote history |
 | `skills/git/references/stacked.md` | The stacked pull request lifecycle, and where to stop: one consent and one readiness gate per layer |

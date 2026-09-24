@@ -141,7 +141,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/verify/references/report-template.md` | Báo cáo kiểm chứng, nêu rõ đã chứng minh được gì và chưa chứng minh được gì |
 | `skills/security/references/threat-checklist.md` | Thứ tự tìm các lệnh audit của dự án, các kiểm tra tự động, sáu câu hỏi STRIDE cho mỗi ranh giới tin cậy, bảng ánh xạ sang OWASP Top 10, và checklist nền được trả lời khi không ai cung cấp checklist |
 | `skills/security/references/record-template.md` | Ba kết luận và vì sao một ứng viên bị bác bỏ vẫn được giữ lại, bốn mức nghiêm trọng, quy tắc che thông tin nhạy cảm, và hình dạng của bản ghi bảo mật và mô hình mối đe dọa |
-| `skills/git/references/secret-scan.md` | Các mẫu quét trong phần đã stage, những đường dẫn tự nó đã là phát hiện, và vì sao một lần trúng chặn cả lượt chạy |
+| `skills/git/references/secret-scan.md` | Các mẫu quét trong phần đã stage, những đường dẫn tự nó đã là phát hiện, và vì sao một lần trúng chặn cả lượt chạy; `atk:security` chỉ đọc các mẫu và các đường dẫn, trên các file đã track |
 | `skills/git/references/commit-craft.md` | Chỗ một commit kết thúc và commit sau bắt đầu, cái bẫy format toàn file, và phần thân commit mang bằng chứng gì |
 | `skills/git/references/repair.md` | Rebase, gỡ conflict và fixup, cùng ba lần kiểm tra phải làm trước khi viết lại lịch sử đã có trên remote |
 | `skills/git/references/stacked.md` | Vòng đời chồng pull request, và chỗ phải dừng: mỗi tầng một lời đồng ý và một cửa kiểm tra riêng |

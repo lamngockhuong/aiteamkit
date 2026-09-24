@@ -52,7 +52,7 @@ that names none, it is the gating artifact updated most recently.
 | 13 | Commits exist since the newest version tag and no release record covers them, where the team cuts versions | `atk:release` | `atk:git`, which carries a change but writes no rollback path |
 | 14 | No conventions are recorded, resolved per `shared/review-checklist.md` | `atk:convention` | `atk:review`, which falls back to the baseline items alone |
 | 15 | An override file is `DRAFT`, or its approver is a bare `TBD` | `atk:tailor --audit` | Running the skill with an override nobody has accepted |
-| 16 | A threat model under `docs/security/` has an `updated` date older than the last merged commit touching a path in its `Covers` list | `atk:security --threat-model <feature>` for each model that drifted | `atk:spec --check`, which compares reference documents with the code but never reads a threat model |
+| 16 | A threat model under `docs/security/` has an `updated` date older than the last merged commit touching a path in its `Covers` list, or has no `Covers` list at all | `atk:security --threat-model <feature>` for each model that drifted | `atk:spec --check`, which compares reference documents with the code but never reads a threat model |
 | 17 | None of the above | Ask what the asker is about to do, and route the answer as a question | Guessing a phase |
 
 Rows 10 and 13 hold only where the team works that way, which the estimate records already on disk

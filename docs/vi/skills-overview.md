@@ -462,7 +462,7 @@ chính ID và câu chữ của nó, để câu trả lời dán ngược lại �
 
 **Không dùng khi.** Bạn muốn phát hiện được sửa, đó là `atk:fix` hoặc `atk:implement`, hoặc muốn kiểm
 thử một môi trường đã deploy từ bên ngoài, đó là việc của người được khách hàng ủy quyền làm. Skill
-chỉ đọc mã và chạy công cụ cục bộ.
+đọc mã và chạy công cụ của chính dự án; nó không bao giờ dò quét một hệ thống không chạy ở máy cục bộ.
 
 **Thói quen tạo ra khác biệt.** Một phát hiện phải nêu được đường đi từ một lối vào tới một tác động,
 nếu không thì nó chỉ là một mối lo, chưa phải phát hiện. Skill không bao giờ điền ô `Accepted by` của

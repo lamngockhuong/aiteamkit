@@ -35,8 +35,9 @@ Does NOT handle: fixing a finding, which is `atk:fix` for a defect and `atk:impl
 control; rotating a credential or rewriting git history, which the owner of the credential and the
 repository does; reviewing a pull request for everything else (`atk:review`); writing test cases
 for a control (`atk:qa`); responding to a live breach (`atk:incident`); or deciding that a risk is
-acceptable, which belongs to a role. It never sends a request to a system it does not run locally:
-penetration testing a deployed environment is work for whoever the client authorises to do it.
+acceptable, which belongs to a role. It never probes, scans, or attacks a system it does not run
+locally: penetration testing a deployed environment is work for whoever the client authorises to do
+it.
 
 ## Roles
 
@@ -93,9 +94,12 @@ order to look for each command in and the checks to run when the project has non
 - **Dependencies.** The project's audit command, from the Commands section of `.atk/profile.md`, a
   CI workflow, or a script in the manifest. Where there is none, the package manager's own audit
   command, when its lockfile is present, recorded as run by this skill rather than by the project's
-  gate. Never install a scanner without asking.
-- **Secrets.** The patterns and the paths of `skills/git/references/secret-scan.md`, run over the
-  tracked files rather than the staged diff, plus whether an environment file is tracked at all.
+  gate. Never install a scanner without asking. An audit command sends the dependency list to its
+  registry; say so in the record, and skip it where the project's override forbids that.
+- **Secrets.** The patterns and the paths of `skills/git/references/secret-scan.md`, its scan and
+  its path list only, run over the tracked files rather than the staged diff, plus whether an
+  environment file is tracked at all. Its procedure on a hit belongs to `atk:git`: here a hit is a
+  finding, redacted, and nothing is unstaged.
 - **Configuration.** Debug flags, permissive cross-origin rules, and default credentials in the
   configuration the scope ships.
 
@@ -138,7 +142,8 @@ keeps with a person. Set `status: IN REVIEW` and name the approver.
 The security record at `docs/records/security/<ticket-or-date>-<slug>.md`, or
 `docs/records/security/<version>.md` for a release scope, per `shared/artifact-paths.md`. It is a
 record of what was checked on one day against one version of the code, and it is not edited
-afterwards: a later review writes a new one and links the old.
+afterwards: a later review of the same scope writes a new one, and the earlier record takes
+`status: SUPERSEDED` with a link forward, per `shared/artifact-paths.md`.
 
 Under `--threat-model`, the threat model at `docs/security/threat-model-<slug>.md`, named after the
 feature. It describes the feature's threats as the code stands, so it is updated in place when the
