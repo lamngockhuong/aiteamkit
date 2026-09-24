@@ -32,7 +32,7 @@ flowchart TD
         RL["release"] --> IC["incident"] --> RT["retro"]
     end
     L0 --> L1 --> L2 --> L3 --> L4
-    L1 <-.-|Chu kỳ sau| L4
+    L4 -.-> NC["Chu kỳ sau<br/><small>bắt đầu lại từ intake</small>"]
 ```
 
 Ba skill đáp lại một sự kiện chứ không nằm trong phase nào: `fix` khi có lỗi được báo, ở bất kỳ

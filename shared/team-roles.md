@@ -21,11 +21,11 @@ fill them.
 | Stakeholder / Client | - | Acceptance, priority, business trade-offs | intake, estimate, security, release |
 
 The last column lists, in lifecycle order, every skill that names the role as an author, an
-approver, or a reviewer, in its own `## Roles` section or in the phase reference of the project
-flow. `help` is in no row, because it serves whoever runs it, in any role. A few skills also name a
-person by what they are doing rather than by role: whoever joins in `catchup` and `onboard`, the
-leaver and the receiver in `handover`, the whole team in `retro`, and the Incident Commander in
-`incident`. Those people come from any row.
+approver, or a reviewer, in its own `## Roles` section or in the phase reference of
+`docs/flow/project-flow.md`. `help` is in no row, because it serves whoever runs it, in any role. A
+few skills also name a person by what they are doing rather than by role: whoever joins in `catchup`
+and `onboard`, the leaver and the receiver in `handover`, the whole team in `retro`, and the
+Incident Commander in `incident`. Those people come from any row.
 
 A small team maps several roles onto one person, and a solo project maps all of them onto one. That
 is supported and changes none of the rules below. The approver line still names somebody, the

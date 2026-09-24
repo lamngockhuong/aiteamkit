@@ -31,7 +31,7 @@ flowchart TD
         RL["release"] --> IC["incident"] --> RT["retro"]
     end
     L0 --> L1 --> L2 --> L3 --> L4
-    L1 <-.-|Next cycle| L4
+    L4 -.-> NC["Next cycle<br/><small>starts again at intake</small>"]
 ```
 
 Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;

@@ -23,7 +23,7 @@ flowchart TD
     P5 --> P6["6. Verify"]
     P6 --> P7["7. Release"]
     P7 --> P8["8. Operate and learn"]
-    P1 <-.-|Next cycle| P8
+    P8 -.-> NC["Next cycle<br/><small>starts again at 1. Requirement</small>"]
 ```
 
 ## The cycle in detail
@@ -49,7 +49,7 @@ flowchart TD
     end
 
     subgraph S2["2. Estimate"]
-        E0["atk:estimate<br/><small>Dev sizes, PM checks capacity</small>"] --> E1{"PM and Stakeholder<br/>commit the sprint"}
+        E0["atk:estimate<br/><small>Dev or TL sizes, PM checks capacity</small>"] --> E1{"PM and Stakeholder<br/>commit the sprint"}
         E1 -->|Scope does not fit| R0
         E1 -->|Committed| E2["Sprint backlog"]
     end

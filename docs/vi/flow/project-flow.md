@@ -24,7 +24,7 @@ flowchart TD
     P5 --> P6["6. Kiểm chứng"]
     P6 --> P7["7. Phát hành"]
     P7 --> P8["8. Vận hành và rút kinh nghiệm"]
-    P1 <-.-|Chu kỳ sau| P8
+    P8 -.-> NC["Chu kỳ sau<br/><small>bắt đầu lại từ 1. Yêu cầu</small>"]
 ```
 
 ## Chi tiết chu trình
@@ -50,7 +50,7 @@ flowchart TD
     end
 
     subgraph S2["2. Ước lượng"]
-        E0["atk:estimate<br/><small>Dev ước lượng, PM soát năng lực</small>"] --> E1{"PM và Stakeholder<br/>chốt sprint"}
+        E0["atk:estimate<br/><small>Dev hoặc TL ước lượng, PM soát năng lực</small>"] --> E1{"PM và Stakeholder<br/>chốt sprint"}
         E1 -->|Phạm vi không vừa| R0
         E1 -->|Đã chốt| E2["Backlog của sprint"]
     end
