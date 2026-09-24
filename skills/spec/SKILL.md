@@ -60,6 +60,7 @@ Never one document with a shared one.
 /atk:spec <subject> --from <design-path>  # Contract-first: write the document from the design, before the code
 /atk:spec <screen> --kind screen --design <figma-url>  # Write or update a screen spec from a Figma frame or section
 /atk:spec <screen> --kind screen --design <image-dir>  # The same from exported images, where Figma is out of reach
+/atk:spec <screen> --kind screen  # Update a screen spec from the design it already records
 /atk:spec --sync                  # Fold the change on the current branch into the documents it touched
 /atk:spec --check                 # Report drift between the documents and the code, change nothing
 /atk:spec --check --kind db       # Limit the drift report to one kind
@@ -108,8 +109,10 @@ fails, say which and change nothing.
 `--design` belongs to the `screen` kind alone. Given with another kind, say that a design is the
 source of no other kind, per `shared/spec-docs.md`, and change nothing. `--from` is never a `screen`
 source, since a screen spec is written from its design, not from a design document: given with
-`--kind screen` or with `--design`, say so and change nothing. `--check` and `--sync` take no
-`--design`: both read the `design_*` fields the document already carries.
+`--kind screen` or with `--design`, say so and change nothing. On a screen document that exists,
+the design is the one its `design_source` and `design_node` record, so a rerun needs no `--design`,
+and `--check` and `--sync` take none: given one, say it is ignored and why. Under `--out`, a link
+holding several screens is refused, since one path cannot hold several documents.
 
 ### 2. Take the shape from the neighbours
 
@@ -121,11 +124,11 @@ which of the two happened, so a reviewer knows whether the shape was inherited o
 
 ### 3. Read the source
 
-A `screen` document is the exception to everything else in this step: its source is the design,
-read per `shared/design-sources.md`, which holds the three states of the Figma connection, the
-fallback to exported images, and what the read records. Each row cites its node ID in place of
-`path:line`. Where the screen's code already exists, compare each row with it as `--check` would,
-to set `implemented` in step 4. The rest of this step is about the other kinds.
+A `screen` document takes its source differently from the next two paragraphs: the design, read
+per `shared/design-sources.md`, which holds the three states of the Figma connection, the fallback
+to exported images, and what the read records. Each row cites its node ID. Where the screen's code
+already exists, compare each row with the screen's code for its label, required mark, limits, and
+transition, to set `implemented` in step 4. The paragraphs on `--sync` below apply to it as well.
 
 Describe what the code does, citing `path:line`. Do not describe intended behaviour taken from a
 ticket, a design document, or a Figma file: those say what was going to happen, and the gap between
@@ -148,8 +151,9 @@ diff implements from its design citation to `path:line` and takes off its not-im
 `shared/spec-docs.md`; on a document at `no`, it first marks every item the diff does not reach, since
 the field stops speaking for all of them. Where the code does something other than what the item
 says, the item keeps its mark and the sync reports the difference in its summary as a disagreement
-for the document's approver. This is the one place a marked item is compared with its code, which is
-why `--check` never reports one as drift, and the sync never rewrites a contract to match the code.
+for the document's approver. Outside a `screen` document, which compares its rows with the code on every
+write, this is the one place a marked item is compared with its code, which is why `--check` never
+reports one as drift, and the sync never rewrites a contract to match the code.
 
 A `screen` document is synced the same way under either `Contract` line, with one difference: an
 implemented row keeps its node ID and gains its `path:line` beside it, per The `screen` kind in
@@ -175,8 +179,9 @@ A `screen` document always carries `implemented`, under either `Contract` line, 
 kind in `shared/spec-docs.md`: `no` where the screen has no code, otherwise `partial` or `yes` from
 the comparison in step 3. Run again on a screen document that exists, it follows Updating from a changed
 design in `references/screen-spec-template.md`, which is read on every such run and not only when
-the directory is empty: rows keyed by node ID, only changed rows touched, a row the BrSE settled
-kept and its conflict turned into an open question.
+the directory is empty: rows keyed by node ID and only changed rows touched while the document has
+never been approved, and every difference turned into an open question for the approver once it
+has.
 
 Two rules keep an update honest:
 

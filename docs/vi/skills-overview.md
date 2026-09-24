@@ -115,7 +115,7 @@ vi, các giả định được đánh dấu rõ là giả định, và câu h�
 **Dùng khi.** Yêu cầu tới dưới dạng tin nhắn, biên bản họp, mail hoặc một ticket một dòng, và team
 chưa bắt đầu được từ đó. Cũng dùng khi hai người đọc cùng một ticket mà hiểu khác nhau, và khi yêu
 cầu là một design Figma: `--design <figma-url>` đọc design, ghi lại những khung màn hình đã đọc, và
-biến những gì người dùng thấy trên đó thành story, còn thứ design không cho thấy thì thành câu hỏi.
+biến những gì người dùng thấy trên đó thành story, còn thứ design không cho thấy thì được đề xuất kèm nguồn hoặc được hỏi.
 Bảng thành phần của màn hình thuộc về `atk:spec --kind screen`, không thuộc skill này.
 
 **Không dùng khi.** Yêu cầu đã chốt và đã viết ra; bạn cần con số ước lượng (`atk:estimate`) hoặc

@@ -109,7 +109,7 @@ before consuming an artifact, not the file's existence.
 **A reference document nobody carried.** A contract changed and its document did not, so the next
 person designing against it designs against something that stopped being true. `atk:review` raises
 this as a blocking finding, and `atk:spec --check` finds the ones that got through. The obligation
-and the five changes that trigger it are in `shared/spec-docs.md`.
+and the six changes that trigger it are in `shared/spec-docs.md`.
 
 **A superseded artifact still looking current.** Planning the same work twice makes a second
 directory, and nothing marks the first one dead automatically. The rule for retiring it is at the

@@ -114,8 +114,8 @@ assumptions labelled as assumptions, and open questions each naming the person w
 **Use when.** A request arrives as a chat message, a meeting note, a mail, or a one-line ticket, and
 the team cannot start from it. Also when two people read the same ticket differently, and when the
 request is a Figma design: `--design <figma-url>` reads it, records which frames were read, and
-turns what the user can see on them into stories, while anything the design does not show becomes a
-question. The screen's component table is `atk:spec --kind screen`, not this skill.
+turns what the user can see on them into stories, while anything the design does not show is proposed
+with its source or asked. The screen's component table is `atk:spec --kind screen`, not this skill.
 
 **Do not use when.** The requirement is already agreed and written; you want effort numbers
 (`atk:estimate`) or a technical approach (`atk:design-doc`).

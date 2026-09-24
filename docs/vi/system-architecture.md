@@ -127,7 +127,7 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
 
 - `shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
   là gì khi profile của dự án ghi `Contract: first` cùng field `implemented` cho biết code của nó đã
-  có hay chưa, hình dạng của ai thắng khi dự án đã giữ sẵn tài liệu của mình, năm loại thay
+  có hay chưa, hình dạng của ai thắng khi dự án đã giữ sẵn tài liệu của mình, sáu loại thay
   đổi buộc pull request phải mang theo tài liệu tham chiếu, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác với
   code, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
   viết ra những tài liệu đó, `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và

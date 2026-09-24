@@ -61,12 +61,14 @@ the design out.
 3. **Image**, through its screenshot tool, for what the tree cannot say: which of two overlapping
    layers is on top, whether a group reads as one control.
 
-A Figma URL carries the node as `node-id=1-2`, and the tools take it as `1:2`. Convert before the
-first call.
+A Figma URL carries the node as `node-id=1-2`, or in older links `node-id=1%3A2`, and the tools
+take it as `1:2`. Convert before the first call. A link to a branch, `/design/<key>/branch/<branch
+key>/...`, is read from the branch key, and `design_source` keeps the branch path, since the main
+file may not hold the frames at all.
 
 A URL with no `node-id`, or one whose node is a page, points at far more than one screen. Do not
-read the whole file: list the page's first-level sections and frames and ask which, in
-one question.
+read the whole file: list its pages, or the page's first-level sections and frames, and ask which,
+in one question.
 
 Only the tools that read are called: the identity tool, metadata, design context, and screenshot.
 A connection also carries tools that change a Figma file, and no skill calls one, whatever the
@@ -92,9 +94,13 @@ their frame name. A directory of images is split the same way, one image to a fr
 
 A `screen_id`, or a frame name standing in for one, names a file, so it is used as a file name only
 when it is made of letters, digits, hyphens, and underscores. Anything else is turned into a
-lowercase slug of those characters, and a name that leaves nothing is asked for. Two frames of
-different layout carrying the same `screen_id` are asked about before anything is written: writing
-both into one file mixes two screens under one key.
+lowercase slug of those characters, and a name that leaves nothing is asked for. Ask before anything
+is written when two frames of different layout would land in one file, whether they carry the same
+`screen_id`, slug to the same name, or differ only in letter case, which some file systems do not
+tell apart; and when a file of that name already exists and its `design_node` does not hold the
+frame being read. Writing both into one file mixes two screens under one key. A link to a frame that
+an existing document already records as one of its states updates that document rather than
+creating a new one.
 
 Then compare their layouts. A frame that differs from another only by a toast, a dialog over the same
 layout, or one state of a control is not a screen of its own: it is a state of the screen it differs
@@ -134,11 +140,15 @@ Every document written from a design carries four things about the read, so the 
 - `design_fingerprint`: `sha256:` followed by the first 16 hex characters of a SHA-256 digest, over
   exactly the nodes or images in `design_node`.
 
-From a connection, the digest input is one line per visible node in those frames: the node ID, a
-tab, the node's type with its component variant values, such as `INSTANCE Button/primary`, a tab,
-and its visible text. The text is normalised to NFC, every run of whitespace in it, the ideographic
-space U+3000 and line breaks included, becomes one space, and it is trimmed at both ends; a node with
-no text has an empty last field. Lines are sorted by node ID, compared character by character, and
+From a connection, the digest input is one line per visible node in those frames, the frame nodes
+themselves included: the node ID, a tab, the node's type, a tab, and its visible text. The type is
+the node type in upper case, one of `FRAME`, `GROUP`, `SECTION`, `COMPONENT`, `INSTANCE`, `TEXT`,
+`RECTANGLE`, `ELLIPSE`, `VECTOR`, `LINE`, and `OTHER` for anything else, whatever casing or tag the
+connection uses for it. An instance adds its component set name, or its component name where it
+belongs to no set, and its variant values as `name=value` pairs sorted by name and joined by commas,
+such as `INSTANCE Button State=Default,Type=primary`. Only a text node has visible text; every other node
+has an empty last field, so a container's text is counted once, on the text node that holds it. The text is normalised to NFC, every run of whitespace in it, the ideographic
+space U+3000 and line breaks included, becomes one space, and it is trimmed at both ends. Lines are sorted by node ID, compared character by character, and
 joined by a single newline with none after the last. From images, the input is one line per image
 in `design_node`: its file name, a tab, and the SHA-256 of its bytes, sorted the same way.
 

@@ -194,7 +194,8 @@ English document. A tree that is not partitioned records that and nothing else;
 `shared/artifact-paths.md` owns what each skill then does with it.
 
 `Contract: first` or `Contract: code` in Docs is the one entry there that changes what a skill does
-rather than where it writes: whether a reference document may exist before the code it describes.
+rather than where it writes: whether a reference document of any kind but `screen` may exist before
+the code it describes.
 `shared/spec-docs.md` owns what each value means, and why a missing line reads as `code`.
 
 Every entry is a pointer or a command, never prose copied from elsewhere. A section that runs long

@@ -45,15 +45,18 @@ A `screen` document is checked against its design as well as its code, per The `
   document's `design_node` names: the nodes, read through the Figma connection from the file in
   `design_source`, or the images, hashed again from the directory in `design_source`. Compare it with
   the recorded one. A difference lists the screen as `design changed`, with both digests and the
-  `design_read` date, and the next step is `atk:spec <screen> --kind screen --design <url>`, the URL
-  narrowed to the screen's frame in `design_node`. It is a status of the document rather than of an
+  `design_read` date, and the next step is `atk:spec <screen> --kind screen`, which reads the
+  document's own `design_node`. It is a status of the document rather than of an
   item, and the rows keep their own statuses from the code side. It is `major`: every row may still
   be right, but nobody can say which, and the digest cannot say which component moved, so the report
   does not guess. Where the connection is not ready, or the images are no longer in that directory,
   the report says in one line that the design side of that screen was not checked, and why. Silence
   here would read as a match.
-- **The code side.** Each row the document counts as implemented is an item on the coverage list
-  above, compared with the screen's code for its label, required mark, limits, and transition.
+- **The code side.** Every row is an item on the coverage list above. A row the document counts as
+  implemented is compared with the screen's code for its label, required mark, limits, and
+  transition. A marked row is `not implemented yet`, and so is a row struck through as removed from
+  the design whose component the code still shows: the removal is the same planned state as an
+  addition, per `shared/spec-docs.md`. It becomes `checked` once the code drops the component.
 
 ## Drift is not the same as an unanswered question
 

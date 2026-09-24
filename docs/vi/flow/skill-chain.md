@@ -106,7 +106,7 @@ matter trước khi dùng một artifact, đừng chỉ xem file có tồn tại
 
 **Tài liệu tham chiếu không ai mang theo.** Hợp đồng đổi mà tài liệu đứng yên, nên người thiết kế
 tiếp theo thiết kế dựa trên thứ đã hết đúng. `atk:review` nêu đây là phát hiện mức chặn, còn
-`atk:spec --check` tìm ra những chỗ đã lọt. Nghĩa vụ này và năm loại thay đổi kích hoạt nó nằm trong
+`atk:spec --check` tìm ra những chỗ đã lọt. Nghĩa vụ này và sáu loại thay đổi kích hoạt nó nằm trong
 `shared/spec-docs.md`.
 
 **Artifact đã bị thay thế nhưng trông vẫn như bản hiện hành.** Lập kế hoạch lại cho cùng một việc sẽ

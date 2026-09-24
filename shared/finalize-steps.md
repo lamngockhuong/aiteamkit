@@ -41,7 +41,7 @@ starts a review clock, and cannot be withdrawn quietly.
 ## 1. The reference documents the change owes
 
 A change that alters a public contract carries its reference document in the same pull request, per
-the sync obligation in `shared/spec-docs.md`, which also lists the five kinds of change that count.
+the sync obligation in `shared/spec-docs.md`, which also lists the six kinds of change that count.
 `atk:spec --sync` does the update; doing it by hand is equally fine, and the obligation is on the
 change either way.
 

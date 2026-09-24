@@ -125,7 +125,9 @@ exists yet above, with the component row as the unit that carries the mark, and 
 in how an implemented row is cited: it keeps its node ID and cites its code beside it, as
 `path:line`, never in its place, because the node ID is what every later read of the design matches
 the row on. So `yes` on a screen means every row carries a code citation beside its node ID and no
-mark is left.
+mark is left. A row struck through as removed carries neither and does not count once the code no
+longer shows its component: it records a number that is taken, not a component the code has to
+have. Until then its removal is pending, and it counts as not in code.
 
 **Its drift has two sides.** The design can move away from the document, and the code can move away
 from the document, and the two are reported apart:
@@ -160,14 +162,16 @@ never a side effect of documenting one endpoint.
 
 ## The sync obligation
 
-A change that alters a public contract carries its reference document in the same pull request. Five
-things count as altering a public contract:
+A change that alters a public contract carries its reference document in the same pull request. Six
+things count, the last because a screen spec is what QA and the BrSE read a screen from:
 
 - the path or the method of an endpoint;
 - the shape of a request or a response, a field becoming optional included;
 - an error code, or the condition that produces one;
 - a table or a column, a default or a constraint included;
-- an enum value, or what an existing value means.
+- an enum value, or what an existing value means;
+- a component of a screen that has a `screen` document: its label, its required mark, a limit it
+  enforces, or where it leads.
 
 Nothing else triggers the obligation. A refactor behind an unchanged contract does not, and neither
 does a change to a comment, a test, or a name the document was never allowed to mention.
@@ -196,7 +200,8 @@ A document that never settled the point, or that carries it as an open question 
 it, is not drift. Nobody has decided yet, and reporting it as a gap sends someone to fix code that is
 doing nothing wrong.
 
-An item a contract-first document counts as not implemented yet, per Whether the code exists yet
+An item a contract-first document, or a `screen` document under either `Contract` line, counts as
+not implemented yet, per Whether the code exists yet
 above, is neither. The document says the code is still to come, and code that is not there yet is the
 state the team planned for. It is reported as not implemented, never as a finding. Once the mark comes off, a
 disagreement is drift like any other, and which side changes is still the approver's call: an agreed
