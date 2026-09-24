@@ -1,0 +1,227 @@
+# Test case template
+
+Loaded by `atk:qa` in step 2 for the shape of the cases file, and again at the Output section for the
+CSV export. One file per feature at `docs/qa/test-cases-<slug>.md`, per `shared/artifact-paths.md`.
+How the negative and boundary rows are found is in `references/case-dimensions.md`; this file only
+says what a row looks like and how the table leaves the repository.
+
+The reader is a tester who was not in the conversation that produced the feature, executing the
+cases one row at a time, and the BrSE/BA confirming that the rows match what the client asked for.
+Both need a row they can act on without asking the author anything.
+
+## The project's own template wins
+
+Before writing a file from the shape below, look for the one the team already uses, in this order,
+and stop at the first hit:
+
+1. The `## Before` section of `.atk/overrides/qa.md` names a template or a column set, per
+   `shared/project-overrides.md`.
+2. An existing file under `docs/qa/` already has a cases table. Copy its columns and its ID scheme.
+
+When one is found, its columns and its vocabulary replace the defaults here, and every rule below
+that does not depend on a column name still applies: traceability, the three sections, the ID that
+is never reused, the export. A company form such as a numbered ISO test case document belongs to the
+project, not to the kit, which is why the kit carries its column mapping below and never its header.
+
+## Shape
+
+````markdown
+---
+title: "Test cases: <feature>"
+status: IN REVIEW
+owner: <QA who wrote it>
+approver: <QA lead, or TL where there is none>
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+ticket: <the ticket that last changed this, or none>
+---
+
+# Test cases: <feature>
+
+Sources: <requirement path>, <reference documents>, <screen spec or design>. What each one was used
+for is in step 1 of `atk:qa`.
+
+## Summary
+
+| Section | Cases | High | Medium | Low |
+|---------|-------|------|--------|-----|
+| ACCESSING | 4 | 3 | 1 | 0 |
+| GUI | 3 | 0 | 2 | 1 |
+| FUNCTION | 21 | 9 | 10 | 2 |
+
+## Coverage
+
+| Criterion | Cases |
+|-----------|-------|
+| AC-1 | TC-SA0201-FUN-001, TC-SA0201-FUN-002, TC-SA0201-FUN-007 |
+| AC-2 | TC-SA0201-ACC-001 |
+
+## Cases
+
+| ID | Page | Section | Category | Sub-category | Sub-sub category | Criterion | Pre-condition | Test data | Steps | Expected result | Priority | Testcase type | Source | Test result | Executed date | Tester | Environment | Note |
+|----|------|---------|----------|--------------|------------------|-----------|---------------|-----------|-------|-----------------|----------|---------------|--------|-------------|---------------|--------|-------------|------|
+| TC-SA0201-FUN-003 | User list | FUNCTION | Check data validation | Email | Max length | AC-1 | Signed in as Service Admin | Local part of 65 characters | 1. Open the user list<br>2. Click Add<br>3. Enter the test data in Email<br>4. Click Save | The message `E-VAL-012` appears under Email and nothing is saved | Medium | Abnormal_Others | `docs/api/users.md`, POST /users; dimension 2, BVA | | | | | |
+
+## Open questions
+
+| # | Question | Who answers | Blocks | Answer |
+|---|----------|-------------|--------|--------|
+````
+
+## The columns
+
+| Column | Required | Holds |
+|--------|----------|-------|
+| ID | Yes | See The ID below |
+| Page | Yes | The screen, endpoint, or batch under test, named as the source names it |
+| Section | Yes | `ACCESSING`, `GUI`, or `FUNCTION`, per The three sections |
+| Category | Yes | The check, from the list for its section |
+| Sub-category | Yes | The component, field, or flow the check is about |
+| Sub-sub category | When it narrows | The rule or condition: `Required`, `Max length`, `Two filters combined` |
+| Criterion | Yes | The acceptance criterion ID, or `exploratory` |
+| Pre-condition | When needed | The state before step 1: who is signed in, what data exists |
+| Test data | When needed | The exact values, never real personal data or a real credential |
+| Steps | Yes | Numbered actions, one per line, separated by `<br>` |
+| Expected result | Yes | What a tester can observe, per step 2 of `atk:qa` |
+| Priority | Yes | `High`, `Medium`, or `Low`, from the table in `references/case-dimensions.md` |
+| Testcase type | Yes | One value from Testcase types below |
+| Source | Yes | Where the expected result comes from, per The Source column below |
+| Test result | Left empty | Filled by the tester in the project's own tracking; see below |
+| Executed date | Left empty | As above |
+| Tester | Left empty | As above |
+| Environment | Left empty | The browser, device, or build the case ran on |
+| Note | Left empty | Evidence, defect ID, actual result |
+
+The five execution columns stay empty in this file. It is a reference document, updated in place as
+the feature changes, and a pass recorded in it would be true of one build and read as true of all of
+them. They exist so the exported sheet has the columns a tester fills in, in the order the team's
+spreadsheet expects.
+
+## The three sections
+
+| Section | Holds | Never holds |
+|---------|-------|-------------|
+| `ACCESSING` | Who can reach the page or call the endpoint, sign-in and session gates, direct URL access, the entry paths | Layout, validation, business outcomes |
+| `GUI` | What the screen shows before anyone acts: labels, placeholders, default values, empty and data-present states, visibility and disabled rules, text of dialogs and buttons | Whether the business result is correct |
+| `FUNCTION` | Validation, interactions, business rules, state transitions, list behaviour, effects on other screens, persisted data, error handling | Appearance |
+
+Categories per section:
+
+- `ACCESSING`: `Check access permission`, `Check authentication`, `Check session handling`,
+  `Check navigation path`.
+- `GUI`: `Check layout`, `Initialize`.
+- `FUNCTION`: `Check data validation`, `Check component interaction`, `Check business logic`,
+  `Check state transition`, `Check list behavior`, `Check cross-screen effect`,
+  `Check data persistence`, `Check error handling`.
+
+Two rules keep the `GUI` section from swallowing the file:
+
+- One `Check layout` case per screen covers the overall structure. Do not write one case per element
+  for its position.
+- A repeated item, a card or a row, and a finite group of controls, a toolbar, have their parts
+  asserted once, in the layout case or in one data-present case, not one case each.
+
+Where a case could sit in two sections, sign-in, redirect and entry go to `ACCESSING`, what shows
+before acting goes to `GUI`, and everything that runs a rule goes to `FUNCTION`.
+
+## Testcase types
+
+| Type | Use for |
+|------|---------|
+| `Normal_Login` | A happy path through sign-in, sign-out, or the session |
+| `Normal_Billing` | A happy path through payment, billing, or invoicing |
+| `Normal_Email` | A happy path that sends or shows a mail or a notification |
+| `Normal_Others` | Every other happy path |
+| `Abnormal_Login` | A negative case for sign-in, sign-out, or the session |
+| `Abnormal_Billing` | A negative case for payment, billing, or invoicing |
+| `Abnormal_Email` | A negative case for a mail or a notification |
+| `Abnormal_Others` | Every other negative or boundary case |
+| `Data and Database Integrity Testing` | The persisted state is the assertion |
+| `User interface` | Every `GUI` case |
+| `Access control and security` | Every `ACCESSING` case, and a `FUNCTION` case whose failure would be a security finding |
+| `Load Testing` | Behaviour under the expected load the design states |
+| `Stress Testing` | Behaviour beyond it |
+
+A team whose master list differs uses its own, per The project's own template wins.
+
+## The ID
+
+`TC-<SUBJECT>-<ACC|GUI|FUN>-<NNN>`, where `SUBJECT` is the screen ID when the source has one and the
+feature slug in capitals otherwise, and `NNN` counts within its section.
+
+An ID is never given to a second case. A new case takes the next number after the highest one ever
+used in its section, including cases since removed, and a removed case keeps its row, struck
+through, with `Removed YYYY-MM-DD: <reason>` at the start of its `Expected result`, so the execution
+columns stay empty on that row too. A bug report, a run record, and a regression matrix all point at
+these IDs, and an ID that comes back meaning something else sends each of them to the wrong case.
+
+## The Source column
+
+Every expected result says where it came from, so a reviewer can check it against something other
+than the author's word:
+
+- A reference document: its path and the section, `docs/api/users.md`, POST /users.
+- A screen spec: its path and the component number, `docs/screens/SA02_01.md`, 1.2.
+- A design read directly: the `design_node` of the node, per `shared/design-sources.md`.
+- A requirement: the criterion ID is already in `Criterion`; write `requirement`.
+- A checklist viewpoint or a dimension: its ID or number, beside the source of the expected value.
+
+A value with no source is written with `[ASSUMPTION]` in front of it, per
+`references/case-dimensions.md`, and the same thing becomes an open question.
+
+## Mapping to a spreadsheet form
+
+A company test case sheet usually has no `Section` column: its own Category holds `Accessing`,
+`GUI`, or `Function`, it has three category levels, and it has no column for the criterion or the
+source. The mapping onto such a sheet is exact for every column it has and says where the rest go:
+
+| This template | Sheet column |
+|---------------|--------------|
+| ID | ID, TC ID |
+| Page | Page Name |
+| Section | Category, as `Accessing`, `GUI`, or `Function` |
+| Category and Sub-category | Sub-category, joined as `<Category>: <Sub-category>`, `Check data validation: Email` |
+| Sub-sub category | Sub-sub category |
+| Pre-condition, Test data, Steps, Expected result | The same names |
+| Priority, Testcase type | The same names |
+| Test result, Executed date, Tester, Environment | The same names |
+| Criterion, Source | Note, as a prefix before anything the tester writes: `AC-1; docs/api/users.md, POST /users` |
+| Note | Note, after that prefix |
+
+The sheet gains no column: a form whose rules forbid extra columns, such as a test objective or a
+specs column, keeps its header exactly. Where the sheet does have a column for the criterion or the
+source, use it instead of the prefix. A team whose sheet differs from both layouts writes its own
+mapping in the override, per The project's own template wins.
+
+## Exporting to CSV
+
+The Markdown file is the source. A CSV is written beside it, `docs/qa/test-cases-<slug>.csv`, when
+the person running the skill asks for one, when `.atk/overrides/qa.md` asks for one, or when one
+already exists there. It is committed with its source, and an existing CSV is regenerated in the same
+run that changes the Markdown, so the two never disagree; nobody edits it by hand.
+
+1. The header row once, in the layout of the sheet the CSV is pasted into, which is the first of
+   these that holds: the layout `.atk/overrides/qa.md` names; the header of the CSV already beside the
+   Markdown; the table's own columns. A sheet in the company layout of Mapping to a spreadsheet form
+   gets that layout, its columns only, with the joins and the `Note` prefix that section gives, so a
+   paste lines up with the sheet column for column. Asked for a CSV with none of the three settling
+   it, ask which sheet it goes into rather than guessing.
+2. Rows sorted by Page, then Section in the order `ACCESSING`, `GUI`, `FUNCTION`, then Category,
+   Sub-category, Sub-sub category. The IDs do not change when the rows are sorted.
+3. `<br>` inside a cell becomes a real newline, so each step sits on its own line when the sheet is
+   opened.
+4. Every cell holding a newline, a comma, or a double quote is wrapped in double quotes, and a double
+   quote inside it is written twice, `""`.
+5. Grouping cells, Page and the three category levels, are left empty where they repeat the row
+   above. When a higher level changes, every level below it is filled in again on that row, even if
+   its value matches an earlier group.
+6. An empty column stays an empty cell; nothing is written as `-` or `N/A`.
+7. The five execution columns are exported empty.
+
+A struck-through row is not exported. The Markdown keeps it for the ID; the sheet is for executing,
+and a removed case in it gets executed.
+
+## Updating
+
+This is a reference document: it is updated in place when the feature changes, and `status` goes
+back to `IN REVIEW` on any change to a row, because the approver accepted a different set of cases.

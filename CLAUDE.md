@@ -115,7 +115,7 @@ skill discovery.
 | `shared/spec-docs.md` | What separates a reference document from a design document, what one is when the profile says `Contract: first` and the `implemented` field that says whether its code exists yet, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change including when the document lives in another repository, the `screen` kind with its always-present `implemented`, two-sided drift and split with `feature`, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review`, `qa`, `help` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
-| `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request) |
+| `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request), `qa` (`GUI` cases where no screen spec exists) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -155,8 +155,8 @@ to the rule. The drift-versus-open-question line lives there for the same reason
 format in `review-checklist.md`: two skills have to answer it the same way, so neither of them owns
 it.
 
-`design-sources.md` has two citers, `spec` and `intake`, and sits in `shared/` because how a design
-is read is neither one's to own: the rule that the connection is found by what it can do, told apart in three
+`design-sources.md` has three citers, `spec`, `intake` and `qa`, and sits in `shared/` because how a
+design is read is none of theirs to own: the rule that the connection is found by what it can do, told apart in three
 states, and replaced by exported images when it is not ready is what every skill that ever reads a
 design has to answer the same way. It leans on the connection row of `host-capabilities.md`, which
 lets a skill name the Figma connection and still forbids naming a command of the plugin carrying it.

@@ -151,7 +151,8 @@ Nine are contracts between a named handful of skills rather than kit-wide rules:
   when none is ready, so no skill stops for want of it. It also holds the node ID as the stable key
   of a component and the fingerprint a read records, which is what lets a second run touch only the
   rows that changed. Cited by `atk:spec` for the `screen` kind, the one kind whose source is a
-  design, and by `atk:intake`, which takes a design as the request. It is the reason `shared/host-capabilities.md` now has a row for a connection to an
+  design, by `atk:intake`, which takes a design as the request, and by `atk:qa`, which reads the design
+  for `GUI` cases only when the screen has no screen spec yet. It is the reason `shared/host-capabilities.md` now has a row for a connection to an
   outside service: the service may be named, a command of the plugin carrying it may not.
 
 The last two describe files that do not ship with the kit at all:

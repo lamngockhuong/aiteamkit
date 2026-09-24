@@ -5,7 +5,7 @@ directory of images exported from it when there is no such connection. Reference
 `skills/<name>/SKILL.md` as `shared/design-sources.md`, which is `../../shared/design-sources.md`
 relative to a skill file.
 
-Cited by `spec`, for the `screen` kind, and by `intake`, for a design given as the request. What a screen spec is, and why a design is its source and
+Cited by `spec`, for the `screen` kind, by `intake`, for a design given as the request, and by `qa`, for the `GUI` cases of a screen that has no screen spec yet. What a screen spec is, and why a design is its source and
 the source of no other kind, is in `shared/spec-docs.md`; this file only says how the design is read.
 
 ## Find the connection by what it can do

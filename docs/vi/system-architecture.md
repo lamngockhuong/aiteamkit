@@ -146,7 +146,8 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   sẵn sàng, ảnh export thay chỗ, nên không skill nào dừng vì thiếu nó. File này cũng giữ node ID làm
   khóa ổn định của mỗi thành phần và mã băm mà một lần đọc ghi lại; nhờ hai thứ đó, lần chạy thứ hai
   chỉ đụng tới những dòng đã đổi. `atk:spec` trích dẫn nó cho kind `screen`, kind duy nhất lấy design
-  làm nguồn, và `atk:intake` trích dẫn nó khi yêu cầu là một design. Cũng vì file này mà `shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
+  làm nguồn, `atk:intake` trích dẫn nó khi yêu cầu là một design, còn `atk:qa` chỉ đọc design cho case `GUI` khi
+  màn hình chưa có spec màn hình. Cũng vì file này mà `shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
   vụ bên ngoài: được nêu tên dịch vụ, nhưng không được nêu lệnh của plugin mang kết nối đó.
 
 Hai file cuối mô tả những file không đi kèm kit:

@@ -53,9 +53,10 @@ Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared
 ### 1. Read the acceptance criteria
 
 Load the requirement and design, and the reference documents for the area: the ones the design
-names, and those under `docs/api/`, `docs/database/` and `docs/features/` for what the change touches,
-resolved per `shared/artifact-paths.md`. List every acceptance criterion with an ID. A criterion that
-cannot be turned into a test is reported back as a requirement defect, not quietly skipped.
+names, and those under `docs/api/`, `docs/database/`, `docs/features/` and `docs/screens/` for what
+the change touches, resolved per `shared/artifact-paths.md`. List every acceptance criterion with an
+ID. A criterion that cannot be turned into a test is reported back as a requirement defect, not
+quietly skipped.
 
 Each source answers a different question, per `shared/spec-docs.md`. The design gives what a
 reference document never carries: migration, rollback, backward compatibility, rollout, and the
@@ -70,17 +71,27 @@ for what the change alters.
 
 ### 2. Derive the happy-path cases
 
-One case per criterion at minimum. A case has: ID, title, precondition, steps, test data, expected
-result, priority, and the criterion ID it covers. An expected result taken from a reference document
-cites it. Expected results state an observable outcome, not
-"works as expected".
+One case per criterion at minimum, written as a row of `references/test-case-template.md`, which
+holds the columns, the three sections `ACCESSING`, `GUI` and `FUNCTION`, the testcase types, and the ID
+that is never reused. A team that already has a template keeps it, per that file. Every expected
+result names its source in the `Source` column, and states an observable outcome, not "works as
+expected".
+
+`GUI` cases take their labels, placeholders, and the text of dialogs and buttons from the screen spec
+under `docs/screens/`, citing the component number. Text from a spec that is not `APPROVED`, or from a
+row whose `qa` cell holds an open question or whose value is marked `Proposed:`, carries
+`[ASSUMPTION]` and points at that question rather than opening a second one. Where the screen has no
+spec, read the design per `shared/design-sources.md` and cite the node. Where there is neither, the
+`GUI` cases carry `[ASSUMPTION]` and the cases file says its `GUI` coverage is reduced.
 
 ### 3. Negative, boundary, and cross-cutting cases
 
 Walk each criterion through the ten dimensions in `references/case-dimensions.md`: actor, input,
-quantity, state, timing, failure, environment, data, integration, and rules. A dimension that gives
-no case is skipped with the assumption that makes it irrelevant, written beside the criterion, so a
-reader can tell a dimension that was asked from one nobody thought of. Then cover the concerns that
+quantity, state, timing, failure, environment, data, integration, and rules. The techniques in that
+file, equivalence partitioning, boundary values, decision tables, state transitions, and pairwise,
+decide how many cases each dimension produces. A dimension that gives no case is skipped with the
+assumption that makes it irrelevant, written beside the criterion, so a reader can tell a dimension
+that was asked from one nobody thought of. Then cover the concerns that
 span the feature: permissions by role, i18n and locale, timezone, and accessibility where the
 project requires it.
 
@@ -94,6 +105,9 @@ a module, a table, or an endpoint with the change, and mark each `MUST TEST`, `S
 
 ### 5. Entry and exit criteria
 
+The test plan takes the shape of `references/test-plan-template.md`: levels, test types, environments,
+compatibility, and defect severity beside the criteria below.
+
 Entry: what the developer must deliver before QA starts, including build, environment, test account,
 seed data, and the list of what is not implemented yet. Where a reference document carries
 `implemented`, per `shared/spec-docs.md`, that list starts from its value and its marks rather than
@@ -103,8 +117,10 @@ that block a release, and who signs off.
 ## Output
 
 Test plan at `docs/qa/test-plan-<slug>.md` and cases at `docs/qa/test-cases-<slug>.md` per
-`shared/artifact-paths.md`. Cases are a Markdown table so they paste into a spreadsheet or a test
-management tool without rewriting.
+`shared/artifact-paths.md`. The Markdown table is the source. A CSV beside it,
+`docs/qa/test-cases-<slug>.csv`, is written by the export rules in `references/test-case-template.md`
+when the person asks for one, when the override asks for one, or when one already exists; an existing
+CSV is regenerated in the same run that changes the Markdown, and never edited by hand.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
@@ -124,3 +140,7 @@ and the criterion ID.
       criterion carries the assumption that made it irrelevant.
 - [ ] The regression matrix justifies each entry with a shared module, table, or endpoint.
 - [ ] Entry and exit criteria name who provides what and who signs off.
+- [ ] Every case has a section, a testcase type, and a source, and no ID was given to a second case.
+- [ ] Every field with a stated limit has its boundary cases, and every validation rule has one
+      accepted and one rejected case.
+- [ ] Every `[ASSUMPTION]` has an open question naming who answers it.

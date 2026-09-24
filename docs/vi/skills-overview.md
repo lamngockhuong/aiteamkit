@@ -432,7 +432,15 @@ tham chiếu cho phần nó không đụng tới.
 
 Case âm và case biên có được nhờ đưa từng tiêu chí đi qua mười chiều: tác nhân, input, số lượng,
 trạng thái, thời điểm, lỗi, môi trường, dữ liệu, tích hợp, và quy tắc; chiều nào không cho ra case
-nào thì được bỏ qua, kèm giả định khiến nó không liên quan.
+nào thì được bỏ qua, kèm giả định khiến nó không liên quan. Các kỹ thuật có tên, giá trị biên, phân
+lớp tương đương, bảng quyết định, chuyển trạng thái và ghép cặp (`pairwise`), quyết định mỗi chiều cho ra bao nhiêu
+case; giá trị không nguồn nào nêu thì được đánh dấu `[ASSUMPTION]` và thành câu hỏi.
+
+Test case theo một template cố định: ba nhóm `ACCESSING`, `GUI` và `FUNCTION`, một loại test case, nguồn
+cho mọi kết quả mong đợi, ID không bao giờ dùng lại, các cột kết quả chạy để trống, và bản xuất CSV mở
+được trong bảng tính với mỗi bước trên một dòng. Case `GUI` lấy text từ spec màn hình trong
+`docs/screens/`, hoặc từ design khi chưa có spec. Team đã có template hoặc mẫu của công ty thì giữ nguyên
+mẫu đó.
 
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.

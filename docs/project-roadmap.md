@@ -46,7 +46,7 @@ and `tidy-pass.md` around what the harness itself provides, `spec-docs.md` betwe
 five skills that have to leave its documents true, `host-file-locations.md` between `convention`,
 which asks whether a collaboration file is missing, `git`, which has to find the pull request
 template, and `init`, which reads the team's handles out of `CODEOWNERS`, `design-sources.md`,
-which says how `spec` and `intake` read a Figma design, `project-profile.md`,
+which says how `spec`, `intake` and `qa` read a Figma design, `project-profile.md`,
 which describes `.atk/profile.md`, a file that lives in the target project rather than in the kit,
 and `project-overrides.md`, which describes `.atk/overrides/<skill>.md` and reaches every skill
 through rule 7 of `team-roles.md` rather than by being cited directly.

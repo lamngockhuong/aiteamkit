@@ -45,7 +45,7 @@ artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần 
 cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng,
 `host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không,
 `git`, skill phải tìm ra template pull request, và `init`, skill đọc định danh của cả đội trong
-`CODEOWNERS`, `design-sources.md` nói `spec` và `intake` đọc design Figma ra sao, `project-profile.md` mô tả
+`CODEOWNERS`, `design-sources.md` nói `spec`, `intake` và `qa` đọc design Figma ra sao, `project-profile.md` mô tả
 `.atk/profile.md`, một file nằm trong dự án đích chứ không
 nằm trong kit, và `project-overrides.md` mô tả
 `.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ

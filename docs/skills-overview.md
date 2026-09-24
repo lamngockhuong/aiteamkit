@@ -427,7 +427,15 @@ what the change alters and from the reference documents for what it leaves alone
 
 Negative and boundary cases come from walking each criterion through ten dimensions, actor, input,
 quantity, state, timing, failure, environment, data, integration, and rules, and a dimension that
-gives no case is skipped with the assumption that makes it irrelevant.
+gives no case is skipped with the assumption that makes it irrelevant. Named techniques, boundary
+values, equivalence classes, decision tables, state transitions and pairwise, decide how many cases
+each dimension gives, and a value no source states is marked `[ASSUMPTION]` and becomes a question.
+
+Cases follow a fixed template: the sections `ACCESSING`, `GUI` and `FUNCTION`, a testcase type, a
+source for every expected result, an ID never reused, and empty execution columns, with a CSV export
+that opens in a spreadsheet with each step on its own line. `GUI` cases take their text from the
+screen spec in `docs/screens/`, or from the design when there is none. A team that already has its own
+template or company form keeps it.
 
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.
