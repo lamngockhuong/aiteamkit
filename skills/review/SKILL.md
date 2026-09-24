@@ -152,7 +152,7 @@ drift, per the same file.
 ### 5. Verify before reporting
 
 Every candidate gets one verdict, decided against the code rather than against how confident it
-sounds.
+sounds, and so does a round's checkable "checked and fine", per `references/review-rounds.md`.
 
 | Verdict | The candidate | What happens to it |
 |---------|---------------|--------------------|
@@ -178,19 +178,18 @@ naming neither is not plausible, it is unexamined, and it is dropped.
 Then take one more pass, once, with the verified list in hand: in an agent of its own above band 1
 where one can be spawned, and in band 1 inside the reviewer agent. Read the diff and the code around
 it looking only for what is not on that list: the job is the gaps, not a second opinion on what has
-already been found. Surface at most eight new candidates, and return nothing at all when there is
-nothing new. A padded sweep costs the author the attention that makes the rest of the list worth
-reading.
+already been found. Surface at most eight new candidates, or nothing at all when there is nothing
+new: a padded sweep costs the author the attention that makes the rest of the list worth reading.
 
 What a first pass misses is predictable, so start there: code moved or extracted that left a guard or
 an anchor behind, setup and teardown that stopped matching each other in a test, a default flipped in
-configuration, a predicate that turns out to have a side effect, and a lock whose scope quietly
-shrank.
+configuration, a predicate that turns out to have a side effect, a lock whose scope quietly shrank,
+and a listed finding's claim or pattern repeated elsewhere, per `references/review-rounds.md`.
 
-New candidates go through the verdicts above like any other, and then through the cap in step 6.
-They are labelled apart from every round's findings, per `references/review-rounds.md`. A sweep that
-died before it reported is re-run once, per the same file, and a review that ships without one says
-so: the run that quietly lost it reads exactly like the run that found nothing.
+New candidates go through the verdicts above like any other, and are labelled apart from every
+round's findings, per `references/review-rounds.md`. A sweep that died before it reported is re-run
+once, per the same file, and a review that ships without one says so: the run that quietly lost it
+reads exactly like the run that found nothing.
 
 ### 6. Rank and write
 
@@ -211,12 +210,12 @@ copies as agreement between people.
 A convention violation takes the severity recorded against its rule. Raise it only when the concrete
 failure is worse than the rule anticipated, and say why.
 
-The report carries at most ten findings, or twenty under `--strict`, ranked with `BLOCKING` first. Where the cap
-cuts, correctness outranks convention and readability: drop `NIT` first, then `SHOULD FIX`, and say
-how many went and at what severity, so the author knows a second pass is owed rather than reading the
-list as the whole of it. A `BLOCKING` finding is never cut. Where blocking findings alone exceed the
-cap, report them all and say so: what to do with a change in that state is the Tech Lead's call, not
-a trimming decision the reviewer makes quietly.
+The report carries every finding step 5 kept, `BLOCKING` first, a `NIT` in the one-row form of
+`references/report-format.md` if need be. The cap is on attention, not on the record: the summary
+and the inline comments carry at most ten findings, or twenty under `--strict`, cutting `NIT` first,
+then `SHOULD FIX`, and the summary says how many are in the report alone, at what severity.
+`BLOCKING` is never cut; where it alone exceeds the cap, carry it all and say so: what to do with a
+change in that state is the Tech Lead's call, not a trimming decision the reviewer makes quietly.
 
 Each comment: the file and line, what goes wrong, and a concrete suggestion. Address the code, never
 the author. State what the change does well in one line; a review with only negatives teaches
@@ -235,7 +234,7 @@ running the review again. Where the target is not a pull request the name carrie
 instead of the number, the branch, the short commit, or a slug of the paths.
 
 The session gets the summary, not the report: how many findings at each severity, the `BLOCKING`
-ones in one line each, how many the cap cut and at what severity, and the path to the file. Whoever
+ones in one line each, how many the cap left to the report alone, and the path to the file. Whoever
 has just watched the review run needs to know whether they are blocked and where to read the rest;
 the argument behind each finding is what the file is for.
 
@@ -255,23 +254,25 @@ writes, here and in step 1 of `atk:convention`, which takes its `Convention gaps
 
 ## Ticket
 
-Follow `shared/ticket-adapters.md`. Under `--comment`, post each finding as an inline comment on the
-line it cites, and the summary as one review comment. Post nothing before showing the list. In
-band 1 the reviewer agent only writes the report; the session shows the list from it and posts on
-consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
+Follow `shared/ticket-adapters.md`. Under `--comment`, post the findings the cap in step 6 allows as
+inline comments on the lines they cite, and the summary as one review comment that names the rest by
+identifier and points at the report. Post nothing before showing the list. In band 1 the reviewer
+agent only writes the report; the session shows the list from it and posts on consent. A `BLOCKING`
+finding requests changes; `NIT` findings never do.
 
 ## Definition of done
 
 - [ ] The requirement or design the change was reviewed against is named, or its absence is stated.
 - [ ] Every `BLOCKING` finding names a concrete failing input or broken contract.
-- [ ] Every reported finding was verified, and a `PLAUSIBLE` one names the check that would settle it.
+- [ ] Every reported finding and every checkable "checked and fine" was verified, and a `PLAUSIBLE`
+      finding names the check that would settle it.
 - [ ] Nothing was refuted for being unlikely: every drop rests on a line, a type, a guard, or the
       absence of any observable effect.
 - [ ] Preferences are labelled `NIT` and do not block.
-- [ ] The list is within the cap, and a cut says how many findings went and at what severity.
+- [ ] The report carries every verified finding; the summary and any inline comments are within the
+      cap, and a cut says how many are in the report alone and at what severity.
 - [ ] A sweep for gaps ran once against the verified list, in its own agent above band 1 where one
-      could be spawned or inside the band-1 reviewer agent, and returned nothing rather than padding
-      when it found nothing new.
+      could be spawned or inside the band-1 reviewer agent, and returned nothing rather than padding.
 - [ ] New behavior without a test is reported as a finding.
 - [ ] Every convention finding cites a rule ID and quotes the rule, or is marked as a baseline item.
 - [ ] A rule the review wanted but the project has not recorded is reported as a convention gap, not applied as if agreed.

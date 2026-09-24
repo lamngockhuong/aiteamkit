@@ -344,7 +344,8 @@ dọn dẹp cả file xung quanh thì không revert gọn được vào ngày c�
 **Sinh ra.** Một báo cáo review ở `docs/derived/reviews/<pr>-<date>.md`, lần chạy nào cũng viết, kèm
 một bản tóm tắt trong phiên nói có bao nhiêu phát hiện ở mỗi mức, nêu tên những phát hiện chặn merge,
 và trỏ tới file. Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới
-một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể; nhiều nhất mười phát hiện, hoặc
+một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể. Báo cáo giữ mọi phát hiện đã
+qua thẩm tra; bản tóm tắt trong phiên và các comment inline chỉ mang nhiều nhất mười phát hiện, hoặc
 hai mươi khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Mỗi phát hiện mang một
 mã định danh có tiền tố theo mức nghiêm trọng, `B1`, `S1`, `N1`, nhờ đó cả nhóm gọi tên được một phát
 hiện trong buổi họp nhanh hay trong một luồng trao đổi trên pull request; lượt review thứ hai trên
@@ -369,9 +370,10 @@ Không phát hiện nào vào danh sách mà chưa qua thẩm tra. Một phát h
 nhờ vậy tác giả đóng được nó trong một phút. Chỉ bỏ một ứng viên khi chính mã chỉ ra chỗ nó sai,
 không bao giờ bỏ vì cho rằng khó xảy ra: đó mới là thói quen giữ lỗi race condition và lỗi trên nhánh
 hiếm nằm lại trong bản review thay vì trôi ra production. Có danh sách đó rồi thì thêm một lượt đọc
-lại diff, chỉ đi tìm thứ chưa nằm trong danh sách, và thà trả về rỗng còn hơn độn thêm cho đủ. Khi
-trần cắt bớt danh sách, lỗi đúng sai đứng trên lỗi quy ước và chỗ mã khó đọc, và bản review nói rõ
-đã bỏ bao nhiêu phát hiện, ở mức nào.
+lại diff, chỉ đi tìm thứ chưa nằm trong danh sách và những chỗ khác trong diff lặp lại một phát hiện
+đã có, và thà trả về rỗng còn hơn độn thêm cho đủ. Khi trần cắt bớt những gì bản tóm tắt và comment
+mang theo, lỗi đúng sai đứng trên lỗi quy ước và chỗ mã khó đọc, và bản review nói rõ bao nhiêu phát
+hiện chỉ còn nằm trong báo cáo, ở mức nào.
 
 Bản review chạy theo chín vòng, mỗi vòng một việc, nên không lượt nào phải ôm hết mọi thứ cần để ý
 cùng lúc, và cũng không lượt nào bỏ sót đúng một vùng vì cùng một lý do. Mặc định mỗi vòng chạy
