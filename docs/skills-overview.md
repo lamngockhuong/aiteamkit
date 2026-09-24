@@ -397,6 +397,10 @@ expected values come from the reference documents in `docs/api/`, `docs/database
 `docs/features/`, so cases can be written before the code exists; under `code`, from the design for
 what the change alters and from the reference documents for what it leaves alone.
 
+Negative and boundary cases come from walking each criterion through ten dimensions, actor, input,
+quantity, state, timing, failure, environment, data, integration, and rules, and a dimension that
+gives no case is skipped with the assumption that makes it irrelevant.
+
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.
 

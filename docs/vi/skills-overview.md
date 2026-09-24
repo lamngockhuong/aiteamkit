@@ -401,6 +401,10 @@ mong đợi lấy từ tài liệu tham chiếu trong `docs/api/`, `docs/databas
 case có thể viết trước khi có code; khi `code`, lấy từ thiết kế cho phần thay đổi sửa và từ tài liệu
 tham chiếu cho phần nó không đụng tới.
 
+Case âm và case biên có được nhờ đưa từng tiêu chí đi qua mười chiều: tác nhân, input, số lượng,
+trạng thái, thời điểm, lỗi, môi trường, dữ liệu, tích hợp, và quy tắc; chiều nào không cho ra case
+nào thì được bỏ qua, kèm giả định khiến nó không liên quan.
+
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.
 

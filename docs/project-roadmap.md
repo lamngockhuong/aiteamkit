@@ -60,7 +60,7 @@ run:
 | `estimate` | The sizing scales with one worked example each, and the capacity worksheet |
 | `design-doc` | Design document template, ADR template, the option-comparison criteria set |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
-| `qa` | Test case table schema, a negative and boundary case checklist by input type |
+| `qa` | Test case table schema. The negative and boundary dimensions are done: `skills/qa/references/case-dimensions.md` |
 | `release` | Checklist template per environment, the client-notes style rules |
 | `incident` | Severity rubric, timeline format, postmortem template |
 | `retro` | The evidence-gathering command set for git, CI, and each tracker |

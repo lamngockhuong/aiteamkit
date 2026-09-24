@@ -77,9 +77,11 @@ cites it. Expected results state an observable outcome, not
 
 ### 3. Negative, boundary, and cross-cutting cases
 
-Add, per criterion where they apply: invalid input, empty and maximum values, permission denied,
-concurrent action, network failure and timeout, and duplicate submission. Then cover the concerns
-that span the feature: permissions by role, i18n and locale, timezone, and accessibility where the
+Walk each criterion through the ten dimensions in `references/case-dimensions.md`: actor, input,
+quantity, state, timing, failure, environment, data, integration, and rules. A dimension that gives
+no case is skipped with the assumption that makes it irrelevant, written beside the criterion, so a
+reader can tell a dimension that was asked from one nobody thought of. Then cover the concerns that
+span the feature: permissions by role, i18n and locale, timezone, and accessibility where the
 project requires it.
 
 ### 4. Regression matrix
@@ -118,6 +120,7 @@ and the criterion ID.
 
 - [ ] Every acceptance criterion maps to at least one test case.
 - [ ] Every test case maps back to a criterion, or is labelled exploratory.
-- [ ] Negative and boundary cases exist, not only happy paths.
+- [ ] Negative and boundary cases exist, not only happy paths, and every dimension skipped for a
+      criterion carries the assumption that made it irrelevant.
 - [ ] The regression matrix justifies each entry with a shared module, table, or endpoint.
 - [ ] Entry and exit criteria name who provides what and who signs off.

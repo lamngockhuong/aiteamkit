@@ -59,7 +59,7 @@ cục cố định mà chưa reference nào giữ bố cục ấy, template ph�
 | `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang, và bảng tính capacity |
 | `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án |
 | `breakdown` | Schema bảng task và luật sở hữu file cho các làn song song |
-| `qa` | Schema bảng test case, checklist case âm và biên theo từng kiểu input |
+| `qa` | Schema bảng test case. Các chiều cho case âm và biên đã xong: `skills/qa/references/case-dimensions.md` |
 | `release` | Template checklist theo môi trường, quy tắc hành văn cho ghi chú gửi khách |
 | `incident` | Thang mức nghiêm trọng, định dạng timeline, template postmortem |
 | `retro` | Bộ lệnh thu thập bằng chứng từ git, CI và từng tracker |
