@@ -1,6 +1,6 @@
 name: Bug report
 description: Report a problem with an atk skill, slash command, or plugin manifest
-labels: ["bug"]
+labels: ["bug", "status: triage"]
 body:
   - type: markdown
     attributes:

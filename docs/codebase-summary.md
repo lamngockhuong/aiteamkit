@@ -203,7 +203,10 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | File | Purpose |
 |------|---------|
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
+| `.github/workflows/labeler.yml` | Labels each pull request from the paths it changes, using `.github/labeler.yml` |
+| `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill, which must list all 22 |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
+| `.github/ISSUE_TEMPLATE/*.yml` forms | Each adds its type label plus `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
 | `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 22 skills, plus the profile, the overrides, the shared layer, and the hooks |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |

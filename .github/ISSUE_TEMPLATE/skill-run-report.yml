@@ -1,6 +1,6 @@
 name: Skill run report
 description: Report how a skill behaved on a real run, so its definition can be fixed
-labels: ["skill-run"]
+labels: ["skill-run", "status: triage"]
 body:
   - type: markdown
     attributes:
