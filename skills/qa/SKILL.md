@@ -8,7 +8,7 @@ description: >
   written test cases.
   Triggers on: "test plan", "test case", "QA", "kiểm thử", "viết test case", "regression",
   "テスト計画", "テストケース", "how do we test this", "QA handoff", "/atk:qa".
-argument-hint: "[requirement-path|feature|release] [--plan|--cases|--regression] [--lang <code>] [--out <path>]"
+argument-hint: "[requirement-path|feature|release|cases-path] [--plan|--cases|--regression|--update] [--lang <code>] [--out <path>]"
 ---
 
 # QA Planning and Test Cases (`atk:qa`)
@@ -38,6 +38,7 @@ handoff and the test data. PM owns the exit criteria. See `shared/team-roles.md`
 /atk:qa --plan <feature>        # Test plan only
 /atk:qa --cases <feature>       # Test cases only
 /atk:qa --regression <release>  # Regression matrix for a release scope
+/atk:qa --update <cases-path>   # Bring existing cases level with a changed source
 /atk:qa --lang vi               # Write the artifacts in Vietnamese
 /atk:qa --out <path>            # Override the default output path
 ```
@@ -49,6 +50,10 @@ handoff and the test data. PM owns the exit criteria. See `shared/team-roles.md`
 ```
 
 Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
+`--update` replaces the five steps with `references/update-mode.md`: it compares each source with what
+the cases file's Sources table recorded at the last run, and adds, rewrites, or strikes rows
+accordingly, keeping every ID, rather than writing the file again. The override is read either way.
 
 ### 1. Read the acceptance criteria
 
@@ -76,6 +81,8 @@ holds the columns, the three sections `ACCESSING`, `GUI` and `FUNCTION`, the tes
 that is never reused. A team that already has a template keeps it, per that file. Every expected
 result names its source in the `Source` column, and states an observable outcome, not "works as
 expected".
+The file's Sources table records what each source was when it was read, which `--update` later
+compares against.
 
 `GUI` cases take their labels, placeholders, and the text of dialogs and buttons from the screen spec
 under `docs/screens/`, citing the component number. Text from a spec that is not `APPROVED`, or from a
@@ -149,3 +156,6 @@ and the criterion ID.
       accepted and one rejected case.
 - [ ] Every `[ASSUMPTION]` has an open question naming who answers it.
 - [ ] Every checklist viewpoint for a component the screen has gives a case or a reason it was skipped.
+- [ ] Under `--update`, no ID changed or was reused, every rewritten case has empty execution cells,
+      an approved file had its existing rows changed only through an answered question, and the run
+      summary lists every row the diff touches.

@@ -440,6 +440,12 @@ that opens in a spreadsheet with each step on its own line. `GUI` cases take the
 screen spec in `docs/screens/`, or from the design when there is none. A team that already has its own
 template or company form keeps it.
 
+When a requirement, a reference document, a screen spec, or a design changes, `--update` brings the
+cases file level with it instead of writing it again: new cases take new IDs, changed cases are
+rewritten with their execution cells cleared, removed ones are struck through, and no ID is ever
+reused. Once the file has been approved, a change to an existing case becomes a question for the
+approver rather than an edit.
+
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.
 

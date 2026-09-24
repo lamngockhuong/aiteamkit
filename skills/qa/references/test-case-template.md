@@ -38,8 +38,13 @@ ticket: <the ticket that last changed this, or none>
 
 # Test cases: <feature>
 
-Sources: <requirement path>, <reference documents>, <screen spec or design>. What each one was used
-for is in step 1 of `atk:qa`.
+## Sources
+
+| Source | Read as |
+|--------|---------|
+| `docs/records/requirements/260918-user-list.md` | `sha256:3f9a0c1d2e4b5a67` |
+| `docs/api/users.md` | `sha256:81c2d9e0f1a3b4c5` |
+| `https://www.figma.com/design/<key>/<name>`, `[28256:70680]` | `design_fingerprint` `sha256:0d4e5f6a7b8c9d01` |
 
 ## Summary
 
@@ -154,6 +159,20 @@ used in its section, including cases since removed, and a removed case keeps its
 through, with `Removed YYYY-MM-DD: <reason>` at the start of its `Expected result`, so the execution
 columns stay empty on that row too. A bug report, a run record, and a regression matrix all point at
 these IDs, and an ID that comes back meaning something else sends each of them to the wrong case.
+
+## The Sources table
+
+Every source the cases were written from, one row each: a file by its path, and a design read
+directly, for a screen with no screen spec, by its `design_source` and `design_node`. `Read as` holds
+what the source was when this run read it: for a file, `sha256:` and the first 16 hex characters of
+the SHA-256 of its content with every line ending turned into LF first, so the same file checked out
+on Windows and on Linux hashes the same; for a design, the `design_fingerprint` of that read, per
+`shared/design-sources.md`. What each source was used for is in step 1 of `atk:qa`.
+
+Only a run of `atk:qa` writes this table, and it rewrites it on every run that reads the sources. It
+is what `--update` compares against to find what changed, which is why it records content rather than
+a commit: it holds wherever the source lives, in this repository or another, and whatever was
+committed in between.
 
 ## The Source column
 

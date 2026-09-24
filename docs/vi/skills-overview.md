@@ -445,6 +445,11 @@ cho mọi kết quả mong đợi, ID không bao giờ dùng lại, các cột k
 `docs/screens/`, hoặc từ design khi chưa có spec. Team đã có template hoặc mẫu của công ty thì giữ nguyên
 mẫu đó.
 
+Khi requirement, tài liệu tham chiếu, spec màn hình hay design thay đổi, `--update` đưa file test case
+theo kịp thay vì viết lại từ đầu: case mới nhận ID mới, case bị đổi được viết lại và xóa các ô kết quả
+chạy, case bị bỏ thì gạch ngang, và không ID nào bị dùng lại. Khi file đã được duyệt, mọi thay đổi trên
+một case có sẵn thành câu hỏi cho người duyệt thay vì được sửa thẳng.
+
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.
 

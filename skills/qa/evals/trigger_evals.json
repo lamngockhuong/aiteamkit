@@ -10,6 +10,9 @@
   { "query": "build the regression matrix for this change", "should_trigger": true },
   { "query": "ma trận regression cho lần phát hành này", "should_trigger": true },
   { "query": "what does a developer owe QA before moving a ticket to testing", "should_trigger": true },
+  { "query": "update the test cases, the spec changed since we wrote them", "should_trigger": true },
+  { "query": "cập nhật test case theo spec mới", "should_trigger": true },
+  { "query": "仕様変更に合わせてテストケースを更新して", "should_trigger": true },
 
   { "query": "start the app and confirm the whole flow works", "should_trigger": false },
   { "query": "chạy thử thật xem đơn hàng có vào database không", "should_trigger": false },
@@ -21,5 +24,6 @@
   { "query": "write the release checklist for production", "should_trigger": false },
   { "query": "viết user story và tiêu chí nghiệm thu", "should_trigger": false },
   { "query": "ước lượng sprint tới", "should_trigger": false },
-  { "query": "answer the client's security checklist for this release", "should_trigger": false }
+  { "query": "answer the client's security checklist for this release", "should_trigger": false },
+  { "query": "check whether the API docs still match the code", "should_trigger": false }
 ]
