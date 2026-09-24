@@ -23,7 +23,7 @@ flowchart TD
     P5 --> P6["6. Verify"]
     P6 --> P7["7. Release"]
     P7 --> P8["8. Operate and learn"]
-    P8 -.->|Next cycle| P1
+    P1 <-.-|Next cycle| P8
 ```
 
 ## The cycle in detail
@@ -34,9 +34,10 @@ artifact goes back to its author, which is the loop each phase is drawn with.
 ```mermaid
 flowchart TD
     subgraph S0["0. Setup"]
-        I0["atk:init<br/><small>Dev or TL drafts</small>"] --> IA{"TL approves<br/>the profile"}
+        I0["atk:init<br/><small>Dev or TL drafts</small>"] --> I1[".atk/profile.md at DRAFT<br/><small>committed, unless the project root is in no repository</small>"]
+        I1 --> IA{"TL approves<br/>the profile"}
         IA -->|Change requested| I0
-        IA -->|Approved| I1[".atk/profile.md<br/><small>committed, unless the project root is in no repository</small>"]
+        IA -->|Approved| IP["Profile APPROVED"]
         I1 --> I2["atk:tailor<br/><small>optional, TL or the owning role</small>"]
         I2 --> I3[".atk/overrides/&lt;skill&gt;.md committed"]
     end
@@ -121,11 +122,11 @@ flowchart TD
 
 | Phase | Skill | Author | Accepted by | Artifact state at the gate |
 |-------|-------|--------|-------------|-----------------------------|
-| 0. Setup | `atk:init` | Dev or TL, with PM on the tracker and team sections | TL, before the profile stops being a draft; under a `workspace` shape there is no repository to commit it to | `DRAFT` to `APPROVED` |
+| 0. Setup | `atk:init` | Dev or TL, with PM on the tracker and team sections | TL, before the profile stops being a draft; the skills it unblocks run meanwhile | `DRAFT` to `APPROVED`, committed at `DRAFT` unless a `workspace` shape leaves no repository to commit it to |
 | 0. Setup | `atk:tailor` | TL, or whoever owns the skill's output | The role that owns what the tailored skill produces | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:intake` | BrSE/BA | Stakeholder, on scope and criteria | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:catchup` | Whoever joins | Nobody; the understanding check is self-marked | `DRAFT` |
-| 2. Estimate | `atk:estimate` | Dev, with PM on capacity | PM and Stakeholder together | `IN REVIEW` to `APPROVED` |
+| 2. Estimate | `atk:estimate` | Dev or TL on sizes, PM on capacity | PM and Stakeholder together | `IN REVIEW` to `APPROVED` |
 | 3. Design | `atk:design-doc` | TL or Dev | TL, who owns the final technical call | `IN REVIEW` to `APPROVED` |
 | 3. Design | `atk:spec` | Dev, and BrSE/BA for `screen` | TL for `api` and `db`, BrSE/BA for `feature` and `screen` | `IN REVIEW` to `APPROVED`, then updated in place forever |
 | 4. Split | `atk:breakdown` | TL or PM | Dev owners accept their own tasks | `IN REVIEW` to `APPROVED` |
@@ -144,17 +145,17 @@ flowchart TD
 ## By role
 
 The same gates read from the other side: what a person in each role writes, what waits on their
-acceptance, and where a skill asks them to read or answer without owning the artifact. The first two
-columns follow the phase reference above; the third comes from each skill's own `## Roles` section.
-Anyone can run `atk:help`, and it is in no row.
+acceptance, and where a skill asks them to read or answer without owning the artifact. All three
+columns draw on both the phase reference above and each skill's own `## Roles` section. Anyone can
+run `atk:help`, and it is in no row.
 
 | Role | Authors | Accepts | Reviews or answers in |
 |------|---------|---------|------------------------|
-| PM | `estimate` capacity, with Dev on sizes; `breakdown`, or TL; `release`, with SRE; `retro`, or the team | `estimate`, with the Stakeholder; the go in `release`, or the Stakeholder; the follow-up actions in `incident`, with TL; an unfixed finding in `security`, or the Stakeholder; a `tailor` override of `intake`, `estimate`, `breakdown`, `release`, or `retro` | `init` tracker and team sections, which PM writes; `intake`, which PM leads with BrSE/BA; `catchup`, answering what a newcomer asks; `qa` exit criteria; `incident` client communication; access in `onboard` and `handover` |
+| PM | `estimate` capacity, with TL and Dev on sizes; `breakdown`, or TL; `release`, with SRE; `retro`, or the team | `estimate`, with the Stakeholder; the go in `release`, or the Stakeholder; the follow-up actions in `incident`, with TL; an unfixed finding in `security`, or the Stakeholder; a `tailor` override of `intake`, `estimate`, `breakdown`, `release`, or `retro` | `init` tracker and team sections, which PM writes; `intake`, which PM leads with BrSE/BA; `catchup`, answering what a newcomer asks; `qa` exit criteria; `incident` client communication; access in `onboard` and `handover` |
 | BrSE/BA | `intake`; `spec` of kind `screen` | `spec` of kinds `feature` and `screen`; a `tailor` override of `design-doc` or `spec` | `catchup`, answering what a newcomer asks; `design-doc`, that it still meets the requirement; `qa`, that the cases match the intent |
-| TL | `init`, or Dev; `tailor`; `design-doc`, or Dev; `breakdown`, or PM; `convention`; `security`, or Dev | `init`; `design-doc`; `spec` of kinds `api` and `db`; `plan`, when it touches a schema, a public contract, or two services; `qa`, or the QA lead; `security`, unless the team has a security officer; the follow-up actions in `incident`, with PM; a `tailor` override of any skill not listed for PM, BrSE/BA, or QA | `intake` feasibility; `implement`, at the large gate and the review ceiling; `fix`, when the intent check stops; `review`, on a disputed blocking finding; `verify`, at the ceiling; `release` technical risk; `incident` root cause; a buddy for `onboard`; gaps in `handover` |
+| TL | `init`, or Dev; `tailor`; `estimate` sizes, with Dev; `design-doc`, or Dev; `breakdown`, or PM; `convention`; `security`, or Dev | `init`; `design-doc`; `spec` of kinds `api` and `db`; `plan`, when it touches a schema, a public contract, or two services; `qa`, or the QA lead; `security`, unless the team has a security officer; the follow-up actions in `incident`, with PM; a `tailor` override of any skill not listed for PM, BrSE/BA, or QA, and any override touching how code is written or reviewed | `intake` feasibility; `implement`, at the large gate and the review ceiling; `fix`, when the intent check stops; `review`, on a disputed blocking finding; `verify`, at the ceiling; `release` technical risk; `incident` root cause; a buddy for `onboard`; gaps in `handover` |
 | Dev | `init`, or TL; `estimate` sizes; `design-doc`, or TL; `spec`; `plan`; `implement`; `fix`; `review` of someone else's change; `verify`, or QA; `security`, or TL; `git` | Their own tasks in `breakdown`; their own `plan`, below the TL boundary | `catchup`, as the reader who takes the understanding check; `convention`, agreeing rule by rule; `qa` handoff and test data |
-| QA | `qa`; `verify`, or Dev; its own test effort in `estimate` | `qa`, as QA lead; the sign-off in `verify` before the ticket moves; a `tailor` override of `qa` | `intake`, that each criterion is testable; its own test tasks in `breakdown`; `fix`, that the symptom is gone against the reproduction; `review` test adequacy; `security`, read at sign-off; `release` test result |
+| QA | `qa`; `verify`, or Dev; its own test effort in `estimate` | `qa`, as QA lead; the sign-off in `verify` before the ticket moves; a `tailor` override of `qa` | `intake`, that each criterion is testable; `catchup`, as a reader joining work in flight; its own test tasks in `breakdown`; `fix`, that the symptom is gone against the reproduction; `review` test adequacy; `security`, read at sign-off; `release` test result |
 | SRE | `release`, with PM | Nothing in the cycle | `design-doc` deployment, data, and capacity; `verify` environment; `security` configuration, infrastructure, and secrets; `release` execution and rollback; `incident` mitigation |
 | Stakeholder | Nothing in the cycle | `intake` scope and criteria; `estimate`, with PM; the go in `release`, or PM; an unfixed finding in `security`, or PM | Open questions `intake` names them against |
 
