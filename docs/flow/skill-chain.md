@@ -13,7 +13,7 @@ that file is the authority when the two disagree.
 Nodes are artifacts. Edge labels are the skill that turns one into the next.
 
 ```mermaid
-flowchart LR
+flowchart TD
     A0["Raw request<br/><small>chat, mail, ticket</small>"]
     A1["Requirements<br/><small>stories, criteria, open questions</small>"]
     A2["Estimate<br/><small>sizes, capacity, commitment</small>"]

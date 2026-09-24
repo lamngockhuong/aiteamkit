@@ -78,6 +78,13 @@ flowchart LR
 - **No hardcoded fill colours.** `style N fill:#e8f5e9` is black text on pale green in a dark theme,
   which is most readers on a tracker at night. Group with `subgraph` instead; where a distinction
   genuinely needs colour, use `classDef` with a stroke and let the theme pick the background.
+- **Run a long chain top-down.** `flowchart LR` suits three or four nodes. Past that, a preview
+  shrinks the picture to fit the width until the labels cannot be read, so use `flowchart TD`. Where
+  the chain has stages, put each in a `subgraph` with `direction LR` and link the subgraphs to each
+  other: Mermaid ignores a subgraph's direction once one of its nodes links outside it. Draw a loop
+  back to an earlier stage as a dotted edge to an end node that says where the next round starts,
+  `L4 -.-> N["Next cycle: back to intake"]`. An edge pointing up at the earlier stage makes the
+  layout move the last stage to the top, and `A <-.- B` keeps the order but draws no arrowhead.
 - **Keep labels to a few words.** The sentence goes in the prose under the diagram.
 
 ## Which skills draw what

@@ -9,13 +9,30 @@ với một skill.
 ## Vị trí trong vòng đời
 
 ```mermaid
-flowchart LR
-    I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
-    E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
-    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"] --> RL["release"]
-    R -.->|Có phát hiện chặn| IM
-    RL --> IC["incident"] --> RT["retro"]
-    RT -.->|Chu kỳ sau| IN
+flowchart TD
+    subgraph L0["0. Thiết lập"]
+        direction LR
+        I["init"] --> T["tailor"]
+    end
+    subgraph L1["1-2. Yêu cầu và ước lượng"]
+        direction LR
+        IN["intake"] --> C["catchup"] --> E["estimate"]
+    end
+    subgraph L2["3-4. Thiết kế, chia việc, xếp thứ tự"]
+        direction LR
+        D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    end
+    subgraph L3["5-6. Làm và kiểm chứng"]
+        direction LR
+        IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"]
+        R -.->|Có phát hiện chặn| IM
+    end
+    subgraph L4["7-8. Phát hành, vận hành, rút kinh nghiệm"]
+        direction LR
+        RL["release"] --> IC["incident"] --> RT["retro"]
+    end
+    L0 --> L1 --> L2 --> L3 --> L4
+    L4 -.-> NC["Chu kỳ sau<br/><small>bắt đầu lại từ intake</small>"]
 ```
 
 Ba skill đáp lại một sự kiện chứ không nằm trong phase nào: `fix` khi có lỗi được báo, ở bất kỳ

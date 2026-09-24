@@ -32,7 +32,7 @@ một lần mỗi lượt chạy, ở những skill cần dữ kiện của dự
 ## Hình dạng một lượt chạy
 
 ```mermaid
-flowchart LR
+flowchart TD
     S0["Điều kiện cần<br/><small>có profile, hoặc dừng</small>"] --> S1["Cổng<br/><small>có được đi tiếp không</small>"]
     S1 --> S2["Phần việc chính"]
     S2 --> S3["Kiểm chứng<br/><small>bằng chứng, không phải lời khẳng định</small>"]

@@ -44,8 +44,8 @@ is never duplicated per harness. The manifests differ only in how they declare c
 | `.codex-plugin/plugin.json` | `"skills": "./skills/"` | `interface{}` with `defaultPrompt`, icons, `brandColor` |
 
 ```mermaid
-flowchart LR
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>20 folders, one SKILL.md each</small>"]
+flowchart TD
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>23 folders, one SKILL.md each</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
     SK --> SH["shared/<br/><small>cited by the skills that need it</small>"]
