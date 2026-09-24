@@ -14,13 +14,30 @@ Walkthrough of what each skill means and when to use it:
 ## Lifecycle
 
 ```mermaid
-flowchart LR
-    I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
-    E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
-    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"] --> RL["release"]
-    R -.->|Blocking findings| IM
-    RL --> IC["incident"] --> RT["retro"]
-    RT -.->|Next cycle| IN
+flowchart TD
+    subgraph L0["0. Setup"]
+        direction LR
+        I["init"] --> T["tailor"]
+    end
+    subgraph L1["1-2. Requirement and estimate"]
+        direction LR
+        IN["intake"] --> C["catchup"] --> E["estimate"]
+    end
+    subgraph L2["3-4. Design, split, sequence"]
+        direction LR
+        D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
+    end
+    subgraph L3["5-6. Build and verify"]
+        direction LR
+        IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"]
+        R -.->|Blocking findings| IM
+    end
+    subgraph L4["7-8. Release, operate, learn"]
+        direction LR
+        RL["release"] --> IC["incident"] --> RT["retro"]
+    end
+    L0 --> L1 --> L2 --> L3 --> L4
+    L1 <-.-|Next cycle| L4
 ```
 
 Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;

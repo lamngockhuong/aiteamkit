@@ -43,8 +43,8 @@ nhân bản theo từng harness. Các manifest chỉ khác nhau ở cách khai b
 | `.codex-plugin/plugin.json` | `"skills": "./skills/"` | khối `interface{}` với `defaultPrompt`, icon, `brandColor` |
 
 ```mermaid
-flowchart LR
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>20 thư mục, mỗi thư mục một SKILL.md</small>"]
+flowchart TD
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>23 thư mục, mỗi thư mục một SKILL.md</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
     SK --> SH["shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]

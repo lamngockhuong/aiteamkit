@@ -12,7 +12,7 @@ nào thì ở [skill-lifecycle.md](./skill-lifecycle.md); tài liệu này nói 
 Các nút là artifact. Nhãn trên mũi tên là skill biến artifact này thành artifact kia.
 
 ```mermaid
-flowchart LR
+flowchart TD
     A0["Yêu cầu thô<br/><small>chat, mail, ticket</small>"]
     A1["Yêu cầu<br/><small>user story, tiêu chí, câu hỏi bỏ ngỏ</small>"]
     A2["Ước lượng<br/><small>khối lượng, năng lực, cam kết</small>"]

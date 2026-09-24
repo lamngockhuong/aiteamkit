@@ -32,7 +32,7 @@ loads: the body of a `SKILL.md` on invocation, a reference when a step reaches i
 ## The shape of a run
 
 ```mermaid
-flowchart LR
+flowchart TD
     S0["Precondition<br/><small>profile, or stop</small>"] --> S1["Gate<br/><small>may this proceed</small>"]
     S1 --> S2["The work"]
     S2 --> S3["Verification<br/><small>evidence, not a claim</small>"]
