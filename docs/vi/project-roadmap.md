@@ -5,9 +5,9 @@
 | Phase | Trạng thái | Tóm tắt |
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
-| 2. Độ phủ skill | XONG | 22 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười bốn skill đã có, tám skill còn lại chưa |
-| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 22 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
+| 2. Độ phủ skill | XONG | 23 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười bảy skill đã có, sáu skill còn lại chưa |
+| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 23 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
 
@@ -19,7 +19,7 @@ release-please chạy khi push lên `main`, cùng các template issue và pull r
 
 ## Phase 2: Độ phủ skill (xong)
 
-Hai mươi hai skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục:
+Hai mươi ba skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục:
 frontmatter với trigger đa ngôn ngữ, scope, roles, invocation, workflow, output, ticket và
 definition of done.
 
@@ -34,10 +34,13 @@ hôm nay làm gì.
 `help` đến sau cùng. Nó không ghi gì và trả lời nên chạy skill nào trong số còn lại, đọc từ trạng
 thái của dự án chứ không từ một danh sách, nên một skill thêm về sau là skill nó đã biết sẵn.
 
-Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi hai lần: từ vựng vai trò, quy ước đường dẫn
+`security` đến sau nó, cho checklist mà khách hàng yêu cầu trước khi nghiệm thu: một bản ghi về những gì
+đã được kiểm tra và tìm thấy, với mọi phát hiện chưa sửa được để lại cho một người có tên chấp nhận.
+
+Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi ba lần: từ vựng vai trò, quy ước đường dẫn
 artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười một file còn lại là hợp đồng giữa
 những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
-`layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa năm skill có
+`layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa sáu skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
 cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng,
 `host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không,
@@ -50,7 +53,7 @@ nằm trong kit, và `project-overrides.md` mô tả
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Mười bốn skill đã có sẵn `references/`. Tám skill còn lại thì chưa. Chỗ nào output là tài liệu bố
+Mười bảy skill đã có sẵn `references/`. Sáu skill còn lại thì chưa. Chỗ nào output là tài liệu bố
 cục cố định mà chưa reference nào giữ bố cục ấy, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |

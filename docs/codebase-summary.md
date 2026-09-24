@@ -7,7 +7,7 @@ removed, or renamed; update it in the same commit.
 
 | File | Purpose |
 |------|---------|
-| `README.md` | Public entry point: lifecycle diagram, the 22-skill table, invocation block, output convention, install instructions |
+| `README.md` | Public entry point: lifecycle diagram, the 23-skill table, invocation block, output convention, install instructions |
 | `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `shared/` DRY rule, cross-file sync list, em-dash policy, the `CONV-NNN` review checklist this repository is held to, release flow, verification commands |
 | `CHANGELOG.md` | Written by release-please from the commit types, never by hand. `feat:` and `fix:` appear; the other types are silent |
 | `LICENSE` | MIT |
@@ -37,7 +37,7 @@ removed, or renamed; update it in the same commit.
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` holds in the target project, why one file per skill rather than several, the `## Before` and `## After` sections, the seven things an override may never remove, the line it makes a skill print when it skips one, and where the directory sits when a project spans several repositories. Reached from rule 7 of `shared/team-roles.md`, so every skill honours it |
 | `shared/finalize-steps.md` | The closing sequence for any finished work: the reference documents it owes, branch, commit, merge, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in. `atk:git` carries it out; this file is the contract. Cited by every skill that finishes something |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not. Cited by `fix`, `implement`, and `verify`, so all three say the same thing about the same result |
-| `shared/diagram-conventions.md` | When a diagram earns its place in an artifact, the four shapes the kit draws (approval flow, dependency graph, sequence, causal chain), and the rules that keep them readable: Mermaid only, `<br/>` not a literal newline, roles instead of names, both branches on every decision, no hardcoded fill colours. Cited by `catchup`, `design-doc`, `plan`, `breakdown`, and `incident` |
+| `shared/diagram-conventions.md` | When a diagram earns its place in an artifact, the four shapes the kit draws (approval flow, dependency graph, sequence, causal chain), and the rules that keep them readable: Mermaid only, `<br/>` not a literal newline, roles instead of names, both branches on every decision, no hardcoded fill colours. Cited by `catchup`, `design-doc`, `plan`, `breakdown`, `security`, and `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use and how to name one, the rule that a command from another kit still may not be named, what to do on a harness that has neither, the four rules of the tidy step, the policy bounding how many reviewers a round runs at once, what one turn of an interview counts as on a harness that asks several questions at once, and when a connection to an outside service may be named. Cited by `fix`, `implement`, `verify`, `review`, and `init`, and by `design-sources.md` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, the rule that the project's own document shape wins over a kit template, the six kinds of change that oblige a pull request to carry its reference document, a screen's components among them, what that obligation becomes when the document lives in another repository, and the line between drift and a question nobody has answered. Cited by `spec`, `design-doc`, `implement`, `fix`, `verify`, and `review` |
 | `shared/host-file-locations.md` | Host detection in its own order, the locations GitHub and GitLab read `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, both spellings, and the rule that a file present at any of them is present, including why a stub counts as absent. Cited by `convention` to decide what is missing, by `git` to find the template it fills, and by `init` to find the `CODEOWNERS` that already holds the team's host identifiers |
@@ -67,8 +67,8 @@ first line that it belongs to this repository, and no skill reads either for ano
 
 ## Skills
 
-Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Fourteen also carry
-`references/`; the other eight do not yet.
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Seventeen also carry
+`references/`; the other six do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
@@ -88,6 +88,7 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Fourt
 | `skills/review/SKILL.md` | Development | Findings ranked blocking / should fix / nit, optionally posted to the PR |
 | `skills/qa/SKILL.md` | Verification | Test plan, traced test cases, regression matrix, entry and exit criteria |
 | `skills/verify/SKILL.md` | Verification | The running system exercised, side effects asserted in data, escalation after three rounds |
+| `skills/security/SKILL.md` | Verification | A security record: scope and trust boundaries, scanners run, threats per boundary, verified findings, a checklist answered item by item, residual risk left for a person to accept; and the threat model of a feature |
 | `skills/git/SKILL.md` | Version control | The diff read before staging, a scan that stops on a credential, commits that revert alone, and push, pull request and merge each behind their own yes |
 | `skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, rollback, sign-offs |
 | `skills/incident/SKILL.md` | Operation | Timeline, proven root cause, blameless postmortem, actions, runbook |
@@ -137,6 +138,8 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/verify/references/runtime-checks.md` | Bringing the application up, exercising it, asserting a real side effect, and cleaning up |
 | `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
 | `skills/verify/references/report-template.md` | The verification report, naming what was proven and what was not |
+| `skills/security/references/threat-checklist.md` | The order to find the project's audit commands in, the automated checks, the six STRIDE questions per trust boundary, the map to the OWASP Top 10, and the baseline checklist answered when nobody supplied one |
+| `skills/security/references/record-template.md` | The three verdicts and why a refuted candidate is kept, the four severities, the redaction rule, and the shapes of the security record and the threat model |
 | `skills/git/references/secret-scan.md` | The patterns scanned for in the staged diff, the paths that are a finding on their own, and why a hit stops the whole run |
 | `skills/git/references/commit-craft.md` | Where one commit ends and the next begins, the formatting sweep trap, and what evidence the body carries |
 | `skills/git/references/repair.md` | Rebase, conflict resolution and fixup, with the three checks that come before any rewrite of remote history |
@@ -168,6 +171,7 @@ all three trigger languages. The kit ships no runner; see `docs/project-roadmap.
 | `skills/review/evals/trigger_evals.json` | Reading a diff, against `qa`, `verify`, `fix`, and `catchup` |
 | `skills/qa/evals/trigger_evals.json` | Written cases and plans, against `verify` and automated test code |
 | `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
+| `skills/security/evals/trigger_evals.json` | Security review, a client checklist and a threat model, against `review`, `git`, `qa`, `fix`, `incident`, and `release` |
 | `skills/git/evals/trigger_evals.json` | Commits, pull requests and rebases, against `review`, `release` and `implement` |
 | `skills/release/evals/trigger_evals.json` | Notes and the deploy checklist, against `incident` and `qa` |
 | `skills/incident/evals/trigger_evals.json` | An outage and its postmortem, against `fix` and `release` |
@@ -195,7 +199,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
 | `docs/trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`: why a generic harness reports a vacuous score, the `PreToolUse` hook that does measure selection, the three conditions a run needs, and the cases nothing can observe |
-| `docs/flow/project-flow.md` | The 22 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
+| `docs/flow/project-flow.md` | The 23 skills placed in delivery phases, with the author and the approver of each artifact and the loop back when one is rejected |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/vi/**/*.md` | Vietnamese mirror of the ten files above, at the same relative paths |
@@ -206,10 +210,10 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 |------|---------|
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
 | `.github/workflows/labeler.yml` | Labels each pull request from the paths it changes, using `.github/labeler.yml` |
-| `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill, which must list all 22 |
+| `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill, which must list all 23 |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/*.yml` forms | Each adds its type label plus `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 22 skills, plus the profile, the overrides, the shared layer, and the hooks |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 23 skills, plus the profile, the overrides, the shared layer, and the hooks |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Skill run form taking a `--feedback` record: what was asked, which steps ran, where the skill was silent, and what the team expected |

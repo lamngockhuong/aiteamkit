@@ -1,6 +1,6 @@
 # Tổng quan các skill
 
-Hai mươi hai skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+Hai mươi ba skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
 dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
@@ -12,7 +12,7 @@ với một skill.
 flowchart LR
     I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
     E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
-    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
+    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"] --> RL["release"]
     R -.->|Có phát hiện chặn| IM
     RL --> IC["incident"] --> RT["retro"]
     RT -.->|Chu kỳ sau| IN
@@ -440,6 +440,31 @@ chạy dài vẫn là thay đổi có người phải review.
 
 ---
 
+## `atk:security`
+
+**Sinh ra.** Một bản ghi bảo mật: tài sản, tác nhân, lối vào và ranh giới tin cậy trong phạm vi, lệnh
+audit phụ thuộc của chính dự án và một lượt quét secret trên các file được theo dõi, sáu câu hỏi
+STRIDE đặt ra ở mọi ranh giới và ánh xạ sang OWASP Top 10, mỗi phát hiện được lần từ lối vào tới tác
+động, các ứng viên bị loại kèm dòng mã loại chúng, một checklist trả lời từng mục, và một bảng rủi ro
+còn lại. Với `--threat-model`, là mô hình mối đe dọa của một tính năng, được giữ cập nhật trong
+`docs/security/`.
+
+**Dùng khi.** Một bản release đụng tới xác thực, dữ liệu cá nhân, thanh toán, hoặc một tích hợp bên
+ngoài; khách hàng hoặc công ty giao một checklist bảo mật cần điền; hoặc một bản thiết kế cần ghi ra
+các mối đe dọa trước khi ai đó bắt tay xây. `--checklist <path>` trả lời checklist được cung cấp bằng
+chính ID và câu chữ của nó, để câu trả lời dán ngược lại được vào bảng tính gốc.
+
+**Không dùng khi.** Bạn muốn phát hiện được sửa, đó là `atk:fix` hoặc `atk:implement`, hoặc muốn kiểm
+thử một môi trường đã deploy từ bên ngoài, đó là việc của người được khách hàng ủy quyền làm. Skill
+chỉ đọc mã và chạy công cụ cục bộ.
+
+**Thói quen tạo ra khác biệt.** Một phát hiện phải nêu được đường đi từ một lối vào tới một tác động,
+nếu không thì nó chỉ là một mối lo, chưa phải phát hiện. Skill không bao giờ điền ô `Accepted by` của
+một rủi ro được phát hành mà chưa sửa: chấp nhận rủi ro là một quyết định tuân thủ, và nó thuộc về
+PM, hoặc về khách hàng khi hợp đồng nói vậy.
+
+---
+
 ## `atk:git`
 
 **Sinh ra.** Nhánh, các commit, và pull request. Diff được đọc trước khi bất cứ thứ gì được stage,
@@ -562,7 +587,7 @@ bởi người tiếp quản, không bao giờ do người rời đi tự tuyên
 
 ## Bắt đầu áp dụng
 
-Bắt đầu từ chặng đang đau nhất. Sáu điểm vào thường gặp:
+Bắt đầu từ chặng đang đau nhất. Bảy điểm vào thường gặp:
 
 - Chưa biết bắt đầu từ đâu: `atk:help`, skill đọc dự án và gọi tên một skill.
 - Yêu cầu tới mập mờ: `atk:intake`, rồi `atk:qa` khi đã có tiêu chí.
@@ -570,6 +595,7 @@ Bắt đầu từ chặng đang đau nhất. Sáu điểm vào thường gặp:
 - Kiến thức cứ đi theo người: `atk:handover` và `atk:onboard`.
 - Lỗi cứ quay lại vì nguyên nhân chưa bao giờ được tìm ra: `atk:fix`.
 - Tính năng tới tay QA mà mới chỉ được nhìn thấy xanh trên CI: `atk:init`, rồi `atk:verify`.
+- Khách hàng yêu cầu một checklist bảo mật trước khi nghiệm thu: `atk:security --checklist`.
 
 `atk:implement`, `atk:fix` và `atk:verify` đòi có `.atk/profile.md` trước khi làm bất cứ việc gì, còn
 `atk:plan` có nó thì cho ra kế hoạch tốt hơn. Mọi skill còn lại chạy được trên một bản clone mới

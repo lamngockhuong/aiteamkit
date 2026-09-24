@@ -5,10 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
-OpenAI Codex CLI. It packages 22 skills covering the delivery lifecycle of a company project team
+OpenAI Codex CLI. It packages 23 skills covering the delivery lifecycle of a company project team
 (`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`,
-`convention`, `plan`, `implement`, `fix`, `review`, `qa`, `verify`, `git`, `release`, `incident`,
-`retro`, `onboard`, `handover`), each invocable as a slash command by its own name
+`convention`, `plan`, `implement`, `fix`, `review`, `qa`, `verify`, `security`, `git`, `release`,
+`incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
 (`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
 
 This is content plus manifests, not a runtime application: there is no build step, no bundler, no
@@ -68,12 +68,12 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: fourteen of them carry
-one (`help`, `init`, `tailor`, `intake`, `catchup`, `plan`, `implement`, `fix`, `verify`, `spec`,
-`review`, `git`, `convention`, `onboard`), and the other eight are still `SKILL.md` alone. `git` holds the
-most, six, because the closing sequence has more cases than its workflow line names. Deepening a
-skill means adding `references/` files and pointing at them from the relevant workflow step, not
-growing `SKILL.md` past 300 lines.
+neighbours it must not steal. `references/` is where they still differ: seventeen of them carry
+one (`help`, `init`, `tailor`, `intake`, `catchup`, `design-doc`, `plan`, `implement`, `fix`,
+`verify`, `spec`, `review`, `qa`, `security`, `git`, `convention`, `onboard`), and the other six are
+still `SKILL.md` alone. `git` holds the most, six, because the closing sequence has more cases than
+its workflow line names. Deepening a skill means adding `references/` files and pointing at them
+from the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
 A reference is Markdown, with one exception: a list that grows one record at a time, whose fields a
 check can count. `convention` keeps its standard sources in `references/standard-sources.tsv` for
@@ -110,7 +110,7 @@ skill discovery.
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, where it sits relative to the project root and why the hook can miss it in a member repository, the two sections it may hold, and the seven things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `tailor` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not, plus the gate rule: which CI job judges a layer, and what a local command weaker than it leaves unverified | `fix`, `implement`, `verify` |
-| `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `incident` |
+| `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `security`, `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, what counts as one turn of an interview, and when a connection to an outside service may be named | `fix`, `implement`, `verify`, `review`, `init`, `design-sources.md` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, what one is when the profile says `Contract: first` and the `implemented` field that says whether its code exists yet, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change including when the document lives in another repository, the `screen` kind with its always-present `implemented`, two-sided drift and split with `feature`, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review`, `qa`, `help` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
@@ -280,13 +280,13 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
    artifact the tree did not hold before. The per-group paragraphs name the kinds and count them, so
    a new one leaves two files disagreeing about what is safe to delete
 7. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 22
+8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 23
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
 10. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
     all three `docs/vi/flow/` mirrors.
-    Each names all 22 skills: the phase table and the consumes/produces table respectively
+    Each names all 23 skills: the phase table and the consumes/produces table respectively
 11. `skills/help/references/state-signals.md`, if something on disk says the skill is the next one
     to run. A skill that answers an event a person reports has no row there, because nothing on
     disk announces the event
@@ -338,7 +338,7 @@ Should print nothing (`grep` exits 1).
 
 Every flow, graph, and diagram in a doc, in the README, or in an artifact a skill produces is a
 fenced `mermaid` block. The drawing rules are in `shared/diagram-conventions.md`, which is also what
-the five diagram-producing skills cite; do not restate them here or in a `SKILL.md`.
+the six diagram-producing skills cite; do not restate them here or in a `SKILL.md`.
 
 Two places keep plain ASCII on purpose:
 
@@ -382,7 +382,7 @@ its Layers table, and the mirror check below excludes both paths.
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
-| `flow/project-flow.md` | The 22 skills placed in delivery phases, with the author and approver of each artifact |
+| `flow/project-flow.md` | The 23 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 

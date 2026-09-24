@@ -26,6 +26,7 @@ flowchart LR
     A7["Review findings"]
     A8["Test plan and cases"]
     A9["Verification report"]
+    A9b["Security record<br/><small>findings, checklist, residual risk</small>"]
     A10["Release notes + checklist"]
     A11["Postmortem + runbook"]
     A12["Retro + status report"]
@@ -46,6 +47,8 @@ flowchart LR
     A3b -->|qa| A8
     A6 -->|qa| A8
     A8 -->|verify| A9
+    A9 -->|security| A9b
+    A9b -->|release| A10
     A9 -->|release| A10
     A10 -->|incident| A11
     A10 -->|retro| A12
@@ -86,7 +89,8 @@ lands, per `shared/spec-docs.md`.
 | `fix` | A defect report | A proven cause and the smallest change | `verify`, `review` |
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit, and the convention gaps behind them | `implement`, `fix`, `convention` |
 | `qa` | Acceptance criteria, the change, the reference documents for expected values, and the design for migration, rollback and rollout | Test plan, cases, regression matrix | `verify` |
-| `verify` | The running system | What was proven, and what was not | `release` |
+| `verify` | The running system | What was proven, and what was not | `security`, `release` |
+| `security` | The code in scope, the project's scanners, the design and the threat model; under `--checklist`, the checklist a client or the company supplied | A security record with verified findings, an answered checklist and residual risk; under `--threat-model`, the threat model of a feature | `release`, `fix`, `implement`, and the approver who accepts each risk |
 | `git` | A finished change or artifact, and the record the calling skill wrote | Commits, a branch, and the pull request that carries the record | `review`, then the approver |
 | `release` | The diff since the last version | Notes, checklist, rollback path | `incident`, `retro` |
 | `incident` | Logs, metrics, the timeline | Postmortem plus runbook | `retro`, `fix` |

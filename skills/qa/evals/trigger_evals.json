@@ -20,5 +20,6 @@
   { "query": "the list comes back empty, find out why", "should_trigger": false },
   { "query": "write the release checklist for production", "should_trigger": false },
   { "query": "viết user story và tiêu chí nghiệm thu", "should_trigger": false },
-  { "query": "ước lượng sprint tới", "should_trigger": false }
+  { "query": "ước lượng sprint tới", "should_trigger": false },
+  { "query": "answer the client's security checklist for this release", "should_trigger": false }
 ]

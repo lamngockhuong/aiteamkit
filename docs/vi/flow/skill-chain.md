@@ -25,6 +25,7 @@ flowchart LR
     A7["Kết quả review"]
     A8["Kế hoạch và test case"]
     A9["Báo cáo kiểm chứng"]
+    A9b["Bản ghi bảo mật<br/><small>phát hiện, checklist, rủi ro còn lại</small>"]
     A10["Ghi chú phát hành + checklist"]
     A11["Postmortem + runbook"]
     A12["Retro + báo cáo trạng thái"]
@@ -45,6 +46,8 @@ flowchart LR
     A3b -->|qa| A8
     A6 -->|qa| A8
     A8 -->|verify| A9
+    A9 -->|security| A9b
+    A9b -->|release| A10
     A9 -->|release| A10
     A10 -->|incident| A11
     A10 -->|retro| A12
@@ -84,7 +87,8 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
 | `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt, cùng những khoảng trống quy ước đứng sau chúng | `implement`, `fix`, `convention` |
 | `qa` | Tiêu chí nghiệm thu, thay đổi, tài liệu tham chiếu cho giá trị mong đợi, và thiết kế cho migration, rollback và rollout | Kế hoạch test, test case, ma trận hồi quy | `verify` |
-| `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | `release` |
+| `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | `security`, `release` |
+| `security` | Mã trong phạm vi, các scanner của dự án, bản thiết kế và mô hình mối đe dọa; với `--checklist`, checklist do khách hàng hoặc công ty cung cấp | Một bản ghi bảo mật với các phát hiện đã kiểm chứng, một checklist đã trả lời và rủi ro còn lại; với `--threat-model`, mô hình mối đe dọa của một tính năng | `release`, `fix`, `implement`, và người duyệt chấp nhận từng rủi ro |
 | `git` | Một thay đổi hoặc artifact đã xong, cùng bản ghi mà skill gọi nó đã viết | Các commit, một nhánh, và pull request mang bản ghi đó | `review`, rồi tới người duyệt |
 | `release` | Diff kể từ phiên bản trước | Ghi chú, checklist, đường lui | `incident`, `retro` |
 | `incident` | Log, số đo, dòng thời gian | Postmortem kèm runbook | `retro`, `fix` |

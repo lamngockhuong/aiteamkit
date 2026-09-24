@@ -213,7 +213,7 @@ or incomplete.
 | Group | Skills | Behavior when the profile is missing |
 |-------|--------|--------------------------------------|
 | Required | implement, fix, verify | Stop. Say what is missing and that `/atk:init` creates it. Change nothing. |
-| Required-soft | plan, review, qa, release, convention, spec | Continue, and state in the artifact that no profile was found, so every command and path in it is a guess. |
+| Required-soft | plan, review, qa, security, release, convention, spec | Continue, and state in the artifact that no profile was found, so every command and path in it is a guess. |
 | Not needed | tailor, intake, catchup, estimate, design-doc, breakdown, incident, retro, onboard, handover | Never mention the profile. |
 
 `atk:init` is in no group. It is the skill that writes the profile, so a missing one is its input

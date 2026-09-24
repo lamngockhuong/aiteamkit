@@ -22,8 +22,9 @@ are the same directory, and the next subsection changes nothing.
 
 Where the shape in `.atk/profile.md` names member repositories, the docs root hangs off the project
 root, and that is where an artifact about the project goes: the requirements, the design and its ADR,
-the breakdown, the estimate, the retro, the release record, the incident record, the runbook, the
-onboarding documents, the conventions, and the reference document of any contract two members share.
+the breakdown, the estimate, the retro, the release record, the security record and the threat
+model, the incident record, the runbook, the onboarding documents, the conventions, and the
+reference document of any contract two members share.
 One tree, read by every team.
 
 Under `parent + members` that tree is in the parent repository, which is what the parent repository
@@ -140,6 +141,7 @@ to `docs/adr/` as well.
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md` |
 | `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
+| `security` | `docs/records/security/<ticket-or-date>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
 | `release` | `docs/records/releases/<version>.md` |
 | `incident` | `docs/records/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
@@ -194,7 +196,7 @@ wins, exactly as the docs root rule works above.
 ### Named after the subject: `plan` is dated, `spec` is not
 
 `atk:spec`, `atk:qa`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither
-a ticket nor a date. A reference document is named after the thing it describes, one file per resource, per
+a ticket nor a date, and so is the threat model `atk:security` writes. A reference document is named after the thing it describes, one file per resource, per
 table, per feature, per screen, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
 
@@ -223,8 +225,8 @@ merged and which directory it goes in.
 
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
-| Reference | the `spec` kinds, `docs/qa/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
-| Record | requirements, planning, design, fixes, verification, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
+| Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
+| Record | requirements, planning, design, fixes, verification, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
 | Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does

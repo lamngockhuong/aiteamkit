@@ -69,6 +69,10 @@ List every schema migration with its duration estimate, its reversibility, and w
 downtime. List every new or changed config key and secret, and where it must be set per environment.
 Flag anything that cannot be rolled back, because that changes the go decision.
 
+Where a security record under `docs/records/security/` covers this range, link it, and carry each
+open Critical or High finding into the checklist as a blocking item, with its `Accepted by` cell as
+the record has it. An empty cell is an unchecked item, not an accepted risk.
+
 ### 4. Checklist
 
 Three phases, each step with an owner and an expected duration: pre-flight (backup taken, migration

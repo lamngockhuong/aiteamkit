@@ -71,8 +71,8 @@ commit đều phải hỏi, hỏi lại từng lần.
 
 ## Một skill với sang skill khác thế nào
 
-Trong hai mươi hai file `SKILL.md`, đếm những lần nhắc `atk:`, một skill gọi tên skill khác một trăm
-ba mươi mốt lượt, thành tám mươi chín cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
+Trong hai mươi ba file `SKILL.md`, đếm những lần nhắc `atk:`, một skill gọi tên skill khác một trăm
+bốn mươi hai lượt, thành chín mươi tám cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
 phần lớn trong số đó là ranh giới chứ không phải cạnh. Có năm loại, và chỉ bốn loại đầu xảy ra lúc
 chạy.
 

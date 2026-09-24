@@ -1,6 +1,6 @@
 # Project Flow
 
-How the 22 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
+How the 23 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,
@@ -80,6 +80,10 @@ flowchart TD
         V1 --> V2{"QA signs off"}
         V2 -->|Defect found| F0["atk:fix"]
         F0 --> V1
+        V2 -->|Passed| V5{"Touches auth, personal<br/>data, or money?"}
+        V5 -->|Yes| V3["atk:security<br/><small>Dev or TL drafts</small>"]
+        V3 --> V4{"TL approves,<br/>risk accepted by name"}
+        V4 -->|Finding to fix| F0
     end
 
     subgraph S7["7. Release"]
@@ -104,7 +108,8 @@ flowchart TD
     M2 -.->|Contract changed| D3
     D1 -.->|Contract: first, spec --from| D3
     M2 --> V0
-    V2 -->|Passed| L0
+    V4 -->|Approved| L0
+    V5 -->|No| L0
     L2 --> O0
     L2 --> O1
     O1 -.->|Actions feed the next cycle| R0
@@ -129,6 +134,7 @@ flowchart TD
 | 5. Build | `atk:git` | Dev | The reviewer, who approves the pull request it opens | n/a |
 | 6. Verify | `atk:qa` | QA | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | 6. Verify | `atk:verify` | Dev or QA | QA sign-off before the ticket moves | `DRAFT` |
+| 6. Verify | `atk:security` | Dev or TL | TL, or the security officer where the team has one; each unfixed finding accepted by the PM or the Stakeholder | `IN REVIEW` to `APPROVED` |
 | 7. Release | `atk:release` | PM with SRE | Stakeholder or PM gives the go decision | `IN REVIEW` to `APPROVED` |
 | 8. Operate | `atk:incident` | Incident Commander | TL and PM on the follow-up actions | `IN REVIEW` to `APPROVED` |
 | 8. Learn | `atk:retro` | PM or the team | The team, on the three actions | `IN REVIEW` to `APPROVED` |
