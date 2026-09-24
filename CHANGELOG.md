@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.12](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.11...v0.0.12) (2026-09-24)
+
+
+### Features
+
+* add atk:help, which says which skill to run from the project's state ([#57](https://github.com/lamngockhuong/aiteamkit/issues/57)) ([1028253](https://github.com/lamngockhuong/aiteamkit/commit/1028253eb72810738fd85fb00dc8f1a98f466298))
+* give atk:intake a requirement template of its own ([#55](https://github.com/lamngockhuong/aiteamkit/issues/55)) ([7396811](https://github.com/lamngockhuong/aiteamkit/commit/73968112e088be2160d1622f297633f070617702))
+* let a project write its reference documents before the code ([#58](https://github.com/lamngockhuong/aiteamkit/issues/58)) ([59d6cfa](https://github.com/lamngockhuong/aiteamkit/commit/59d6cfa96be57936452c22b9ed9f710027279624))
+
 ## [0.0.11](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.10...v0.0.11) (2026-09-23)
 
 
