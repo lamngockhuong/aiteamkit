@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.13](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.12...v0.0.13) (2026-09-24)
+
+
+### Features
+
+* let atk:spec write a screen spec from a Figma design, and atk:intake read one ([#59](https://github.com/lamngockhuong/aiteamkit/issues/59)) ([e52c181](https://github.com/lamngockhuong/aiteamkit/commit/e52c1813c20a154897436760c9928b96a6bde95e))
+
+
+### Bug Fixes
+
+* keep every verified finding in the atk:review report ([#61](https://github.com/lamngockhuong/aiteamkit/issues/61)) ([a68102b](https://github.com/lamngockhuong/aiteamkit/commit/a68102ba661c9c7d83d5003f53741f3ef4141db7))
+
 ## [0.0.12](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.11...v0.0.12) (2026-09-24)
 
 
