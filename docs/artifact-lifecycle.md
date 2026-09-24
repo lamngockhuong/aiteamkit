@@ -33,7 +33,7 @@ flowchart TB
 | Group | What is in it | Commit | Change it later | Delete it later |
 |-------|---------------|--------|-----------------|-----------------|
 | Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
-| Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead | Only as a decision somebody owns, never as a blanket rule |
+| Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead. A test run record takes its issue links and a redaction, and nothing else | Only as a decision somebody owns, never as a blanket rule |
 | Derived | everything under `docs/derived/` | Optional | Run the skill again | Yes, freely |
 
 ## The three files that are not in any group

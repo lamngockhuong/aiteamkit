@@ -68,7 +68,21 @@ One row per non-functional requirement the project actually states, and none for
 Copied from the requirement or the non-functional list, which is authoritative for the values. A
 project that states none has this section say so, and the question of which to test goes to the PM.
 
-## 6. Entry and exit criteria
+## 6. Regression
+
+The existing features that share a module, a table, or an endpoint with the change, each marked from
+the diff or the design, never from intuition, and the migration, rollback, compatibility, rollout, and
+performance cases the design calls for, one case each.
+
+| Feature | Shares | Mark | Reason |
+|---------|--------|------|--------|
+| <feature> | <module, table, or endpoint> | <MUST TEST, SPOT CHECK, or NOT AFFECTED> | <why> |
+
+| Design case | Case ID | Expected result |
+|-------------|---------|-----------------|
+| <migration, rollback, compatibility, rollout, or performance> | <ID in the cases file> | <the design's expectation, quoted> |
+
+## 7. Entry and exit criteria
 
 | Level | Entry | Exit |
 |-------|-------|------|
@@ -76,7 +90,7 @@ project that states none has this section say so, and the question of which to t
 
 Entry names who delivers each item. Exit names who signs off, and the figure in it is the PM's.
 
-## 7. Defect severity
+## 8. Defect severity
 
 | Severity | Means | Response target |
 |----------|-------|-----------------|
@@ -89,11 +103,11 @@ The response targets are the PM's to set with the client; they stay empty until 
 priority, from `references/case-dimensions.md`, says how much a failure would matter before it
 happens; severity says how much an actual defect matters, and a High case can fail with a Low defect.
 
-## 8. Schedule
+## 9. Schedule
 
 A link to the estimate or breakdown that holds the test effort and dates, or `none yet (ask <PM>)`.
 
-## 9. Open questions
+## 10. Open questions
 
 | # | Question | Who answers | Blocks | Answer |
 |---|----------|-------------|--------|--------|

@@ -450,9 +450,12 @@ approver rather than an edit.
 After the team has executed the cases, `--run` turns the results the testers give into a run record
 under `docs/records/test-runs/`, with a summary against the plan's exit criteria and one defect section
 per failed case, written so `atk:fix` can start from it. `--bug` raises the defects the person picks
-as issues on the tracker, and `--retest <issue>` records a narrow run of the fixed case and the cases
-the fix touched, offering the verdict as a comment on the issue. The skill never marks a result
-itself, and never closes an issue.
+as issues on the tracker, never a security defect on a public one, and `--retest <issue>` (or
+`<run-path>#D<n>` where there is no tracker) records a narrow run of the fixed case and the cases
+the fix touched, offering the verdict as a comment on the issue. Credentials, secrets, real personal
+data and production data a tester pastes are redacted before the record is written, and each record's
+file name carries the time, so a second run never overwrites the first. The skill never marks a
+result itself, and never closes an issue.
 
 `--review <cases-path>` is the second person's read before a cases file is approved: the BrSE/BA or
 the QA lead checks structure, classification, traceability, the dimension walk, sources, technique, checklist coverage,

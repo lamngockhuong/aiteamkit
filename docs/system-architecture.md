@@ -100,7 +100,7 @@ Nine are contracts between a named handful of skills rather than kit-wide rules:
   repositories is carried in. `atk:git` is what carries it out; this file
   stays the contract, which is what lets the code-changing skills and the artifact-writing ones
   close the same way. Cited by `atk:fix`, `atk:implement` and `atk:verify`, which hand off to
-  `atk:git`, by `atk:plan` and `atk:tailor` for the consent line alone, and by every skill that
+  `atk:git`, by `atk:plan`, `atk:tailor` and `atk:qa` for the consent line alone, and by every skill that
   writes an artifact for the section about a change that produced only a document. Nothing leaves
   the local repository without being asked for.
 - `shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass

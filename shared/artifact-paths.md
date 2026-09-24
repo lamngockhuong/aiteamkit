@@ -139,7 +139,7 @@ to `docs/adr/` as well.
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
-| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<ticket-or-date>-<slug>.md`; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-<slug>-<date>.md` |
+| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes afterwards only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
 | `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
 | `security` | `docs/records/security/<ticket-or-date>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
@@ -195,8 +195,9 @@ wins, exactly as the docs root rule works above.
 
 ### Named after the subject: `plan` is dated, `spec` is not
 
-`atk:spec`, `atk:qa`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither
-a ticket nor a date, and so is the threat model `atk:security` writes. A reference document is named after the thing it describes, one file per resource, per
+`atk:spec`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither a ticket nor
+a date, and so are the test plan and the cases file of `atk:qa`, whose run records and review reports
+are dated like any record or report, and so is the threat model `atk:security` writes. A reference document is named after the thing it describes, one file per resource, per
 table, per feature, per screen, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
 
@@ -327,6 +328,12 @@ When the contract comes before the code in `shared/spec-docs.md`. A `screen` doc
 
 Read the file if it already exists and update it in place. Do not overwrite an `APPROVED` artifact:
 supersede it, link the replacement, and say which decision changed.
+
+A skill whose file names carry the time, the `atk:qa` run record among them, never updates an
+existing file: an existing path means a second file, not an edit. Where a skill names a narrow change
+it may make to one of its own records after writing it, a pointer or a redaction such as the `Ticket`
+cell and the redaction of a run record, that change is the only one, and it is allowed at `APPROVED`
+too, because it changes nothing the record found.
 
 The no-overwrite rule is about records. A reference document is updated in place by design, and
 superseding one would leave the project holding two files that both claim to describe the same live

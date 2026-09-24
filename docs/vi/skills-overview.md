@@ -454,8 +454,11 @@ một case có sẵn thành câu hỏi cho người duyệt thay vì được s�
 Sau khi team đã chạy các case, `--run` biến kết quả tester đưa vào thành record của lần chạy trong
 `docs/records/test-runs/`, kèm bảng tổng kết đối chiếu với tiêu chí kết thúc của kế hoạch và một mục lỗi
 cho mỗi case thất bại, viết sao cho `atk:fix` bắt đầu được từ đó. `--bug` tạo issue trên tracker cho các
-lỗi người dùng chọn, còn `--retest <issue>` ghi lại một lần chạy hẹp gồm case đã sửa và các case mà bản
-sửa chạm tới, rồi đề nghị đăng kết luận thành comment trên issue. Skill không bao giờ tự đánh kết quả, và
+lỗi người dùng chọn, không bao giờ đưa lỗi bảo mật lên tracker công khai, còn `--retest <issue>`
+(hoặc `<run-path>#D<n>` khi không có tracker) ghi lại một lần chạy hẹp gồm case đã sửa và các case mà bản
+sửa chạm tới, rồi đề nghị đăng kết luận thành comment trên issue. Thông tin đăng nhập, secret, dữ liệu cá nhân thật và
+dữ liệu production mà tester dán vào đều được che trước khi ghi record, và tên file của mỗi record mang
+theo giờ nên lần chạy sau không bao giờ ghi đè lần trước. Skill không bao giờ tự đánh kết quả, và
 không bao giờ đóng issue.
 
 `--review <cases-path>` là lượt đọc của người thứ hai trước khi file test case được duyệt: BrSE/BA hoặc

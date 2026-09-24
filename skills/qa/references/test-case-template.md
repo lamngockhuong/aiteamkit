@@ -16,7 +16,14 @@ and stop at the first hit:
 
 1. The `## Before` section of `.atk/overrides/qa.md` names a template or a column set, per
    `shared/project-overrides.md`.
-2. An existing file under `docs/qa/` already has a cases table. Copy its columns and its ID scheme.
+2. An existing file under `docs/qa/` has a cases table whose columns differ from this template's and
+   from the kit's earlier shape (ID, title, precondition, steps, test data, expected result, priority,
+   criterion). Copy its columns and its ID scheme.
+
+A file in that earlier kit shape is not the team's template: it is what an older version of this
+skill wrote. It carries no `Section`, `Testcase type`, `Source`, or Sources table, and copying it would
+carry those gaps forward. Offer to migrate it to the shape below, keeping every ID, and ask before
+changing it.
 
 When one is found, its columns and its vocabulary replace the defaults here, and every rule below
 that does not depend on a column name still applies: traceability, the three sections, the ID that
@@ -40,6 +47,8 @@ ticket: <the ticket that last changed this, or none>
 
 ## Sources
 
+Last run: YYYY-MM-DD HH:MM, atk:qa --cases
+
 | Source | Read as |
 |--------|---------|
 | `docs/records/requirements/260918-user-list.md` | `sha256:3f9a0c1d2e4b5a67` |
@@ -60,6 +69,13 @@ ticket: <the ticket that last changed this, or none>
 |-----------|-------|
 | AC-1 | TC-SA0201-FUN-001, TC-SA0201-FUN-002, TC-SA0201-FUN-007 |
 | AC-2 | TC-SA0201-ACC-001 |
+
+## Skipped
+
+| Criterion or component | Dimension or viewpoint | Why it gives no case |
+|------------------------|------------------------|----------------------|
+| AC-2 | 5, Timing | The record is only ever edited by its owner |
+| Search box | `search-09` | One filter only, so there are no pairs |
 
 ## Cases
 
@@ -147,6 +163,16 @@ before acting goes to `GUI`, and everything that runs a rule goes to `FUNCTION`.
 | `Load Testing` | Behaviour under the expected load the design states |
 | `Stress Testing` | Behaviour beyond it |
 
+Where two types fit, the first row that fits in this order wins, so two authors choose the same one:
+
+1. `Access control and security`, for every `ACCESSING` case and for a case whose failure would be a
+   security finding.
+2. `User interface`, for every `GUI` case, a boundary on a visible state included.
+3. `Data and Database Integrity Testing`, where the persisted state is the assertion.
+4. `Load Testing` or `Stress Testing`, where the load is the condition.
+5. A `_Login`, `_Billing`, or `_Email` type, where the case is about that domain.
+6. `Normal_Others` or `Abnormal_Others`.
+
 A team whose master list differs uses its own, per The project's own template wins.
 
 ## The ID
@@ -169,7 +195,9 @@ the SHA-256 of its content with every line ending turned into LF first, so the s
 on Windows and on Linux hashes the same; for a design, the `design_fingerprint` of that read, per
 `shared/design-sources.md`. What each source was used for is in step 1 of `atk:qa`.
 
-Only a run of `atk:qa` writes this table, and it rewrites it on every run that reads the sources. It
+Only a run of `atk:qa` writes this table, and it rewrites it on every run that reads the sources. The
+`Last run` line above it is rewritten on every run, whether or not a source changed, so `--update` can
+tell which rows the last run wrote. It
 is what `--update` compares against to find what changed, which is why it records content rather than
 a commit: it holds wherever the source lives, in this repository or another, and whatever was
 committed in between.
@@ -219,12 +247,12 @@ the person running the skill asks for one, when `.atk/overrides/qa.md` asks for 
 already exists there. It is committed with its source, and an existing CSV is regenerated in the same
 run that changes the Markdown, so the two never disagree; nobody edits it by hand.
 
-1. The header row once, in the layout of the sheet the CSV is pasted into, which is the first of
-   these that holds: the layout `.atk/overrides/qa.md` names; the header of the CSV already beside the
-   Markdown; the table's own columns. A sheet in the company layout of Mapping to a spreadsheet form
-   gets that layout, its columns only, with the joins and the `Note` prefix that section gives, so a
-   paste lines up with the sheet column for column. Asked for a CSV with none of the three settling
-   it, ask which sheet it goes into rather than guessing.
+1. The header row once, in the layout of the sheet the CSV is pasted into. Two things settle that
+   layout: the one `.atk/overrides/qa.md` names, then the header of the CSV already beside the
+   Markdown. Where neither does, ask which sheet it goes into, offering this table's own columns and
+   the company layout of Mapping to a spreadsheet form as the two usual answers, rather than choosing.
+   A sheet in the company layout gets that layout, its columns only, with the joins and the `Note`
+   prefix that section gives, so a paste lines up with the sheet column for column.
 2. Rows sorted by Page, then Section in the order `ACCESSING`, `GUI`, `FUNCTION`, then Category,
    Sub-category, Sub-sub category. The IDs do not change when the rows are sorted.
 3. `<br>` inside a cell becomes a real newline, so each step sits on its own line when the sheet is
@@ -235,7 +263,11 @@ run that changes the Markdown, so the two never disagree; nobody edits it by han
    above. When a higher level changes, every level below it is filled in again on that row, even if
    its value matches an earlier group.
 6. An empty column stays an empty cell; nothing is written as `-` or `N/A`.
-7. The five execution columns are exported empty.
+7. A cell a spreadsheet would read as a formula or reformat as a number is written as text: one
+   starting with `=`, `+`, `-`, or `@`, and a value such as `0123` or `+84...` whose leading character
+   matters, gets a leading `'`. Boundary data is exactly the data this breaks, and a cell starting
+   with `=` runs as a formula in whoever opens the sheet.
+8. The five execution columns are exported empty. A tester fills a copy, never this file.
 
 A struck-through row is not exported. The Markdown keeps it for the ID; the sheet is for executing,
 and a removed case in it gets executed.

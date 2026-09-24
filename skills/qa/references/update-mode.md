@@ -19,13 +19,22 @@ something that may have changed, which section 3 then handles row by row.
 
 For each row of the table, and for each source the requirement now names that the table does not:
 
-- **A file.** Hash its content the way the table does, line endings turned into LF first. The same hash means no change. A different
-  hash means read what changed: the old content is the version in the file's history whose hash is
-  the recorded one, `git log -p --follow -- <path>` in whichever repository holds it, and the change
-  is the difference between that version and the file as it stands now, uncommitted edits included.
-  Where no version with that hash can be found, the source is read whole and every case resting on it
-  is compared with it. A commit between the two reads, or a squash that folded several together,
-  changes nothing here: the comparison is between two contents, not two commits.
+- **A file.** Hash its content the way the table does, line endings turned into LF first. The same
+  hash means no change. A different hash means read what changed: the old content is the version in
+  the file's history whose hash is the recorded one. List the commits that touched it,
+  `git log --format=%H --follow -- <path>` in whichever repository holds it, and for each read the
+  whole file at that commit, `git show <sha>:<path as it was named then>`, hash it the same way, and
+  stop at the match. The change is the difference between that version and the file as it stands
+  now, uncommitted edits included. Where no version with that hash can be found, the source is read
+  whole and every case resting on it is compared with it. A commit between the two reads, or a squash
+  that folded several together, changes nothing here: the comparison is between two contents, not two
+  commits.
+- **A file that is not where the table says.** Renamed, split, moved to another repository, or in a
+  member repository not cloned here: look for it by `git log --follow` and in the Repositories table
+  of `shared/project-profile.md`. Found under a new path, it is read there and the table takes the new
+  path. Not found, it is never read as a source that lost everything: say so in the run summary, leave
+  every case resting on it as it is, keep its old `Read as`, and open a question for that source's
+  approver asking where it went.
 - **A design read directly.** Read exactly the recorded `design_node` again and compute its
   `design_fingerprint`, per `shared/design-sources.md`. The same fingerprint means no change. A
   design that cannot be read is said in the run summary, and the cases resting on it are left as they
@@ -67,17 +76,20 @@ one of two forms: `Keep the cases` or `Take the source`.
 ### Whose row it is
 
 A row is a person's when it differs from what the last run wrote for it. What the last run wrote is
-the cases file as the commit that introduced its current Sources table left it. Walk the commits that
-changed the cases file, `git log --format=%H --follow -- <cases-path>`, from the newest, and stop at
-the first whose Sources table differs from the current one: the commit just after it is the one, and
-the file at that commit is what the last run wrote. Compare the whole table, not one value in it,
-because a source that did not change keeps its `Read as` across many runs. A row changed since then, in a later commit or in the working tree, is a person's; so
-is a row added by hand, and a row nobody can place either way, since an overwritten edit is lost and
-an extra question only costs a question.
+the cases file as the commit that introduced its current `Last run` line left it: every run of this
+skill rewrites that line under the Sources table, whether or not any source changed, so it names one
+run and no other. Walk the commits that changed the cases file,
+`git log --format=%H --follow -- <cases-path>`, from the newest, and stop at the first whose
+`Last run` line differs from the current one: the commit just after it is the one, and the file at
+that commit is what the last run wrote. A row changed since then, in a later commit or in the working
+tree, is a person's; so is a row added by hand, and a row nobody can place either way, since an
+overwritten edit is lost and an extra question only costs a question.
 
-Where the current Sources table exists only in the working tree, the last run's output was never
-committed, and nothing can tell its rows from edits made on top of them. Ask before changing any row
-whether the differences since the last commit are the run's or a person's, rather than guessing.
+Two cases this cannot tell apart, and the run asks rather than guesses. Where the current `Last run`
+line exists only in the working tree, the last run's output was never committed. Where a person edited
+rows and committed them together with a run's output, the edits read as the run's. The run summary of
+every run says to commit its output before editing it by hand, which is what keeps the second case
+rare.
 
 ### Every ID ever used
 
@@ -93,7 +105,9 @@ What the run may do next depends on whether the cases file has ever been `APPROV
 `git log --follow -S'status: APPROVED' -- <cases-path>`, spelled the way the project's front matter
 spells that state; a file at `APPROVED` now has been. A shallow clone holds too little history to
 answer this or the two questions above, and is deepened, or the question asked, before any row
-changes.
+changes. So is a cases file with no git history at all, one never committed, or one at the root of a
+`workspace` project, which no repository tracks: none of the three questions has an answer, and the
+run asks before any row changes rather than treating the file as never approved.
 
 ### Never approved: the changes are merged
 
@@ -130,6 +144,7 @@ the approver is who moves it on. The run never sets `APPROVED`.
 
 ## 4. The rest of the file
 
+- The `Last run` line is rewritten, `Last run: YYYY-MM-DD HH:MM, atk:qa --update`, on every run.
 - The Sources table is rewritten with what each source is now, so the next run starts from this read.
   A source a still-open question rests on keeps its old `Read as`, so the change behind that question
   is found again until the question is answered rather than lost after one run.
@@ -140,7 +155,10 @@ the approver is who moves it on. The run never sets `APPROVED`.
   endpoint another feature shares, per step 4 of `SKILL.md`: a feature that now shares it gains a
   row, and one whose reason changed has it rewritten.
 - An existing CSV is regenerated in the same run, per the export rules in
-  `references/test-case-template.md`.
+  `references/test-case-template.md`. Where that CSV has anything in its execution columns, somebody
+  typed results into the committed file: stop before regenerating it, say so, and ask for the results
+  to be moved into a copy outside `docs/qa/` or recorded with `--run` first, since regenerating would
+  erase them.
 
 ## 5. The run summary
 

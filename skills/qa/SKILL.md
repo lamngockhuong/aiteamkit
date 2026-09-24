@@ -4,11 +4,13 @@ description: >
   Plan and write the team's testing: a test plan with scope and exit criteria, test cases traced to
   acceptance criteria, a regression matrix, test data and environment needs, and the handoff a
   developer owes QA before a ticket moves to testing. Afterwards, records a test run the team
-  executed, raises its failed cases as bugs, and records the retest of a fixed bug.
+  executed, raises its failed cases as bugs, and records the retest of a fixed bug. Also brings
+  existing cases level with a changed spec.
   Use when a feature reaches QA, when a release needs a regression pass, when a team has no
-  written test cases, when test results need recording and their defects logging, or when a
-  cases file needs a second person's review before approval.
+  written test cases, when the spec changed under existing cases, when test results need recording
+  and their defects logging, or when a cases file needs a second person's review before approval.
   Triggers on: "test plan", "test case", "QA", "kiểm thử", "viết test case", "regression",
+  "update the test cases", "cập nhật test case", "テストケース更新",
   "test results", "log the failed cases as bugs", "retest", "ghi kết quả test", "log bug",
   "review these test cases", "review test case", "duyệt test case", "テスト計画", "テストケース",
   "テスト結果", "不具合報告", "再テスト", "テストケースレビュー", "how do we test this", "QA handoff",
@@ -52,6 +54,7 @@ reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 /atk:qa --run <cases-path>      # Record the results of a test run the team executed
 /atk:qa --bug <run-path>        # Raise the defects of a run record on the tracker
 /atk:qa --retest <issue>        # Record a retest of a fixed bug and offer the verdict
+/atk:qa --retest <run#Dn>       # The same, for a defect never raised on a tracker
 /atk:qa --review <cases-path>   # A second person reviews a cases file somebody else wrote
 /atk:qa --lang vi               # Write the artifacts in Vietnamese
 /atk:qa --out <path>            # Override the default output path
@@ -64,6 +67,12 @@ reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 ```
 
 Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
+Where the cases file for the slug already exists, the five steps never write it from nothing: the run
+is `--update`, and the session says so. Written again from step 2, every ID would be numbered afresh,
+an approved file would change without a question, and a person's edits would be lost, while run
+records and bugs already point at those IDs. The test plan beside it is updated in place like any
+reference document.
 
 `--update` replaces the five steps with `references/update-mode.md`: it compares each source with what
 the cases file's Sources table recorded at the last run, and adds, rewrites, or strikes rows
@@ -114,14 +123,14 @@ Walk each criterion through the ten dimensions in `references/case-dimensions.md
 quantity, state, timing, failure, environment, data, integration, and rules. The techniques in that
 file, equivalence partitioning, boundary values, decision tables, state transitions, and pairwise,
 decide how many cases each dimension produces. A dimension that gives no case is skipped with the
-assumption that makes it irrelevant, written beside the criterion, so a reader can tell a dimension
-that was asked from one nobody thought of.
+assumption that makes it irrelevant, written in the Skipped table of the cases file, so a reader can
+tell a dimension that was asked from one nobody thought of.
 
 Then open the lines of `references/checklists.tsv` for the components the screen or flow has, per
 `references/checklists.md`, which also says when a checklist the override names takes their place.
 Each viewpoint that applies gives its cases, cited by the viewpoint ID in `Source`; one that does not
-is skipped with the reason. Then cover the concerns that span the feature: permissions by role, i18n and locale,
-timezone, and accessibility where the project requires it.
+is skipped, with the reason in the same Skipped table. Then cover the concerns that span the feature:
+permissions by role, i18n and locale, timezone, and accessibility where the project requires it.
 
 ### 4. Regression matrix
 
@@ -129,7 +138,9 @@ Derive impact from the diff or the design, not from intuition. The migration, ro
 rollout and performance cases the design calls for go here beside the regression rows, one case
 each, with the design's performance expectation as the expected result of its case. List the existing features that share
 a module, a table, or an endpoint with the change, and mark each `MUST TEST`, `SPOT CHECK`, or
-`NOT AFFECTED`, with the reason.
+`NOT AFFECTED`, with the reason. The matrix is the Regression section of the test plan, per
+`references/test-plan-template.md`; under `--regression` for a release scope it is the same section
+in the release's plan. `--update` and `--retest` read it there.
 
 ### 5. Entry and exit criteria
 
@@ -151,7 +162,7 @@ when the person asks for one, when the override asks for one, or when one alread
 CSV is regenerated in the same run that changes the Markdown, and never edited by hand. A run or a
 retest writes a record at `docs/records/test-runs/<ticket-or-date>-<slug>.md`, whose content is never
 edited once written, apart from its `status` and the `Ticket` cells `--bug` fills. A review writes only
-its report, at `docs/derived/reviews/qa-<slug>-<date>.md`.
+its report, at `docs/derived/reviews/qa-cases-<slug>-<date>.md`.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs

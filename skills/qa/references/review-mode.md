@@ -20,7 +20,10 @@ they are executable and complete. The approver named in the front matter still a
 ## What it reads
 
 The cases file; its test plan beside it, when there is one; and the sources its Sources table names,
-opened, not remembered: the requirement, the reference documents, the screen spec, or the design,
+opened, not remembered. A file written by hand or in the team's own template may have no Sources
+table: then the sources are the ticket in its front matter, the requirement it traces to, and every
+path its `Source` column names, and a pass with none of those to open says it could not run. The
+sources are the requirement, the reference documents, the screen spec, or the design,
 per `shared/design-sources.md` for a design. It also reads `references/test-case-template.md`,
 `references/case-dimensions.md`, and `references/checklists.md` with its list, since those are what
 the cases were supposed to follow; where the override names the team's own template or checklist,
@@ -73,17 +76,25 @@ severity; the case ID or IDs it concerns; what goes wrong if the case stays as i
 a tester would do or miss; and a concrete suggestion, including a new case written as a row of the
 template where the finding is a missing case. The finding addresses the case, never the author.
 
-A second review of the same cases file reads the earlier report first: the newest
-report named `qa-<slug>-` followed by exactly six digits and `.md`, whatever its date, so that the
-report of another cases file whose slug merely starts the same way is never picked up, since a re-review usually comes on another
-day after the author fixed something. It keeps that report's identifiers, so an author asked to fix
+A second review of the same cases file reads the earlier report first: the newest report named
+`qa-cases-<slug>-` followed by exactly six digits and `.md`, whatever its date, since a re-review
+usually comes on another day after the author fixed something. The exact slug and the six digits keep
+out the report of a cases file whose slug merely starts the same way, and the `qa-cases-` prefix keeps
+out a report `atk:review` wrote for a branch called `qa/...`; before carrying identifiers, check that
+the earlier report's `What was reviewed` names this cases file. It keeps that report's identifiers, so an author asked to fix
 `B1` finds `B1` again, and follows `skills/review/references/report-format.md` for what happens when a
 finding is fixed or changes severity, and for numbering from 1 when there is no earlier report.
 
 ## The report
 
-Written to `docs/derived/reviews/qa-<slug>-<date>.md` per `shared/artifact-paths.md`, on every run.
-It is derived: safe to delete, and rebuilt by running the review again. `--out` moves it.
+Written to `docs/derived/reviews/qa-cases-<slug>-<date>.md` per `shared/artifact-paths.md`, on every
+run. It is derived: safe to delete, and rebuilt by running the review again. `--out` moves it.
+
+A derived file may be untracked, and the author may be on another machine, so the findings reach the
+author some way that does not depend on the directory: the session offers to post the summary, with
+the path, as a comment on the cases file's pull request or ticket, shown first and posted on a yes per
+the consent line in `shared/finalize-steps.md`, or to commit the report where the team keeps review
+reports. Which one is the reviewer's call.
 
 It opens with the front matter block of `shared/artifact-paths.md`, the reviewer as `owner` and the
 cases file's approver as `approver`. Then, in order: what was reviewed and against which sources, and

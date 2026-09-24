@@ -97,7 +97,7 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   trên nhiều repository. `atk:git` là thứ thi hành nó; file này
   vẫn là hợp đồng, và chính điều đó khiến nhóm skill sửa mã với nhóm skill viết tài liệu khép lại
   theo cùng một đường. Được `atk:fix`, `atk:implement` và `atk:verify` trích dẫn, ba skill giao việc
-  cho `atk:git`; được `atk:plan` và `atk:tailor` trích riêng phần ranh giới xin phép; và được mọi
+  cho `atk:git`; được `atk:plan`, `atk:tailor` và `atk:qa` trích riêng phần ranh giới xin phép; và được mọi
   skill sinh artifact trích phần nói về thay đổi chỉ tạo ra một tài liệu. Không gì rời khỏi repo cục
   bộ mà chưa được hỏi.
 - `shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng

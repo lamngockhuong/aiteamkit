@@ -55,6 +55,13 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    `.atk/profile.md`, where the project has recorded one. Failing both, the language the user writes
    in. Keep code identifiers, commands, and file paths in their original form.
 
+   Keep in their original spelling, too, the values another skill finds by matching them: a status
+   (`DRAFT`, `IN REVIEW`, `APPROVED`, `SUPERSEDED`), a severity name, a result, a scope, a `Ticket`
+   value such as `none`, a finding identifier's `B` / `S` / `N` prefix, and the field labels and
+   section headings a later run looks up. Translating one of them makes the artifact read correctly
+   to a person and invisibly to the skill that reads it next, which then finds nothing and says
+   nothing. The skill that defines such a value says which of its values are of this kind.
+
    This rule resolves the language prose is written in, and stops there. What that language then
    does to the path, in a docs tree partitioned by language, belongs to `shared/artifact-paths.md`.
    What it never does is change the authored language of that tree, which is a fact about the

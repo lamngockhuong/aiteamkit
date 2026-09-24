@@ -22,8 +22,11 @@ id  component  target  viewpoint  expected  dimension  technique
 ```
 
 - `id` is `<component>-NN`, `input-03`. It is what a case cites in its `Source` column, per
-  `references/test-case-template.md`, and like a case ID it is never given to a second viewpoint: a
-  viewpoint that stops applying is removed, and its number is not reused.
+  `references/test-case-template.md`, and like a case ID it is never given to a second viewpoint. A
+  viewpoint that stops applying keeps its line, with `viewpoint` rewritten as
+  `Removed YYYY-MM-DD: <why>` and `expected` emptied, so its number stays taken and a case that cites
+  it still finds out why. A run skips such a line; the next number for a component is one past the
+  highest on any of its lines, removed ones counted.
 - `component` is one of the keys in Components below.
 - `target` narrows the component when the viewpoint only holds for one kind of it: `email`,
   `password`, `required field`. Empty when it holds for every one.
@@ -77,6 +80,12 @@ commands", checks the field count of every line, that every `id` is unique and m
 - A viewpoint never adds behaviour the sources do not state. `Search is case insensitive` is a
   question to ask the spec, not an expected result: where the spec is silent, the case carries
   `[ASSUMPTION]` and the question goes to the BrSE/BA, per `references/case-dimensions.md`.
+- Two lines are the exception, and on purpose: `login-01` and `password-05` expect the same response
+  for an account that does not exist as for one that does, because a different response tells an
+  attacker which accounts exist. They are fixed security defaults rather than questions. Where the
+  spec asks for a distinct message, the case still asserts the default, and an open question goes to
+  the Tech Lead naming the conflict, with `atk:security` as the place the risk is weighed; the case
+  does not quietly follow the spec, and it does not quietly override it either.
 - A component on the screen that has no line here is covered from the spec alone, and the cases file
   says so, rather than borrowing viewpoints from a component that only looks similar.
 

@@ -76,15 +76,29 @@ release record reaches the client, and an unfixed vulnerability described there 
 everyone who reads it. An empty `Accepted by` cell is an unchecked item, not an accepted risk.
 
 Read the run records under `docs/records/test-runs/` that are not `SUPERSEDED` across this range, the
-way the security records above are read: every build tested since the previous release, not only the
-one being released, because a fix usually ships in a later build than the run that found the defect.
-Link the newest one whose scope is not `retest` as the evidence behind QA's sign-off, with the build
-it tested, its scope, and its summary as the record states them, and every retest record after it;
-where that run tested an earlier build than the one being released, say so. A Critical or High defect
-in any record in the range that no later retest record passed is carried into the checklist as a
-blocking item, by its defect ID, its case ID, and its `Ticket` cell. With no run record in the range,
-QA's sign-off has nothing on disk behind it, and the release record says so rather than leaving the
-line looking checked.
+way the security records above are read, because a fix usually ships in a later build than the run
+that found the defect. A record is in the range when the build it names is a commit or version inside
+the range, or, where it names neither, when its `created` date falls after the previous release's
+tag; on a first release every record counts. "Newest" means by `created`. Then:
+
+- **Evidence behind QA's sign-off.** For each cases file the range touches, link its newest run record
+  whose scope is not `retest`, and the retest records after it, with the build tested, the scope, the
+  summary, and the record's `status` as the record states them. Where that run tested an earlier build
+  than the one being released, say so; where a record is not `APPROVED`, the QA sign-off line stays
+  unchecked, naming the approver it waits on. A feature in the range with no run record is listed as
+  having none.
+- **Blocking defects.** A defect in any record in the range blocks when its severity is one of the top
+  two rows of the severity table in that feature's test plan, whatever the plan names them, or is
+  `TBD`, until the QA lead classifies it. With no plan, the tester's scale decides, and the item says
+  there was none. It stops blocking once a later record in the range passed its case, a retest or a
+  full run alike. Each blocking item names its defect ID, its case ID, its `Ticket` cell, and the path
+  of its record, since defect IDs repeat from one record to the next.
+- **What reaches the client.** A defect marked `Security: yes`, or whose case is typed
+  `Access control and security`, is named by its ID only, in the checklist and among the known issues
+  alike, never by its description, for the reason given above for security findings.
+
+With no run record in the range, QA's sign-off has nothing on disk behind it, and the release record
+says so rather than leaving the line looking checked.
 
 ### 4. Checklist
 
