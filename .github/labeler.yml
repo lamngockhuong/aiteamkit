@@ -1,0 +1,119 @@
+# Labels a pull request from the paths it changes, run by .github/workflows/labeler.yml.
+# The label names match the ones on the repository; a label missing there is created grey.
+# Type labels (bug, enhancement, documentation) and harness labels are applied by hand. The type
+# comes from the Conventional Commit title, which this action cannot read, and a path rule for
+# harnesses would fire on every pull request that changes the skill count in all three manifests.
+
+'area: skill':
+- changed-files:
+  - any-glob-to-any-file: 'skills/**'
+
+'area: shared':
+- changed-files:
+  - any-glob-to-any-file: 'shared/**'
+
+'area: hooks':
+- changed-files:
+  - any-glob-to-any-file: 'hooks/**'
+
+'area: manifest':
+- changed-files:
+  - any-glob-to-any-file: ['.claude-plugin/**', '.cursor-plugin/**', '.codex-plugin/**', 'package.json']
+
+'area: profile':
+- changed-files:
+  - any-glob-to-any-file: ['shared/project-profile.md', 'shared/project-overrides.md']
+
+'area: ci':
+- changed-files:
+  - any-glob-to-any-file: ['.github/**', 'release-please-config.json']
+
+# One entry per skill, in lifecycle order. Adding or renaming a skill adds its entry here.
+
+'skill: help':
+- changed-files:
+  - any-glob-to-any-file: 'skills/help/**'
+
+'skill: init':
+- changed-files:
+  - any-glob-to-any-file: 'skills/init/**'
+
+'skill: tailor':
+- changed-files:
+  - any-glob-to-any-file: 'skills/tailor/**'
+
+'skill: intake':
+- changed-files:
+  - any-glob-to-any-file: 'skills/intake/**'
+
+'skill: catchup':
+- changed-files:
+  - any-glob-to-any-file: 'skills/catchup/**'
+
+'skill: estimate':
+- changed-files:
+  - any-glob-to-any-file: 'skills/estimate/**'
+
+'skill: design-doc':
+- changed-files:
+  - any-glob-to-any-file: 'skills/design-doc/**'
+
+'skill: spec':
+- changed-files:
+  - any-glob-to-any-file: 'skills/spec/**'
+
+'skill: breakdown':
+- changed-files:
+  - any-glob-to-any-file: 'skills/breakdown/**'
+
+'skill: convention':
+- changed-files:
+  - any-glob-to-any-file: 'skills/convention/**'
+
+'skill: plan':
+- changed-files:
+  - any-glob-to-any-file: 'skills/plan/**'
+
+'skill: implement':
+- changed-files:
+  - any-glob-to-any-file: 'skills/implement/**'
+
+'skill: fix':
+- changed-files:
+  - any-glob-to-any-file: 'skills/fix/**'
+
+'skill: review':
+- changed-files:
+  - any-glob-to-any-file: 'skills/review/**'
+
+'skill: qa':
+- changed-files:
+  - any-glob-to-any-file: 'skills/qa/**'
+
+'skill: verify':
+- changed-files:
+  - any-glob-to-any-file: 'skills/verify/**'
+
+'skill: git':
+- changed-files:
+  - any-glob-to-any-file: 'skills/git/**'
+
+'skill: release':
+- changed-files:
+  - any-glob-to-any-file: 'skills/release/**'
+
+'skill: incident':
+- changed-files:
+  - any-glob-to-any-file: 'skills/incident/**'
+
+'skill: retro':
+- changed-files:
+  - any-glob-to-any-file: 'skills/retro/**'
+
+'skill: onboard':
+- changed-files:
+  - any-glob-to-any-file: 'skills/onboard/**'
+
+'skill: handover':
+- changed-files:
+  - any-glob-to-any-file: 'skills/handover/**'

@@ -1,6 +1,6 @@
 name: Feature request
 description: Suggest a new skill, a new flag, or a change to an existing atk workflow
-labels: ["enhancement"]
+labels: ["enhancement", "status: triage"]
 body:
   - type: markdown
     attributes:

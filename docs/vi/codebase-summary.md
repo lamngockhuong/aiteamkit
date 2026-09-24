@@ -203,7 +203,10 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | File | Mục đích |
 |------|----------|
 | `.github/workflows/release-please.yml` | Chạy release-please khi push lên `main` |
+| `.github/workflows/labeler.yml` | Gắn label cho từng pull request theo đường dẫn file nó thay đổi, dựa trên `.github/labeler.yml` |
+| `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill một label `skill:`, phải có đủ 22 skill |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Hướng dẫn Conventional Commit, harness bị ảnh hưởng, và checklist kiểm tra gồm cả các mục đồng bộ chéo |
+| Các form `.github/ISSUE_TEMPLATE/*.yml` | Mỗi form gắn label loại của nó cùng `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Tắt issue trống, dẫn sang Discussions |
 | `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 22 skill, cộng profile, phần ghi đè, lớp dùng chung và các hook |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Form tính năng, hỏi tình huống của team trước khi hỏi năng lực đề xuất |

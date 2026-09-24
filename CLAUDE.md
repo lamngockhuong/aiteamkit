@@ -290,6 +290,10 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 11. `skills/help/references/state-signals.md`, if something on disk says the skill is the next one
     to run. A skill that answers an event a person reports has no row there, because nothing on
     disk announces the event
+12. The `skill: <name>` label on the GitHub repository and its entry in `.github/labeler.yml`,
+    which labels a pull request by the skill folders it changes. A label that exists on the
+    repository but not in the file is never applied; one in the file but not on the repository is
+    created grey with no description
 
 When changing only a **flag**, update: the `## Invocation` block in `SKILL.md`, the `argument-hint`
 frontmatter, the `README.md` invocation block, and both `skills-overview.md` files.
@@ -416,15 +420,15 @@ above, drop the two `bump-*-pre-major` flags.
 
 This is the section `atk:review` reads and cites by ID, in the record format from
 `shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks, because this
-repository has no CI that runs anything. `.github/workflows/` carries release-please and nothing
-else, so no rule here is `ENFORCED` and none is enforced by a tool failing a build.
+repository has no CI that runs anything. `.github/workflows/` carries release-please and the
+labeler, and neither checks content, so no rule here is `ENFORCED` and none is enforced by a tool failing a build.
 
 Every rule below is already stated in prose somewhere above; this table is the checkable form of it,
 not a second set of rules. The `source` column says where the prose lives.
 
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
-| `CONV-001` | Adding, renaming, or removing a skill touches all eleven groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-001` | Adding, renaming, or removing a skill touches all twelve groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
@@ -440,7 +444,7 @@ deleted, so a review that cited it stays readable.
 Three things worth automating, proposed and not installed. A CI job running the block below would
 move most of this table to `ENFORCED` and stop a reviewer spending attention on it. `CONV-001` is the
 one that would need writing rather than wiring: a check that a diff touching `skills/` also touches
-the eleven groups. The third is a profile check, and it belongs to a project rather than to this
+the twelve groups. The third is a profile check, and it belongs to a project rather than to this
 repository: that a `.atk/profile.md` whose `Shape` names members carries a Repositories table, that
 one whose shape does not carries none, and that every path and every `Repository` cell elsewhere in
 the file resolves to a row of it. None is done here, and all three belong to whoever owns the
