@@ -61,7 +61,7 @@ run:
 |-------|------------------|
 | `intake` | An interview question bank. The requirement template is done: `skills/intake/references/requirement-template.md` |
 | `estimate` | The sizing scales with one worked example each, and the capacity worksheet |
-| `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode is done: `skills/design-doc/references/spike.md` |
+| `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode and the role challenge are done: `skills/design-doc/references/spike.md`, `skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
 | `qa` | Test case table schema. The negative and boundary dimensions are done: `skills/qa/references/case-dimensions.md` |
 | `release` | Checklist template per environment, the client-notes style rules |

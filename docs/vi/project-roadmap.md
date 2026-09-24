@@ -60,7 +60,7 @@ cục cố định mà chưa reference nào giữ bố cục ấy, template ph�
 |-------|--------------------|
 | `intake` | Ngân hàng câu hỏi phỏng vấn. Template requirement đã xong: `skills/intake/references/requirement-template.md` |
 | `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang, và bảng tính capacity |
-| `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án. Chế độ spike đã xong: `skills/design-doc/references/spike.md` |
+| `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án. Chế độ spike và lượt phản biện theo vai trò đã xong: `skills/design-doc/references/spike.md`, `skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Schema bảng task và luật sở hữu file cho các làn song song |
 | `qa` | Schema bảng test case. Các chiều cho case âm và biên đã xong: `skills/qa/references/case-dimensions.md` |
 | `release` | Template checklist theo môi trường, quy tắc hành văn cho ghi chú gửi khách |

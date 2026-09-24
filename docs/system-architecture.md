@@ -116,7 +116,7 @@ Nine are contracts between a named handful of skills rather than kit-wide rules:
 - `shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
   does on a harness that has none. Cited by `atk:fix`, `atk:implement`, and `atk:verify` for the
   tidy step that follows a green verification, by `atk:review` for independent passes run in
-  parallel, and by `atk:init` for what one turn of an interview counts as where the harness carries
+  parallel and by `atk:design-doc` for its role challenge, and by `atk:init` for what one turn of an interview counts as where the harness carries
   several questions in a single prompt. It draws the line the kit had drawn only one way before: a
   capability the harness itself ships may be named and used, a command belonging to another kit may
   not, because the first is there for everyone who installed atk on that harness and the second is

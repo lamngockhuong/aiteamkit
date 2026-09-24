@@ -178,6 +178,12 @@ out: whether a library does what its page says, whether the real data migrates i
 answers that one question inside a time box somebody set, keeps any prototype out of the change, and
 ends in a spike record with a recommendation rather than a design.
 
+`--challenge` runs before the design goes to review: one agent per role that must sign it, TL,
+BrSE/BA, QA, SRE, and a security lens where the design touches trust boundaries, reads the draft
+with nothing of the conversation and raises what that role would raise. Objections that survive a
+check against the code are answered as changed or left open for the person who holds the role, in a
+`Pre-review objections` section that says plainly it is not a review and not an approval.
+
 **Do not use when.** The change is local and reversible. A design document for a two-file fix costs
 more than it returns.
 

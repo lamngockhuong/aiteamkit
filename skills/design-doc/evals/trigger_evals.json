@@ -13,6 +13,9 @@
   { "query": "/atk:design-doc --spike \"can the orders table take a tenant column without downtime\"", "should_trigger": true },
   { "query": "làm spike kỹ thuật xem thư viện này có hỗ trợ SSO không", "should_trigger": true },
   { "query": "設計の前に技術調査をして、このライブラリで実現できるか確認して", "should_trigger": true },
+  { "query": "pressure-test this design from the QA and SRE side before it goes to review", "should_trigger": true },
+  { "query": "phản biện thiết kế này theo góc nhìn từng người duyệt trước khi gửi review", "should_trigger": true },
+  { "query": "/atk:design-doc docs/records/requirements/260920-export.md --challenge", "should_trigger": true },
 
   { "query": "turn the client mail into user stories", "should_trigger": false },
   { "query": "the design is in review, write the API reference doc from it so frontend can start", "should_trigger": false },

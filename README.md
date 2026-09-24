@@ -48,7 +48,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
 | `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, what the work touches and where it is in the code, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
-| `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. With `--spike`, a time-boxed investigation of the one question a design cannot choose without, ending in a recommendation for the Tech Lead. |
+| `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. With `--spike`, a time-boxed investigation of the one question a design cannot choose without, ending in a recommendation for the Tech Lead. With `--challenge`, one agent per signing role raises objections against the draft before the real reviewers see it. |
 | `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, and the components of each screen read from its Figma design, updated in place and checked against the code, and the design, for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, grouped by each language and technology it detects, each classified as enforced by tooling, checked in review, or merely aspirational. A project with nothing written gets one standards document per technology under `docs/standards/`. With `--suggest` it also proposes rules from published standards for that stack, each one waiting for the Tech Lead. Offers to draft the collaboration files the project has none of, and writes only the ones you pick. |
@@ -77,7 +77,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out
 /atk:catchup <epic-url|pr-url>            # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
-/atk:design-doc <requirement|topic>       # --adr|--no-adr --options --spike --lang --out
+/atk:design-doc <requirement|topic>       # --adr|--no-adr --options --spike --challenge --lang --out
 /atk:spec [subject]                       # --kind --from --design --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
 /atk:convention                           # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
@@ -130,7 +130,8 @@ enforced in the same words: `convention` records each rule with an ID and a defa
 Where the harness offers capabilities of its own, the skills use them. `atk:implement`, `atk:fix`
 and `atk:verify` tidy a change through the host's code clean-up capability, `/simplify` in Claude
 Code, after the verification passes and before anyone reviews it; `atk:review` puts several
-independent passes over a large diff when the host can run agents in parallel. None of it is
+independent passes over a large diff when the host can run agents in parallel, and
+`atk:design-doc --challenge` puts one agent per signing role over a draft design. None of it is
 required: on a harness without them the step runs by hand, against the same list in
 [shared/tidy-pass.md](shared/tidy-pass.md), and the artifact says which way it ran. The rules are in
 [shared/host-capabilities.md](shared/host-capabilities.md).

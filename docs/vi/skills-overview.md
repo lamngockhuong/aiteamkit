@@ -182,6 +182,12 @@ không. Nó trả lời đúng một câu hỏi đó trong một giới hạn th
 prototype ở ngoài thay đổi, và kết thúc bằng một bản ghi spike kèm khuyến nghị chứ không phải một bản
 thiết kế.
 
+`--challenge` chạy trước khi thiết kế được đưa đi review: mỗi vai trò phải ký duyệt nó, TL, BrSE/BA,
+QA, SRE, cùng một góc nhìn bảo mật khi thiết kế chạm tới ranh giới tin cậy, được giao cho một agent
+đọc bản nháp mà không biết gì về cuộc trò chuyện, và nêu ra điều vai trò đó sẽ nêu. Những phản biện
+còn đứng vững sau khi đối chiếu với code được trả lời là đã sửa, hoặc để mở cho người giữ vai trò đó,
+trong một mục `Pre-review objections` nói rõ đây không phải một lượt review và không phải sự phê duyệt.
+
 **Không dùng khi.** Thay đổi nhỏ, cục bộ và dễ quay lui. Viết design doc cho một sửa đổi hai file
 tốn hơn phần nhận lại.
 

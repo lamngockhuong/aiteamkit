@@ -113,7 +113,7 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
 - `shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
   dùng, và cách xử lý trên harness không có chúng. Được `atk:fix`, `atk:implement` và `atk:verify`
   trích dẫn cho bước dọn mã ngay sau lượt kiểm chứng đạt, `atk:review` trích dẫn cho những lượt đọc
-  độc lập chạy song song, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
+  độc lập chạy song song, `atk:design-doc` trích dẫn cho lượt phản biện theo vai trò, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
   gửi được nhiều câu hỏi trong cùng một lần. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo
   một chiều: khả năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về
   một kit khác thì không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai
