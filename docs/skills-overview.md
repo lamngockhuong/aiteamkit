@@ -340,8 +340,9 @@ a tidy-up of the surrounding file cannot be reverted cleanly.
 **Produces.** A review report at `docs/derived/reviews/<pr>-<date>.md`, written on every run, and a
 summary in the session that says how many findings there are at each severity, names the blocking
 ones, and points at the file. The findings are ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each
-citing a line, stating the failure it causes, and suggesting a concrete change; at most ten of them,
-or twenty under `--strict`, with the blocking ones never cut. Each one carries an identifier prefixed
+citing a line, stating the failure it causes, and suggesting a concrete change. The report keeps
+every finding that survived verification; the session summary and the inline comments carry at most
+ten, or twenty under `--strict`, with the blocking ones never cut. Each one carries an identifier prefixed
 by its severity, `B1`, `S1`, `N1`, which is what lets a team name a single finding in a stand-up or a
 pull request thread, and a second review of the same pull request reads the first report to keep
 those identifiers pointing at the same findings. The report has a fixed shape rather than one rebuilt per run, and it carries no
@@ -365,9 +366,10 @@ configuration; a plausible one carries the single check that would settle it, wh
 author close it in a minute. A candidate is dropped only on something the code shows, never for
 being unlikely, because the second habit is what keeps races and rare-path failures in a review
 instead of in production. Once that list exists, one more pass reads the diff looking only for what
-is not on it, and comes back empty rather than padded when there is nothing new. Where the cap cuts
-the list, correctness outranks convention and readability, and the review says how many findings went
-and at what severity.
+is not on it, and for the other places in the diff that repeat a finding already on it, and comes
+back empty rather than padded when there is nothing new. Where the cap cuts what the summary and the
+comments carry, correctness outranks convention and readability, and the review says how many
+findings are in the report alone and at what severity.
 
 The review runs as nine rounds, one job each, so no pass has to hold every concern at once and none
 of them skips the same ground for the same reason. Every round runs once by default. A change of

@@ -64,6 +64,19 @@ exists to prevent.
   here with the one check that would settle it. `CONFIRMED` is the default and is not written out,
   because a word on every finding stops being read.
 
+**The one-row form, for `NIT` only.** Where the `NIT` section runs long, it may be a table rather than
+a heading per finding. The row is shorter, not emptier: an author has to be able to act on it without
+the argument, so every column is filled.
+
+```markdown
+| ID | File | Issue | Fix | Raised by |
+|---|---|---|---|---|
+| `N4` | `path/to/file.ts:88` | What goes wrong, in one clause | The change to make | `lines` |
+```
+
+A `NIT` quoting a convention rule keeps the heading form, because the rule has to be quoted verbatim.
+`BLOCKING` and `SHOULD FIX` always keep it.
+
 ## The report
 
 In this order. The order is fixed; the list is not closed. A run adds a section when it has
@@ -133,8 +146,9 @@ conventions document resolved per `shared/review-checklist.md` belongs here too,
 **What the change does well.** One line at least. A review of only negatives teaches nothing about
 what to repeat.
 
-**Cap.** How many findings were cut and at what severity, and, where the cut group is worth a second
-pass, what is in it. The author has to know whether the list is the whole of it.
+**Cap.** Nothing is cut from this file. This section names, by identifier, the findings the session
+summary and the inline comments left out, so a reader of the thread knows it is not the whole
+review. `None.` when the cap cut nothing.
 
 **Rounds.** The band and the count that put the change in it, then one row per round:
 
@@ -157,7 +171,7 @@ One row per round, and the three states of `references/review-rounds.md` are thr
 `skipped` names the condition that fired, `empty` means it ran and reported nothing, `dead` says so
 and whether the re-run landed. The sweep is not a round and takes no copy count, because a `1` there
 would read as the `[1/1]` that both files ban. `Findings` counts what that round contributed to the
-merged list after deduplication and before the cap, so the column will not add up to the number of
+merged list after deduplication, so the column will not add up to the number of
 findings in the report, and is not meant to.
 
 The line above the table carries the agent count as well as the band, because the numbers
@@ -206,5 +220,7 @@ a `BLOCKING` finding blocks whatever the rest of the list says.
 ## Under `--comment`
 
 The inline comment on a line opens with the finding's ID, so the thread on GitHub and the report say
-the same name for the same thing. The summary comment carries the counts per severity and the
-blocking titles with their IDs, and points at the report for the argument.
+the same name for the same thing. Inline comments go only to the findings within the cap of step 6;
+the rest stay in the report. The summary comment carries the counts per severity, the blocking
+titles with their IDs, and the IDs the cap kept off the thread, and points at the report for the
+argument.

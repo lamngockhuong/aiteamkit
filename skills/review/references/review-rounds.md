@@ -98,8 +98,8 @@ the requirement to the code, so it is the only one that finds an acceptance crit
 implemented. Every round that starts from the diff is blind to work that is absent.
 
 **Why readability has no round.** An agent told to go and find hard-to-read code will find some,
-whether or not any exists, and all of it will be `NIT`. One round like that eats the ten-finding cap
-in step 6 and returns nothing in exchange. Readability stays something any round may raise when it
+whether or not any exists, and all of it will be `NIT`. One round like that fills the report with
+`NIT` and the ten slots of the summary in step 6, and returns nothing in exchange. Readability stays something any round may raise when it
 trips over it, and no round hunts for.
 
 ## How many copies a round runs
@@ -322,6 +322,11 @@ Duplicates between rounds are ordinary rather than rare, and synthesis deduplica
 pass that must see the list is the sweep at the end, whose job is finding what the list is missing;
 it is not a round, and the section below says why.
 
+That includes the polite form of the list. A round's prompt carries no "known already", no "do not
+re-report", and no finding from an earlier round however briefly put: a round told that one false
+sentence in the docs is already reported treats that surface as done and stops reading it, and
+misses the three other sentences making the same claim.
+
 **Which rounds overlap, and which earn their place.** The five that start from the diff, `lines`,
 `removed`, `boundary`, `callers` and `exposure`, converge hard: on one 1,864-line change a single
 finding came back from 11 of 13 agents, and the five most-reported findings from 6 or more. The four
@@ -371,6 +376,13 @@ the difference in scope is the point:
   can name, together with the trigger that mechanism depends on. An agent that quietly drops what it
   half believes has decided the verdict alone and skipped step 5, which is where most missed defects
   go.
+- The instruction to return each candidate as its own entry, never as a clause inside another's
+  description. A second mechanism tucked into a `NIT` about something else takes that `NIT`'s
+  severity and gets no verdict of its own.
+- The instruction to return, beside its findings, each "checked and fine" that rests on a claim the
+  code can settle: A needs B, A is guarded at C, every caller already passes D. Step 5 checks these
+  like candidates, and a wrong one becomes one: it is a missed finding that reads as coverage. A bare "nothing
+  found" states no claim and is not checked.
 - The instruction to read around the changed lines rather than whole unchanged files, which is what
   keeps a large diff inside one context.
 
@@ -381,7 +393,9 @@ concrete suggestion. It does not rank against anyone else, because it cannot see
 
 Per round, as the round closes, not once for the whole review:
 
-1. **Collect** every finding from every copy, keeping which copy raised it.
+1. **Collect** every finding from every copy, keeping which copy raised it, and split out any
+   second mechanism still riding inside a finding's description, per *What each agent in a round is
+   given*.
 2. **Deduplicate.** Two findings are the same when they cite the same file within about ten lines and
    describe the same cause, however differently they are worded.
 3. **Count.** Each unique finding carries how many copies raised it, as `[k/N]`.
@@ -405,8 +419,8 @@ Then once, after the last round has closed, across rounds:
    which round set the severity.
 10. **Renumber** in the skill's own order, severity first, into the severity-prefixed identifiers of
     `references/report-format.md`: `B`, `S`, `N`, from 1 within each severity, never one sequence
-    across the three. The cap in the skill's step 6 applies to that final merged list, never to one
-    round's and never to one copy's.
+    across the three. The cap in the skill's step 6, on what the summary and the comments carry,
+    applies to that final merged list, never to one round's and never to one copy's.
 
 `[k/N]` means something only between copies of one round. A round that ran once carries its round
 name instead: `[1/1]` would invite the reader to think eight other agents looked and disagreed, when
@@ -431,8 +445,17 @@ It is not a round. It ran last, with every round's findings in front of it, so i
 neither `[k/N]` nor a round name and are labelled as coming from the sweep. Tagging one `[1/N]` would
 tell the author that other agents looked at it and stayed silent, when in truth none of them saw it.
 
-Its candidates come back as candidates. The verdicts in step 5 and the cap in step 6 stay with the
-calling agent, because what is delegated is the search and never the judgement.
+Its candidates come back as candidates. The verdicts in step 5 and the ranking in step 6 stay with
+the calling agent, because what is delegated is the search and never the judgement.
+
+**Other locations of a listed finding.** For each finding on the list that is a false claim in a
+document or a faulty pattern in code, the sweep searches the diff for the same claim or the same
+pattern elsewhere: the other documents that say it, the mirrors in other languages, the other call
+sites written the same way. Each one comes back as a further location of that finding, by its
+identifier, never as a new candidate, so it does not count toward the eight. A finding spanning
+four files is one finding with four locations, per `references/report-format.md`, and the report
+that names one of the four has left the author to find the other three the hard way. The calling
+agent checks that each location really carries the same cause before adding it.
 
 Its own agent is not the same as one more round. A round runs alongside its copies and is handed no
 list; the sweep runs alone, after every round has closed, and the list is the whole of what it is
