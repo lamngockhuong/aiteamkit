@@ -290,12 +290,13 @@ Ask these, and nothing else:
 | Who approves what | An approval rule is an agreement, not a file |
 | Working language | The repository may be English while the team works in another language |
 | Where the spec lives | Often a wiki, a drive, or a chat channel outside the repository |
+| Whether contracts come first | A `docs/api/` directory looks the same whether it was written before the code or after it |
 
 **Except where the project wrote it down.** A stated value is detected with its source and not
 asked for, the same way the Commands section above takes a cell out of `CLAUDE.md` when that is the
-only place the project recorded it. Two rows meet this in practice: `CODEOWNERS` states a person's
+only place the project recorded it. Three rows meet this in practice: `CODEOWNERS` states a person's
 host identifier and the paths they own, and an agent instruction file sometimes states where the
-spec lives. `shared/host-file-locations.md` holds where each host reads `CODEOWNERS` from and when
+spec lives, or that API and schema documents are approved before implementation. `shared/host-file-locations.md` holds where each host reads `CODEOWNERS` from and when
 one counts as present.
 
 What `CODEOWNERS` never states is the role name. A line giving `@handle` ownership of `apps/api`
@@ -313,6 +314,11 @@ in a single prompt spends one turn on that prompt, per Several questions in one 
 identifiers and their approvals in a single question, never one question per role and never a second
 turn for the identifiers), the working language, where the spec lives, and who approves the profile.
 
+The spec turn carries a second half: whether the team approves its API, schema and feature documents
+before the code is written, which is the `Contract` line in Docs. It rides on the spec question
+because both are about where the agreed description of the work comes from, and costs no turn of its
+own. No answer is `TBD` with the Tech Lead's name, which every skill reads as `code`.
+
 That leaves four turns for the ambiguities the section above can raise: which directory is the
 project root, two lock files, a watch-mode test script, a command that needs another command first,
 a member list that does not group cleanly, a tracker that may not match the git host, and more than
@@ -329,6 +335,9 @@ The four fixed turns assume there is no profile yet. Against one that already ex
 are usually answered in the file being re-read, and asking again is the defect step 1 exists to
 prevent. Owe only the fixed turns the existing profile leaves unanswered, plus the ambiguities the
 comparison raises, and count a value that matches what the profile records as already confirmed.
+A fixed-turn field the profile lacks entirely is unanswered, the same as one at `TBD`: a profile written before
+the field existed has never been asked. The `Contract` line is the case this meets today, and when
+the spec half of its turn is already answered, the Contract half takes that turn on its own.
 `SKILL.md`, under "Re-running against an existing profile", owns that rule; this is its half of the
 budget.
 

@@ -17,6 +17,7 @@ approver: <Tech Lead>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ticket: <the ticket that last changed this, or none>
+implemented: no | partial | yes   # only where the profile says Contract: first; delete otherwise
 ---
 
 # `<table_name>`
@@ -77,3 +78,9 @@ Each with the name of the person who must answer it.
 - Do not name functions, sequences, or policies as the explanation of a rule. Describe the rule: a
   ten-digit number padded from a counter starting at 1, not the name of the sequence that produces
   it.
+- Under `Contract: first` the unit that carries the not-implemented mark is the column, the index, or
+  the constraint, per `shared/spec-docs.md`, since the document is one table, and only at `implemented: partial`. The mark goes at the
+  start of the row's `Meaning` cell: `Not implemented yet.`, or `Not implemented yet: <what the
+  contract changes>.` for one that exists and is changing. A table that does not exist at all marks
+  its opening paragraph instead. Until the mark comes off, the row cites the design, or the author
+  who proposed a detail the design left open, not the schema.

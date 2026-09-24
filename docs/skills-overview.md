@@ -166,7 +166,9 @@ two or more compared options, the chosen data model and API contracts, migration
 risks, required reviewers, and the matching ADR.
 
 **Use when.** Before implementing anything touching a schema, a public contract, a shared module, or
-more than one service.
+more than one service. Where the profile says `Contract: first`, the design states the contract in
+summary and names the reference documents `atk:spec --from` writes from it, rather than carrying
+every field twice.
 
 **Do not use when.** The change is local and reversible. A design document for a two-file fix costs
 more than it returns.
@@ -185,10 +187,14 @@ reports where a document and the code disagree and changes nothing.
 
 **Use when.** A project has no written contract, a merged change left one behind, or nobody trusts
 the documents any more. `--sync` folds the change on the current branch into the documents it
-touched.
+touched. In a project whose profile says `Contract: first`, also when the contract has to exist
+before the code: `--from <design-path>` writes the document from a design in review, marked
+`implemented: no`, so frontend, backend and QA build against the same page while the code catches up.
 
 **Do not use when.** The question is still which approach to take. That is `atk:design-doc`, which
-compares options and stops; this skill describes what was actually done.
+compares options and stops; this skill describes what was actually done, or, contract-first, what
+the design agreed. Nor from a ticket or a draft design: `--from` takes a design somebody is
+reviewing, and nothing less.
 
 **The habit that matters.** The shape comes from the documents the project already keeps, not from
 the kit. A team holding 29 API documents in one shape has a convention, and a thirtieth in another
@@ -375,6 +381,10 @@ negative and boundary coverage, and a regression matrix that justifies each entr
 module, table, or endpoint.
 
 **Use when.** A feature reaches QA, a release needs a regression pass, or there are no written cases.
+Migration, rollback, rollout and performance cases come from the design. Under `Contract: first`
+expected values come from the reference documents in `docs/api/`, `docs/database/` and
+`docs/features/`, so cases can be written before the code exists; under `code`, from the design for
+what the change alters and from the reference documents for what it leaves alone.
 
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.

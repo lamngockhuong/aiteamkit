@@ -77,7 +77,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:catchup <epic-url|pr-url>            # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
 /atk:design-doc <requirement|topic>       # --adr|--no-adr --options --lang --out
-/atk:spec [subject]                       # --kind --sync --check --lang --out
+/atk:spec [subject]                       # --kind --from --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
 /atk:convention                           # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
 /atk:plan <ticket|design|text|plan-path>  # --inline --review --comment --layer --out

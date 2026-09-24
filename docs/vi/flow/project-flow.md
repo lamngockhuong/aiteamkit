@@ -58,7 +58,7 @@ flowchart TD
         D0 -->|Có| D1["atk:design-doc<br/><small>TL hoặc Dev soạn, ghi ADR</small>"]
         D1 --> D2{"TL duyệt"}
         D2 -->|Yêu cầu sửa| D1
-        D3["atk:spec<br/><small>vùng này hiện làm gì</small>"]
+        D3["atk:spec<br/><small>vùng này hiện làm gì, hoặc đã thống nhất làm gì</small>"]
     end
 
     subgraph S4["4. Chia việc và xếp thứ tự"]
@@ -102,6 +102,7 @@ flowchart TD
     C0 --> M0
     D0 -->|Có| D3
     M2 -.->|Hợp đồng thay đổi| D3
+    D1 -.->|Contract: first, spec --from| D3
     B2 --> M0
     M2 --> V0
     V2 -->|Đạt| L0
@@ -160,7 +161,9 @@ pha nào. Mọi skill làm xong việc đều giao lại cho nó, nên một art
 `atk:spec` vẽ ở pha 3 vì đó là lúc một đội lần đầu viết ra vùng này làm gì, nhưng cạnh nét đứt đi từ
 chỗ merge mới là cạnh chạy thường xuyên nhất. Thay đổi nào đụng tới hợp đồng thì mang theo tài liệu
 tham chiếu trong cùng pull request, theo `shared/spec-docs.md`, và đó là lý do tài liệu sống lâu hơn
-cái pha sinh ra nó.
+cái pha sinh ra nó. Khi `Contract: first`, pha 3 cũng là lúc tài liệu được viết từ thiết kế ngay khi
+thiết kế đang được review, nên contract và quyết định được review cùng nhau, và các pha sau làm theo
+cùng một trang.
 
 ## Những gì luồng này không quy định
 

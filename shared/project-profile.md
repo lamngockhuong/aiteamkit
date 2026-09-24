@@ -181,7 +181,7 @@ a section to delete.
 | Project | Name, repository, the shape from the four above, package manager, and, where the shape names them, the member repositories with their paths, remotes, owning teams, and how each is linked | all |
 | Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify |
 | Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
-| Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
+| Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, whether the project writes its reference documents before the code or after it, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release |
 | Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, and the language the team writes artifacts in | all |
 | Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to clean up, how to be sure the target is local | verify |
@@ -192,6 +192,10 @@ prose in. Docs says which branch of a language-partitioned tree is the source th
 from, which is a fact about the directory layout and stays true when a Vietnamese team writes an
 English document. A tree that is not partitioned records that and nothing else;
 `shared/artifact-paths.md` owns what each skill then does with it.
+
+`Contract: first` or `Contract: code` in Docs is the one entry there that changes what a skill does
+rather than where it writes: whether a reference document may exist before the code it describes.
+`shared/spec-docs.md` owns what each value means, and why a missing line reads as `code`.
 
 Every entry is a pointer or a command, never prose copied from elsewhere. A section that runs long
 because it has started explaining instead of linking is duplicating a document; a section that runs

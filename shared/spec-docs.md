@@ -1,11 +1,12 @@
 # Reference documents
 
-Shared contract for the documents that describe the system as it currently is: the API contract per
-resource, the schema per table, the behaviour per feature. Referenced from `skills/<name>/SKILL.md`
-as `shared/spec-docs.md`, which is `../../shared/spec-docs.md` relative to a skill file.
+Shared contract for the documents that describe the system as it currently is, or, in a project that
+writes its contract first, as it is agreed to be: the API contract per resource, the schema per table,
+the behaviour per feature. Referenced from `skills/<name>/SKILL.md` as `shared/spec-docs.md`, which is
+`../../shared/spec-docs.md` relative to a skill file.
 
-Cited by `spec`, which writes them, and by `design-doc`, `implement`, `fix`, `verify` and `review`,
-which have to leave them true.
+Cited by `spec`, which writes them, by `design-doc`, `implement`, `fix`, `verify` and `review`,
+which have to leave them true, and by `qa` and `help`, which read them.
 
 ## What makes a document a reference document
 
@@ -13,7 +14,7 @@ Not its subject. Its tense.
 
 | | Design document | Reference document |
 |---|---|---|
-| Answers | what should we do, and why not the other thing | what does it do today |
+| Answers | what should we do, and why not the other thing | what does it do today, or under `Contract: first` what it is agreed to do |
 | Cites the code | as it stood before the change | as it stands now |
 | Named after | the ticket or the date | the subject |
 | The day it merges | becomes an account of a decision | becomes the thing that has to stay true |
@@ -24,6 +25,81 @@ The same sentence can appear in both and be correct in one and stale in the othe
 are two files rather than one document that gets edited. Where they live and how they are named is in
 `shared/artifact-paths.md`, under Persistence and under the kinds table. Do not restate either here
 or in a skill.
+
+The table above is the reference document of a project that writes its code first. A project that
+writes its contract first holds the same document to a different standard, and says which it does.
+
+## When the contract comes before the code
+
+The Docs section of `.atk/profile.md` carries one line, `Contract: first` or `Contract: code`, per
+`shared/project-profile.md`. A missing line, or one still at `TBD`, means `code`: that is what every
+profile written before the line existed describes, and a project must not change behaviour because
+somebody has not answered a question yet. Changing the line is the Tech Lead's call, never a skill's.
+
+| | `Contract: code` | `Contract: first` |
+|---|---|---|
+| Exists before the code | no | yes, written from a design once it is in review |
+| Answers | what does it do today | what the code is held to |
+| Cites | the code, as `path:line` | the design section a decision came from, or the author who proposed a detail the design left open, until the code exists, then the code |
+| When the two disagree | the document is stale | the code differs from an agreed contract |
+| Written by | `atk:spec` | `atk:spec`, from the design first, then from the code as it lands |
+
+What stays the same under both is what makes it a reference document rather than a design: it is
+named after its subject, updated in place, carries no options and no history, and is approved per
+kind. The design document still answers which approach, and why not the other; under `first` it
+decides the contract in summary and names the reference documents that will carry it in full, and
+the author of each reference document proposes the detail the summary leaves open, for that
+document's approver to accept. The
+two are separate documents, and the reference documents may be written from the design as soon as it
+is `IN REVIEW`, so the contract is reviewed beside the decision rather than after it. A design still
+at `DRAFT` is not a source: nobody has been asked to look at it yet. The order that holds is the
+approval: a reference document reaches `APPROVED` no earlier than the design it came from, and a
+design that changes in review is written into its reference documents again before either is
+approved. Both may merge in the same pull request, so one review sees the decision and the contract
+together.
+
+### Whether the code exists yet
+
+Under `Contract: first` a reference document carries one field beyond the shared front matter block
+in `shared/artifact-paths.md`:
+
+```yaml
+implemented: no | partial | yes
+```
+
+It is not an approval state, and `status` is not an implementation state. A document can be
+`APPROVED` and `implemented: no`, which is the ordinary state of a contract a frontend is building
+against while the backend catches up.
+
+- `no`: nothing in the code corresponds to the document yet. Every item counts as not implemented
+  and cites the design or the author who proposed it, and no item carries a mark of its own: the field already says it of all of
+  them.
+- `partial`: some of it exists. Each item not yet in code carries one line saying it is not
+  implemented yet, placed where the kind's template in `skills/spec/references/` puts it: an
+  endpoint in an `api` document, a column, index, or constraint in a `db` document, which is one
+  table, and a behaviour rule in a `feature` document. An item the contract changes counts as not
+  in code until the change lands, and its line says what changes. An item without the line claims
+  the code exists, and is cited to it.
+- `yes`: every item is in the code, cited as `path:line`, and no mark is left. The value is set in
+  the change that implements the last item, by the same sync that takes the last mark off, so it
+  becomes true in the repository when that change merges: a merge is the event the repository
+  records, and the document travels in the same pull request as the code.
+
+An item counted as not implemented, whether by `no` or by its mark, is never drift, even where code
+for it already runs: old behaviour still running under a changing item is what the mark describes.
+Whether the new code matches the contract is checked where the mark comes off, by `atk:spec --sync`
+and `atk:review` on the change that implements it, and a mark that stays on after its code agrees is
+a stale mark, not a disagreement.
+
+Under `Contract: code` the field is absent: a document written from the code is `yes` by
+construction, and so is every document a project had before it switched to `first`.
+
+Switching back from `first` to `code` is the Tech Lead's call, like the switch the other way, and it
+has one step to take before the line changes: run `atk:spec --check`, and for each item still counted
+as not implemented, by its mark or by a document at `implemented: no`, either remove it or turn it into
+an open question. Which of the two is the document's approver's call. Then delete the `implemented`
+field. Under `code` a document may only say what the code does, so an item left behind reads as drift
+on the day the line changes, and nobody will remember it was once a plan.
 
 ## The project's own shape wins
 
@@ -75,6 +151,12 @@ code allows 500.
 A document that never settled the point, or that carries it as an open question with a name against
 it, is not drift. Nobody has decided yet, and reporting it as a gap sends someone to fix code that is
 doing nothing wrong.
+
+An item a contract-first document counts as not implemented yet, per Whether the code exists yet
+above, is neither. The document says the code is still to come, and code that is not there yet is the
+state the team planned for. It is reported as not implemented, never as a finding. Once the mark comes off, a
+disagreement is drift like any other, and which side changes is still the approver's call: an agreed
+contract makes the code the likelier side to move, not the certain one.
 
 Both `atk:spec --check` and `atk:review` have to answer this the same way, which is why the rule
 lives here rather than beside either of them. Mixing the two is also how a drift report stops being

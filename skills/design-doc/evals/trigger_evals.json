@@ -11,6 +11,8 @@
   { "query": "/atk:design-doc --options 3", "should_trigger": true },
 
   { "query": "turn the client mail into user stories", "should_trigger": false },
+  { "query": "the design is in review, write the API reference doc from it so frontend can start", "should_trigger": false },
+  { "query": "viết tài liệu API từ design đã chốt để FE code trước", "should_trigger": false },
   { "query": "viết user story cho yêu cầu này", "should_trigger": false },
   { "query": "chia epic này thành task cho từng người", "should_trigger": false },
   { "query": "cắt phần việc này thành các phase để tôi làm", "should_trigger": false },

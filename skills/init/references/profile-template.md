@@ -89,6 +89,7 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 - Language mirrors: `<paths>` or `none`
 - Conventions: `<path>` or `TBD (ask <person>)`
 - Designs: `<path>` or `TBD (ask <person>)`
+- Contract: `first`, `code`, or `TBD (ask <person>)`  <!-- first: API, schema and feature docs are approved before the code; absent or TBD reads as code, per shared/spec-docs.md -->
 - Agent instructions: `<CLAUDE.md, AGENTS.md, or none>`
 
 ## Tracker

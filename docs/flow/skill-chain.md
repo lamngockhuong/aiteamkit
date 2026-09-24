@@ -42,6 +42,7 @@ flowchart LR
     A6b -->|review| A7
     A7 -->|implement| A6
     A6 -->|spec --sync| A3b
+    A3 -.->|spec --from, Contract: first| A3b
     A3b -->|qa| A8
     A6 -->|qa| A8
     A8 -->|verify| A9
@@ -60,7 +61,11 @@ and `tailor` writes the override file each skill reads before its first step.
 
 `spec` is the one node the chain returns to rather than passes through. Its documents are an input to
 the next design and the next test plan, and an output of every change that alters a contract, which
-is why the arrow into them comes from the code rather than from the design that proposed it.
+is why the arrow into them comes from the code rather than from the design that proposed it. A
+project whose profile says `Contract: first` adds a second arrow, from the design into `spec`: the
+contract is written from the design while it is in review, so frontend, backend and QA build against
+it before the code exists, and the arrow from the code then moves each item onto the code as it
+lands, per `shared/spec-docs.md`.
 
 ## What each skill consumes
 
@@ -72,15 +77,15 @@ is why the arrow into them comes from the code rather than from the design that 
 | `intake` | A raw request | Requirements with open questions | `estimate`, `design-doc`, `qa` |
 | `catchup` | An epic or a pull request | A brief plus an understanding check | The person, not a skill |
 | `estimate` | Requirements or an epic | Sizes, capacity, sprint commitment | `breakdown` |
-| `design-doc` | Requirements, and the reference documents for the area | Design plus ADR | `breakdown`, `plan`, `implement` |
-| `spec` | The code, and the documents already in `docs/api/`, `docs/database/`, `docs/features/` | Reference documents kept current, or a drift report | `design-doc`, `qa`, `implement`, `review` |
+| `design-doc` | Requirements, and the reference documents for the area | Design plus ADR; under `Contract: first` the contract in summary, naming the reference documents | `breakdown`, `plan`, `implement`, and `spec` under `Contract: first` |
+| `spec` | The code, and the documents already in `docs/api/`, `docs/database/`, `docs/features/`; under `Contract: first`, the design too | Reference documents kept current, or a drift report | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | A design or an epic | Owned tasks, lanes, dependency graph | `plan`, `implement` |
 | `convention` | The code and its history, and the convention gaps in the review reports already written | Conventions classified by how they are enforced | `implement`, `review` |
 | `plan` | A ticket, design, or description; under `--review`, a plan already written | Phases and steps, or findings about a plan | `implement`; under `--review`, the plan's author |
 | `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body | `review`, `qa` |
 | `fix` | A defect report | A proven cause and the smallest change | `verify`, `review` |
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit, and the convention gaps behind them | `implement`, `fix`, `convention` |
-| `qa` | Acceptance criteria and the change | Test plan, cases, regression matrix | `verify` |
+| `qa` | Acceptance criteria, the change, the reference documents for expected values, and the design for migration, rollback and rollout | Test plan, cases, regression matrix | `verify` |
 | `verify` | The running system | What was proven, and what was not | `release` |
 | `git` | A finished change or artifact, and the record the calling skill wrote | Commits, a branch, and the pull request that carries the record | `review`, then the approver |
 | `release` | The diff since the last version | Notes, checklist, rollback path | `incident`, `retro` |

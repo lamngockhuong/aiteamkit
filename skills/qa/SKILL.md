@@ -52,13 +52,27 @@ Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared
 
 ### 1. Read the acceptance criteria
 
-Load the requirement and design. List every acceptance criterion with an ID. A criterion that
+Load the requirement and design, and the reference documents for the area: the ones the design
+names, and those under `docs/api/`, `docs/database/` and `docs/features/` for what the change touches,
+resolved per `shared/artifact-paths.md`. List every acceptance criterion with an ID. A criterion that
 cannot be turned into a test is reported back as a requirement defect, not quietly skipped.
+
+Each source answers a different question, per `shared/spec-docs.md`. The design gives what a
+reference document never carries: migration, rollback, backward compatibility, rollout, and the
+performance expectation. Expected values, fields, status codes, error codes, limits, constraints,
+come from where the agreed contract is, which the `Contract` line in the Docs section of
+`.atk/profile.md` decides. Under `first`, the reference document is the contract, so it wins over
+the design, and a disagreement between the two becomes an open question for the reference
+document's approver: the Tech Lead for `api` and `db`, the BrSE/BA for `feature`. Under `code`, or
+with no line, a reference document still describes the code before the change, so it gives the
+expected values for what the change leaves alone, the regression cases, and the design gives them
+for what the change alters.
 
 ### 2. Derive the happy-path cases
 
 One case per criterion at minimum. A case has: ID, title, precondition, steps, test data, expected
-result, priority, and the criterion ID it covers. Expected results state an observable outcome, not
+result, priority, and the criterion ID it covers. An expected result taken from a reference document
+cites it. Expected results state an observable outcome, not
 "works as expected".
 
 ### 3. Negative, boundary, and cross-cutting cases
@@ -70,14 +84,18 @@ project requires it.
 
 ### 4. Regression matrix
 
-Derive impact from the diff or the design, not from intuition. List the existing features that share
+Derive impact from the diff or the design, not from intuition. The migration, rollback, compatibility,
+rollout and performance cases the design calls for go here beside the regression rows, one case
+each, with the design's performance expectation as the expected result of its case. List the existing features that share
 a module, a table, or an endpoint with the change, and mark each `MUST TEST`, `SPOT CHECK`, or
 `NOT AFFECTED`, with the reason.
 
 ### 5. Entry and exit criteria
 
 Entry: what the developer must deliver before QA starts, including build, environment, test account,
-seed data, and the list of what is not implemented yet. Exit: the pass rate, the severity thresholds
+seed data, and the list of what is not implemented yet. Where a reference document carries
+`implemented`, per `shared/spec-docs.md`, that list starts from its value and its marks rather than
+from memory. Exit: the pass rate, the severity thresholds
 that block a release, and who signs off.
 
 ## Output

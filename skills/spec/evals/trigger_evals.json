@@ -12,9 +12,13 @@
   { "query": "この API の仕様書を書いて", "should_trigger": true },
   { "query": "仕様書と実装がずれていないか確認して", "should_trigger": true },
   { "query": "テーブル定義書を更新して", "should_trigger": true },
+  { "query": "write the API doc for the orders endpoint before backend builds it, so frontend can start now", "should_trigger": true },
+  { "query": "viết tài liệu API và bảng database trước khi code để FE làm trước", "should_trigger": true },
+  { "query": "承認待ちの設計書からAPI仕様を先に書いて、フロントが実装を始められるようにしたい", "should_trigger": true },
 
   { "query": "should we use a queue or a cron job for this", "should_trigger": false },
   { "query": "compare two options for the notification delivery and pick one", "should_trigger": false },
+  { "query": "we have not decided how the orders API should work yet, weigh the options before anyone builds it", "should_trigger": false },
   { "query": "nên chọn phương án nào cho phần gửi thông báo", "should_trigger": false },
   { "query": "設計書を書いて、方式を比較して決めたい", "should_trigger": false },
   { "query": "review this pull request before I approve it", "should_trigger": false },

@@ -81,6 +81,15 @@ contracts with request and response shapes, error and edge-case behavior, backwa
 feature flag or rollout plan, rollback path, observability, security and permission impact, and
 performance expectation.
 
+Where the Docs section of `.atk/profile.md` says `Contract: first`, the data model and the API
+contract are specified in summary here: which endpoints, tables, columns, and behaviour rules the
+change adds or alters, and why. The full shapes, request and response fields, column types,
+constraints, error codes, go into the reference documents `atk:spec --from` writes from this design,
+whose author proposes them there for each document's approver, and this section names each of them
+by path. Writing them in both places would leave two copies to
+disagree the first time review changes one, per `shared/spec-docs.md`. A missing line or `TBD`
+means `code`, and then this section carries the full shapes as above.
+
 ### 5. ADR and review
 
 Write the ADR as context, decision, consequences, and alternatives rejected, numbered sequentially
@@ -89,9 +98,10 @@ from the existing `docs/adr/` directory. Set `status: IN REVIEW` and list the re
 ## Output
 
 Design at `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
-`shared/artifact-paths.md`. Both are records of a moment and neither is edited afterwards; the data
+`shared/artifact-paths.md`. Both are records of a moment and neither is edited afterwards. The data
 model and the API contract specified in step 4 reach their lasting form in `docs/api/` and
-`docs/database/`, written by `atk:spec` once the change is real.
+`docs/database/`, written by `atk:spec`: once the change is real under `Contract: code`, and from this
+design while it is in review under `Contract: first`, so the contract is reviewed beside the decision.
 
 When this design replaces an earlier one for the same area, retire the earlier one in the same pull
 request: `status: SUPERSEDED`, a link to this design from it, and a link back. Nothing marks it

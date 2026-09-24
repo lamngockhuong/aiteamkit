@@ -222,14 +222,14 @@ merged and which directory it goes in.
 
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
-| Reference | the `spec` kinds, `docs/qa/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, so a stale line in it is wrong rather than old |
+| Reference | the `spec` kinds, `docs/qa/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
 | Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
 its name says by carrying a ticket, a date, a sprint, or a version? Then it is a record. What is
-left describes the system as it currently is, and that is reference.
+left describes the system as it currently is, or as it is agreed to be, and that is reference.
 
 The question about the name is the one that settles the cases people argue about. `docs/qa/` is
 named after the feature rather than the sprint, and a regression suite is updated when the feature
@@ -311,6 +311,10 @@ updated: YYYY-MM-DD
 ticket: <id or URL, or none>
 ---
 ```
+
+In this block `status` is the approval state and nothing else. The one kind that adds a field is the reference
+document in a project whose profile says `Contract: first`, which also carries `implemented`, defined
+under When the contract comes before the code in `shared/spec-docs.md`.
 
 ## Before writing
 
