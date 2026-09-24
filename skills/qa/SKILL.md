@@ -3,12 +3,15 @@ name: qa
 description: >
   Plan and write the team's testing: a test plan with scope and exit criteria, test cases traced to
   acceptance criteria, a regression matrix, test data and environment needs, and the handoff a
-  developer owes QA before a ticket moves to testing.
-  Use when a feature reaches QA, when a release needs a regression pass, or when a team has no
-  written test cases.
+  developer owes QA before a ticket moves to testing. Afterwards, records a test run the team
+  executed, raises its failed cases as bugs, and records the retest of a fixed bug.
+  Use when a feature reaches QA, when a release needs a regression pass, when a team has no
+  written test cases, or when test results need recording and their defects logging.
   Triggers on: "test plan", "test case", "QA", "kiểm thử", "viết test case", "regression",
-  "テスト計画", "テストケース", "how do we test this", "QA handoff", "/atk:qa".
-argument-hint: "[requirement-path|feature|release|cases-path] [--plan|--cases|--regression|--update] [--lang <code>] [--out <path>]"
+  "test results", "log the failed cases as bugs", "retest", "ghi kết quả test", "log bug",
+  "テスト計画", "テストケース", "テスト結果", "不具合報告", "再テスト", "how do we test this",
+  "QA handoff", "/atk:qa".
+argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--plan|--cases|--regression|--update|--run|--bug|--retest] [--lang <code>] [--out <path>]"
 ---
 
 # QA Planning and Test Cases (`atk:qa`)
@@ -21,15 +24,19 @@ cases both become visible.
 
 Handles: writing the test plan, deriving test cases from acceptance criteria, adding negative and
 boundary cases, building the regression matrix from change impact, listing test data and environment
-needs, and defining the QA entry and exit criteria.
+needs, defining the QA entry and exit criteria, and afterwards recording what the team's own test
+execution found: the run record, its defects raised on the tracker, and the retest of a fixed bug.
 
 Does NOT handle: writing automated test code, which belongs to `atk:implement`; running the
-suite; or signing off a release (`atk:release`).
+suite or executing the cases, which the testers do; deciding a result on the tester's behalf; or
+signing off a release (`atk:release`).
 
 ## Roles
 
 QA owns the plan and the cases. BrSE/BA confirms cases match the requirement intent. Dev owns the
-handoff and the test data. PM owns the exit criteria. See `shared/team-roles.md`.
+handoff and the test data. PM owns the exit criteria. The QA who ran the cases owns the run record
+and its results, the QA lead approves it, or the Tech Lead where there is none. See
+`shared/team-roles.md`.
 
 ## Invocation
 
@@ -39,6 +46,9 @@ handoff and the test data. PM owns the exit criteria. See `shared/team-roles.md`
 /atk:qa --cases <feature>       # Test cases only
 /atk:qa --regression <release>  # Regression matrix for a release scope
 /atk:qa --update <cases-path>   # Bring existing cases level with a changed source
+/atk:qa --run <cases-path>      # Record the results of a test run the team executed
+/atk:qa --bug <run-path>        # Raise the defects of a run record on the tracker
+/atk:qa --retest <issue>        # Record a retest of a fixed bug and offer the verdict
 /atk:qa --lang vi               # Write the artifacts in Vietnamese
 /atk:qa --out <path>            # Override the default output path
 ```
@@ -53,7 +63,9 @@ Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared
 
 `--update` replaces the five steps with `references/update-mode.md`: it compares each source with what
 the cases file's Sources table recorded at the last run, and adds, rewrites, or strikes rows
-accordingly, keeping every ID, rather than writing the file again. The override is read either way.
+accordingly, keeping every ID, rather than writing the file again. `--run`, `--bug` and `--retest` replace them
+with `references/test-run.md`: recording what the team's own execution found, raising its defects,
+and confirming a fix. The override is read either way.
 
 ### 1. Read the acceptance criteria
 
@@ -131,7 +143,9 @@ Test plan at `docs/qa/test-plan-<slug>.md` and cases at `docs/qa/test-cases-<slu
 `shared/artifact-paths.md`. The Markdown table is the source. A CSV beside it,
 `docs/qa/test-cases-<slug>.csv`, is written by the export rules in `references/test-case-template.md`
 when the person asks for one, when the override asks for one, or when one already exists; an existing
-CSV is regenerated in the same run that changes the Markdown, and never edited by hand.
+CSV is regenerated in the same run that changes the Markdown, and never edited by hand. A run or a
+retest writes a record at `docs/records/test-runs/<ticket-or-date>-<slug>.md`, whose content is never
+edited once written, apart from its `status` and the `Ticket` cells `--bug` fills.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
@@ -140,8 +154,11 @@ it falls into, per `shared/artifact-paths.md`.
 
 ## Ticket
 
-Follow `shared/ticket-adapters.md`. Bugs found during execution become issues linked to the case ID
-and the criterion ID.
+Follow `shared/ticket-adapters.md`. Bugs found during execution become issues through `--bug`, one
+per defect the person picks from the list shown first, each carrying the case ID, the criterion ID,
+and the path of the run record. A retest verdict is offered as a comment on its issue, shown first and
+posted on a yes, per the consent line in `shared/finalize-steps.md`. Neither closes an issue: the QA
+who raised the bug closes it, or whoever the team's own flow names. The whole procedure is `references/test-run.md`.
 
 ## Definition of done
 
@@ -159,3 +176,4 @@ and the criterion ID.
 - [ ] Under `--update`, no ID changed or was reused, every rewritten case has empty execution cells,
       an approved file had its existing rows changed only through an answered question, and the run
       summary lists every row the diff touches.
+- [ ] Under `--run`, `--bug` and `--retest`, the definition of done in `references/test-run.md` holds.

@@ -139,7 +139,7 @@ to `docs/adr/` as well.
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
-| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited |
+| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<ticket-or-date>-<slug>.md` |
 | `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
 | `security` | `docs/records/security/<ticket-or-date>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
@@ -226,7 +226,7 @@ merged and which directory it goes in.
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
-| Record | requirements, planning, design, fixes, verification, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
+| Record | requirements, planning, design, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
 | Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does

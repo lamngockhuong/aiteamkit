@@ -140,6 +140,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/qa/references/checklists.md` | Checklist theo component: bảy trường của một dòng điểm kiểm tra, mười tám khóa component, những gì một lần chạy được làm với một dòng, lý do một điểm kiểm tra không bao giờ thêm hành vi mà nguồn không nêu, và quy tắc checklist riêng của team thay cho file này ở các component nó phủ |
 | `skills/qa/references/checklists.tsv` | Bản thân các điểm kiểm tra, mỗi dòng một điểm, ghi component, chiều và kỹ thuật quyết định nó cho ra bao nhiêu case |
 | `skills/qa/references/update-mode.md` | Lượt `--update`: bảng Sources làm mốc, so bằng mã băm nội dung hoặc `design_fingerprint` nên vẫn đúng khi nguồn ở repo khác hay có commit xen giữa, những gì đã đổi chia thành mới, sửa và bỏ, cách phân biệt dòng do người sửa với dòng do lần chạy trước ghi, mọi ID từng dùng lấy từ lịch sử của file, hai câu trả lời người duyệt dùng cho câu hỏi nó mở, những gì run được tự gộp khi file chưa từng được duyệt và những gì thành câu hỏi khi file đã được duyệt, và bản tóm tắt để người review đối chiếu với diff |
+| `skills/qa/references/test-run.md` | Các chế độ `--run`, `--bug` và `--retest`: những gì một lần chạy cần tester cung cấp, hình dạng record của lần chạy với bảng tổng kết đối chiếu tiêu chí kết thúc và mục lỗi mang đủ những gì `atk:fix` cần, việc tạo issue cho các lỗi được chọn sau khi đã cho xem danh sách, và retest như một lần chạy mới phạm vi hẹp, kết luận được đề nghị đăng thành comment |
 | `skills/qa/references/test-plan-template.md` | Test plan: phạm vi, các cấp test từ UT tới UAT, loại test theo yêu cầu phi chức năng dự án thực sự nêu, môi trường, tương thích, tiêu chí vào và ra theo từng cấp, severity của lỗi với thời hạn xử lý để PM điền, và đường dẫn tới lịch test thay vì chép lịch vào |
 | `skills/verify/references/runtime-checks.md` | Dựng ứng dụng lên, tác động vào nó, khẳng định một tác động thật, và dọn dẹp sau đó |
 | `skills/verify/references/ui-checks.md` | Lượt chạy `--ui`: đối chiếu màn hình với bản thiết kế |
@@ -173,9 +174,9 @@ bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 tro
 | `skills/convention/evals/trigger_evals.json` | Ghi lại luật của team và standard theo từng công nghệ, đối lại `review`, `init`, `tailor` và `design-doc` |
 | `skills/plan/evals/trigger_evals.json` | Lập kế hoạch cho một người, đối lại `breakdown` và `design-doc` |
 | `skills/implement/evals/trigger_evals.json` | Làm việc xây dựng, đối lại lập kế hoạch và review |
-| `skills/fix/evals/trigger_evals.json` | Một lỗi, đối lại `incident` và việc triển khai thông thường |
+| `skills/fix/evals/trigger_evals.json` | Một lỗi, đối lại `incident`, việc triển khai thông thường, và việc log hay retest một bug, thuộc về `qa` |
 | `skills/review/evals/trigger_evals.json` | Đọc một diff, đối lại `qa`, `verify`, `fix` và `catchup` |
-| `skills/qa/evals/trigger_evals.json` | Test case và test plan viết ra, và việc cập nhật chúng sau khi spec đổi, đối lại `verify`, việc viết mã test tự động, và việc kiểm tra tài liệu tham chiếu có lệch khỏi code không |
+| `skills/qa/evals/trigger_evals.json` | Test case và test plan viết ra, việc cập nhật chúng sau khi spec đổi, và việc ghi một lần chạy, các bug của nó và một lần retest, đối lại `verify`, việc viết mã test tự động, việc kiểm tra tài liệu tham chiếu có lệch khỏi code không, và việc sửa một bug |
 | `skills/verify/evals/trigger_evals.json` | Kiểm chứng lúc chạy, đối lại `qa` và `review` |
 | `skills/security/evals/trigger_evals.json` | Review bảo mật, một checklist của khách hàng và một mô hình mối đe dọa, đối lại `review`, `git`, `qa`, `fix`, `incident` và `release` |
 | `skills/git/evals/trigger_evals.json` | Commit, pull request và rebase, đối lại `review`, `release` và `implement` |

@@ -86,7 +86,7 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR | `review`, `qa` |
 | `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
 | `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt, cùng những khoảng trống quy ước đứng sau chúng | `implement`, `fix`, `convention` |
-| `qa` | Tiêu chí nghiệm thu, thay đổi, tài liệu tham chiếu cho giá trị mong đợi, spec màn hình cho text của case `GUI` hoặc design Figma khi màn hình chưa có spec, và thiết kế cho migration, rollback và rollout | Kế hoạch test, test case, ma trận hồi quy | `verify` |
+| `qa` | Tiêu chí nghiệm thu, thay đổi, tài liệu tham chiếu cho giá trị mong đợi, spec màn hình cho text của case `GUI` hoặc design Figma khi màn hình chưa có spec, và thiết kế cho migration, rollback và rollout | Kế hoạch test, test case, ma trận hồi quy; sau đó là record của lần chạy kèm các lỗi, bug được tạo từ đó, và record của lần retest | `verify`; `fix` từ một bug đã tạo; `release` từ record của lần chạy |
 | `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | `security`, `release` |
 | `security` | Mã trong phạm vi, các scanner của dự án, bản thiết kế và mô hình mối đe dọa; với `--checklist`, checklist do khách hàng hoặc công ty cung cấp | Một bản ghi bảo mật với các phát hiện đã kiểm chứng, một checklist đã trả lời và rủi ro còn lại; với `--threat-model`, mô hình mối đe dọa của một tính năng | `release`, `fix`, `implement`, và người duyệt chấp nhận từng rủi ro |
 | `git` | Một thay đổi hoặc artifact đã xong, cùng bản ghi mà skill gọi nó đã viết | Các commit, một nhánh, và pull request mang bản ghi đó | `review`, rồi tới người duyệt |

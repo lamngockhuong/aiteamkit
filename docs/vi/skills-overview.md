@@ -450,6 +450,13 @@ theo kịp thay vì viết lại từ đầu: case mới nhận ID mới, case b
 chạy, case bị bỏ thì gạch ngang, và không ID nào bị dùng lại. Khi file đã được duyệt, mọi thay đổi trên
 một case có sẵn thành câu hỏi cho người duyệt thay vì được sửa thẳng.
 
+Sau khi team đã chạy các case, `--run` biến kết quả tester đưa vào thành record của lần chạy trong
+`docs/records/test-runs/`, kèm bảng tổng kết đối chiếu với tiêu chí kết thúc của kế hoạch và một mục lỗi
+cho mỗi case thất bại, viết sao cho `atk:fix` bắt đầu được từ đó. `--bug` tạo issue trên tracker cho các
+lỗi người dùng chọn, còn `--retest <issue>` ghi lại một lần chạy hẹp gồm case đã sửa và các case mà bản
+sửa chạm tới, rồi đề nghị đăng kết luận thành comment trên issue. Skill không bao giờ tự đánh kết quả, và
+không bao giờ đóng issue.
+
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.
 

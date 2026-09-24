@@ -140,6 +140,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/qa/references/checklists.md` | The component checklist: the seven fields of a viewpoint line, the eighteen component keys, what a run may do with a line, why a viewpoint never adds behaviour the sources do not state, and the rule that a team's own checklist replaces it for the components it covers |
 | `skills/qa/references/checklists.tsv` | The viewpoints themselves, one per line, each naming its component, its dimension, and the technique that decides how many cases it gives |
 | `skills/qa/references/update-mode.md` | The `--update` pass: the Sources table as the baseline, compared by content hash or design fingerprint so it holds across repositories and intervening commits, what changed sorted into new, modified, and deleted, how a person's row is told from the last run's, every ID ever used taken from the file's history, the two answers an approver gives to a question it raised, what a never-approved file lets the run merge and what an approved one turns into questions, and the run summary a reviewer checks the diff against |
+| `skills/qa/references/test-run.md` | The `--run`, `--bug` and `--retest` modes: what a run needs from the tester, the run record's shape with its summary against the exit criteria and a defect section carrying what `atk:fix` needs, raising chosen defects on the tracker after the list is shown, and a retest as a narrow new run whose verdict is offered as a comment |
 | `skills/qa/references/test-plan-template.md` | The test plan: scope, test levels UT to UAT, test types from the stated non-functional requirements, environments, compatibility, entry and exit per level, defect severity with response targets left to the PM, and a link to the schedule rather than a copy of it |
 | `skills/verify/references/runtime-checks.md` | Bringing the application up, exercising it, asserting a real side effect, and cleaning up |
 | `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
@@ -173,9 +174,9 @@ all three trigger languages. The kit ships no runner; see `docs/project-roadmap.
 | `skills/convention/evals/trigger_evals.json` | Recording the team's rules and the standards per technology, against `review`, `init`, `tailor`, and `design-doc` |
 | `skills/plan/evals/trigger_evals.json` | Planning one person's work against `breakdown` and `design-doc` |
 | `skills/implement/evals/trigger_evals.json` | Building against planning and reviewing |
-| `skills/fix/evals/trigger_evals.json` | A defect against `incident` and ordinary implementation |
+| `skills/fix/evals/trigger_evals.json` | A defect against `incident`, ordinary implementation, and logging or retesting a bug, which is `qa` |
 | `skills/review/evals/trigger_evals.json` | Reading a diff, against `qa`, `verify`, `fix`, and `catchup` |
-| `skills/qa/evals/trigger_evals.json` | Written cases and plans and updating them after a spec change, against `verify`, automated test code, and a drift check of reference documents |
+| `skills/qa/evals/trigger_evals.json` | Written cases and plans, updating them after a spec change, and recording a run, its bugs and a retest, against `verify`, automated test code, a drift check of reference documents, and fixing a bug |
 | `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
 | `skills/security/evals/trigger_evals.json` | Security review, a client checklist and a threat model, against `review`, `git`, `qa`, `fix`, `incident`, and `release` |
 | `skills/git/evals/trigger_evals.json` | Commits, pull requests and rebases, against `review`, `release` and `implement` |

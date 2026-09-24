@@ -75,6 +75,15 @@ ID, its severity, and its `Accepted by` cell as the record has it, never by its 
 release record reaches the client, and an unfixed vulnerability described there is disclosed to
 everyone who reads it. An empty `Accepted by` cell is an unchecked item, not an accepted risk.
 
+Where run records under `docs/records/test-runs/` that are not `SUPERSEDED` cover the build being
+released, link the newest one whose scope is not `retest` as the evidence behind QA's sign-off, with
+its scope and its summary as the record states them, and every retest record after it. Read the
+defects of all of them, not only the newest: a Critical or High defect in any of them that no later
+retest record passed is carried into the checklist as a blocking item, by its defect ID, its case ID,
+and its `Ticket` cell. With no run
+record for this build, QA's sign-off has nothing on disk behind it, and the release record says so
+rather than leaving the line looking checked.
+
 ### 4. Checklist
 
 Three phases, each step with an owner and an expected duration: pre-flight (backup taken, migration

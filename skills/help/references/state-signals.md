@@ -17,6 +17,8 @@ it sits in the Reference or Record group of `shared/artifact-paths.md` and is no
   review of that pull request, so waiting on it before opening the pull request waits forever.
 - A plan. `atk:plan` leaves a plan at `DRAFT` and lets the work start; the Tech Lead gates one only
   by moving it to `IN REVIEW`.
+- A test run record. Its defects need logging and fixing while the QA lead reviews it, so a run
+  record at `IN REVIEW` does not hold back `atk:qa --bug`, `atk:fix`, or a retest.
 
 Nothing in the Derived group gates. A catchup brief or a review report may sit at `DRAFT` for good,
 and that is not approval anybody owes.
@@ -49,14 +51,19 @@ that names none, it is the gating artifact updated most recently.
 | 10 | A requirement is approved and no estimate covers its ticket, where the team estimates | `atk:estimate` | `atk:breakdown`, which splits work nobody has sized |
 | 11 | A requirement is approved with acceptance criteria and no test plan or cases under `docs/qa/` trace to it | `atk:qa` | `atk:verify`, which asserts against criteria nobody wrote cases for |
 | 12 | A reference document's `updated` date is older than the last merged commit touching the subject it describes, a screen spec under `docs/screens/` included | `atk:spec --check`, then `atk:spec <subject>` for each subject that drifted. For a screen spec whose design is not retired, say that the check also compares its `design_fingerprint` with the design: no file on disk records whether the design moved, so only the check can tell | `atk:spec --sync`, which folds the current branch rather than work already merged |
-| 13 | Commits exist since the newest version tag and no release record covers them, where the team cuts versions | `atk:release` | `atk:git`, which carries a change but writes no rollback path |
-| 14 | No conventions are recorded, resolved per `shared/review-checklist.md` | `atk:convention` | `atk:review`, which falls back to the baseline items alone |
-| 15 | An override file is `DRAFT`, or its approver is a bare `TBD` | `atk:tailor --audit` | Running the skill with an override nobody has accepted |
-| 16 | A threat model under `docs/security/` has an `updated` date older than the last merged commit touching a path in its `Covers` list, or has no `Covers` list at all | `atk:security --threat-model <feature>` for each model that drifted | `atk:spec --check`, which compares reference documents with the code but never reads a threat model |
-| 17 | None of the above | Ask what the asker is about to do, and route the answer as a question | Guessing a phase |
+| 13 | A fix record under `docs/records/fixes/` names a bug that a run record raised, and no retest record under `docs/records/test-runs/` names that bug | `atk:qa --retest <issue>` | `atk:release`, which would ship a fix QA has not confirmed |
+| 14 | Commits exist since the newest version tag and no release record covers them, where the team cuts versions | `atk:release` | `atk:git`, which carries a change but writes no rollback path |
+| 15 | No conventions are recorded, resolved per `shared/review-checklist.md` | `atk:convention` | `atk:review`, which falls back to the baseline items alone |
+| 16 | An override file is `DRAFT`, or its approver is a bare `TBD` | `atk:tailor --audit` | Running the skill with an override nobody has accepted |
+| 17 | A threat model under `docs/security/` has an `updated` date older than the last merged commit touching a path in its `Covers` list, or has no `Covers` list at all | `atk:security --threat-model <feature>` for each model that drifted | `atk:spec --check`, which compares reference documents with the code but never reads a threat model |
+| 18 | A run record under `docs/records/test-runs/` has a defect whose `Ticket` is `none`, where the team uses a tracker | `atk:qa --bug <run path>` | `atk:fix`, which would start from a defect nobody has logged or assigned |
+| 19 | None of the above | Ask what the asker is about to do, and route the answer as a question | Guessing a phase |
 
-Rows 10 and 13 hold only where the team works that way, which the estimate records already on disk
+Rows 10 and 14 hold only where the team works that way, which the estimate records already on disk
 or the version tags say. A team that never estimates is not behind on estimating.
+
+Row 13 sits above row 14 because a fix QA has not confirmed is exactly what a release cut now would
+ship; the retest comes first.
 
 ## After a row matches
 

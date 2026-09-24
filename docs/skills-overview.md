@@ -446,6 +446,13 @@ rewritten with their execution cells cleared, removed ones are struck through, a
 reused. Once the file has been approved, a change to an existing case becomes a question for the
 approver rather than an edit.
 
+After the team has executed the cases, `--run` turns the results the testers give into a run record
+under `docs/records/test-runs/`, with a summary against the plan's exit criteria and one defect section
+per failed case, written so `atk:fix` can start from it. `--bug` raises the defects the person picks
+as issues on the tracker, and `--retest <issue>` records a narrow run of the fixed case and the cases
+the fix touched, offering the verdict as a comment on the issue. The skill never marks a result
+itself, and never closes an issue.
+
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.
 
