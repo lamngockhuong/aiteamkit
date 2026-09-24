@@ -17,7 +17,7 @@ flowchart LR
     A1["Yêu cầu<br/><small>user story, tiêu chí, câu hỏi bỏ ngỏ</small>"]
     A2["Ước lượng<br/><small>khối lượng, năng lực, cam kết</small>"]
     A3["Thiết kế + ADR"]
-    A3b["Tài liệu tham chiếu<br/><small>API, schema, tính năng</small>"]
+    A3b["Tài liệu tham chiếu<br/><small>API, schema, tính năng, màn hình</small>"]
     A4["Danh sách task<br/><small>chủ sở hữu, làn, phụ thuộc</small>"]
     A5["Kế hoạch<br/><small>pha và bước</small>"]
     A6["Code + bản ghi thực thi"]
@@ -72,11 +72,11 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `help` | Các skill của chính kit, cùng profile, front matter của artifact, kế hoạch và branch của dự án | Một câu trả lời trong phiên, không có file | Skill nó gọi tên, do người hỏi chạy |
 | `init` | Repo | Profile của dự án | Mọi skill có chạy lệnh |
 | `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi | File ghi đè cho skill đó | Chính skill mang tên file đó |
-| `intake` | Một yêu cầu thô | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa` |
+| `intake` | Một yêu cầu thô, hoặc một design Figma | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa`; từ design thì `spec --kind screen`, bỏ qua `design-doc` trừ khi thay đổi của màn hình chạm tới schema, public contract, shared module, hoặc hơn một service |
 | `catchup` | Một epic hoặc một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài | Con người, không phải skill |
 | `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |
 | `design-doc` | Yêu cầu, và tài liệu tham chiếu của vùng sắp đổi | Thiết kế kèm ADR; khi `Contract: first` thì contract ở dạng tóm tắt, kèm tên các tài liệu tham chiếu | `breakdown`, `plan`, `implement`, và `spec` khi `Contract: first` |
-| `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/`; khi `Contract: first` thì cả thiết kế | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `plan`, `implement`, `review` |
+| `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`; khi `Contract: first` thì cả thiết kế; với màn hình thì design Figma của nó hoặc ảnh export từ đó | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
 | `convention` | Code và lịch sử của nó, cùng những khoảng trống quy ước trong các báo cáo review đã viết | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
 | `plan` | Ticket, thiết kế, hoặc mô tả; với `--review` thì là một bản kế hoạch đã viết | Pha và bước, hoặc danh sách phát hiện về một bản kế hoạch | `implement`; với `--review` là người viết bản kế hoạch đó |

@@ -72,7 +72,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 22 skill trích dẫn:
+Mười bốn file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 22 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -82,7 +82,7 @@ Mười ba file giữ những gì các skill sẽ phải lặp lại. Ba file đ
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
-Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -140,6 +140,14 @@ Tám file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ t
   tìm template phải điền, còn `atk:init` dựa vào đó để đọc định danh host của cả đội trong
   `CODEOWNERS` thay vì tiêu một lượt hỏi. Hai skill đầu hỏi cùng một câu từ hai đầu, và chỉ cần một
   bên trả lời hẹp hơn là repo có thêm một template thứ hai đè lên template của chính đội.
+- `shared/design-sources.md`: cách một skill đọc design Figma qua bất kỳ kết nối Figma nào harness
+  có. Kết nối được tìm theo việc nó làm được chứ không theo tên tool, và được chia thành ba trạng
+  thái, vì một kết nối có thể nằm trong danh sách mà vẫn chưa đăng nhập. Khi không kết nối nào
+  sẵn sàng, ảnh export thay chỗ, nên không skill nào dừng vì thiếu nó. File này cũng giữ node ID làm
+  khóa ổn định của mỗi thành phần và mã băm mà một lần đọc ghi lại; nhờ hai thứ đó, lần chạy thứ hai
+  chỉ đụng tới những dòng đã đổi. `atk:spec` trích dẫn nó cho kind `screen`, kind duy nhất lấy design
+  làm nguồn, và `atk:intake` trích dẫn nó khi yêu cầu là một design. Cũng vì file này mà `shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
+  vụ bên ngoài: được nêu tên dịch vụ, nhưng không được nêu lệnh của plugin mang kết nối đó.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

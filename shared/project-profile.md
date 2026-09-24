@@ -233,7 +233,7 @@ produces the same artifact with the same confidence, only having worked a little
 the profile would have told it.
 
 `atk:spec` is Required-soft rather than Required because it has two other ways to find its
-footing: the documents already in the directory, whose shape it copies, and the three default kinds.
+footing: the documents already in the directory, whose shape it copies, and the four default kinds.
 What it loses without a profile is the project's own directory layout, so it says so and carries on.
 
 Three groups rather than two, because the middle case is real: `atk:review` can still read a diff

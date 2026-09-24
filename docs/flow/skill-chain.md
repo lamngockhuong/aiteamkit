@@ -18,7 +18,7 @@ flowchart LR
     A1["Requirements<br/><small>stories, criteria, open questions</small>"]
     A2["Estimate<br/><small>sizes, capacity, commitment</small>"]
     A3["Design + ADR"]
-    A3b["Reference documents<br/><small>API, schema, feature</small>"]
+    A3b["Reference documents<br/><small>API, schema, feature, screen</small>"]
     A4["Task list<br/><small>owners, lanes, dependencies</small>"]
     A5["Plan<br/><small>phases and steps</small>"]
     A6["Code + implementation record"]
@@ -74,11 +74,11 @@ lands, per `shared/spec-docs.md`.
 | `help` | The kit's own skills, and the project's profile, artifact front matter, plans, and branch | An answer in the session, no file | The skill it names, run by the asker |
 | `init` | The repository | Project profile | Every skill that runs a command |
 | `tailor` | A shipped `SKILL.md`, and what the team says it wants different | Project override for that skill | The skill it is named after |
-| `intake` | A raw request | Requirements with open questions | `estimate`, `design-doc`, `qa` |
+| `intake` | A raw request, or a Figma design | Requirements with open questions | `estimate`, `design-doc`, `qa`; from a design, `spec --kind screen`, with `design-doc` skipped unless the screen's change touches a schema, a public contract, a shared module, or more than one service |
 | `catchup` | An epic or a pull request | A brief plus an understanding check | The person, not a skill |
 | `estimate` | Requirements or an epic | Sizes, capacity, sprint commitment | `breakdown` |
 | `design-doc` | Requirements, and the reference documents for the area | Design plus ADR; under `Contract: first` the contract in summary, naming the reference documents | `breakdown`, `plan`, `implement`, and `spec` under `Contract: first` |
-| `spec` | The code, and the documents already in `docs/api/`, `docs/database/`, `docs/features/`; under `Contract: first`, the design too | Reference documents kept current, or a drift report | `design-doc`, `qa`, `plan`, `implement`, `review` |
+| `spec` | The code, and the documents already in `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`; under `Contract: first`, the design too; for a screen, its Figma design or the images exported from it | Reference documents kept current, or a drift report | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | A design or an epic | Owned tasks, lanes, dependency graph | `plan`, `implement` |
 | `convention` | The code and its history, and the convention gaps in the review reports already written | Conventions classified by how they are enforced | `implement`, `review` |
 | `plan` | A ticket, design, or description; under `--review`, a plan already written | Phases and steps, or findings about a plan | `implement`; under `--review`, the plan's author |

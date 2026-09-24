@@ -131,7 +131,7 @@ to `docs/adr/` as well.
 | `catchup` | `docs/derived/catchup/<ticket-or-date>-<slug>.md` |
 | `estimate` | `docs/records/planning/estimate-<sprint-or-date>.md` |
 | `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
-| `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md` (see below) |
+| `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
 | `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology and a `<layer>/<tech>.md` where its rules differ by layer, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below); under `--review` no plan file at all, and a report at `docs/derived/reviews/plan-<slug>-<date>.md` |
@@ -195,7 +195,7 @@ wins, exactly as the docs root rule works above.
 
 `atk:spec`, `atk:qa`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither
 a ticket nor a date. A reference document is named after the thing it describes, one file per resource, per
-table, per feature, or per skill, because the next person looks for the subject rather than for the
+table, per feature, per screen, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
 
 | Kind | Directory | One file per |
@@ -203,6 +203,7 @@ sprint it was built in. The `spec` kinds:
 | `api` | `docs/api/` | resource |
 | `db` | `docs/database/` | table |
 | `feature` | `docs/features/` | feature |
+| `screen` | `docs/screens/` | screen |
 
 A project overrides a row, or adds a row of its own, in the `Docs` section of `.atk/profile.md`. The
 kind name is also the value of `--kind`, so a kind the project declared is invocable without touching
@@ -312,9 +313,11 @@ ticket: <id or URL, or none>
 ---
 ```
 
-In this block `status` is the approval state and nothing else. The one kind that adds a field is the reference
-document in a project whose profile says `Contract: first`, which also carries `implemented`, defined
-under When the contract comes before the code in `shared/spec-docs.md`.
+In this block `status` is the approval state and nothing else. Two kinds add fields. A reference
+document in a project whose profile says `Contract: first` also carries `implemented`, defined under
+When the contract comes before the code in `shared/spec-docs.md`. A `screen` document carries
+`implemented` under either `Contract` line, per The `screen` kind in that file, and the four
+`design_*` fields of What a read records in `shared/design-sources.md`.
 
 ## Before writing
 

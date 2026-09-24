@@ -113,7 +113,10 @@ dẫn file, các user story, tiêu chí nghiệm thu dạng `Given / When / Then
 vi, các giả định được đánh dấu rõ là giả định, và câu hỏi còn treo kèm tên người phải trả lời.
 
 **Dùng khi.** Yêu cầu tới dưới dạng tin nhắn, biên bản họp, mail hoặc một ticket một dòng, và team
-chưa bắt đầu được từ đó. Cũng dùng khi hai người đọc cùng một ticket mà hiểu khác nhau.
+chưa bắt đầu được từ đó. Cũng dùng khi hai người đọc cùng một ticket mà hiểu khác nhau, và khi yêu
+cầu là một design Figma: `--design <figma-url>` đọc design, ghi lại những khung màn hình đã đọc, và
+biến những gì người dùng thấy trên đó thành story, còn thứ design không cho thấy thì thành câu hỏi.
+Bảng thành phần của màn hình thuộc về `atk:spec --kind screen`, không thuộc skill này.
 
 **Không dùng khi.** Yêu cầu đã chốt và đã viết ra; bạn cần con số ước lượng (`atk:estimate`) hoặc
 hướng kỹ thuật (`atk:design-doc`).
@@ -184,15 +187,21 @@ buộc có cả phương án mà team sẽ chọn theo quán tính, và nói rõ
 ## `atk:spec`
 
 **Sinh ra.** Tài liệu tham chiếu mà đội còn đọc rất lâu sau khi công việc sinh ra nó đã merge: API
-contract theo từng resource trong `docs/api/`, schema theo từng bảng trong `docs/database/`, và hành
-vi của từng tính năng trong `docs/features/`. Mỗi chủ thể một file, đặt tên theo chủ thể, ghi đè tại
-chỗ. Cờ `--check` báo chỗ tài liệu và code không khớp nhau mà không sửa gì.
+contract theo từng resource trong `docs/api/`, schema theo từng bảng trong `docs/database/`, hành
+vi của từng tính năng trong `docs/features/`, và các thành phần của từng màn hình trong
+`docs/screens/`, mỗi thành phần một dòng, đọc từ design Figma của màn hình đó. Mỗi chủ thể một file,
+đặt tên theo chủ thể, ghi đè tại chỗ. Cờ `--check` báo chỗ tài liệu và code không khớp nhau, với
+màn hình thì báo cả khi design đã đổi, và không sửa gì.
 
 **Dùng khi.** Dự án chưa có contract nào được viết ra, một thay đổi đã merge bỏ quên tài liệu, hoặc
 không ai còn tin vào tài liệu nữa. Cờ `--sync` gấp thay đổi trên nhánh hiện tại vào đúng những tài
 liệu mà nó đụng tới. Với dự án có profile ghi `Contract: first`, còn dùng khi contract phải có trước
 code: `--from <design-path>` viết tài liệu từ một design đang được review, đánh dấu
 `implemented: no`, để frontend, backend và QA cùng làm theo một trang trong lúc code đuổi kịp.
+Và khi BrSE cần một spec màn hình để duyệt: `--kind screen --design <figma-url>` soạn bản nháp từ
+khung màn hình trong Figma, đề xuất những gì design không cho thấy kèm nguồn, và hỏi phần còn lại, có tên người trả lời.
+Nếu agent không có kết nối tới Figma, skill nói rõ điều đó rồi đọc một thư mục ảnh export thay thế.
+Chạy lại sau khi design đổi thì chỉ những dòng đổi được viết lại.
 
 **Không dùng khi.** Câu hỏi vẫn là chọn hướng nào. Đó là việc của `atk:design-doc`, vốn so sánh
 phương án rồi dừng lại; skill này mô tả thứ đã thực sự làm, hoặc, khi làm contract-first, thứ design
