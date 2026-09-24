@@ -32,7 +32,7 @@ flowchart TB
 
 | Group | What is in it | Commit | Change it later | Delete it later |
 |-------|---------------|--------|-----------------|-----------------|
-| Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
+| Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead | Only as a decision somebody owns, never as a blanket rule |
 | Derived | everything under `docs/derived/` | Optional | Run the skill again | Yes, freely |
 
@@ -47,6 +47,15 @@ What that means in practice is short. **Commit them**, always. Change them whene
 to, in place, by hand or through another run of the skill that drafted them. Deleting one costs
 whatever the host stops doing for you: no template means reviewers see a diff and nothing else, and
 no `CODEOWNERS` means reviews stop routing themselves.
+
+## A record that names an open vulnerability
+
+A security record written by `atk:security` is a record like any other, committed and never edited,
+with one difference: until its findings are fixed, it tells whoever reads it where the system is
+weak. Commit it where the people allowed to know can read it and nobody else can. In a repository the
+client or the public can read, that may mean a private repository or the team's private tracker
+instead, and the skill asks its approver before the commit rather than after. Once every finding in
+it is fixed or accepted, it is an ordinary record again.
 
 ## What deleting each one costs
 

@@ -10,7 +10,7 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-  skills/<name>/SKILL.md        22 skill, mỗi skill một thư mục
+  skills/<name>/SKILL.md        23 skill, mỗi skill một thư mục
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
   skills/<name>/references/*.tsv danh sách do một file tham chiếu quản, mỗi dòng một bản ghi
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
@@ -63,7 +63,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho cả 22 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho cả 23 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
@@ -72,7 +72,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười bốn file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 22 skill trích dẫn:
+Mười bốn file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 23 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -107,13 +107,13 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   giống hệt nhau ở cả ba.
 - `shared/diagram-conventions.md`: khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình
   mà kit vẽ, và các quy tắc giữ cho chúng dễ đọc trong một pull request ở cả nền sáng lẫn nền tối.
-  Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown` và `atk:incident` trích dẫn, tức
-  năm skill có sơ đồ trong artifact. Sơ đồ viết bằng Mermaid nên hiện ra ngay tại nơi người ta đọc
+  Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:security` và `atk:incident`
+  trích dẫn, tức sáu skill có sơ đồ trong artifact. Sơ đồ viết bằng Mermaid nên hiện ra ngay tại nơi người ta đọc
   artifact, và không phải commit thêm file ảnh nào.
 - `shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
   dùng, và cách xử lý trên harness không có chúng. Được `atk:fix`, `atk:implement` và `atk:verify`
   trích dẫn cho bước dọn mã ngay sau lượt kiểm chứng đạt, `atk:review` trích dẫn cho những lượt đọc
-  độc lập chạy song song, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
+  độc lập chạy song song, `atk:design-doc` trích dẫn cho lượt phản biện theo vai trò, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
   gửi được nhiều câu hỏi trong cùng một lần. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo
   một chiều: khả năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về
   một kit khác thì không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai

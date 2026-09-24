@@ -3,6 +3,10 @@
 Loaded by `atk:git` in step 2, before anything is committed. `shared/finalize-steps.md` says never to
 stage a credential; this file is how that is checked rather than hoped for.
 
+`atk:security` loads it in its step 2 for The scan and Paths that are a finding on their own only,
+run over `git ls-files` rather than the staged diff. What happens on a hit is `atk:git`'s procedure,
+not its.
+
 The scan runs on what is staged, not on the working tree, because staged is what is about to become
 permanent.
 

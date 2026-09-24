@@ -1,0 +1,28 @@
+[
+  { "query": "security review of this branch before we release", "should_trigger": true },
+  { "query": "/atk:security v2.4.0..HEAD", "should_trigger": true },
+  { "query": "the client sent their security checklist, answer it against our code", "should_trigger": true },
+  { "query": "/atk:security --checklist docs/client/security-checklist.md", "should_trigger": true },
+  { "query": "write the threat model for the payment feature", "should_trigger": true },
+  { "query": "run a STRIDE pass over the new login flow", "should_trigger": true },
+  { "query": "is this secure enough to ship", "should_trigger": true },
+  { "query": "kiểm tra bảo mật phần upload file trước khi phát hành", "should_trigger": true },
+  { "query": "điền checklist bảo mật khách hàng gửi", "should_trigger": true },
+  { "query": "lập mô hình mối đe dọa cho tính năng thanh toán", "should_trigger": true },
+  { "query": "リリース前にセキュリティレビューをお願いします", "should_trigger": true },
+  { "query": "お客様のセキュリティチェックリストに回答して", "should_trigger": true },
+  { "query": "この機能の脅威モデルを作って", "should_trigger": true },
+
+  { "query": "review this pull request before I approve it", "should_trigger": false },
+  { "query": "duyệt code nhánh feature/export giúp tôi", "should_trigger": false },
+  { "query": "commit this and open a PR", "should_trigger": false },
+  { "query": "tạo commit và đẩy code lên", "should_trigger": false },
+  { "query": "write the test cases for the permission rules", "should_trigger": false },
+  { "query": "viết test case cho phân quyền", "should_trigger": false },
+  { "query": "fix the SQL injection in the search endpoint", "should_trigger": false },
+  { "query": "sửa lỗi lộ token trong log", "should_trigger": false },
+  { "query": "production is down and we think we were breached, run the incident", "should_trigger": false },
+  { "query": "本番で障害が発生、インシデント対応を始めて", "should_trigger": false },
+  { "query": "write the release checklist and rollback plan for v2.4.0", "should_trigger": false },
+  { "query": "technical design for moving sessions to Redis", "should_trigger": false }
+]

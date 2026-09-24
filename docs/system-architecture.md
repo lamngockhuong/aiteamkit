@@ -10,7 +10,7 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-  skills/<name>/SKILL.md        22 skills, one folder each
+  skills/<name>/SKILL.md        23 skills, one folder each
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
   skills/<name>/references/*.tsv a list one reference file governs, one record per line
   skills/<name>/evals/*.json    trigger cases for the description
@@ -64,7 +64,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for all 22 skills | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for all 23 skills | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
@@ -73,7 +73,7 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Fourteen files hold what skills would otherwise repeat. The first three are cited by all 22:
+Fourteen files hold what skills would otherwise repeat. The first three are cited by all 23:
 
 - `shared/team-roles.md`: the role table and the eight rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -110,13 +110,13 @@ Nine are contracts between a named handful of skills rather than kit-wide rules:
   in all three.
 - `shared/diagram-conventions.md`: when a diagram earns its place in an artifact, the four shapes
   the kit draws, and the rules that keep them readable in a pull request on either theme. Cited by
-  `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, and `atk:incident`, the five skills
-  whose artifacts carry a diagram. Diagrams are Mermaid, so they render where the artifact is read
-  and nothing has to be committed as an image.
+  `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:security`, and `atk:incident`,
+  the six skills whose artifacts carry a diagram. Diagrams are Mermaid, so they render where the
+  artifact is read and nothing has to be committed as an image.
 - `shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
   does on a harness that has none. Cited by `atk:fix`, `atk:implement`, and `atk:verify` for the
   tidy step that follows a green verification, by `atk:review` for independent passes run in
-  parallel, and by `atk:init` for what one turn of an interview counts as where the harness carries
+  parallel and by `atk:design-doc` for its role challenge, and by `atk:init` for what one turn of an interview counts as where the harness carries
   several questions in a single prompt. It draws the line the kit had drawn only one way before: a
   capability the harness itself ships may be named and used, a command belonging to another kit may
   not, because the first is there for everyone who installed atk on that harness and the second is

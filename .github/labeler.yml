@@ -94,6 +94,10 @@
 - changed-files:
   - any-glob-to-any-file: 'skills/verify/**'
 
+'skill: security':
+- changed-files:
+  - any-glob-to-any-file: 'skills/security/**'
+
 'skill: git':
 - changed-files:
   - any-glob-to-any-file: 'skills/git/**'

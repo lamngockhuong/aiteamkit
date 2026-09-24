@@ -14,11 +14,11 @@ fill them.
 |------|-------|------|----------------------|
 | Project Manager | PM | Scope, schedule, budget, client communication | intake, estimate, breakdown, release, retro |
 | Bridge SE / Business Analyst | BrSE / BA | Requirement meaning, client language, spec correctness | intake, design-doc, qa |
-| Tech Lead / Architect | TL | Technical design, conventions, final review call | design-doc, convention, review, incident |
+| Tech Lead / Architect | TL | Technical design, conventions, final review call | design-doc, convention, review, security, incident |
 | Developer | Dev | Implementation, self-check, peer review | breakdown, convention, review, handover |
 | QA / QC Engineer | QA | Test plan, test cases, regression, release sign-off | qa, release, incident |
-| DevOps / SRE | SRE | Environments, pipeline, deployment, on-call | release, incident, onboard |
-| Stakeholder / Client | - | Acceptance, priority, business trade-offs | intake, estimate, release, retro |
+| DevOps / SRE | SRE | Environments, pipeline, deployment, on-call | security, release, incident, onboard |
+| Stakeholder / Client | - | Acceptance, priority, business trade-offs | intake, estimate, security, release, retro |
 
 A small team maps several roles onto one person, and a solo project maps all of them onto one. That
 is supported and changes none of the rules below. The approver line still names somebody, the

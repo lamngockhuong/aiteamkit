@@ -5,9 +5,9 @@
 | Phase | State | Summary |
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
-| 2. Skill coverage | DONE | 22 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for fourteen, pending for the other eight |
-| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 22 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
+| 2. Skill coverage | DONE | 23 `SKILL.md` files covering the lifecycle, sharing one section contract |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for seventeen, pending for the other six |
+| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 23 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
 
@@ -19,7 +19,7 @@ Repository layout mirroring a working multi-harness plugin: `.claude-plugin/`, `
 
 ## Phase 2: Skill coverage (done)
 
-Twenty-two skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
+Twenty-three skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
 with multilingual triggers, scope, roles, invocation, workflow, output, ticket, and a definition of
 done.
 
@@ -34,11 +34,14 @@ each feature do today.
 `help` came last. It writes nothing and answers which of the others to run, read from the state of
 the project rather than from a list, so a skill added later is one it already knows.
 
-The `shared/` layer holds what would otherwise be repeated twenty-two times: the role vocabulary,
+`security` followed it, for the checklist a client asks for before acceptance: a record of what was
+checked and found, with every unfixed finding left for a named person to accept.
+
+The `shared/` layer holds what would otherwise be repeated twenty-three times: the role vocabulary,
 the artifact path convention, and the tracker adapters, cited by every skill. Eleven more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
-`diagram-conventions.md` between the five whose artifacts carry a diagram, `host-capabilities.md`
+`diagram-conventions.md` between the six whose artifacts carry a diagram, `host-capabilities.md`
 and `tidy-pass.md` around what the harness itself provides, `spec-docs.md` between `spec` and the
 five skills that have to leave its documents true, `host-file-locations.md` between `convention`,
 which asks whether a collaboration file is missing, `git`, which has to find the pull request
@@ -50,7 +53,7 @@ through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Fourteen skills ship with `references/` already. The other eight do not. Where the output is a
+Seventeen skills ship with `references/` already. The other six do not. Where the output is a
 document with a fixed shape and no reference holds that shape, the template is re-derived on every
 run:
 
@@ -58,9 +61,9 @@ run:
 |-------|------------------|
 | `intake` | An interview question bank. The requirement template is done: `skills/intake/references/requirement-template.md` |
 | `estimate` | The sizing scales with one worked example each, and the capacity worksheet |
-| `design-doc` | Design document template, ADR template, the option-comparison criteria set |
+| `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode and the role challenge are done: `skills/design-doc/references/spike.md`, `skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
-| `qa` | Test case table schema, a negative and boundary case checklist by input type |
+| `qa` | Test case table schema. The negative and boundary dimensions are done: `skills/qa/references/case-dimensions.md` |
 | `release` | Checklist template per environment, the client-notes style rules |
 | `incident` | Severity rubric, timeline format, postmortem template |
 | `retro` | The evidence-gathering command set for git, CI, and each tracker |

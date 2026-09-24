@@ -1,6 +1,6 @@
 # Tổng quan các skill
 
-Hai mươi hai skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+Hai mươi ba skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
 dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
@@ -12,7 +12,7 @@ với một skill.
 flowchart LR
     I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
     E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
-    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
+    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"] --> RL["release"]
     R -.->|Có phát hiện chặn| IM
     RL --> IC["incident"] --> RT["retro"]
     RT -.->|Chu kỳ sau| IN
@@ -175,6 +175,18 @@ cách rollback, rủi ro, danh sách người phải review, cùng ADR tương �
 dùng chung, hoặc nhiều hơn một service. Khi profile ghi `Contract: first`, thiết kế nêu contract ở
 dạng tóm tắt và ghi tên các tài liệu tham chiếu mà `atk:spec --from` viết ra từ nó, thay vì chép mọi
 field hai lần.
+
+`--spike "<question>"` đi trước khi các phương án chưa thể chấm điểm cho tới khi tìm ra một điều gì
+đó: một thư viện có làm đúng như trang của nó nói không, dữ liệu thật có migrate kịp trong khung giờ
+không. Nó trả lời đúng một câu hỏi đó trong một giới hạn thời gian do một người đặt ra, giữ mọi
+prototype ở ngoài thay đổi, và kết thúc bằng một bản ghi spike kèm khuyến nghị chứ không phải một bản
+thiết kế.
+
+`--challenge` chạy trước khi thiết kế được đưa đi review: mỗi vai trò phải ký duyệt nó, TL, BrSE/BA,
+QA, SRE, cùng một góc nhìn bảo mật khi thiết kế chạm tới ranh giới tin cậy, được giao cho một agent
+đọc bản nháp mà không biết gì về cuộc trò chuyện, và nêu ra điều vai trò đó sẽ nêu. Những phản biện
+còn đứng vững sau khi đối chiếu với code được trả lời là đã sửa, hoặc để mở cho người giữ vai trò đó,
+trong một mục `Pre-review objections` nói rõ đây không phải một lượt review và không phải sự phê duyệt.
 
 **Không dùng khi.** Thay đổi nhỏ, cục bộ và dễ quay lui. Viết design doc cho một sửa đổi hai file
 tốn hơn phần nhận lại.
@@ -401,6 +413,10 @@ mong đợi lấy từ tài liệu tham chiếu trong `docs/api/`, `docs/databas
 case có thể viết trước khi có code; khi `code`, lấy từ thiết kế cho phần thay đổi sửa và từ tài liệu
 tham chiếu cho phần nó không đụng tới.
 
+Case âm và case biên có được nhờ đưa từng tiêu chí đi qua mười chiều: tác nhân, input, số lượng,
+trạng thái, thời điểm, lỗi, môi trường, dữ liệu, tích hợp, và quy tắc; chiều nào không cho ra case
+nào thì được bỏ qua, kèm giả định khiến nó không liên quan.
+
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.
 
@@ -427,6 +443,31 @@ liệu, cái file, hoặc cái tin nhắn mà request lẽ ra phải sinh ra. N�
 một người có tên, thay vì cứ vá cho tới khi có thứ gì đó xanh. Mã mà các vòng thử đã đổi sẽ được dọn
 lại, rồi chạy lại đúng ca đang hỏng, trước khi thay đổi được đóng: một bản vá làm ở cuối một lượt
 chạy dài vẫn là thay đổi có người phải review.
+
+---
+
+## `atk:security`
+
+**Sinh ra.** Một bản ghi bảo mật: tài sản, tác nhân, lối vào và ranh giới tin cậy trong phạm vi, lệnh
+audit phụ thuộc của chính dự án và một lượt quét secret trên các file được theo dõi, sáu câu hỏi
+STRIDE đặt ra ở mọi ranh giới và ánh xạ sang OWASP Top 10, mỗi phát hiện được lần từ lối vào tới tác
+động, các ứng viên bị loại kèm dòng mã loại chúng, một checklist trả lời từng mục, và một bảng rủi ro
+còn lại. Với `--threat-model`, là mô hình mối đe dọa của một tính năng, được giữ cập nhật trong
+`docs/security/`.
+
+**Dùng khi.** Một bản release đụng tới xác thực, dữ liệu cá nhân, thanh toán, hoặc một tích hợp bên
+ngoài; khách hàng hoặc công ty giao một checklist bảo mật cần điền; hoặc một bản thiết kế cần ghi ra
+các mối đe dọa trước khi ai đó bắt tay xây. `--checklist <path>` trả lời checklist được cung cấp bằng
+chính ID và câu chữ của nó, để câu trả lời dán ngược lại được vào bảng tính gốc.
+
+**Không dùng khi.** Bạn muốn phát hiện được sửa, đó là `atk:fix` hoặc `atk:implement`, hoặc muốn kiểm
+thử một môi trường đã deploy từ bên ngoài, đó là việc của người được khách hàng ủy quyền làm. Skill
+đọc mã và chạy công cụ của chính dự án; nó không bao giờ dò quét một hệ thống không chạy ở máy cục bộ.
+
+**Thói quen tạo ra khác biệt.** Một phát hiện phải nêu được đường đi từ một lối vào tới một tác động,
+nếu không thì nó chỉ là một mối lo, chưa phải phát hiện. Skill không bao giờ điền ô `Accepted by` của
+một rủi ro được phát hành mà chưa sửa: chấp nhận rủi ro là một quyết định tuân thủ, và nó thuộc về
+PM, hoặc về khách hàng khi hợp đồng nói vậy.
 
 ---
 
@@ -552,7 +593,7 @@ bởi người tiếp quản, không bao giờ do người rời đi tự tuyên
 
 ## Bắt đầu áp dụng
 
-Bắt đầu từ chặng đang đau nhất. Sáu điểm vào thường gặp:
+Bắt đầu từ chặng đang đau nhất. Bảy điểm vào thường gặp:
 
 - Chưa biết bắt đầu từ đâu: `atk:help`, skill đọc dự án và gọi tên một skill.
 - Yêu cầu tới mập mờ: `atk:intake`, rồi `atk:qa` khi đã có tiêu chí.
@@ -560,6 +601,7 @@ Bắt đầu từ chặng đang đau nhất. Sáu điểm vào thường gặp:
 - Kiến thức cứ đi theo người: `atk:handover` và `atk:onboard`.
 - Lỗi cứ quay lại vì nguyên nhân chưa bao giờ được tìm ra: `atk:fix`.
 - Tính năng tới tay QA mà mới chỉ được nhìn thấy xanh trên CI: `atk:init`, rồi `atk:verify`.
+- Khách hàng yêu cầu một checklist bảo mật trước khi nghiệm thu: `atk:security --checklist`.
 
 `atk:implement`, `atk:fix` và `atk:verify` đòi có `.atk/profile.md` trước khi làm bất cứ việc gì, còn
 `atk:plan` có nó thì cho ra kế hoạch tốt hơn. Mọi skill còn lại chạy được trên một bản clone mới

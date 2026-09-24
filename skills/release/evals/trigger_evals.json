@@ -19,5 +19,6 @@
   { "query": "バグを直して", "should_trigger": false },
   { "query": "estimate the next sprint", "should_trigger": false },
   { "query": "kiểm chứng tính năng này trên app chạy thật", "should_trigger": false },
-  { "query": "viết test case cho luồng thanh toán", "should_trigger": false }
+  { "query": "viết test case cho luồng thanh toán", "should_trigger": false },
+  { "query": "お客様向けにセキュリティチェックリストを埋めて", "should_trigger": false }
 ]

@@ -1,6 +1,6 @@
 # Skills Overview
 
-Twenty-two skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+Twenty-three skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
 to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
@@ -11,7 +11,7 @@ Read this before adopting the kit: every skill works alone, and a team can start
 flowchart LR
     I["init"] --> T["tailor"] --> IN["intake"] --> C["catchup"] --> E["estimate"]
     E --> D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
-    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> RL["release"]
+    P --> IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"] --> RL["release"]
     R -.->|Blocking findings| IM
     RL --> IC["incident"] --> RT["retro"]
     RT -.->|Next cycle| IN
@@ -172,6 +172,17 @@ risks, required reviewers, and the matching ADR.
 more than one service. Where the profile says `Contract: first`, the design states the contract in
 summary and names the reference documents `atk:spec --from` writes from it, rather than carrying
 every field twice.
+
+`--spike "<question>"` comes first when the comparison cannot be scored until something is found
+out: whether a library does what its page says, whether the real data migrates in the window. It
+answers that one question inside a time box somebody set, keeps any prototype out of the change, and
+ends in a spike record with a recommendation rather than a design.
+
+`--challenge` runs before the design goes to review: one agent per role that must sign it, TL,
+BrSE/BA, QA, SRE, and a security lens where the design touches trust boundaries, reads the draft
+with nothing of the conversation and raises what that role would raise. Objections that survive a
+check against the code are answered as changed or left open for the person who holds the role, in a
+`Pre-review objections` section that says plainly it is not a review and not an approval.
 
 **Do not use when.** The change is local and reversible. A design document for a two-file fix costs
 more than it returns.
@@ -397,6 +408,10 @@ expected values come from the reference documents in `docs/api/`, `docs/database
 `docs/features/`, so cases can be written before the code exists; under `code`, from the design for
 what the change alters and from the reference documents for what it leaves alone.
 
+Negative and boundary cases come from walking each criterion through ten dimensions, actor, input,
+quantity, state, timing, failure, environment, data, integration, and rules, and a dimension that
+gives no case is skipped with the assumption that makes it irrelevant.
+
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.
 
@@ -423,6 +438,31 @@ message the request was supposed to produce. It also stops after three rounds an
 named person, rather than patching until something passes. Code its rounds changed is tidied and the
 failing case re-run before the change is closed, because a fix made at the end of a long run is
 still a change somebody has to review.
+
+---
+
+## `atk:security`
+
+**Produces.** A security record: the assets, actors, entry points and trust boundaries in scope, the
+project's own dependency audit and a secret scan over tracked files, the six STRIDE questions asked
+at every boundary and mapped to the OWASP Top 10, each finding traced from entry point to impact,
+the candidates ruled out with the line that rules them out, a checklist answered item by item, and a
+residual risk table. With `--threat-model`, the threat model of a feature, kept current in
+`docs/security/`.
+
+**Use when.** A release touches authentication, personal data, payments, or an external integration;
+a client or the company hands over a security checklist to fill; or a design needs its threats
+written down before anyone builds it. `--checklist <path>` answers the supplied checklist with its
+own IDs and wording, so the answers paste back into the sheet it came from.
+
+**Do not use when.** You want the finding fixed, which is `atk:fix` or `atk:implement`, or a deployed
+environment tested from outside, which is work for whoever the client authorises to do it. The skill
+reads code and runs the project's own tools; it never probes a system it does not run locally.
+
+**The habit that matters.** A finding names the path from an entry point to an impact, or it is a
+worry, not a finding. The skill never fills the `Accepted by` cell of a risk that ships unfixed:
+accepting a risk is a compliance call, and it belongs to the PM, or to the client where the contract
+says so.
 
 ---
 
@@ -543,7 +583,7 @@ it, never declared complete by the person leaving.
 
 ## Adopting the kit
 
-Start with the stage that hurts. Six common entry points:
+Start with the stage that hurts. Seven common entry points:
 
 - Not sure where to start: `atk:help`, which reads the project and names one skill.
 - Requests arrive unclear: `atk:intake`, then `atk:qa` once criteria exist.
@@ -551,6 +591,7 @@ Start with the stage that hurts. Six common entry points:
 - Knowledge keeps walking out the door: `atk:handover` and `atk:onboard`.
 - Bugs come back because the cause was never found: `atk:fix`.
 - Features reach QA having only ever been seen green in CI: `atk:init`, then `atk:verify`.
+- A client asks for a security checklist before acceptance: `atk:security --checklist`.
 
 `atk:implement`, `atk:fix` and `atk:verify` want `.atk/profile.md` before they will do anything, and
 `atk:plan` produces a better plan with it. Every other skill runs on a fresh clone with nothing set

@@ -7,7 +7,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 
 | File | Mục đích |
 |------|----------|
-| `README.md` | Điểm vào công khai: sơ đồ vòng đời, bảng 22 skill, khối invocation, quy ước output, hướng dẫn cài đặt |
+| `README.md` | Điểm vào công khai: sơ đồ vòng đời, bảng 23 skill, khối invocation, quy ước output, hướng dẫn cài đặt |
 | `CLAUDE.md` | Hướng dẫn cho người bảo trì: tiền đề về team, bố cục ba manifest, giải phẫu skill, nguyên tắc DRY của `shared/`, danh sách file phải đồng bộ chéo, chính sách em-dash, mục review checklist `CONV-NNN` mà repo này bị soi theo, quy trình release, lệnh kiểm tra |
 | `CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay. `feat:` và `fix:` hiện lên; các loại khác im lặng |
 | `LICENSE` | MIT |
@@ -37,8 +37,8 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `shared/project-overrides.md` | Nội dung của `.atk/overrides/<skill>.md` trong dự án đích, vì sao mỗi skill một file thay vì nhiều file, hai mục `## Before` và `## After`, bảy thứ mà phần ghi đè không bao giờ được gỡ, dòng skill phải in ra khi bỏ qua một chỉ dẫn, và chỗ thư mục này nằm khi dự án trải trên nhiều repository. Vào qua nguyên tắc 7 của `shared/team-roles.md`, nên mọi skill đều tuân theo |
 | `shared/finalize-steps.md` | Trình tự khép lại một phần việc đã xong: tài liệu tham chiếu mà nó mắc nợ, nhánh, commit, merge, ranh giới xin phép mà mọi hành động sau commit phải vượt qua, và thứ tự tiến hành một thay đổi trải trên nhiều repository. `atk:git` thi hành nó; file này là hợp đồng. Mọi skill làm xong việc đều trích dẫn |
 | `shared/layer-verification.md` | Bảng năm tầng: chạy gì cho một tầng, một lượt đạt chứng minh được gì, và không chứng minh được gì. `fix`, `implement` và `verify` trích dẫn, để cả ba nói cùng một điều về cùng một kết quả |
-| `shared/diagram-conventions.md` | Khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình kit vẽ (luồng duyệt, đồ thị phụ thuộc, sequence, chuỗi nhân quả), và các quy tắc giữ cho chúng dễ đọc: chỉ Mermaid, xuống dòng bằng `<br/>` chứ không bằng ký tự xuống dòng thô, gọi vai trò thay vì gọi tên người, hình thoi nào cũng có đủ hai nhánh, không đặt màu nền cứng. `catchup`, `design-doc`, `plan`, `breakdown` và `incident` trích dẫn |
-| `shared/host-capabilities.md` | Skill được dùng những khả năng nào của agent chủ và gọi tên chúng ra sao, nguyên tắc vẫn cấm gọi tên lệnh của một kit khác, cách xử lý trên harness không có khả năng đó, bốn quy tắc của bước dọn mã, phần chính sách chặn số agent review chạy đồng thời trong một vòng, một lượt hỏi được tính thế nào trên harness gửi được nhiều câu hỏi cùng lúc, và khi nào được nêu tên một kết nối tới dịch vụ bên ngoài. `fix`, `implement`, `verify`, `review` và `init` trích dẫn, `design-sources.md` cũng vậy |
+| `shared/diagram-conventions.md` | Khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình kit vẽ (luồng duyệt, đồ thị phụ thuộc, sequence, chuỗi nhân quả), và các quy tắc giữ cho chúng dễ đọc: chỉ Mermaid, xuống dòng bằng `<br/>` chứ không bằng ký tự xuống dòng thô, gọi vai trò thay vì gọi tên người, hình thoi nào cũng có đủ hai nhánh, không đặt màu nền cứng. `catchup`, `design-doc`, `plan`, `breakdown`, `security` và `incident` trích dẫn |
+| `shared/host-capabilities.md` | Skill được dùng những khả năng nào của agent chủ và gọi tên chúng ra sao, nguyên tắc vẫn cấm gọi tên lệnh của một kit khác, cách xử lý trên harness không có khả năng đó, bốn quy tắc của bước dọn mã, phần chính sách chặn số agent review chạy đồng thời trong một vòng, một lượt hỏi được tính thế nào trên harness gửi được nhiều câu hỏi cùng lúc, và khi nào được nêu tên một kết nối tới dịch vụ bên ngoài. `fix`, `implement`, `verify`, `review`, `design-doc` và `init` trích dẫn, `design-sources.md` cũng vậy |
 | `shared/spec-docs.md` | Điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, nguyên tắc hình dạng tài liệu sẵn có của dự án thắng template của kit, sáu loại thay đổi buộc pull request phải mang theo tài liệu tham chiếu, trong đó có thành phần của một màn hình, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `spec`, `design-doc`, `implement`, `fix`, `verify` và `review` trích dẫn |
 | `shared/host-file-locations.md` | Cách nhận ra code host theo thứ tự riêng, các vị trí mà GitHub và GitLab đọc `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, cả hai cách viết hoa thường, và luật một file có mặt ở bất kỳ vị trí nào thì coi như đã có, kể cả vì sao một file rỗng ruột vẫn tính là chưa có. `convention` dùng để biết thiếu gì, `git` dùng để tìm template phải điền, `init` dùng để tìm `CODEOWNERS` đang giữ sẵn định danh host của cả đội |
 | `shared/design-sources.md` | Cách một skill đọc design Figma: tìm kết nối theo việc nó làm được, ba trạng thái của kết nối (chưa cài, chưa đăng nhập, sẵn sàng) và đường lùi về ảnh export, ba lượt đọc, bỏ qua layer ẩn, một đường dẫn chứa nhiều màn hình, node ID làm khóa ổn định, cách xử lý giá trị design không cho thấy, và bốn trường `design_source`, `design_node`, `design_read`, `design_fingerprint` mà một lần đọc ghi lại. `spec` trích dẫn cho kind `screen`, `intake` trích dẫn khi yêu cầu là một design |
@@ -67,8 +67,8 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười bốn skill có thêm `references/`;
-tám skill còn lại thì chưa.
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười bảy skill có thêm `references/`;
+sáu skill còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
@@ -78,7 +78,7 @@ tám skill còn lại thì chưa.
 | `skills/intake/SKILL.md` | Yêu cầu | User story, tiêu chí nghiệm thu, ngoài phạm vi, câu hỏi treo có người phụ trách |
 | `skills/catchup/SKILL.md` | Yêu cầu | Bản tóm tắt cho người không có mặt trong cuộc hội thoại, kèm phần tự kiểm hiểu bài cho epic |
 | `skills/estimate/SKILL.md` | Lập kế hoạch | Ước lượng có căn cứ và độ tin cậy, capacity, cam kết sprint, phần dư |
-| `skills/design-doc/SKILL.md` | Thiết kế | Tài liệu thiết kế có so sánh phương án, kèm ADR |
+| `skills/design-doc/SKILL.md` | Thiết kế | Tài liệu thiết kế có so sánh phương án, kèm ADR; với `--spike`, một cuộc điều tra có giới hạn thời gian, kết thúc bằng một khuyến nghị; với `--challenge`, các phản biện theo từng vai trò ký duyệt trước khi review |
 | `skills/spec/SKILL.md` | Thiết kế | Tài liệu tham chiếu cho API, schema, tính năng và màn hình, ghi đè tại chỗ, kèm chế độ dò lệch |
 | `skills/breakdown/SKILL.md` | Lập kế hoạch | Task có người nhận, đồ thị phụ thuộc, làn song song kèm quyền sở hữu file |
 | `skills/convention/SKILL.md` | Phát triển | Quy ước team phân loại enforced / reviewed / aspirational |
@@ -88,6 +88,7 @@ tám skill còn lại thì chưa.
 | `skills/review/SKILL.md` | Phát triển | Phát hiện xếp hạng blocking / should fix / nit, có thể đăng lên PR |
 | `skills/qa/SKILL.md` | Kiểm thử | Test plan, test case có truy vết, ma trận regression, tiêu chí vào và ra |
 | `skills/verify/SKILL.md` | Kiểm thử | Hệ thống chạy thật, khẳng định tác động trong dữ liệu, báo lên người có tên sau ba vòng |
+| `skills/security/SKILL.md` | Kiểm thử | Một bản ghi bảo mật: phạm vi và ranh giới tin cậy, các scanner đã chạy, mối đe dọa theo từng ranh giới, phát hiện đã kiểm chứng, một checklist trả lời từng mục, rủi ro còn lại để một người chấp nhận; và mô hình mối đe dọa của một tính năng |
 | `skills/git/SKILL.md` | Quản lý phiên bản | Đọc diff trước khi stage, quét dừng lại khi gặp thông tin đăng nhập, commit revert được một mình, và push, pull request, merge đều chờ lời đồng ý riêng |
 | `skills/release/SKILL.md` | Bàn giao | Ghi chú theo đối tượng, checklist có người phụ trách, migration, rollback, phê duyệt |
 | `skills/incident/SKILL.md` | Vận hành | Timeline, nguyên nhân gốc có bằng chứng, postmortem, hành động, runbook |
@@ -110,6 +111,8 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/intake/references/requirement-template.md` | Bố cục cố định của một requirement: bảy mục đánh số, câu story, ID `AC N.M` mà các skill khác trích dẫn và vì sao không bao giờ đánh số lại, các cột của bảng câu hỏi mở và bảng vùng ảnh hưởng, và những gì giữ nguyên khi dùng `--lang` |
 | `skills/catchup/references/brief-template.md` | Một khung chung cho hai chế độ, phần khác nhau giữa epic và pull request được đánh dấu theo từng mục |
 | `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, bảng phân loại kiểu tính năng, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
+| `skills/design-doc/references/spike.md` | Chế độ `--spike`: một câu hỏi phân định các phương án, giới hạn thời gian và ai đặt ra nó, điều gì sẽ được tính là câu trả lời, viết ra trước khi tìm hiểu, ba loại bằng chứng, vì sao prototype đứng ngoài thay đổi, và bản ghi spike |
+| `skills/design-doc/references/role-challenge.md` | Lượt `--challenge`: vai trò nào được giao một agent và câu hỏi mỗi vai trò mang theo, agent được đưa gì và không bao giờ được đưa gì, một phản biện phải nêu những gì, agent gọi kiểm tra và trả lời chúng ra sao, và mục `Pre-review objections` nói rõ đây không phải một lượt review |
 | `skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |
 | `skills/convention/references/stack-standards.md` | Cách nhận ra một ngôn ngữ hay công nghệ từ những gì có trên đĩa và theo thứ tự tin cậy nào, ngưỡng mà dưới đó nó không tính là stack, cách nhóm rule suy ra theo công nghệ và, khi một công nghệ trải qua nhiều layer của profile, theo layer, và hình dạng bộ `docs/standards/` |
 | `skills/convention/references/standard-sources.md` | Bảy trường của `standard-sources.tsv` mang nghĩa gì, ngày `checked` chứng minh điều gì, một lần chạy được rút gì từ một dòng và không bao giờ được chép gì, team thêm nguồn riêng ở đâu, và cách clone thưa cùng chỗ đặt cache và luật khi lấy về hỏng |
@@ -132,10 +135,13 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/spec/references/drift-check.md` | Bảng kiểm phủ, hình dạng một phát hiện, ba mức nghiêm trọng, và ranh giới chỉ đọc |
 | `skills/review/references/review-rounds.md` | Chín vòng review và mỗi vòng mở ra cái gì trước, ngưỡng số dòng thay đổi quyết định các vòng có chạy trong agent riêng hay không, vòng nào chạy nhiều bản khi có `--parallel` và vòng nào không bao giờ, dòng nào được tính vào bậc và vì sao tệp do máy sinh thì không, phải làm gì khi một agent không trở về, cách agent gọi phát trước một vòng khi điều phối mà không cho vòng nào thấy kết quả của vòng khác, và cách gộp phát hiện thành một danh sách xếp hạng trong từng vòng rồi giữa các vòng |
 | `skills/review/references/report-format.md` | Hình dạng báo cáo review: mã định danh phát hiện mang tiền tố mức nghiêm trọng và cách nó được giữ sang lượt review sau trên cùng đối tượng, các nhãn dưới mỗi phát hiện gồm cả rule quy ước mà nó viện dẫn, bảng các vòng, thứ tự các mục, ngôn ngữ viết chúng, và vì sao không mục nào trong đó có điểm số |
+| `skills/qa/references/case-dimensions.md` | Mười chiều mà mỗi tiêu chí chấp nhận được đi qua để tìm ca âm và ca biên, quy tắc rằng một chiều bị bỏ qua phải kèm giả định của nó, và mức ưu tiên một ca nhận từ thứ bị hỏng |
 | `skills/verify/references/runtime-checks.md` | Dựng ứng dụng lên, tác động vào nó, khẳng định một tác động thật, và dọn dẹp sau đó |
 | `skills/verify/references/ui-checks.md` | Lượt chạy `--ui`: đối chiếu màn hình với bản thiết kế |
 | `skills/verify/references/report-template.md` | Báo cáo kiểm chứng, nêu rõ đã chứng minh được gì và chưa chứng minh được gì |
-| `skills/git/references/secret-scan.md` | Các mẫu quét trong phần đã stage, những đường dẫn tự nó đã là phát hiện, và vì sao một lần trúng chặn cả lượt chạy |
+| `skills/security/references/threat-checklist.md` | Thứ tự tìm các lệnh audit của dự án, các kiểm tra tự động, sáu câu hỏi STRIDE cho mỗi ranh giới tin cậy, bảng ánh xạ sang OWASP Top 10, và checklist nền được trả lời khi không ai cung cấp checklist |
+| `skills/security/references/record-template.md` | Ba kết luận và vì sao một ứng viên bị bác bỏ vẫn được giữ lại, bốn mức nghiêm trọng, quy tắc che thông tin nhạy cảm, và hình dạng của bản ghi bảo mật và mô hình mối đe dọa |
+| `skills/git/references/secret-scan.md` | Các mẫu quét trong phần đã stage, những đường dẫn tự nó đã là phát hiện, và vì sao một lần trúng chặn cả lượt chạy; `atk:security` chỉ đọc các mẫu và các đường dẫn, trên các file đã track |
 | `skills/git/references/commit-craft.md` | Chỗ một commit kết thúc và commit sau bắt đầu, cái bẫy format toàn file, và phần thân commit mang bằng chứng gì |
 | `skills/git/references/repair.md` | Rebase, gỡ conflict và fixup, cùng ba lần kiểm tra phải làm trước khi viết lại lịch sử đã có trên remote |
 | `skills/git/references/stacked.md` | Vòng đời chồng pull request, và chỗ phải dừng: mỗi tầng một lời đồng ý và một cửa kiểm tra riêng |
@@ -166,6 +172,7 @@ bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 tro
 | `skills/review/evals/trigger_evals.json` | Đọc một diff, đối lại `qa`, `verify`, `fix` và `catchup` |
 | `skills/qa/evals/trigger_evals.json` | Test case và test plan viết ra, đối lại `verify` và việc viết mã test tự động |
 | `skills/verify/evals/trigger_evals.json` | Kiểm chứng lúc chạy, đối lại `qa` và `review` |
+| `skills/security/evals/trigger_evals.json` | Review bảo mật, một checklist của khách hàng và một mô hình mối đe dọa, đối lại `review`, `git`, `qa`, `fix`, `incident` và `release` |
 | `skills/git/evals/trigger_evals.json` | Commit, pull request và rebase, đối lại `review`, `release` và `implement` |
 | `skills/release/evals/trigger_evals.json` | Ghi chú và checklist deploy, đối lại `incident` và `qa` |
 | `skills/incident/evals/trigger_evals.json` | Một sự cố và postmortem của nó, đối lại `fix` và `release` |
@@ -193,7 +200,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/codebase-summary.md` | Chính là file này |
 | `docs/project-roadmap.md` | Kế hoạch theo phase và trạng thái |
 | `docs/trigger-eval-measurement.md` | Cách lấy một số đo đúng từ `evals/trigger_evals.json`: vì sao một bộ chạy thông thường báo ra điểm số rỗng, hook `PreToolUse` đo được việc chọn skill, ba điều kiện một lượt chạy cần có, và những case không gì quan sát được |
-| `docs/flow/project-flow.md` | 22 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, và vòng quay lại khi artifact bị trả về |
+| `docs/flow/project-flow.md` | 23 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, và vòng quay lại khi artifact bị trả về |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
 | `docs/vi/**/*.md` | Bản tiếng Việt mirror mười file trên, đặt ở cùng đường dẫn tương đối |
@@ -204,10 +211,10 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 |------|----------|
 | `.github/workflows/release-please.yml` | Chạy release-please khi push lên `main` |
 | `.github/workflows/labeler.yml` | Gắn label cho từng pull request theo đường dẫn file nó thay đổi, dựa trên `.github/labeler.yml` |
-| `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill một label `skill:`, phải có đủ 22 skill |
+| `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill một label `skill:`, phải có đủ 23 skill |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Hướng dẫn Conventional Commit, harness bị ảnh hưởng, và checklist kiểm tra gồm cả các mục đồng bộ chéo |
 | Các form `.github/ISSUE_TEMPLATE/*.yml` | Mỗi form gắn label loại của nó cùng `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Tắt issue trống, dẫn sang Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 22 skill, cộng profile, phần ghi đè, lớp dùng chung và các hook |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 23 skill, cộng profile, phần ghi đè, lớp dùng chung và các hook |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Form tính năng, hỏi tình huống của team trước khi hỏi năng lực đề xuất |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Form báo lần chạy skill, nhận bản ghi `--feedback`: đã yêu cầu gì, bước nào chạy, chỗ nào skill không nói, và team mong đợi gì |

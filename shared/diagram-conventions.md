@@ -42,8 +42,9 @@ flowchart LR
     T2["T2 Fixtures<br/><small>Dev B</small>"] --> T3
 ```
 
-**Sequence.** A call path across services or components, used by `atk:design-doc`. Participants are
-systems, not people.
+**Sequence.** A call path across services or components, used by `atk:design-doc`, and by
+`atk:security` for a request that crosses several trust boundaries. Participants are systems, not
+people.
 
 ```mermaid
 sequenceDiagram
@@ -87,6 +88,7 @@ flowchart LR
 | `design-doc` | Sequence and component diagrams for the chosen option | Beside the option it belongs to |
 | `plan` | Phase order, only when phases are not a straight line | In the plan index, not in a phase file |
 | `breakdown` | Dependency graph, with the task ids from the table | After the task table |
+| `security` | Sequence, only where a request crosses more than two trust boundaries | In the threat model, under Data flow |
 | `incident` | Causal chain | Under the root cause section, beside the timeline table and never instead of it |
 
 A skill not in this table does not add a diagram to its artifact. Prose and tables are the default;

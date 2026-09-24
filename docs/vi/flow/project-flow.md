@@ -1,6 +1,6 @@
 # Luồng dự án
 
-22 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
+23 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,
@@ -81,6 +81,10 @@ flowchart TD
         V1 --> V2{"QA ký nhận"}
         V2 -->|Phát hiện lỗi| F0["atk:fix"]
         F0 --> V1
+        V2 -->|Đạt| V5{"Chạm tới xác thực, dữ liệu<br/>cá nhân, hay tiền?"}
+        V5 -->|Có| V3["atk:security<br/><small>Dev hoặc TL soạn</small>"]
+        V3 --> V4{"TL duyệt,<br/>rủi ro được chấp nhận có tên người"}
+        V4 -->|Phát hiện cần sửa| F0
     end
 
     subgraph S7["7. Phát hành"]
@@ -105,7 +109,8 @@ flowchart TD
     D1 -.->|Contract: first, spec --from| D3
     B2 --> M0
     M2 --> V0
-    V2 -->|Đạt| L0
+    V4 -->|Đã duyệt| L0
+    V5 -->|Không| L0
     L2 --> O0
     L2 --> O1
     O1 -.->|Hành động chảy sang chu kỳ sau| R0
@@ -130,6 +135,7 @@ flowchart TD
 | 5. Làm | `atk:git` | Dev | Người review, người duyệt pull request mà nó mở | không có |
 | 6. Kiểm chứng | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm chứng | `atk:verify` | Dev hoặc QA | QA ký nhận trước khi ticket chuyển trạng thái | `DRAFT` |
+| 6. Kiểm chứng | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận | `IN REVIEW` sang `APPROVED` |
 | 7. Phát hành | `atk:release` | PM cùng SRE | Stakeholder hoặc PM ra quyết định phát hành | `IN REVIEW` sang `APPROVED` |
 | 8. Vận hành | `atk:incident` | Incident Commander | TL và PM, về các hành động tiếp theo | `IN REVIEW` sang `APPROVED` |
 | 8. Rút kinh nghiệm | `atk:retro` | PM hoặc cả đội | Cả đội, về ba hành động chọn ra | `IN REVIEW` sang `APPROVED` |

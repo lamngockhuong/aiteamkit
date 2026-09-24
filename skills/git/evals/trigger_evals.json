@@ -27,5 +27,6 @@
   { "query": "write the coding conventions document", "should_trigger": false },
   { "query": "hand over my work to another developer", "should_trigger": false },
   { "query": "draft a pull request template for this repo", "should_trigger": false },
-  { "query": "viết file CODEOWNERS cho dự án", "should_trigger": false }
+  { "query": "viết file CODEOWNERS cho dự án", "should_trigger": false },
+  { "query": "scan the whole repository for leaked credentials and vulnerable dependencies", "should_trigger": false }
 ]
