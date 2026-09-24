@@ -75,14 +75,16 @@ ID, its severity, and its `Accepted by` cell as the record has it, never by its 
 release record reaches the client, and an unfixed vulnerability described there is disclosed to
 everyone who reads it. An empty `Accepted by` cell is an unchecked item, not an accepted risk.
 
-Where run records under `docs/records/test-runs/` that are not `SUPERSEDED` cover the build being
-released, link the newest one whose scope is not `retest` as the evidence behind QA's sign-off, with
-its scope and its summary as the record states them, and every retest record after it. Read the
-defects of all of them, not only the newest: a Critical or High defect in any of them that no later
-retest record passed is carried into the checklist as a blocking item, by its defect ID, its case ID,
-and its `Ticket` cell. With no run
-record for this build, QA's sign-off has nothing on disk behind it, and the release record says so
-rather than leaving the line looking checked.
+Read the run records under `docs/records/test-runs/` that are not `SUPERSEDED` across this range, the
+way the security records above are read: every build tested since the previous release, not only the
+one being released, because a fix usually ships in a later build than the run that found the defect.
+Link the newest one whose scope is not `retest` as the evidence behind QA's sign-off, with the build
+it tested, its scope, and its summary as the record states them, and every retest record after it;
+where that run tested an earlier build than the one being released, say so. A Critical or High defect
+in any record in the range that no later retest record passed is carried into the checklist as a
+blocking item, by its defect ID, its case ID, and its `Ticket` cell. With no run record in the range,
+QA's sign-off has nothing on disk behind it, and the release record says so rather than leaving the
+line looking checked.
 
 ### 4. Checklist
 

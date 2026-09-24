@@ -10,7 +10,7 @@ no row: nothing on disk announces the event, and the question routes to it throu
 ## Which artifacts gate
 
 Only some artifacts hold up the next skill while they wait for approval. An artifact **gates** when
-it sits in the Reference or Record group of `shared/artifact-paths.md` and is not one of two kinds:
+it sits in the Reference or Record group of `shared/artifact-paths.md` and is not one of three kinds:
 
 - The evidence for one change, the fix report and the verification record among them, which
   `shared/artifact-paths.md` sends into the pull request carrying that change. Its approval is the
