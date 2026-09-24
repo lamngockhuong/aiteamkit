@@ -78,7 +78,7 @@ tám skill còn lại thì chưa.
 | `skills/intake/SKILL.md` | Yêu cầu | User story, tiêu chí nghiệm thu, ngoài phạm vi, câu hỏi treo có người phụ trách |
 | `skills/catchup/SKILL.md` | Yêu cầu | Bản tóm tắt cho người không có mặt trong cuộc hội thoại, kèm phần tự kiểm hiểu bài cho epic |
 | `skills/estimate/SKILL.md` | Lập kế hoạch | Ước lượng có căn cứ và độ tin cậy, capacity, cam kết sprint, phần dư |
-| `skills/design-doc/SKILL.md` | Thiết kế | Tài liệu thiết kế có so sánh phương án, kèm ADR |
+| `skills/design-doc/SKILL.md` | Thiết kế | Tài liệu thiết kế có so sánh phương án, kèm ADR; với `--spike`, một cuộc điều tra có giới hạn thời gian, kết thúc bằng một khuyến nghị |
 | `skills/spec/SKILL.md` | Thiết kế | Tài liệu tham chiếu cho API, schema, tính năng và màn hình, ghi đè tại chỗ, kèm chế độ dò lệch |
 | `skills/breakdown/SKILL.md` | Lập kế hoạch | Task có người nhận, đồ thị phụ thuộc, làn song song kèm quyền sở hữu file |
 | `skills/convention/SKILL.md` | Phát triển | Quy ước team phân loại enforced / reviewed / aspirational |
@@ -110,6 +110,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/intake/references/requirement-template.md` | Bố cục cố định của một requirement: bảy mục đánh số, câu story, ID `AC N.M` mà các skill khác trích dẫn và vì sao không bao giờ đánh số lại, các cột của bảng câu hỏi mở và bảng vùng ảnh hưởng, và những gì giữ nguyên khi dùng `--lang` |
 | `skills/catchup/references/brief-template.md` | Một khung chung cho hai chế độ, phần khác nhau giữa epic và pull request được đánh dấu theo từng mục |
 | `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, bảng phân loại kiểu tính năng, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
+| `skills/design-doc/references/spike.md` | Chế độ `--spike`: một câu hỏi phân định các phương án, giới hạn thời gian và ai đặt ra nó, điều gì sẽ được tính là câu trả lời, viết ra trước khi tìm hiểu, ba loại bằng chứng, vì sao prototype đứng ngoài thay đổi, và bản ghi spike |
 | `skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |
 | `skills/convention/references/stack-standards.md` | Cách nhận ra một ngôn ngữ hay công nghệ từ những gì có trên đĩa và theo thứ tự tin cậy nào, ngưỡng mà dưới đó nó không tính là stack, cách nhóm rule suy ra theo công nghệ và, khi một công nghệ trải qua nhiều layer của profile, theo layer, và hình dạng bộ `docs/standards/` |
 | `skills/convention/references/standard-sources.md` | Bảy trường của `standard-sources.tsv` mang nghĩa gì, ngày `checked` chứng minh điều gì, một lần chạy được rút gì từ một dòng và không bao giờ được chép gì, team thêm nguồn riêng ở đâu, và cách clone thưa cùng chỗ đặt cache và luật khi lấy về hỏng |

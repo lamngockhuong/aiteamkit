@@ -9,6 +9,10 @@
   { "query": "how should we build this, it touches the schema and two services", "should_trigger": true },
   { "query": "ghi lại quyết định kiến trúc này kèm lý do và phương án đã loại", "should_trigger": true },
   { "query": "/atk:design-doc --options 3", "should_trigger": true },
+  { "query": "spike whether the payment SDK can do partial refunds before we design this", "should_trigger": true },
+  { "query": "/atk:design-doc --spike \"can the orders table take a tenant column without downtime\"", "should_trigger": true },
+  { "query": "làm spike kỹ thuật xem thư viện này có hỗ trợ SSO không", "should_trigger": true },
+  { "query": "設計の前に技術調査をして、このライブラリで実現できるか確認して", "should_trigger": true },
 
   { "query": "turn the client mail into user stories", "should_trigger": false },
   { "query": "the design is in review, write the API reference doc from it so frontend can start", "should_trigger": false },
@@ -21,5 +25,6 @@
   { "query": "estimate this epic in man-days", "should_trigger": false },
   { "query": "review this pull request against the design", "should_trigger": false },
   { "query": "implement the design in docs/records/design/design-260901-queue.md", "should_trigger": false },
-  { "query": "設計書どおりに実装して", "should_trigger": false }
+  { "query": "設計書どおりに実装して", "should_trigger": false },
+  { "query": "research the latest React release notes for me", "should_trigger": false }
 ]

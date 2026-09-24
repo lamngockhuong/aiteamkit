@@ -173,6 +173,11 @@ more than one service. Where the profile says `Contract: first`, the design stat
 summary and names the reference documents `atk:spec --from` writes from it, rather than carrying
 every field twice.
 
+`--spike "<question>"` comes first when the comparison cannot be scored until something is found
+out: whether a library does what its page says, whether the real data migrates in the window. It
+answers that one question inside a time box somebody set, keeps any prototype out of the change, and
+ends in a spike record with a recommendation rather than a design.
+
 **Do not use when.** The change is local and reversible. A design document for a two-file fix costs
 more than it returns.
 

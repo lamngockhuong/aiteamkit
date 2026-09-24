@@ -78,7 +78,7 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Fourt
 | `skills/intake/SKILL.md` | Requirement | User stories, acceptance criteria, non-goals, open questions with owners |
 | `skills/catchup/SKILL.md` | Requirement | A brief for someone who was not in the conversation, plus the understanding check for an epic |
 | `skills/estimate/SKILL.md` | Planning | Sizes with basis and confidence, capacity, sprint commitment, overflow |
-| `skills/design-doc/SKILL.md` | Design | Technical design with compared options, plus the ADR |
+| `skills/design-doc/SKILL.md` | Design | Technical design with compared options, plus the ADR; under `--spike`, a time-boxed investigation ending in a recommendation |
 | `skills/spec/SKILL.md` | Design | Reference documents for API, schema, feature, and screen, updated in place, plus the drift check |
 | `skills/breakdown/SKILL.md` | Planning | Owned tasks, dependency graph, parallel lanes with file ownership |
 | `skills/convention/SKILL.md` | Development | Team conventions classified enforced / reviewed / aspirational |
@@ -110,6 +110,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/intake/references/requirement-template.md` | The fixed shape of a requirement: the seven numbered sections, the story sentence, the `AC N.M` IDs other skills cite and why they are never renumbered, the open-questions and impacted-areas columns, and what stays unchanged under `--lang` |
 | `skills/catchup/references/brief-template.md` | One skeleton for both modes, with the epic and pull-request differences marked per section |
 | `skills/catchup/references/understanding-check.md` | The fixed questions, the feature type table, and the two rules deciding whether the check is worth anything |
+| `skills/design-doc/references/spike.md` | The `--spike` mode: one question that separates options, the time box and who set it, what would count as an answer written before looking, the three kinds of evidence, why a prototype stays out of the change, and the spike record |
 | `skills/convention/references/collaboration-files.md` | What `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` each carry, where each host keeps them, and why an owner never comes from git history |
 | `skills/convention/references/stack-standards.md` | How a language or technology is detected from what is on disk and in which order of trust, the threshold below which it is not the stack, how derived rules are grouped by technology and, where one technology spans several of the profile's layers, by layer, and the shape of the `docs/standards/` set |
 | `skills/convention/references/standard-sources.md` | What each of the seven fields of `standard-sources.tsv` means, what a `checked` date proves, what a run may draw from a line and what it may never copy, where a team adds its own sources, and the sparse fetch with its cache location and failure rule |

@@ -130,7 +130,7 @@ to `docs/adr/` as well.
 | `intake` | `docs/records/requirements/<ticket-or-date>-<slug>.md` |
 | `catchup` | `docs/derived/catchup/<ticket-or-date>-<slug>.md` |
 | `estimate` | `docs/records/planning/estimate-<sprint-or-date>.md` |
-| `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md` |
+| `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`; under `--spike`, `docs/records/design/<ticket-or-date>-spike-<slug>.md` and no ADR |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
 | `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology and a `<layer>/<tech>.md` where its rules differ by layer, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |

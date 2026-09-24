@@ -5,10 +5,13 @@ description: >
   decision behind it: current state, options with trade-offs, chosen approach, data and API changes,
   migration and rollback, risks, and the reviewers who must sign off.
   Use before implementing anything that touches a schema, a public contract, a shared module, or
-  more than one service.
+  more than one service. With `--spike`, runs a time-boxed investigation first, for a design that
+  cannot choose until a question is answered.
   Triggers on: "design doc", "technical design", "tech design", "thiết kế kỹ thuật", "tài liệu thiết kế",
-  "ADR", "architecture decision", "設計書", "detail design", "how should we build this", "/atk:design-doc".
-argument-hint: "[requirement-path|topic] [--adr|--no-adr] [--options <n>] [--lang <code>] [--out <path>]"
+  "ADR", "architecture decision", "設計書", "detail design", "how should we build this",
+  "technical spike", "spike this", "nghiên cứu kỹ thuật", "spike kỹ thuật", "技術調査", "スパイク",
+  "/atk:design-doc".
+argument-hint: "[requirement-path|topic] [--adr|--no-adr] [--options <n>] [--spike <question>] [--lang <code>] [--out <path>]"
 ---
 
 # Technical Design Document (`atk:design-doc`)
@@ -21,7 +24,9 @@ design, and gets reviewed as such.
 
 Handles: describing the current implementation with citations, framing the problem, comparing viable
 options against stated criteria, specifying the chosen data model, API contracts, and the migration
-and rollout sequence the change requires, and writing the ADR entry.
+and rollout sequence the change requires, and writing the ADR entry. Under `--spike`, it also
+investigates a question the comparison cannot be scored without, inside a time box somebody set,
+and writes what was found instead of a design.
 
 Does NOT handle: writing the requirement (`atk:intake`), sizing (`atk:estimate`), or the
 implementation itself. It chooses the approach and stops there: sequencing the chosen approach into
@@ -46,6 +51,7 @@ See `shared/team-roles.md`.
 /atk:design-doc --options 3          # Compare exactly N options (default 2 to 3)
 /atk:design-doc --no-adr             # Skip the ADR entry
 /atk:design-doc --adr                # ADR only, for a decision with no document behind it
+/atk:design-doc --spike "<question>" # Investigate one question first; a spike record, no design, no ADR
 /atk:design-doc --lang vi            # Write the document in Vietnamese
 /atk:design-doc --out <path>         # Override the default output path
 ```
@@ -57,6 +63,10 @@ See `shared/team-roles.md`.
 ```
 
 Before step 1, read `.atk/overrides/design-doc.md` when it exists, per rule 7 of `shared/team-roles.md`.
+
+Under `--spike`, steps 1 to 3 run as below with the investigation of `references/spike.md` inside
+step 3, and steps 4 and 5 are replaced by the spike record that file describes. A spike answers a
+question and recommends; the design that chooses comes after it, in a run of its own.
 
 ### 1. Read the requirement
 
@@ -108,6 +118,9 @@ request: `status: SUPERSEDED`, a link to this design from it, and a link back. N
 automatically, and a directory where two designs both read as current sends the next reader to the
 wrong one. The rule is at the end of `shared/artifact-paths.md`.
 
+Under `--spike`, the spike record at `docs/records/design/<ticket-or-date>-spike-<slug>.md`, a record
+like the design and linked from the design that follows it.
+
 Diagrams are inline Mermaid so they stay readable in a pull request, drawn per
 `shared/diagram-conventions.md`: a sequence or component diagram beside the option it belongs to,
 and nothing the prose does not also say.
@@ -130,3 +143,5 @@ front matter.
 - [ ] Every acceptance criterion maps to something in the design.
 - [ ] The ADR states what was rejected and why, not only what was chosen.
 - [ ] Any earlier design this one replaces is marked `SUPERSEDED` and linked in both directions.
+- [ ] Under `--spike`, the record names who set the time box, cites every source with the date it
+      was read, keeps prototype code out of the change, and recommends without deciding.

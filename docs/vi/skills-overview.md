@@ -176,6 +176,12 @@ dùng chung, hoặc nhiều hơn một service. Khi profile ghi `Contract: first
 dạng tóm tắt và ghi tên các tài liệu tham chiếu mà `atk:spec --from` viết ra từ nó, thay vì chép mọi
 field hai lần.
 
+`--spike "<question>"` đi trước khi các phương án chưa thể chấm điểm cho tới khi tìm ra một điều gì
+đó: một thư viện có làm đúng như trang của nó nói không, dữ liệu thật có migrate kịp trong khung giờ
+không. Nó trả lời đúng một câu hỏi đó trong một giới hạn thời gian do một người đặt ra, giữ mọi
+prototype ở ngoài thay đổi, và kết thúc bằng một bản ghi spike kèm khuyến nghị chứ không phải một bản
+thiết kế.
+
 **Không dùng khi.** Thay đổi nhỏ, cục bộ và dễ quay lui. Viết design doc cho một sửa đổi hai file
 tốn hơn phần nhận lại.
 
