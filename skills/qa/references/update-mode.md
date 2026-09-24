@@ -21,17 +21,19 @@ For each row of the table, and for each source the requirement now names that th
 
 - **A file.** Hash its content the way the table does, line endings turned into LF first. The same
   hash means no change. A different hash means read what changed: the old content is the version in
-  the file's history whose hash is the recorded one. List the commits that touched it,
-  `git log --format=%H --follow -- <path>` in whichever repository holds it, and for each read the
-  whole file at that commit, `git show <sha>:<path as it was named then>`, hash it the same way, and
+  the file's history whose hash is the recorded one. List the commits that touched it with the name it
+  had in each, `git log --format=%H --name-only --follow -- <path>` in whichever repository holds it,
+  and for each read the whole file at that commit, `git show <sha>:<the name listed with it>`, hash it the same way, and
   stop at the match. The change is the difference between that version and the file as it stands
   now, uncommitted edits included. Where no version with that hash can be found, the source is read
   whole and every case resting on it is compared with it. A commit between the two reads, or a squash
   that folded several together, changes nothing here: the comparison is between two contents, not two
   commits.
 - **A file that is not where the table says.** Renamed, split, moved to another repository, or in a
-  member repository not cloned here: look for it by `git log --follow` and in the Repositories table
-  of `shared/project-profile.md`. Found under a new path, it is read there and the table takes the new
+  member repository not cloned here: find where the old path went with
+  `git log -M --diff-filter=RD --name-status --format=%H -- <old path>`, which names a rename's new
+  path or the commit that deleted it, and look in the Repositories table of
+  `shared/project-profile.md` for a member that holds it. Found under a new path, it is read there and the table takes the new
   path. Not found, it is never read as a source that lost everything: say so in the run summary, leave
   every case resting on it as it is, keep its old `Read as`, and open a question for that source's
   approver asking where it went.
@@ -52,7 +54,8 @@ Sort every change into one of three groups, from what the source says and nothin
 A change the source does not explain, a value that moved with no reason given, is still grouped by
 what it does; why it changed is not the run's to guess, and the run summary never offers a reason.
 Where a change contradicts the requirement, the case follows the source that wins per step 1 of
-`SKILL.md`, and the contradiction becomes an open question for that source's approver.
+`SKILL.md`, and the contradiction becomes an open question for the approver of the source that
+wins, naming the other source and its approver too.
 
 A change that settles an assumption is `MODIFIED` too: a screen spec that reached `APPROVED`, a
 `Proposed:` mark removed, or an open question a case points at answered, in the source or in this
@@ -76,12 +79,15 @@ one of two forms: `Keep the cases` or `Take the source`.
 ### Whose row it is
 
 A row is a person's when it differs from what the last run wrote for it. What the last run wrote is
-the cases file as the commit that introduced its current `Last run` line left it: every run of this
-skill rewrites that line under the Sources table, whether or not any source changed, so it names one
+the cases file as the commit that introduced its current `Last run` line left it: every run that
+writes the cases file rewrites that line under the Sources table, whether or not any source changed, so it names one
 run and no other. Walk the commits that changed the cases file,
 `git log --format=%H --follow -- <cases-path>`, from the newest, and stop at the first whose
 `Last run` line differs from the current one: the commit just after it is the one, and the file at
-that commit is what the last run wrote. A row changed since then, in a later commit or in the working
+that commit is what the last run wrote. Where no commit carries a different line, only one run has ever
+written the file, and the oldest commit carrying the line is the one. A file with a Sources table and
+no `Last run` line at all was written before the line existed: ask before changing any row. A row
+changed since then, in a later commit or in the working
 tree, is a person's; so is a row added by hand, and a row nobody can place either way, since an
 overwritten edit is lost and an extra question only costs a question.
 
@@ -144,16 +150,19 @@ the approver is who moves it on. The run never sets `APPROVED`.
 
 ## 4. The rest of the file
 
-- The `Last run` line is rewritten, `Last run: YYYY-MM-DD HH:MM, atk:qa --update`, on every run.
+- The `Last run` line is rewritten, `Last run: YYYY-MM-DD HH:MM:SS, atk:qa --update`, on every run, to the second, so two runs in one minute still leave two different lines.
 - The Sources table is rewritten with what each source is now, so the next run starts from this read.
   A source a still-open question rests on keeps its old `Read as`, so the change behind that question
   is found again until the question is answered rather than lost after one run.
 - The Summary and Coverage tables are recounted from the rows, struck-through rows excluded.
 - A criterion the requirement dropped keeps its row in Coverage, struck through, so a reader can see
   which cases went with it.
-- The regression matrix is updated in the same run when a change touches a module, a table, or an
-  endpoint another feature shares, per step 4 of `SKILL.md`: a feature that now shares it gains a
-  row, and one whose reason changed has it rewritten.
+- The regression matrix, the Regression section of the test plan, is updated in the same run when a
+  change touches a module, a table, or an endpoint another feature shares, per step 4 of `SKILL.md`: a
+  feature that now shares it gains a row, and one whose reason changed has it rewritten. The plan's
+  `status` goes back to `IN REVIEW` when any of its rows changed, and an `APPROVED` plan has its
+  existing rows changed only through a question, the same way as an approved cases file. Where the
+  feature has no test plan, the run summary says the matrix had nowhere to go and offers `--plan`.
 - An existing CSV is regenerated in the same run, per the export rules in
   `references/test-case-template.md`. Where that CSV has anything in its execution columns, somebody
   typed results into the committed file: stop before regenerating it, say so, and ask for the results

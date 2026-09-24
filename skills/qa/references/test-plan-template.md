@@ -1,6 +1,7 @@
 # Test plan template
 
-Loaded by `atk:qa` in step 5, and on any run that writes the plan: the default run and `--plan`. One
+Loaded by `atk:qa` in steps 4 and 5, and on any run that writes or reads the plan: the default run,
+`--plan`, `--regression`, `--update`, and `--retest`, which read its Regression section. One
 file per feature or release at `docs/qa/test-plan-<slug>.md`, per `shared/artifact-paths.md`. The
 project's own template wins over this shape in the same order as `references/test-case-template.md`
 gives: an override that names one, then an existing plan under `docs/qa/`.
@@ -112,6 +113,14 @@ A link to the estimate or breakdown that holds the test effort and dates, or `no
 | # | Question | Who answers | Blocks | Answer |
 |---|----------|-------------|--------|--------|
 ````
+
+## Values a later run matches on
+
+Per rule 6 of `shared/team-roles.md`, these stay spelled exactly as here whatever language the rest of
+the plan is written in, because `atk:qa --run`, `--update`, `--retest` and `atk:release` find them by
+matching: the headings `Regression` and `Defect severity`, the column names of both tables, the marks
+`MUST TEST`, `SPOT CHECK` and `NOT AFFECTED`, and the front matter keys and statuses. A severity's name
+is the plan's to choose, and stays however the plan spells it.
 
 ## Updating
 

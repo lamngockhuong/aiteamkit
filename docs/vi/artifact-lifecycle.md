@@ -33,7 +33,7 @@ flowchart TB
 | Nhóm | Gồm những gì | Commit | Sửa về sau | Xóa về sau |
 |------|--------------|--------|------------|------------|
 | Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` và `docs/conventions.md`, các tài liệu onboarding, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có, trừ hình dạng `workspace`, nơi gốc dự án không thuộc repository nào nên không gì theo dõi chúng | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì, hoặc, khi `Contract: first`, đã được thống nhất sẽ làm gì |
-| Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa. Record của một lần chạy test chỉ nhận thêm liên kết tới issue và phần che dữ liệu, không gì khác | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
+| Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa. Record của một lần chạy test chỉ được đổi `status`, các ô `Ticket`, và phần che dữ liệu có ghi lại, không gì khác | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
 | Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội | Chạy lại skill | Được, thoải mái |
 
 ## Ba file không thuộc nhóm nào

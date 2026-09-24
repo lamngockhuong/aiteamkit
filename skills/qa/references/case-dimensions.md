@@ -53,8 +53,9 @@ somebody agreed to it.
 
 ## Skipping a dimension
 
-Skip a dimension only with the assumption that makes it irrelevant, written beside the criterion:
-"Timing: skipped, the record is only ever edited by its owner." An assumption that could stop being
+Skip a dimension only with the assumption that makes it irrelevant, written as a row of the Skipped
+table of the cases file, per `references/test-case-template.md`: "AC-2, Timing: the record is only
+ever edited by its owner." An assumption that could stop being
 true while the feature is in service is not a reason to skip, it is a case. The one above becomes a
 case the day sharing is added, so either it is written now or the regression matrix names the
 dimension to revisit.

@@ -79,7 +79,9 @@ Read the run records under `docs/records/test-runs/` that are not `SUPERSEDED` a
 way the security records above are read, because a fix usually ships in a later build than the run
 that found the defect. A record is in the range when the build it names is a commit or version inside
 the range, or, where it names neither, when its `created` date falls after the previous release's
-tag; on a first release every record counts. "Newest" means by `created`. Then:
+tag; on a first release every record counts. Records sort by the time in their file name,
+`YYMMDD-HHMM`, then by a `-2`, `-3` suffix, the unsuffixed file first, which is what "newest", "after" and "later" mean below; `created` holds only a date and
+is the fallback for a name that carries no time. Then:
 
 - **Evidence behind QA's sign-off.** For each cases file the range touches, link its newest run record
   whose scope is not `retest`, and the retest records after it, with the build tested, the scope, the
@@ -87,15 +89,26 @@ tag; on a first release every record counts. "Newest" means by `created`. Then:
   than the one being released, say so; where a record is not `APPROVED`, the QA sign-off line stays
   unchecked, naming the approver it waits on. A feature in the range with no run record is listed as
   having none.
-- **Blocking defects.** A defect in any record in the range blocks when its severity is one of the top
-  two rows of the severity table in that feature's test plan, whatever the plan names them, or is
-  `TBD`, until the QA lead classifies it. With no plan, the tester's scale decides, and the item says
-  there was none. It stops blocking once a later record in the range passed its case, a retest or a
-  full run alike. Each blocking item names its defect ID, its case ID, its `Ticket` cell, and the path
-  of its record, since defect IDs repeat from one record to the next.
-- **What reaches the client.** A defect marked `Security: yes`, or whose case is typed
-  `Access control and security`, is named by its ID only, in the checklist and among the known issues
-  alike, never by its description, for the reason given above for security findings.
+- **Blocking defects.** A defect blocks when its severity is one of the two most severe levels in the
+  severity table of that feature's test plan, read from what each level means rather than from where
+  it sits in the table, whatever the plan names them; where the order cannot be told, ask the QA lead.
+  A severity of `TBD` blocks too, and the QA lead's classification is recorded in this release
+  record's checklist beside the item, since a run record's content cannot change. With no plan, the
+  tester's scale decides, and the item says there was none. The defects read are those in the range,
+  plus any still blocking in the previous release record, carried forward so a defect found before
+  that release and never fixed does not drop out of sight.
+  A defect stops blocking once a later record passed its case, a retest or a full run alike. A
+  `Ticket` of `not raised: not a bug` or `not raised: duplicate of ...` lifts the block only when the
+  person named after it is the QA lead, and the item says who. One bug is one item: defects whose `Ticket` names the same
+  issue, an original and its failed retests, are grouped, and the newest stands for them; so are the
+defects of one case in two runs of the same cases. Each item
+  names its defect ID, its case ID, its `Ticket` cell, and the path of its record, since defect IDs
+  repeat from one record to the next.
+- **What reaches the client.** A defect marked `Security: yes`, or whose `Ticket` starts with
+  `private`, is named by its ID only, in the checklist and among the known issues
+  alike, never by its description, for the reason given above for security findings; a `Ticket` cell
+  of `not raised` or `private` is written without the reason after it, since the reason can describe
+  the vulnerability.
 
 With no run record in the range, QA's sign-off has nothing on disk behind it, and the release record
 says so rather than leaving the line looking checked.

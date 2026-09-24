@@ -47,7 +47,7 @@ ticket: <the ticket that last changed this, or none>
 
 ## Sources
 
-Last run: YYYY-MM-DD HH:MM, atk:qa --cases
+Last run: YYYY-MM-DD HH:MM:SS, atk:qa --cases
 
 | Source | Read as |
 |--------|---------|
@@ -192,11 +192,13 @@ Every source the cases were written from, one row each: a file by its path, and 
 directly, for a screen with no screen spec, by its `design_source` and `design_node`. `Read as` holds
 what the source was when this run read it: for a file, `sha256:` and the first 16 hex characters of
 the SHA-256 of its content with every line ending turned into LF first, so the same file checked out
-on Windows and on Linux hashes the same; for a design, the `design_fingerprint` of that read, per
+on Windows and on Linux hashes the same, computed the same way on every machine:
+`python3 -c "import sys,hashlib;d=open(sys.argv[1],'rb').read().replace(b'\r\n',b'\n').replace(b'\r',b'\n');print('sha256:'+hashlib.sha256(d).hexdigest()[:16])" <path>`;
+for a design, the `design_fingerprint` of that read, per
 `shared/design-sources.md`. What each source was used for is in step 1 of `atk:qa`.
 
 Only a run of `atk:qa` writes this table, and it rewrites it on every run that reads the sources. The
-`Last run` line above it is rewritten on every run, whether or not a source changed, so `--update` can
+`Last run` line above it is rewritten on every run that writes this file, whether or not a source changed, so `--update` can
 tell which rows the last run wrote. It
 is what `--update` compares against to find what changed, which is why it records content rather than
 a commit: it holds wherever the source lives, in this repository or another, and whatever was
@@ -254,23 +256,49 @@ run that changes the Markdown, so the two never disagree; nobody edits it by han
    A sheet in the company layout gets that layout, its columns only, with the joins and the `Note`
    prefix that section gives, so a paste lines up with the sheet column for column.
 2. Rows sorted by Page, then Section in the order `ACCESSING`, `GUI`, `FUNCTION`, then Category,
-   Sub-category, Sub-sub category. The IDs do not change when the rows are sorted.
-3. `<br>` inside a cell becomes a real newline, so each step sits on its own line when the sheet is
+   Sub-category, Sub-sub category, each of those in the order it first appears in the Markdown rather
+   than alphabetically, so the sheet reads in the order the author wrote. The IDs do not change when
+   the rows are sorted.
+3. Markdown is taken out of a cell: backticks around a value go, an escaped `\|` becomes `|`, and a
+   link becomes its text followed by its URL. The sheet shows the value, not its formatting.
+4. `<br>` inside a cell becomes a real newline, so each step sits on its own line when the sheet is
    opened.
-4. Every cell holding a newline, a comma, or a double quote is wrapped in double quotes, and a double
+5. Every cell holding a newline, a comma, or a double quote is wrapped in double quotes, and a double
    quote inside it is written twice, `""`.
-5. Grouping cells, Page and the three category levels, are left empty where they repeat the row
+6. Grouping cells, Page and the three category levels, are left empty where they repeat the row
    above. When a higher level changes, every level below it is filled in again on that row, even if
    its value matches an earlier group.
-6. An empty column stays an empty cell; nothing is written as `-` or `N/A`.
-7. A cell a spreadsheet would read as a formula or reformat as a number is written as text: one
-   starting with `=`, `+`, `-`, or `@`, and a value such as `0123` or `+84...` whose leading character
-   matters, gets a leading `'`. Boundary data is exactly the data this breaks, and a cell starting
-   with `=` runs as a formula in whoever opens the sheet.
-8. The five execution columns are exported empty. A tester fills a copy, never this file.
+7. An empty column stays an empty cell; nothing is written as `-` or `N/A`.
+8. A cell a spreadsheet would run as a formula, one starting with `=`, `+`, `-`, `@`, a tab, or a
+   carriage return, gets a leading `'`, and so does a value such as `0123` or `+84...` whose leading
+   character a spreadsheet would drop. A cell starting with `=` otherwise runs as a formula in whoever
+   opens the sheet, and boundary data is exactly the data a spreadsheet reformats. Some spreadsheets
+   show the `'` when they open a CSV rather than hiding it, so the session says, whenever the export
+   added one, that the `'` is not part of the data and the tester enters the value without it; the
+   alternative the session offers is importing those columns as text.
+9. The file is UTF-8 with a byte order mark, so a spreadsheet opens Japanese, Vietnamese, and
+   full-width text as written rather than guessing another encoding.
+10. The five execution columns are exported empty. A tester fills a copy, never this file.
 
 A struck-through row is not exported. The Markdown keeps it for the ID; the sheet is for executing,
 and a removed case in it gets executed.
+
+## Values a later run matches on
+
+Per rule 6 of `shared/team-roles.md`, these stay spelled exactly as here whatever language the rest of
+the file is written in, because `--update`, `--review`, `--run`, `atk:release`, or `atk:help` finds
+them by matching:
+
+- the headings `Sources`, `Summary`, `Coverage`, `Skipped`, `Cases`, `Open questions`, and the
+  `Last run:` line;
+- the column names of the Sources table, `Source` and `Read as`, and of the cases table;
+- the sections `ACCESSING`, `GUI`, `FUNCTION`, the categories, and the testcase types;
+- the ID shape, the `Removed YYYY-MM-DD:` and `Removed by hand on YYYY-MM-DD.` marks, and
+  `[ASSUMPTION]`;
+- the answers `Keep the cases` and `Take the source`;
+- the front matter keys and the statuses.
+
+A team's own template, per The project's own template wins, names its own values of this kind.
 
 ## Updating
 

@@ -24,7 +24,7 @@ id  component  target  viewpoint  expected  dimension  technique
 - `id` is `<component>-NN`, `input-03`. It is what a case cites in its `Source` column, per
   `references/test-case-template.md`, and like a case ID it is never given to a second viewpoint. A
   viewpoint that stops applying keeps its line, with `viewpoint` rewritten as
-  `Removed YYYY-MM-DD: <why>` and `expected` emptied, so its number stays taken and a case that cites
+  `Removed YYYY-MM-DD: <why>`, `expected` emptied, and `dimension` and `technique` kept, so its number stays taken and a case that cites
   it still finds out why. A run skips such a line; the next number for a component is one past the
   highest on any of its lines, removed ones counted.
 - `component` is one of the keys in Components below.

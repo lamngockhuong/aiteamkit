@@ -16,16 +16,23 @@ Check in this order, stop at the first hit, and say which one you picked:
    a line for that member, that line. A member tracking its own work is unusual, and the profile is
    the only place it is written down, so a run that skipped this step would post to the project's
    tracker instead of the member's.
-3. The project `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` names one.
-4. Ticket IDs in recent git log: `ABC-123` suggests Jira, `#123` suggests GitHub Issues,
+3. The Tracker section of `.atk/profile.md` names the project's tracker, in any shape of project.
+   A section that says the project uses none is a hit too, and ends the walk at step 7: the team
+   wrote down that it has no tracker, and a CLI that happens to be installed does not overrule it.
+   A skill that never mentions the profile, per `shared/project-profile.md`, still takes the answer
+   from here and names the tracker, without naming the file it came from.
+4. The project `CLAUDE.md` / `AGENTS.md` / `CONTRIBUTING.md` names one.
+5. Ticket IDs in recent git log: `ABC-123` suggests Jira, `#123` suggests GitHub Issues,
    `PROJ-123` also appears in Backlog.
-5. A configured CLI or MCP server is available: `gh`, a Jira MCP, an Atlassian connector. Available
-   is what makes this a hit; whether it answers is a separate question, and the next section is how
-   to ask it.
-6. Otherwise: stay in Markdown and tell the user no tracker was detected.
+6. A configured CLI or MCP server is available for a host this repository uses: `gh` where a remote
+   points at GitHub, a Jira MCP or an Atlassian connector where something above points at Jira. A CLI
+   installed on the machine is not evidence about this project; a repository with no remote on that
+   host is not detected by it. Available is what makes this a hit; whether it answers is a separate
+   question, and the next section is how to ask it.
+7. Otherwise: stay in Markdown and tell the user no tracker was detected.
 
-Detection and reachability are two steps on purpose. Folding "and it answers" into step 5 would send
-a project whose only signal is an unauthenticated CLI down to step 6, which reports no tracker at
+Detection and reachability are two steps on purpose. Folding "and it answers" into step 6 would send
+a project whose only signal is an unauthenticated CLI down to step 7, which reports no tracker at
 all, and that is the outcome the next section exists to prevent.
 
 ### Detected is not reachable

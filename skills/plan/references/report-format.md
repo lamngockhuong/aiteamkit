@@ -158,8 +158,8 @@ different from "not checked".
 ## Language
 
 The headings and the labels are written in the team's working language, per rule 6 of
-`shared/team-roles.md`. Three things stay in English whatever that language is, because something
-else matches on them: the severity names `BLOCKING`, `SHOULD FIX` and `NIT`; the `B`, `S` and `N`
+`shared/team-roles.md`. What something else matches on stays as spelled here whatever that language
+is, per the same rule: the severity names `BLOCKING`, `SHOULD FIX` and `NIT`; the `B`, `S` and `N`
 prefixes; and the order of the sections. A later review of the same plan finds a result by its
 identifier, so the identifier cannot be translated.
 

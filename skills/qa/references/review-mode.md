@@ -12,8 +12,9 @@ not make, and the approver reading a file nobody wrote.
 
 ## Who runs it
 
-The reviewer is never the cases file's `owner`: a run where the person asking is the owner says so at
-the top of the report, since a self-review catches slips and no judgement errors. The usual reviewer
+The reviewer should not be the cases file's `owner`. Ask who is reviewing rather than reading it off
+the machine, since the git user of a shared or a personal checkout says nothing about who is reading;
+a run where the reviewer named is the owner says so at the top of the report, since a self-review catches slips and no judgement errors. The usual reviewer
 is the BrSE/BA, for whether the cases match what the client asked for, or the QA lead, for whether
 they are executable and complete. The approver named in the front matter still approves.
 
@@ -80,8 +81,11 @@ A second review of the same cases file reads the earlier report first: the newes
 `qa-cases-<slug>-` followed by exactly six digits and `.md`, whatever its date, since a re-review
 usually comes on another day after the author fixed something. The exact slug and the six digits keep
 out the report of a cases file whose slug merely starts the same way, and the `qa-cases-` prefix keeps
-out a report `atk:review` wrote for a branch called `qa/...`; before carrying identifiers, check that
-the earlier report's `What was reviewed` names this cases file. It keeps that report's identifiers, so an author asked to fix
+out a report `atk:review` wrote for a branch called `qa/...`. Before carrying identifiers, check that
+the earlier report's title line names this cases file by its path, which no language setting
+translates; where it names another file, try the next newest, and where none does, number from 1 and
+say so. A report written under `--out` is found only where the reviewer says it went. It keeps that
+report's identifiers, so an author asked to fix
 `B1` finds `B1` again, and follows `skills/review/references/report-format.md` for what happens when a
 finding is fixed or changes severity, and for numbering from 1 when there is no earlier report.
 
@@ -97,7 +101,8 @@ the consent line in `shared/finalize-steps.md`, or to commit the report where th
 reports. Which one is the reviewer's call.
 
 It opens with the front matter block of `shared/artifact-paths.md`, the reviewer as `owner` and the
-cases file's approver as `approver`. Then, in order: what was reviewed and against which sources, and
+cases file's approver as `approver`, and a title line naming the cases file by its path,
+`# Review of cases: docs/qa/test-cases-<slug>.md`. Then, in order: what was reviewed and against which sources, and
 anything that could not be opened; one line on what the cases do well; the findings, `BLOCKING`
 first; a table of the passes, each marked ran, found nothing, or could not run; and the open
 questions, each with the person who answers. Three rules come from

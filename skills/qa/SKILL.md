@@ -54,7 +54,7 @@ reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 /atk:qa --run <cases-path>      # Record the results of a test run the team executed
 /atk:qa --bug <run-path>        # Raise the defects of a run record on the tracker
 /atk:qa --retest <issue>        # Record a retest of a fixed bug and offer the verdict
-/atk:qa --retest <run#Dn>       # The same, for a defect never raised on a tracker
+/atk:qa --retest <run-path>#D<n> # The same, for a defect never raised on a tracker
 /atk:qa --review <cases-path>   # A second person reviews a cases file somebody else wrote
 /atk:qa --lang vi               # Write the artifacts in Vietnamese
 /atk:qa --out <path>            # Override the default output path
@@ -98,7 +98,9 @@ the design, and a disagreement between the two becomes an open question for the 
 document's approver: the Tech Lead for `api` and `db`, the BrSE/BA for `feature`. Under `code`, or
 with no line, a reference document still describes the code before the change, so it gives the
 expected values for what the change leaves alone, the regression cases, and the design gives them
-for what the change alters.
+for what the change alters. Two reference documents that disagree with each other, an API limit of
+100 against a screen spec's 50, are settled by neither: the case carries `[ASSUMPTION]` on that value,
+and the question goes to both documents' approvers, naming both.
 
 ### 2. Derive the happy-path cases
 
@@ -108,12 +110,14 @@ that is never reused. A team that already has a template keeps it, per that file
 result names its source in the `Source` column, and states an observable outcome, not "works as
 expected".
 The file's Sources table records what each source was when it was read, which `--update` later
-compares against.
+compares against, under a `Last run` line naming the mode, `atk:qa`, `atk:qa --cases`, or
+`atk:qa --update`.
 
 `GUI` cases take their labels, placeholders, and the text of dialogs and buttons from the screen spec
 under `docs/screens/`, citing the component number. Text from a spec that is not `APPROVED`, or from a
 row whose `qa` cell holds an open question or whose value is marked `Proposed:`, carries
-`[ASSUMPTION]` and points at that question rather than opening a second one. Where the screen has no
+`[ASSUMPTION]` on the value the question is about, not on the whole row, and points at that question
+rather than opening a second one. Where the screen has no
 spec, read the design per `shared/design-sources.md` and cite the node. Where there is neither, the
 `GUI` cases carry `[ASSUMPTION]` and the cases file says its `GUI` coverage is reduced.
 
@@ -160,8 +164,10 @@ Test plan at `docs/qa/test-plan-<slug>.md` and cases at `docs/qa/test-cases-<slu
 `docs/qa/test-cases-<slug>.csv`, is written by the export rules in `references/test-case-template.md`
 when the person asks for one, when the override asks for one, or when one already exists; an existing
 CSV is regenerated in the same run that changes the Markdown, and never edited by hand. A run or a
-retest writes a record at `docs/records/test-runs/<ticket-or-date>-<slug>.md`, whose content is never
-edited once written, apart from its `status` and the `Ticket` cells `--bug` fills. A review writes only
+retest writes a new record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never
+over an existing one, whose content is never edited once written apart from the three changes
+`references/test-run.md` allows: its `status`, the `Ticket` cells `--bug` sets, and a recorded
+redaction. A review writes only
 its report, at `docs/derived/reviews/qa-cases-<slug>-<date>.md`.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of

@@ -93,9 +93,10 @@ blocking section look identical otherwise, and the reader who most needs to tell
 approver.
 
 **Language.** The headings and the labels are written in the team's working language, per rule 6 of
-`shared/team-roles.md`. Three things stay in English whatever that language is, because something
-else matches on them: the severity names `BLOCKING`, `SHOULD FIX` and `NIT`; the `B` / `S` / `N`
-prefixes on the identifiers; and the order of the sections. A comment posted under `--comment` and a
+`shared/team-roles.md`. What something else matches on stays as spelled here whatever that language
+is, per the same rule: the severity names `BLOCKING`, `SHOULD FIX` and `NIT`; the `B` / `S` / `N`
+prefixes on the identifiers; the order of the sections; and the `Convention gaps` heading, which
+`atk:convention` looks up. A comment posted under `--comment` and a
 later review of the same target both find a finding by its identifier, so the identifier cannot be
 translated.
 

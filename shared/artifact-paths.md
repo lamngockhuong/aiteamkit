@@ -329,7 +329,7 @@ When the contract comes before the code in `shared/spec-docs.md`. A `screen` doc
 Read the file if it already exists and update it in place. Do not overwrite an `APPROVED` artifact:
 supersede it, link the replacement, and say which decision changed.
 
-A skill whose file names carry the time, the `atk:qa` run record among them, never updates an
+A record whose file name carries the time, the `atk:qa` run record among them, is never updated as an
 existing file: an existing path means a second file, not an edit. Where a skill names a narrow change
 it may make to one of its own records after writing it, a pointer or a redaction such as the `Ticket`
 cell and the redaction of a run record, that change is the only one, and it is allowed at `APPROVED`

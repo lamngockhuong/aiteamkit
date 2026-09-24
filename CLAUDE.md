@@ -110,7 +110,7 @@ skill discovery.
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the route that carries a convention gap from the review report back to `convention`, the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement`, `git`, `plan` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, where the project root is and how a skill finds it, the four shapes a project can have and what each costs, which skills stop, degrade, or ignore the file when it is missing, and that the `Contract` line in Docs changes behaviour rather than a path | the skills that need project facts |
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, where it sits relative to the project root and why the hook can miss it in a member repository, the two sections it may hold, and the seven things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
-| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `tailor`, `qa` |
+| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `plan`, `tailor`, `qa` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not, plus the gate rule: which CI job judges a layer, and what a local command weaker than it leaves unverified | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `security`, `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, what counts as one turn of an interview, and when a connection to an outside service may be named | `fix`, `implement`, `verify`, `review`, `design-doc`, `init`, `design-sources.md` |
@@ -131,9 +131,10 @@ having recorded no conventions. `implement` reads the file for that and for the 
 which it falls back to when the project really has recorded none. `finalize-steps.md` is cited by the three skills
 that change code, and holds the rule that nothing leaves the local repository without being asked
 for. `verify` is one of them because the fixes it makes between retry rounds are code like any other.
-`tailor` and `qa` are the citers that change no code, and cite the consent line alone: `tailor`
-because a `--feedback` record is sent to a repository the team does not own, `qa` because `--bug`
-creates issues and `--retest` comments on them.
+`plan`, `tailor` and `qa` are the citers that change no code, and cite the consent line alone: `plan`
+because it offers its index as a ticket comment, `tailor` because a `--feedback` record is sent to a
+repository the team does not own, `qa` because `--bug` creates issues and `--retest` and `--review`
+comment on them.
 
 `layer-verification.md` is a contract between the same three: each runs a check and then has to say
 what the result means, and the answer to that second half has to be the same in all three. Each keeps
