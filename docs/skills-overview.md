@@ -112,7 +112,10 @@ file paths, user stories, `Given / When / Then` acceptance criteria, an out-of-s
 assumptions labelled as assumptions, and open questions each naming the person who must answer.
 
 **Use when.** A request arrives as a chat message, a meeting note, a mail, or a one-line ticket, and
-the team cannot start from it. Also when two people read the same ticket differently.
+the team cannot start from it. Also when two people read the same ticket differently, and when the
+request is a Figma design: `--design <figma-url>` reads it, records which frames were read, and
+turns what the user can see on them into stories, while anything the design does not show is proposed
+with its source or asked. The screen's component table is `atk:spec --kind screen`, not this skill.
 
 **Do not use when.** The requirement is already agreed and written; you want effort numbers
 (`atk:estimate`) or a technical approach (`atk:design-doc`).
@@ -181,15 +184,21 @@ team would have picked by default, and says why it loses.
 ## `atk:spec`
 
 **Produces.** The reference documents a team reads long after the work that produced them merged: the
-API contract per resource in `docs/api/`, the schema per table in `docs/database/`, and what a feature
-does in `docs/features/`. One file per subject, named after the subject, updated in place. `--check`
-reports where a document and the code disagree and changes nothing.
+API contract per resource in `docs/api/`, the schema per table in `docs/database/`, what a feature
+does in `docs/features/`, and the components of a screen in `docs/screens/`, one row per component
+read from its Figma design. One file per subject, named after the subject, updated in place.
+`--check` reports where a document and the code disagree, and for a screen whether its design has
+moved, and changes nothing.
 
 **Use when.** A project has no written contract, a merged change left one behind, or nobody trusts
 the documents any more. `--sync` folds the change on the current branch into the documents it
 touched. In a project whose profile says `Contract: first`, also when the contract has to exist
 before the code: `--from <design-path>` writes the document from a design in review, marked
 `implemented: no`, so frontend, backend and QA build against the same page while the code catches up.
+And when a BrSE needs a screen spec to review: `--kind screen --design <figma-url>` drafts one from
+the frame, proposes what the design does not show with its source cited, and asks the rest by name.
+Where the agent has no Figma connection, it says so and reads a directory of exported images instead.
+Run it again after the design changes, and only the rows that changed are rewritten.
 
 **Do not use when.** The question is still which approach to take. That is `atk:design-doc`, which
 compares options and stops; this skill describes what was actually done, or, contract-first, what

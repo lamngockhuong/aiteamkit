@@ -48,6 +48,24 @@ When the request is in a language other than the artifact's, add a rendering in 
 language beneath the quote, labelled as a rendering. The quote stays: interpretation drifts, the
 quote does not.
 
+A design given with `--design` gets a block of its own beside the quote, since a picture cannot be
+quoted. It is a list, read per `shared/design-sources.md`:
+
+```markdown
+**Design read**
+
+- Source: <the design_source form in What a read records, `shared/design-sources.md`: the Figma
+  URL with every query parameter dropped, or the image directory relative to the project root>
+- Read: YYYY-MM-DD
+- Frames: `SA02_08_01` (`28256:70675`, `sha256:<16 hex characters>`), `SA02_08_02`
+  (`28256:70811`, `sha256:<16 hex characters>`, a state of `SA02_08_01`)
+- Ready for dev status could not be checked through the Figma connection. Confirm it with the
+  designer.
+```
+
+A request that came as text and a design together keeps both: the quote for the text, this block
+for the design. Neither replaces the other.
+
 ## `## 2. Context and current behavior`
 
 A list of what exists today that the request changes or builds on, one fact per item, each with

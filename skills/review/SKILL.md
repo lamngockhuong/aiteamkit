@@ -140,9 +140,9 @@ there. The other baseline items stay with the rounds that hold them, per
 `atk:convention` can record it.
 
 The reference-document check is the `contract` round, and the sync obligation in
-`shared/spec-docs.md`, which lists the five kinds of change that trigger it and so decides whether
+`shared/spec-docs.md`, which lists the six kinds of change that trigger it and so decides whether
 the round runs at all. Raise a `BLOCKING` finding when a contract moved and neither the document nor
-a stated skip came with it; `Contract: first` adds a rule in `references/review-rounds.md`. Where the
+a stated skip came with it; `Contract: first`, and any `screen` document, add a rule in `references/review-rounds.md`. Where the
 pull request says what is stale and who will fix it, the obligation was met and there is no finding.
 
 Do not fix the document as the reviewer. That moves the work to the wrong person and teaches the next

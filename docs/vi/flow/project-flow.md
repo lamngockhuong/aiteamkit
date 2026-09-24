@@ -121,7 +121,7 @@ flowchart TD
 | 1. Yêu cầu | `atk:catchup` | Người mới vào việc | Không ai; phần kiểm tra hiểu bài là tự chấm | `DRAFT` |
 | 2. Ước lượng | `atk:estimate` | Dev, PM soát năng lực | PM và Stakeholder cùng chốt | `IN REVIEW` sang `APPROVED` |
 | 3. Thiết kế | `atk:design-doc` | TL hoặc Dev | TL, người nắm quyết định kỹ thuật cuối | `IN REVIEW` sang `APPROVED` |
-| 3. Thiết kế | `atk:spec` | Dev | TL với loại `api` và `db`, BrSE/BA với loại `feature` | `IN REVIEW` sang `APPROVED`, sau đó ghi đè tại chỗ mãi mãi |
+| 3. Thiết kế | `atk:spec` | Dev, và BrSE/BA với loại `screen` | TL với loại `api` và `db`, BrSE/BA với loại `feature` và `screen` | `IN REVIEW` sang `APPROVED`, sau đó ghi đè tại chỗ mãi mãi |
 | 4. Chia việc | `atk:breakdown` | TL hoặc PM | Từng Dev nhận phần việc của mình | `IN REVIEW` sang `APPROVED` |
 | 4. Xếp thứ tự | `atk:plan` | Dev | Chính tác giả, trừ khi cửa kiểm tra đẩy lên TL | `DRAFT` |
 | 4. Quy ước | `atk:convention` | TL | Cả đội đồng thuận, ghi theo từng quy tắc | `IN REVIEW` sang `APPROVED` |

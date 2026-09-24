@@ -194,7 +194,8 @@ English document. A tree that is not partitioned records that and nothing else;
 `shared/artifact-paths.md` owns what each skill then does with it.
 
 `Contract: first` or `Contract: code` in Docs is the one entry there that changes what a skill does
-rather than where it writes: whether a reference document may exist before the code it describes.
+rather than where it writes: whether a reference document of any kind but `screen` may exist before
+the code it describes.
 `shared/spec-docs.md` owns what each value means, and why a missing line reads as `code`.
 
 Every entry is a pointer or a command, never prose copied from elsewhere. A section that runs long
@@ -233,7 +234,7 @@ produces the same artifact with the same confidence, only having worked a little
 the profile would have told it.
 
 `atk:spec` is Required-soft rather than Required because it has two other ways to find its
-footing: the documents already in the directory, whose shape it copies, and the three default kinds.
+footing: the documents already in the directory, whose shape it copies, and the four default kinds.
 What it loses without a profile is the project's own directory layout, so it says so and carries on.
 
 Three groups rather than two, because the middle case is real: `atk:review` can still read a diff

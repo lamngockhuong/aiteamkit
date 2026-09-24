@@ -15,6 +15,11 @@
   { "query": "write the API doc for the orders endpoint before backend builds it, so frontend can start now", "should_trigger": true },
   { "query": "viết tài liệu API và bảng database trước khi code để FE làm trước", "should_trigger": true },
   { "query": "承認待ちの設計書からAPI仕様を先に書いて、フロントが実装を始められるようにしたい", "should_trigger": true },
+  { "query": "viết spec màn hình từ Figma này", "should_trigger": true },
+  { "query": "画面仕様書を作って", "should_trigger": true },
+  { "query": "screen spec from this Figma frame", "should_trigger": true },
+  { "query": "Figma đổi rồi, cập nhật spec màn hình", "should_trigger": true },
+  { "query": "/atk:spec SA02_08_01 --kind screen --design https://www.figma.com/design/abc/App?node-id=1-2", "should_trigger": true },
 
   { "query": "should we use a queue or a cron job for this", "should_trigger": false },
   { "query": "compare two options for the notification delivery and pick one", "should_trigger": false },
@@ -27,5 +32,9 @@
   { "query": "generate an openapi file from the controllers", "should_trigger": false },
   { "query": "write the migration that adds the column", "should_trigger": false },
   { "query": "onboarding doc for the new developer joining monday", "should_trigger": false },
-  { "query": "what conventions does this team follow for branch names", "should_trigger": false }
+  { "query": "what conventions does this team follow for branch names", "should_trigger": false },
+  { "query": "dịch màn hình Figma này", "should_trigger": false },
+  { "query": "implement this Figma screen in React", "should_trigger": false },
+  { "query": "phân tích yêu cầu từ bản Figma này thành user story", "should_trigger": false },
+  { "query": "đối chiếu màn hình vừa code với bản Figma", "should_trigger": false }
 ]

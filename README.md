@@ -45,11 +45,11 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:help` | No file: the skill to run next with the line to type, the evidence in the project behind it, what that skill needs first, who approves what it produces, and what is still waiting on a named approver. Also routes a question to one skill, or explains one skill. |
 | `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
 | `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
-| `atk:intake` | A raw request turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
+| `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
 | `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, what the work touches and where it is in the code, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
 | `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. |
-| `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, updated in place and checked against the code for drift. |
+| `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, and the components of each screen read from its Figma design, updated in place and checked against the code, and the design, for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, grouped by each language and technology it detects, each classified as enforced by tooling, checked in review, or merely aspirational. A project with nothing written gets one standards document per technology under `docs/standards/`. With `--suggest` it also proposes rules from published standards for that stack, each one waiting for the Tech Lead. Offers to draft the collaboration files the project has none of, and writes only the ones you pick. |
 | `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. Reads the written plan back against the repository, and reviews one somebody else wrote. |
@@ -73,11 +73,11 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:help [question|skill]                # --lang
 /atk:init                                 # --audit --lang --out
 /atk:tailor [<skill>]                     # --audit --feedback --out
-/atk:intake <request-file|ticket|text>    # --interview|--no-interview --lang --out
+/atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out
 /atk:catchup <epic-url|pr-url>            # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
 /atk:design-doc <requirement|topic>       # --adr|--no-adr --options --lang --out
-/atk:spec [subject]                       # --kind --from --sync --check --lang --out
+/atk:spec [subject]                       # --kind --from --design --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
 /atk:convention                           # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
 /atk:plan <ticket|design|text|plan-path>  # --inline --review --comment --layer --out

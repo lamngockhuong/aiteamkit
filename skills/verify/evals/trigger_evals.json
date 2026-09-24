@@ -23,5 +23,6 @@
   { "query": "review this pull request before I approve it", "should_trigger": false },
   { "query": "production is down, checkout is failing for everyone", "should_trigger": false },
   { "query": "write the release notes for version 2.3", "should_trigger": false },
-  { "query": "add a unit test for this function", "should_trigger": false }
+  { "query": "add a unit test for this function", "should_trigger": false },
+  { "query": "viết spec màn hình từ Figma", "should_trigger": false }
 ]

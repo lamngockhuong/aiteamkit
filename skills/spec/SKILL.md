@@ -2,8 +2,9 @@
 name: spec
 description: >
   Write and keep current the reference documents a team reads long after the work that produced them
-  merged: the API contract per resource, the schema per table, and the behaviour of a feature. Also
-  compares what those documents claim against what the code does, and reports where the two drifted.
+  merged: the API contract per resource, the schema per table, the behaviour of a feature, and the
+  components of a screen as its Figma design draws them. Also compares what those documents claim
+  against what the code does, and for a screen against its design as well, and reports drift.
   In a project that works contract-first, writes them from the design before the code exists, so
   frontend, backend and QA can work against one agreed contract.
   Use when a project has no written contract, when a merged change left one behind, when nobody
@@ -12,8 +13,9 @@ description: >
   "tài liệu database", "spec bị lệch", "cập nhật tài liệu", "仕様書", "API仕様", "spec drift",
   "document this endpoint", "is the doc still true", "api docs before the code", "contract first",
   "viết tài liệu API trước khi code", "API docs cho FE làm trước", "実装前にAPI仕様を書く",
-  "/atk:spec".
-argument-hint: "[subject] [--kind api|db|feature] [--from <design-path>] [--sync] [--check] [--lang <code>] [--out <path>]"
+  "screen spec", "screen spec from Figma", "spec màn hình", "viết spec màn hình từ Figma",
+  "画面仕様書", "Figmaから画面仕様書", "/atk:spec".
+argument-hint: "[subject] [--kind api|db|feature|screen] [--from <design-path>] [--design <figma-url|image-dir>] [--sync] [--check] [--lang <code>] [--out <path>]"
 ---
 
 # Reference Specs (`atk:spec`)
@@ -27,8 +29,8 @@ superseded. `shared/spec-docs.md` holds what separates it from a design document
 
 ## Scope
 
-Handles: writing and updating reference documents for API contracts, database schema, and feature
-behaviour; taking their shape from the documents a project already keeps; under `Contract: first`,
+Handles: writing and updating reference documents for API contracts, database schema, feature
+behaviour, and screens, the last from a Figma design or the images exported from it; taking their shape from the documents a project already keeps; under `Contract: first`,
 writing them from a design before the code exists and moving them onto the code as it lands; folding
 a merged change into them; and reporting where they and the code disagree.
 
@@ -42,9 +44,10 @@ moved. Which of them changes is a decision, and decisions belong to the approver
 
 ## Roles
 
-Dev authors. Tech Lead approves the `api` and `db` kinds, because both are contracts other people
-work against. BrSE/BA approves the `feature` kind, because it states what the product does for a
-user and that is a business claim rather than a technical one. See `shared/team-roles.md`.
+Dev authors, and BrSE/BA authors a `screen` document as often as Dev does. Tech Lead approves the
+`api` and `db` kinds, because both are contracts other people work against. BrSE/BA approves the
+`feature` and `screen` kinds, because each states what the product does for a user or asks of one,
+and that is a business claim rather than a technical one. See `shared/team-roles.md`.
 
 The approver differs by kind, so a run covering two kinds produces two documents with two approvers.
 Never one document with a shared one.
@@ -55,6 +58,9 @@ Never one document with a shared one.
 /atk:spec <subject>               # Write or update the document for one subject
 /atk:spec <subject> --kind api    # Say which kind when the subject alone is ambiguous
 /atk:spec <subject> --from <design-path>  # Contract-first: write the document from the design, before the code
+/atk:spec <screen> --kind screen --design <figma-url>  # Write or update a screen spec from a Figma frame or section
+/atk:spec <screen> --kind screen --design <image-dir>  # The same from exported images, where Figma is out of reach
+/atk:spec <screen> --kind screen  # Update a screen spec from the design it already records
 /atk:spec --sync                  # Fold the change on the current branch into the documents it touched
 /atk:spec --check                 # Report drift between the documents and the code, change nothing
 /atk:spec --check --kind db       # Limit the drift report to one kind
@@ -73,7 +79,8 @@ Before step 1, read `.atk/overrides/spec.md` when it exists, per rule 7 of `shar
 ### 1. Resolve the kind and the file
 
 The kind comes from `--kind`, or from the subject when it is unambiguous: a route or a resource name
-means `api`, a table name means `db`, a named capability means `feature`. Ask when two kinds fit and
+means `api`, a table name means `db`, a named capability means `feature`, and a Figma frame or a
+screen name or `screen_id` means `screen`. `--design` implies `screen`. Ask when two kinds fit and
 the answer changes which directory is written.
 
 Where the subject belongs to one member repository and that member keeps a docs tree of its own,
@@ -81,11 +88,14 @@ resolve the directory there: the document then travels in the same pull request 
 what the sync obligation asks for. A contract two members share belongs to the project docs root.
 `shared/artifact-paths.md` owns the split.
 
-Resolve the directory from the `Docs` section of `.atk/profile.md`, falling back to the three default
-kinds in `shared/artifact-paths.md`. A kind the project declared there is as valid as the three that
+Resolve the directory from the `Docs` section of `.atk/profile.md`, falling back to the four default
+kinds in `shared/artifact-paths.md`. A kind the project declared there is as valid as the four that
 ship with the kit.
 
-The file is named after the subject, never after a ticket or a date. Read it first when it exists;
+The file is named after the subject, never after a ticket or a date. A screen is named by its
+`screen_id` where the design carries one, under the file-name rule in One link, several screens in
+`shared/design-sources.md`, and a link to a section holding several screens resolves to one file
+per screen. Read it first when it exists;
 this skill updates in place, and the reason is in the Persistence section of
 `shared/artifact-paths.md`.
 
@@ -96,14 +106,31 @@ than write a document the project's own rules call stale. And the design is at `
 `APPROVED`: a `DRAFT` is not a source, because nobody has been asked to look at it. Where either
 fails, say which and change nothing.
 
+`--design` belongs to the `screen` kind alone. Given with another kind, say that a design is the
+source of no other kind, per `shared/spec-docs.md`, and change nothing. `--from` is never a `screen`
+source, since a screen spec is written from its design, not from a design document: given with
+`--kind screen` or with `--design`, say so and change nothing. On a screen document that exists,
+the design is the one its `design_source` and `design_node` record, unless `design_source` starts
+with `retired`, so a rerun needs no `--design`,
+and `--check` and `--sync` take none: given one, say it is ignored and why. Under `--out`, a link
+holding several screens is refused, since one path cannot hold several documents.
+
 ### 2. Take the shape from the neighbours
 
 When the directory already holds documents of this kind, read one and follow it, per the shape rule
 in `shared/spec-docs.md`. Use `references/api-spec-template.md`, `references/db-spec-template.md`, or
-`references/feature-spec-template.md` only when there is nothing to copy from. Say in the run summary
+`references/feature-spec-template.md`, or `references/screen-spec-template.md`, only when there is
+nothing to copy from. Say in the run summary
 which of the two happened, so a reviewer knows whether the shape was inherited or invented.
 
 ### 3. Read the source
+
+A `screen` document takes its source differently from the next two paragraphs: the design, unless
+its `design_source` starts with `retired`, in which case the code, and otherwise read
+per `shared/design-sources.md`, which holds the three states of the Figma connection, the fallback
+to exported images, and what the read records. Each row cites its node ID. Where the screen's code
+already exists, compare each row with the screen's code for its label, required mark, limits, and
+transition, to set `implemented` in step 4. The paragraphs on `--sync` below apply to it as well.
 
 Describe what the code does, citing `path:line`. Do not describe intended behaviour taken from a
 ticket, a design document, or a Figma file: those say what was going to happen, and the gap between
@@ -126,24 +153,41 @@ diff implements from its design citation to `path:line` and takes off its not-im
 `shared/spec-docs.md`; on a document at `no`, it first marks every item the diff does not reach, since
 the field stops speaking for all of them. Where the code does something other than what the item
 says, the item keeps its mark and the sync reports the difference in its summary as a disagreement
-for the document's approver. This is the one place a marked item is compared with its code, which is
-why `--check` never reports one as drift, and the sync never rewrites a contract to match the code.
+for the document's approver. Outside a `screen` document, which compares its rows with the code on every
+write, this is the one place a marked item is compared with its code, which is why `--check` never
+reports one as drift, and the sync never rewrites a contract to match the code.
+
+A `screen` document is synced the same way under either `Contract` line, with one difference: an
+implemented row keeps its node ID and gains its `path:line` beside it, per The `screen` kind in
+`shared/spec-docs.md`, and the sync sets `yes` when the last mark comes off. Where the diff changes
+what an implemented row promises, the sync reads the row, opens a question for the BrSE/BA with both
+versions, and sets `IN REVIEW`; where `design_source` starts with `retired`, it rewrites the row from
+the code instead. When the code moves on its own and When the design is retired, in that file, say
+why the two differ.
 
 ### 4. Write
 
 Front matter per `shared/artifact-paths.md`, with `approver` set per kind from the Roles section
-above. An update that changes what the document promises sets `status` back to `IN REVIEW`; a
+above. A `screen` document adds the four `design_*` fields from the read. An update that changes what the document promises sets `status` back to `IN REVIEW`; a
 correction of wording does not.
 
-Under `Contract: first` the front matter also carries `implemented`, set per `shared/spec-docs.md`.
-`--from` sets `no` on a document it creates. Run again on a document that exists, which is also how a
+On every kind but `screen`, under `Contract: first` the front matter also carries `implemented`,
+set per `shared/spec-docs.md`. `--from` sets `no` on a document it creates. Run again on a document that exists, which is also how a
 design that changed in review is carried over, it rewrites every item that cites a design from the
 design named, adds the items the design adds, marked unless the document is at `no`, marks the items it changes that are cited to the code,
 and leaves the rest as they were. The value is then `no` if no item cites the code, and `partial`
 otherwise. `--sync` moves it on as the items land, and sets `yes` in the change that takes the last
 mark off, so the value becomes true when that change merges. A document written from a design still `IN REVIEW` says so
 under its title, and stays `IN REVIEW` itself until that design is `APPROVED`. Under `Contract: code`
-the field is left out.
+the field is left out, on every kind but `screen`.
+
+A `screen` document always carries `implemented`, under either `Contract` line, per The `screen`
+kind in `shared/spec-docs.md`: `no` where the screen has no code, otherwise `partial` or `yes` from
+the comparison in step 3. Run again on a screen document that exists, it follows Updating from a changed
+design in `references/screen-spec-template.md`, which is read on every such run and not only when
+the directory is empty: rows keyed by node ID and only changed rows touched while the document has
+never been approved, and every difference turned into an open question for the approver once it
+has.
 
 Two rules keep an update honest:
 
@@ -155,7 +199,8 @@ Two rules keep an update honest:
 
 ### 5. Report
 
-`--check` compares the documents against the code and changes no file, following
+`--check` compares the documents against the code, and a `screen` document against its design as
+well, and changes no file, following
 `references/drift-check.md`. That file holds the coverage checklist that keeps items from being
 quietly skipped, the shape of a finding, and the read-only boundary. What counts as drift in the
 first place is in `shared/spec-docs.md`, because `atk:review` has to answer it the same way.
@@ -166,8 +211,8 @@ last.
 
 ## Output
 
-`docs/api/<resource>.md`, `docs/database/<table>.md`, or `docs/features/<slug>.md` per
-`shared/artifact-paths.md`, one file per subject, updated in place.
+`docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, or
+`docs/screens/<screen>.md` per `shared/artifact-paths.md`, one file per subject, updated in place.
 
 Sections come from the neighbouring document when there is one, and otherwise from the template for
 the kind. Diagrams are inline Mermaid per `shared/diagram-conventions.md`, and only where a sequence
@@ -198,7 +243,12 @@ one issue per finding, never one issue listing everything.
 - [ ] The document's shape matches its neighbours when the directory was not empty, and the summary
       says whether the shape was inherited or came from a template.
 - [ ] The file is named after its subject, with no ticket and no date in the name.
-- [ ] `approver` matches the kind: Tech Lead for `api` and `db`, BrSE/BA for `feature`.
+- [ ] `approver` matches the kind: Tech Lead for `api` and `db`, BrSE/BA for `feature` and `screen`.
+- [ ] A `screen` document records `design_source`, `design_node`, `design_read`, and
+      `design_fingerprint`, carries
+      the Ready for dev line and `implemented`, and holds no value the design did not show unless it
+      is marked as a proposal with its source; a missing Figma connection was reported by its state
+      and did not stop the run.
 - [ ] Nothing unverified was deleted; what looked wrong went into the drift report instead.
 - [ ] Every open question carries the name of the person who must answer it.
 - [ ] `--check` changed no file.

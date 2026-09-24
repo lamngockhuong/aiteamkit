@@ -29,12 +29,13 @@ One paragraph: what the feature does, for whom, and what it is for. No implement
 
 | Entry point | Who | Note |
 |-------------|-----|------|
-| `/business-office/reports` | Business office user | Main screen |
+| `/business-office/reports` | Business office user | Main screen, see `docs/screens/SA03_01.md` |
 | `POST /reports` | Same, through the API | See `docs/api/report.md` |
 | Nightly job | Nobody | Closes expired rows |
 
 Jobs and scheduled work are entry points. A feature documented only through its screens hides half
-of itself.
+of itself. A screen that has a `screen` document links to it here, and that document lists this
+feature among the ones it serves.
 
 ## Behaviour
 
@@ -80,9 +81,12 @@ Each with the name of the person who must answer it.
 
 - The feature spec describes the product, so it is written in the language the team writes artifacts
   in, per the Team section of `.atk/profile.md`. The `api` and `db` kinds follow the same setting.
-- No component names, no route file paths, no class names, no internal constants. A feature spec that
-  names the component rendering a table stops being true at the next refactor, and nothing will catch
-  it.
+- No component names from the code, no route file paths, no class names, no internal constants. A
+  feature spec that names the component rendering a table stops being true at the next refactor, and
+  nothing will catch it. The name a user sees on the screen is a different thing and is allowed, but
+  the screen's parts, one row per component, belong to its `screen` document rather than here.
+- Whether a rule is stated here or in a `screen` document is decided by the split in The `screen`
+  kind in `shared/spec-docs.md`. A rule stated here is pointed to from each screen that shows it.
 - Behaviour that only one role sees is stated with the role, not written as though it were universal.
 - Where a rule exists because a client asked for it, say so in one clause. That clause is what stops
   it being optimised away by someone who reads it as an accident.

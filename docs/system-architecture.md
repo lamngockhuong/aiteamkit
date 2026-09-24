@@ -73,7 +73,7 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Thirteen files hold what skills would otherwise repeat. The first three are cited by all 22:
+Fourteen files hold what skills would otherwise repeat. The first three are cited by all 22:
 
 - `shared/team-roles.md`: the role table and the eight rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -83,7 +83,7 @@ Thirteen files hold what skills would otherwise repeat. The first three are cite
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
 
-Eight are contracts between a named handful of skills rather than kit-wide rules:
+Nine are contracts between a named handful of skills rather than kit-wide rules:
 
 - `shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
@@ -130,7 +130,7 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
 
 - `shared/spec-docs.md`: what separates a reference document from a design document, what one is
   in a project whose profile says `Contract: first` and the `implemented` field that tracks whether
-  its code exists yet, whose shape wins when a project already keeps documents of its own, the five
+  its code exists yet, whose shape wins when a project already keeps documents of its own, the six
   kinds of change that oblige a pull request to carry its reference document, what that obligation
   becomes when the document lives in a repository other than the code's, and the line between drift
   and a question nobody has answered. Cited by `atk:spec`, which writes those documents, by
@@ -145,6 +145,14 @@ Eight are contracts between a named handful of skills rather than kit-wide rules
   which reads the team's host identifiers out of `CODEOWNERS` instead of spending an interview turn
   on them. The first two ask the same question from opposite ends, and a narrower answer in either
   one is how a repository ends up with a second template that outranks the team's own.
+- `shared/design-sources.md`: how a skill reads a Figma design, through whatever connection to
+  Figma the harness has, found by what it can do rather than by a tool name, told apart in three
+  states because a connector can be listed and still not signed in, and replaced by exported images
+  when none is ready, so no skill stops for want of it. It also holds the node ID as the stable key
+  of a component and the fingerprint a read records, which is what lets a second run touch only the
+  rows that changed. Cited by `atk:spec` for the `screen` kind, the one kind whose source is a
+  design, and by `atk:intake`, which takes a design as the request. It is the reason `shared/host-capabilities.md` now has a row for a connection to an
+  outside service: the service may be named, a command of the plugin carrying it may not.
 
 The last two describe files that do not ship with the kit at all:
 

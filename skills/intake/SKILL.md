@@ -3,12 +3,13 @@ name: intake
 description: >
   Turn a raw stakeholder or client request into reviewable requirements: context, user stories,
   acceptance criteria, out-of-scope list, open questions, and the person who must answer each one.
-  Use when a request arrives as a chat message, a meeting note, a mail, or a one-line ticket and
-  the team cannot start work from it yet.
+  Use when a request arrives as a chat message, a meeting note, a mail, a one-line ticket, or a
+  Figma design, and the team cannot start work from it yet.
   Triggers on: "intake", "requirement", "làm rõ yêu cầu", "phân tích yêu cầu", "user story",
   "acceptance criteria", "要件定義", "要求整理", "clarify this request", "turn this into stories",
-  "/atk:intake".
-argument-hint: "[request-file|ticket-id|text] [--interview|--no-interview] [--lang <code>] [--out <path>]"
+  "requirement from Figma", "stories from this design", "phân tích yêu cầu từ Figma",
+  "Figmaから要件定義", "/atk:intake".
+argument-hint: "[request-file|ticket-id|text] [--design <figma-url|image-dir>] [--interview|--no-interview] [--lang <code>] [--out <path>]"
 ---
 
 # Requirement Intake (`atk:intake`)
@@ -19,12 +20,13 @@ is still unanswered, with a name against every open question.
 
 ## Scope
 
-Handles: reading the raw request, scanning the codebase for what already exists, splitting the
+Handles: reading the raw request, including a Figma design or the images exported from it, scanning the codebase for what already exists, splitting the
 request into user stories, writing testable acceptance criteria, listing non-goals, and collecting
 open questions with an owner each.
 
 Does NOT handle: estimating effort (`atk:estimate`), technical design (`atk:design-doc`), task
-assignment (`atk:breakdown`), or deciding priority and scope. Those belong to the PM and the
+assignment (`atk:breakdown`), writing a screen's component table (`atk:spec --kind screen`), or
+deciding priority and scope. Those belong to the PM and the
 stakeholder; this skill records their decision, it does not make it.
 
 ## Roles
@@ -38,6 +40,8 @@ testable. See `shared/team-roles.md`.
 /atk:intake <request-file>        # Read a meeting note, mail export, or spec fragment
 /atk:intake "<pasted request>"    # Read the request straight from the prompt
 /atk:intake <ticket-id>           # Pull the request from the detected tracker
+/atk:intake --design <figma-url>  # Read a Figma frame or section as the request, alone or beside any of the above
+/atk:intake --design <image-dir>  # The same from exported images, where Figma is out of reach
 /atk:intake --no-interview        # Draft from the request alone, mark every gap OPEN
 /atk:intake --lang ja             # Write the artifact in Japanese
 /atk:intake --out <path>          # Override the default output path
@@ -56,10 +60,21 @@ Before step 1, read `.atk/overrides/intake.md` when it exists, per rule 7 of `sh
 Quote the request verbatim into the artifact before interpreting it. Interpretation drifts; the
 quote does not.
 
+A design given with `--design` is read per `shared/design-sources.md`, which holds the three states
+of the Figma connection and the fallback to exported images. A picture cannot be quoted the way text
+can, so in place of the quote the artifact records what was read: the source, in the form What a read records in
+`shared/design-sources.md` gives it, each frame with its
+`screen_id`, node ID and fingerprint, and the date. The line saying that Ready for dev could not be
+checked goes with it, in the artifact and in the session. Where the design cannot be read and the
+request also came as text or a ticket, the run carries on from those and records which state of the
+connection kept the design out; under `--no-interview` any question the reading raises is marked
+`OPEN` rather than asked.
+
 ### 2. Scan the repository
 
 Find what already exists: matching features, similar endpoints, existing entities, prior
-requirement docs. A request is often a change to something, not a new thing. Cite file paths.
+requirement docs, and the screen and feature specs under `docs/screens/` and `docs/features/`, which
+say what an existing screen already shows and does. A request is often a change to something, not a new thing. Cite file paths.
 
 ### 3. Interview the gaps
 
@@ -69,7 +84,12 @@ step under `--no-interview` and mark each gap `OPEN` with a suggested owner.
 
 ### 4. Draft stories and criteria
 
-One story per user-visible outcome. Acceptance criteria are `Given / When / Then` and each one must
+One story per user-visible outcome. From a design, each behaviour the user can see on it is a
+candidate story: a control that does something, a transition, a message. What the design does not
+show, a limit, a rule, what happens on failure, is never read into it: it is proposed or asked, per
+What the design does not show in `shared/design-sources.md`.
+
+Acceptance criteria are `Given / When / Then` and each one must
 be checkable by a person who did not write it. Vague criteria such as "works correctly" or "is fast"
 are rejected: replace them with a number, a state, or a visible result, or move them to open
 questions.
@@ -83,7 +103,9 @@ Set `status: IN REVIEW` and name the approver. Do not mark anything `APPROVED` o
 
 ## Output
 
-Written to `docs/records/requirements/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. Sections:
+Written to `docs/records/requirements/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`.
+From a design, the screen's component table is the next artifact, and `atk:spec --kind screen`
+writes it. Sections:
 front matter, original request, context and current behavior, user stories with acceptance criteria,
 out of scope, assumptions, open questions with owners, and impacted areas with file paths. The
 headings, their order, and the shape of each section are in `references/requirement-template.md`.
@@ -105,3 +127,6 @@ first; create nothing without a yes.
 - [ ] Every open question names the person who must answer it.
 - [ ] The out-of-scope list is non-empty, or its emptiness is explained.
 - [ ] Nothing is marked `APPROVED` without the approver actually saying so.
+- [ ] A design given as the request is recorded by source, frames, node IDs, fingerprint, and date,
+      with the Ready for dev line, and nothing it does not show is stated as a criterion unless it is
+      marked `Proposed:` with its source.

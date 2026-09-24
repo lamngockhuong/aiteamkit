@@ -10,6 +10,10 @@
   { "query": "split this request into stories, with acceptance criteria and a list of what is out of scope", "should_trigger": true },
   { "query": "what do we need to ask the stakeholder before anyone starts on this", "should_trigger": true },
   { "query": "/atk:intake --interview", "should_trigger": true },
+  { "query": "phân tích yêu cầu từ bản Figma này", "should_trigger": true },
+  { "query": "turn this Figma flow into user stories and acceptance criteria", "should_trigger": true },
+  { "query": "このFigmaから要件定義を作って", "should_trigger": true },
+  { "query": "/atk:intake --design https://www.figma.com/design/abc/App?node-id=1-2", "should_trigger": true },
 
   { "query": "write the technical design for the export feature", "should_trigger": false },
   { "query": "thiết kế kỹ thuật cho tính năng export", "should_trigger": false },
@@ -21,5 +25,7 @@
   { "query": "document what the orders API does today", "should_trigger": false },
   { "query": "implement the export endpoint", "should_trigger": false },
   { "query": "この設計書をレビューして", "should_trigger": false },
-  { "query": "tóm tắt epic này cho người mới nhận việc", "should_trigger": false }
+  { "query": "tóm tắt epic này cho người mới nhận việc", "should_trigger": false },
+  { "query": "viết bảng thành phần màn hình từ Figma này", "should_trigger": false },
+  { "query": "screen spec with every field of this Figma frame", "should_trigger": false }
 ]
