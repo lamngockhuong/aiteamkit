@@ -139,7 +139,7 @@ to `docs/adr/` as well.
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
-| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<ticket-or-date>-<slug>.md` |
+| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<ticket-or-date>-<slug>.md`; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-<slug>-<date>.md` |
 | `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
 | `security` | `docs/records/security/<ticket-or-date>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
@@ -265,15 +265,17 @@ what the next paragraph already allows, so there is nothing to say and nothing t
 `docs/derived/` is the only part of the tree a project may leave untracked, and nothing in the
 chain breaks if it does: the implementation record and the shipping record are copies of what lives
 on the pull request, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
-running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, a feedback
+running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, or
+`atk:qa --review` where it was a cases file, a feedback
 record is a copy of what was filed with whoever owns the skill it is about, and a setup-defect
 report is rebuilt by running `atk:onboard` again against the repository as it stands then.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
-directory rather than a break in the chain. Two skills read one of the six, and both read the review
-report: a second `atk:review` over the same target reads the one already at that path, to carry its
-finding identifiers forward, and starts numbering at 1 and says so when there is none; and
-`atk:convention` reads the `Convention gaps` section of the reports written for the project, per
+directory rather than a break in the chain. Four skills read one of the six, and all four read the
+review report: a second `atk:review` over the same target reads the one already at that path, to carry
+its finding identifiers forward, and starts numbering at 1 and says so when there is none;
+`atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
+cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
 Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the six, and losing a
 report costs a set of identifiers and a list of gaps the next review raises again, rather than a step
 in the chain. A team that

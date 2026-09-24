@@ -6,12 +6,14 @@ description: >
   developer owes QA before a ticket moves to testing. Afterwards, records a test run the team
   executed, raises its failed cases as bugs, and records the retest of a fixed bug.
   Use when a feature reaches QA, when a release needs a regression pass, when a team has no
-  written test cases, or when test results need recording and their defects logging.
+  written test cases, when test results need recording and their defects logging, or when a
+  cases file needs a second person's review before approval.
   Triggers on: "test plan", "test case", "QA", "kiểm thử", "viết test case", "regression",
   "test results", "log the failed cases as bugs", "retest", "ghi kết quả test", "log bug",
-  "テスト計画", "テストケース", "テスト結果", "不具合報告", "再テスト", "how do we test this",
-  "QA handoff", "/atk:qa".
-argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--plan|--cases|--regression|--update|--run|--bug|--retest] [--lang <code>] [--out <path>]"
+  "review these test cases", "review test case", "duyệt test case", "テスト計画", "テストケース",
+  "テスト結果", "不具合報告", "再テスト", "テストケースレビュー", "how do we test this", "QA handoff",
+  "/atk:qa".
+argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--plan|--cases|--regression|--update|--run|--bug|--retest|--review] [--lang <code>] [--out <path>]"
 ---
 
 # QA Planning and Test Cases (`atk:qa`)
@@ -35,7 +37,8 @@ signing off a release (`atk:release`).
 
 QA owns the plan and the cases. BrSE/BA confirms cases match the requirement intent. Dev owns the
 handoff and the test data. PM owns the exit criteria. The QA who ran the cases owns the run record
-and its results, the QA lead approves it, or the Tech Lead where there is none. See
+and its results, the QA lead approves it, or the Tech Lead where there is none. Under `--review` the
+reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 `shared/team-roles.md`.
 
 ## Invocation
@@ -49,6 +52,7 @@ and its results, the QA lead approves it, or the Tech Lead where there is none. 
 /atk:qa --run <cases-path>      # Record the results of a test run the team executed
 /atk:qa --bug <run-path>        # Raise the defects of a run record on the tracker
 /atk:qa --retest <issue>        # Record a retest of a fixed bug and offer the verdict
+/atk:qa --review <cases-path>   # A second person reviews a cases file somebody else wrote
 /atk:qa --lang vi               # Write the artifacts in Vietnamese
 /atk:qa --out <path>            # Override the default output path
 ```
@@ -65,7 +69,8 @@ Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared
 the cases file's Sources table recorded at the last run, and adds, rewrites, or strikes rows
 accordingly, keeping every ID, rather than writing the file again. `--run`, `--bug` and `--retest` replace them
 with `references/test-run.md`: recording what the team's own execution found, raising its defects,
-and confirming a fix. The override is read either way.
+and confirming a fix. `--review` replaces them with `references/review-mode.md`, which reads a cases
+file against its sources and reports findings without editing it. The override is read either way.
 
 ### 1. Read the acceptance criteria
 
@@ -145,7 +150,8 @@ Test plan at `docs/qa/test-plan-<slug>.md` and cases at `docs/qa/test-cases-<slu
 when the person asks for one, when the override asks for one, or when one already exists; an existing
 CSV is regenerated in the same run that changes the Markdown, and never edited by hand. A run or a
 retest writes a record at `docs/records/test-runs/<ticket-or-date>-<slug>.md`, whose content is never
-edited once written, apart from its `status` and the `Ticket` cells `--bug` fills.
+edited once written, apart from its `status` and the `Ticket` cells `--bug` fills. A review writes only
+its report, at `docs/derived/reviews/qa-<slug>-<date>.md`.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
@@ -177,3 +183,4 @@ who raised the bug closes it, or whoever the team's own flow names. The whole pr
       an approved file had its existing rows changed only through an answered question, and the run
       summary lists every row the diff touches.
 - [ ] Under `--run`, `--bug` and `--retest`, the definition of done in `references/test-run.md` holds.
+- [ ] Under `--review`, the definition of done in `references/review-mode.md` holds.

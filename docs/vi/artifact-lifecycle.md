@@ -74,15 +74,17 @@ khắc phục; người bàn giao đã đi sáu tháng trước và file bàn gi
 **Dẫn xuất.** Không mất gì. Bản ghi triển khai và bản ghi chuyển giao đều là bản sao của thứ nằm
 trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi lên repo của kit, bản tóm tắt của
 `atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại `atk:review`, hoặc
-`atk:plan --review` nếu thứ được soát là một bản kế hoạch; còn báo cáo lỗi thiết lập thì chạy lại
-`atk:onboard` trên kho mã ở trạng thái lúc đó. Hai lượt review ấy, khi chạy mà không kèm
-`--comment` của chúng, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
-bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có ba skill đọc một
-trong sáu loại, và cả ba đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
+`atk:plan --review` nếu thứ được soát là một bản kế hoạch, hoặc `atk:qa --review` nếu đó là một file
+test case; còn báo cáo lỗi thiết lập thì chạy lại
+`atk:onboard` trên kho mã ở trạng thái lúc đó. Các lượt review ấy, khi chạy mà không kèm
+`--comment`, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
+bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có bốn skill đọc một
+trong sáu loại, và cả bốn đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
 đọc báo cáo đang nằm sẵn ở đó để giữ lại mã định danh của các phát hiện, và khi không có báo cáo nào
 thì đánh số lại từ 1 và nói rõ điều đó; `atk:plan --review` đọc báo cáo đang có của cùng bản kế
 hoạch, cũng để giữ mã định danh, và để phân biệt một kết quả tác giả đã thấy mà không sửa với một
-kết quả vừa mới sinh ra sau một tuần commit; còn `atk:convention` đọc mục `Convention gaps` của báo
+kết quả vừa mới sinh ra sau một tuần commit; `atk:qa --review` đọc báo cáo mới nhất của cùng file test
+case, cũng để giữ mã định danh; còn `atk:convention` đọc mục `Convention gaps` của báo
 cáo, đó là đường đi để một luật mà lượt review muốn có tới được tài liệu ghi luật. Xóa báo cáo ấy làm lượt
 review sau mất một bộ mã định danh và mất những khoảng trống quy ước đáng lẽ được mang sang, chứ
 không đứt mắt xích nào.

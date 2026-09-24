@@ -386,7 +386,8 @@ người duyệt. Cờ `--out` đổi chỗ file, cờ `--comment` đăng phát 
 
 **Không dùng khi.** Bạn muốn code được sửa chứ không phải được review, muốn chất vấn chính bản yêu
 cầu (`atk:intake`), hoặc thứ cần đọc là một bản kế hoạch chứ không phải một thay đổi, khi đó dùng
-`atk:plan --review`: kế hoạch được đối chiếu với kho mã mà nó giả định, không phải với một diff.
+`atk:plan --review`: kế hoạch được đối chiếu với kho mã mà nó giả định, không phải với một diff. Một
+file test case thì dùng `atk:qa --review`, đối chiếu các case với nguồn của chúng.
 
 **Thói quen tạo ra khác biệt.** Nó xuất phát từ việc thay đổi này lẽ ra phải làm gì, chứ không xuất
 phát từ diff, và nó tách lỗi chặn merge khỏi ý kiến sở thích, đó là thứ khiến một lần review được
@@ -456,6 +457,11 @@ cho mỗi case thất bại, viết sao cho `atk:fix` bắt đầu được từ
 lỗi người dùng chọn, còn `--retest <issue>` ghi lại một lần chạy hẹp gồm case đã sửa và các case mà bản
 sửa chạm tới, rồi đề nghị đăng kết luận thành comment trên issue. Skill không bao giờ tự đánh kết quả, và
 không bao giờ đóng issue.
+
+`--review <cases-path>` là lượt đọc của người thứ hai trước khi file test case được duyệt: BrSE/BA hoặc
+QA lead kiểm cấu trúc, phân loại, truy vết, việc đi qua mười chiều, nguồn, kỹ thuật, độ phủ checklist, độ rõ, giả định, mức ưu
+tiên và dữ liệu test, và nhận các phát hiện ở mức `BLOCKING`, `SHOULD FIX` hoặc `NIT` trong một report ở
+`docs/derived/reviews/`. Skill không sửa gì, nên người viết tự sửa và người duyệt quyết định.
 
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.

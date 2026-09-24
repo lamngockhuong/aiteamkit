@@ -24,10 +24,9 @@ review rounds the change is worth and whether they run in agents of their own, f
 and regression risks, checking test coverage of the changed behavior, and writing review comments
 that a person can act on.
 
-Does NOT handle: approving or merging, which is a human act; rewriting the code, which the author
-does with `atk:implement` or `atk:fix`; deciding whether the requirement itself is right
-(`atk:intake`); or reviewing a plan, which is `atk:plan --review`, because a plan is checked against
-the repository it assumes rather than against a diff.
+Does NOT handle: approving or merging, a human act; rewriting the code, which the author does with
+`atk:implement` or `atk:fix`; judging the requirement itself (`atk:intake`); or reviewing a plan or a
+cases file, which `atk:plan --review` and `atk:qa --review` do against what each one rests on.
 
 ## Roles
 
@@ -247,8 +246,8 @@ Read the report already at that path before writing, when one is there. A second
 target reuses the identifiers of the first, so an author asked to fix `B1` finds `B1` again;
 `references/report-format.md` holds what happens when a finding changes severity, and what to do
 when no earlier report exists. This report is the one derived artifact the kit reads rather than only
-writes, here and in step 1 of `atk:convention`, which takes its `Convention gaps` section;
-`shared/artifact-paths.md` records both readers.
+writes, here, in `atk:plan --review` and `atk:qa --review` for their own reports, and in step 1 of
+`atk:convention`, which takes its `Convention gaps` section; `shared/artifact-paths.md` records them.
 
 `--out <path>` moves the file. It no longer decides whether one is written.
 

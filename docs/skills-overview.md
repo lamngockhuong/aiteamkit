@@ -381,7 +381,8 @@ posts the findings as inline PR comments.
 
 **Do not use when.** You want the code fixed rather than reviewed, you want the requirement itself
 questioned (`atk:intake`), or what you want read is a plan rather than a change, which is
-`atk:plan --review`: a plan is checked against the repository it assumes, not against a diff.
+`atk:plan --review`: a plan is checked against the repository it assumes, not against a diff. A cases
+file is `atk:qa --review`, which checks the cases against their sources.
 
 **The habit that matters.** It starts from what the change was supposed to do, not from the diff,
 and it separates blocking defects from preferences, which is what makes a review feel fair. A
@@ -452,6 +453,12 @@ per failed case, written so `atk:fix` can start from it. `--bug` raises the defe
 as issues on the tracker, and `--retest <issue>` records a narrow run of the fixed case and the cases
 the fix touched, offering the verdict as a comment on the issue. The skill never marks a result
 itself, and never closes an issue.
+
+`--review <cases-path>` is the second person's read before a cases file is approved: the BrSE/BA or
+the QA lead checks structure, classification, traceability, the dimension walk, sources, technique, checklist coverage,
+clarity, assumptions, priority, and test data, and gets findings at `BLOCKING`, `SHOULD FIX`, or `NIT`
+in a report under `docs/derived/reviews/`. It edits nothing, so the author fixes and the approver
+decides.
 
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.

@@ -27,5 +27,8 @@
   { "query": "check the plan in this PR against what the repo actually has", "should_trigger": false },
   { "query": "soát lại các phase trong bản kế hoạch này", "should_trigger": false },
   { "query": "security review of this branch before the release", "should_trigger": false },
-  { "query": "kiểm tra bảo mật nhánh này trước khi phát hành", "should_trigger": false }
+  { "query": "kiểm tra bảo mật nhánh này trước khi phát hành", "should_trigger": false },
+  { "query": "review the test cases my colleague wrote for the export screen", "should_trigger": false },
+  { "query": "review giúp bộ test case này trước khi duyệt", "should_trigger": false },
+  { "query": "このテストケースをレビューして", "should_trigger": false }
 ]
