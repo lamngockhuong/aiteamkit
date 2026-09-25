@@ -147,9 +147,7 @@ every finding was taken:
 - `S6`, `N1`, `N2`, `N3`: roadmap counts, row order, lifecycle order, and the `DRAFT` state in the
   phase table.
 - `S8`: this record named the client project, its custom field, its ticket, and its own skill; they
-  are now described neutrally. `CLAUDE.md` gains "A record here names no client" and `CONV-010`, and
-  the one record on `main` that named the same project,
-  `docs/records/fixes/260921-skill-run-silences-git-and-init.md`, carries a recorded redaction.
+  are now described neutrally. `CLAUDE.md` gains "A record here names no client" and `CONV-010`.
 - `S7`: see section 6.
 
 The re-run in section 6 then reported sixteen places the definition left a run to guess. Nine were
