@@ -40,9 +40,12 @@ all, and that is the outcome the next section exists to prevent.
 The tracker a project uses and the tracker this run can read are two different facts. A run that
 treats them as one writes an artifact claiming the second while only the first is true.
 
-Before the first read that matters, spend one cheap call proving access: `gh auth status` for
-GitHub, the cheapest list or identity call the server offers for an MCP server, and for a REST
-integration the endpoint that names the current user. Once per run, and once per distinct tracker
+Before the first read that matters, spend one cheap call proving access to this project, not only a
+login: `gh repo view <owner>/<repo>` for GitHub, the cheapest read of this project's own board or key
+for an MCP server or a REST integration. `gh auth status`, or an endpoint that names the current
+user, proves only that some account is signed in. On a machine that holds several accounts, the
+signed-in one may not be the one that can see this repository, and the run would then report a
+tracker as reachable that it cannot read. Once per run, and once per distinct tracker
 the run will read, which in a project where a member tracks its own work is two.
 
 Three outcomes, and each has a sentence of its own:

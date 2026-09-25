@@ -174,7 +174,10 @@ The last two describe files that do not ship with the kit at all:
   where the directory sits when a project spans several repositories, the two sections it may carry,
   and the seven things an override may never remove. The seven
   exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
-  skill that skips part of an override says so in its artifact rather than silently.
+  skill that skips part of an override says so in its artifact rather than silently. An override
+  applies only once its approver has moved it to `APPROVED`; before that the skill runs as shipped
+  and says so, because a draft that changed every run would be a skill entering an approval state
+  on the team's behalf.
 
 The override mechanism is the one that reaches every skill in two halves, and the split is
 deliberate. Rule 7 of `shared/team-roles.md` holds the behaviour, stated once. Each `## Workflow`
