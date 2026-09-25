@@ -7,7 +7,8 @@ the same ticket, can be compared section by section instead of read from the top
 
 ## The file
 
-One file, at `docs/records/planning/estimate-<sprint-or-date>.md` per `shared/artifact-paths.md`:
+One file, at `docs/records/planning/estimate-<sprint-or-date>-<ticket>.md` per
+`shared/artifact-paths.md`:
 front matter, a title, at most one opening note, then nine numbered sections in the order below. A
 section with nothing in it is kept and says why it is empty: a missing heading reads as a section
 the run forgot.

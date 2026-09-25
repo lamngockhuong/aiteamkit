@@ -130,7 +130,7 @@ to `docs/adr/` as well.
 | `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
 | `intake` | `docs/records/requirements/<date>-<ticket>-<slug>.md` |
 | `catchup` | `docs/derived/catchup/<date>-<ticket>-<slug>.md` |
-| `estimate` | `docs/records/planning/estimate-<sprint-or-date>.md` |
+| `estimate` | `docs/records/planning/estimate-<sprint-or-date>-<ticket>.md`, with `-<ticket>` left out where the backlog has no ticket, so two epics estimated for one sprint get two names |
 | `design-doc` | `docs/records/design/<date>-<ticket>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`; under `--spike`, `docs/records/design/<date>-<ticket>-spike-<slug>.md` and no ADR |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |

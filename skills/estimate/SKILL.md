@@ -90,8 +90,9 @@ the artifact, and no item sized from those samples goes above `MEDIUM` confidenc
 
 ### 3. Size
 
-Default scale is Fibonacci `1, 2, 3, 5, 8, 13`. Anything at `13` or above must be split before it is
-committed. Each item records: size, basis, confidence (`HIGH`, `MEDIUM`, `LOW`), and the unknown
+Default scale is Fibonacci `1, 2, 3, 5, 8, 13`. `13` means too large to commit: an item above `8`
+points, 3 person-days, or 24 hours is split before it is committed, the same threshold the
+Definition of done checks. Each item records: size, basis, confidence (`HIGH`, `MEDIUM`, `LOW`), and the unknown
 that would move it. Judge complexity from the countable drivers in `references/complexity-drivers.md`,
 not from how hard the work feels; a rubric in the project's override replaces or extends them.
 
@@ -137,7 +138,7 @@ fixes.
 
 ## Output
 
-Written to `docs/records/planning/estimate-<sprint-or-date>.md` per `shared/artifact-paths.md`, in the
+Written to `docs/records/planning/estimate-<sprint-or-date>-<ticket>.md` per `shared/artifact-paths.md`, in the
 shape `references/estimate-template.md` fixes: front matter, then nine numbered sections in the same
 order on every run, so two estimates for two tickets can be read side by side.
 

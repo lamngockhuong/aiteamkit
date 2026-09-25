@@ -94,7 +94,8 @@ gì, trước khi file được ghi.
 
 **Sinh ra.** File `.atk/overrides/<skill>.md` trong dự án: điều team này muốn một skill làm khác đi,
 viết thành mục `## Before`, mục `## After`, hoặc cả hai, kèm tên vai trò sở hữu thứ skill đó sinh ra
-đứng ở dòng người duyệt. Với cờ `--feedback` thì thứ sinh ra là một bản ghi, đặt tại
+đứng ở dòng người duyệt. File chỉ có hiệu lực khi người duyệt đó chuyển nó sang `APPROVED`, trước
+đó thì chưa. Với cờ `--feedback` thì thứ sinh ra là một bản ghi, đặt tại
 `docs/derived/feedback/<skill>-<date>.md`, theo một bộ khung cố định: lần chạy nằm trong một bảng,
 các phát hiện được đếm và chia theo chỗ mỗi phát hiện thuộc về, mỗi phát hiện một dòng mang mức
 nghiêm trọng và dòng định nghĩa nó dẫn ra, một mục riêng cho từng phát hiện, và số bước của skill đã

@@ -170,7 +170,9 @@ Hai file cuối mô tả những file không đi kèm kit:
   chỗ thư mục này nằm khi dự án trải trên nhiều repository, hai mục mà file đó được phép mang, và
   bảy thứ phần ghi đè không bao giờ được gỡ. Bảy điều loại trừ
   là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
-  qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng.
+  qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng. File ghi đè chỉ có hiệu
+  lực khi người duyệt đã chuyển nó sang `APPROVED`; trước đó skill chạy như bản gốc và ghi rõ điều
+  này, vì một bản nháp mà thay đổi được mọi lần chạy thì chẳng khác gì skill tự duyệt thay cho team.
 
 Cơ chế ghi đè là cơ chế duy nhất chạm tới mọi skill bằng hai nửa, và việc tách đôi là cố ý. Nguyên
 tắc 7 của `shared/team-roles.md` giữ phần hành vi, viết đúng một lần. Mỗi mục `## Workflow` mang một

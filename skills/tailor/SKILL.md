@@ -151,7 +151,10 @@ machine, and no way to tell why two people got two different answers.
 ### 5. Read back
 
 Show the file, then three things: what it will change about the next run of that skill, what was
-refused in step 3 and why, and who must approve it before `status` leaves `IN REVIEW`.
+refused in step 3 and why, and who must approve it before `status` leaves `IN REVIEW`. Say too that
+until then the skill runs as shipped, per Only an approved override applies in
+`shared/project-overrides.md`, and for an update, that the earlier approved version stops applying
+as well, since the file has one status.
 
 ### `--audit`
 

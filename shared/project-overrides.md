@@ -114,6 +114,24 @@ Read the file once at the start of a run. Do not re-read it per step, and do not
 runs. Every skill reads its own override file; only the skills that need project facts also read
 `.atk/profile.md`, per the three groups in `shared/project-profile.md`.
 
+### Only an approved override applies
+
+An override changes what a skill does for the whole team, so it takes effect when its approver has
+approved it and not before: `status: APPROVED` in its front matter. A file that is `DRAFT`,
+`IN REVIEW`, or `SUPERSEDED`, or that carries no front matter at all, is read and not applied. The
+skill runs as shipped, and the artifact says so in one line, in the team's working language:
+
+> Did not apply `.atk/overrides/<skill>.md`: its status is `<status>`. It takes effect once
+> `<approver>` approves it.
+
+Never silently. A team that wrote an override and sees no effect needs to learn why from the
+artifact, not from a second run. On a solo project the author is also the approver and moves the
+status by hand, the same step every other artifact of the kit asks of them.
+
+The reason is the premise of the kit: a skill never enters an approval state itself, and an
+override applied before approval would be exactly that, one person's draft changing every run the
+team makes. Moving `status` is the approver's act, per rule 2 of `shared/team-roles.md`.
+
 Apply `## Before` as context for the first workflow step: it narrows scope, adds constraints, and
 names things to establish before starting. Apply `## After` once the last step has produced its
 result, before the artifact is written, so anything it adds lands in the artifact rather than in a

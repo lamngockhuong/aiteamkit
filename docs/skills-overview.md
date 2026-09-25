@@ -93,7 +93,8 @@ loud with what the profile there can and cannot be, before the file is written.
 
 **Produces.** `.atk/overrides/<skill>.md` in the project: what this team wants one skill to do
 differently, as a `## Before` section, an `## After` section, or both, with the role that owns the
-skill's output named as approver. Under `--feedback` it produces a record instead, at
+skill's output named as approver. It takes effect once that approver moves it to `APPROVED`, and
+not before. Under `--feedback` it produces a record instead, at
 `docs/derived/feedback/<skill>-<date>.md`, in a fixed shape: the run in a table, the findings counted
 and split by where each one lands, one row per finding carrying a severity and the line of the
 definition it cites, a section per finding, and which steps of the skill ran out of how many.
