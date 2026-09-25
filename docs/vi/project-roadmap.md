@@ -6,7 +6,7 @@
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
 | 2. Độ phủ skill | XONG | 23 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười bảy skill đã có, sáu skill còn lại chưa |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười tám skill đã có, năm skill còn lại chưa |
 | 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 23 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
@@ -38,14 +38,15 @@ thái của dự án chứ không từ một danh sách, nên một skill thêm 
 đã được kiểm tra và tìm thấy, với mọi phát hiện chưa sửa được để lại cho một người có tên chấp nhận.
 
 Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi ba lần: từ vựng vai trò, quy ước đường dẫn
-artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười một file còn lại là hợp đồng giữa
+artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười hai file còn lại là hợp đồng giữa
 những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa sáu skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
 cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng,
 `host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không,
 `git`, skill phải tìm ra template pull request, và `init`, skill đọc định danh của cả đội trong
-`CODEOWNERS`, `design-sources.md` nói `spec`, `intake` và `qa` đọc design Figma ra sao, `project-profile.md` mô tả
+`CODEOWNERS`, `design-sources.md` nói `spec`, `intake` và `qa` đọc design Figma ra sao, `feature-types.md` là
+cách phân loại tính năng duy nhất, `catchup` lấy câu hỏi từ đó còn `estimate` lấy mức rủi ro QA, `project-profile.md` mô tả
 `.atk/profile.md`, một file nằm trong dự án đích chứ không
 nằm trong kit, và `project-overrides.md` mô tả
 `.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ
@@ -53,13 +54,13 @@ nằm trong kit, và `project-overrides.md` mô tả
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Mười bảy skill đã có sẵn `references/`. Sáu skill còn lại thì chưa. Chỗ nào output là tài liệu bố
+Mười tám skill đã có sẵn `references/`. Năm skill còn lại thì chưa. Chỗ nào output là tài liệu bố
 cục cố định mà chưa reference nào giữ bố cục ấy, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |
 |-------|--------------------|
 | `intake` | Ngân hàng câu hỏi phỏng vấn. Template requirement đã xong: `skills/intake/references/requirement-template.md` |
-| `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang, và bảng tính capacity |
+| `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang. Template bảng ước lượng và các yếu tố độ phức tạp đã xong: `skills/estimate/references/estimate-template.md`, `skills/estimate/references/complexity-drivers.md` |
 | `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án. Chế độ spike và lượt phản biện theo vai trò đã xong: `skills/design-doc/references/spike.md`, `skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Schema bảng task và luật sở hữu file cho các làn song song |
 | `qa` | Schema bảng test case. Các chiều cho case âm và biên đã xong: `skills/qa/references/case-dimensions.md` |

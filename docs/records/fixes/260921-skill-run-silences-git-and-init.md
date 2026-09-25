@@ -17,7 +17,7 @@ why the two rows stay separate anyway.
 ## 1. Symptom as captured
 
 Two skill run reports, written against atk 0.0.3 installed at
-`~/.claude/plugins/cache/atk/atk/0.0.3`, on the project `framgia/persol-bd_laughtale`. Neither
+`~/.claude/plugins/cache/atk/atk/0.0.3`, on a client project. Neither
 reports a wrong output. Both report the same failure mode, in the reporter's own words:
 
 From `atk:init`, section 5:
@@ -127,7 +127,7 @@ Broken since each file was written, and each was written before the case existed
   never-detectable table, so the table could not have cited it.
 
 What made all five reachable on the same day is the same thing: the kit was run against a real
-project that is not this repository. `persol-bd_laughtale` has a `CODEOWNERS`, an agent instruction
+project that is not this repository. That project has a `CODEOWNERS`, an agent instruction
 file that states where the spec lives, an optional section in its pull request template, and a house
 rule about authorship markers. This repository has none of those, so its own runs never reached any
 of the five.
@@ -203,7 +203,7 @@ it.
 ## 7. Not verified
 
 - **That a fresh run of either skill now decides the same way.** The two reports came from runs
-  against `persol-bd_laughtale`, which this session did not re-run. What was verified is that the
+  against the client project, which this session did not re-run. What was verified is that the
   instruction each run had to guess at is now written down, not that a new run reads it as intended.
   Re-running `atk:init --audit` and `atk:git --pr` on that project is the check that would close
   this, and it belongs to whoever next works there.
@@ -255,3 +255,8 @@ they were corrected because this change made three of their sentences false.
   the interview whether every member belongs in it. `profile-template.md` answers that in a comment
   addressed to whoever fills the template rather than to whoever reads the result. One line, not
   taken here because it was not among the numbered findings.
+
+## Correction, 2026-09-25
+
+The client project this record was written against was named in three places. It is now "a client
+project", per "A record here names no client" in `CLAUDE.md`. Nothing else in the record changed.

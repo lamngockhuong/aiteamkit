@@ -127,7 +127,7 @@ flowchart TD
 | 0. Thiết lập | `atk:tailor` | TL, hoặc ai sở hữu thứ skill đó sinh ra | Vai sở hữu kết quả của skill được tùy biến | `IN REVIEW` sang `APPROVED` |
 | 1. Yêu cầu | `atk:intake` | BrSE/BA | Stakeholder, về phạm vi và tiêu chí | `IN REVIEW` sang `APPROVED` |
 | 1. Yêu cầu | `atk:catchup` | Người mới vào việc | Không ai; phần kiểm tra hiểu bài là tự chấm | `DRAFT` |
-| 2. Ước lượng | `atk:estimate` | Dev hoặc TL lo kích thước, PM soát năng lực | PM và Stakeholder cùng chốt | `IN REVIEW` sang `APPROVED` |
+| 2. Ước lượng | `atk:estimate` | Dev hoặc TL lo kích thước, PM soát năng lực | PM và Stakeholder cùng chốt | `DRAFT` khi còn thiếu số liệu capacity, rồi `IN REVIEW` sang `APPROVED` |
 | 3. Thiết kế | `atk:design-doc` | TL hoặc Dev | TL, người nắm quyết định kỹ thuật cuối | `IN REVIEW` sang `APPROVED` |
 | 3. Thiết kế | `atk:spec` | Dev, và BrSE/BA với loại `screen` | TL với loại `api` và `db`, BrSE/BA với loại `feature` và `screen` | `IN REVIEW` sang `APPROVED`, sau đó ghi đè tại chỗ mãi mãi |
 | 4. Chia việc | `atk:breakdown` | TL hoặc PM | Từng Dev nhận phần việc của mình | `IN REVIEW` sang `APPROVED` |

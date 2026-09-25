@@ -42,6 +42,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `shared/spec-docs.md` | Điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, nguyên tắc hình dạng tài liệu sẵn có của dự án thắng template của kit, sáu loại thay đổi buộc pull request phải mang theo tài liệu tham chiếu, trong đó có thành phần của một màn hình, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `spec`, `design-doc`, `implement`, `fix`, `verify` và `review` trích dẫn |
 | `shared/host-file-locations.md` | Cách nhận ra code host theo thứ tự riêng, các vị trí mà GitHub và GitLab đọc `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, cả hai cách viết hoa thường, và luật một file có mặt ở bất kỳ vị trí nào thì coi như đã có, kể cả vì sao một file rỗng ruột vẫn tính là chưa có. `convention` dùng để biết thiếu gì, `git` dùng để tìm template phải điền, `init` dùng để tìm `CODEOWNERS` đang giữ sẵn định danh host của cả đội |
 | `shared/design-sources.md` | Cách một skill đọc design Figma: tìm kết nối theo việc nó làm được, ba trạng thái của kết nối (chưa cài, chưa đăng nhập, sẵn sàng) và đường lùi về ảnh export, ba lượt đọc, bỏ qua layer ẩn, một đường dẫn chứa nhiều màn hình, node ID làm khóa ổn định, cách xử lý giá trị design không cho thấy, và bốn trường `design_source`, `design_node`, `design_read`, `design_fingerprint` mà một lần đọc ghi lại. `spec` trích dẫn cho kind `screen`, `intake` trích dẫn khi yêu cầu là một design, `qa` trích dẫn cho case `GUI` của màn hình chưa có spec màn hình |
+| `shared/feature-types.md` | Cách phân loại tính năng duy nhất của kit: chín loại, mỗi loại có các câu hỏi thêm cho bài kiểm tra mức hiểu và một mức rủi ro QA, mức `Low` cho tính năng không khớp loại nào, và quy tắc chỉ thêm một dòng khi điền đủ cả hai cột. `catchup` và `estimate` trích dẫn qua các reference của chúng |
 | `shared/tidy-pass.md` | Nội dung của bước dọn mã: ba lăng kính (tái dùng, sáng rõ, hiệu năng), phần được sửa, phần không bao giờ đụng, và những gì phải soi lại trong diff sau đó. `fix`, `implement` và `verify` trích dẫn thông qua `host-capabilities.md`, và đây là lý do kit không có skill `simplify` |
 
 ## Hook
@@ -67,8 +68,8 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười bảy skill có thêm `references/`;
-sáu skill còn lại thì chưa.
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười tám skill có thêm `references/`;
+năm skill còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
@@ -110,7 +111,9 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/tailor/references/feedback.md` | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, hai thứ nó không bao giờ được chứa, và chế độ này khác đi thế nào với skill không thuộc kit |
 | `skills/intake/references/requirement-template.md` | Bố cục cố định của một requirement: bảy mục đánh số, câu story, ID `AC N.M` mà các skill khác trích dẫn và vì sao không bao giờ đánh số lại, các cột của bảng câu hỏi mở và bảng vùng ảnh hưởng, và những gì giữ nguyên khi dùng `--lang` |
 | `skills/catchup/references/brief-template.md` | Một khung chung cho hai chế độ, phần khác nhau giữa epic và pull request được đánh dấu theo từng mục |
-| `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, bảng phân loại kiểu tính năng, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
+| `skills/catchup/references/understanding-check.md` | Bộ câu hỏi cố định, số câu hỏi theo loại tính năng mà một nhóm lấy từ `shared/feature-types.md`, và hai quy tắc quyết định phần tự kiểm có giá trị hay không |
+| `skills/estimate/references/estimate-template.md` | Khung cố định của bảng ước lượng: chín mục đánh số, bảng việc tương tự ghi layer, công nghệ và cách làm, được căn cứ của từng hạng mục trích theo ID, phần hiệu chỉnh mà một hệ số giờ trên điểm phải trình ra, cột so sánh dành cho mô hình chưa hiệu chỉnh, các tổng phải cộng khớp, và trạng thái `DRAFT` khi còn thiếu số liệu capacity |
+| `skills/estimate/references/complexity-drivers.md` | Kích thước được chấm dựa vào đâu: các yếu tố đếm được theo từng layer, vì sao công nghệ và chi phí kiểm chứng nặng ký hơn khi code do AI sinh ra, rủi ro QA theo loại tính năng, các yếu tố làm tăng chi phí hiểu spec, và nơi đặt bộ tiêu chí chấm riêng của dự án |
 | `skills/design-doc/references/spike.md` | Chế độ `--spike`: một câu hỏi phân định các phương án, giới hạn thời gian và ai đặt ra nó, điều gì sẽ được tính là câu trả lời, viết ra trước khi tìm hiểu, ba loại bằng chứng, vì sao prototype đứng ngoài thay đổi, và bản ghi spike |
 | `skills/design-doc/references/role-challenge.md` | Lượt `--challenge`: vai trò nào được giao một agent và câu hỏi mỗi vai trò mang theo, agent được đưa gì và không bao giờ được đưa gì, một phản biện phải nêu những gì, agent gọi kiểm tra và trả lời chúng ra sao, và mục `Pre-review objections` nói rõ đây không phải một lượt review |
 | `skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |

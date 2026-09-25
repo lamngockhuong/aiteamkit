@@ -73,7 +73,7 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Fourteen files hold what skills would otherwise repeat. The first three are cited by all 23:
+Fifteen files hold what skills would otherwise repeat. The first three are cited by all 23:
 
 - `shared/team-roles.md`: the role table and the eight rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -154,6 +154,10 @@ Nine are contracts between a named handful of skills rather than kit-wide rules:
   design, by `atk:intake`, which takes a design as the request, and by `atk:qa`, which reads the design
   for `GUI` cases only when the screen has no screen spec yet. It is the reason `shared/host-capabilities.md` now has a row for a connection to an
   outside service: the service may be named, a command of the plugin carrying it may not.
+- `shared/feature-types.md`: the one classification of features in the kit, each type carrying the
+  extra questions `atk:catchup` adds to an understanding check and the QA risk `atk:estimate` sizes
+  testing from. One table, because a feature classified one way for questions and another way for
+  effort is a payment flow to the developer and a plain form to whoever sizes its testing.
 
 The last two describe files that do not ship with the kit at all:
 

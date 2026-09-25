@@ -175,7 +175,7 @@ overflow list.
 rather than guess, which is the correct answer but not the one you wanted.
 
 **The habit that matters.** Every number carries the basis it came from, usually a comparable past
-item found in git history. A number without a basis cannot be argued with or learned from.
+item with the time actually spent on it, read from the tracker before the git history. A number without a basis cannot be argued with or learned from.
 
 ---
 

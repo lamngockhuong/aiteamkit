@@ -6,7 +6,7 @@
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
 | 2. Skill coverage | DONE | 23 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for seventeen, pending for the other six |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for eighteen, pending for the other five |
 | 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 23 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
@@ -38,7 +38,7 @@ the project rather than from a list, so a skill added later is one it already kn
 checked and found, with every unfixed finding left for a named person to accept.
 
 The `shared/` layer holds what would otherwise be repeated twenty-three times: the role vocabulary,
-the artifact path convention, and the tracker adapters, cited by every skill. Eleven more files are
+the artifact path convention, and the tracker adapters, cited by every skill. Twelve more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
 `diagram-conventions.md` between the six whose artifacts carry a diagram, `host-capabilities.md`
@@ -46,21 +46,22 @@ and `tidy-pass.md` around what the harness itself provides, `spec-docs.md` betwe
 five skills that have to leave its documents true, `host-file-locations.md` between `convention`,
 which asks whether a collaboration file is missing, `git`, which has to find the pull request
 template, and `init`, which reads the team's handles out of `CODEOWNERS`, `design-sources.md`,
-which says how `spec`, `intake` and `qa` read a Figma design, `project-profile.md`,
+which says how `spec`, `intake` and `qa` read a Figma design, `feature-types.md`, the one
+classification of features that `catchup` asks from and `estimate` sizes QA from, `project-profile.md`,
 which describes `.atk/profile.md`, a file that lives in the target project rather than in the kit,
 and `project-overrides.md`, which describes `.atk/overrides/<skill>.md` and reaches every skill
 through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Seventeen skills ship with `references/` already. The other six do not. Where the output is a
+Eighteen skills ship with `references/` already. The other five do not. Where the output is a
 document with a fixed shape and no reference holds that shape, the template is re-derived on every
 run:
 
 | Skill | Reference to add |
 |-------|------------------|
 | `intake` | An interview question bank. The requirement template is done: `skills/intake/references/requirement-template.md` |
-| `estimate` | The sizing scales with one worked example each, and the capacity worksheet |
+| `estimate` | The sizing scales with one worked example each. The sheet template and the complexity drivers are done: `skills/estimate/references/estimate-template.md`, `skills/estimate/references/complexity-drivers.md` |
 | `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode and the role challenge are done: `skills/design-doc/references/spike.md`, `skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
 | `qa` | Test case table schema. The negative and boundary dimensions are done: `skills/qa/references/case-dimensions.md` |

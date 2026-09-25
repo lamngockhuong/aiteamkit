@@ -177,7 +177,7 @@ kết sprint, và danh sách phần không nhét vừa.
 vì đoán, đó là câu trả lời đúng nhưng không phải câu bạn muốn nghe.
 
 **Thói quen tạo ra khác biệt.** Mỗi con số đều mang theo căn cứ của nó, thường là một hạng mục tương
-tự trong quá khứ tìm được từ lịch sử git. Con số không có căn cứ thì không tranh luận được và cũng
+tự trong quá khứ cùng thời gian thực tế đã bỏ ra, đọc trên tracker trước rồi mới đến lịch sử git. Con số không có căn cứ thì không tranh luận được và cũng
 không học được gì từ nó.
 
 ---

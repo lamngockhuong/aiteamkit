@@ -68,9 +68,9 @@ skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: seventeen of them carry
-one (`help`, `init`, `tailor`, `intake`, `catchup`, `design-doc`, `plan`, `implement`, `fix`,
-`verify`, `spec`, `review`, `qa`, `security`, `git`, `convention`, `onboard`), and the other six are
+neighbours it must not steal. `references/` is where they still differ: eighteen of them carry
+one (`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `convention`,
+`plan`, `implement`, `fix`, `review`, `qa`, `verify`, `security`, `git`, `onboard`), and the other five are
 still `SKILL.md` alone. `qa` holds the most, eight: its modes for updating cases, recording a run,
 and reviewing cases each keep their procedure in a file of their own, and its checklist is a list
 beside the file that governs it. Deepening a skill means adding `references/` files and pointing at
@@ -98,7 +98,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Fourteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Fifteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -118,6 +118,7 @@ skill discovery.
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
 | `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request), `qa` (`GUI` cases where no screen spec exists) |
+| `shared/feature-types.md` | The one classification of features: each type with the extra questions an understanding check adds and the QA risk an estimate reads, and the rule that a row is added with both filled | `catchup` (through `understanding-check.md`), `estimate` (through `complexity-drivers.md`) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -164,6 +165,11 @@ design is read is none of theirs to own: the rule that the connection is found b
 states, and replaced by exported images when it is not ready is what every skill that ever reads a
 design has to answer the same way. It leans on the connection row of `host-capabilities.md`, which
 lets a skill name the Figma connection and still forbids naming a command of the plugin carrying it.
+
+`feature-types.md` has two citers, `catchup` and `estimate`, each through a reference of its own. It
+exists because the two classify the same features, one to ask questions and one to size testing, and
+two tables would drift into a feature that is a payment flow in one and a plain form in the other.
+A new column for a third skill goes into the same table rather than into a table of its own.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
@@ -390,6 +396,26 @@ its Layers table, and the mirror check below excludes both paths.
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 
+## A record here names no client
+
+This repository is public, and the kit is tried on client projects before a change lands here. A
+fix report, a design record, or any file under `docs/records/` written from such a run, and the
+commit message and pull request body that carry it, describe the client work in neutral terms:
+"a client project", "the epic under review", "a custom actual-effort field on the tracker", "the
+project's own estimate skill". What they never carry is the client project or repository name,
+its tracker ticket numbers or URLs, the names of its custom fields, internal tools or skills, the
+names of people on its team, or figures and quoted text that together point at one project.
+
+Hours, counts, and the shape of a defect stay, because they are the evidence and identify nothing
+once the name is gone. The source record stays in the client project, and the record here cites it
+by its path inside that project and its date, which is enough for the person who has access to find
+it and tells nobody else where to look.
+
+A file already on `main` that breaks this is corrected in a new commit rather than by rewriting
+history, and the correction says so. There is no `grep` for this rule: a check would have to list the
+names it protects, which is the leak itself. It is read, by the author before the commit and by the
+reviewer after.
+
 ## Release flow (release-please, pre-1.0 mode)
 
 Versions are bumped automatically by release-please on push to `main`. Five files share the version,
@@ -441,6 +467,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | The five manifests and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
+| `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
