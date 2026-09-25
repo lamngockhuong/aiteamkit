@@ -70,8 +70,10 @@ invalidates it, and the log at 09:14 shows the read at the old value" is evidenc
 ### The ceiling: three hypotheses
 
 A hypothesis is stated before it is checked, and the check either turns it into evidence or rules it
-out. Three of them, counted across the whole run, and the count goes in the report whether or not it
-was reached. Past the third the investigation stops and hands over what it has.
+out. Three of them per defect, counted across the whole run, and the count goes in the report whether
+or not it was reached. Past the third the investigation of that defect stops and hands over what it
+has, and the other defects carry on. A defect is the failure as captured, not its description:
+restating it or splitting it into parts continues its count.
 
 It stops there because the fourth hypothesis is where the cost changes shape. The cheap places have
 been looked at, and what is usually left is a question about how the thing was meant to work, which

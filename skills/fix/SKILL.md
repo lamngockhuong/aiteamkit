@@ -84,7 +84,7 @@ Proof is one of exactly three things: a red test that reproduces it, a direct re
 output, or the responsible lines quoted together with a specific check that shows they do it. A
 cause with no evidence block is not a cause, it is the first hypothesis.
 
-The step has a ceiling of three hypotheses, counted across the whole run. Past the third the
+The step has a ceiling of three hypotheses per defect, counted across the whole run. Past the third the
 investigation stops and hands over the four things `references/investigate.md` lists under the
 ceiling, the last of which is the name of the person who has to look. "Needs further investigation"
 is not a handover: rule 1 in `shared/team-roles.md` applies here as everywhere, and an owner is a

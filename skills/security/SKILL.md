@@ -51,6 +51,7 @@ the record at release sign-off.
 ## Invocation
 
 ```bash
+/atk:security                                 # No argument: propose the unreleased range, then ask
 /atk:security <branch|range>                  # Review what a branch or a commit range changes
 /atk:security <paths>                         # Review given paths in the working tree
 /atk:security v1.3.0..HEAD                    # Review the scope of a release
@@ -78,6 +79,12 @@ under `--threat-model`, the entry points of the feature, found from the design, 
 documents under `docs/api/`, `docs/features/` and `docs/screens/`, and the code. Where the shape in
 `.atk/profile.md` names member repositories, a release scope is read once per member, per the same
 rule `atk:release` follows.
+
+With no argument, propose a scope rather than choose one: the unreleased range, from the last tag to
+`HEAD`, or the whole repository at `HEAD` when that range is empty or the repository has no tag. Put
+the proposal and why in one question, offering the other of the two and a set of paths as the
+alternatives, and continue once it is answered. The Scope section of the record says which was
+chosen and by whom.
 
 Then name what the scope protects, with `path:line` citations: the assets (credentials, personal
 data, money, anything an administrator alone may change), the actors who reach it (anonymous,
@@ -141,9 +148,11 @@ keeps with a person. Set `status: IN REVIEW` and name the approver.
 
 The security record at `docs/records/security/<ticket-or-date>-<slug>.md`, or
 `docs/records/security/<version>.md` for a release scope, per `shared/artifact-paths.md`. It is a
-record of what was checked on one day against one version of the code, and it is not edited
-afterwards: a later review of the same scope writes a new one, and the earlier record takes
-`status: SUPERSEDED` with a link forward, per `shared/artifact-paths.md`.
+record of what was checked on one day against one version of the code. It may be corrected until it
+is committed, per Before writing in `shared/artifact-paths.md`, and a finding fixed in that window
+changes the residual risk table as Residual risk in `references/record-template.md` says. From the
+commit on it is not edited: a later review of the same scope writes a new one, and the earlier record
+takes `status: SUPERSEDED` with a link forward, per `shared/artifact-paths.md`.
 
 Under `--threat-model`, the threat model at `docs/security/threat-model-<slug>.md`, named after the
 feature. It describes the feature's threats as the code stands, so it is updated in place when the

@@ -25,7 +25,7 @@ at; anything else is flattened to a hyphen. A defect retested without an issue i
 time and its ID, `retest-260924-1030-D2`. No `#` or `/` ever reaches a file name, since `#` is what
 `--retest` uses to name a defect and what a Markdown link reads as a fragment.
 
-It is committed, and its content is never edited once written, with three exceptions, none of which
+It is committed, and its content is never edited once committed, with three exceptions, none of which
 changes what the run found: its `status` moves, by its approver; `--bug` fills the `Ticket` cell of
 each defect it raises, or marks it not raised; and a secret or personal data found in it later is
 redacted, per The data a record must not carry, with a line at the end saying what was redacted, when,
@@ -320,6 +320,6 @@ and the defect's ID, `docs/records/test-runs/<file>.md#D2`.
       a redaction, and every `N/A` carries its reason.
 - [ ] Nothing was created on the tracker and nothing was commented without the list or the text shown
       first, the tracker's visibility named, and a yes; no security defect went to a public tracker.
-- [ ] No run record's content was edited after it was written, beyond its `status`, the `Ticket` cells
+- [ ] No run record's content was edited after it was committed, beyond its `status`, the `Ticket` cells
       `--bug` set, and a redaction recorded as such; a retest is a record of its own.
 - [ ] No severity, actual result, or frequency was filled in by the skill.

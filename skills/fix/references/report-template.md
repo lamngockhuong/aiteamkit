@@ -16,7 +16,7 @@ owner: <the person who made the fix>
 approver: <the reviewer, or "TBD (ask <person>)">
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-ticket: <bug URL or id; for a defect of an atk:qa run record that has no issue, <run record path>#D<n>; or none>
+ticket: <bug URL or id; for a defect or finding with no issue, <record path>#<ID>; or none>
 ---
 ```
 
@@ -25,6 +25,21 @@ section of `.atk/profile.md` or asked for; when neither gives one, `TBD` naming 
 reviewer, per `shared/team-roles.md`. Under `--investigate-only` the status is `DRAFT`, because
 there is nothing to approve yet. A run the hypothesis ceiling stopped is `DRAFT` too: the work is
 not finished, and a reader who sees `IN REVIEW` will assume it is.
+
+The `<record path>#<ID>` form, several references, and a record that is not committed follow Front
+matter in `shared/artifact-paths.md`.
+
+## Several defects in one run
+
+When the argument names more than one defect, they share one report, which becomes one pull request
+body. Each defect gets an ID the report uses throughout, taken from its source where it has one, such
+as `SF1` or `D2`, and sections 1 to 4b and section 8 are written once per defect, as a block headed by
+that ID, so each cause is read against its own evidence. Sections 5 to 7 and 9 are shared, with every
+line naming the defect it concerns. `ticket` lists each reference. The hypothesis
+count is per defect, and a defect the ceiling stopped keeps its block with what ruled its hypotheses
+out.
+`status` is `DRAFT` only when every defect was stopped; otherwise it is `IN REVIEW`, and the title
+names the stopped defect so no reader takes the report for complete.
 
 ## 1. Symptom as captured
 

@@ -183,7 +183,9 @@ exists to stop. Tick only what this run verified, leave the rest and say which, 
 before the pull request is opened.
 
 Reviewers come from the Team section of `.atk/profile.md`. Never assign a person the team has not
-named, and never request a review from whoever touched the file last.
+named, and never request a review from whoever touched the file last. If the Team section names only
+the author, request no review and say so in the pull request; that person still approves by hand,
+per rule 2 of `shared/team-roles.md`.
 
 Then the ticket, per `shared/ticket-adapters.md`: show the comment, post it on a yes, link both
 ways, and move the ticket to the team's "in review" state. Never to done. With no ticket behind the
