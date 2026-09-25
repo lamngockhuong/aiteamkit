@@ -165,7 +165,7 @@ Test plan at `docs/qa/test-plan-<slug>.md` and cases at `docs/qa/test-cases-<slu
 when the person asks for one, when the override asks for one, or when one already exists; an existing
 CSV is regenerated in the same run that changes the Markdown, and never edited by hand. A run or a
 retest writes a new record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never
-over an existing one, whose content is never edited once written apart from the three changes
+over an existing one, whose content is never edited once committed apart from the three changes
 `references/test-run.md` allows: its `status`, the `Ticket` cells `--bug` sets, and a recorded
 redaction. A review writes only
 its report, at `docs/derived/reviews/qa-cases-<slug>-<date>.md`.

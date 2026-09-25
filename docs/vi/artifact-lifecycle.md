@@ -50,8 +50,8 @@ thôi tự động định tuyến.
 
 ## Một bản ghi nêu tên một lỗ hổng còn mở
 
-Bản ghi bảo mật do `atk:security` viết là một bản ghi như mọi bản ghi khác, được commit và không bao
-giờ sửa, với một khác biệt: chừng nào các phát hiện trong đó chưa được sửa, nó chỉ cho bất kỳ ai đọc
+Bản ghi bảo mật do `atk:security` viết là một bản ghi như mọi bản ghi khác, không bao giờ sửa sau khi
+đã commit, với một khác biệt: chừng nào các phát hiện trong đó chưa được sửa, nó chỉ cho bất kỳ ai đọc
 thấy hệ thống yếu ở đâu. Hãy commit nó ở nơi những người được phép biết đọc được và không ai khác đọc
 được. Trong một repository mà khách hàng hoặc công chúng đọc được, điều đó có thể nghĩa là một
 repository riêng tư hoặc tracker riêng tư của đội, và skill hỏi người duyệt trước khi commit chứ không

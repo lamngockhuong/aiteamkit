@@ -139,7 +139,7 @@ to `docs/adr/` as well.
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
-| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes afterwards only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
+| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes once committed only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
 | `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
 | `security` | `docs/records/security/<ticket-or-date>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
@@ -324,6 +324,12 @@ When the contract comes before the code in `shared/spec-docs.md`. A `screen` doc
 `implemented` under either `Contract` line, per The `screen` kind in that file, and the four
 `design_*` fields of What a read records in `shared/design-sources.md`.
 
+A finding or a defect with no issue of its own is referenced by the record that holds it and its ID,
+`<record path>#<ID>`: `#D2` of an `atk:qa` run record, `#SF1` of an `atk:security` record. Several
+references are separated by commas. A record that is not committed has no path a reader can follow,
+so `ticket` is `none` and the body names the ID and the record's date instead: a path to an
+uncommitted file breaks for everyone but its author.
+
 ## Before writing
 
 Read the file if it already exists and update it in place. Do not overwrite an `APPROVED` artifact:
@@ -334,6 +340,14 @@ existing file: an existing path means a second file, not an edit. Where a skill 
 it may make to one of its own records after writing it, a pointer or a redaction such as the `Ticket`
 cell and the redaction of a run record, that change is the only one, and it is allowed at `APPROVED`
 too, because it changes nothing the record found.
+
+Until a record is committed it may still be corrected, and each correction is named in the session:
+a citation that proves wrong, a path, a count. A correction fixes what the record got wrong about its
+own evidence and never rewrites what it found; something that happened after it was written, a
+finding fixed in the same session, is added beside what it found, in the place its skill names. From
+the commit on, every rule above holds, and "once written" in a skill's own file means once committed.
+A later run of the same skill over the same subject still writes a new file rather than correcting
+an earlier one, whether or not that one was committed.
 
 The no-overwrite rule is about records. A reference document is updated in place by design, and
 superseding one would leave the project holding two files that both claim to describe the same live

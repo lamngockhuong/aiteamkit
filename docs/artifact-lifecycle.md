@@ -50,7 +50,7 @@ no `CODEOWNERS` means reviews stop routing themselves.
 
 ## A record that names an open vulnerability
 
-A security record written by `atk:security` is a record like any other, committed and never edited,
+A security record written by `atk:security` is a record like any other, never edited once committed,
 with one difference: until its findings are fixed, it tells whoever reads it where the system is
 weak. Commit it where the people allowed to know can read it and nobody else can. In a repository the
 client or the public can read, that may mean a private repository or the team's private tracker
