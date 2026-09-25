@@ -33,7 +33,7 @@ flowchart TB
 | Group | What is in it | Commit | Change it later | Delete it later |
 |-------|---------------|--------|-----------------|-----------------|
 | Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
-| Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead | Only as a decision somebody owns, never as a blanket rule |
+| Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead. A test run record takes its `status`, its `Ticket` cells, and a recorded redaction, and nothing else | Only as a decision somebody owns, never as a blanket rule |
 | Derived | everything under `docs/derived/` | Optional | Run the skill again | Yes, freely |
 
 ## The three files that are not in any group
@@ -74,15 +74,17 @@ that survived them.
 **Derived.** Nothing. The implementation record and the shipping record are copies of what lives on
 the pull request, a feedback record is a copy of what was filed on the kit repository, a catchup
 brief is rebuilt by running `atk:catchup` again, a review report by running `atk:review` again, or
-`atk:plan --review` where what was reviewed was a plan, and a setup-defect report by running
-`atk:onboard` again against the repository as it stands then. Either of those review runs, made
-without its `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
-only written copy: a reason to keep the directory, not a reason to fear deleting it. Three skills
-read one of the six, and all three read the review report: a second `atk:review` over the same target
+`atk:plan --review` where what was reviewed was a plan, or `atk:qa --review` where it was a cases
+file, and a setup-defect report by running
+`atk:onboard` again against the repository as it stands then. Any of those review runs, made
+without a `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
+only written copy: a reason to keep the directory, not a reason to fear deleting it. Four skills
+read one of the six, and all four read the review report: a second `atk:review` over the same target
 reads the one already there, to carry its finding identifiers forward, and numbers from 1 and says so
 when there is none; `atk:plan --review` reads the one already there for the same plan, for the same
 identifiers and to tell a result the author has already declined from one a week of commits has just
-created; and `atk:convention` reads its `Convention gaps` section, which is how a rule the review
+created; `atk:qa --review` reads the newest one for the same cases file, for the same identifiers;
+and `atk:convention` reads its `Convention gaps` section, which is how a rule the review
 wanted reaches the file that records it. Deleting that report costs the next review a set of
 identifiers and the gaps it would have carried across, not a step in the chain.
 

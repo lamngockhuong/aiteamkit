@@ -73,7 +73,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:implement` | The code, written to the project's own conventions and reference modules, verified layer by layer with the project's own commands, and put through review before handover. |
 | `atk:fix` | The failure captured verbatim, the cause proven before a line changes, a stop after three ruled-out hypotheses rather than a guess, the smallest change that removes it, and a report of what was checked and what was not. |
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences, written to a report and summarised in the session. |
-| `atk:qa` | A test plan, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria. |
+| `atk:qa` | A test plan, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria; afterwards the record of a test run, its defects raised as bugs, and the retest of a fix. |
 | `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |
 | `atk:security` | A security record a Tech Lead can sign and a client can read: assets and trust boundaries, the project's own scanners run, threats walked per boundary, every finding traced from entry point to impact, a client or company checklist answered item by item, and residual risk left for a named person to accept. Also the threat model of a feature, kept current. |
 | `atk:git` | Finished work carried into the repository: the diff read before anything is staged, a scan that stops on a credential, commits that revert one at a time, and push, pull request and merge each behind a yes given for that action. |
@@ -102,7 +102,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
 /atk:fix <issue|report|description>       # --layer --investigate-only --out
 /atk:review <pr|branch|paths>             # --against --comment --strict --parallel --out
-/atk:qa <requirement|feature>             # --plan|--cases|--regression --lang --out
+/atk:qa <requirement|feature|cases|run|issue> # --plan|--cases|--regression|--update|--run|--bug|--retest|--review --lang --out
 /atk:verify <module|paths|ticket>         # --ui --report-only --out
 /atk:security <branch|range|paths>        # --threat-model --checklist --lang --out
 /atk:git                                  # --commit|--pr|--merge|--rebase|--resolve|--stack --lang --out

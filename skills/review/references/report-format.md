@@ -1,6 +1,9 @@
 # Review report format
 
-Loaded by `atk:review` at step 6, when the ranked list becomes a file. It holds the **shape** of that
+Loaded by `atk:review` at step 6, when the ranked list becomes a file. `atk:qa --review` follows
+three of its rules for its own report, the empty-section `None.`, the English severity names and
+prefixes, and no score, plus how identifiers carry from one review to the next; a change to any of
+those changes that report too. It holds the **shape** of that
 file. What has to be in it is settled elsewhere and not repeated here: step 6 of `SKILL.md` for what
 a comment carries, `references/review-rounds.md` under *What the report adds* for the band, the
 rounds and the `[k/N]` tags, and `shared/artifact-paths.md` for the path and the front matter block.
@@ -90,9 +93,10 @@ blocking section look identical otherwise, and the reader who most needs to tell
 approver.
 
 **Language.** The headings and the labels are written in the team's working language, per rule 6 of
-`shared/team-roles.md`. Three things stay in English whatever that language is, because something
-else matches on them: the severity names `BLOCKING`, `SHOULD FIX` and `NIT`; the `B` / `S` / `N`
-prefixes on the identifiers; and the order of the sections. A comment posted under `--comment` and a
+`shared/team-roles.md`. What something else matches on stays as spelled here whatever that language
+is, per the same rule: the severity names `BLOCKING`, `SHOULD FIX` and `NIT`; the `B` / `S` / `N`
+prefixes on the identifiers; the order of the sections; and the `Convention gaps` heading, which
+`atk:convention` looks up. A comment posted under `--comment` and a
 later review of the same target both find a finding by its identifier, so the identifier cannot be
 translated.
 

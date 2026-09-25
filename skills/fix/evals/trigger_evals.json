@@ -21,5 +21,7 @@
   { "query": "write test cases for the login screen", "should_trigger": false },
   { "query": "our code style is inconsistent, write down the conventions", "should_trigger": false },
   { "query": "estimate how long the payment integration will take", "should_trigger": false },
-  { "query": "summarize this epic for me before I start", "should_trigger": false }
+  { "query": "summarize this epic for me before I start", "should_trigger": false },
+  { "query": "log the failed cases from the test run as bugs", "should_trigger": false },
+  { "query": "retest the bug, the fix is on staging", "should_trigger": false }
 ]

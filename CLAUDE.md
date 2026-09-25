@@ -71,14 +71,16 @@ Every skill carries `evals/trigger_evals.json`, so a description edit can be tes
 neighbours it must not steal. `references/` is where they still differ: seventeen of them carry
 one (`help`, `init`, `tailor`, `intake`, `catchup`, `design-doc`, `plan`, `implement`, `fix`,
 `verify`, `spec`, `review`, `qa`, `security`, `git`, `convention`, `onboard`), and the other six are
-still `SKILL.md` alone. `git` holds the most, six, because the closing sequence has more cases than
-its workflow line names. Deepening a skill means adding `references/` files and pointing at them
-from the relevant workflow step, not growing `SKILL.md` past 300 lines.
+still `SKILL.md` alone. `qa` holds the most, eight: its modes for updating cases, recording a run,
+and reviewing cases each keep their procedure in a file of their own, and its checklist is a list
+beside the file that governs it. Deepening a skill means adding `references/` files and pointing at
+them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
 
 A reference is Markdown, with one exception: a list that grows one record at a time, whose fields a
 check can count. `convention` keeps its standard sources in `references/standard-sources.tsv` for
 that reason, and `references/standard-sources.md` beside it says what each field means and what a
-run may do with a line. The rules stay in Markdown; only the records move. Tabs rather than commas,
+run may do with a line. `qa` does the same with its component checklist, `references/checklists.tsv`
+beside `references/checklists.md`. The rules stay in Markdown; only the records move. Tabs rather than commas,
 because a free-text field routinely holds a comma and a quote forgotten by hand shifts every field
 after it.
 
@@ -108,14 +110,14 @@ skill discovery.
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the route that carries a convention gap from the review report back to `convention`, the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement`, `git`, `plan` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, where the project root is and how a skill finds it, the four shapes a project can have and what each costs, which skills stop, degrade, or ignore the file when it is missing, and that the `Contract` line in Docs changes behaviour rather than a path | the skills that need project facts |
 | `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, where it sits relative to the project root and why the hook can miss it in a member repository, the two sections it may hold, and the seven things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
-| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `tailor` |
+| `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `plan`, `tailor`, `qa` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not, plus the gate rule: which CI job judges a layer, and what a local command weaker than it leaves unverified | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `security`, `incident` |
 | `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, what counts as one turn of an interview, and when a connection to an outside service may be named | `fix`, `implement`, `verify`, `review`, `design-doc`, `init`, `design-sources.md` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, what one is when the profile says `Contract: first` and the `implemented` field that says whether its code exists yet, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change including when the document lives in another repository, the `screen` kind with its always-present `implemented`, two-sided drift and split with `feature`, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review`, `qa`, `help` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
-| `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request) |
+| `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request), `qa` (`GUI` cases where no screen spec exists) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -129,8 +131,10 @@ having recorded no conventions. `implement` reads the file for that and for the 
 which it falls back to when the project really has recorded none. `finalize-steps.md` is cited by the three skills
 that change code, and holds the rule that nothing leaves the local repository without being asked
 for. `verify` is one of them because the fixes it makes between retry rounds are code like any other.
-`tailor` is the one citer that changes no code: it cites the consent line alone, because a
-`--feedback` record is sent to a repository the team does not own.
+`plan`, `tailor` and `qa` are the citers that change no code, and cite the consent line alone: `plan`
+because it offers its index as a ticket comment, `tailor` because a `--feedback` record is sent to a
+repository the team does not own, `qa` because `--bug` creates issues and `--retest` and `--review`
+comment on them.
 
 `layer-verification.md` is a contract between the same three: each runs a check and then has to say
 what the result means, and the answer to that second half has to be the same in all three. Each keeps
@@ -155,8 +159,8 @@ to the rule. The drift-versus-open-question line lives there for the same reason
 format in `review-checklist.md`: two skills have to answer it the same way, so neither of them owns
 it.
 
-`design-sources.md` has two citers, `spec` and `intake`, and sits in `shared/` because how a design
-is read is neither one's to own: the rule that the connection is found by what it can do, told apart in three
+`design-sources.md` has three citers, `spec`, `intake` and `qa`, and sits in `shared/` because how a
+design is read is none of theirs to own: the rule that the connection is found by what it can do, told apart in three
 states, and replaced by exported images when it is not ready is what every skill that ever reads a
 design has to answer the same way. It leans on the connection row of `host-capabilities.md`, which
 lets a skill name the Figma connection and still forbids naming a command of the plugin carrying it.
@@ -435,7 +439,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
-| `CONV-008` | The five manifests and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
+| `CONV-008` | The five manifests and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
@@ -547,18 +551,28 @@ for f in skills/*/evals/trigger_evals.json; do
 done; echo "OK evals"
 
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
-# holds a date or nothing
+# holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs
+# unique and shaped `<component>-NN`, its dimension a number from 1 to 10, and its technique a code
+# that skills/qa/references/checklists.md defines
 python3 -c "
 import csv, glob, re
 for f in glob.glob('skills/*/references/*.tsv'):
     rows = list(csv.reader(open(f, newline=''), delimiter='\t', quoting=csv.QUOTE_NONE))
     head, body = rows[0], rows[1:]
     assert body, f + ': no records'
+    seen = set()
     for n, r in enumerate(body, 2):
         assert len(r) == len(head), '%s:%d: %d fields, header has %d' % (f, n, len(r), len(head))
         if 'checked' in head:
             v = r[head.index('checked')]
             assert v == '' or re.fullmatch(r'\d{4}-\d{2}-\d{2}', v), '%s:%d: checked is %r' % (f, n, v)
+        if 'technique' in head:
+            i, c = r[head.index('id')], r[head.index('component')]
+            assert re.fullmatch(re.escape(c) + r'-\d{2}', i), '%s:%d: id %r does not match %r' % (f, n, i, c)
+            assert i not in seen, '%s:%d: id %r used twice' % (f, n, i)
+            seen.add(i)
+            assert r[head.index('dimension')] in [str(d) for d in range(1, 11)], '%s:%d: dimension' % (f, n)
+            assert r[head.index('technique')] in ('', 'EP', 'BVA', 'DT', 'ST', 'PW', 'EG'), '%s:%d: technique' % (f, n)
     print('OK %s, %d records' % (f, len(body)))"
 
 # Version agreement across the 6 version-bearing files

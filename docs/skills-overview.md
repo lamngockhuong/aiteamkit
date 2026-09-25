@@ -381,7 +381,8 @@ posts the findings as inline PR comments.
 
 **Do not use when.** You want the code fixed rather than reviewed, you want the requirement itself
 questioned (`atk:intake`), or what you want read is a plan rather than a change, which is
-`atk:plan --review`: a plan is checked against the repository it assumes, not against a diff.
+`atk:plan --review`: a plan is checked against the repository it assumes, not against a diff. A cases
+file is `atk:qa --review`, which checks the cases against their sources.
 
 **The habit that matters.** It starts from what the change was supposed to do, not from the diff,
 and it separates blocking defects from preferences, which is what makes a review feel fair. A
@@ -427,7 +428,40 @@ what the change alters and from the reference documents for what it leaves alone
 
 Negative and boundary cases come from walking each criterion through ten dimensions, actor, input,
 quantity, state, timing, failure, environment, data, integration, and rules, and a dimension that
-gives no case is skipped with the assumption that makes it irrelevant.
+gives no case is skipped with the assumption that makes it irrelevant. Named techniques, boundary
+values, equivalence classes, decision tables, state transitions and pairwise, decide how many cases
+each dimension gives, and a value no source states is marked `[ASSUMPTION]` and becomes a question.
+A checklist of eighteen common components, input, date, table, pagination, search, dialog, upload,
+import, sign-in, permission and more, adds the viewpoints those components tend to get wrong; a team
+that keeps its own checklist, a company one included, uses that instead.
+
+Cases follow a fixed template: the sections `ACCESSING`, `GUI` and `FUNCTION`, a testcase type, a
+source for every expected result, an ID never reused, and empty execution columns, with a CSV export
+that opens in a spreadsheet with each step on its own line. `GUI` cases take their text from the
+screen spec in `docs/screens/`, or from the design when there is none. A team that already has its own
+template or company form keeps it.
+
+When a requirement, a reference document, a screen spec, or a design changes, `--update` brings the
+cases file level with it instead of writing it again: new cases take new IDs, changed cases are
+rewritten with their execution cells cleared, removed ones are struck through, and no ID is ever
+reused. Once the file has been approved, a change to an existing case becomes a question for the
+approver rather than an edit.
+
+After the team has executed the cases, `--run` turns the results the testers give into a run record
+under `docs/records/test-runs/`, with a summary against the plan's exit criteria and one defect section
+per failed case, written so `atk:fix` can start from it. `--bug` raises the defects the person picks
+as issues on the tracker, never a security defect on a public one, and `--retest <issue>` (or
+`<run-path>#D<n>` where there is no tracker) records a narrow run of the fixed case and the cases
+the fix touched, offering the verdict as a comment on the issue. Credentials, secrets, real personal
+data and production data a tester pastes are redacted before the record is written, and each record's
+file name carries the time, so a second run never overwrites the first. The skill never marks a
+result itself, and never closes an issue.
+
+`--review <cases-path>` is the second person's read before a cases file is approved: the BrSE/BA or
+the QA lead checks structure, classification, traceability, the dimension walk, sources, technique, checklist coverage,
+clarity, assumptions, priority, and test data, and gets findings at `BLOCKING`, `SHOULD FIX`, or `NIT`
+in a report under `docs/derived/reviews/`. It edits nothing, so the author fixes and the approver
+decides.
 
 **Do not use when.** You want automated test code written. This produces the plan a person executes
 and a developer can automate from.

@@ -97,7 +97,7 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   trên nhiều repository. `atk:git` là thứ thi hành nó; file này
   vẫn là hợp đồng, và chính điều đó khiến nhóm skill sửa mã với nhóm skill viết tài liệu khép lại
   theo cùng một đường. Được `atk:fix`, `atk:implement` và `atk:verify` trích dẫn, ba skill giao việc
-  cho `atk:git`; được `atk:plan` và `atk:tailor` trích riêng phần ranh giới xin phép; và được mọi
+  cho `atk:git`; được `atk:plan`, `atk:tailor` và `atk:qa` trích riêng phần ranh giới xin phép; và được mọi
   skill sinh artifact trích phần nói về thay đổi chỉ tạo ra một tài liệu. Không gì rời khỏi repo cục
   bộ mà chưa được hỏi.
 - `shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
@@ -146,7 +146,8 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   sẵn sàng, ảnh export thay chỗ, nên không skill nào dừng vì thiếu nó. File này cũng giữ node ID làm
   khóa ổn định của mỗi thành phần và mã băm mà một lần đọc ghi lại; nhờ hai thứ đó, lần chạy thứ hai
   chỉ đụng tới những dòng đã đổi. `atk:spec` trích dẫn nó cho kind `screen`, kind duy nhất lấy design
-  làm nguồn, và `atk:intake` trích dẫn nó khi yêu cầu là một design. Cũng vì file này mà `shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
+  làm nguồn, `atk:intake` trích dẫn nó khi yêu cầu là một design, còn `atk:qa` chỉ đọc design cho case `GUI` khi
+  màn hình chưa có spec màn hình. Cũng vì file này mà `shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
   vụ bên ngoài: được nêu tên dịch vụ, nhưng không được nêu lệnh của plugin mang kết nối đó.
 
 Hai file cuối mô tả những file không đi kèm kit:

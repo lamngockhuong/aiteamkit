@@ -139,7 +139,7 @@ to `docs/adr/` as well.
 | `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
 | `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
-| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md` |
+| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes afterwards only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
 | `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
 | `security` | `docs/records/security/<ticket-or-date>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
@@ -195,8 +195,9 @@ wins, exactly as the docs root rule works above.
 
 ### Named after the subject: `plan` is dated, `spec` is not
 
-`atk:spec`, `atk:qa`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither
-a ticket nor a date, and so is the threat model `atk:security` writes. A reference document is named after the thing it describes, one file per resource, per
+`atk:spec`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither a ticket nor
+a date, and so are the test plan and the cases file of `atk:qa`, whose run records and review reports
+are dated like any record or report, and so is the threat model `atk:security` writes. A reference document is named after the thing it describes, one file per resource, per
 table, per feature, per screen, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
 
@@ -226,7 +227,7 @@ merged and which directory it goes in.
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
-| Record | requirements, planning, design, fixes, verification, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
+| Record | requirements, planning, design, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
 | Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
@@ -265,15 +266,17 @@ what the next paragraph already allows, so there is nothing to say and nothing t
 `docs/derived/` is the only part of the tree a project may leave untracked, and nothing in the
 chain breaks if it does: the implementation record and the shipping record are copies of what lives
 on the pull request, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
-running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, a feedback
+running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, or
+`atk:qa --review` where it was a cases file, a feedback
 record is a copy of what was filed with whoever owns the skill it is about, and a setup-defect
 report is rebuilt by running `atk:onboard` again against the repository as it stands then.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
-directory rather than a break in the chain. Two skills read one of the six, and both read the review
-report: a second `atk:review` over the same target reads the one already at that path, to carry its
-finding identifiers forward, and starts numbering at 1 and says so when there is none; and
-`atk:convention` reads the `Convention gaps` section of the reports written for the project, per
+directory rather than a break in the chain. Four skills read one of the six, and all four read the
+review report: a second `atk:review` over the same target reads the one already at that path, to carry
+its finding identifiers forward, and starts numbering at 1 and says so when there is none;
+`atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
+cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
 Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the six, and losing a
 report costs a set of identifiers and a list of gaps the next review raises again, rather than a step
 in the chain. A team that
@@ -325,6 +328,12 @@ When the contract comes before the code in `shared/spec-docs.md`. A `screen` doc
 
 Read the file if it already exists and update it in place. Do not overwrite an `APPROVED` artifact:
 supersede it, link the replacement, and say which decision changed.
+
+A record whose file name carries the time, the `atk:qa` run record among them, is never updated as an
+existing file: an existing path means a second file, not an edit. Where a skill names a narrow change
+it may make to one of its own records after writing it, a pointer or a redaction such as the `Ticket`
+cell and the redaction of a run record, that change is the only one, and it is allowed at `APPROVED`
+too, because it changes nothing the record found.
 
 The no-overwrite rule is about records. A reference document is updated in place by design, and
 superseding one would leave the project holding two files that both claim to describe the same live

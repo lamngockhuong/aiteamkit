@@ -386,7 +386,8 @@ người duyệt. Cờ `--out` đổi chỗ file, cờ `--comment` đăng phát 
 
 **Không dùng khi.** Bạn muốn code được sửa chứ không phải được review, muốn chất vấn chính bản yêu
 cầu (`atk:intake`), hoặc thứ cần đọc là một bản kế hoạch chứ không phải một thay đổi, khi đó dùng
-`atk:plan --review`: kế hoạch được đối chiếu với kho mã mà nó giả định, không phải với một diff.
+`atk:plan --review`: kế hoạch được đối chiếu với kho mã mà nó giả định, không phải với một diff. Một
+file test case thì dùng `atk:qa --review`, đối chiếu các case với nguồn của chúng.
 
 **Thói quen tạo ra khác biệt.** Nó xuất phát từ việc thay đổi này lẽ ra phải làm gì, chứ không xuất
 phát từ diff, và nó tách lỗi chặn merge khỏi ý kiến sở thích, đó là thứ khiến một lần review được
@@ -432,7 +433,38 @@ tham chiếu cho phần nó không đụng tới.
 
 Case âm và case biên có được nhờ đưa từng tiêu chí đi qua mười chiều: tác nhân, input, số lượng,
 trạng thái, thời điểm, lỗi, môi trường, dữ liệu, tích hợp, và quy tắc; chiều nào không cho ra case
-nào thì được bỏ qua, kèm giả định khiến nó không liên quan.
+nào thì được bỏ qua, kèm giả định khiến nó không liên quan. Các kỹ thuật có tên, giá trị biên, phân
+lớp tương đương, bảng quyết định, chuyển trạng thái và ghép cặp (`pairwise`), quyết định mỗi chiều cho ra bao nhiêu
+case; giá trị không nguồn nào nêu thì được đánh dấu `[ASSUMPTION]` và thành câu hỏi. Một checklist
+cho mười tám component phổ biến, ô nhập, ngày, bảng, phân trang, tìm kiếm, hộp thoại, tải file lên, import,
+đăng nhập, phân quyền và các loại khác, bổ sung những điểm các component đó hay sai; team đã có
+checklist riêng, kể cả checklist của công ty, thì dùng checklist đó.
+
+Test case theo một template cố định: ba nhóm `ACCESSING`, `GUI` và `FUNCTION`, một loại test case, nguồn
+cho mọi kết quả mong đợi, ID không bao giờ dùng lại, các cột kết quả chạy để trống, và bản xuất CSV mở
+được trong bảng tính với mỗi bước trên một dòng. Case `GUI` lấy text từ spec màn hình trong
+`docs/screens/`, hoặc từ design khi chưa có spec. Team đã có template hoặc mẫu của công ty thì giữ nguyên
+mẫu đó.
+
+Khi requirement, tài liệu tham chiếu, spec màn hình hay design thay đổi, `--update` đưa file test case
+theo kịp thay vì viết lại từ đầu: case mới nhận ID mới, case bị đổi được viết lại và xóa các ô kết quả
+chạy, case bị bỏ thì gạch ngang, và không ID nào bị dùng lại. Khi file đã được duyệt, mọi thay đổi trên
+một case có sẵn thành câu hỏi cho người duyệt thay vì được sửa thẳng.
+
+Sau khi team đã chạy các case, `--run` biến kết quả tester đưa vào thành record của lần chạy trong
+`docs/records/test-runs/`, kèm bảng tổng kết đối chiếu với tiêu chí kết thúc của kế hoạch và một mục lỗi
+cho mỗi case thất bại, viết sao cho `atk:fix` bắt đầu được từ đó. `--bug` tạo issue trên tracker cho các
+lỗi người dùng chọn, không bao giờ đưa lỗi bảo mật lên tracker công khai, còn `--retest <issue>`
+(hoặc `<run-path>#D<n>` khi không có tracker) ghi lại một lần chạy hẹp gồm case đã sửa và các case mà bản
+sửa chạm tới, rồi đề nghị đăng kết luận thành comment trên issue. Thông tin đăng nhập, secret, dữ liệu cá nhân thật và
+dữ liệu production mà tester dán vào đều được che trước khi ghi record, và tên file của mỗi record mang
+theo giờ nên lần chạy sau không bao giờ ghi đè lần trước. Skill không bao giờ tự đánh kết quả, và
+không bao giờ đóng issue.
+
+`--review <cases-path>` là lượt đọc của người thứ hai trước khi file test case được duyệt: BrSE/BA hoặc
+QA lead kiểm cấu trúc, phân loại, truy vết, việc đi qua mười chiều, nguồn, kỹ thuật, độ phủ checklist, độ rõ, giả định, mức ưu
+tiên và dữ liệu test, và nhận các phát hiện ở mức `BLOCKING`, `SHOULD FIX` hoặc `NIT` trong một report ở
+`docs/derived/reviews/`. Skill không sửa gì, nên người viết tự sửa và người duyệt quyết định.
 
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
 để dev tự động hóa từ đó.

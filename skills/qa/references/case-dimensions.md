@@ -23,19 +23,49 @@ asked.
 | 9 | Integration | What if the other side changes or repeats itself? | A webhook delivered twice, an older client version, a field the other side stopped sending |
 | 10 | Rules | Where do the business rules meet at their edges? | Zero and negative amounts, two discounts together, a limit reached exactly, a refund after a partial delivery |
 
+## Techniques
+
+A dimension says where to look; a technique says how many cases that look produces, so two authors
+walking the same criterion write the same set rather than one writing three cases and the other
+thirty.
+
+| Technique | Use when | Produces | Dimensions |
+|-----------|----------|----------|------------|
+| Equivalence partitioning | An input splits into classes the system treats alike | One case per valid class and one per invalid class. A second case from a class already covered is a duplicate and is dropped | 2, 8 |
+| Boundary value analysis | A field, a count, or an amount has a limit | `min-1`, `min`, `max`, `max+1` for every limit the source states, and `0` or empty where the lower limit allows it | 2, 3, 10 |
+| Decision table | Two or more conditions decide the outcome together, role and status, or several filters | One case per combination whose outcome differs; combinations that end the same way share one | 1, 4, 10 |
+| State transition | The thing has a status and rules about moving between them | Each allowed transition, and each blocked transition a user can actually attempt | 4, 5 |
+| Pairwise | The combinations are too many to list, many filters or many options | Every pair of values covered at least once, instead of the full product | 2, 7 |
+| Error guessing | Always, last | The defects this kind of field usually has: trimmed spaces, full-width and multibyte text, a pasted value, a double submit, a leading zero, a timezone edge | 2, 5, 7 |
+
+Every validation rule the source states gets at least two cases: one value the rule accepts, and one
+value it rejects or one at its boundary. Never one case asserting both, because a case that passes
+cannot then say which half passed.
+
+## Assumptions
+
+A case states only what a source states. Where the expected result, a limit, a message, or a
+permission has to be inferred, write `[ASSUMPTION]` at the start of the cell holding it, and add an
+open question for it to the cases file with the name of whoever must answer, per rule 1 of
+`shared/team-roles.md`: the BrSE/BA for behaviour, the Tech Lead for an API or a table. A marked
+assumption is a case waiting on an answer; an unmarked one is a guess that gets executed as though
+somebody agreed to it.
+
 ## Skipping a dimension
 
-Skip a dimension only with the assumption that makes it irrelevant, written beside the criterion:
-"Timing: skipped, the record is only ever edited by its owner." An assumption that could stop being
+Skip a dimension only with the assumption that makes it irrelevant, written as a row of the Skipped
+table of the cases file, per `references/test-case-template.md`: "AC-2, Timing: the record is only
+ever edited by its owner." An assumption that could stop being
 true while the feature is in service is not a reason to skip, it is a case. The one above becomes a
 case the day sharing is added, so either it is written now or the regression matrix names the
 dimension to revisit.
 
 ## From dimension to case
 
-Each case a dimension produces is an ordinary row of the cases table in `SKILL.md` step 2: an ID,
-the criterion it covers, and an expected result a tester can observe. Record the dimension number in
-the title or a column, so a reader can see which dimensions a criterion was walked through.
+Each case a dimension produces is an ordinary row of the cases table in `references/test-case-template.md`:
+an ID, the criterion it covers, and an expected result a tester can observe. Record the dimension
+number and the technique in its `Source` column, `dimension 2, BVA`, so a reader can see which
+dimensions a criterion was walked through.
 
 Priority follows what breaks, not which dimension found it:
 

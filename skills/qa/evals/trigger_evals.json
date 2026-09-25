@@ -10,6 +10,18 @@
   { "query": "build the regression matrix for this change", "should_trigger": true },
   { "query": "ma trận regression cho lần phát hành này", "should_trigger": true },
   { "query": "what does a developer owe QA before moving a ticket to testing", "should_trigger": true },
+  { "query": "update the test cases, the spec changed since we wrote them", "should_trigger": true },
+  { "query": "cập nhật test case theo spec mới", "should_trigger": true },
+  { "query": "仕様変更に合わせてテストケースを更新して", "should_trigger": true },
+  { "query": "record the results of today's test run, three cases failed", "should_trigger": true },
+  { "query": "log the failed cases from the run as bugs", "should_trigger": true },
+  { "query": "retest bug #412, the fix is deployed to staging", "should_trigger": true },
+  { "query": "ghi kết quả test hôm nay và log bug cho các case fail", "should_trigger": true },
+  { "query": "修正済みの不具合を再テストして結果を記録して", "should_trigger": true },
+  { "query": "review the test cases my colleague wrote for the export screen", "should_trigger": true },
+  { "query": "review giúp bộ test case này trước khi duyệt", "should_trigger": true },
+  { "query": "このテストケースをレビューして", "should_trigger": true },
+  { "query": "duyệt giúp bộ test case của màn hình xuất CSV", "should_trigger": true },
 
   { "query": "start the app and confirm the whole flow works", "should_trigger": false },
   { "query": "chạy thử thật xem đơn hàng có vào database không", "should_trigger": false },
@@ -21,5 +33,10 @@
   { "query": "write the release checklist for production", "should_trigger": false },
   { "query": "viết user story và tiêu chí nghiệm thu", "should_trigger": false },
   { "query": "ước lượng sprint tới", "should_trigger": false },
-  { "query": "answer the client's security checklist for this release", "should_trigger": false }
+  { "query": "answer the client's security checklist for this release", "should_trigger": false },
+  { "query": "check whether the API docs still match the code", "should_trigger": false },
+  { "query": "fix the bug in issue #412", "should_trigger": false },
+  { "query": "sửa bug này giúp tôi", "should_trigger": false },
+  { "query": "review giúp pull request này", "should_trigger": false },
+  { "query": "このプルリクエストをレビューして", "should_trigger": false }
 ]

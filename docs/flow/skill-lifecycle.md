@@ -81,7 +81,7 @@ run time.
 | Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc` |
 | Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
-| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa` |
+| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record |
 
 ```mermaid
 flowchart TD

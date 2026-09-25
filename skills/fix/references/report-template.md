@@ -16,7 +16,7 @@ owner: <the person who made the fix>
 approver: <the reviewer, or "TBD (ask <person>)">
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-ticket: <bug URL or id, or none>
+ticket: <bug URL or id; for a defect of an atk:qa run record that has no issue, <run record path>#D<n>; or none>
 ---
 ```
 
