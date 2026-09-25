@@ -66,7 +66,8 @@ file rests on.
 
 ## Feature type questions
 
-Classify each group, then add at most three questions from its row. Adding all of them everywhere
+Classify each group against the table in `shared/feature-types.md`, then add at most three
+questions from the `Extra questions` column of its row. Adding all of them everywhere
 returns the section to a checklist nobody reads.
 
 A group no row describes adds none. An entity that reaches no screen is the usual case: it takes
@@ -81,26 +82,6 @@ a group where it has drifted to number 13 is a group where the constraint is eas
 Write the label in bold, as its own paragraph, never as a list marker. `9a.` is not one under
 CommonMark or GFM: a renderer ends the numbered list at question 9, prints the label as plain text,
 and leaves the folded block below it with no list item to belong to.
-
-| Feature type | Extra questions |
-|--------------|-----------------|
-| CRUD screen | What is validated on the client, on the server, and in the database? What happens to related records on delete? What does the user see after a successful write? |
-| List, search, filter | What is the default sort and where does it come from? Which filters combine, and with what logic? What happens past the page size the data actually reaches? |
-| Report or aggregation | What period does a number cover, and in which timezone? Is it recomputed or cached, and by what? Which rows does the total exclude? |
-| Batch or scheduled job | What happens when a run overlaps the previous one? Is a rerun safe on the same input? Where does a partial failure leave the data? |
-| External integration | What happens when the other side is slow, down, or answers differently? Who owns the credential and where does it live? Is the call retried, and is retrying safe? |
-| Authentication or permission | Where is the check enforced, server side or in the UI only? What happens to an open session when a role changes? Which routes are deliberately public? |
-| File import or export | What is the accepted size and format, and what is rejected? What happens on a row that fails halfway through? Where does the produced file go and who can read it? |
-| Notification | What triggers it, and can that trigger fire twice? Who receives it and can they turn it off? What does it contain that must not leak? |
-| Money or payment | Which currency and rounding rule applies, and where is it enforced? What happens when the charge succeeds and the record does not save? What is the refund or reversal path? |
-
-### On this table moving
-
-This is the kit's first feature type classification. When `atk:estimate` grows one for sizing, the
-two must be one table, not two: a project cannot have features classified one way for questions and
-another way for effort. The destination is `shared/feature-types.md`, because `shared/` is where a
-rule that two or more skills need belongs. Until that move happens, do not build a second
-classification anywhere in the kit.
 
 ## Shape of one group
 

@@ -42,6 +42,7 @@ removed, or renamed; update it in the same commit.
 | `shared/spec-docs.md` | What separates a reference document from a design document, the rule that the project's own document shape wins over a kit template, the six kinds of change that oblige a pull request to carry its reference document, a screen's components among them, what that obligation becomes when the document lives in another repository, and the line between drift and a question nobody has answered. Cited by `spec`, `design-doc`, `implement`, `fix`, `verify`, and `review` |
 | `shared/host-file-locations.md` | Host detection in its own order, the locations GitHub and GitLab read `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, both spellings, and the rule that a file present at any of them is present, including why a stub counts as absent. Cited by `convention` to decide what is missing, by `git` to find the template it fills, and by `init` to find the `CODEOWNERS` that already holds the team's host identifiers |
 | `shared/design-sources.md` | How a skill reads a Figma design: the connection found by what it can do, its three states (not installed, not signed in, ready) and the fallback to exported images, the three reading passes, hidden layers skipped, one link holding several screens, the node ID as the stable key, the values a design does not show, and the `design_source`, `design_node`, `design_read` and `design_fingerprint` fields a read records. Cited by `spec` for the `screen` kind, by `intake` for a design given as the request, and by `qa` for the `GUI` cases of a screen with no screen spec |
+| `shared/feature-types.md` | The one classification of features in the kit: nine types, each with the extra understanding-check questions and a QA risk, `Low` for a feature no row describes, and the rule that a row is added with both columns filled. Cited by `catchup` and `estimate` through their references |
 | `shared/tidy-pass.md` | The content of the tidy step: three lenses (reuse, clarity, efficiency), what may be changed, what is never touched, and what to read in the diff afterwards. Cited by `fix`, `implement`, and `verify` through `host-capabilities.md`, and the reason the kit ships no `simplify` skill |
 
 ## Hooks
@@ -67,8 +68,8 @@ first line that it belongs to this repository, and no skill reads either for ano
 
 ## Skills
 
-Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Seventeen also carry
-`references/`; the other six do not yet.
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Eighteen also carry
+`references/`; the other five do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
@@ -110,7 +111,9 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/tailor/references/feedback.md` | The three-way fork a bad run splits into, what the `--feedback` record holds, the two things it may never hold, and how the mode changes for a skill that is not one of the kit's |
 | `skills/intake/references/requirement-template.md` | The fixed shape of a requirement: the seven numbered sections, the story sentence, the `AC N.M` IDs other skills cite and why they are never renumbered, the open-questions and impacted-areas columns, and what stays unchanged under `--lang` |
 | `skills/catchup/references/brief-template.md` | One skeleton for both modes, with the epic and pull-request differences marked per section |
-| `skills/catchup/references/understanding-check.md` | The fixed questions, the feature type table, and the two rules deciding whether the check is worth anything |
+| `skills/catchup/references/understanding-check.md` | The fixed questions, how many feature type questions a group takes from `shared/feature-types.md`, and the two rules deciding whether the check is worth anything |
+| `skills/estimate/references/estimate-template.md` | The fixed shape of an estimate sheet: the nine numbered sections, the comparables table with the layer, technology and way of building that per-item bases cite by ID, the calibration a rate per point must show, the comparison column an uncalibrated model is confined to, the totals that must reconcile, and the `DRAFT` status while a capacity input is still owed |
+| `skills/estimate/references/complexity-drivers.md` | What a size is judged from: countable drivers per layer, why technology and verification cost matter more once code is generated, QA risk by feature type, the drivers of understanding a spec, and where a project's own rubric goes |
 | `skills/design-doc/references/spike.md` | The `--spike` mode: one question that separates options, the time box and who set it, what would count as an answer written before looking, the three kinds of evidence, why a prototype stays out of the change, and the spike record |
 | `skills/design-doc/references/role-challenge.md` | The `--challenge` pass: which roles get an agent and the questions each brings, what an agent is given and never given, what an objection must name, how the calling agent checks and answers them, and the `Pre-review objections` section that says it is not a review |
 | `skills/convention/references/collaboration-files.md` | What `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` each carry, where each host keeps them, and why an owner never comes from git history |

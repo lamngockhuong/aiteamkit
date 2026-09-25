@@ -92,6 +92,7 @@ paste a token. Re-authenticating is the user's own command to run, and naming it
 | Bug | Issue with `bug` label | Bug | Issue (type: Bug) | Issue (tracker: Bug) |
 | Sprint | Project iteration field, or a single-select field (see below) | Sprint | Milestone | Version / Sprint field |
 | Estimate | Custom field or label | Story Points | Estimated hours | Estimated time |
+| Actual time | A number field on a Project, when the team added one; none by default | Time Spent | Actual hours | Spent time |
 | Owner | Assignee | Assignee | Assignee | Assigned to |
 | Status | Project status field | Workflow status | Status | Status |
 | Release | Release / tag | Fix Version | Milestone | Target version |

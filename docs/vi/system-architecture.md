@@ -72,7 +72,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười bốn file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 23 skill trích dẫn:
+Mười lăm file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 23 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -149,6 +149,11 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   làm nguồn, `atk:intake` trích dẫn nó khi yêu cầu là một design, còn `atk:qa` chỉ đọc design cho case `GUI` khi
   màn hình chưa có spec màn hình. Cũng vì file này mà `shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
   vụ bên ngoài: được nêu tên dịch vụ, nhưng không được nêu lệnh của plugin mang kết nối đó.
+- `shared/feature-types.md`: cách phân loại tính năng duy nhất của kit. Mỗi loại mang các câu hỏi
+  mà `atk:catchup` thêm vào bài kiểm tra mức hiểu, và mức rủi ro QA mà `atk:estimate` dựa vào để
+  ước lượng phần kiểm thử. Chỉ một bảng, vì nếu phân loại một kiểu khi hỏi và một kiểu khác khi
+  ước lượng, cùng một tính năng sẽ là luồng thanh toán với người code nhưng chỉ là một form bình
+  thường với người ước lượng phần test.
 
 Hai file cuối mô tả những file không đi kèm kit:
 
