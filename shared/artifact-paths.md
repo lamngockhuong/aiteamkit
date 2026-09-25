@@ -128,20 +128,20 @@ to `docs/adr/` as well.
 | `help` | No file: the answer is given in the session, because everyone it is for is present |
 | `init` | `.atk/profile.md` (see the exception below) |
 | `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
-| `intake` | `docs/records/requirements/<ticket-or-date>-<slug>.md` |
-| `catchup` | `docs/derived/catchup/<ticket-or-date>-<slug>.md` |
+| `intake` | `docs/records/requirements/<date>-<ticket>-<slug>.md` |
+| `catchup` | `docs/derived/catchup/<date>-<ticket>-<slug>.md` |
 | `estimate` | `docs/records/planning/estimate-<sprint-or-date>.md` |
-| `design-doc` | `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`; under `--spike`, `docs/records/design/<ticket-or-date>-spike-<slug>.md` and no ADR |
+| `design-doc` | `docs/records/design/<date>-<ticket>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`; under `--spike`, `docs/records/design/<date>-<ticket>-spike-<slug>.md` and no ADR |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below) |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
 | `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology and a `<layer>/<tech>.md` where its rules differ by layer, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below); under `--review` no plan file at all, and a report at `docs/derived/reviews/plan-<slug>-<date>.md` |
-| `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<ticket-or-date>-<slug>.md` |
-| `fix` | `docs/records/fixes/<ticket-or-date>-<slug>.md` |
+| `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<date>-<ticket>-<slug>.md` |
+| `fix` | `docs/records/fixes/<date>-<ticket>-<slug>.md` |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--run` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes once committed only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
-| `verify` | `docs/records/verification/<ticket-or-date>-<slug>.md`, with any screenshots in `docs/records/verification/<ticket-or-date>-<slug>/` beside it |
-| `security` | `docs/records/security/<ticket-or-date>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
+| `verify` | `docs/records/verification/<date>-<ticket>-<slug>.md`, with any screenshots in `docs/records/verification/<date>-<ticket>-<slug>/` beside it |
+| `security` | `docs/records/security/<date>-<ticket>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
 | `release` | `docs/records/releases/<version>.md` |
 | `incident` | `docs/records/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
@@ -273,7 +273,7 @@ report is rebuilt by running `atk:onboard` again against the repository as it st
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. Four skills read one of the six, and all four read the
-review report: a second `atk:review` over the same target reads the one already at that path, to carry
+review report: a second `atk:review` over the same target reads the newest one for that target, to carry
 its finding identifiers forward, and starts numbering at 1 and says so when there is none;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
@@ -283,7 +283,7 @@ in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
 
-The split is why `docs/records/design/<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
+The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
 documents rather than one. A design argues for a change and cites the code as it stood before it;
 the day the change merges, that citation stops being true and the document becomes an account of a
 decision. The reference document begins where the design ends, and from then on it is the code that
@@ -291,10 +291,30 @@ has to keep up with it, or it with the code.
 
 ## Naming
 
-- Dates are `YYMMDD`, taken from `date +%y%m%d` on macOS and Linux or
-  `Get-Date -UFormat "%y%m%d"` on Windows PowerShell. Do not guess today's date.
-- Plan directories carry the time too, `YYMMDD-HHMM`, from `date +%y%m%d-%H%M`. Two plans started on
-  one day are common; two started in one minute are not.
+- A date in a file or directory name is `YYMMDD-HHMM`, taken from `date +%y%m%d-%H%M` on macOS and
+  Linux or `Get-Date -UFormat "%y%m%d-%H%M"` on Windows PowerShell, in the local time of the machine
+  running the skill. Do not guess the date or the time. Every `<date>` in the Default paths table and
+  in every skill path that cites it means this, and so does the date half of `<sprint-or-date>`,
+  where a sprint in its place carries no time. Two artifacts of one kind written on one day are
+  common; two written in one minute are not.
+- `<date>-<ticket>-<slug>` puts the ticket after the time, and leaves `<ticket>-` out where there is
+  no ticket, so two runs over one ticket get two names. A ticket or an issue becomes its key, the
+  letters, digits and hyphens of `PROJ-12` or the number of `#12`, `12`; a link becomes the key it
+  points at; anything else is flattened to a hyphen. No `#` or `/` ever reaches a name.
+- The name carries no time zone. A team spread across zones should know that two names written
+  within the difference between its zones can sort out of order; nothing else depends on the zone.
+- A path that already exists is not taken by a new artifact of a kind that is never written over:
+  the next free suffix, `-2`, `-3`, goes before `.md` or at the end of a directory name. Names sort by
+  the date and time, then by the suffix, the unsuffixed name first, whatever order a directory
+  listing shows. A name written before the time was added sorts before every timed name of its day:
+  the day is the `YYMMDD` it carries, or the `created` date in its front matter when it carries a
+  ticket and no date at all. Two such names of one day sort by name.
+- A lookup that matches a dated name by its shape accepts `YYMMDD` as well as `YYMMDD-HHMM`, so a
+  report or record written before the time was added is still found.
+- The time in a name is for ordering and uniqueness. A date inside a document, `created` and
+  `updated` in the front matter or `agreed <date>` and `fetched <date>` in a rule's `source`, carries
+  no time and is written `YYYY-MM-DD`. Where a document does state a time of day, in a timeline or a run
+  record, it carries its offset, `10:51 +07:00`, so a reader in another zone reads it correctly.
 - Slugs are lowercase kebab-case, derived from the title, at most six words.
 - A reference document takes its name from its subject, not from a title: the resource, the table,
   or the feature. Lowercase kebab-case, and it does not change when the subject is extended.
@@ -353,8 +373,8 @@ The no-overwrite rule is about records. A reference document is updated in place
 superseding one would leave the project holding two files that both claim to describe the same live
 endpoint. Its front matter goes back to `IN REVIEW` when an update changes what it promises.
 
-A plan directory never collides, because its name carries the time, so updating in place cannot
-happen by accident there. Planning the same work again therefore has to supersede by hand: set the
+A plan directory rarely collides, because its name carries the time, and where it does the suffix
+under Naming applies, so updating in place cannot happen by accident there. Planning the same work again therefore has to supersede by hand: set the
 old index `status` to `SUPERSEDED`, link the new directory from it, and link back. Otherwise the
 project accumulates plans that all look current.
 

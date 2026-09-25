@@ -242,12 +242,13 @@ under each finding, the round table, and the sections in order. This section dec
 report goes and what reaches the session; that file decides its shape, so a report does not get
 rebuilt from nothing once per run.
 
-Read the report already at that path before writing, when one is there. A second review of the same
-target reuses the identifiers of the first, so an author asked to fix `B1` finds `B1` again;
+Read the newest earlier report on the same target first. A second review of the same target reuses
+the identifiers of the first, so an author asked to fix `B1` finds `B1` again;
 `references/report-format.md` holds what happens when a finding changes severity, and what to do
-when no earlier report exists. This report is the one derived artifact the kit reads rather than only
-writes, here, in `atk:plan --review` and `atk:qa --review` for their own reports, and in step 1 of
-`atk:convention`, which takes its `Convention gaps` section; `shared/artifact-paths.md` records them.
+when no earlier report exists. This report is the one derived artifact the kit reads rather than
+only writes, here, in `atk:plan --review` and `atk:qa --review` for their own reports, and in step 1
+of `atk:convention`, which takes its `Convention gaps` section; `shared/artifact-paths.md` records
+them.
 
 `--out <path>` moves the file. It no longer decides whether one is written.
 

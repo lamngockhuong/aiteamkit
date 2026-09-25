@@ -150,7 +150,7 @@ the approver is who moves it on. The run never sets `APPROVED`.
 
 ## 4. The rest of the file
 
-- The `Last run` line is rewritten, `Last run: YYYY-MM-DD HH:MM:SS, atk:qa --update`, on every run, to the second, so two runs in one minute still leave two different lines.
+- The `Last run` line is rewritten, `Last run: YYYY-MM-DD HH:MM:SS +HH:MM, atk:qa --update`, on every run, to the second and with its offset per Naming in `shared/artifact-paths.md`, so two runs in one minute still leave two different lines. A line with no offset was written before the offset was required, and still names its run.
 - The Sources table is rewritten with what each source is now, so the next run starts from this read.
   A source a still-open question rests on keeps its old `Read as`, so the change behind that question
   is found again until the question is answered rather than lost after one run.

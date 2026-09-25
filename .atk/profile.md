@@ -55,7 +55,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 <!-- source: CLAUDE.md -> "Common verification commands" -->
 <!-- No package scripts and no test CI; .github/workflows/ carries release-please and the labeler.
-     Those eight blocks are what stands in for a test suite, and CLAUDE.md is the single copy of
+     Those blocks are what stands in for a test suite, and CLAUDE.md is the single copy of
      them on purpose: an earlier profile pasted four of them inline and went stale when the repo
      gained hooks and trigger evals. Run the block, do not transcribe it. -->
 

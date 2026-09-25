@@ -103,7 +103,7 @@ Set `status: IN REVIEW` and name the approver. Do not mark anything `APPROVED` o
 
 ## Output
 
-Written to `docs/records/requirements/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`.
+Written to `docs/records/requirements/<date>-<ticket>-<slug>.md` per `shared/artifact-paths.md`.
 From a design, the screen's component table is the next artifact, and `atk:spec --kind screen`
 writes it. Sections:
 front matter, original request, context and current behavior, user stories with acceptance criteria,

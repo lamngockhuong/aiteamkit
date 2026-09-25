@@ -80,8 +80,8 @@ file, and a setup-defect report by running
 without a `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
 only written copy: a reason to keep the directory, not a reason to fear deleting it. Four skills
 read one of the six, and all four read the review report: a second `atk:review` over the same target
-reads the one already there, to carry its finding identifiers forward, and numbers from 1 and says so
-when there is none; `atk:plan --review` reads the one already there for the same plan, for the same
+reads the newest one for that target, to carry its finding identifiers forward, and numbers from 1 and
+says so when there is none; `atk:plan --review` reads the newest one for the same plan, for the same
 identifiers and to tell a result the author has already declined from one a week of commits has just
 created; `atk:qa --review` reads the newest one for the same cases file, for the same identifiers;
 and `atk:convention` reads its `Convention gaps` section, which is how a rule the review

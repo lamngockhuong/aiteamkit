@@ -1,6 +1,6 @@
 [
   { "query": "write the test cases for the login screen", "should_trigger": true },
-  { "query": "/atk:qa docs/records/requirements/req-260918-export.md --cases", "should_trigger": true },
+  { "query": "/atk:qa docs/records/requirements/260918-0915-export.md --cases", "should_trigger": true },
   { "query": "viết test case cho màn hình đăng nhập", "should_trigger": true },
   { "query": "kiểm thử tính năng này cần những case nào", "should_trigger": true },
   { "query": "we need a test plan with entry and exit criteria for this release", "should_trigger": true },

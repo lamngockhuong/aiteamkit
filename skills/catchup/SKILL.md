@@ -162,7 +162,7 @@ padded with questions the spec does answer is a block the spec author stops read
 
 ## Output
 
-Written to `docs/derived/catchup/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. Under
+Written to `docs/derived/catchup/<date>-<ticket>-<slug>.md` per `shared/artifact-paths.md`. Under
 the shared front matter block: the sections from the mode table in step 4, then the questions for
 the spec author from step 6, which closes the artifact in both modes because it is the part that
 leaves it.

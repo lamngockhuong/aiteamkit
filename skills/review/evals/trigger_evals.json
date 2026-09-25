@@ -1,6 +1,6 @@
 [
   { "query": "review this pull request before I approve it", "should_trigger": true },
-  { "query": "/atk:review 214 --against docs/records/design/design-260901-orders.md", "should_trigger": true },
+  { "query": "/atk:review 214 --against docs/records/design/260901-1400-orders.md", "should_trigger": true },
   { "query": "duyệt code nhánh feature/export giúp tôi", "should_trigger": true },
   { "query": "review giúp phần thay đổi trong thư mục api", "should_trigger": true },
   { "query": "is this ready to merge", "should_trigger": true },

@@ -120,12 +120,14 @@ that reached the pass. A run that stopped before it writes no report, and says i
 The report is derived: safe to delete, and rebuilt by running the review again.
 
 The `<slug>` comes from the plan directory's name, or the phase file's slug, or the pull request
-number, in that order. Two reviews of one plan on one day write the same name, and the second
+number, in that order. Two reviews of one plan in one minute write the same name, and the second
 replaces the first; that is acceptable in a derived directory and worth knowing before someone goes
 looking for the earlier one.
 
-**A review already written for this plan is read before this one is written.** Look it up by
-`<slug>`, since a review from an earlier day carries a different date and is about the same plan.
+**A review already written for this plan is read before this one is written.** Take the newest
+report named `plan-<slug>-` followed by exactly `YYMMDD-HHMM` or `YYMMDD` and `.md`, ordered per
+Naming in `shared/artifact-paths.md`, since an earlier review carries a different date and time and
+is about the same plan, and the exact shape keeps out a plan whose slug merely starts the same way.
 A result it already raised is one the author has seen and not acted on, which is a different thing
 from a result a week of commits has just created, and a report that cannot tell them apart sends the
 approver to the wrong question. Reading it is all that happens: it is never rewritten, and a result

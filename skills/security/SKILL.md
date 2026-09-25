@@ -146,7 +146,7 @@ keeps with a person. Set `status: IN REVIEW` and name the approver.
 
 ## Output
 
-The security record at `docs/records/security/<ticket-or-date>-<slug>.md`, or
+The security record at `docs/records/security/<date>-<ticket>-<slug>.md`, or
 `docs/records/security/<version>.md` for a release scope, per `shared/artifact-paths.md`. It is a
 record of what was checked on one day against one version of the code. It may be corrected until it
 is committed, per Before writing in `shared/artifact-paths.md`, and a finding fixed in that window

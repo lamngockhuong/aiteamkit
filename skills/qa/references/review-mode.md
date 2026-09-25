@@ -78,8 +78,8 @@ a tester would do or miss; and a concrete suggestion, including a new case writt
 template where the finding is a missing case. The finding addresses the case, never the author.
 
 A second review of the same cases file reads the earlier report first: the newest report named
-`qa-cases-<slug>-` followed by exactly six digits and `.md`, whatever its date, since a re-review
-usually comes on another day after the author fixed something. The exact slug and the six digits keep
+`qa-cases-<slug>-` followed by exactly `YYMMDD-HHMM` or `YYMMDD` and `.md`, whatever its date, since a re-review
+usually comes on another day after the author fixed something. The exact slug and that shape keep
 out the report of a cases file whose slug merely starts the same way, and the `qa-cases-` prefix keeps
 out a report `atk:review` wrote for a branch called `qa/...`. Before carrying identifiers, check that
 the earlier report's title line names this cases file by its path, which no language setting

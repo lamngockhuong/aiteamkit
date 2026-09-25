@@ -30,9 +30,9 @@ its title: `### B3. ... (was S2)`. The prefix has to match the section the resul
 
 ## Reading the review already there
 
-Before writing, open the report already in `docs/derived/reviews/` for this plan. Look it up by
-`<slug>`, not by the whole file name: a review from two days ago carries a different date and is
-still about the same plan.
+Before writing, open the newest report in `docs/derived/reviews/` for this plan, found per
+`plan-review-mode.md`: by `<slug>` and the exact date shape, not by the whole file name, since a
+review from two days ago carries a different date and time and is still about the same plan.
 
 It is what the identifiers above carry across, and it separates two things a single report cannot
 tell apart: a citation that has just decayed, and one reported days ago and left alone. The first is
@@ -42,7 +42,7 @@ approver.
 What comes of it:
 
 - A result in both reports keeps its identifier and says in its title that it is a repeat, with the
-  date of the earlier report: `### N1. ... (also 260921)`.
+  date and time of the earlier report: `### N1. ... (also 260921-0940)`.
 - A result in the earlier report and not in this one goes in `## Closed since the last review`, one
   line each, saying whether the plan was fixed or the repository moved under it. It is the only
   section that reports something the plan got right.

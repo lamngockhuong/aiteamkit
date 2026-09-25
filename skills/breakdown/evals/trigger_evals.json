@@ -1,6 +1,6 @@
 [
   { "query": "break this epic into tasks with owners and an order", "should_trigger": true },
-  { "query": "/atk:breakdown docs/records/design/design-260918-export.md --members An,Binh,Chi --parallel", "should_trigger": true },
+  { "query": "/atk:breakdown docs/records/design/260918-1030-export.md --members An,Binh,Chi --parallel", "should_trigger": true },
   { "query": "chia task cho ba bạn dev, tránh hai người sửa cùng một file", "should_trigger": true },
   { "query": "phân chia công việc cho sprint tới", "should_trigger": true },
   { "query": "WBS cho tài liệu thiết kế này", "should_trigger": true },

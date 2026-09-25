@@ -119,7 +119,7 @@ answered as changed or left open for the role, and the design carries them in a
 
 ## Output
 
-Design at `docs/records/design/<ticket-or-date>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
+Design at `docs/records/design/<date>-<ticket>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
 `shared/artifact-paths.md`. Both are records of a moment and neither is edited afterwards. The data
 model and the API contract specified in step 4 reach their lasting form in `docs/api/` and
 `docs/database/`, written by `atk:spec`: once the change is real under `Contract: code`, and from this
@@ -130,7 +130,7 @@ request: `status: SUPERSEDED`, a link to this design from it, and a link back. N
 automatically, and a directory where two designs both read as current sends the next reader to the
 wrong one. The rule is at the end of `shared/artifact-paths.md`.
 
-Under `--spike`, the spike record at `docs/records/design/<ticket-or-date>-spike-<slug>.md`, a record
+Under `--spike`, the spike record at `docs/records/design/<date>-<ticket>-spike-<slug>.md`, a record
 like the design and linked from the design that follows it.
 
 Diagrams are inline Mermaid so they stay readable in a pull request, drawn per

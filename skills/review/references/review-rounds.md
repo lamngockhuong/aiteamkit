@@ -144,7 +144,8 @@ rule 2 exists to prevent. It is also the most expensive context in the run: ever
 the whole session, and a review makes dozens of them. A fresh agent starts with neither.
 
 It is given the target, the paths to the requirement, plan or design, the conventions document, and
-the report already at the output path when there is one, and nothing from the conversation. It runs
+the newest earlier report on the same target, found per `references/report-format.md`, when there
+is one, and nothing from the conversation. It runs
 the skill from step 1 to step 6 as the calling agent of this file: it finds the intent from those
 paths, runs the rounds in order, takes the sweep and the verdicts itself, and writes the report. It
 returns the session summary of the skill's `## Output` and the report path, and the session that

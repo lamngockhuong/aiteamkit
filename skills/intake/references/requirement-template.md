@@ -7,7 +7,7 @@ a plan, an estimate, or a test case can cite a criterion by an ID that is still 
 
 ## The file
 
-One file, at `docs/records/requirements/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`:
+One file, at `docs/records/requirements/<date>-<ticket>-<slug>.md` per `shared/artifact-paths.md`:
 front matter, a title, at most one opening note, then seven numbered sections in the order below.
 A section with nothing in it is kept and says why it is empty: a missing heading reads as a section
 the run forgot.

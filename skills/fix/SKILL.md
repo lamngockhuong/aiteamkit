@@ -179,7 +179,7 @@ reader can paste. A flag that promises to change nothing must not leave a file b
 
 ## Output
 
-Written to `docs/records/fixes/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`. The sections, and
+Written to `docs/records/fixes/<date>-<ticket>-<slug>.md` per `shared/artifact-paths.md`. The sections, and
 which of them `--investigate-only` drops, are in `references/report-template.md`.
 
 Check whether the project ignores that directory before writing the file, with

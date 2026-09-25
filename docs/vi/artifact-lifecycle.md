@@ -80,8 +80,8 @@ test case; còn báo cáo lỗi thiết lập thì chạy lại
 `--comment`, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
 bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có bốn skill đọc một
 trong sáu loại, và cả bốn đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
-đọc báo cáo đang nằm sẵn ở đó để giữ lại mã định danh của các phát hiện, và khi không có báo cáo nào
-thì đánh số lại từ 1 và nói rõ điều đó; `atk:plan --review` đọc báo cáo đang có của cùng bản kế
+đọc báo cáo mới nhất của đối tượng đó để giữ lại mã định danh của các phát hiện, và khi không có báo cáo nào
+thì đánh số lại từ 1 và nói rõ điều đó; `atk:plan --review` đọc báo cáo mới nhất của cùng bản kế
 hoạch, cũng để giữ mã định danh, và để phân biệt một kết quả tác giả đã thấy mà không sửa với một
 kết quả vừa mới sinh ra sau một tuần commit; `atk:qa --review` đọc báo cáo mới nhất của cùng file test
 case, cũng để giữ mã định danh; còn `atk:convention` đọc mục `Convention gaps` của báo
