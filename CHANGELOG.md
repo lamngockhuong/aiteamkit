@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.17](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.16...v0.0.17) (2026-09-25)
+
+
+### Bug Fixes
+
+* apply an override only once approved, and prove tracker access per project ([#74](https://github.com/lamngockhuong/aiteamkit/issues/74)) ([6b64f23](https://github.com/lamngockhuong/aiteamkit/commit/6b64f23e67feddf0d266b7fe596aff64634820e0))
+
 ## [0.0.16](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.15...v0.0.16) (2026-09-25)
 
 
