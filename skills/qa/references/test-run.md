@@ -18,10 +18,8 @@ a file in place says; a collision within the same minute takes the next free suf
 records sort by the time, then by the suffix, the unsuffixed file first, whatever order a directory
 listing shows.
 
-The time is the local time of the person running the skill, and the same zone throughout a project:
-the file-name time is what later runs sort records by. A ticket or an issue becomes its key, the
-letters, digits and hyphens of `PROJ-12` or the number of `#12`, `12`; a link becomes the key it points
-at; anything else is flattened to a hyphen. A defect retested without an issue is named by its record's
+The time, and the key a ticket or an issue becomes, follow Naming in `shared/artifact-paths.md`: local
+time with no zone in the name, `PROJ-12` kept and `#12` written `12`. A defect retested without an issue is named by its record's
 time and its ID, `retest-260924-1030-D2`. No `#` or `/` ever reaches a file name, since `#` is what
 `--retest` uses to name a defect and what a Markdown link reads as a fragment.
 

@@ -216,7 +216,7 @@ and "nothing is left" are different claims, and only the second one is worth wri
 
 ## Output
 
-Written to `docs/records/verification/<ticket-or-date>-<slug>.md` per `shared/artifact-paths.md`, opening
+Written to `docs/records/verification/<date>-<ticket>-<slug>.md` per `shared/artifact-paths.md`, opening
 with the shared front matter block. `--out` overrides the path.
 
 The report holds: what was verified and against which criteria; the local-only check and its result;

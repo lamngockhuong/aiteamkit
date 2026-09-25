@@ -16,7 +16,7 @@ Not its subject. Its tense.
 |---|---|---|
 | Answers | what should we do, and why not the other thing | what does it do today, or under `Contract: first` what it is agreed to do |
 | Cites the code | as it stood before the change | as it stands now |
-| Named after | the ticket or the date | the subject |
+| Named after | the date, and the ticket where there is one | the subject |
 | The day it merges | becomes an account of a decision | becomes the thing that has to stay true |
 | Is wrong when | it misrepresents what was decided | the code moved and it did not |
 | Written by | `atk:design-doc` | `atk:spec` |

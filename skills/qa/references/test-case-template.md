@@ -47,11 +47,11 @@ ticket: <the ticket that last changed this, or none>
 
 ## Sources
 
-Last run: YYYY-MM-DD HH:MM:SS, atk:qa --cases
+Last run: YYYY-MM-DD HH:MM:SS +HH:MM, atk:qa --cases
 
 | Source | Read as |
 |--------|---------|
-| `docs/records/requirements/260918-user-list.md` | `sha256:3f9a0c1d2e4b5a67` |
+| `docs/records/requirements/260918-0930-user-list.md` | `sha256:3f9a0c1d2e4b5a67` |
 | `docs/api/users.md` | `sha256:81c2d9e0f1a3b4c5` |
 | `https://www.figma.com/design/<key>/<name>`, `[28256:70680]` | `design_fingerprint` `sha256:0d4e5f6a7b8c9d01` |
 

@@ -21,13 +21,16 @@ across the three, which would make `5` mean nothing until the reader has found i
 The ID is the only part of a review that survives being spoken. "Please fix `B1` and `S2`" works in a
 stand-up, in a chat thread and in a pull request comment; "the fifth one" needs the file open.
 
-**An ID carries across runs on the same target.** Before writing, read the report already at the
-path, per `## Output` of `SKILL.md`: a second review of the same pull request is what the identifier
-was built for, and an author who was asked to fix `B1` has to find `B1` in the new report too. A
-finding still present keeps its number. A new one takes the next number above the highest that
-report used, never one left free by a finding since fixed. Where there is no earlier report, because
-none was written or the project does not keep `docs/derived/`, numbering starts at 1 and
-`## What this was reviewed against` says so, so nobody reads a fresh `B1` as the old one.
+**An ID carries across runs on the same target.** Before writing, read the newest earlier report on
+the same target, per `## Output` of `SKILL.md`: the newest named after that target followed by
+`YYMMDD-HHMM` or `YYMMDD` and `.md`, whose title line names the same target, since a name carrying
+the minute means a re-review never lands on the earlier path. A second review of the same pull
+request is what the identifier was built for, and an author who was asked to fix `B1` has to find
+`B1` in the new report too. A finding still present keeps its number. A new one takes the next
+number above the highest that report used, never one left free by a finding since fixed. Where there
+is no earlier report, because none was written or the project does not keep `docs/derived/`,
+numbering starts at 1 and `## What this was reviewed against` says so, so nobody reads a fresh `B1`
+as the old one.
 
 **Severity wins over continuity when the two collide.** A finding that was `S3` and comes back
 `BLOCKING` takes a `B` number and names the old one in its title: `### B2. ... (was S3)`. The

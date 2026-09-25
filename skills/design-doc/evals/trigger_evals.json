@@ -1,6 +1,6 @@
 [
   { "query": "write the design doc for moving order processing onto a queue", "should_trigger": true },
-  { "query": "/atk:design-doc docs/records/requirements/req-260918-export.md --adr", "should_trigger": true },
+  { "query": "/atk:design-doc docs/records/requirements/260918-0915-export.md --adr", "should_trigger": true },
   { "query": "tài liệu thiết kế kỹ thuật cho việc tách service thanh toán", "should_trigger": true },
   { "query": "so sánh vài phương án rồi chốt cách làm, viết thành tài liệu cho team duyệt", "should_trigger": true },
   { "query": "we need an ADR recording why we picked this queue over the other one", "should_trigger": true },
@@ -15,7 +15,7 @@
   { "query": "設計の前に技術調査をして、このライブラリで実現できるか確認して", "should_trigger": true },
   { "query": "pressure-test this design from the QA and SRE side before it goes to review", "should_trigger": true },
   { "query": "phản biện thiết kế này theo góc nhìn từng người duyệt trước khi gửi review", "should_trigger": true },
-  { "query": "/atk:design-doc docs/records/requirements/260920-export.md --challenge", "should_trigger": true },
+  { "query": "/atk:design-doc docs/records/requirements/260920-1415-export.md --challenge", "should_trigger": true },
 
   { "query": "turn the client mail into user stories", "should_trigger": false },
   { "query": "the design is in review, write the API reference doc from it so frontend can start", "should_trigger": false },
@@ -27,7 +27,7 @@
   { "query": "viết tài liệu đặc tả cho bảng orders", "should_trigger": false },
   { "query": "estimate this epic in man-days", "should_trigger": false },
   { "query": "review this pull request against the design", "should_trigger": false },
-  { "query": "implement the design in docs/records/design/design-260901-queue.md", "should_trigger": false },
+  { "query": "implement the design in docs/records/design/260901-1100-queue.md", "should_trigger": false },
   { "query": "設計書どおりに実装して", "should_trigger": false },
   { "query": "research the latest React release notes for me", "should_trigger": false }
 ]

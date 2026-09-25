@@ -105,7 +105,7 @@ skill discovery.
 | File | Owns | Cited by |
 |------|------|----------|
 | `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the eight rules every skill follows | all |
-| `shared/artifact-paths.md` | Default output path per skill, how a docs root partitioned by language moves that path, which repository an artifact lands in when the project spans several, `YYMMDD` naming, the shared YAML front matter block with the `<record path>#<ID>` ticket form, the window in which a record may still be corrected, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
+| `shared/artifact-paths.md` | Default output path per skill, how a docs root partitioned by language moves that path, which repository an artifact lands in when the project spans several, `YYMMDD-HHMM` naming, the shared YAML front matter block with the `<record path>#<ID>` ticket form, the window in which a record may still be corrected, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete | all |
 | `shared/ticket-adapters.md` | Tracker detection order, the three outcomes it can reach including a tracker that is configured and answers nothing, the GitHub / Jira / Backlog / Redmine vocabulary map, which of those trackers stores a sprint's start and end, and the sprint metrics no tracker without field history can produce, each with the substitute to use instead | all |
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the route that carries a convention gap from the review report back to `convention`, the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement`, `git`, `plan` |
 | `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, where the project root is and how a skill finds it, the four shapes a project can have and what each costs, which skills stop, degrade, or ignore the file when it is missing, and that the `Contract` line in Docs changes behaviour rather than a path | the skills that need project facts |
@@ -591,6 +591,13 @@ for f in glob.glob('skills/*/references/*.tsv'):
             assert r[head.index('dimension')] in [str(d) for d in range(1, 11)], '%s:%d: dimension' % (f, n)
             assert r[head.index('technique')] in ('', 'EP', 'BVA', 'DT', 'ST', 'PW', 'EG'), '%s:%d: technique' % (f, n)
     print('OK %s, %d records' % (f, len(body)))"
+
+# No example of a dated artifact name has lost its time: shared/artifact-paths.md dates every name
+# YYMMDD-HHMM, and a six-digit date followed by a slug, an extension, `/` or `)` is the shape it
+# replaced.
+# Should print nothing (grep exits 1)
+grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' skills/ shared/ README.md docs/ \
+  | grep -v -E '^docs/(records|derived)/'
 
 # Version agreement across the 6 version-bearing files
 grep -h '"version"' package.json .claude-plugin/plugin.json .cursor-plugin/plugin.json \
