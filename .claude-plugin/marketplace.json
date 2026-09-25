@@ -9,7 +9,7 @@
     {
       "name": "atk",
       "description": "AI Team Kit - 23 skills covering the software delivery lifecycle of a company project team: choosing the next skill from the project's state, project profile setup, per-team skill overrides, requirement intake, catching up on work in flight, estimation, technical design, reference specs for API, schema and feature, task breakdown, conventions, implementation planning, implementation, bug fixing, code review, QA, runtime verification, security review, version control, release, incident response, retrospective, onboarding, and handover",
-      "version": "0.0.14",
+      "version": "0.0.15",
       "source": "./",
       "author": {
         "name": "Lam Ngoc Khuong",
