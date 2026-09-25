@@ -3,6 +3,9 @@ __pycache__/
 *.pyc
 .venv/
 .env
+.env.*
+!.env.example
+!.env.sample
 node_modules/
 plans/
 docs/derived/
