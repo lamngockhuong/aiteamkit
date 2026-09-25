@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.14](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.13...v0.0.14) (2026-09-25)
+
+
+### Features
+
+* add atk:security, case dimensions for atk:qa, and spike and challenge modes for atk:design-doc ([#63](https://github.com/lamngockhuong/aiteamkit/issues/63)) ([358fa88](https://github.com/lamngockhuong/aiteamkit/commit/358fa88feab11a39ef99c6ade525de10a51e2edc))
+* close the QA loop in atk:qa with templates, a component checklist, and update, run, bug, retest and review modes ([#66](https://github.com/lamngockhuong/aiteamkit/issues/66)) ([762f11d](https://github.com/lamngockhuong/aiteamkit/commit/762f11d341d4ceb45d1e110757c3a1391aaefd17))
+
 ## [0.0.13](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.12...v0.0.13) (2026-09-24)
 
 
