@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.15](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.14...v0.0.15) (2026-09-25)
+
+
+### Bug Fixes
+
+* refuse a symlinked override, pin workflow actions, ignore .env.* ([#67](https://github.com/lamngockhuong/aiteamkit/issues/67)) ([a21e18c](https://github.com/lamngockhuong/aiteamkit/commit/a21e18cf5559c39bf2c8900ba75ab4419eb691ce))
+
 ## [0.0.14](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.13...v0.0.14) (2026-09-25)
 
 
