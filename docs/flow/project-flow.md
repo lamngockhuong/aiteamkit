@@ -40,6 +40,9 @@ flowchart TD
         IA -->|Approved| IP["Profile APPROVED"]
         I1 --> I2["atk:tailor<br/><small>optional, TL or the owning role</small>"]
         I2 --> I3[".atk/overrides/&lt;skill&gt;.md committed"]
+        I3 --> IB{"Its approver<br/>approves it"}
+        IB -->|Change requested| I2
+        IB -->|Approved| IO["Override APPROVED,<br/>applies from the next run"]
     end
 
     subgraph S1["1. Requirement"]

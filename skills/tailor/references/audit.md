@@ -60,8 +60,10 @@ Three things worth reporting as facts because they are unambiguous:
 - A heading other than `## Before` and `## After` carrying instructions. It is ignored at run time,
   so the team wrote a rule that has never once applied.
 - Front matter with no approver, or an approver still `TBD` with no name attached.
-- `status: DRAFT` on a file that has been in the repository for a while. A draft override still
-  applies at run time, which surprises people; the audit is where they find out.
+- Any `status` other than `APPROVED`, or no front matter at all. The override is not applied and
+  the skill runs as shipped, per Only an approved override applies in `shared/project-overrides.md`,
+  which surprises a team that committed it and expects an effect. Report the file, its status, and
+  the approver who has to move it.
 
 ## Output
 

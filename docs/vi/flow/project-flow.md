@@ -41,6 +41,9 @@ flowchart TD
         IA -->|Đã duyệt| IP["Profile APPROVED"]
         I1 --> I2["atk:tailor<br/><small>không bắt buộc, TL hoặc vai sở hữu</small>"]
         I2 --> I3["Đã commit .atk/overrides/&lt;skill&gt;.md"]
+        I3 --> IB{"Người duyệt<br/>ghi trong file duyệt"}
+        IB -->|Yêu cầu sửa| I2
+        IB -->|Đã duyệt| IO["Override APPROVED,<br/>áp dụng từ lần chạy sau"]
     end
 
     subgraph S1["1. Yêu cầu"]

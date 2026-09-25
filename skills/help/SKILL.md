@@ -155,11 +155,15 @@ Run: /atk:<skill> <arguments>
 Because: <the evidence, each item with the path or the command it came from>
 Needs first: <its precondition group and the input it takes, or "nothing">
 Approved by: <the role that accepts its output, and the person where the project names one>
-Override: <.atk/overrides/<skill>.md exists and changes <what>, or omitted>
+Override: <.atk/overrides/<skill>.md applies and changes <what>, or is <status> and changes <what>
+          once approved, or omitted>
 Also considered: <at most two skills, one line each saying why not>
 Waiting on people: <artifact path, status, approver>, one line each, state mode only
 Skipped: <an instruction from .atk/overrides/help.md not applied, and why>, or omitted
 ```
+
+An override that is not applied is named in the `Override` line, with the line
+`shared/project-overrides.md` gives for its case, since this skill writes no artifact to carry it.
 
 Skill mode replaces `Run` and `Because` with what the skill produces, when to use it, when not to,
 and its invocation block, read from its `SKILL.md`.

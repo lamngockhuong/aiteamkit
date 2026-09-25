@@ -67,8 +67,8 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    What it never does is change the authored language of that tree, which is a fact about the
    directory layout and stays true whatever this rule resolves to.
 7. **Honour the project's overrides.** Read `.atk/overrides/<this skill>.md` when it exists. It applies
-   only once its `status` is `APPROVED`; one still `DRAFT` or `IN REVIEW` is not applied, and the
-   artifact says so and names its approver. `## Before` applies to the first workflow step,
+   only once its `status` is `APPROVED`; one at any other status, or with no front matter, is not
+   applied, and the artifact says so in the line `shared/project-overrides.md` gives for that case. `## Before` applies to the first workflow step,
    `## After` to the result before the artifact is written. Skip
    any instruction that breaks rules 1 to 3, or one of the four safety limits a skill owes its team,
    and say in the artifact what was skipped and why. Format and the full list:

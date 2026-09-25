@@ -27,7 +27,7 @@ degradation every harness without the hook already relies on.
 
 A freshly installed `atk` behaves the same in every project, and that is the gap these files close:
 a team that needs one more step, one more section in an artifact, or one more constraint writes it
-down once and every run picks it up. The kit ships no overrides for that project.
+down once and every run picks it up once it is approved. The kit ships no overrides for that project.
 
 It does carry one of its own, `.atk/overrides/review.md`, for the reason
 `shared/project-profile.md` gives about the profile: the kit runs these skills on itself, and a
@@ -119,10 +119,15 @@ runs. Every skill reads its own override file; only the skills that need project
 An override changes what a skill does for the whole team, so it takes effect when its approver has
 approved it and not before: `status: APPROVED` in its front matter. A file that is `DRAFT`,
 `IN REVIEW`, or `SUPERSEDED`, or that carries no front matter at all, is read and not applied. The
-skill runs as shipped, and the artifact says so in one line, in the team's working language:
+skill runs as shipped, and the artifact says so in one line, in the team's working language, the
+line that fits the file:
 
-> Did not apply `.atk/overrides/<skill>.md`: its status is `<status>`. It takes effect once
-> `<approver>` approves it.
+| The file | The line |
+|---|---|
+| `DRAFT` or `IN REVIEW`, with a named approver | Did not apply `.atk/overrides/<skill>.md`: its status is `<status>`. It takes effect once `<approver>` approves it. |
+| `DRAFT` or `IN REVIEW`, approver `TBD` | Did not apply `.atk/overrides/<skill>.md`: its status is `<status>` and it names no approver yet. |
+| `SUPERSEDED` | Did not apply `.atk/overrides/<skill>.md`: it is superseded, and the file that replaced it applies instead. |
+| No front matter | Did not apply `.atk/overrides/<skill>.md`: it has no front matter, so nobody has approved it. Add the block from Format below. |
 
 Never silently. A team that wrote an override and sees no effect needs to learn why from the
 artifact, not from a second run. On a solo project the author is also the approver and moves the
@@ -192,6 +197,9 @@ Sharpening a skill is what these files are for. Turning one into a different ski
 override that replaces what a skill does, rather than adding to it, belongs in a kit issue.
 
 ## Examples
+
+Each example shows the body only. Every one of them is a file whose front matter, the block under
+Format, says `status: APPROVED`; without it none of them applies.
 
 Adding a check, the most common shape. `.atk/overrides/review.md`:
 
