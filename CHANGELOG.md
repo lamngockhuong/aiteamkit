@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.16](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.15...v0.0.16) (2026-09-25)
+
+
+### Bug Fixes
+
+* close skill definition gaps found by the 2026-09-25 feedback runs ([#69](https://github.com/lamngockhuong/aiteamkit/issues/69)) ([61e1112](https://github.com/lamngockhuong/aiteamkit/commit/61e1112f4b98f2e0bb342890d0a71f1d3b217226))
+* date every artifact name with YYMMDD-HHMM, ticket names included ([#71](https://github.com/lamngockhuong/aiteamkit/issues/71)) ([0b31930](https://github.com/lamngockhuong/aiteamkit/commit/0b31930cb67e5921e2a9d90cfda02696cdd252b2))
+* give atk:estimate a measured basis, complexity drivers, and one sheet shape ([#72](https://github.com/lamngockhuong/aiteamkit/issues/72)) ([555f463](https://github.com/lamngockhuong/aiteamkit/commit/555f4630c3881210fd42779b25e68c6059da9a9c))
+
 ## [0.0.15](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.14...v0.0.15) (2026-09-25)
 
 
