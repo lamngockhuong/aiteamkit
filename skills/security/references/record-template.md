@@ -12,9 +12,13 @@ severities, the redaction rule, and the shape of the two artifacts the skill wri
 | `REFUTED` | Rests on something the code does not do | A non-issue: one line with the line of code or the control that rules it out |
 
 Refute on evidence only: the value is bound, the handler checks the owner, the route is not
-exposed. "Nobody would try that" refutes nothing. Keeping the non-issues is the difference from a
-code review, where a refuted candidate is dropped: a client asking whether a threat was considered
-wants to see that it was, and why it does not apply.
+exposed. "Nobody would try that" refutes nothing. A refutation that rests on how a dependency, an
+external action, or a service behaves cites that behaviour's source, its code or its documentation,
+with the version read; without one the candidate is `PLAUSIBLE`, and reading that source is the check
+that settles it.
+
+Keeping the non-issues is the difference from a code review, where a refuted candidate is dropped: a
+client asking whether a threat was considered wants to see that it was, and why it does not apply.
 
 ## Severities
 
@@ -71,6 +75,11 @@ Front matter per `shared/artifact-paths.md`, then these sections in order:
 
    `Accepted by` and `Date` are left empty for the person who accepts it. The skill writes the first
    three columns only.
+
+   A finding fixed before the record is committed takes no row. It takes a line under the table
+   instead, naming the finding ID and the fix, a commit or a pull request, while its block under
+   Findings stays as written: the record still shows what was found at the commit it was read at,
+   and the reader sees why it does not ship.
 
 9. **Open questions.** Each with the name of the person who must answer it.
 

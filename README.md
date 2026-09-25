@@ -104,7 +104,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:review <pr|branch|paths>             # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature|cases|run|issue> # --plan|--cases|--regression|--update|--run|--bug|--retest|--review --lang --out
 /atk:verify <module|paths|ticket>         # --ui --report-only --out
-/atk:security <branch|range|paths>        # --threat-model --checklist --lang --out
+/atk:security [branch|range|paths]        # --threat-model --checklist --lang --out
 /atk:git                                  # --commit|--pr|--merge|--rebase|--resolve|--stack --lang --out
 /atk:release <version|range>              # --notes|--checklist --audience --env --out
 /atk:incident                             # --live|--postmortem|--runbook --out
