@@ -19,8 +19,8 @@
 // Printing an empty object lets the Skill call through untouched, and that is the
 // only acceptable failure of a hook whose whole job is a convenience.
 
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { join, resolve, sep } from 'node:path';
+import { readFileSync, realpathSync, statSync } from 'node:fs';
+import { join, sep } from 'node:path';
 
 // Past this many characters the file is named rather than inlined, and the skill
 // reads it on demand. A long override in front of every invocation costs more than
@@ -58,12 +58,21 @@ function skillFileName(name) {
 
 // Resolve inside .atk/overrides/ and confirm the result stayed there. The name is
 // already constrained above; this is the second lock, because a path that escapes
-// its directory is the one bug in a file reader worth two checks.
+// its directory is the one bug in a file reader worth two checks. The comparison
+// is between real paths: a repository can commit an override, or the overrides
+// directory itself, as a symlink to a file in the user's home, and this hook reads
+// with Node rather than through the harness's file tool, so nothing would ask
+// before that file's content reached the agent under the override's name. A
+// symlink that stays inside the directory still resolves; one that leaves it is
+// skipped, and the skill opens the path itself, where the harness can ask.
 function overridePath(root, fileName) {
-  const dir = resolve(root, '.atk', 'overrides');
-  const file = resolve(dir, fileName);
-  if (!file.startsWith(dir + sep)) return null;
-  return file;
+  try {
+    const dir = join(realpathSync(root), '.atk', 'overrides');
+    const file = realpathSync(join(dir, fileName));
+    return file.startsWith(dir + sep) && statSync(file).isFile() ? file : null;
+  } catch {
+    return null; // no such file, or a root that does not resolve
+  }
 }
 
 // Returns the context to inject, or null when there is nothing to say. Writing is
@@ -83,11 +92,8 @@ function contextFor() {
   let file = null;
   for (const root of roots) {
     if (!root) continue;
-    const candidate = overridePath(root, fileName);
-    if (candidate && existsSync(candidate) && statSync(candidate).isFile()) {
-      file = candidate;
-      break;
-    }
+    file = overridePath(root, fileName);
+    if (file) break;
   }
   if (!file) return null;
 

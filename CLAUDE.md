@@ -511,6 +511,23 @@ for payload in '{"tool_name":"Bash","tool_input":{}}' \
   test "$out" = "{}" || echo "LEAK on: $payload"
 done; echo "OK load-overrides quiet"
 
+# An override that is a symlink out of .atk/overrides/, or an overrides directory that is one, is
+# not read: the hook reads with Node, so nothing in the harness would ask before the target reached
+# the agent. A symlink that stays inside the directory still loads.
+t=$(mktemp -d); mkdir -p "$t/out" "$t/p/.atk/overrides" "$t/q/.atk"
+echo outside > "$t/out/fix.md"; echo inside > "$t/p/.atk/overrides/real.md"
+ln -s "$t/out/fix.md" "$t/p/.atk/overrides/fix.md"; ln -s real.md "$t/p/.atk/overrides/plan.md"
+ln -s "$t/out" "$t/q/.atk/overrides"
+for c in "p:fix:{}" "q:fix:{}"; do
+  IFS=: read -r dir skill want <<< "$c"
+  out=$(echo "{\"tool_name\":\"Skill\",\"tool_input\":{\"skill\":\"atk:$skill\"}}" \
+    | CLAUDE_PROJECT_DIR="$t/$dir" node hooks/load-overrides.mjs)
+  test "$out" = "$want" && echo "OK $dir symlink out refused" || echo "LEAK $dir: $out"
+done
+echo '{"tool_name":"Skill","tool_input":{"skill":"atk:plan"}}' \
+  | CLAUDE_PROJECT_DIR="$t/p" node hooks/load-overrides.mjs | grep -q inside \
+  && echo "OK symlink inside loads" || echo "FAIL symlink inside"; rm -rf "$t"
+
 # Each harness gets the registration it can read. Claude Code: exec form, since shell form would
 # break bare Windows. Codex: a string command, since Codex substitutes ${PLUGIN_ROOT} there and
 # nowhere else, and an args array would reach Node as a literal path that does not exist. Every
