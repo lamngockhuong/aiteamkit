@@ -124,7 +124,7 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 - Ready when: <the log line, port, or health check that proves it started>
 - Logs: `<path or how to read them>`
 - Data check: `<read-only command to confirm a side effect>`
-- Prepare: `<read-only command showing whether the data store matches the branch>`, then `<the commands that bring it there: migrate, seed, role grants, test logins>`, or none
+- Prepare: `<read-only command showing whether the data store holds everything the commands after it bring in>`, then `<the commands that bring it there: migrate, seed, role grants, test logins>`, or none
 - Shared stores: <each cache, bucket, or database another session also reads; for a cache or bucket, the read-only command that lists its entries and the command that removes one>, or none
 - Cleanup: `<how to stop what was started>`
 - Local only: <how to be sure this points at a local environment>

@@ -82,8 +82,8 @@ worktrees sharing one database and one cache exercised every path above.
 
 ## 4b. Recorded intent
 
-Two decisions were open in the feedback record and were answered by Lam Ngoc Khuong on 2026-09-28,
-before any file changed:
+Three decisions were answered by Lam Ngoc Khuong on 2026-09-28. The first two were open in the
+feedback record and were answered before any file changed:
 
 - Setup commands live in the profile, as fields `atk:init` fills, not in the skill as a generic
   step.
@@ -93,7 +93,7 @@ before any file changed:
   the run removing its rows afterwards; answered the same day, after the first draft of this change
   applied the list-and-remove rule to databases as well as caches and buckets.
 
-No existing record contradicted either. `SKILL.md:62-66` ("never guess a start command") is the
+No existing record contradicted any of them. `SKILL.md:62-66` ("never guess a start command") is the
 intent the first answer keeps.
 
 ## 5. The change
@@ -135,20 +135,41 @@ Tidy: this repository has no code, so the host's clean-up capability had nothing
 was run by hand per `shared/tidy-pass.md` over the changed lines, and changed one sentence: the
 tidy-step line in step 5 that would have skipped the `atk:git` handover.
 
+### After review
+
+The review of PR #76 raised nine findings that were fixed on the same branch, and two further
+decisions by Lam Ngoc Khuong on 2026-09-28:
+
+- The shared-database question is asked once, after step 1 and before any fixture or request, since
+  asked before the first writing case it could fall after a request, where a fixture no longer
+  counts as setup.
+- A profile with no `Shared stores` line does not skip the question: the run names each database the
+  cases write to and asks whether another session reads it (decided: ask, rather than assume not
+  shared).
+- A `Prepare` check that covers only migrations vouches for them alone; seeds, grants and test
+  logins it does not cover run only under the same question as a mismatch.
+- The report carries the count of each shared-cache listing and the names added and removed, never
+  the full listing, and a name carrying a credential, session identifier or personal data by its
+  kind.
+- `TBD` in `Prepare` or `Shared stores` is treated as absent, with the owed name in Not verified.
+- The fixture section points at the rule it depends on, both `skills-overview.md` files describe the
+  three listings the same way, and this record's line count and decision count are corrected.
+
 ## 6. Verified
 
 From `CLAUDE.md`, "Common verification commands":
 
 - No em-dash, no `ak:` reference, every `name:` matches its folder, `docs/` and `docs/vi/` mirror
   each other, no dated name without its time: all silent.
-- `skills/verify/SKILL.md` is 283 lines, under 300, and its section order is unchanged.
+- `skills/verify/SKILL.md` is 287 lines, under 300, and its section order is unchanged.
 - The translation checker `check_translation.py` over the two touched `docs/vi/` files: 110 findings on
   `main`, three more after the change, `fixture`, `worktree` and `bucket`, each a technical term kept
   as such.
 
 ## 7. Not verified
 
-- No `atk:verify` run has yet exercised the new steps. The next run against the client project,
+- No `atk:verify` run has yet exercised the new steps; accepted by Lam Ngoc Khuong on 2026-09-28,
+  who chose to merge without a throwaway run first. The next run against the client project,
   after its profile gains the two lines, is the test.
 - `atk:init` detecting `Prepare` and `Shared stores` has not been run against any project.
 - Profiles written before this change have neither line. They keep working and report the check as

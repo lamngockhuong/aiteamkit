@@ -15,8 +15,10 @@ A local database that has not had the branch's migrations, or holds an older rev
 the change adds, fails in a way that looks like the change. So the first command of the profile's
 `Prepare` line, the read-only one, runs in step 1, before any process starts.
 
-When it reports that the store matches, nothing is prepared. When it reports a mismatch, the run
-stops and asks, every time. It shows what differs, which stores the `Shared stores` line says
+When it reports that the store holds everything the rest of `Prepare` brings in, nothing is
+prepared. A check that covers only part of it, a migration status that says nothing about seeds,
+grants, or test logins, vouches for that part alone: the steps it does not cover are run only under
+the same question as a mismatch. When it reports a mismatch, the run stops and asks, every time. It shows what differs, which stores the `Shared stores` line says
 other sessions read, and these options:
 
 - run the rest of `Prepare` against this store, when the person answering says no other session
@@ -30,14 +32,17 @@ worktree is running against, and a migration applied under it is not undone by s
 
 Where the profile has no `Prepare` line, the check does not run and is not improvised: the report
 says in Not verified that the data store's state was not checked, and names `/atk:init --audit` as
-what adds the line.
+what adds the line. A `Prepare` or `Shared stores` line that reads `TBD` is treated as absent, and
+the person the `TBD` names goes into Not verified with it.
 
 ## Fixtures for one case
 
 Some cases need data the change only reads: rows a batch outside the change writes, or a
 soft-deleted record for the filter to exclude. Writing them is setup, not tampering, when all three
-hold: it happens before the first request of the run, into a store the run may write per the
-section above, and every write is listed in the report with its command. Writing after a request,
+hold: it happens before the first request of the run, into a store the run may write, and every write is
+listed in the report with its command. A store only this run uses may be written; a shared
+database only after the question in A shared database under Cleaning up, which is asked before any
+fixture for that reason. Writing after a request,
 to change what an assertion sees, is tampering whatever the reason, and is what step 3 forbids.
 
 A fixture is the one command of a run that may come from outside the profile, since no profile can
@@ -131,20 +136,32 @@ A store another session reads is different, because what this run left there is 
 session: a cache entry shared across users, an object in a bucket another worktree lists. For each
 cache or bucket the `Shared stores` line names, list its entries before the first request, list them
 again after the last, and remove exactly the entries that appeared in between, by name, with the
-removal command from the same line. Then list once more and put all three listings in the report. An
-entry that was there before the run is never removed, even when it looks like debris. Where the
+removal command from the same line. Then list once more. The report carries the number of entries
+each of the three listings held and the names of the entries added and removed, never a full
+listing: a shared cache runs to thousands of keys, and its key names routinely carry a session
+identifier or an email. A name that carries a credential, a session identifier, or personal data is
+written by its kind instead, `<redacted: session key>`, since the report is committed. An entry
+that was there before the run is never removed, even when it looks like debris. Where the
 application writes to a store the line does not name, the report says so in Not verified rather than
 guessing at a removal command.
 
 A shared database cannot be handled that way, because nothing lists every row of every table, and a
 removal chosen from a partial listing deletes another session's data. So a case that writes to a
-database the `Shared stores` line names, a fixture included, is not run until the user answers,
-asked once before the first such case with the cases listed. The options:
+database the `Shared stores` line names, a fixture included, is not run until the user answers. The
+question is asked once, after step 1 and before any fixture is written or any request is sent,
+with every case and fixture that writes to such a database listed. Asked later, it would come after
+a request, and a fixture answered then would be written too late to count as setup. The options:
 
 - run them and leave the rows, each case's rows named in the report so the owner of the store can
   remove them;
 - point the run at a separate store, per the data-store section above;
 - skip those cases, each recorded in Not verified with this as the reason.
+
+A profile with no `Shared stores` line cannot say which database is shared, and treating that as
+"none" is how a run writes into the store another worktree is using. So, at the same moment and in
+the same question, the run names each database the cases write to and asks whether another session
+reads it; one the user calls shared is handled as if the line named it. The report says in Not
+verified that the profile has no `Shared stores` line, and names `/atk:init --audit`.
 
 A resource the run itself created, a database, a container, a bucket, a file outside the working
 tree, is recorded like a process as it is created: what it is, and the command that removes it. At

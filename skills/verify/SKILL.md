@@ -134,7 +134,8 @@ The three assertion shapes, with what each proves and how each is read out of a 
 in `references/runtime-checks.md`. Data checks use the read-only command from the profile. This
 skill never writes to data by hand to make an assertion pass. A fixture a case needs, data the change
 only reads, is setup rather than that, when it is written before the first request, into a store the
-run may write, and listed in the report; Fixtures for one case in `references/runtime-checks.md`
+run may write, and listed in the report; a fixture for a shared database waits for the question
+asked before any fixture; Fixtures for one case in `references/runtime-checks.md`
 draws the line. A write after a request, to change what an assertion sees, is never setup.
 
 Under `--ui`, `references/ui-checks.md` adds the screen comparison: the widths to check, how to
@@ -223,7 +224,7 @@ database, a container, a bucket, is recorded the same way with the command that 
 **A shared store is treated like a port.** A cache or bucket another session reads gets an
 inventory before the first request, and at cleanup exactly the entries this run added are removed
 and the inventory is taken again. A database another session reads cannot be inventoried that way,
-so a case that writes to one waits for the user's answer before it runs. The rule for evidence, that
+so a case that writes to one waits for an answer asked once, before any fixture or request. The rule for evidence, that
 data stays where it was written, covers only a store this run alone uses.
 `references/runtime-checks.md` holds all three, under Cleaning up.
 
@@ -263,8 +264,9 @@ distance between those two is the whole reason the kit separates the roles.
 - [ ] The data store's state was checked before anything started, and a mismatch stopped the run
       and was put to the user, or the report says the profile has no `Prepare` line.
 - [ ] Every entry the run wrote into a shared cache or bucket was removed and the listing after
-      shows it, no case wrote to a shared database before the user answered, and every resource
-      the run created was removed or left with its removal command.
+      shows it, no case or fixture wrote to a shared database before the user answered, a profile
+      with no `Shared stores` line was asked about each database instead, and every resource the
+      run created was removed or left with its removal command.
 - [ ] The readiness signal was waited for, not assumed from the start command returning.
 - [ ] Every case has at least one side-effect assertion, or a stated reason why it has none.
 - [ ] No status code is reported as an assertion on its own.

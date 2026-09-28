@@ -497,7 +497,8 @@ chạy dài vẫn là thay đổi có người phải review.
 Trước khi khởi động gì, skill kiểm tra kho dữ liệu trên máy có khớp với branch hay không. Nếu lệch, run
 dừng lại và hỏi chứ không tự migrate, vì có thể một worktree khác đang chạy trên cùng database đó.
 Những gì run ghi vào cache hay bucket mà session khác cũng đọc sẽ bị xoá theo tên khi kết thúc, và
-danh sách trước lẫn sau khi xoá được đưa vào báo cáo. Ca nào sẽ ghi vào database mà session khác
+báo cáo ghi số mục của ba lần liệt kê: trước request đầu tiên, sau request cuối cùng, và sau khi
+xoá. Ca nào sẽ ghi vào database mà session khác
 cũng dùng thì phải chờ người dùng trả lời, vì không danh sách nào chỉ ra được dòng nào do run này
 ghi.
 

@@ -111,8 +111,10 @@ The cleanup command, its result, and the post-run inventory showing nothing is l
 halves. "Cleanup ran" and "nothing is left" are different claims, and only the second is worth the
 reader's trust.
 
-For each shared cache or bucket, the three listings: before the first request, after the last, and
-after the removal, with the entries removed named between them. For each shared database, what the
+For each shared cache or bucket, how many entries each of the three listings held, before the first
+request, after the last, and after the removal, with the entries added and removed named between
+them. Never the full listing, and a name carrying a credential, a session identifier, or personal
+data by its kind, per Cleaning up in `references/runtime-checks.md`. For each shared database, what the
 user answered, and the rows each case left there when the answer was to run them.
 
 Anything deliberately left running or left in place, why, and how to stop or remove it.

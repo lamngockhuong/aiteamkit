@@ -494,7 +494,8 @@ still a change somebody has to review.
 Before anything starts, it checks that the local data store matches the branch, and a mismatch
 stops the run with a question rather than a migration, because another worktree may be running
 against the same database. What it writes into a cache or bucket other sessions read is removed by
-name at the end, and the listings before and after go in the report. A case that would write to a
+name at the end, and the report carries how many entries it listed before the first request, after
+the last, and after the removal. A case that would write to a
 database other sessions use waits for an answer first, because no listing can say which rows were
 this run's.
 
