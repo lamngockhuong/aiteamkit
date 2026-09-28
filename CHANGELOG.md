@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.18](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.17...v0.0.18) (2026-09-28)
+
+
+### Bug Fixes
+
+* make atk:verify check the data store and clean shared stores ([#76](https://github.com/lamngockhuong/aiteamkit/issues/76)) ([ef99cf5](https://github.com/lamngockhuong/aiteamkit/commit/ef99cf524f91b47a4d6a2958b63e490683a00d29))
+
 ## [0.0.17](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.16...v0.0.17) (2026-09-25)
 
 
