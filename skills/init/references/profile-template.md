@@ -124,11 +124,17 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 - Ready when: <the log line, port, or health check that proves it started>
 - Logs: `<path or how to read them>`
 - Data check: `<read-only command to confirm a side effect>`
+- Prepare: `<read-only command showing whether the data store matches the branch>`, then `<the commands that bring it there: migrate, seed, role grants, test logins>`, or none
+- Shared stores: <each cache, bucket, or database another session also reads; for a cache or bucket, the read-only command that lists its entries and the command that removes one>, or none
 - Cleanup: `<how to stop what was started>`
 - Local only: <how to be sure this points at a local environment>
 
 <!-- One block per app. A project whose apps live in different repositories has one block each, and
      `Runs from` is what says which. -->
+<!-- Prepare is not the Setup line under Commands: Setup installs dependencies, Prepare brings the
+     data the application reads to the state of the branch. A command that wipes something another
+     session uses, such as a seed that resets a shared login pool, does not belong here; name the
+     one that adds to it instead. -->
 ````
 
 ## Filling rules

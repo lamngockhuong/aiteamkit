@@ -47,8 +47,14 @@ The result of the local-only check from step 1, with the command and its output.
 because it is the section that stops a reader worrying that these assertions were made against a
 shared environment.
 
+Then the data store: the `Prepare` check and its output, and, where it found a mismatch, what the
+user chose and each command that followed. Where the profile has no `Prepare` line, say so here and
+again in section 6.
+
 Then the processes started, one row each: command, PID, port, and what the readiness signal was and
-how long it took.
+how long it took. Resources the run created that are not processes follow, each with the command
+that removes it, and the fixtures written before the first request, each with its command and the
+case that needs it.
 
 ## 3. Cases
 
@@ -105,7 +111,11 @@ The cleanup command, its result, and the post-run inventory showing nothing is l
 halves. "Cleanup ran" and "nothing is left" are different claims, and only the second is worth the
 reader's trust.
 
-Anything deliberately left running, why, and how to stop it.
+For each shared cache or bucket, the three listings: before the first request, after the last, and
+after the removal, with the entries removed named between them. For each shared database, what the
+user answered, and the rows each case left there when the answer was to run them.
+
+Anything deliberately left running or left in place, why, and how to stop or remove it.
 
 ## 8. Found on the way
 

@@ -101,7 +101,14 @@ failed test. Say what was found, and hand it to the person the `Team` section na
 environment. A role with no name attached reaches nobody, and a team that has no SRE deletes that row
 from its profile, so "tell SRE" can resolve to no one at all.
 
-Take the process inventory here as well, per `## Process management` below.
+Then the data store, per The data store before anything starts in `references/runtime-checks.md`:
+the read-only check from the profile's `Prepare` line tells whether the store matches the branch.
+A mismatch stops the run and is put to the user, every time, with the options that section lists.
+This skill never migrates or seeds a store on its own judgement, because another worktree may be
+running against it.
+
+Take the process inventory here as well, per `## Process management` below, and the entry listing of
+every store the profile's `Shared stores` line names.
 
 ### 2. Start and wait
 
@@ -125,7 +132,10 @@ observable side effect, the report says which case and why, rather than letting 
 
 The three assertion shapes, with what each proves and how each is read out of a running system, are
 in `references/runtime-checks.md`. Data checks use the read-only command from the profile. This
-skill never writes to data by hand to make an assertion pass.
+skill never writes to data by hand to make an assertion pass. A fixture a case needs, data the change
+only reads, is setup rather than that, when it is written before the first request, into a store the
+run may write, and listed in the report; Fixtures for one case in `references/runtime-checks.md`
+draws the line. A write after a request, to change what an assertion sees, is never setup.
 
 Under `--ui`, `references/ui-checks.md` adds the screen comparison: the widths to check, how to
 compare against the design, what counts as a difference and what does not, and the console errors to
@@ -163,7 +173,9 @@ not a change to the thing under verification.
 ### 5. Clean up and report
 
 Stop every process this run started, in the reverse order it started them, using the cleanup command
-from the profile. Then confirm they are gone rather than assuming the command worked. Cleanup is
+from the profile, then remove what the run wrote into shared stores and what it created, per
+`references/runtime-checks.md`. Then confirm all of it is gone rather than assuming the command
+worked. Cleanup is
 part of done, not an optional last step: see `## Process management`.
 
 Write the report from `references/report-template.md`. It is the same report whether the run passed,
@@ -173,15 +185,15 @@ because that is what the next person needs in order to trust it.
 Where a round changed code, tidy it first, with the host's code clean-up capability, `/simplify` in
 Claude Code, per `shared/host-capabilities.md`. It covers only what the rounds changed, and the case
 that was failing is re-run after it: a clean-up that puts that case back to red is reverted rather
-than debugged, and the report says so. A run whose rounds changed nothing skips this and the
-paragraph below with it.
+than debugged, and the report says so. A run whose rounds changed nothing skips this.
 
 Then close it by handing off to `atk:git`, like any other change the kit makes: the reference
 documents the change owes, the branch, the commit, and the consent line that everything past the
 commit has to cross, all of it the contract in `shared/finalize-steps.md`. A
 verification that ends with edited files sitting in the working tree and no decision about them is
 how a fix made at six o'clock gets committed by somebody else tomorrow, inside a commit about
-something else. A run that changed nothing skips this and says so.
+something else. A run that changed no code still hands over the report: it is a record, which is
+committed per Persistence in `shared/artifact-paths.md`, so the commit carries the report alone.
 
 ## Process management
 
@@ -205,7 +217,15 @@ inventory by process instead. A port that changes every run cannot be used to re
 and pretending otherwise produces a check that always passes.
 
 **Record what was started.** Command, PID, and port, for every process, in the report. A process
-nobody wrote down is a process nobody will stop.
+nobody wrote down is a process nobody will stop. A resource the run created that is not a process, a
+database, a container, a bucket, is recorded the same way with the command that removes it.
+
+**A shared store is treated like a port.** A cache or bucket another session reads gets an
+inventory before the first request, and at cleanup exactly the entries this run added are removed
+and the inventory is taken again. A database another session reads cannot be inventoried that way,
+so a case that writes to one waits for the user's answer before it runs. The rule for evidence, that
+data stays where it was written, covers only a store this run alone uses.
+`references/runtime-checks.md` holds all three, under Cleaning up.
 
 **Stop cleanly.** The profile's cleanup command first, then `SIGTERM`, and only then a hard kill.
 Stop only what this run started. Anything else on the machine belongs to the user or to another
@@ -237,7 +257,14 @@ distance between those two is the whole reason the kit separates the roles.
 - [ ] The `Verify` section of `.atk/profile.md` was present and complete, and the run stopped when it
       was not.
 - [ ] The local-only check ran before anything was started, and its result is in the report.
-- [ ] Every command that started, queried, or stopped anything came from the profile.
+- [ ] Every command that started, queried, prepared, or stopped anything came from the profile,
+      apart from fixtures and a resource a person asked the run to create, each listed in the
+      report with its reason.
+- [ ] The data store's state was checked before anything started, and a mismatch stopped the run
+      and was put to the user, or the report says the profile has no `Prepare` line.
+- [ ] Every entry the run wrote into a shared cache or bucket was removed and the listing after
+      shows it, no case wrote to a shared database before the user answered, and every resource
+      the run created was removed or left with its removal command.
 - [ ] The readiness signal was waited for, not assumed from the start command returning.
 - [ ] Every case has at least one side-effect assertion, or a stated reason why it has none.
 - [ ] No status code is reported as an assertion on its own.
