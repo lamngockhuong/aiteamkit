@@ -103,5 +103,7 @@ Two further checks live outside that section, each beside the rule it enforces:
 - Ready when: not applicable.
 - Logs: not applicable.
 - Data check: the checks named in the Commands section stand in for runtime verification.
+- Prepare: none; there is no data store.
+- Shared stores: none.
 - Cleanup: not applicable.
 - Local only: not applicable; nothing is started.

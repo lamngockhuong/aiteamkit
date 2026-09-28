@@ -184,7 +184,7 @@ a section to delete.
 | Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, whether the project writes its reference documents before the code or after it, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release; and every skill detecting a tracker, per `shared/ticket-adapters.md` |
 | Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, and the language the team writes artifacts in | all |
-| Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to clean up, how to be sure the target is local | verify |
+| Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to bring the data store to the branch's state, which stores other sessions also read, how to clean up, how to be sure the target is local | verify |
 
 The authored language in Docs is not the working language in Team, and a profile that fills one
 from the other will put a document in the wrong place. Team says which language a skill writes

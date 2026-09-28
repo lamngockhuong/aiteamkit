@@ -279,6 +279,23 @@ candidates means a question, because the wrong one wastes every later run of `at
 A repository that ships content rather than an application has nothing to start. Record that, and
 let the Verify section point at the check commands instead.
 
+### How to prepare its data, and what it shares
+
+`Prepare` comes from the database package's scripts, a migration tool's status and apply commands,
+the seed script, and a setup document that says which grants or test logins the environment needs.
+The first command is the read-only one that reports whether the store matches the branch, because
+`atk:verify` runs it before anything else and stops on a mismatch. It has to cover what the
+commands after it bring in: a migration status alone says nothing about seeds, grants, or test
+logins, so where the project has nothing better, record that and `atk:verify` asks before running
+the rest. A seed that resets something other sessions use, a whole login pool or a shared bucket,
+is recorded with that warning or replaced by the command that adds one entry.
+
+`Shared stores` comes from the local environment's definition, a `docker-compose.yml` or the
+application's connection configuration: every cache, bucket, or database that more than one
+worktree or session points at. Detection says which stores exist and records each as shared; the
+user corrects that in step 2 with every other detected value, so it costs no turn. An application
+with no data store records `none` for both.
+
 ## What is never detectable
 
 Ask these, and nothing else:
