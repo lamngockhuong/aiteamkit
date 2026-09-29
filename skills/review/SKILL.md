@@ -3,9 +3,8 @@ name: review
 description: >
   Review a teammate's pull request the way a team reviewer should: against the requirement, the
   design, and the team conventions, with findings ranked by severity, each one citing a line and
-  stating the failure it causes, and blocking issues separated from preferences.
-  Use before approving a PR, when reviewing a colleague's branch, or when a review needs a second
-  opinion.
+  stating the failure it causes, and blocking issues separated from preferences. Use before
+  approving a PR, when reviewing a colleague's branch, or when a review needs a second opinion.
   Triggers on: "review PR", "code review", "review this branch", "review giúp", "duyệt code",
   "check PR", "レビュー", "approve this", "is this ready to merge", "/atk:review".
 argument-hint: "[pr-number|branch|commit|paths] [--against <design-path>] [--comment] [--strict] [--parallel <N>] [--out <path>]"
@@ -62,7 +61,8 @@ once with the target and the paths: it runs steps 1 to 6 and spawns no reviewer 
 ### 1. Establish intent
 
 Find the requirement and design behind the change. Without them, say so in the review and review
-against the PR description alone; a review with no stated intent is a style check.
+against the PR description alone; a review with no stated intent is a style check. A finding whose
+fix reverses a decision they record keeps its severity, per `references/report-format.md`.
 
 ### 2. Read the diff in context
 
@@ -80,8 +80,8 @@ a run:
 
 **Which rounds run.** All nine, minus the ones whose subject the diff does not contain: no deleted
 lines, no signature change, no behavior change. That is different from a round that ran and found
-nothing, and the report keeps the two apart. The list comes from step 4 below and is not a second
-list alongside it.
+nothing, and the report keeps the two apart. The list comes from step 4 below. Called again after a
+fix, the diff is the fix and what it reaches, per `references/review-rounds.md`.
 
 **Where they run, and how many copies.** Every round runs once. The size of the change decides only
 where, measured in changed lines and never in files: 500 lines or fewer run all nine rounds and the

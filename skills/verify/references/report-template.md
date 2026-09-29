@@ -115,7 +115,9 @@ For each shared cache or bucket, how many entries each of the three listings hel
 request, after the last, and after the removal, with the entries added and removed named between
 them. Never the full listing, and a name carrying a credential, a session identifier, or personal
 data by its kind, per Cleaning up in `references/runtime-checks.md`. For each shared database, what the
-user answered, and the rows each case left there when the answer was to run them.
+user answered, and the rows each case left there when the answer was to run them. For each mail
+catcher or other channel a code was read from, how many messages each listing held and which message
+the code came from, never the code, and a statement that nothing was deleted from it.
 
 Anything deliberately left running or left in place, why, and how to stop or remove it.
 

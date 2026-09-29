@@ -18,6 +18,11 @@ of truth for the same rules, and two sources of one rule drift apart quietly.
 At most twice. The second pass is there because a fix can introduce a finding; a third pass is there
 because the first two did not work, which is a different problem from the one more fixing solves.
 
+The second call reviews the fix, not one round picked because it raised the finding and not the
+whole change again: pass it the first report's path, and `atk:review` takes the diff since then and
+what that diff reaches, per Called again after a fix in its `references/review-rounds.md`. The
+record says which rounds ran the second time.
+
 ## Calling the review
 
 Call `atk:review` on the change, and give it what it needs to review against intent rather than
@@ -56,6 +61,19 @@ do instead.
 
 The work waits on that answer where the finding is `BLOCKING`. It carries on where the finding is
 `SHOULD FIX`, with the dispute recorded.
+
+A dispute never changes the severity. The finding stays at the severity `atk:review` gave it, with
+the dispute beside it: lowering a `BLOCKING` to `SHOULD FIX` so the work can carry on is the move the
+ceiling below forbids, reached by a different road. That holds most of all when the reason is that
+the finding contradicts a decision already recorded in the plan or a design document. `atk:review`
+labels that case with the decision and the person who made it, and the answer is theirs, not the
+author's.
+
+Waiting means what it means after an escalation: step 6 does not start, so nothing is pushed,
+opened, or merged, and the change stays in the local repository where it is. Say so to the
+user in plain words, with the finding, the reason it is disputed, and who has to answer. A user who
+is told only that a dispute was recorded, and then asked whether to push, is being asked a question
+the skill has already answered.
 
 ## Re-verify after each round
 

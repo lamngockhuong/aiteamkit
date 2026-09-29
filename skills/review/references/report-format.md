@@ -65,6 +65,14 @@ exists to prevent.
 - **Issue.** What breaks and why it matters. `BLOCKING` names a failing input or a broken contract,
   per the definition of done.
 - **Fix.** What to do. A finding with no suggestion is a complaint.
+- **Decision.** Only where the fix would reverse a decision the intent of step 1 records: in the
+  plan, a design document, or an ADR. It names the decision with its source as a path and line, and
+  the person who made it, and it goes between Fix and Raised by. The finding keeps the severity the
+  rounds gave it, because a recorded decision says what was chosen, not that the consequence the
+  round found is harmless. Reopening the decision is that person's call, per rule 3 of
+  `shared/team-roles.md`, so the reviewer neither drops the finding nor lowers it because a decision
+  exists, and a skill that called the review does not lower it either: it takes the finding to that
+  person as it stands.
 - **Raised by.** The tags from `references/review-rounds.md`: `[k/N]` for a replicated round, the
   round name alone where it ran once, `sweep` for the closing pass. A `PLAUSIBLE` verdict is stated
   here with the one check that would settle it. `CONFIRMED` is the default and is not written out,

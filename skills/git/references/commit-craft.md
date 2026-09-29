@@ -93,3 +93,12 @@ For the reading of the diff itself, do one of two things after each commit and s
 
 The second is the honest answer where the diff is too large to re-read, and it is still better than
 the silence that reads as a commit nobody has looked at since the hook rewrote it.
+
+A hook can also use the stash. `lint-staged`, among others, saves the part of the tree it is not
+checking with `git stash` before it runs and restores it afterwards. The stash is one stack per
+repository, shared by every worktree of it, so two sessions committing at the same moment in two
+worktrees can each restore the other's entry, and a hook that fails halfway leaves its entry on the
+stack for whoever runs next. Where the hook configuration shows this and `git worktree list` shows
+more than one worktree, take `git stash list` before the commit and after it; the two should match.
+An entry that appeared or disappeared is reported to the user, never popped or dropped, because it
+may be another session's work.

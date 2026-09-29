@@ -125,7 +125,7 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 - Logs: `<path or how to read them>`
 - Data check: `<read-only command to confirm a side effect>`
 - Prepare: `<read-only command showing whether the data store holds everything the commands after it bring in>`, then `<the commands that bring it there: migrate, seed, role grants, test logins>`, or none
-- Shared stores: <each cache, bucket, or database another session also reads; for a cache or bucket, the read-only command that lists its entries and the command that removes one>, or none
+- Shared stores: <each cache, bucket, mail catcher, or database another session also reads; for a cache or bucket, the read-only command that lists its entries and the command that removes one; for a mail catcher, the read-only commands that list its messages and read one, never one that deletes>, or none
 - Cleanup: `<how to stop what was started>`
 - Local only: <how to be sure this points at a local environment>
 

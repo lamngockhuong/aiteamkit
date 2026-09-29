@@ -167,8 +167,8 @@ verification from step 3, and repeat at most twice.
 
 `NIT` findings are never fixed here and never block, exactly as `atk:review` defines them. Disputing
 a finding is not fixing it: a finding the author believes is wrong goes to the Tech Lead with the
-reason. A disputed `BLOCKING` finding stops the work until the answer comes; a disputed `SHOULD FIX`
-does not, and the dispute goes into the record.
+reason. A disputed `BLOCKING` finding keeps its severity and stops the work until the answer comes;
+a disputed `SHOULD FIX` does not, and the dispute goes into the record.
 
 Still `BLOCKING` after the second round means stop. Escalate with the remaining findings, each with
 its file and line, and the name of the person who has to look. A third round is where a design
@@ -183,6 +183,9 @@ unreviewed and names who must review it before merge. A skipped review that nobo
 record is the same as a review that never happened and was never missed.
 
 ### 6. Finalize
+
+Not while a `BLOCKING` finding is disputed or escalated: tell the user the work stops here, and who
+answers, per `references/review-fix-loop.md`.
 
 Hand off to `atk:git` for the branch, the commit, and every action past it, with the implementation
 record as the pull request body. `shared/finalize-steps.md` is the contract that skill carries out,
@@ -241,6 +244,8 @@ done: this skill is the author, and done is the approver's word.
 - [ ] What the review would cost was said before it was called.
 - [ ] `atk:review` was called, or `--no-review` was passed and the record says who must review.
 - [ ] Every `BLOCKING` finding is fixed or escalated by name, and no `NIT` was fixed silently.
+- [ ] No finding's severity was lowered by the author, and step 6 did not start while a `BLOCKING`
+      finding was disputed or escalated.
 - [ ] The review loop ran at most twice before escalating.
 - [ ] The record says whether `atk:verify` ran, and a change nobody has run is named as one.
 - [ ] A plan whose steps prescribe test-first was followed that way for those steps, and the record

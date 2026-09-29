@@ -484,6 +484,26 @@ The review is still one model's work, and the report never presents a count as a
 people. `shared/team-roles.md` rule 2 holds at any number of rounds: the reviewer is a person, and
 this is what that person reads before they start.
 
+## Called again after a fix
+
+A caller that fixed findings and calls the review again, `atk:implement` in its review and fix loop
+above all, gets a review of the fix. Not the one round that raised the finding, because a fix to a
+document can break the test that asserts what it says, and a fix to a guard can move a contract. Not
+the whole change from the start either, because what did not change since the first review has
+already had its rounds.
+
+The subject is the diff since the first review, plus what that diff reaches: the callers of anything
+it changed, and the tests and reference documents that describe it. The rounds for it are chosen the
+way step 3 of the skill chooses them for any diff, and the band follows from the size of that
+subject, not from the size of the original change. Every finding of the first review that the fix
+set out to close is then checked by its identifier, and the report says of each whether it is closed
+or still open.
+
+The report says it is a second pass, names the report of the first by its path, and lists the
+rounds that ran this time. A finding that stayed open keeps its identifier and a new one takes the
+next number, per Finding identifiers in `references/report-format.md`, so the caller can tell a
+finding that survived the fix from one the fix introduced.
+
 ## When the host cannot spawn agents
 
 The nine rounds run one after another in the session that asked for the review, and the report says

@@ -339,6 +339,11 @@ Once the verification is green, the change goes through the host's code clean-up
 behavior, not on duplication the author could have removed. On a harness without that capability the
 record says so rather than leaving the step invisible.
 
+A `BLOCKING` finding the author disputes keeps its severity and stops the work: nothing is committed
+through `atk:git`, pushed, or opened until the Tech Lead answers, and the user is told so in plain
+words rather than asked whether to push. The second review after a round of fixes covers the fixes
+and what they reach, not only the round that raised the finding.
+
 ---
 
 ## `atk:fix`
@@ -388,7 +393,8 @@ file is `atk:qa --review`, which checks the cases against their sources.
 **The habit that matters.** It starts from what the change was supposed to do, not from the diff,
 and it separates blocking defects from preferences, which is what makes a review feel fair. A
 convention finding quotes the rule and cites its ID, so the author can dispute the rule rather than
-the reviewer.
+the reviewer. A finding whose fix would reverse a decision the plan or a design records keeps its
+severity and names the decision and the person who made it, because reopening it is theirs.
 
 Nothing reaches the list unverified. A finding is confirmed when the input that triggers it can be
 named, and plausible when the mechanism is real but the trigger depends on timing, environment, or
@@ -495,9 +501,12 @@ Before anything starts, it checks that the local data store matches the branch, 
 stops the run with a question rather than a migration, because another worktree may be running
 against the same database. What it writes into a cache or bucket other sessions read is removed by
 name at the end, and the report carries how many entries it listed before the first request, after
-the last, and after the removal. A case that would write to a
+the last, and after the removal. A mail catcher it reads a login code from is shared as well: it
+reads the message that arrived after its own request and deletes nothing, since a message another
+session waits for cannot be sent again. A case that would write to a
 database other sessions use waits for an answer first, because no listing can say which rows were
-this run's.
+this run's. A start that fails for missing configuration stops with a question too: the run never
+fills in values of its own, not even from the project's example file.
 
 ---
 

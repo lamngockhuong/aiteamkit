@@ -117,8 +117,10 @@ capture the logs from the first line rather than from the moment somebody thinks
 
 Never treat a start command that returned as a ready application. Wait for the readiness signal the
 profile names, with a stated timeout, and report a timeout as a failure of this run rather than
-retrying silently. An assertion run against an application that had not finished starting produces a
-failure that costs an hour to understand.
+retrying silently. A start that exits early for missing configuration stops the run with a question,
+per Knowing it is ready in `references/runtime-checks.md`; the run never fills in values itself.
+An assertion run against an application that had not finished starting produces a failure that
+costs an hour to understand.
 
 ### 3. Exercise and assert
 
@@ -226,7 +228,9 @@ inventory before the first request, and at cleanup exactly the entries this run 
 and the inventory is taken again. A database another session reads cannot be inventoried that way,
 so a case that writes to one waits for an answer asked once, before any fixture or request. The rule for evidence, that
 data stays where it was written, covers only a store this run alone uses.
-`references/runtime-checks.md` holds all three, under Cleaning up.
+A mail catcher, or any channel a login code arrives through, is shared whether the line names it or
+not: it is listed before the request that sends the code, read from the message that arrived after
+it, and never emptied. `references/runtime-checks.md` holds all four, under Cleaning up.
 
 **Stop cleanly.** The profile's cleanup command first, then `SIGTERM`, and only then a hard kill.
 Stop only what this run started. Anything else on the machine belongs to the user or to another
@@ -259,12 +263,13 @@ distance between those two is the whole reason the kit separates the roles.
       was not.
 - [ ] The local-only check ran before anything was started, and its result is in the report.
 - [ ] Every command that started, queried, prepared, or stopped anything came from the profile,
-      apart from fixtures and a resource a person asked the run to create, each listed in the
-      report with its reason.
+      apart from fixtures, a resource a person asked the run to create, and a command a person
+      gave, each listed in the report with its reason.
 - [ ] The data store's state was checked before anything started, and a mismatch stopped the run
       and was put to the user, or the report says the profile has no `Prepare` line.
 - [ ] Every entry the run wrote into a shared cache or bucket was removed and the listing after
-      shows it, no case or fixture wrote to a shared database before the user answered, a profile
+      shows it, nothing was deleted from a mail catcher or any channel a code was read from, no
+      case or fixture wrote to a shared database before the user answered, a profile
       with no `Shared stores` line was asked about each database instead, and every resource the
       run created was removed or left with its removal command.
 - [ ] The readiness signal was waited for, not assumed from the start command returning.
