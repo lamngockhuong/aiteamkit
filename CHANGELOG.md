@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.20](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.19...v0.0.20) (2026-09-29)
+
+
+### Bug Fixes
+
+* close six atk:init audit gaps and let an approver approve by instruction ([#80](https://github.com/lamngockhuong/aiteamkit/issues/80)) ([f8b7355](https://github.com/lamngockhuong/aiteamkit/commit/f8b7355f9d873465e07172917a1ef7b4ca3209b3))
+
 ## [0.0.19](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.18...v0.0.19) (2026-09-29)
 
 
