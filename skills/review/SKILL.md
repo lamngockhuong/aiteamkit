@@ -81,7 +81,7 @@ a run:
 **Which rounds run.** All nine, minus the ones whose subject the diff does not contain: no deleted
 lines, no signature change, no behavior change. That is different from a round that ran and found
 nothing, and the report keeps the two apart. The list comes from step 4 below. Called again after a
-fix, the diff is the fix and what it reaches, per `references/review-rounds.md`.
+fix, the subject is the fix and what it reaches, per `references/review-rounds.md`.
 
 **Where they run, and how many copies.** Every round runs once. The size of the change decides only
 where, measured in changed lines and never in files: 500 lines or fewer run all nine rounds and the

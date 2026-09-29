@@ -46,11 +46,12 @@ reissued. Decide the severity, then number.
 - **Rule:** `CONV-004` - "the rule, quoted exactly as the project wrote it"
 - **Issue:** What goes wrong, and the input or state that triggers it.
 - **Fix:** The concrete change, naming the function, file or pattern to use.
+- **Decision:** Only where the fix reverses a recorded decision: `path:line`, and who made it.
 - **Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`
 ```
 
 Each label is a list item, and a label that runs onto a second line indents its continuation by two
-spaces. Without the list, Markdown joins the five consecutive lines into one paragraph, and a reader
+spaces. Without the list, Markdown joins the consecutive lines into one paragraph, and a reader
 previewing the report gets a wall of bold labels run together, which is the one thing the structure
 exists to prevent.
 
@@ -94,9 +95,11 @@ A `NIT` quoting a convention rule keeps the heading form, because the rule has t
 ## The report
 
 In this order. The order is fixed; the list is not closed. A run adds a section when it has
-something to declare that none of these holds, and two cases recur: that the reviewer was also the
-author, which `## Roles` of `SKILL.md` makes a thing to say out loud, and a section a project's
-`.atk/overrides/review.md` asks for.
+something to declare that none of these holds, and three cases recur: that the reviewer was also
+the author, which `## Roles` of `SKILL.md` makes a thing to say out loud; a section a project's
+`.atk/overrides/review.md` asks for; and, on a second pass, `## Closed since the first review` right
+after `## What this was reviewed against`, one line per finding the fix closed, with its identifier
+and what closed it, since a closed finding belongs in no severity section.
 
 A section with nothing in it is dropped, except `## Cap` and the three severity sections, which are
 written with `None.` instead. A review that found nothing blocking and a review that lost its

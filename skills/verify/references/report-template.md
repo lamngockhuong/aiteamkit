@@ -117,7 +117,7 @@ them. Never the full listing, and a name carrying a credential, a session identi
 data by its kind, per Cleaning up in `references/runtime-checks.md`. For each shared database, what the
 user answered, and the rows each case left there when the answer was to run them. For each mail
 catcher or other channel a code was read from, how many messages each listing held and which message
-the code came from, never the code, and a statement that nothing was deleted from it.
+the code came from, never the code or the link, and a statement that nothing was deleted from it.
 
 Anything deliberately left running or left in place, why, and how to stop or remove it.
 

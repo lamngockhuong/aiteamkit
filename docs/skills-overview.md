@@ -339,10 +339,11 @@ Once the verification is green, the change goes through the host's code clean-up
 behavior, not on duplication the author could have removed. On a harness without that capability the
 record says so rather than leaving the step invisible.
 
-A `BLOCKING` finding the author disputes keeps its severity and stops the work: nothing is committed
-through `atk:git`, pushed, or opened until the Tech Lead answers, and the user is told so in plain
-words rather than asked whether to push. The second review after a round of fixes covers the fixes
-and what they reach, not only the round that raised the finding.
+A `BLOCKING` finding the author disputes keeps its severity and stops the work at the commit: the
+change is committed locally through `atk:git`, and nothing is pushed or opened until the Tech Lead
+answers. The user is told so in plain words rather than asked whether to push. The second review
+after a round of fixes covers the fixes and what they reach, not only the round that raised the
+finding.
 
 ---
 

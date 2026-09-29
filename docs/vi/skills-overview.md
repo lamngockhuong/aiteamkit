@@ -343,10 +343,11 @@ trên Claude Code, trước khi gọi review: người review nên dành lượt
 cho đoạn trùng lặp mà tác giả tự bỏ được. Trên harness không có khả năng đó, bản ghi nói rõ bước này
 đã không chạy, thay vì để nó biến mất không dấu vết.
 
-Phát hiện `BLOCKING` mà tác giả không đồng ý vẫn giữ nguyên mức và làm công việc dừng lại: không commit
-qua `atk:git`, không push, không mở PR cho tới khi Tech Lead trả lời, và người dùng được nói thẳng điều
-đó thay vì bị hỏi có push không. Lần review thứ hai sau một vòng sửa xem xét các bản sửa và những gì
-chúng chạm tới, chứ không chỉ chạy lại đúng lượt kiểm tra đã nêu phát hiện.
+Phát hiện `BLOCKING` mà tác giả không đồng ý vẫn giữ nguyên mức, và công việc dừng lại ở commit:
+thay đổi được commit trên máy qua `atk:git`, nhưng không push, không mở PR cho tới khi Tech Lead trả
+lời. Người dùng được nói thẳng điều đó thay vì bị hỏi có push không. Lần review thứ hai sau một vòng
+sửa xem xét các bản sửa và những gì chúng chạm tới, chứ không chỉ chạy lại đúng lượt kiểm tra đã nêu
+phát hiện.
 
 ---
 

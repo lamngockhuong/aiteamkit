@@ -101,7 +101,9 @@ options:
 Values supplied the first way go through the local-only check before the start is retried, since a
 host or a key named in them is exactly what that check exists to catch. The report lists each by
 variable name as a difference between this run's environment and the project's own, never by a
-value that is a credential.
+value that is a credential. The same holds for the start command the report records for the
+process: a supplied value there is written `<KEY>=<redacted>`, because an inline assignment is the
+ordinary way to pass it and the report is committed.
 
 ## Capturing logs
 
@@ -178,13 +180,15 @@ A mail catcher, or any other channel a login code or a confirmation link reaches
 a shared store whether the `Shared stores` line names it or not. Every session running against the
 same local environment sends to it, and a code another session is waiting for sits in it. List its
 messages before the request that sends the code, then read the code from a message that arrived
-after that request, addressed to the account the case used. Nothing is deleted from it, neither to
-make room before the request nor at cleanup, and a message this run caused is left as evidence: an
-extra message costs another session nothing, and a deleted one cannot be sent again. The commands
-that list and read messages come from the `Shared stores` line; where the line has none, the run
-asks for them before that request, and the report lists them as commands a person gave. The report
-carries the number of messages each listing held and which message the code was read from, never
-the code itself.
+after that request, addressed to the account the case used. Where more than one such message
+arrived, another session is logging in with the same account, and the run does not choose between
+them: it stops that case and asks, since taking the other session's code spends it. Nothing is
+deleted from it, neither to make room before the request nor at cleanup, and a message this run
+caused is left as evidence: an extra message costs another session nothing, and a deleted one cannot
+be sent again. The commands that list and read messages come from the `Shared stores` line; where
+the line has none, the run asks for them before that request, and the report lists them as commands
+a person gave. The report carries the number of messages each listing held and which message the
+code was read from, never the code or the link itself.
 
 A shared database cannot be handled that way, because nothing lists every row of every table, and a
 removal chosen from a partial listing deletes another session's data. So a case that writes to a

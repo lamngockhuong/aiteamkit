@@ -184,8 +184,8 @@ record is the same as a review that never happened and was never missed.
 
 ### 6. Finalize
 
-Not while a `BLOCKING` finding is disputed or escalated: tell the user the work stops here, and who
-answers, per `references/review-fix-loop.md`.
+While a `BLOCKING` finding is disputed or escalated, only as far as the commit: tell the user the
+work stops there, and who answers, per `references/review-fix-loop.md`.
 
 Hand off to `atk:git` for the branch, the commit, and every action past it, with the implementation
 record as the pull request body. `shared/finalize-steps.md` is the contract that skill carries out,
@@ -244,8 +244,8 @@ done: this skill is the author, and done is the approver's word.
 - [ ] What the review would cost was said before it was called.
 - [ ] `atk:review` was called, or `--no-review` was passed and the record says who must review.
 - [ ] Every `BLOCKING` finding is fixed or escalated by name, and no `NIT` was fixed silently.
-- [ ] No finding's severity was lowered by the author, and step 6 did not start while a `BLOCKING`
-      finding was disputed or escalated.
+- [ ] No finding's severity was lowered by the author, and nothing was pushed or opened while a
+      `BLOCKING` finding was disputed or escalated.
 - [ ] The review loop ran at most twice before escalating.
 - [ ] The record says whether `atk:verify` ran, and a change nobody has run is named as one.
 - [ ] A plan whose steps prescribe test-first was followed that way for those steps, and the record

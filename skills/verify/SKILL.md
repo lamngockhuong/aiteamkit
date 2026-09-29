@@ -176,9 +176,9 @@ not a change to the thing under verification.
 ### 5. Clean up and report
 
 Stop every process this run started, in the reverse order it started them, using the cleanup command
-from the profile, then remove what the run wrote into shared stores and what it created, per
-`references/runtime-checks.md`. Then confirm all of it is gone rather than assuming the command
-worked. Cleanup is
+from the profile, then clean up the shared stores and what the run created, per Cleaning up in
+`references/runtime-checks.md`: a mail catcher is left as it is. Then confirm the result rather than
+assuming the command worked. Cleanup is
 part of done, not an optional last step: see `## Process management`.
 
 Write the report from `references/report-template.md`. It is the same report whether the run passed,

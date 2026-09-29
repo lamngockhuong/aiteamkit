@@ -42,8 +42,10 @@ From the feedback records:
 
 ## 2. Root cause
 
-Each is a definition gap, except `I1`, where the definition was clear and the gap was on the road
-around it.
+`V1` and `I1` are runs going around a rule the definition stated clearly: the verify feedback
+classes `V1` that way, since the definition of done already required every command to come from the
+profile. Each was made easier by a gap beside the rule, and that gap is what is fixed here. The rest
+are definition gaps.
 
 - `V1`, `V2`: `skills/verify/SKILL.md:224` (before this change) names "a cache or bucket" as the
   shared stores, and `skills/verify/references/runtime-checks.md` Cleaning up handles caches,
@@ -111,20 +113,39 @@ each one replaces a choice the run made on its own with a question to a person.
   and the run puts forward no migrate or seed of its own.
 - `I1`: `atk:review` step 1 and a new `Decision` label in `references/report-format.md`: a finding
   whose fix reverses a recorded decision keeps its severity and names the decision and its owner.
-  `atk:implement`: a dispute never changes a severity, step 6 does not start while a `BLOCKING` is
-  disputed or escalated, and the user is told so in plain words. One new definition-of-done line.
-- `R3`, `I2`: `review-rounds.md` Called again after a fix: the subject is the diff since the first
-  review plus what it reaches, the rounds are chosen for that subject, and every finding the fix set
-  out to close is checked by its identifier. `review-fix-loop.md` points at it.
+  `atk:implement`: a dispute never changes a severity, step 6 goes only as far as the commit while
+  a `BLOCKING` is disputed or escalated, and the user is told so in plain words. One new
+  definition-of-done line.
+- `R3`, `I2`: `review-rounds.md` Called again after a fix: the subject is what changed since the
+  first review plus what it reaches, the rounds are chosen for that subject, and every finding the
+  fix set out to close is checked by its identifier. On a working tree, what changed is the list of
+  files the caller names, since both reviews sit on the same head. `review-fix-loop.md` has
+  `atk:implement` pass that list and the first report's path in the prompt.
 - `G1`: `commit-craft.md`: where a hook uses the stash and the repository has several worktrees,
-  compare `git stash list` before and after the commit, and report a difference rather than popping
-  or dropping.
+  compare `git stash list` and a hash of the unstaged changes before and after the commit, and
+  report a difference rather than popping or dropping.
 - `docs/skills-overview.md` and `docs/vi/skills-overview.md`: the `implement`, `review` and `verify`
   sections say what changed for a reader.
 
 `skills/review/SKILL.md` stood at 299 lines. The two new sentences fit by folding the description
 in the frontmatter onto fewer lines, with every word and trigger kept, and by dropping "and is not a
 second list alongside it" from step 3, which repeated the sentence before it.
+
+The review of this pull request, `docs/derived/reviews/78-260929-0644.md` (gitignored), raised
+twelve findings, all fixed in a second commit except `S7`:
+
+- `B1`, `S3`: the second review's subject could not be computed on an uncommitted working tree, and
+  `atk:review` had no argument for the first report. Fixed by the file list and prompt rule above.
+- `S1`: the first commit's step 6 gate contradicted the escalation rule already in
+  `review-fix-loop.md`, that the change stays committed on its branch. The earlier rule was kept:
+  step 6 commits locally and stops before the push, in both places and both `skills-overview.md`.
+- `S2`: step 5 of `atk:verify` still said to remove what the run wrote into shared stores; it now
+  defers to Cleaning up and says a mail catcher is left as it is.
+- `S4`: a value a person supplies for a start is written `<KEY>=<redacted>` in the recorded command.
+- `S5`: more than one new message to the case's account stops the case with a question.
+- `S6`: a stash swap leaves the listing unchanged, so the unstaged-changes hash was added.
+- `N1` to `N4`: no link in the report, a `## Closed since the first review` section, the `Decision`
+  line in the finding template, and the `V1` classification above.
 
 Tidy: this change is prose, so the host's code clean-up capability has nothing to read. The pass was
 run by hand per `shared/tidy-pass.md`: two paragraphs reflowed to the 100-column width, and one
@@ -150,6 +171,8 @@ The verification block in `CLAUDE.md`, run after the change:
   short of a run shows that the next `atk:verify` reads a code without emptying an inbox, or that
   the next `atk:implement` stops at step 6. The check is to re-run the same three skills against a
   project with a mail catcher and a plan that records a decision.
+- The gap above is accepted by Lam Ngoc Khuong, as approver, on 2026-09-29 (review finding `S7`):
+  the next client run of these skills is the first test of the new rules.
 - The trigger evals were not re-measured. The `atk:review` description changed line breaks only,
   and no other description changed.
 
