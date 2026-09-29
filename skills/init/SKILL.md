@@ -152,6 +152,11 @@ the project shape say which is true today. This one leads the report because a p
 to be inherited and is not hides every other line: the sections under it can all match and still
 reach nobody.
 
+Then the front matter. Where the `approver:` named there is not the person the Team section gives
+the Tech Lead role, whom Roles above has approve the profile, say so as a note rather than as drift,
+with the persistence line beside it: a profile nobody else inherits may be approved by the one person
+who uses it, and whether that is acceptable is theirs to say, not the audit's.
+
 With no profile to audit, say so and stop. Do not fall through into the writing flow: a flag that
 promises to change nothing must not create a file. Point at `/atk:init` and let the user choose.
 Under `--out <path>`, audit the profile at that path rather than the default one.
