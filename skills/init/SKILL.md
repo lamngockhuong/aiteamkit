@@ -157,6 +157,12 @@ the Tech Lead role, whom Roles above has approve the profile, say so as a note r
 with the persistence line beside it: a profile nobody else inherits may be approved by the one person
 who uses it, and whether that is acceptable is theirs to say, not the audit's.
 
+When the user answers the drift in the same session and asks for the profile to be updated, say
+that the run is moving from the audit to an update, then follow Re-running against an existing
+profile from its step 2 with the audit report as what was found. The audit itself still changed
+nothing; the update is a run of its own, with the same rules for `created`, `updated` and `status`,
+and step 5 runs after it as after any re-run.
+
 With no profile to audit, say so and stop. Do not fall through into the writing flow: a flag that
 promises to change nothing must not create a file. Point at `/atk:init` and let the user choose.
 Under `--out <path>`, audit the profile at that path rather than the default one.
