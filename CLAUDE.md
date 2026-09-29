@@ -21,8 +21,8 @@ in sync. See "Common verification commands" at the bottom.
 Every skill assumes work done the way a team does it. This is the one thing to preserve when editing:
 
 - Author and approver are different roles, and artifacts carry an approval state. One person may hold
-  both, and on a solo project all of them; what never happens is a skill entering the state on its own,
-  without the approver saying so.
+  both, and on a solo project all of them; what never happens is a skill entering the state on its
+  own, without the approver saying so.
 - A skill drafts and gathers evidence; it never makes a decision that a role owns (scope, priority,
   deadline, pricing, compliance, go or no-go).
 - Artifacts are written for a reader who was not in the conversation.

@@ -3,7 +3,8 @@
 Twenty-three skills covering the software delivery lifecycle of a **company project team**. Every skill
 assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read
 by someone who was not in the conversation that produced them. Those are roles rather than a
-headcount: a solo developer holding all of them gets the same gates, and still gives each approval themselves.
+headcount: a solo developer holding all of them gets the same gates, and still gives each approval
+themselves.
 
 Compatible with Claude Code, Cursor, and OpenAI Codex CLI.
 
