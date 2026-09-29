@@ -23,8 +23,8 @@ làm một mình là chỗ chúng dừng lại: dừng ở ranh giới mà một
 giờ kết thúc trước khi người review có thứ để đọc.
 
 Đó là câu nói về chỗ một skill dừng lại, không phải câu nói về dự án có bao nhiêu người. Một người
-giữ mọi vai trò vẫn được hỗ trợ, và các cửa kiểm soát không vì thế mà nới ra: họ tự tay duyệt, như
-bất kỳ người duyệt nào khác. Luật nằm ở `shared/team-roles.md`.
+giữ mọi vai trò vẫn được hỗ trợ, và các cửa kiểm soát không vì thế mà nới ra: việc duyệt vẫn do
+chính họ làm, như với bất kỳ người duyệt nào khác. Luật nằm ở `shared/team-roles.md`.
 
 ## Vấn đề mà atk giải quyết
 

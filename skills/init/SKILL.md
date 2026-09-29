@@ -42,7 +42,7 @@ matter accepts it. See `shared/team-roles.md`.
 
 ```bash
 /atk:init                    # Detect, confirm, interview, and write or update .atk/profile.md
-/atk:init --audit            # Compare an existing profile against the repository, change nothing
+/atk:init --audit            # Compare an existing profile against the repository, report only
 /atk:init --lang vi          # Write the profile in Vietnamese
 /atk:init --out <path>       # Override the default output path
 ```
@@ -112,6 +112,11 @@ files being the usual case, follow "When the repository will not take the file" 
 rather than in `.gitignore`, and what that costs the rest of the team is said out loud. Never
 raise it unasked; a profile nobody inherits is the worse default.
 
+Where the user says the repository would take it but the team is keeping it out of git for now,
+trying the kit out being the usual case, the exclusion is the same and the persistence line is the
+`Not committed yet` block, with who chose and until what. Writing the refusal block there states
+something false about the repository.
+
 ### 5. Hand off
 
 Print which skills are now unblocked, reading the three-group table in `shared/project-profile.md`
@@ -142,15 +147,27 @@ comment leaves it alone.
 ### `--audit`
 
 Re-run step 1 against an existing profile and report per section: matches, drifted, or missing. A
-drifted entry shows both values and their sources. Change nothing, and do not reorder the file. The
-output is a list the Tech Lead can act on, not a patch.
+drifted entry shows both values and their sources. The audit itself changes nothing and does not
+reorder the file. The output is a list the Tech Lead can act on, not a patch.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
-persistence line of the profile header names which of the three forms in
+persistence line of the profile header names which of the four forms in
 `references/profile-template.md` this file was written in; `git ls-files`, `git check-ignore` and
 the project shape say which is true today. This one leads the report because a profile that claims
 to be inherited and is not hides every other line: the sections under it can all match and still
 reach nobody.
+
+Then the front matter. Where the `approver:` named there is not the person the Team section gives
+the Tech Lead role, whom Roles above has approve the profile, say so as a note rather than as
+drift, with the persistence line beside it: a profile nobody else inherits may be approved by the
+one person who uses it, and whether that is acceptable is theirs to say, not the audit's. Where the
+Team section names no Tech Lead, or names them `TBD`, the note says that instead.
+
+When the user answers the drift in the same session and asks for the profile to be updated, say
+that the run is moving from the audit to an update, then follow Re-running against an existing
+profile from workflow step 2, as that subsection applies it, with the audit report as what was
+found. The audit itself still changed nothing; the update is a run of its own, with the same rules
+for `created`, `updated` and `status`, and step 5 runs after it as after any re-run.
 
 With no profile to audit, say so and stop. Do not fall through into the writing flow: a flag that
 promises to change nothing must not create a file. Point at `/atk:init` and let the user choose.
@@ -183,11 +200,13 @@ the repository and the tracker holds a pointer.
 - [ ] Front matter names an owner and an approver, and a newly created profile opens at `status: DRAFT`.
 - [ ] Every unanswered field says `TBD` and names the person who owes the answer.
 - [ ] No credential, token, or connection string appears in the profile.
-- [ ] Before the file was written, the user was told which repository commits it, or that no
-      repository will take it and what that costs. Both cases are said first, not after the write.
+- [ ] Before the file was written, the user was told which repository commits it, that no
+      repository will take it, or that the team chose to wait and until what, and what that costs.
+      All three are said first, not after the write.
 - [ ] On a re-run, `created:` survived, only drifted, `TBD`, and missing fixed-turn fields were asked about, and `status`
       moved only because what the profile promises changed.
-- [ ] Exactly one of the template's three persistence blocks survived the write, and it is the one
+- [ ] Exactly one of the template's four persistence blocks survived the write, and it is the one
       matching how the file is actually stored.
-- [ ] Under `--audit`, no file was modified, and how the profile is stored was reported ahead of the
+- [ ] Under `--audit`, no file was modified before the user asked for an update, a move into an
+      update was said before it began, and how the profile is stored was reported ahead of the
       sections.

@@ -75,7 +75,8 @@ in its data.
 
 **Use when.** A team first installs `atk` in a project, and again when the project has moved on from
 what the profile says. `--audit` compares an existing profile against the repository and changes
-nothing.
+nothing; when the user answers the drift in the same session, the run says so and continues as an
+update.
 
 **Do not use when.** You want the kit configured once for every project. A profile is true of one
 project and is committed with it; the kit itself holds no project facts.

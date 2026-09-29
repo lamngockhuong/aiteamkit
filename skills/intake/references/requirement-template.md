@@ -28,8 +28,8 @@ ticket: <ticket id or URL, or none>
 ---
 ```
 
-`status` is `IN REVIEW` once step 5 has run, and never `APPROVED` from this skill: only the approver
-moves it there.
+`status` is `IN REVIEW` once step 5 has run, and never `APPROVED` on this skill's own: the approver
+moves it there, or tells the agent to, per rule 2 of `shared/team-roles.md`.
 
 ## Title and opening note
 

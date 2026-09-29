@@ -21,7 +21,8 @@ in sync. See "Common verification commands" at the bottom.
 Every skill assumes work done the way a team does it. This is the one thing to preserve when editing:
 
 - Author and approver are different roles, and artifacts carry an approval state. One person may hold
-  both, and on a solo project all of them; what never happens is a skill entering the state itself.
+  both, and on a solo project all of them; what never happens is a skill entering the state on its
+  own, without the approver saying so.
 - A skill drafts and gathers evidence; it never makes a decision that a role owns (scope, priority,
   deadline, pricing, compliance, go or no-go).
 - Artifacts are written for a reader who was not in the conversation.
@@ -29,8 +30,9 @@ Every skill assumes work done the way a team does it. This is the one thing to p
 
 A change that makes a skill act like a solo assistant, deciding on the team's behalf or leaving an
 artifact with no owner, is a regression even if it reads more helpfully. Supporting a solo developer
-is a different thing and is in scope: one person holding every role still gets the gates, and still
-approves by hand. `shared/team-roles.md` owns that distinction.
+is a different thing and is in scope: one person holding every role still gets the gates, and the
+approval is still their own act, whether they edit the state or tell the agent to.
+`shared/team-roles.md` owns that distinction.
 
 ## Multi-manifest layout (non-obvious)
 

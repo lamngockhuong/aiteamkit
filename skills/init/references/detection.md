@@ -276,6 +276,12 @@ member whose tracker differs on a line of its own.
 `[project.scripts]` or `[tool.poetry.scripts]`, or the run command in the project README. Multiple
 candidates means a question, because the wrong one wastes every later run of `atk:verify`.
 
+Then open the entry point the command starts and read how it takes what varies between runs: a job
+name, a port, a mode. An environment variable and a command-line argument look the same in a README
+line and are not interchangeable, so record the command in the form the entry point reads, with the
+file and line as its source. A command copied from a script without that check runs, and runs the
+wrong thing.
+
 A repository that ships content rather than an application has nothing to start. Record that, and
 let the Verify section point at the check commands instead.
 
@@ -330,6 +336,13 @@ in a single prompt spends one turn on that prompt, per Several questions in one 
 `shared/host-capabilities.md`. Four turns are fixed: the team table (all roles, their host
 identifiers and their approvals in a single question, never one question per role and never a second
 turn for the identifiers), the working language, where the spec lives, and who approves the profile.
+
+The team question arrives with its `Approves` column already proposed, so the user confirms or
+corrects a default instead of composing one. The default per role is the kit's own: the Accepts
+column of the role table in `docs/flow/project-flow.md` in the kit, which collects what each skill's
+`## Roles` section names and which `shared/team-roles.md` points at. A proposal is not an answer; a
+row the user neither confirms nor corrects is `TBD` like any other, and a role the team does not
+fill takes no default.
 
 The spec turn carries a second half: whether the team approves its API, schema and feature documents
 before the code is written, which is the `Contract` line in Docs. It rides on the spec question

@@ -131,9 +131,9 @@ line that fits the file:
 
 Never silently. A team that wrote an override and sees no effect needs to learn why from the
 artifact, not from a second run. On a solo project the author is also the approver and moves the
-status by hand, the same step every other artifact of the kit asks of them.
+status themselves or tells the agent to, the same step every other artifact of the kit asks of them.
 
-The reason is the premise of the kit: a skill never enters an approval state itself, and an
+The reason is the premise of the kit: a skill never enters an approval state on its own, and an
 override applied before approval would be exactly that, one person's draft changing every run the
 team makes. Moving `status` is the approver's act, per rule 2 of `shared/team-roles.md`.
 
