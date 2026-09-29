@@ -276,6 +276,12 @@ member whose tracker differs on a line of its own.
 `[project.scripts]` or `[tool.poetry.scripts]`, or the run command in the project README. Multiple
 candidates means a question, because the wrong one wastes every later run of `atk:verify`.
 
+Then open the entry point the command starts and read how it takes what varies between runs: a job
+name, a port, a mode. An environment variable and a command-line argument look the same in a README
+line and are not interchangeable, so record the command in the form the entry point reads, with the
+file and line as its source. A command copied from a script without that check runs, and runs the
+wrong thing.
+
 A repository that ships content rather than an application has nothing to start. Record that, and
 let the Verify section point at the check commands instead.
 
