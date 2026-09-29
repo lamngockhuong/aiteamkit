@@ -112,6 +112,11 @@ files being the usual case, follow "When the repository will not take the file" 
 rather than in `.gitignore`, and what that costs the rest of the team is said out loud. Never
 raise it unasked; a profile nobody inherits is the worse default.
 
+Where the user says the repository would take it but the team is keeping it out of git for now,
+trying the kit out being the usual case, the exclusion is the same and the persistence line is the
+`Not committed yet` block, with who chose and until what. Writing the refusal block there states
+something false about the repository.
+
 ### 5. Hand off
 
 Print which skills are now unblocked, reading the three-group table in `shared/project-profile.md`
@@ -194,11 +199,12 @@ the repository and the tracker holds a pointer.
 - [ ] Front matter names an owner and an approver, and a newly created profile opens at `status: DRAFT`.
 - [ ] Every unanswered field says `TBD` and names the person who owes the answer.
 - [ ] No credential, token, or connection string appears in the profile.
-- [ ] Before the file was written, the user was told which repository commits it, or that no
-      repository will take it and what that costs. Both cases are said first, not after the write.
+- [ ] Before the file was written, the user was told which repository commits it, that no
+      repository will take it, or that the team chose to wait and until what, and what that costs.
+      All three are said first, not after the write.
 - [ ] On a re-run, `created:` survived, only drifted, `TBD`, and missing fixed-turn fields were asked about, and `status`
       moved only because what the profile promises changed.
-- [ ] Exactly one of the template's three persistence blocks survived the write, and it is the one
+- [ ] Exactly one of the template's four persistence blocks survived the write, and it is the one
       matching how the file is actually stored.
 - [ ] Under `--audit`, no file was modified, and how the profile is stored was reported ahead of the
       sections.

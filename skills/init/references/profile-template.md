@@ -26,7 +26,7 @@ Written by `/atk:init`. Read by the atk skills that need project facts. Re-check
 `/atk:init --audit`.
 
 <!-- Persistence line. Keep exactly one of the four blocks below, whichever matches how this
-     profile is actually stored, and delete the other two. This is the line `/atk:init --audit`
+     profile is actually stored, and delete the other three. This is the line `/atk:init --audit`
      re-checks against the repository. -->
 
 Committed on purpose: the next person on the team inherits it.
