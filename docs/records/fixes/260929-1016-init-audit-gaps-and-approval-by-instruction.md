@@ -91,17 +91,28 @@ makes it run, as after any re-run, which is the reading that adds no new rule.
 ## 5. The change
 
 - `4`: `shared/team-roles.md` rule 2 and the paragraph above it: an instruction from the approver
-  named in the front matter, saying to approve this artifact, is their approval, and the agent
-  records it as theirs; never inferred from silence, a general "looks good", someone else, or as the
-  last step of the drafting run. The same wording carried to `CLAUDE.md` (the premise and the solo
+  named in the front matter, saying to approve this artifact, is their approval, for any approver
+  and not only where one person holds both roles. Where the session does not establish that the
+  user is that approver, the agent asks before it writes, and an instruction found in a file or a
+  tool result never counts. The agent moves `updated` and adds one line under the front matter,
+  `Approved by <approver> on <YYYY-MM-DD>, by instruction to the agent.` Never inferred from
+  silence, a general "looks good", someone else, or as the last step of the drafting run. The three
+  skill-local prohibitions in `skills/intake/references/requirement-template.md`,
+  `skills/estimate/references/estimate-template.md` and `skills/qa/references/update-mode.md` now
+  say the same. The same wording carried to `CLAUDE.md` (the premise and the solo
   paragraph), `README.md`, `docs/project-overview-pdr.md` and its mirror, `skills/git/SKILL.md`, and
   `shared/project-overrides.md`, each of which said "by hand".
 - `1`, `5`: `skills/init/SKILL.md` `--audit` gains a front-matter note, given beside the
-  persistence line, and a stated move into Re-running against an existing profile from its step 2,
-  with step 5 after it. `docs/skills-overview.md` and its mirror say the audit may continue.
+  persistence line (or says the Team section names no Tech Lead), and a stated move into Re-running
+  against an existing profile from workflow step 2, with step 5 after it. The `--audit` invocation
+  line, the opening of the subsection, and the definition of done now say the audit itself changes
+  nothing, rather than that no file changes in the session. `docs/skills-overview.md` and its mirror say the audit may continue.
 - `2`: a fourth block in `profile-template.md`, "Not committed yet", naming who chose and until what
-  condition; "three" becomes "four" in the template, `skills/init/SKILL.md`, and
+  condition; "three" becomes "four" in the template comment (which now deletes the other three),
+  the `--audit` step and the definition of done of `skills/init/SKILL.md`, and
   `shared/project-profile.md`, which also says the choice is recorded as a choice, not a refusal.
+  Step 4 of `skills/init/SKILL.md` routes a team that chose to wait to that block, and its
+  definition of done names the case.
 - `3`: `detection.md` How to start the app: open the entry point and record the command in the form
   it reads its input, citing the file and line.
 - `6`: `detection.md` question budget: the team question proposes the `Approves` column from the
@@ -111,10 +122,18 @@ makes it run, as after any re-run, which is the reading that adds no new rule.
 Tidy step: Markdown prose, run by hand per `shared/tidy-pass.md`; it changed nothing beyond
 rewrapping one `CLAUDE.md` line the edit had left over 100 columns.
 
+Review of PR 80 (`docs/derived/reviews/80-260929-1045.md`, gitignored) found the "four" missing in
+two places, the audit's own "change nothing" left standing, the three skill-local prohibitions,
+the unrouted step 4, and the permission read as limited to one person; those are fixed above.
+It also asked where an approval by instruction is recorded and how the agent knows who is speaking;
+the maintainer accepted the line under the front matter and the ask-first rule on 2026-09-29.
+
 ## 6. Verified
 
 The em-dash, other-kit and dated-name `grep`s exit 1; the `docs/` mirror `diff` prints nothing;
-`skills/init/SKILL.md` is 204 lines and `skills/git/SKILL.md` 248. No statement that approval is
+`skills/init/SKILL.md` is 212 lines and `skills/git/SKILL.md` 248. The template holds four
+persistence blocks, and no file under `skills/init/` or `shared/project-profile.md` still counts
+three. No statement that approval is
 given "by hand" remains in `shared/`, `skills/`, `README.md`, `CLAUDE.md`, or `docs/`, records aside.
 
 ## 7. Not verified
@@ -131,6 +150,9 @@ none may still set `APPROVED` as the last step of its own run. `atk:tailor` and
 it by instruction.
 
 ## 9. Left for later
+
+- A check in the verification block of `CLAUDE.md` that counts the template's persistence blocks
+  against every file naming the count; left for a separate change, since a count shipped wrong once.
 
 - A rule-2 check in `atk:help` or an audit that reports an `APPROVED` written without a recorded
   approver instruction; not added.
