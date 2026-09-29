@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.19](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.18...v0.0.19) (2026-09-29)
+
+
+### Bug Fixes
+
+* treat a mail catcher as shared and stop on a disputed BLOCKING ([#78](https://github.com/lamngockhuong/aiteamkit/issues/78)) ([867dee2](https://github.com/lamngockhuong/aiteamkit/commit/867dee281dc0617bda7b0883f5bc821f234367b3))
+
 ## [0.0.18](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.17...v0.0.18) (2026-09-28)
 
 
