@@ -146,7 +146,7 @@ drifted entry shows both values and their sources. Change nothing, and do not re
 output is a list the Tech Lead can act on, not a patch.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
-persistence line of the profile header names which of the three forms in
+persistence line of the profile header names which of the four forms in
 `references/profile-template.md` this file was written in; `git ls-files`, `git check-ignore` and
 the project shape say which is true today. This one leads the report because a profile that claims
 to be inherited and is not hides every other line: the sections under it can all match and still

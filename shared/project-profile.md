@@ -142,12 +142,15 @@ repository refused in the first place, and it would impose the choice on everyon
 the repository, including the people who own it.
 
 The profile says how it is stored in the persistence line of its header, and
-`skills/init/references/profile-template.md` carries a form for each of the three ways that can go.
+`skills/init/references/profile-template.md` carries a form for each of the four ways that can go.
 That line is what `--audit` re-checks against the repository, so a profile carrying the wrong form
 is the drift that hides the rest.
 
 This is for a repository the team does not own. A team that owns its repository and leaves `.atk/`
-untracked anyway pays the same price for nothing.
+untracked anyway pays the same price, usually for a reason that will not last, such as still trying
+the kit out. That is the team's call, and the profile records it as a choice, not as a refusal: who
+made it, and what has to happen before `.atk/` is committed. A profile that says the repository
+refuses the file when it does not states something false about the repository.
 
 The price, worth naming before choosing it. Everyone who works on the project runs `/atk:init`
 separately, and their answers drift apart with nothing to reconcile them. Anyone who has not run it
