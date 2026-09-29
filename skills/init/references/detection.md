@@ -337,6 +337,13 @@ in a single prompt spends one turn on that prompt, per Several questions in one 
 identifiers and their approvals in a single question, never one question per role and never a second
 turn for the identifiers), the working language, where the spec lives, and who approves the profile.
 
+The team question arrives with its `Approves` column already proposed, so the user confirms or
+corrects a default instead of composing one. The default per role is the kit's own: the Accepts
+column of the role table in `docs/flow/project-flow.md` in the kit, which collects what each skill's
+`## Roles` section names and which `shared/team-roles.md` points at. A proposal is not an answer; a
+row the user neither confirms nor corrects is `TBD` like any other, and a role the team does not
+fill takes no default.
+
 The spec turn carries a second half: whether the team approves its API, schema and feature documents
 before the code is written, which is the `Contract` line in Docs. It rides on the spec question
 because both are about where the agreed description of the work comes from, and costs no turn of its
