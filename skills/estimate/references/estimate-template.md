@@ -29,10 +29,11 @@ ticket: <epic or ticket ids or URLs, comma separated, or none>
 ---
 ```
 
-`status` is `IN REVIEW` once every section holds its numbers, and never `APPROVED` from this skill:
-the team commits, not the run. It stays `DRAFT` while section 6 is still waiting on an input a
-person owes, such as the leave plan, because a commitment built on a capacity with holes in it is
-not ready to be approved.
+`status` is `IN REVIEW` once every section holds its numbers, and never `APPROVED` on this skill's
+own: the team commits, not the run, and the approver moves it or tells the agent to, per rule 2 of
+`shared/team-roles.md`. It stays `DRAFT` while section 6 is still waiting on an input a person owes,
+such as the leave plan, because a commitment built on a capacity with holes in it is not ready to be
+approved.
 
 ## Title and opening note
 

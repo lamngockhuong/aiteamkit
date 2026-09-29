@@ -146,7 +146,8 @@ The approver accepted this set of cases. The run adds, and asks about everything
   on the next run, per section 2.
 
 Either branch sets `status` back to `IN REVIEW` when any row changed or any question was opened, and
-the approver is who moves it on. The run never sets `APPROVED`.
+the approver is who moves it on. The run never sets `APPROVED` on its own; the approver moves it,
+or tells the agent to, per rule 2 of `shared/team-roles.md`.
 
 ## 4. The rest of the file
 
