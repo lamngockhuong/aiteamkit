@@ -93,3 +93,18 @@ For the reading of the diff itself, do one of two things after each commit and s
 
 The second is the honest answer where the diff is too large to re-read, and it is still better than
 the silence that reads as a commit nobody has looked at since the hook rewrote it.
+
+A hook can also use the stash. `lint-staged`, among others, saves the part of the tree it is not
+checking with `git stash` before it runs and restores it afterwards. The stash is one stack per
+repository, shared by every worktree of it, so two sessions committing at the same moment in two
+worktrees can each restore the other's entry, and a hook that fails halfway leaves its entry on the
+stack for whoever runs next. Where the hook configuration shows this and `git worktree list` shows
+more than one worktree, take two readings before the commit and again after it:
+
+- `git stash list`, which catches the entry a failed hook left behind;
+- a hash of the unstaged changes, `git diff | git hash-object --stdin`, which catches the swap. Each
+  hook pushes one entry and takes one back, so the stack ends as it began and its listing matches,
+  while each worktree now holds the other's unstaged work.
+
+A difference in either is reported to the user, and no entry is popped or dropped, because it may
+be another session's work.

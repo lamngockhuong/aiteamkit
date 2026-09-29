@@ -291,10 +291,10 @@ the rest. A seed that resets something other sessions use, a whole login pool or
 is recorded with that warning or replaced by the command that adds one entry.
 
 `Shared stores` comes from the local environment's definition, a `docker-compose.yml` or the
-application's connection configuration: every cache, bucket, or database that more than one
-worktree or session points at. Detection says which stores exist and records each as shared; the
-user corrects that in step 2 with every other detected value, so it costs no turn. An application
-with no data store records `none` for both.
+application's connection configuration: every cache, bucket, mail catcher, or database that more
+than one worktree or session points at. Detection says which stores exist and records each as
+shared; the user corrects that in step 2 with every other detected value, so it costs no turn. An
+application with no data store records `none` for both.
 
 ## What is never detectable
 

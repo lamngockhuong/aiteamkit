@@ -18,6 +18,13 @@ of truth for the same rules, and two sources of one rule drift apart quietly.
 At most twice. The second pass is there because a fix can introduce a finding; a third pass is there
 because the first two did not work, which is a different problem from the one more fixing solves.
 
+The second call reviews the fix, not one round picked because it raised the finding and not the
+whole change again. The change is still uncommitted at this point, so nothing in git marks where the
+first review stopped, and the call has to say it: in the prompt, name the first report's path as the
+earlier report, never as a path to review, and list every file the fixes touched. `atk:review`
+takes that list and what it reaches, per Called again after a fix in its
+`references/review-rounds.md`. The record says which rounds ran the second time.
+
 ## Calling the review
 
 Call `atk:review` on the change, and give it what it needs to review against intent rather than
@@ -57,6 +64,19 @@ do instead.
 The work waits on that answer where the finding is `BLOCKING`. It carries on where the finding is
 `SHOULD FIX`, with the dispute recorded.
 
+A dispute never changes the severity. The finding stays at the severity `atk:review` gave it, with
+the dispute beside it: lowering a `BLOCKING` to `SHOULD FIX` so the work can carry on is the move the
+ceiling below forbids, reached by a different road. That holds most of all when the reason is that
+the finding contradicts a decision already recorded in the plan or a design document. `atk:review`
+labels that case with the decision and the person who made it, and the answer is theirs, not the
+author's.
+
+Waiting means what it means after an escalation: step 6 goes as far as the commit and stops, per
+`atk:git --commit`, so nothing is pushed, opened, or merged. Say so to the user in plain words, with
+the finding, the reason it is disputed, and who has to answer. A user who
+is told only that a dispute was recorded, and then asked whether to push, is being asked a question
+the skill has already answered.
+
 ## Re-verify after each round
 
 Every round of fixes goes back through `references/verification.md` before the review is called
@@ -83,8 +103,11 @@ The escalation says five things:
 The fifth is the one that decides whether the escalation works. "This needs another look" reaches
 nobody. Rule 1 in `shared/team-roles.md` applies here as anywhere: an owner is a person.
 
-Nothing is pushed, opened, or merged after an escalation. The change stays committed on its branch,
-where the named person can read it.
+Nothing is pushed, opened, or merged after an escalation. Step 6 commits the change on its branch
+through `atk:git --commit` and stops there, because the commit stays inside the local repository per
+the consent line in `shared/finalize-steps.md`. The named person is given the findings with their
+file and line and the path of the review report, since a branch nobody pushed is readable only on
+the author's machine.
 
 ## When the loop comes out clean
 

@@ -343,6 +343,12 @@ trên Claude Code, trước khi gọi review: người review nên dành lượt
 cho đoạn trùng lặp mà tác giả tự bỏ được. Trên harness không có khả năng đó, bản ghi nói rõ bước này
 đã không chạy, thay vì để nó biến mất không dấu vết.
 
+Phát hiện `BLOCKING` mà tác giả không đồng ý vẫn giữ nguyên mức, và công việc dừng lại ở commit:
+thay đổi được commit trên máy qua `atk:git`, nhưng không push, không mở PR cho tới khi Tech Lead trả
+lời. Người dùng được nói thẳng điều đó thay vì bị hỏi có push không. Lần review thứ hai sau một vòng
+sửa xem xét các bản sửa và những gì chúng chạm tới, chứ không chỉ chạy lại đúng lượt kiểm tra đã nêu
+phát hiện.
+
 ---
 
 ## `atk:fix`
@@ -393,7 +399,9 @@ file test case thì dùng `atk:qa --review`, đối chiếu các case với ngu�
 **Thói quen tạo ra khác biệt.** Nó xuất phát từ việc thay đổi này lẽ ra phải làm gì, chứ không xuất
 phát từ diff, và nó tách lỗi chặn merge khỏi ý kiến sở thích, đó là thứ khiến một lần review được
 cảm nhận là công bằng. Một phát hiện về quy ước sẽ trích nguyên văn quy tắc kèm ID, để tác giả tranh
-luận với quy tắc chứ không tranh luận với người review.
+luận với quy tắc chứ không tranh luận với người review. Phát hiện mà sửa nó sẽ lật lại một quyết định
+đã ghi trong plan hay tài liệu thiết kế vẫn giữ nguyên mức, và ghi rõ quyết định đó cùng người đã quyết,
+vì mở lại quyết định là việc của người đó.
 
 Không phát hiện nào vào danh sách mà chưa qua thẩm tra. Một phát hiện là `CONFIRMED` khi gọi được tên
 đầu vào làm nó xảy ra, và là `PLAUSIBLE` khi cơ chế có thật nhưng điều kiện kích hoạt còn tuỳ thời
@@ -498,9 +506,12 @@ Trước khi khởi động gì, skill kiểm tra kho dữ liệu trên máy có
 dừng lại và hỏi chứ không tự migrate, vì có thể một worktree khác đang chạy trên cùng database đó.
 Những gì run ghi vào cache hay bucket mà session khác cũng đọc sẽ bị xoá theo tên khi kết thúc, và
 báo cáo ghi số mục của ba lần liệt kê: trước request đầu tiên, sau request cuối cùng, và sau khi
-xoá. Ca nào sẽ ghi vào database mà session khác
+xoá. Hộp thư giả lập mà run đọc mã đăng nhập từ đó cũng là kho dùng chung: run đọc thư đến sau
+request của chính nó và không xoá gì, vì thư mà session khác đang chờ thì không gửi lại được. Ca nào
+sẽ ghi vào database mà session khác
 cũng dùng thì phải chờ người dùng trả lời, vì không danh sách nào chỉ ra được dòng nào do run này
-ghi.
+ghi. Lệnh start thất bại vì thiếu cấu hình cũng dừng lại và hỏi: run không tự điền giá trị nào, kể
+cả từ file mẫu của dự án.
 
 ---
 

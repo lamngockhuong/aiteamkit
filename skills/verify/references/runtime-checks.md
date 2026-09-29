@@ -35,6 +35,19 @@ says in Not verified that the data store's state was not checked, and names `/at
 what adds the line. A `Prepare` or `Shared stores` line that reads `TBD` is treated as absent, and
 the person the `TBD` names goes into Not verified with it.
 
+A mismatch can still show itself later without a `Prepare` line, as a case failing on a table or a
+column the branch adds. That case stops, and the question above is asked with the options that
+remain when there is no `Prepare` to run:
+
+- run a command the person answering names to bring the store level, recorded in the report as a
+  command a person gave;
+- point the run at a separate store, as above;
+- stop that case, and record the mismatch as the reason it was not verified.
+
+The run does not put forward a migrate or a seed of its own from the project's scripts. Nothing says
+the store's migration history comes from this branch, and a migration run over another branch's
+history fails at best and half-applies at worst, under a store another worktree may be using.
+
 ## Fixtures for one case
 
 Some cases need data the change only reads: rows a batch outside the change writes, or a
@@ -73,6 +86,24 @@ safe on a slow machine wastes minutes on every run, and a sleep short enough to 
 run waiting to happen. A timeout that expires is a failure of this run and is reported as one, with
 the last lines of the log attached. It is not retried silently, because an application that took
 twice as long as usual to start is itself a finding.
+
+A start command that exits before the signal, naming a missing environment variable or a missing
+configuration file, is a gap in this machine's environment rather than a failure of the change, and
+it stops the run with a question. The run does not fill in values of its own, not even from the
+project's example file: a sample value can point at a real service, or switch off the behaviour a
+case is about. It shows which values are missing, where the project documents them, and these
+options:
+
+- start the process with the values the person names, for this process only, writing no file;
+- the person sets the configuration up, and the run starts again from the local-only check;
+- stop here, with the missing configuration as the reason nothing was verified.
+
+Values supplied the first way go through the local-only check before the start is retried, since a
+host or a key named in them is exactly what that check exists to catch. The report lists each by
+variable name as a difference between this run's environment and the project's own, never by a
+value that is a credential. The same holds for the start command the report records for the
+process: a supplied value there is written `<KEY>=<redacted>`, because an inline assignment is the
+ordinary way to pass it and the report is committed.
 
 ## Capturing logs
 
@@ -144,6 +175,20 @@ written by its kind instead, `<redacted: session key>`, since the report is comm
 that was there before the run is never removed, even when it looks like debris. Where the
 application writes to a store the line does not name, the report says so in Not verified rather than
 guessing at a removal command.
+
+A mail catcher, or any other channel a login code or a confirmation link reaches the run through, is
+a shared store whether the `Shared stores` line names it or not. Every session running against the
+same local environment sends to it, and a code another session is waiting for sits in it. List its
+messages before the request that sends the code, then read the code from a message that arrived
+after that request, addressed to the account the case used. Where more than one such message
+arrived, another session is logging in with the same account, and the run does not choose between
+them: it stops that case and asks, since taking the other session's code spends it. Nothing is
+deleted from it, neither to make room before the request nor at cleanup, and a message this run
+caused is left as evidence: an extra message costs another session nothing, and a deleted one cannot
+be sent again. The commands that list and read messages come from the `Shared stores` line; where
+the line has none, the run asks for them before that request, and the report lists them as commands
+a person gave. The report carries the number of messages each listing held and which message the
+code was read from, never the code or the link itself.
 
 A shared database cannot be handled that way, because nothing lists every row of every table, and a
 removal chosen from a partial listing deletes another session's data. So a case that writes to a
