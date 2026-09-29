@@ -24,8 +24,8 @@ assistant is where they stop: at the point a role owns the decision, and never b
 something to read.
 
 That is a statement about where a skill stops, not about how many people a project has. One person
-holding every role is supported, and the gates do not soften: they approve by hand, as any approver
-does. `shared/team-roles.md` holds the rule.
+holding every role is supported, and the gates do not soften: the approval is still their own act, as
+it is for any approver. `shared/team-roles.md` holds the rule.
 
 ## The problem it addresses
 
