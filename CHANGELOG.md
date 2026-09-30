@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.21](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.20...v0.0.21) (2026-09-30)
+
+
+### Bug Fixes
+
+* stop atk:verify migrating a diverged store, back up before a reset, and open run reports with a plain summary ([#82](https://github.com/lamngockhuong/aiteamkit/issues/82)) ([f037263](https://github.com/lamngockhuong/aiteamkit/commit/f0372633c06011e0bdd3c9ea5402e403d5df54cd))
+
 ## [0.0.20](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.19...v0.0.20) (2026-09-29)
 
 
