@@ -149,6 +149,11 @@ ticket: <ticket, or none>
 - Run by: <names>, <dates>
 - Retest of: <issue or defect, and the run record it failed in, only under `--retest`>
 
+## In short
+
+<Per The opening summary in `shared/plain-writing.md`: how many cases ran and how many failed, the
+worst failure as what a user sees, what is still pending, and who decides whether the build goes on.>
+
 ## Summary
 
 | Result | Cases | Share |

@@ -505,6 +505,9 @@ chạy dài vẫn là thay đổi có người phải review.
 
 Trước khi khởi động gì, skill kiểm tra kho dữ liệu trên máy có khớp với branch hay không. Nếu lệch, run
 dừng lại và hỏi chứ không tự migrate, vì có thể một worktree khác đang chạy trên cùng database đó.
+Database đang chứa migration của branch khác thì không bao giờ được migrate từ run, còn database
+không do run tạo ra thì được sao lưu trước khi bất kỳ bước chuẩn bị nào ghi vào nó, và báo cáo ghi
+lại lệnh khôi phục.
 Những gì run ghi vào cache hay bucket mà session khác cũng đọc sẽ bị xoá theo tên khi kết thúc, và
 báo cáo ghi số mục của ba lần liệt kê: trước request đầu tiên, sau request cuối cùng, và sau khi
 xoá. Hộp thư giả lập mà run đọc mã đăng nhập từ đó cũng là kho dùng chung: run đọc thư đến sau

@@ -41,6 +41,17 @@ out.
 `status` is `DRAFT` only when every defect was stopped; otherwise it is `IN REVIEW`, and the title
 names the stopped defect so no reader takes the report for complete.
 
+## In short
+
+Before section 1, the summary from The opening summary in `shared/plain-writing.md`: the defect as the
+case that showed it, the cause in words, what changed, and who has to approve or decide what. Under
+`--investigate-only` it says the cause and that no file changed; after a ceiling stop, that no cause
+was proven and who has to look. Where one report holds several defects, one summary covers them, a
+sentence or two each.
+
+The prose of every section below follows the same file. Sections 1 and 3 keep their blocks verbatim,
+and the words around those blocks are what the file governs.
+
 ## 1. Symptom as captured
 
 The verbatim block from step 0: the error or failing assertion, the reproduction steps, expected

@@ -72,7 +72,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười lăm file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 23 skill trích dẫn:
+Mười sáu file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 23 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -82,7 +82,7 @@ Mười lăm file giữ những gì các skill sẽ phải lặp lại. Ba file 
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
-Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Mười một file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -154,6 +154,13 @@ Chín file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ 
   ước lượng phần kiểm thử. Chỉ một bảng, vì nếu phân loại một kiểu khi hỏi và một kiểu khác khi
   ước lượng, cùng một tính năng sẽ là luồng thanh toán với người code nhưng chỉ là một form bình
   thường với người ước lượng phần test.
+- `shared/plain-writing.md`: cách viết phần lời của một report ghi lại một lần chạy, cho người đọc
+  chưa mở file nào mà report trích dẫn. Gồm mục `In short` ở đầu report, năm quy tắc cho phần lời
+  quanh bằng chứng, và những thứ không bao giờ đổi, trước hết là chính bằng chứng. Template report
+  của `atk:fix`, `atk:verify`, `atk:review`, `atk:security` và `atk:qa --run` trích dẫn file này,
+  cùng mục `## Output` của `atk:incident`, vì đó là những report ghi lại một lần chạy và cần một người hành động theo. Một
+  report đúng từng dòng vẫn không đọc được khi mỗi nhận định chỉ là một trích dẫn, và một quy tắc
+  chép vào sáu template sẽ trôi thành sáu bản khác nhau.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

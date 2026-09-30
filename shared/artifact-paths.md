@@ -256,7 +256,11 @@ is this kit's default for where a file should end up; whether this repository ke
 project's decision, and it wins here the same way it wins over the docs root above. What may not
 happen is the team learning it afterwards. Name the directory before writing the file, say that the
 artifact will not be staged and will not travel in the pull request, and let the team decide whether
-to track it, to put it elsewhere, or to write it there anyway. A run that discovers it at the commit
+to track it, to put it elsewhere, or to write it there anyway. The check is
+`git check-ignore -v <file>` on the path of the file about to be written, run before it is written:
+it also sees `.git/info/exclude` and the user's global excludes, which a reading of `.gitignore`
+misses. The file's path rather than its directory's, because a pattern ending in `/` matches only a
+directory, and git cannot tell that a directory not created yet is one unless given a path inside it. A run that discovers it at the commit
 has already made that choice on the team's behalf, and the artifact it wrote is a record the rest of
 the kit believes exists and nobody will ever read.
 

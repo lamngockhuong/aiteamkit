@@ -149,6 +149,7 @@ do not.
 ```bash
 gh issue create --title "<title>" --body-file <artifact.md> --label <label> --assignee <user>
 gh issue comment <number> --body-file <artifact.md>
+gh pr comment <number> --body-file <artifact.md>
 gh pr create --title "<title>" --body-file <body.md>
 ```
 
@@ -164,6 +165,18 @@ gh pr checkout <number>                                       # the files themse
 The first two give paths, counts, and hunks, never whole files. A skill that has to open a file the
 change touches, rather than read what changed in it, needs the third: on a pull request that edits an
 existing document, the hunks alone show a fraction of it, and everything outside them looks absent.
+
+`atk:verify` reads a pull request for its acceptance criteria rather than its files, so it needs a
+different line, and never the checkout above, because the application it exercises runs from the
+working tree:
+
+```bash
+gh pr view <number> --json body,closingIssuesReferences,headRefOid   # criteria, linked issues, head
+gh issue view <number> --json body                                   # each linked issue's criteria
+```
+
+A `headRefOid` that differs from `git rev-parse HEAD` is said and asked about, per step 1 of that
+skill.
 
 Where the pull request belongs to a repository other than this checkout, say so and stop rather than
 reading the local tree as though it were the one the change was written against.

@@ -9,7 +9,7 @@ description: >
   QA, or before a release goes out.
   Triggers on: "verify", "verify this works", "kiểm chứng", "chạy thử thật", "test thực tế",
   "đối chiếu thiết kế", "動作確認", "実機確認", "画面確認", "/atk:verify".
-argument-hint: "[module|paths|ticket] [--ui] [--report-only] [--out <path>]"
+argument-hint: "[module|paths|ticket|pr] [--ui] [--report-only] [--out <path>]"
 ---
 
 # Verify on the Running System (`atk:verify`)
@@ -54,6 +54,7 @@ turns out not to be pointed at a local one. See `shared/team-roles.md`.
 /atk:verify <module>         # Verify one module or feature by name
 /atk:verify <paths>          # Verify what the given files affect
 /atk:verify <ticket>         # Verify against the criteria on a ticket in the detected tracker
+/atk:verify <pr>             # Verify against the criteria in a pull request and the issue it links
 /atk:verify --ui             # Also compare the screens against the design
 /atk:verify --report-only    # Run and report, change no file, even when a fix is obvious
 /atk:verify --out <path>     # Override the default output path
@@ -90,8 +91,10 @@ Before step 1, read `.atk/overrides/verify.md` when it exists, per rule 7 of `sh
 ### 1. Preflight
 
 Read the profile once. Establish what is being verified and against which acceptance criteria: the
-ticket, the plan, the implementation record, or the criteria given in the prompt. Verification with
-no stated criteria degrades into clicking around and reporting that nothing looked wrong.
+ticket, the pull request's body and the issue it links, the plan, the implementation record, or the
+criteria given in the prompt. Verification with no stated criteria degrades into clicking around and
+reporting that nothing looked wrong. A pull request is read per `shared/ticket-adapters.md`, and a
+working tree not at its head is asked about, never checked out: the application runs from that tree.
 
 Then the local-only check, before anything is started. The profile says how to be sure the run is
 pointed at a local environment. Run that check and read the result. A host, connection string, or
@@ -104,8 +107,8 @@ from its profile, so "tell SRE" can resolve to no one at all.
 Then the data store, per The data store before anything starts in `references/runtime-checks.md`:
 the read-only check from the profile's `Prepare` line tells whether the store matches the branch.
 A mismatch stops the run and is put to the user, every time, with the options that section lists.
-This skill never migrates or seeds a store on its own judgement, because another worktree may be
-running against it.
+It never migrates or seeds on its own judgement, never offers a migrate over a diverged history,
+and backs up a store it did not create before any preparation writes to it.
 
 Take the process inventory here as well, per `## Process management` below, and the entry listing of
 every store the profile's `Shared stores` line names.
@@ -226,8 +229,8 @@ database, a container, a bucket, is recorded the same way with the command that 
 **A shared store is treated like a port.** A cache or bucket another session reads gets an
 inventory before the first request, and at cleanup exactly the entries this run added are removed
 and the inventory is taken again. A database another session reads cannot be inventoried that way,
-so a case that writes to one waits for an answer asked once, before any fixture or request. The rule for evidence, that
-data stays where it was written, covers only a store this run alone uses.
+so a case that writes to one waits for an answer asked once, before any fixture or request. The rule
+for evidence, that data stays where it was written, covers only a store this run alone uses.
 A mail catcher, or any channel a login code arrives through, is shared whether the line names it or
 not: it is listed before the request that sends the code, read from the message that arrived after
 it, and never emptied. `references/runtime-checks.md` holds all four, under Cleaning up.
@@ -242,7 +245,8 @@ and "nothing is left" are different claims, and only the second one is worth wri
 ## Output
 
 Written to `docs/records/verification/<date>-<ticket>-<slug>.md` per `shared/artifact-paths.md`, opening
-with the shared front matter block. `--out` overrides the path.
+with the shared front matter block. `--out` overrides the path. Check the file's own path first,
+with `git check-ignore -v <file>` per Persistence in `shared/artifact-paths.md`, and say so then.
 
 The report holds: what was verified and against which criteria; the local-only check and its result;
 the processes started, with command, PID, and port; per case, what was sent, what was asserted, and
@@ -253,9 +257,10 @@ count and what each round changed; what could not be verified and why; and the c
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. The report is offered as the comment on the ticket, shown first
-and posted on a yes, per the consent line in `shared/finalize-steps.md`. Do not move the ticket to
-done or to any accepted state. This skill produces evidence; accepting it is QA's act, and the
-distance between those two is the whole reason the kit separates the roles.
+and posted on a yes, per the consent line in `shared/finalize-steps.md`. From a pull request, it is
+offered on that pull request first, where its reviewer reads it, and on the linked issue second.
+Do not move the ticket to done or to any accepted state. This skill produces evidence; accepting it
+is QA's act, and the distance between those two is the whole reason the kit separates the roles.
 
 ## Definition of done
 
@@ -266,7 +271,8 @@ distance between those two is the whole reason the kit separates the roles.
       apart from fixtures, a resource a person asked the run to create, and a command a person
       gave, each listed in the report with its reason.
 - [ ] The data store's state was checked before anything started, and a mismatch stopped the run
-      and was put to the user, or the report says the profile has no `Prepare` line.
+      and was put to the user, or the report says the profile has no `Prepare` line. A store not
+      created by this run was backed up before any preparation, its restore command in the report.
 - [ ] Every entry the run wrote into a shared cache or bucket was removed and the listing after
       shows it, nothing was deleted from a mail catcher or any channel a code was read from, no
       case or fixture wrote to a shared database before the user answered, a profile
@@ -289,4 +295,4 @@ distance between those two is the whole reason the kit separates the roles.
 - [ ] Under `--report-only`, `git status` shows no source file touched.
 - [ ] Every process this run started is stopped, and the post-run inventory confirming it is in the
       report.
-- [ ] The report names what could not be verified and why.
+- [ ] The report names what could not be verified and why, at a path checked first.

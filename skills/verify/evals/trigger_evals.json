@@ -24,5 +24,9 @@
   { "query": "production is down, checkout is failing for everyone", "should_trigger": false },
   { "query": "write the release notes for version 2.3", "should_trigger": false },
   { "query": "add a unit test for this function", "should_trigger": false },
-  { "query": "viết spec màn hình từ Figma", "should_trigger": false }
+  { "query": "viết spec màn hình từ Figma", "should_trigger": false },
+
+  {"query": "run PR 82 for real and check the feature actually works", "should_trigger": true},
+  {"query": "chạy thử thật PR 82 xem tính năng có hoạt động không", "should_trigger": true},
+  {"query": "PR 82 を実機確認して", "should_trigger": true}
 ]
