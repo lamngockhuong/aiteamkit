@@ -18,14 +18,29 @@ the change adds, fails in a way that looks like the change. So the first command
 When it reports that the store holds everything the rest of `Prepare` brings in, nothing is
 prepared. A check that covers only part of it, a migration status that says nothing about seeds,
 grants, or test logins, vouches for that part alone: the steps it does not cover are run only under
-the same question as a mismatch. When it reports a mismatch, the run stops and asks, every time. It shows what differs, which stores the `Shared stores` line says
-other sessions read, and these options:
+the same question as a mismatch. When it reports a mismatch, the run stops and asks, every time.
+
+First it tells which kind of mismatch it is. A store that lags holds only migrations the branch also
+has, and is missing some of the rest. A store that has diverged holds at least one migration the
+branch does not have, usually applied from another branch by another worktree. Telling them apart
+takes the identities of the migrations, not their number: a store with 77 applied against 81 on the
+branch can be either. A check that returns counts alone cannot tell, so the store is treated as
+diverged, and the report names `/atk:init --audit` as what gives the line a check that compares
+identities.
+
+It shows what differs, which stores the `Shared stores` line says other sessions read, and the
+options for its kind. For a store that lags:
 
 - run the rest of `Prepare` against this store, when the person answering says no other session
   depends on its current state;
 - point the run at a separate store the person sets up or asks this run to create, which is then a
   resource this run created, per the section below;
 - stop here, and record the mismatch as the reason nothing was verified.
+
+For a store that has diverged, running the rest of `Prepare` is not offered at all, and the warning
+below the no-`Prepare` options is shown in its place. The options are the three given there: a
+command the person answering names, a separate store, or stop. The foreign migrations are listed by
+identity, so the person can see whose branch they came from.
 
 It never migrates, seeds, or grants on its own judgement, because the store may be the one another
 worktree is running against, and a migration applied under it is not undone by stopping this run.
@@ -47,6 +62,30 @@ remain when there is no `Prepare` to run:
 The run does not put forward a migrate or a seed of its own from the project's scripts. Nothing says
 the store's migration history comes from this branch, and a migration run over another branch's
 history fails at best and half-applies at worst, under a store another worktree may be using.
+
+### Before anything writes to a store the run did not create
+
+Any preparation that writes to a store this run did not create, a migration, a seed, a grant, a reset
+or a drop, whether the command came from `Prepare` or from the person answering, is preceded by a
+backup of that store. The store's current state belongs to somebody, and a person who answered "no
+other session depends on it" may be wrong about a worktree they forgot. A store the run created
+needs none: its removal command is already recorded, per Cleaning up.
+
+- **The commands come from the profile or a person.** The backup and restore commands come from the
+  `Prepare` or `Shared stores` line. Where neither gives one, the run asks for both before the write,
+  and the report lists them as commands a person gave. Neither is written from this file.
+- **The backup outlives the session.** It goes to a path the person answering names, never to a
+  session scratchpad or a temporary directory removed when the session ends: a backup nobody can
+  find tomorrow restores nothing.
+- **The report carries both.** Section 2 of the report holds the backup's path and the command that
+  restores it, and Cleanup leaves the backup in place with that command printed, like a resource the
+  run created.
+- **The application can use the store before the first case.** Grants, roles, and extensions often
+  live outside the migrations, and a reset drops them without a word. So after the preparation, and
+  before the first case, the profile's read-only data command runs with the connection the
+  application itself uses, not an administrator's. A failure there is repaired as environment work,
+  recorded in section 2, and is not a round of step 4. Skipped, it comes back as the first case
+  failing with a permission error that looks like a defect in the change.
 
 ## Fixtures for one case
 

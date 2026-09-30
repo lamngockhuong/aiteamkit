@@ -47,8 +47,11 @@ The result of the local-only check from step 1, with the command and its output.
 because it is the section that stops a reader worrying that these assertions were made against a
 shared environment.
 
-Then the data store: the `Prepare` check and its output, and, where it found a mismatch, what the
-user chose and each command that followed. Where the profile has no `Prepare` line, say so here and
+Then the data store: the `Prepare` check and its output, and, where it found a mismatch, whether
+the store lagged or had diverged, with any foreign migration named, what the user chose and each
+command that followed. Before any write to a store the run did not create, the backup's path and the
+command that restores it; after it, the check run as the application's own connection, and any
+environment repair it led to. Where the profile has no `Prepare` line, say so here and
 again in section 6.
 
 Then the processes started, one row each: command, PID, port, and what the readiness signal was and
@@ -119,7 +122,8 @@ user answered, and the rows each case left there when the answer was to run them
 catcher or other channel a code was read from, how many messages each listing held and which message
 the code came from, never the code or the link, and a statement that nothing was deleted from it.
 
-Anything deliberately left running or left in place, why, and how to stop or remove it.
+Anything deliberately left running or left in place, why, and how to stop or remove it. A backup
+taken before a preparation is always in this list, with its restore command.
 
 ## 8. Found on the way
 

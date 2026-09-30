@@ -149,6 +149,7 @@ do not.
 ```bash
 gh issue create --title "<title>" --body-file <artifact.md> --label <label> --assignee <user>
 gh issue comment <number> --body-file <artifact.md>
+gh pr comment <number> --body-file <artifact.md>
 gh pr create --title "<title>" --body-file <body.md>
 ```
 
