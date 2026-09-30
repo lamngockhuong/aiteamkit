@@ -44,7 +44,10 @@ echoed into any of them is a secret in a second place.
 
 ## The security record
 
-Front matter per `shared/artifact-paths.md`, then these sections in order:
+Front matter per `shared/artifact-paths.md`, then `In short` per The opening summary in
+`shared/plain-writing.md`: what was reviewed, what was found with the counts by severity, the worst
+finding told as what an actor does and gains, what was not checked, and who has to fix or accept
+what. Then these sections in order, their prose following the same file:
 
 1. **Scope.** What was reviewed: the branch, the range, the version, or the paths, and the commit it
    was read at. What was left out and why.

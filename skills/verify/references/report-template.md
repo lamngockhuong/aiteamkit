@@ -31,6 +31,15 @@ is writing a role, and a role approves nothing.
 somebody else's act. Where the run escalated, the status is `DRAFT` instead, because the work is not
 finished and a reader who sees `IN REVIEW` will assume it is.
 
+## In short
+
+Before section 1, the summary from The opening summary in `shared/plain-writing.md`: what was
+exercised, with the cases counted, what passed and what did not, anything done to a shared store,
+what was not verified, and who acts next. A run that escalated says so in its first sentence.
+
+The prose of every section below follows the same file. What was sent, what came back, and each
+command's output stay verbatim.
+
 ## 1. What was verified, and against what
 
 The change or feature, and the criteria it was checked against, quoted rather than referenced:

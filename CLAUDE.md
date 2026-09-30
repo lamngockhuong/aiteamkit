@@ -100,7 +100,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (repo-root, outside `skills/`)
 
-Fifteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
+Sixteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
 `skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
 skill discovery.
 
@@ -121,6 +121,7 @@ skill discovery.
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
 | `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request), `qa` (`GUI` cases where no screen spec exists) |
 | `shared/feature-types.md` | The one classification of features: each type with the extra questions an understanding check adds and the QA risk an estimate reads, and the rule that a row is added with both filled | `catchup` (through `understanding-check.md`), `estimate` (through `complexity-drivers.md`) |
+| `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `incident`, `qa --run` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.

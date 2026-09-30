@@ -73,7 +73,7 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Fifteen files hold what skills would otherwise repeat. The first three are cited by all 23:
+Sixteen files hold what skills would otherwise repeat. The first three are cited by all 23:
 
 - `shared/team-roles.md`: the role table and the eight rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -83,7 +83,7 @@ Fifteen files hold what skills would otherwise repeat. The first three are cited
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
 
-Nine are contracts between a named handful of skills rather than kit-wide rules:
+Eleven are contracts between a named handful of skills rather than kit-wide rules:
 
 - `shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
@@ -158,6 +158,12 @@ Nine are contracts between a named handful of skills rather than kit-wide rules:
   extra questions `atk:catchup` adds to an understanding check and the QA risk `atk:estimate` sizes
   testing from. One table, because a feature classified one way for questions and another way for
   effort is a payment flow to the developer and a plain form to whoever sizes its testing.
+- `shared/plain-writing.md`: how the prose of a run's report is written for a reader who has opened
+  none of the files it cites: the `In short` section that opens it, five rules for the prose around
+  the evidence, and what never changes, the evidence itself above all. Cited by the report templates
+  of `atk:fix`, `atk:verify`, `atk:review`, `atk:security`, `atk:incident`, and `atk:qa --run`, the
+  reports that record one run and ask a person to act on it. A report correct in every line is still
+  unreadable when each claim is a citation, and a rule written into six templates would drift into six.
 
 The last two describe files that do not ship with the kit at all:
 

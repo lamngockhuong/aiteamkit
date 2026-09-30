@@ -101,6 +101,13 @@ the author, which `## Roles` of `SKILL.md` makes a thing to say out loud; a sect
 after `## What this was reviewed against`, one line per finding the fix closed, with its identifier
 and what closed it, since a closed finding belongs in no severity section.
 
+`## In short` opens the report, after the metadata table, per The opening summary in
+`shared/plain-writing.md`: what the change does, the verdict the findings add up to with the
+`BLOCKING` count, and what the author and the approver each have to do next. It is never empty, and
+it is not one of the fixed headings: it is written in the team's working language. The prose of each
+finding follows the same file, so a finding's failure is told as the case that fails before the line
+it cites.
+
 A section with nothing in it is dropped, except `## Cap` and the three severity sections, which are
 written with `None.` instead. A review that found nothing blocking and a review that lost its
 blocking section look identical otherwise, and the reader who most needs to tell them apart is the
@@ -135,6 +142,7 @@ ticket: <id or URL>
 | Changed | 45 files, 1,864 lines |
 | Not counted | `apps/api/openapi.yaml`, `.../api-types.generated.ts`: generated, 515 lines, opened by `contract`, `exposure` and `callers` |
 
+## In short
 ## What this was reviewed against
 ## What the change does well
 ## BLOCKING
