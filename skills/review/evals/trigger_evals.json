@@ -30,5 +30,9 @@
   { "query": "kiểm tra bảo mật nhánh này trước khi phát hành", "should_trigger": false },
   { "query": "review the test cases my colleague wrote for the export screen", "should_trigger": false },
   { "query": "review giúp bộ test case này trước khi duyệt", "should_trigger": false },
-  { "query": "このテストケースをレビューして", "should_trigger": false }
+  { "query": "このテストケースをレビューして", "should_trigger": false },
+
+  {"query": "run PR 82 for real and check the feature actually works", "should_trigger": false},
+  {"query": "chạy thử thật PR 82 xem tính năng có hoạt động không", "should_trigger": false},
+  {"query": "PR 82 を実機確認して", "should_trigger": false}
 ]

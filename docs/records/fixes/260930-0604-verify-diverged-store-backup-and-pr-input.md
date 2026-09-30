@@ -162,7 +162,7 @@ written. The fix supplies the missing check.
   diverged, by migration identity; a check that returns counts alone is treated as diverged and
   `/atk:init --audit` is named. For a diverged store, running the rest of `Prepare` is not offered;
   the no-`Prepare` warning and its three options apply, with the foreign migrations listed.
-- `skills/verify/references/runtime-checks.md` (`2`): a new subsection, Before anything writes to a
+- `skills/verify/references/runtime-checks.md` (`2`): a new subsection, Before a preparation writes to a
   store the run did not create. A backup first, with backup and restore commands from the profile or
   a person; a path that outlives the session; both in the report; and, before the first case, the
   read-only data command run as the application's own connection, a failure there being environment
@@ -174,7 +174,7 @@ written. The fix supplies the missing check.
   rules; `<pr>` in `argument-hint` and Invocation; step 1 takes criteria from a pull request and asks
   rather than checks out when the tree is not at its head; `## Ticket` offers the report on the pull
   request first; Output runs `git check-ignore -v`; two Definition of done lines extended.
-- `shared/artifact-paths.md` (`S5`): Persistence names `git check-ignore -v <dir>` as the check,
+- `shared/artifact-paths.md` (`S5`): Persistence names `git check-ignore -v <file>`, on the path about to be written, as the check,
   which covers every skill that cites it rather than ten separate edits.
 - `shared/ticket-adapters.md` (`4`): `gh pr comment` added to the push commands.
 - `README.md` (`4`): the invocation block reads `<module|paths|ticket|pr>`.
@@ -207,8 +207,9 @@ under 300 lines (298), and rewrapped one line of an existing paragraph that ran 
 ## 8. Blast radius
 
 - `README.md:107`, the only other list of verify's inputs: updated.
-- `docs/skills-overview.md` and `docs/vi/skills-overview.md`: no invocation or data-store rule for
-  verify in either; checked by reading `## atk:verify` in each. Nothing to move.
+- `docs/skills-overview.md` and `docs/vi/skills-overview.md`: neither lists verify's inputs, but
+  both describe its data-store check; a sentence on the diverged store and the backup was added to
+  each after review (`S6` of `docs/derived/reviews/82-260930-0831.md`).
 - `shared/artifact-paths.md` Persistence: cited by every skill; the added sentence names a check for
   a rule they already follow.
 - `shared/ticket-adapters.md` push commands: an added command changes nothing for a skill that does
@@ -219,5 +220,29 @@ under 300 lines (298), and rewrapped one line of an existing paragraph that ran 
 
 - Finding 3 of the record: the client project's `Prepare` check compares counts, and its app-role
   grants are not in its profile. `/atk:init --audit` in that project.
-- `atk:init` could propose a `Prepare` check that compares migration identities, and ask for backup
+- Owner: Lam Ngoc Khuong. `atk:init` could propose a `Prepare` check that compares migration identities, and ask for backup
   and restore commands, so projects do not meet the new fallbacks on their first verify run.
+
+## 10. Corrected after review
+
+The review of PR 82, `docs/derived/reviews/82-260930-0831.md` (gitignored), raised seven `SHOULD FIX`
+and three `NIT` findings, all fixed on the same branch. The approver answered its two questions the
+way the report recommended.
+
+- `S1`: `SKILL.md` asked for a backup before any write, the reference only before a preparation. The
+  intent is a preparation (migrate, seed, grant, reset, drop); a case writing its own rows needs none.
+  The commit message of `4894c4b` carries the wider reading and is superseded by this line.
+- `S2`: a store holding every branch migration plus a foreign one was accepted as matching. It is now
+  a mismatch, and has diverged.
+- `S3`: `git check-ignore -v <dir>` misses a pattern ending in `/` when the directory does not exist
+  yet, reproduced on a scratch repository. All three places now check the file's own path.
+- `S4`: `shared/ticket-adapters.md` gives verify its own pull request line, body and linked issues,
+  and says why it never checks out.
+- `S5`: every command the report records, backup and restore included, is redacted like the start
+  command.
+- `S6`: both `skills-overview.md` pages name the diverged store and the backup; section 8 above said
+  they needed nothing, and was corrected.
+- `S7`: a pull-request query in three languages is a positive for verify and a negative for review.
+- `N1`: the owner of the `atk:init` follow-up in section 9 is named. `N2`: the check is the profile's
+  `Data check` line. `N3`: `incident` cites `shared/plain-writing.md` from `## Output`, not a template
+  file, and the six places that list the citers say so.

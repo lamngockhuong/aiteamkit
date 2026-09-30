@@ -15,8 +15,9 @@ A local database that has not had the branch's migrations, or holds an older rev
 the change adds, fails in a way that looks like the change. So the first command of the profile's
 `Prepare` line, the read-only one, runs in step 1, before any process starts.
 
-When it reports that the store holds everything the rest of `Prepare` brings in, nothing is
-prepared. A check that covers only part of it, a migration status that says nothing about seeds,
+When it reports that the store holds everything the rest of `Prepare` brings in, and no migration
+the branch does not have, nothing is prepared. A store holding every migration of the branch and
+one more from another branch is a mismatch, and has diverged in the sense below. A check that covers only part of it, a migration status that says nothing about seeds,
 grants, or test logins, vouches for that part alone: the steps it does not cover are run only under
 the same question as a mismatch. When it reports a mismatch, the run stops and asks, every time.
 
@@ -63,13 +64,14 @@ The run does not put forward a migrate or a seed of its own from the project's s
 the store's migration history comes from this branch, and a migration run over another branch's
 history fails at best and half-applies at worst, under a store another worktree may be using.
 
-### Before anything writes to a store the run did not create
+### Before a preparation writes to a store the run did not create
 
 Any preparation that writes to a store this run did not create, a migration, a seed, a grant, a reset
 or a drop, whether the command came from `Prepare` or from the person answering, is preceded by a
 backup of that store. The store's current state belongs to somebody, and a person who answered "no
 other session depends on it" may be wrong about a worktree they forgot. A store the run created
-needs none: its removal command is already recorded, per Cleaning up.
+needs none: its removal command is already recorded, per Cleaning up. A case writing its own rows
+is not a preparation and needs no backup; A shared database under Cleaning up covers it.
 
 - **The commands come from the profile or a person.** The backup and restore commands come from the
   `Prepare` or `Shared stores` line. Where neither gives one, the run asks for both before the write,
@@ -78,11 +80,11 @@ needs none: its removal command is already recorded, per Cleaning up.
   session scratchpad or a temporary directory removed when the session ends: a backup nobody can
   find tomorrow restores nothing.
 - **The report carries both.** Section 2 of the report holds the backup's path and the command that
-  restores it, and Cleanup leaves the backup in place with that command printed, like a resource the
+  restores it, a credential in either redacted as under Knowing it is ready, and Cleanup leaves the backup in place with that command printed, like a resource the
   run created.
 - **The application can use the store before the first case.** Grants, roles, and extensions often
   live outside the migrations, and a reset drops them without a word. So after the preparation, and
-  before the first case, the profile's read-only data command runs with the connection the
+  before the first case, the profile's `Data check` command runs with the connection the
   application itself uses, not an administrator's. A failure there is repaired as environment work,
   recorded in section 2, and is not a round of step 4. Skipped, it comes back as the first case
   failing with a permission error that looks like a defect in the change.
@@ -141,8 +143,10 @@ Values supplied the first way go through the local-only check before the start i
 host or a key named in them is exactly what that check exists to catch. The report lists each by
 variable name as a difference between this run's environment and the project's own, never by a
 value that is a credential. The same holds for the start command the report records for the
-process: a supplied value there is written `<KEY>=<redacted>`, because an inline assignment is the
-ordinary way to pass it and the report is committed.
+process, and for every other command it records, the backup and restore commands of a preparation
+included: a supplied value there is written `<KEY>=<redacted>`, and a password inside a connection
+URL `<redacted: password>`, because an inline assignment is the ordinary way to pass it and the
+report is committed, or posted on a pull request.
 
 ## Capturing logs
 

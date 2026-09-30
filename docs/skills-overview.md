@@ -501,7 +501,9 @@ still a change somebody has to review.
 
 Before anything starts, it checks that the local data store matches the branch, and a mismatch
 stops the run with a question rather than a migration, because another worktree may be running
-against the same database. What it writes into a cache or bucket other sessions read is removed by
+against the same database. A database holding another branch's migrations is never migrated from
+the run, and one the run did not create is backed up, with its restore command in the report,
+before any preparation writes to it. What it writes into a cache or bucket other sessions read is removed by
 name at the end, and the report carries how many entries it listed before the first request, after
 the last, and after the removal. A mail catcher it reads a login code from is shared as well: it
 reads the message that arrived after its own request and deletes nothing, since a message another

@@ -161,7 +161,8 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
 - `shared/plain-writing.md`: how the prose of a run's report is written for a reader who has opened
   none of the files it cites: the `In short` section that opens it, five rules for the prose around
   the evidence, and what never changes, the evidence itself above all. Cited by the report templates
-  of `atk:fix`, `atk:verify`, `atk:review`, `atk:security`, `atk:incident`, and `atk:qa --run`, the
+  of `atk:fix`, `atk:verify`, `atk:review`, `atk:security` and `atk:qa --run`, and by `## Output` of
+  `atk:incident`, the
   reports that record one run and ask a person to act on it. A report correct in every line is still
   unreadable when each claim is a citation, and a rule written into six templates would drift into six.
 

@@ -108,7 +108,7 @@ Then the data store, per The data store before anything starts in `references/ru
 the read-only check from the profile's `Prepare` line tells whether the store matches the branch.
 A mismatch stops the run and is put to the user, every time, with the options that section lists.
 It never migrates or seeds on its own judgement, never offers a migrate over a diverged history,
-and backs up a store it did not create before anything writes to it.
+and backs up a store it did not create before any preparation writes to it.
 
 Take the process inventory here as well, per `## Process management` below, and the entry listing of
 every store the profile's `Shared stores` line names.
@@ -245,8 +245,8 @@ and "nothing is left" are different claims, and only the second one is worth wri
 ## Output
 
 Written to `docs/records/verification/<date>-<ticket>-<slug>.md` per `shared/artifact-paths.md`, opening
-with the shared front matter block. `--out` overrides the path. Check the directory first with
-`git check-ignore -v <dir>`, which also sees `.git/info/exclude`, and name an ignored one then.
+with the shared front matter block. `--out` overrides the path. Check the file's own path first,
+with `git check-ignore -v <file>` per Persistence in `shared/artifact-paths.md`, and say so then.
 
 The report holds: what was verified and against which criteria; the local-only check and its result;
 the processes started, with command, PID, and port; per case, what was sent, what was asserted, and
@@ -272,7 +272,7 @@ is QA's act, and the distance between those two is the whole reason the kit sepa
       gave, each listed in the report with its reason.
 - [ ] The data store's state was checked before anything started, and a mismatch stopped the run
       and was put to the user, or the report says the profile has no `Prepare` line. A store not
-      created by this run was backed up before any write, its restore command in the report.
+      created by this run was backed up before any preparation, its restore command in the report.
 - [ ] Every entry the run wrote into a shared cache or bucket was removed and the listing after
       shows it, nothing was deleted from a mail catcher or any channel a code was read from, no
       case or fixture wrote to a shared database before the user answered, a profile
@@ -295,4 +295,4 @@ is QA's act, and the distance between those two is the whole reason the kit sepa
 - [ ] Under `--report-only`, `git status` shows no source file touched.
 - [ ] Every process this run started is stopped, and the post-run inventory confirming it is in the
       report.
-- [ ] The report names what could not be verified and why, in a directory checked first.
+- [ ] The report names what could not be verified and why, at a path checked first.
