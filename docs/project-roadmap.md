@@ -15,7 +15,8 @@
 
 Repository layout mirroring a working multi-harness plugin: `.claude-plugin/`, `.cursor-plugin/`,
 `.codex-plugin/`, `skills/`, `shared/`, `assets/`, bilingual `docs/`, release-please on push to
-`main`, and GitHub issue and pull request templates.
+`main`, and GitHub issue and pull request templates. The kit has since moved under `plugins/atk/`,
+with one marketplace file per harness at the root.
 
 ## Phase 2: Skill coverage (done)
 
@@ -41,7 +42,7 @@ checked and found, with every unfixed finding left for a named person to accept.
 the agent executes the cases it can observe honestly and writes a run record the QA lead approves,
 while `qa` still never executes a case and `verify` stays the developer's check on the local stack.
 
-The `shared/` layer holds what would otherwise be repeated twenty-four times: the role vocabulary,
+The `plugins/atk/shared/` layer holds what would otherwise be repeated twenty-four times: the role vocabulary,
 the artifact path convention, and the tracker adapters, cited by every skill. Twelve more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
@@ -64,11 +65,11 @@ run:
 
 | Skill | Reference to add |
 |-------|------------------|
-| `intake` | An interview question bank. The requirement template is done: `skills/intake/references/requirement-template.md` |
-| `estimate` | The sizing scales with one worked example each. The sheet template and the complexity drivers are done: `skills/estimate/references/estimate-template.md`, `skills/estimate/references/complexity-drivers.md` |
-| `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode and the role challenge are done: `skills/design-doc/references/spike.md`, `skills/design-doc/references/role-challenge.md` |
+| `intake` | An interview question bank. The requirement template is done: `plugins/atk/skills/intake/references/requirement-template.md` |
+| `estimate` | The sizing scales with one worked example each. The sheet template and the complexity drivers are done: `plugins/atk/skills/estimate/references/estimate-template.md`, `plugins/atk/skills/estimate/references/complexity-drivers.md` |
+| `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode and the role challenge are done: `plugins/atk/skills/design-doc/references/spike.md`, `plugins/atk/skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
-| `qa` | Test case table schema. The negative and boundary dimensions are done: `skills/qa/references/case-dimensions.md` |
+| `qa` | Test case table schema. The negative and boundary dimensions are done: `plugins/atk/skills/qa/references/case-dimensions.md` |
 | `release` | Checklist template per environment, the client-notes style rules |
 | `incident` | Severity rubric, timeline format, postmortem template |
 | `retro` | The evidence-gathering command set for git, CI, and each tracker |
@@ -117,7 +118,7 @@ pre-1.0 by dropping the two `bump-*-pre-major` flags in `release-please-config.j
   matching a skill invocation there. Cursor can package hooks too; is a third registration worth
   maintaining, given that the reminder is a convenience and the override loader only saves a file
   read the skill would otherwise do itself?
-- `shared/project-profile.md` puts `review`, `qa`, `release` and `convention` in the Required-soft
+- `plugins/atk/shared/project-profile.md` puts `review`, `qa`, `release` and `convention` in the Required-soft
   group, meant to continue without a profile and say so in the artifact. `plan` and `convention`
   implement it; `review`, `qa` and `release` do not cite the profile at all, so for them nothing
   does. Wire the other three, or move them to the group that needs nothing.

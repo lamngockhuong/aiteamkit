@@ -8,7 +8,7 @@ Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill 
 skill khác, [../skills-overview.md](../skills-overview.md) cho biết khi nào nên dùng một skill và
 khi nào không.
 
-Các vai trò lấy từ `shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE và Stakeholder. Đội nhỏ thì
+Các vai trò lấy từ `plugins/atk/shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE và Stakeholder. Đội nhỏ thì
 một người gánh vài vai; lý do vẫn tách tên ra là vì người viết artifact và người duyệt nó là hai
 dòng riêng, kể cả khi hai dòng đó trỏ về cùng một khuôn mặt.
 
@@ -154,7 +154,7 @@ flowchart TD
 
 Bảng ghi mỗi vai viết gì, chấp nhận gì và đọc lại ở đâu được `atk:init` đọc khi đề xuất cột
 `Approves` của profile, nên nó nằm trong kit, ở
-[`skills/init/references/role-defaults.md`](../../../skills/init/references/role-defaults.md),
+[`plugins/atk/skills/init/references/role-defaults.md`](../../../plugins/atk/skills/init/references/role-defaults.md),
 và viết bằng tiếng Anh. Bảng lấy từ bảng tra cứu theo pha ở trên và từ mục `## Roles` của từng
 skill.
 
@@ -192,7 +192,7 @@ pha nào. Mọi skill làm xong việc đều giao lại cho nó, nên một art
 
 `atk:spec` vẽ ở pha 3 vì đó là lúc một đội lần đầu viết ra vùng này làm gì, nhưng cạnh nét đứt đi từ
 chỗ merge mới là cạnh chạy thường xuyên nhất. Thay đổi nào đụng tới hợp đồng thì mang theo tài liệu
-tham chiếu trong cùng pull request, theo `shared/spec-docs.md`, và đó là lý do tài liệu sống lâu hơn
+tham chiếu trong cùng pull request, theo `plugins/atk/shared/spec-docs.md`, và đó là lý do tài liệu sống lâu hơn
 cái pha sinh ra nó. Khi `Contract: first`, pha 3 cũng là lúc tài liệu được viết từ thiết kế ngay khi
 thiết kế đang được review, nên contract và quyết định được review cùng nhau, và các pha sau làm theo
 cùng một trang.
@@ -201,5 +201,5 @@ cùng một trang.
 
 Nó không định độ dài sprint, chiến lược nhánh, hay tên cụ thể của người duyệt. Đó là quyết định của
 đội, và kit chỉ ghi lại chứ không chọn thay: người duyệt theo từng loại artifact nằm trong
-`.atk/profile.md` (xem `shared/project-profile.md`), còn quy tắc nhánh và commit là bất cứ thứ gì
+`.atk/profile.md` (xem `plugins/atk/shared/project-profile.md`), còn quy tắc nhánh và commit là bất cứ thứ gì
 `atk:convention` tìm thấy trong repo.

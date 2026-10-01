@@ -7,7 +7,7 @@ Companion documents: [skill-chain.md](./skill-chain.md) for what each skill cons
 [skill-lifecycle.md](./skill-lifecycle.md) for how one skill runs and when it reaches for another,
 [../skills-overview.md](../skills-overview.md) for when to use a skill and when not to.
 
-Roles are the ones in `shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE, and Stakeholder. A
+Roles are the ones in `plugins/atk/shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE, and Stakeholder. A
 small team maps several of them onto one person; the point of naming them separately is that the
 author of an artifact and its approver are two entries, even when they resolve to the same face.
 
@@ -153,7 +153,7 @@ flowchart TD
 
 The table of what each role writes, accepts, and reviews is read by `atk:init` when it proposes
 the `Approves` column of a profile, so it ships with the kit, in
-[`skills/init/references/role-defaults.md`](../../skills/init/references/role-defaults.md). It
+[`plugins/atk/skills/init/references/role-defaults.md`](../../plugins/atk/skills/init/references/role-defaults.md). It
 draws on the phase reference above and on each skill's own `## Roles` section.
 
 ## Outside the cycle
@@ -190,7 +190,7 @@ phase 1 and a fix made in phase 8 both close the same way.
 
 `atk:spec` is drawn in phase 3 because that is where a team first writes down what an area does, but
 the dotted edge from the merge is the one that fires most often. A change altering a contract carries
-its reference document in the same pull request, per `shared/spec-docs.md`, which is why the document
+its reference document in the same pull request, per `plugins/atk/shared/spec-docs.md`, which is why the document
 outlives the phase it was first written in. Under `Contract: first` phase 3 is also where it is
 written from the design while that design is in review, so the contract and the decision are
 reviewed together and the phases after it build against the same page.
@@ -199,5 +199,5 @@ reviewed together and the phases after it build against the same page.
 
 It does not set your sprint length, your branch strategy, or who your approvers are by name. Those
 are team decisions, and the kit records them rather than choosing them: approvers per artifact type
-go in `.atk/profile.md` (see `shared/project-profile.md`), and branch and commit rules are whatever
+go in `.atk/profile.md` (see `plugins/atk/shared/project-profile.md`), and branch and commit rules are whatever
 `atk:convention` finds in the repository.

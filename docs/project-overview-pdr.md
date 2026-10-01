@@ -25,7 +25,7 @@ something to read.
 
 That is a statement about where a skill stops, not about how many people a project has. One person
 holding every role is supported, and the gates do not soften: the approval is still their own act,
-as it is for any approver. `shared/team-roles.md` holds the rule.
+as it is for any approver. `plugins/atk/shared/team-roles.md` holds the rule.
 
 ## The problem it addresses
 
@@ -74,7 +74,7 @@ different failure modes, and they are process failures, not coding failures:
 
 Project teams at a software company, typically five to fifteen people, often working with an
 external client, frequently across Vietnamese, Japanese, and English. Roles are listed in
-`shared/team-roles.md`.
+`plugins/atk/shared/team-roles.md`.
 
 ## Success criteria
 

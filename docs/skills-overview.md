@@ -117,7 +117,7 @@ needs a test" is checkable by a person with no kit installed, so it is a `CONV-N
 is about the skill and belongs here. When both readings fit, the rule about the code wins.
 
 **The habit that matters.** It refuses. Eight things an override may never remove are listed in
-`shared/project-overrides.md`, and the approver line, the rule that a skill does not decide what a
+`plugins/atk/shared/project-overrides.md`, and the approver line, the rule that a skill does not decide what a
 role owns, and the consent line before anything leaves the local repository are three of them. A
 refused instruction is not dropped in silence: the skill says which of the eight it breaks and
 offers the nearest thing that does not, which is usually an instruction that surfaces the decision
@@ -289,7 +289,7 @@ stay apart.
 
 **The habit that matters.** The `ASPIRATIONAL` bucket. A rule nobody enforces is named as such
 rather than left to look like policy. The `REVIEWED` rules are written in the record format from
-`shared/review-checklist.md`, which is what lets `atk:review` cite them by ID.
+`plugins/atk/shared/review-checklist.md`, which is what lets `atk:review` cite them by ID.
 
 ---
 
@@ -660,7 +660,7 @@ never closes its actions does not need another list of them.
 **Produces.** Setup steps derived from the repository and marked `UNVERIFIED` where they could not be
 checked, an access list naming who grants what and whether it blocks day one, a code map by owner,
 the team's working agreements, and a first week ending in the real, reviewed contribution the
-joiner's role makes, which differs per role and is listed in `skills/onboard/references/roles.md`.
+joiner's role makes, which differs per role and is listed in `plugins/atk/skills/onboard/references/roles.md`.
 One document per role. A run that finds the repository wrong about its own setup leaves a second
 file too, a defect report for whoever owns the broken script.
 

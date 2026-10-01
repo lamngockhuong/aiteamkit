@@ -3,51 +3,66 @@
 ## Hình dạng
 
 `atk` là nội dung cộng với manifest. Không có bước build, không bundler, không runtime: harness đọc
-thẳng Markdown và JSON từ cây thư mục của repo.
+thẳng Markdown và JSON từ thư mục plugin.
+
+Repo là một marketplace chứa một plugin. `atk` nằm ở `plugins/atk/`, và mỗi harness tìm ra nó qua
+một file marketplace ở gốc repo.
 
 ```
 aiteamkit/
-  .claude-plugin/     plugin.json + marketplace.json     Claude Code
-  .cursor-plugin/     plugin.json                        Cursor
-  .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-  skills/<name>/SKILL.md        24 skill, mỗi skill một thư mục
-  skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
-  skills/<name>/references/*.tsv danh sách do một file tham chiếu quản, mỗi dòng một bản ghi
-  skills/<name>/evals/*.json    bộ case kiểm trigger của description
-  shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
-  hooks/                        lời nhắc profile và bộ nạp file ghi đè, Claude Code và Codex
-  assets/*.svg                  icon và logo cho trang marketplace
+  .claude-plugin/marketplace.json     liệt kê atk cho Claude Code
+  .cursor-plugin/marketplace.json     liệt kê atk cho Cursor
+  .agents/plugins/marketplace.json    liệt kê atk cho OpenAI Codex CLI
+  plugins/atk/                        plugin; bản cài sao thư mục này và không gì ở trên nó
+    .claude-plugin/     plugin.json                        Claude Code
+    .cursor-plugin/     plugin.json                        Cursor
+    .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
+    skills/<name>/SKILL.md        24 skill, mỗi skill một thư mục
+    skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
+    skills/<name>/references/*.tsv danh sách do một file tham chiếu quản, mỗi dòng một bản ghi
+    skills/<name>/evals/*.json    bộ case kiểm trigger của description
+    shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
+    hooks/                        lời nhắc profile và bộ nạp file ghi đè, Claude Code và Codex
+    assets/*.svg                  icon và logo cho trang marketplace
+    CHANGELOG.md                  do release-please viết cho plugin này
   docs/, docs/vi/               tài liệu dự án song ngữ
   .atk/                         hồ sơ và file ghi đè của chính kit, để kit chạy skill lên chính mình
 ```
 
 Không chỗ nào trong cây này mô tả dự án mà kit được cài vào. Phần đó nằm trong một file thuộc **dự án
 đích**, là `.atk/profile.md`, do `atk:init` viết ra và thường được commit cùng dự án;
-`shared/project-profile.md` giữ hai hình dạng mà không gì theo dõi nó. Thư mục plugin chỉ đọc
+`plugins/atk/shared/project-profile.md` giữ hai hình dạng mà không gì theo dõi nó. Thư mục plugin chỉ đọc
 và dùng chung cho mọi dự án trên máy, nên nó là chỗ sai để giữ một sự thật chỉ đúng với một dự án.
 
-`.atk/` trong cây trên là của chính kit, chỉ đúng với `aiteamkit`, và nó nằm đó vì kit chạy skill của
-mình lên chính mình. Bản cài sao nguyên repo, không manifest nào có ô để loại file ra, nên nó đến tay
-mọi người cài plugin. Không skill nào đọc nó cho dự án của họ: mọi chỗ trích dẫn `.atk/` đều giải
-đường dẫn từ gốc dự án đích.
+Chỉ `plugins/atk/` được phát hành. Skill, file dùng chung hay hook nào đọc một file nằm ngoài thư mục
+đó thì trên máy người dùng sẽ không đọc được gì, và không đường dẫn nào trong manifest được ra khỏi
+nó. Vì thế `atk:init` giữ quyền duyệt mặc định theo vai trong
+`plugins/atk/skills/init/references/role-defaults.md` chứ không để trong `docs/`. `.atk/` trong cây
+trên là của chính kit, chỉ đúng với `aiteamkit`, và nằm đó vì kit chạy skill của mình lên chính mình;
+nó ở trên thư mục plugin nên không bao giờ đến tay người dùng.
 
 ## Một cây nội dung, ba manifest
 
-Ba thư mục manifest cùng mô tả một thư mục `skills/` cho ba harness. Nội dung skill không bao giờ bị
-nhân bản theo từng harness. Các manifest chỉ khác nhau ở cách khai báo nội dung:
+Ba thư mục manifest trong `plugins/atk/` cùng mô tả một thư mục `skills/` cho ba harness, và mỗi file
+marketplace ở gốc repo trỏ harness của nó tới `plugins/atk/`. Nội dung skill không bao giờ bị nhân
+bản theo từng harness. Các manifest chỉ khác nhau ở cách khai báo nội dung, và mọi đường dẫn bên
+trong chúng đều tính từ thư mục plugin:
 
 | Manifest | Cách khai báo skill | Phần riêng của harness |
 |----------|---------------------|------------------------|
-| `.claude-plugin/plugin.json` | không khai báo; Claude Code tự quét `skills/` | có `marketplace.json` đi kèm |
-| `.cursor-plugin/plugin.json` | `"skills": "./skills/"` | `displayName` |
-| `.codex-plugin/plugin.json` | `"skills": "./skills/"` | khối `interface{}` với `defaultPrompt`, icon, `brandColor` |
+| `plugins/atk/.claude-plugin/plugin.json` | không khai báo; Claude Code tự quét `skills/` | được `.claude-plugin/marketplace.json` ở gốc liệt kê |
+| `plugins/atk/.cursor-plugin/plugin.json` | `"skills": "./skills/"` | `displayName`; được `.cursor-plugin/marketplace.json` ở gốc liệt kê |
+| `plugins/atk/.codex-plugin/plugin.json` | `"skills": "./skills/"` | khối `interface{}` với `defaultPrompt`, icon, `brandColor`; được `.agents/plugins/marketplace.json` liệt kê |
 
 ```mermaid
 flowchart TD
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>24 thư mục, mỗi thư mục một SKILL.md</small>"]
-    UP[".cursor-plugin/plugin.json"] --> SK
-    XP[".codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
-    SK --> SH["shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]
+    MK["các file marketplace ở gốc<br/><small>mỗi harness một file, đều trỏ tới plugins/atk</small>"] --> CP
+    MK --> UP
+    MK --> XP
+    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>24 thư mục, mỗi thư mục một SKILL.md</small>"]
+    UP["plugins/atk/.cursor-plugin/plugin.json"] --> SK
+    XP["plugins/atk/.codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
+    SK --> SH["plugins/atk/shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]
 ```
 
 Không có lớp `commands/`. Mỗi skill tự là một slash command, lấy tên từ thư mục của nó, và được
@@ -67,24 +82,24 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
-| `shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
+| `plugins/atk/shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
 | `.atk/profile.md` | Một lần mỗi lượt chạy, ở skill nào cần sự thật của dự án | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
 
 ## Lớp `shared/`
 
 Mười sáu file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
-- `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
-- `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
+- `plugins/atk/shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
+- `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
   ngôn ngữ dời đường dẫn ấy, artifact rơi vào repository nào khi dự án trải trên nhiều repository,
   quy tắc đặt tên, front matter.
-- `shared/ticket-adapters.md`: cách phát hiện tracker và ba kết cục của nó, gồm cả kết cục tracker
+- `plugins/atk/shared/ticket-adapters.md`: cách phát hiện tracker và ba kết cục của nó, gồm cả kết cục tracker
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
 Mười một file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
-- `shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
+- `plugins/atk/shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
   dự án đã tự viết quy ước thì giữ nguyên hình dạng của mình, đường đưa một khoảng trống quy ước từ
   báo cáo review về lại `atk:convention`, cộng với các mục nền đúng với mọi dự án. Nó tồn tại để một quy ước chỉ viết một lần và được kiểm bằng đúng câu chữ đó, thay vì bị chép
@@ -92,7 +107,7 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
   là giá trị mặc định chứ không phải địa chỉ, nên một skill đọc thẳng vào đó sẽ báo rằng một team có cả
   một thư mục tài liệu chuẩn là chưa ghi quy ước nào. `atk:implement` đọc file này để lấy thứ tự tra
   ấy và các mục nền, dùng khi dự án thật sự chưa ghi quy ước nào của riêng mình.
-- `shared/finalize-steps.md`: trình tự khép lại một phần việc đã xong, gồm nhánh, commit, ranh
+- `plugins/atk/shared/finalize-steps.md`: trình tự khép lại một phần việc đã xong, gồm nhánh, commit, ranh
   giới xin phép mà mọi hành động sau commit phải vượt qua, và thứ tự tiến hành một thay đổi trải
   trên nhiều repository. `atk:git` là thứ thi hành nó; file này
   vẫn là hợp đồng, và chính điều đó khiến nhóm skill sửa mã với nhóm skill viết tài liệu khép lại
@@ -100,17 +115,17 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
   cho `atk:git`; được `atk:plan`, `atk:tailor` và `atk:qa` trích riêng phần ranh giới xin phép; và được mọi
   skill sinh artifact trích phần nói về thay đổi chỉ tạo ra một tài liệu. Không gì rời khỏi repo cục
   bộ mà chưa được hỏi.
-- `shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
+- `plugins/atk/shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
   minh được điều gì, và không chứng minh được điều gì, cùng luật về cổng: job CI nào gác một tầng, và
   một lệnh chạy ở máy yếu hơn job đó thì để lại phần nào chưa được kiểm chứng. Cùng ba skill đó trích
   dẫn. Mỗi skill chạy một phép kiểm rồi phải nói kết quả có nghĩa gì, và vế thứ hai đó buộc phải
   giống hệt nhau ở cả ba.
-- `shared/diagram-conventions.md`: khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình
+- `plugins/atk/shared/diagram-conventions.md`: khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình
   mà kit vẽ, và các quy tắc giữ cho chúng dễ đọc trong một pull request ở cả nền sáng lẫn nền tối.
   Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:security` và `atk:incident`
   trích dẫn, tức sáu skill có sơ đồ trong artifact. Sơ đồ viết bằng Mermaid nên hiện ra ngay tại nơi người ta đọc
   artifact, và không phải commit thêm file ảnh nào.
-- `shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
+- `plugins/atk/shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
   dùng, và cách xử lý trên harness không có chúng. Được `atk:fix`, `atk:implement` và `atk:verify`
   trích dẫn cho bước dọn mã ngay sau lượt kiểm chứng đạt, `atk:review` trích dẫn cho những lượt đọc
   độc lập chạy song song, `atk:design-doc` trích dẫn cho lượt phản biện theo vai trò, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
@@ -121,43 +136,43 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
   trên: nó được gọi theo việc nó làm, không bao giờ theo tên plugin hay server cung cấp nó, và là khả
   năng duy nhất mà thiếu nó thì một skill phải dừng, vì với skill đó trình duyệt chính là công việc,
   còn làm tay thì đã là `atk:qa --record`.
-- `shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
+- `plugins/atk/shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
   phần không bao giờ đụng tới. Cùng ba skill sửa mã đó trích dẫn, thông qua `host-capabilities.md`.
   Nó tồn tại để bước dọn mã cho ra cùng một kết quả trên harness có sẵn khả năng dọn và trên harness
   mà skill phải tự đi hết danh sách. Đây cũng là lý do kit không có skill `simplify` riêng: nội dung
   này thuộc về ba skill đang chạy nó, không thuộc về một slash command chẳng sinh artifact và chẳng
   có ai duyệt.
 
-- `shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
+- `plugins/atk/shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
   là gì khi profile của dự án ghi `Contract: first` cùng field `implemented` cho biết code của nó đã
   có hay chưa, hình dạng của ai thắng khi dự án đã giữ sẵn tài liệu của mình, sáu loại thay
   đổi buộc pull request phải mang theo tài liệu tham chiếu, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác với
   code, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
   viết ra những tài liệu đó, `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và
   `atk:verify` có nghĩa vụ để chúng đúng, còn `atk:qa`, `atk:run-cases` và `atk:help` đọc chúng. Đây là hợp đồng
-  rộng nhất trong nhóm, vì `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi
+  rộng nhất trong nhóm, vì `plugins/atk/shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi
   skill đổi mã nguồn đều là một bên của nó.
-- `shared/host-file-locations.md`: cách nhận ra code host, mọi vị trí mà từng host đọc
+- `plugins/atk/shared/host-file-locations.md`: cách nhận ra code host, mọi vị trí mà từng host đọc
   `CONTRIBUTING.md`, template pull request và `CODEOWNERS`, cùng lúc nào một file được tính là đã
   có. `atk:convention` dựa vào đó để biết file nào thiếu mà đề nghị soạn, `atk:git` dựa vào đó để
   tìm template phải điền, còn `atk:init` dựa vào đó để đọc định danh host của cả đội trong
   `CODEOWNERS` thay vì tiêu một lượt hỏi. Hai skill đầu hỏi cùng một câu từ hai đầu, và chỉ cần một
   bên trả lời hẹp hơn là repo có thêm một template thứ hai đè lên template của chính đội.
-- `shared/design-sources.md`: cách một skill đọc design Figma qua bất kỳ kết nối Figma nào harness
+- `plugins/atk/shared/design-sources.md`: cách một skill đọc design Figma qua bất kỳ kết nối Figma nào harness
   có. Kết nối được tìm theo việc nó làm được chứ không theo tên tool, và được chia thành ba trạng
   thái, vì một kết nối có thể nằm trong danh sách mà vẫn chưa đăng nhập. Khi không kết nối nào
   sẵn sàng, ảnh export thay chỗ, nên không skill nào dừng vì thiếu nó. File này cũng giữ node ID làm
   khóa ổn định của mỗi thành phần và mã băm mà một lần đọc ghi lại; nhờ hai thứ đó, lần chạy thứ hai
   chỉ đụng tới những dòng đã đổi. `atk:spec` trích dẫn nó cho kind `screen`, kind duy nhất lấy design
   làm nguồn, `atk:intake` trích dẫn nó khi yêu cầu là một design, còn `atk:qa` chỉ đọc design cho case `GUI` khi
-  màn hình chưa có spec màn hình. Cũng vì file này mà `shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
+  màn hình chưa có spec màn hình. Cũng vì file này mà `plugins/atk/shared/host-capabilities.md` có thêm một dòng cho kết nối tới dịch
   vụ bên ngoài: được nêu tên dịch vụ, nhưng không được nêu lệnh của plugin mang kết nối đó.
-- `shared/feature-types.md`: cách phân loại tính năng duy nhất của kit. Mỗi loại mang các câu hỏi
+- `plugins/atk/shared/feature-types.md`: cách phân loại tính năng duy nhất của kit. Mỗi loại mang các câu hỏi
   mà `atk:catchup` thêm vào bài kiểm tra mức hiểu, và mức rủi ro QA mà `atk:estimate` dựa vào để
   ước lượng phần kiểm thử. Chỉ một bảng, vì nếu phân loại một kiểu khi hỏi và một kiểu khác khi
   ước lượng, cùng một tính năng sẽ là luồng thanh toán với người code nhưng chỉ là một form bình
   thường với người ước lượng phần test.
-- `shared/plain-writing.md`: cách viết phần lời của một report ghi lại một lần chạy, cho người đọc
+- `plugins/atk/shared/plain-writing.md`: cách viết phần lời của một report ghi lại một lần chạy, cho người đọc
   chưa mở file nào mà report trích dẫn. Gồm mục `In short` ở đầu report, năm quy tắc cho phần lời
   quanh bằng chứng, và những thứ không bao giờ đổi, trước hết là chính bằng chứng. Template report
   của `atk:fix`, `atk:verify`, `atk:review`, `atk:security` và `atk:qa --record` trích dẫn file này,
@@ -168,16 +183,16 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
 
 Hai file cuối mô tả những file không đi kèm kit:
 
-- `shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, gốc dự án
+- `plugins/atk/shared/project-profile.md`: nội dung của `.atk/profile.md` bên trong **dự án đích**, gốc dự án
   nằm ở đâu và skill đi ngược lên tìm nó ra sao, bốn hình dạng một dự án có thể mang cùng cái giá
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không nhắc tới.
   Một mục trong Docs, `Contract`, đổi việc skill làm chứ không đổi chỗ nó ghi, và ý nghĩa của mục
-  đó nằm ở `shared/spec-docs.md`.
+  đó nằm ở `plugins/atk/shared/spec-docs.md`.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
-- `shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
+- `plugins/atk/shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
   chỗ thư mục này nằm khi dự án trải trên nhiều repository, hai mục mà file đó được phép mang, và
   tám thứ phần ghi đè không bao giờ được gỡ. Tám điều loại trừ
   là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
@@ -186,29 +201,29 @@ Hai file cuối mô tả những file không đi kèm kit:
   này, vì một bản nháp mà thay đổi được mọi lần chạy thì chẳng khác gì skill tự duyệt thay cho team.
 
 Cơ chế ghi đè là cơ chế duy nhất chạm tới mọi skill bằng hai nửa, và việc tách đôi là cố ý. Nguyên
-tắc 7 của `shared/team-roles.md` giữ phần hành vi, viết đúng một lần. Mỗi mục `## Workflow` mang một
+tắc 7 của `plugins/atk/shared/team-roles.md` giữ phần hành vi, viết đúng một lần. Mỗi mục `## Workflow` mang một
 dòng gọi tên file ghi đè của chính nó và trỏ về nguyên tắc ấy, bởi một file shared chỉ được đọc khi
 có thứ gì đó buộc skill mở nó ra, mà một câu trích dẫn nằm trong mục `## Roles` thì không buộc được.
 Dòng đó tốn vài token mỗi lần gọi và đổi lấy điều chắc chắn rằng cơ chế thật sự chạy; còn đưa hẳn
 phần hành vi vào 20 file thì thành 20 bản của cùng một nguyên tắc, rồi lệch nhau.
 
-`shared/` nằm ở gốc repo chứ không nằm trong `skills/`, vì một thư mục bên trong `skills/` mà không
+`plugins/atk/shared/` nằm ở gốc repo chứ không nằm trong `plugins/atk/skills/`, vì một thư mục bên trong `plugins/atk/skills/` mà không
 có `SKILL.md` sẽ gây nhập nhằng cho cơ chế quét skill. Các skill trích dẫn theo dạng
-`shared/<file>.md`, tương đương `../../shared/<file>.md` tính từ một file skill; cả hai cách viết đều
+`plugins/atk/shared/<file>.md`, tương đương `../../shared/<file>.md` tính từ một file skill; cả hai cách viết đều
 có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại lệ: nó được trích từ gốc dự án
 đích, vì nó không thuộc kit.
 
 ## Hook lúc mở phiên
 
-`hooks/hooks.json` đăng ký một hook `SessionStart` chạy `hooks/check-profile.mjs`, còn
-`hooks/codex-hooks.json` đăng ký đúng script đó trên Codex. Script trả lời đúng một câu hỏi,
-"dự án này đã có profile chưa", hiểu chữ dự án theo đúng cách `shared/project-profile.md` hiểu, tức
+`plugins/atk/hooks/hooks.json` đăng ký một hook `SessionStart` chạy `plugins/atk/hooks/check-profile.mjs`, còn
+`plugins/atk/hooks/codex-hooks.json` đăng ký đúng script đó trên Codex. Script trả lời đúng một câu hỏi,
+"dự án này đã có profile chưa", hiểu chữ dự án theo đúng cách `plugins/atk/shared/project-profile.md` hiểu, tức
 là profile gần nhất ở chính thư mục phiên mở lên hoặc ở trên nó, và nó nhắc chứ không chặn.
 
 Ranh giới đó là toàn bộ vấn đề. Hook mà chặn thì luật nằm ở hai chỗ, mà luật này vốn không đồng nhất:
 mười skill không cần profile, nên một hook chặn tất cả sẽ chặn luôn `atk:intake` biến một tin nhắn
 chat thành yêu cầu, việc chẳng cần gì từ repo. Skill nào cần gì và thiếu thì làm sao, tất cả nằm
-trong `shared/project-profile.md`.
+trong `plugins/atk/shared/project-profile.md`.
 
 Trên harness này, ranh giới còn đứng vững nhờ chính hợp đồng của nó. Claude Code ghi rõ `SessionStart`
 không chặn được: mã thoát 2 cũng không sinh hành vi chặn, và mọi mã thoát đều đưa stdout vào ngữ cảnh
@@ -221,7 +236,7 @@ không, và không bao giờ ghi vào repo của người dùng hay vào một t
 
 Mục này là nơi giữ lý do. `CLAUDE.md` và phần chú thích đầu script trỏ về đây chứ không chép lại.
 
-Trong `hooks/hooks.json`, tức bản đăng ký mà Claude Code đọc, hook nằm ở **dạng exec**:
+Trong `plugins/atk/hooks/hooks.json`, tức bản đăng ký mà Claude Code đọc, hook nằm ở **dạng exec**:
 `"command": "node"` kèm mảng `args`. Claude Code ghi rõ dạng exec tìm file thực thi trên `PATH` rồi
 gọi thẳng, tự thay `${CLAUDE_PLUGIN_ROOT}`, và không có shell nào tham gia trên bất kỳ nền nào. Codex
 cần hình dạng ngược lại, vì lý do mục kế tiếp nêu dưới tiêu đề "Vì sao Codex có file đăng ký riêng";
@@ -236,7 +251,7 @@ Linux và macOS. Một trình thông dịch chạy được mọi nơi là thứ
 
 ### Vì sao Codex có file đăng ký riêng
 
-Mặc định Codex vẫn đọc `hooks/hooks.json` trong thư mục gốc của plugin, nên mục dạng exec ở trên
+Mặc định Codex vẫn đọc `plugins/atk/hooks/hooks.json` trong thư mục gốc của plugin, nên mục dạng exec ở trên
 không hề bị bỏ qua ở đó: nó được chạy với đường dẫn chưa được thay, và mọi phiên Codex đều mở ra
 bằng một hook khởi động hỏng. Hai harness thay gốc plugin ở hai thời điểm khác nhau. Claude Code tự
 thay `${CLAUDE_PLUGIN_ROOT}` trong `args`; Codex thay `${PLUGIN_ROOT}` và `${CLAUDE_PLUGIN_ROOT}`
@@ -244,8 +259,8 @@ trong chuỗi `command` và không thay gì trong `args`, nên Node nhận đún
 `${CLAUDE_PLUGIN_ROOT}/hooks/check-profile.mjs`, hiểu nó là đường dẫn tương đối so với thư mục làm
 việc, rồi thoát với `MODULE_NOT_FOUND`.
 
-`hooks/codex-hooks.json` giữ đúng hai hook đó với đường dẫn nằm trong `command`, và khóa `hooks`
-trong `.codex-plugin/plugin.json` trỏ Codex tới file này, cũng chính là thứ khiến Codex thôi đọc file
+`plugins/atk/hooks/codex-hooks.json` giữ đúng hai hook đó với đường dẫn nằm trong `command`, và khóa `hooks`
+trong `plugins/atk/.codex-plugin/plugin.json` trỏ Codex tới file này, cũng chính là thứ khiến Codex thôi đọc file
 của Claude Code. Phần script không đổi: vẫn hai file Node đó, vẫn đọc cùng một bộ biến môi trường, và
 không file đăng ký nào mang luật. Đo trên codex-cli 0.155.1: repo chưa có profile thì nhận được lời
 nhắc và hook chạy xong, repo đã có thì im lặng, và dấu "đã nhắc" ghi vào thư mục dữ liệu plugin mà
@@ -267,21 +282,21 @@ Hai giới hạn, được chấp nhận:
 
 Kit chạy hai hook và sẽ nhận hook thứ ba với đúng một điều kiện: thiếu nó thì kit vẫn cư xử như cũ.
 
-`hooks/load-overrides.mjs` là trường hợp làm điều kiện ấy thành cụ thể. Nó chạy ở `PreToolUse` với
+`plugins/atk/hooks/load-overrides.mjs` là trường hợp làm điều kiện ấy thành cụ thể. Nó chạy ở `PreToolUse` với
 matcher `Skill` và đặt `.atk/overrides/<skill>.md` ra trước skill sở hữu file đó. Mỗi skill cũng gọi
 tên chính file ấy ở đầu mục `## Workflow` của mình và tự mở khi không có gì đặt sẵn, nên harness nào
 hook không với tới được cũng cho ra cùng một kết quả, chỉ chậm hơn một lượt đọc file. Cursor không có
-sự kiện tương ứng; Codex có mục này trong `hooks/codex-hooks.json` nhưng chưa ai thấy nó khớp một lần
+sự kiện tương ứng; Codex có mục này trong `plugins/atk/hooks/codex-hooks.json` nhưng chưa ai thấy nó khớp một lần
 gọi skill nào, đúng như phần giới hạn đã chấp nhận ở trên ghi lại.
 
 Hướng còn lại đã có sẵn và đã bị loại. Đặt trọn cơ chế ghi đè vào hook thì không phải sửa `SKILL.md`
-nào, đổi lại hai trong ba harness không có gì cả. `shared/project-profile.md` đã từ chối đúng nước
+nào, đổi lại hai trong ba harness không có gì cả. `plugins/atk/shared/project-profile.md` đã từ chối đúng nước
 đi đó cho luật tiền điều kiện, vì một lý do vẫn đúng ở đây và đáng nhắc lại: ba phương ngữ hook nghĩa
 là ba bản của một luật, và ba bản của một luật rồi sẽ lệch nhau.
 
 Vậy ranh giới không phải là "hook chỉ để nhắc". Ranh giới là một hook được phép làm thứ gì đó rẻ đi,
 và không bao giờ được là con đường duy nhất tới thứ đó. Phép thử làm bằng máy: chạy một skill trên
-một dự án có file ghi đè cho nó, một lần có mục `PreToolUse` trong `hooks/hooks.json` và một lần gỡ
+một dự án có file ghi đè cho nó, một lần có mục `PreToolUse` trong `plugins/atk/hooks/hooks.json` và một lần gỡ
 mục đó ra, rồi so hai kết quả. Hai kết quả phải giống nhau.
 
 ## Giải phẫu một skill

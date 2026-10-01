@@ -5,7 +5,7 @@ Mọi skill trong kit có ghi file đều ghi Markdown vào repo của bạn, tr
 hai câu: có phải commit hết không, và sau này có được xóa bớt không. Tài liệu này trả lời cả hai và
 nói rõ mỗi lựa chọn mất gì, để đội tự quyết thay vì đoán.
 
-Đường dẫn của từng artifact nằm ở [shared/artifact-paths.md](../../shared/artifact-paths.md), và khi
+Đường dẫn của từng artifact nằm ở [plugins/atk/shared/artifact-paths.md](../../plugins/atk/shared/artifact-paths.md), và khi
 hai bên nói khác nhau thì file đó đúng. Ở đây chỉ bàn chuyện gì xảy ra với một file sau khi công
 việc sinh ra nó đã merge.
 
