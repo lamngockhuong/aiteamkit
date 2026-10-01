@@ -55,6 +55,7 @@ body:
         - Project overrides (.atk/overrides/)
         - Shared references (plugins/atk/shared/)
         - Hooks (plugins/atk/hooks/)
+        - atkx (plugins/atkx/)
         - Plugin manifest / installation
         - Documentation
         - Other / unsure

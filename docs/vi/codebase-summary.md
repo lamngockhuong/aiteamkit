@@ -11,7 +11,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `CLAUDE.md` | Hướng dẫn cho người bảo trì: tiền đề về team, bố cục ba manifest, giải phẫu skill, nguyên tắc DRY của `plugins/atk/shared/`, danh sách file phải đồng bộ chéo, chính sách em-dash, mục review checklist `CONV-NNN` mà repo này bị soi theo, quy trình release, lệnh kiểm tra |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, không có scripts; tồn tại để mang version và metadata repo |
-| `release-please-config.json` | Tự động hóa release: kiểu `simple`, các cờ bump tiền 1.0, và một package là `plugins/atk`, gắn tag `atk-v*`, với bốn `extra-files` mang version, trong đó có `/package.json` ở gốc |
+| `release-please-config.json` | Tự động hóa release: kiểu `simple`, các cờ bump tiền 1.0, và mỗi plugin một package, `plugins/atk` gắn tag `atk-v*` và `plugins/atkx` gắn tag `atkx-v*`, mỗi package có pull request release riêng; `extra-files` mang version của `atk` có cả `/package.json` ở gốc |
 | `.release-please-manifest.json` | File trạng thái của release-please giữ version hiện tại theo đường dẫn từng package. Không bao giờ sửa tay |
 | `.gitignore` | Rác của macOS, Python, Node |
 
@@ -20,10 +20,12 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | File | Mục đích |
 |------|----------|
 | `plugins/atk/.claude-plugin/plugin.json` | Metadata plugin cho Claude Code. Không có khóa `skills`: Claude tự quét `plugins/atk/skills/` |
-| `.claude-plugin/marketplace.json` | Marketplace của Claude Code, liệt kê `atk` ở `./plugins/atk`, không tự mang version |
-| `.cursor-plugin/marketplace.json` | Marketplace của Cursor, liệt kê `atk` ở `plugins/atk` |
-| `.agents/plugins/marketplace.json` | Marketplace của Codex, liệt kê `atk` là plugin cục bộ ở `./plugins/atk` |
+| `.claude-plugin/marketplace.json` | Marketplace của Claude Code, liệt kê `atk` ở `./plugins/atk` và `atkx` ở `./plugins/atkx`, không tự mang version |
+| `.cursor-plugin/marketplace.json` | Marketplace của Cursor, liệt kê `atk` và `atkx` ở `plugins/atk` và `plugins/atkx`, phần mô tả để `plugin.json` của từng plugin lo |
+| `.agents/plugins/marketplace.json` | Marketplace của Codex, liệt kê `atk` và `atkx` là plugin cục bộ ở `./plugins/atk` và `./plugins/atkx` |
 | `plugins/atk/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay. `feat:` và `fix:` hiện lên; các loại khác im lặng |
+| `plugins/atk/LICENSE` | Bản sao của `LICENSE` ở gốc, vì bản cài chỉ mang thư mục plugin và MIT yêu cầu thông báo giấy phép đi cùng bản sao |
+| `plugins/atkx/LICENSE` | Bản sao như trên cho `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Metadata cho Cursor, có `displayName` và `"skills": "./skills/"` |
 | `plugins/atk/.codex-plugin/plugin.json` | Metadata cho Codex CLI, có `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, cộng khối `interface{}`: mô tả, `defaultPrompt`, `brandColor`, đường dẫn icon |
 | `plugins/atkx/.claude-plugin/plugin.json` | Metadata của `atkx` cho Claude Code, có `"dependencies": ["atk"]` nên cài nó là cài cả `atk` |
@@ -223,7 +225,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/codebase-summary.md` | Chính là file này |
 | `docs/project-roadmap.md` | Kế hoạch theo phase và trạng thái |
 | `docs/trigger-eval-measurement.md` | Cách lấy một số đo đúng từ `evals/trigger_evals.json`: vì sao một bộ chạy thông thường báo ra điểm số rỗng, hook `PreToolUse` đo được việc chọn skill, ba điều kiện một lượt chạy cần có, và những case không gì quan sát được |
-| `docs/flow/project-flow.md` | 24 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, vòng quay lại khi artifact bị trả về, và cùng các cửa duyệt ấy tra theo vai |
+| `docs/flow/project-flow.md` | 24 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, vòng quay lại khi artifact bị trả về, và lối dẫn tới bảng vai trò mà `init` giờ mang theo |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
 | `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | Bản ghi quyết định kiến trúc đầu tiên: `atk` chuyển vào `plugins/atk/`, còn `atkx`, bộ kit skill tiện ích được gọi `atk` nhưng không bao giờ bị `atk` gọi, được tạo ở `plugins/atkx/`, hai plugin không dùng chung file nào, và `atk` thêm `CONV-011` để giữ phụ thuộc chỉ theo một chiều |

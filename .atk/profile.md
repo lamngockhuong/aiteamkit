@@ -30,7 +30,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 | Layer | Directory | Standards | Reference module |
 |-------|-----------|-----------|------------------|
-| content | `plugins/atk/skills/`, `plugins/atk/shared/` | `CLAUDE.md` | `plugins/atk/skills/review/` |
+| content | `plugins/atk/skills/`, `plugins/atk/shared/`, `plugins/atkx/` | `CLAUDE.md` | `plugins/atk/skills/review/` |
 | docs | `docs/` | `CLAUDE.md`, sections "Docs are bilingual" and "Diagrams are Mermaid, except where they are not" | `docs/flow/skill-chain.md` |
 | hooks | `plugins/atk/hooks/` | `CLAUDE.md`, section "`hooks/` never holds a rule, and is never the only road to a behavior" | `plugins/atk/hooks/check-profile.mjs` |
 

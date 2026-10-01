@@ -11,7 +11,7 @@ removed, or renamed; update it in the same commit.
 | `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `plugins/atk/shared/` DRY rule, cross-file sync list, em-dash policy, the `CONV-NNN` review checklist this repository is held to, release flow, verification commands |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, no scripts; exists to carry the version and repository metadata |
-| `release-please-config.json` | Release automation: `simple` release type, pre-1.0 bump flags, and one package, `plugins/atk`, tagged `atk-v*`, whose four version `extra-files` include the root `/package.json` |
+| `release-please-config.json` | Release automation: `simple` release type, pre-1.0 bump flags, and one package per plugin, `plugins/atk` tagged `atk-v*` and `plugins/atkx` tagged `atkx-v*`, each with its own release pull request; `atk`'s version `extra-files` include the root `/package.json` |
 | `.release-please-manifest.json` | Release-please state file holding the current version per package path. Never hand-edit |
 | `.gitignore` | macOS, Python, Node artifacts |
 
@@ -20,10 +20,12 @@ removed, or renamed; update it in the same commit.
 | File | Purpose |
 |------|---------|
 | `plugins/atk/.claude-plugin/plugin.json` | Claude Code plugin metadata. No `skills` key: Claude auto-discovers `plugins/atk/skills/` |
-| `.claude-plugin/marketplace.json` | Claude Code marketplace listing `atk` at `./plugins/atk`, with no version of its own |
-| `.cursor-plugin/marketplace.json` | Cursor marketplace listing `atk` at `plugins/atk` |
-| `.agents/plugins/marketplace.json` | Codex marketplace listing `atk` as a local plugin at `./plugins/atk` |
+| `.claude-plugin/marketplace.json` | Claude Code marketplace listing `atk` at `./plugins/atk` and `atkx` at `./plugins/atkx`, with no version of their own |
+| `.cursor-plugin/marketplace.json` | Cursor marketplace listing `atk` and `atkx` at `plugins/atk` and `plugins/atkx`, descriptions left to each `plugin.json` |
+| `.agents/plugins/marketplace.json` | Codex marketplace listing `atk` and `atkx` as local plugins at `./plugins/atk` and `./plugins/atkx` |
 | `plugins/atk/CHANGELOG.md` | Written by release-please from the commit types, never by hand. `feat:` and `fix:` appear; the other types are silent |
+| `plugins/atk/LICENSE` | A copy of the root `LICENSE`, because an install carries the plugin directory alone and MIT asks for the notice to travel with the copy |
+| `plugins/atkx/LICENSE` | The same copy for `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Cursor plugin metadata with `displayName` and `"skills": "./skills/"` |
 | `plugins/atk/.codex-plugin/plugin.json` | Codex CLI metadata with `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, plus the `interface{}` listing block: descriptions, `defaultPrompt`, `brandColor`, icon paths |
 | `plugins/atkx/.claude-plugin/plugin.json` | Claude Code metadata for `atkx`, with `"dependencies": ["atk"]` so installing it installs `atk` |
@@ -223,7 +225,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
 | `docs/trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`: why a generic harness reports a vacuous score, the `PreToolUse` hook that does measure selection, the three conditions a run needs, and the cases nothing can observe |
-| `docs/flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and the approver of each artifact, the loop back when one is rejected, and the same gates read by role |
+| `docs/flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and the approver of each artifact, the loop back when one is rejected, and a pointer to the role table that `init` now carries |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | The first architecture decision record: `atk` moves to `plugins/atk/` and `atkx`, a kit of utility skills that may call `atk` and is never called by it, is created at `plugins/atkx/`, the two sharing no file, and `atk` gains `CONV-011` to keep the dependency one-way |

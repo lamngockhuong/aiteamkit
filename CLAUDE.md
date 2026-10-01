@@ -232,10 +232,14 @@ would drop any directory called `records` at any depth, including one under `plu
 take it out of a `BLOCKING` check.
 
 ```bash
-grep -rn "\bak:" plugins/ README.md docs/ | grep -v -E '^docs/(records|derived)/'
+grep -rn "\bak:" plugins/ README.md docs/ --exclude=CHANGELOG.md | grep -v -E '^docs/(records|derived)/'
 ```
 
 Should print nothing (the second `grep` exits 1).
+
+`plugins/atk/CHANGELOG.md` is excluded here and in the checks of `CONV-007` and `CONV-011`:
+release-please writes it from commit messages, it is never edited by hand, and a commit that
+quotes a command or a fill would otherwise fail a `BLOCKING` check with no legitimate fix.
 
 ## `atkx` sits beside `atk`, and the dependency runs one way
 
@@ -250,7 +254,7 @@ the kit stands alone, and a team that installed only `atk` must never meet a poi
 follow. That is `CONV-011`:
 
 ```bash
-grep -rn "\batkx:" plugins/atk/
+grep -rn "\batkx:" plugins/atk/ --exclude=CHANGELOG.md
 ```
 
 Should print nothing (`grep` exits 1).
@@ -350,7 +354,7 @@ is correct. Codex replaces `${PLUGIN_ROOT}` inside `command` before anything run
 nothing inside `args`, so the exec-form entry Claude Code needs reaches Node as a literal
 `${CLAUDE_PLUGIN_ROOT}/hooks/check-profile.mjs` and the session shows a failed startup hook.
 `plugins/atk/.codex-plugin/plugin.json` points its `hooks` key at that file, which is what keeps Codex off the
-default `plugins/atk/hooks/hooks.json`. Two files, one pair of scripts: the Node is shared, only the registration
+default `hooks/hooks.json` at the plugin root. Two files, one pair of scripts: the Node is shared, only the registration
 differs, and neither file may grow a rule. There is still no Cursor wrapper, because that event
 contract could not be tested here. That costs a reminder, not a safeguard.
 
@@ -441,7 +445,7 @@ After edits, verify. The one exclusion is the file that quotes the banned patter
 document it:
 
 ```bash
-grep -rn "style .* fill:#" plugins/ docs/ README.md \
+grep -rn "style .* fill:#" plugins/ docs/ README.md --exclude=CHANGELOG.md \
   | grep -v plugins/atk/shared/diagram-conventions.md
 ```
 
@@ -513,6 +517,10 @@ so each plugin's tags stay apart; `separate-pull-requests`, so each plugin gets 
 request of its own; and `last-release-sha`, the `v0.1.0` commit, so the first release after the
 split does not walk the whole history looking for an `atk-v*` tag that was never made.
 
+`plugins/atkx` is a second package, tagged `atkx-v<version>`, whose three `plugin.json` files share
+its version. Its state starts at `0.0.0` with `"initial-version": "0.0.1"`: release-please treats a
+`0.0.0` package as never released and would open its first release at `1.0.0` without that line.
+
 The marketplace files carry no version: each harness reads it from the plugin's own `plugin.json`,
 so a copy in the marketplace entry would be one more place for it to disagree.
 
@@ -554,7 +562,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the version-bearing files of each release package agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
-| `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`plugins/atk/hooks/` never holds a rule" |
+| `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
 | `CONV-011` | `atk` never invokes or names an `atkx` skill, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
 

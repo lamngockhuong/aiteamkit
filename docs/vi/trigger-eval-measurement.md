@@ -42,7 +42,7 @@ kế, để skill nào đang được đo cũng có cái để làm.
 **Các kit khác phải ở ngoài phòng.** Nếu dùng chính cấu hình của người bảo trì thì mọi plugin đã cài
 đều tranh nhau, mà thua một skill của kit khác thì không nói được gì về một team chỉ cài mỗi kit
 này. Hãy chạy với `CLAUDE_CONFIG_DIR` trỏ vào một thư mục chỉ chứa file credentials, và nạp kit bằng
-`--plugin-dir` trỏ vào repository.
+`--plugin-dir` trỏ vào plugin, tức `plugins/atk/` trong repository.
 
 **Skill dựng sẵn của Claude Code thì ở lại trong phòng.** Skill `code-review` dựng sẵn không gỡ được
 và cũng không nên gỡ: một team dùng kit này trên Claude Code gặp đúng cuộc cạnh tranh đó. Khi một
@@ -84,7 +84,7 @@ Một query, chạy trong thư mục dự án mồi vừa dựng:
 
 ```bash
 HOOK_LOG=$log CLAUDE_CONFIG_DIR=$isolated_config \
-  claude -p "$query" --settings "$settings" --plugin-dir "$kit_repo" --model sonnet
+  claude -p "$query" --settings "$settings" --plugin-dir "$kit_repo/plugins/atk" --model sonnet
 ```
 
 Một trigger là một payload đã ghi có `tool_name` bằng `Skill` và `tool_input.skill` bằng đúng

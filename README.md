@@ -140,8 +140,7 @@ into: `.atk/profile.md`, written by `/atk:init` into the target project and comm
 `atk:implement`, `atk:fix` and `atk:verify` stop without it rather than guess a test command.
 `atk:plan` continues and says in the artifact which commands and paths it had to infer. Every other
 skill runs without it. What the profile holds, which skills are meant to degrade rather than stop,
-and why the kit's own copy of that file travels with an install without ever being read for your
-project, is in [plugins/atk/shared/project-profile.md](plugins/atk/shared/project-profile.md).
+and why the kit's own copy of that file stays in this repository and never reaches an install, is in [plugins/atk/shared/project-profile.md](plugins/atk/shared/project-profile.md).
 
 `atk:convention` and `atk:review` share one more file,
 [plugins/atk/shared/review-checklist.md](plugins/atk/shared/review-checklist.md), so a team rule is written once and
@@ -172,8 +171,9 @@ directory alone.
 /plugin install atk@atk
 ```
 
-Installed before the kit moved to `plugins/atk/`? Refresh the marketplace, then update the plugin;
-the update follows the new location, and there is nothing to uninstall:
+Installed before the kit moved to `plugins/atk/`? Once the first `atk` release after the move is
+out, refresh the marketplace, then update the plugin; the update follows the new location, and there
+is nothing to uninstall. Until then the copy you have keeps working as it is:
 
 ```bash
 /plugin marketplace update atk

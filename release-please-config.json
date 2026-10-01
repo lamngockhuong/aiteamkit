@@ -19,6 +19,7 @@
     "plugins/atkx": {
       "component": "atkx",
       "package-name": "atkx",
+      "initial-version": "0.0.1",
       "extra-files": [
         { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" },
         { "type": "json", "path": ".cursor-plugin/plugin.json", "jsonpath": "$.version" },

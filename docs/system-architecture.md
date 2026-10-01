@@ -5,8 +5,8 @@
 `atk` is content plus manifests. There is no build step, no bundler, and no runtime: the harness
 reads Markdown and JSON directly from the plugin directory.
 
-The repository is a marketplace with one plugin in it. `atk` lives at `plugins/atk/`, and each
-harness finds it through a marketplace file at the root.
+The repository is a marketplace with two plugins in it. `atk` lives at `plugins/atk/`, `atkx` beside
+it at `plugins/atkx/`, and each harness finds them through a marketplace file at the root.
 
 ```
 aiteamkit/
@@ -25,6 +25,7 @@ aiteamkit/
     hooks/                        profile reminder and override loader, Claude Code and Codex
     assets/*.svg                  icon and logo for marketplace listings
     CHANGELOG.md                  written by release-please for this plugin
+  plugins/atkx/                       a second plugin, three manifests and an empty skills/ for now
   docs/, docs/vi/               bilingual project documentation
   .atk/                         the kit's own profile and overrides, for running its skills on itself
 ```
@@ -223,8 +224,8 @@ only read when something makes a skill open it, and a citation under `## Roles` 
 costs a few tokens per invocation and buys the guarantee that the mechanism runs at all; putting the
 behaviour itself in 20 files instead would be 20 copies of one rule, drifting.
 
-`plugins/atk/shared/` sits at the repository root rather than under `plugins/atk/skills/`, because a folder inside `plugins/atk/skills/`
-without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `plugins/atk/shared/<file>.md`,
+`shared/` sits at the plugin root, `plugins/atk/shared/`, beside `skills/` rather than under it, because a folder inside `skills/`
+without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `shared/<file>.md`,
 which resolves to `../../shared/<file>.md` from a skill file; both spellings appear in each shared
 file's header. `.atk/profile.md` is the exception: it is cited from the root of the target project,
 because it is not part of the kit.
@@ -270,7 +271,7 @@ Linux and macOS too. One portable interpreter is what lets the three platforms b
 
 ### Why Codex has a registration file of its own
 
-Codex reads `plugins/atk/hooks/hooks.json` from a plugin root by default, so the exec-form entry above was not
+Codex reads `hooks/hooks.json` from a plugin root by default, so the exec-form entry above was not
 ignored there: it was run with its path unresolved, and every Codex session opened on a failed
 startup hook. The two harnesses resolve the plugin root at different moments. Claude Code substitutes
 `${CLAUDE_PLUGIN_ROOT}` in `args` itself; Codex substitutes `${PLUGIN_ROOT}` and `${CLAUDE_PLUGIN_ROOT}`
@@ -359,6 +360,8 @@ Artifacts are written into the **target project**, never into the atk kit itself
 
 ## Versioning
 
-One version spans six files, five of them driven by `release-please-config.json` `extra-files`, with
-`.release-please-manifest.json` owned natively by release-please. The release workflow runs on push
+Each plugin is its own release package in `release-please-config.json`, tagged `atk-v*` and
+`atkx-v*`. A package's version lives in its three `plugin.json` files, plus the root `package.json`
+for `atk`, all driven by that package's `extra-files`, with `.release-please-manifest.json` owned
+natively by release-please. The marketplace files carry no version. The release workflow runs on push
 to `main`. Details in `CLAUDE.md`.

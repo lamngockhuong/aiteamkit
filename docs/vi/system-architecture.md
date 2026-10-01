@@ -5,8 +5,8 @@
 `atk` là nội dung cộng với manifest. Không có bước build, không bundler, không runtime: harness đọc
 thẳng Markdown và JSON từ thư mục plugin.
 
-Repo là một marketplace chứa một plugin. `atk` nằm ở `plugins/atk/`, và mỗi harness tìm ra nó qua
-một file marketplace ở gốc repo.
+Repo là một marketplace chứa hai plugin. `atk` nằm ở `plugins/atk/`, `atkx` nằm cạnh ở
+`plugins/atkx/`, và mỗi harness tìm ra chúng qua một file marketplace ở gốc repo.
 
 ```
 aiteamkit/
@@ -25,6 +25,7 @@ aiteamkit/
     hooks/                        lời nhắc profile và bộ nạp file ghi đè, Claude Code và Codex
     assets/*.svg                  icon và logo cho trang marketplace
     CHANGELOG.md                  do release-please viết cho plugin này
+  plugins/atkx/                       plugin thứ hai, ba manifest và thư mục skills/ còn trống
   docs/, docs/vi/               tài liệu dự án song ngữ
   .atk/                         hồ sơ và file ghi đè của chính kit, để kit chạy skill lên chính mình
 ```
@@ -220,9 +221,9 @@ có thứ gì đó buộc skill mở nó ra, mà một câu trích dẫn nằm t
 Dòng đó tốn vài token mỗi lần gọi và đổi lấy điều chắc chắn rằng cơ chế thật sự chạy; còn đưa hẳn
 phần hành vi vào 20 file thì thành 20 bản của cùng một nguyên tắc, rồi lệch nhau.
 
-`plugins/atk/shared/` nằm ở gốc repo chứ không nằm trong `plugins/atk/skills/`, vì một thư mục bên trong `plugins/atk/skills/` mà không
+`shared/` nằm ở gốc plugin, tức `plugins/atk/shared/`, cạnh `skills/` chứ không nằm trong nó, vì một thư mục bên trong `skills/` mà không
 có `SKILL.md` sẽ gây nhập nhằng cho cơ chế quét skill. Các skill trích dẫn theo dạng
-`plugins/atk/shared/<file>.md`, tương đương `../../shared/<file>.md` tính từ một file skill; cả hai cách viết đều
+`shared/<file>.md`, tương đương `../../shared/<file>.md` tính từ một file skill; cả hai cách viết đều
 có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại lệ: nó được trích từ gốc dự án
 đích, vì nó không thuộc kit.
 
@@ -264,7 +265,7 @@ Linux và macOS. Một trình thông dịch chạy được mọi nơi là thứ
 
 ### Vì sao Codex có file đăng ký riêng
 
-Mặc định Codex vẫn đọc `plugins/atk/hooks/hooks.json` trong thư mục gốc của plugin, nên mục dạng exec ở trên
+Mặc định Codex vẫn đọc `hooks/hooks.json` trong thư mục gốc của plugin, nên mục dạng exec ở trên
 không hề bị bỏ qua ở đó: nó được chạy với đường dẫn chưa được thay, và mọi phiên Codex đều mở ra
 bằng một hook khởi động hỏng. Hai harness thay gốc plugin ở hai thời điểm khác nhau. Claude Code tự
 thay `${CLAUDE_PLUGIN_ROOT}` trong `args`; Codex thay `${PLUGIN_ROOT}` và `${CLAUDE_PLUGIN_ROOT}`
@@ -350,6 +351,8 @@ Artifact luôn được ghi vào **dự án đích**, không bao giờ ghi vào 
 
 ## Quản lý phiên bản
 
-Một phiên bản trải trên sáu file, năm trong số đó do `extra-files` trong
-`release-please-config.json` điều khiển, còn `.release-please-manifest.json` do chính release-please
-sở hữu. Workflow release chạy khi push lên `main`. Chi tiết nằm trong `CLAUDE.md`.
+Mỗi plugin là một package release riêng trong `release-please-config.json`, gắn tag `atk-v*` và
+`atkx-v*`. Version của một package nằm trong ba file `plugin.json` của nó, với `atk` thêm
+`package.json` ở gốc, tất cả do `extra-files` của package đó điều khiển, còn
+`.release-please-manifest.json` do chính release-please sở hữu. Các file marketplace không mang
+version. Workflow release chạy khi push lên `main`. Chi tiết nằm trong `CLAUDE.md`.

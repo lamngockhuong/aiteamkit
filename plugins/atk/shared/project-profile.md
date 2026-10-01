@@ -15,9 +15,10 @@ This file lives in the kit and describes the shape of a second file that does no
 A freshly installed `atk` knows nothing about the project it was installed into, and that is the gap
 `.atk/profile.md` closes. The kit ships no profile of that project.
 
-It does ship one of its own. The kit is a project too and runs these skills on itself, so
-`.atk/profile.md` sits at the root of the kit repository, and a plugin install copies the repository
-whole and carries it along. It describes `aiteamkit` and nothing else. Nothing reads it for another
+It does keep one of its own. The kit is a project too and runs these skills on itself, so
+`.atk/profile.md` sits at the root of the kit repository, above the plugin directory a plugin
+install copies, so it stays in the repository and never reaches a user. It describes `aiteamkit` and
+nothing else. Nothing reads it for another
 project: the citation rule below resolves `.atk/` from the root of the target project, never from
 the kit directory.
 

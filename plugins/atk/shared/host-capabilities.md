@@ -28,7 +28,7 @@ what the team already works in, and the skill reads it as a source. The row name
 a skill or command that the plugin carrying the connection also ships, and every use of it says what
 happens without it.
 
-The last row is the rule `CLAUDE.md` states as "the kit stands alone", and it has not moved. A team
+The last row is the rule the kit repository's `CLAUDE.md` states as "the kit stands alone", and it has not moved. A team
 that installed only atk still has its harness; it does not have somebody else's kit. A pointer at a
 host capability degrades into doing the work by hand, and a pointer at a foreign kit degrades into a
 dead end the team only finds by following it.
