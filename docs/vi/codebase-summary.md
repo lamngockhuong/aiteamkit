@@ -90,7 +90,7 @@ năm skill còn lại thì chưa.
 | `skills/verify/SKILL.md` | Phát triển | Hệ thống chạy thật, khẳng định tác động trong dữ liệu, báo lên người có tên sau ba vòng |
 | `skills/review/SKILL.md` | Phát triển | Phát hiện xếp hạng blocking / should fix / nit, có thể đăng lên PR |
 | `skills/qa/SKILL.md` | Kiểm thử | Test plan, test case có truy vết, ma trận regression, tiêu chí vào và ra |
-| `skills/security/SKILL.md` | Kiểm thử | Một bản ghi bảo mật: phạm vi và ranh giới tin cậy, các scanner đã chạy, mối đe dọa theo từng ranh giới, phát hiện đã kiểm chứng, một checklist trả lời từng mục, rủi ro còn lại để một người chấp nhận; và mô hình mối đe dọa của một tính năng |
+| `skills/security/SKILL.md` | Bất kỳ lúc nào | Một bản ghi bảo mật: phạm vi và ranh giới tin cậy, các scanner đã chạy, mối đe dọa theo từng ranh giới, phát hiện đã kiểm chứng, một checklist trả lời từng mục, rủi ro còn lại để một người chấp nhận; và mô hình mối đe dọa của một tính năng |
 | `skills/git/SKILL.md` | Quản lý phiên bản | Đọc diff trước khi stage, quét dừng lại khi gặp thông tin đăng nhập, commit revert được một mình, và push, pull request, merge đều chờ lời đồng ý riêng |
 | `skills/release/SKILL.md` | Bàn giao | Ghi chú theo đối tượng, checklist có người phụ trách, migration, rollback, phê duyệt |
 | `skills/incident/SKILL.md` | Vận hành | Timeline, nguyên nhân gốc có bằng chứng, postmortem, hành động, runbook |

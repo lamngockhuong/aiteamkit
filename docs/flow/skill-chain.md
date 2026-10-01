@@ -47,7 +47,6 @@ flowchart TD
     A3b -->|qa| A8
     A6 -->|qa| A8
     A6 -->|verify| A9
-    A9 -->|review| A7
     A6 -->|security| A9b
     A9b -->|release| A10
     A8 -->|release| A10
@@ -88,7 +87,7 @@ lands, per `shared/spec-docs.md`.
 | `plan` | A ticket, design, or description; under `--review`, a plan already written | Phases and steps, or findings about a plan | `implement`; under `--review`, the plan's author |
 | `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body | `verify`, `review`, `qa` |
 | `fix` | A defect report | A proven cause and the smallest change | `verify`, `review` |
-| `verify` | The running system | What was proven, and what was not | `review` |
+| `verify` | The running system | What was proven, and what was not | The reviewer of the change, on the pull request |
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit, and the convention gaps behind them | `implement`, `fix`, `convention` |
 | `qa` | Acceptance criteria, the change, the reference documents for expected values, the screen specs for `GUI` text or the Figma design where a screen has none, and the design for migration, rollback and rollout | Test plan, cases, regression matrix; afterwards run records with their defects, the bugs raised from them, and retest records | `fix` from a raised bug; `release` from a run record |
 | `security` | The code in scope, the project's scanners, the design and the threat model; under `--checklist`, the checklist a client or the company supplied | A security record with verified findings, an answered checklist and residual risk; under `--threat-model`, the threat model of a feature | `release`, `fix`, `implement`, and the approver who accepts each risk |

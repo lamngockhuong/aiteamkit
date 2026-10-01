@@ -90,7 +90,7 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Eight
 | `skills/verify/SKILL.md` | Development | The running system exercised, side effects asserted in data, escalation after three rounds |
 | `skills/review/SKILL.md` | Development | Findings ranked blocking / should fix / nit, optionally posted to the PR |
 | `skills/qa/SKILL.md` | Verification | Test plan, traced test cases, regression matrix, entry and exit criteria |
-| `skills/security/SKILL.md` | Verification | A security record: scope and trust boundaries, scanners run, threats per boundary, verified findings, a checklist answered item by item, residual risk left for a person to accept; and the threat model of a feature |
+| `skills/security/SKILL.md` | Any point | A security record: scope and trust boundaries, scanners run, threats per boundary, verified findings, a checklist answered item by item, residual risk left for a person to accept; and the threat model of a feature |
 | `skills/git/SKILL.md` | Version control | The diff read before staging, a scan that stops on a credential, commits that revert alone, and push, pull request and merge each behind their own yes |
 | `skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, rollback, sign-offs |
 | `skills/incident/SKILL.md` | Operation | Timeline, proven root cause, blameless postmortem, actions, runbook |

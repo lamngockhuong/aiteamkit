@@ -135,7 +135,7 @@ flowchart TD
 | 4. Sequence | `atk:plan` | Dev | The author, unless the plan gate raised it to TL | `DRAFT` |
 | 4. Rules | `atk:convention` | TL | Team agreement, recorded per rule | `IN REVIEW` to `APPROVED` |
 | 5. Build | `atk:implement` | Dev | The reviewer of the change, through `atk:review` | n/a |
-| 5. Build | `atk:verify` | Dev | The reviewer of the change, before approving it | `DRAFT` |
+| 5. Build | `atk:verify` | Dev | The reviewer of the change, before approving it | `IN REVIEW` to `APPROVED` |
 | 5. Build | `atk:review` | Reviewer, never the author | TL when the loop hits its ceiling | n/a |
 | 5. Build | `atk:git` | Dev | The reviewer, who approves the pull request it opens | n/a |
 | 6. Test | `atk:qa` | QA | QA lead or TL | `IN REVIEW` to `APPROVED` |

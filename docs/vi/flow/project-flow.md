@@ -136,7 +136,7 @@ flowchart TD
 | 4. Xếp thứ tự | `atk:plan` | Dev | Chính tác giả, trừ khi cửa kiểm tra đẩy lên TL | `DRAFT` |
 | 4. Quy ước | `atk:convention` | TL | Cả đội đồng thuận, ghi theo từng quy tắc | `IN REVIEW` sang `APPROVED` |
 | 5. Làm | `atk:implement` | Dev | Người review thay đổi, qua `atk:review` | không có |
-| 5. Làm | `atk:verify` | Dev | Người review thay đổi, trước khi duyệt nó | `DRAFT` |
+| 5. Làm | `atk:verify` | Dev | Người review thay đổi, trước khi duyệt nó | `IN REVIEW` sang `APPROVED` |
 | 5. Làm | `atk:review` | Người review, không bao giờ là tác giả | TL, khi vòng lặp chạm trần | không có |
 | 5. Làm | `atk:git` | Dev | Người review, người duyệt pull request mà nó mở | không có |
 | 6. Kiểm thử | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
