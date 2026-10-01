@@ -232,7 +232,7 @@ would drop any directory called `records` at any depth, including one under `plu
 take it out of a `BLOCKING` check.
 
 ```bash
-grep -rn "\bak:" plugins/atk/skills/ plugins/atk/shared/ README.md docs/ | grep -v -E '^docs/(records|derived)/'
+grep -rn "\bak:" plugins/ README.md docs/ | grep -v -E '^docs/(records|derived)/'
 ```
 
 Should print nothing (the second `grep` exits 1).
@@ -441,7 +441,7 @@ After edits, verify. The one exclusion is the file that quotes the banned patter
 document it:
 
 ```bash
-grep -rn "style .* fill:#" plugins/atk/skills/ plugins/atk/shared/ docs/ README.md \
+grep -rn "style .* fill:#" plugins/ docs/ README.md \
   | grep -v plugins/atk/shared/diagram-conventions.md
 ```
 
@@ -507,6 +507,11 @@ commits that touch `plugins/atk/`. Four files share its version, all driven by t
 | `plugins/atk/.claude-plugin/plugin.json` | `$.version` |
 | `plugins/atk/.cursor-plugin/plugin.json` | `$.version` |
 | `plugins/atk/.codex-plugin/plugin.json` | `$.version` |
+
+The config sets three things the single-package layout did not need: `include-component-in-tag`,
+so each plugin's tags stay apart; `separate-pull-requests`, so each plugin gets a release pull
+request of its own; and `last-release-sha`, the `v0.1.0` commit, so the first release after the
+split does not walk the whole history looking for an `atk-v*` tag that was never made.
 
 The marketplace files carry no version: each harness reads it from the plugin's own `plugin.json`,
 so a copy in the marketplace entry would be one more place for it to disagree.
@@ -684,7 +689,7 @@ done; echo "OK evals"
 # that plugins/atk/skills/qa/references/checklists.md defines
 python3 -c "
 import csv, glob, re
-for f in glob.glob('plugins/atk/skills/*/references/*.tsv'):
+for f in glob.glob('plugins/*/skills/*/references/*.tsv'):
     rows = list(csv.reader(open(f, newline=''), delimiter='\t', quoting=csv.QUOTE_NONE))
     head, body = rows[0], rows[1:]
     assert body, f + ': no records'
@@ -707,7 +712,8 @@ for f in glob.glob('plugins/atk/skills/*/references/*.tsv'):
 # YYMMDD-HHMM, and a six-digit date followed by a slug, an extension, `/` or `)` is the shape it
 # replaced.
 # Should print nothing (grep exits 1)
-grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/atk/skills/ plugins/atk/shared/ README.md docs/ \
+grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/ README.md docs/ \
+  --exclude=CHANGELOG.md \
   | grep -v -E '^docs/(records|derived)/'
 
 # Version agreement: per release package, its extra-files and its entry in the release-please

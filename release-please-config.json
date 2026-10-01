@@ -10,47 +10,19 @@
       "component": "atk",
       "package-name": "atk",
       "extra-files": [
-        {
-          "type": "json",
-          "path": "/package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": ".cursor-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": ".codex-plugin/plugin.json",
-          "jsonpath": "$.version"
-        }
+        { "type": "json", "path": "/package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" },
+        { "type": "json", "path": ".cursor-plugin/plugin.json", "jsonpath": "$.version" },
+        { "type": "json", "path": ".codex-plugin/plugin.json", "jsonpath": "$.version" }
       ]
     },
     "plugins/atkx": {
       "component": "atkx",
       "package-name": "atkx",
       "extra-files": [
-        {
-          "type": "json",
-          "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": ".cursor-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": ".codex-plugin/plugin.json",
-          "jsonpath": "$.version"
-        }
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" },
+        { "type": "json", "path": ".cursor-plugin/plugin.json", "jsonpath": "$.version" },
+        { "type": "json", "path": ".codex-plugin/plugin.json", "jsonpath": "$.version" }
       ]
     }
   }
