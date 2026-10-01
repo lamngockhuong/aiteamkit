@@ -152,7 +152,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request), `qa` (`GUI` cases where no screen spec exists) |
 | `shared/feature-types.md` | The one classification of features: each type with the extra questions an understanding check adds and the QA risk an estimate reads, and the rule that a row is added with both filled | `catchup` (through `understanding-check.md`), `estimate` (through `complexity-drivers.md`) |
 | `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `qa --record`, and `run-cases` through that same record shape; `## Output` of `incident` |
-| `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, the five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
+| `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -234,7 +234,7 @@ other kit's command.
 A capability the host agent itself ships is different, and is allowed: it arrived with the harness,
 so every team on that harness has it. `atk:implement`, `atk:fix` and `atk:verify` use the host's
 code clean-up capability, `/simplify` in Claude Code, and `atk:review` and
-`atk:design-doc --challenge` use the host's parallel agents. `plugins/atk/shared/host-capabilities.md` owns the rules: name the capability before its local name,
+`atk:design-doc --challenge` and `atk:plan --challenge` use the host's parallel agents. `plugins/atk/shared/host-capabilities.md` owns the rules: name the capability before its local name,
 resolve that name from the harness at the time of use, and degrade into doing the work by hand,
 recorded as such, on a harness that has none. No skill stops because a host capability is missing,
 apart from `atk:run-cases` without browser automation, which that file states as its one exception

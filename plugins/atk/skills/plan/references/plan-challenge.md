@@ -36,7 +36,9 @@ index, naming whoever owns the request, per rule 1 of `shared/team-roles.md`, an
 **An objection showing two approaches is the design gate.** When answering it would mean choosing
 between two ways of building the work, the plan is retired per `## When the design gate fires here`
 in `references/plan-self-review.md`, and the fork goes to `atk:design-doc`. Answering it inside the
-plan would be the comparison step 3 of `SKILL.md` refuses.
+plan would be the comparison step 3 of `SKILL.md` refuses. Section 7 is still written into the
+retired index, the fork's row naming `atk:design-doc` and every other kept objection `Open`, so the
+design starts from what the agents found.
 
 An objection left `Open` stays in the table for the plan's `approver:` to settle, or for the person
 the open question it became names.
@@ -49,11 +51,21 @@ opening line "Raised by one agent per lens over the draft; simulated perspective
 not an approval." The section is written only after a challenge ran; a plan never challenged has no
 section 7.
 
+What each agent gets, per `shared/independent-challenge.md`, is the plan without its section 7. A
+plan challenged before carries the author's answers there, the reasoning that file keeps from the
+agents. A later challenge appends a round of its own under a `Round <n>, <date>` line, numbering on
+from the last `O` so no ID is issued twice.
+
 ## The order of a run
 
-Given a plan path, steps 1 to 5 do not run: the plan exists, so the run starts at step 6, then
-challenges, then ends at step 7 without a recommendation. Without a path, the plan is the one this
-run just wrote.
+Given a plan path, steps 1 to 5 do not run: the plan exists, so `## Before any edit` in
+`references/answer-mode.md` runs first, then step 6, then the challenge, then step 7 without a
+recommendation. Step 6 runs there as for a rewrite the person asked for, so its count of two passes
+starts again. Without a path, the plan is the one this run just wrote.
+
+Where the plan rests on an open question, the fourth row of the table below, say so before spawning
+anything, with the question and who answers it, and ask whether to challenge it anyway: the agents
+would read a plan that may change.
 
 1. Step 6 has already read the plan back. A challenge of a plan nobody has read back spends agents
    on stale line numbers.
@@ -74,15 +86,16 @@ the plan that carries its signal.
 | Signal in the plan | Recommendation |
 |--------------------|----------------|
 | The Tech Lead boundary of `## Roles` in `SKILL.md`: a schema, a public contract, or more than one service | Challenge; the Tech Lead still reviews |
-| A trust boundary, personal data, money, or a permission | Challenge, with the security lens |
+| A trust boundary, personal data, credentials, money, or a permission | Challenge, with the security lens |
 | Three or more phases, or dependencies that are not a straight line | Challenge |
 | An open question the whole plan rests on: one that blocks every phase, directly or through `Depends on` | Answer it first with `/atk:plan <plan-path> --answer`, then run the challenge; a challenge of a plan that may change is wasted |
+| Section 7 already holds a round, and no answer recorded since it was written changed a phase | No challenge: already challenged, citing the round's date |
 | None of the above | No challenge, with the reason |
 
 The table is read again at the end of every `--answer` run, per `references/answer-mode.md`,
 because an answer can bring a signal the plan did not carry.
 
-The fourth row wins over the first three: a plan that rests on an unanswered question is not
+The fourth row wins over the first three, and the fifth over the first four: a plan that rests on an unanswered question is not
 challenged whatever else it touches. With no signal, the recommendation is still printed, as "no,
 because" and what was looked for, so the reader can tell it from a check that never ran.
 
@@ -96,7 +109,10 @@ How it is delivered depends on who called:
 - **`--inline`.** The recommendation rides inside the one confirmation step 7 already asks, with
   its reason. Where it is to challenge, the answers are yes, no, or challenge first, and the
   confirmation states the agent count and the measured cap; on "challenge first"
-  the challenge runs and the same confirmation is asked again. Where it is to answer first, the
+  the challenge runs, then the handback of step 7 in `SKILL.md` is sent again in full, with every
+  open question the challenge created and every objection left `Open`, each with the phase it
+  blocks, and the confirmation is asked again with yes or no only. A caller confirming from the
+  first handback would start a phase the challenge has since blocked. Where it is to answer first, the
   question goes back as one the whole plan rests on, per step 7 of `SKILL.md`, and no challenge is
   offered. Where it is no, the reason is printed and the answers stay yes or no. Either way it goes
   into the handback, so the caller knows it was made.

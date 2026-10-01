@@ -3,9 +3,8 @@
 Loaded by `atk:plan` under `--review`. It replaces the workflow in `SKILL.md` rather than extending
 it: nothing is planned, and no plan file is edited.
 
-`--comment` means something only under `--review`. On a planning run it changes nothing, and it is
-never consent: the index is still shown before it is offered, per `## Ticket` in `SKILL.md`.
-`--inline` and `--layer` are ignored under `--review`, said rather than silently, because a layer
+`--comment` posts the findings on a yes, per `## Ticket` below; what it means on a planning run is
+in `SKILL.md`. `--inline` and `--layer` are ignored under `--review`, said rather than silently, because a layer
 filter would skip citations outside that layer and then report them as gone.
 
 `## Roles` in `SKILL.md` names the Tech Lead as the person who reads a plan that touches a schema, a

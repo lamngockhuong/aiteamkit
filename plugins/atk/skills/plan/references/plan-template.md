@@ -128,7 +128,8 @@ Without a profile this section says which commands are inferred, per the Require
 
 ### 7. Pre-review objections
 
-Present only after `--challenge` ran, and absent from every other plan. The shape, the opening line,
+Present only after a challenge ran, whether through `--challenge`, a yes at the step 7
+recommendation, or "challenge first", and absent from every other plan. The shape, the opening line,
 and what goes below the table are in `references/plan-challenge.md`, under Where the result goes.
 A plan never challenged has no section 7 rather than an empty one, so a reader cannot mistake a
 challenge that found nothing for one that never ran.

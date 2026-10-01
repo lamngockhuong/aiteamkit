@@ -25,13 +25,15 @@ The draft artifact, the requirement it answers, the reference documents it names
 the citer's table of lenses, and read access to the repository, which is where the evidence below
 comes from. Where the requirement has no document of its own, the artifact's section that states it
 is the requirement. Nothing of the conversation that produced the artifact, and nothing another
-agent returned. An agent that has read the author's reasoning agrees with it, which is the one
+agent returned. Each agent is told that it changes no file, and that a secret it comes across is
+cited by its path, never by its value. An agent that has read the author's reasoning agrees with it, which is the one
 result this pass exists to avoid.
 
 The number of agents and the concurrency cap are stated before the first one is spawned, and the cap
 is the machine's, under the policy for independent reviewers in `shared/host-capabilities.md`: read
 the available memory and allow roughly 1.5 GB per agent running at once, the measure
-`skills/review/references/review-rounds.md` uses. Where the harness cannot run agents in parallel,
+`skills/review/references/review-rounds.md` uses. Where the memory cannot be read, run at most two
+agents at once and say so in the statement. Where the harness cannot run agents in parallel,
 the lens passes run one after another in this session, and the artifact says they shared the
 author's context, which makes them weaker.
 
@@ -40,6 +42,10 @@ author's context, which makes them weaker.
 At most five objections, or none. Each one names the section of the artifact it is about, the
 failure it predicts, and the evidence: a `path:line`, an acceptance criterion ID, or a line of the
 artifact itself. An objection with no named failure is a feeling, and it is dropped.
+
+An agent that dies or returns nothing at all is not a lens that found nothing, and the two read the
+same unless they are told apart. Run it once more; if it dies again, the lens is named below the table
+as not run, and it is not counted among the agents that ran.
 
 ## What the calling agent does with them
 

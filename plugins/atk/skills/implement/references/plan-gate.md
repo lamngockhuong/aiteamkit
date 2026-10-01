@@ -94,7 +94,9 @@ ask again. Only the person ends the run.
 
 "Challenge first" is the third answer that confirmation can take, offered when that skill
 recommends a challenge. It is neither a yes nor a no: that skill runs the challenge on its own plan,
-writes what it changed, and asks the same confirmation again. Write no code until the yes.
+writes what it changed, sends the handback again in full, and asks the confirmation again with yes or
+no only. Work from that second handback, not the first: a challenge can turn an objection into an
+open question that blocks a phase. Write no code until the yes.
 
 Then work through the phases in order, setting each phase's `status` as it completes.
 

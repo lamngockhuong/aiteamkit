@@ -85,7 +85,7 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`; khi `Contract: first` thì cả thiết kế; với màn hình thì design Figma của nó hoặc ảnh export từ đó | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
 | `convention` | Code và lịch sử của nó, cùng những khoảng trống quy ước trong các báo cáo review đã viết | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
-| `plan` | Ticket, thiết kế, hoặc mô tả; với `--review` thì là một bản kế hoạch đã viết | Pha và bước, hoặc danh sách phát hiện về một bản kế hoạch | `implement`; với `--review` là người viết bản kế hoạch đó |
+| `plan` | Ticket, thiết kế, hoặc mô tả; với `--review`, `--challenge` hoặc `--answer` thì là một bản kế hoạch đã viết | Pha và bước, danh sách phát hiện về một bản kế hoạch, các phản biện của một lượt phản biện, hoặc câu trả lời đã ghi lại | `implement`; với `--review` là người viết bản kế hoạch đó |
 | `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR | `verify`, `review`, `qa` |
 | `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
 | `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | Người review thay đổi, trên pull request |

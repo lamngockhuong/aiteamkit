@@ -71,7 +71,7 @@ turns every disposition that would edit a plan into a result instead, so a label
 correction would walk the report straight back across that line. State what goes wrong and stop.
 
 **`Found by` earns its line** because the eight claims do not cost the same to re-run. An author
-looking at eight results wants to know which of them a fresh `--review` will raise again by itself,
+looking at a dozen results wants to know which of them a fresh `--review` will raise again by itself,
 and which came out of somebody reading.
 
 ## The report

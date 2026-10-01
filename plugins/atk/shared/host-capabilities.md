@@ -7,7 +7,8 @@ it. Referenced from `skills/<name>/SKILL.md` as `shared/host-capabilities.md`, w
 Cited by `implement`, `fix`, and `verify` for the tidy step, by `review`, `design-doc`, and `plan`
 for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answer` for what counts as
 one turn of an interview,
-by `design-sources.md` for naming a connection to a design tool, and by `run-cases` for browser
+by `independent-challenge.md` for the agents a challenge spawns, by `design-sources.md` for naming
+a connection to a design tool, and by `run-cases` for browser
 automation. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
 way the step runs.
 

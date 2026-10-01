@@ -43,5 +43,11 @@
   { "query": "review this pull request before I approve it", "should_trigger": false },
   { "query": "duyệt code của bạn kia giúp tôi", "should_trigger": false },
   { "query": "このPRをレビューして", "should_trigger": false },
-  { "query": "check this diff against the requirement and our conventions", "should_trigger": false }
+  { "query": "check this diff against the requirement and our conventions", "should_trigger": false },
+  { "query": "/atk:plan plans/261001-1308-queue --answer", "should_trigger": true },
+  { "query": "challenge this design document before the Tech Lead signs it", "should_trigger": false },
+  { "query": "phản biện bản thiết kế này giúp tôi", "should_trigger": false },
+  { "query": "この設計書の懸念を洗い出して", "should_trigger": false },
+  { "query": "record the client's answers to the open questions in the intake document", "should_trigger": false },
+  { "query": "ghi câu trả lời vào các câu hỏi mở của design doc", "should_trigger": false }
 ]

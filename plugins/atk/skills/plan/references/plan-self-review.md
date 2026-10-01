@@ -55,8 +55,12 @@ other than the plan's target refutes the claim, and the step built on it is buil
 
 **The consumers.** Where the plan changes something that already exists, a function signature, an
 endpoint, a response field, a configuration key, `grep` for every caller, test, import, and
-re-export of it. Write the count into the plan and list them, the first ten when there are more and
-the command that finds the rest. "Update all callers" is not a step: it is the same count left for
+re-export of it. Write the count into the `Files` cell of the step that makes the change, with the
+command that produced it, zero included, and list them, the first ten when there are more. Where the
+profile's `Shape` names member repositories, run it over the members checked out beside this one too,
+per `shared/project-profile.md`, and name any that is not. Zero hits for an endpoint, a response field,
+or an export that already exists is written as inconclusive rather than as no consumers: a caller
+outside the checked-out tree is exactly what a `grep` cannot see. "Update all callers" is not a step: it is the same count left for
 the implementer to discover. A consumer outside this repository makes the change a public contract,
 which is the Tech Lead boundary of `## Roles` in `SKILL.md`, not something this pass decides.
 
@@ -105,7 +109,7 @@ settled here, and removed.
 
 | What it is | What happens |
 |------------|--------------|
-| Wrong, and the repository says what is right | Fix the plan in place. A stale line number is not worth a person's attention |
+| Wrong, and the repository says what is right | Fix the plan in place, then the sweep below. A stale line number is not worth a person's attention |
 | Wrong, and fixing it changes the sequence | Fix it, run the sweep below over every plan file, then re-run this pass over the phases the fix touched |
 | Unconfirmable, and the plan depends on it | An open question in the phase that depends on it, naming who must answer |
 | Unconfirmable, and nothing depends on it | Out of the plan. An assumption nobody needs is noise in a document a person has to read |
@@ -167,13 +171,14 @@ A correction is made where it was found, and the old form survives everywhere el
 a function, and phase 4, which nobody touched, still calls it by the old name; the second pass would
 not see it, because phase 4 is not among the phases the fix touched.
 
-So after any correction, and before the second pass when one is earned, list what was replaced: a
+So after each pass's corrections, and before the second pass when one is earned, list what was replaced: a
 name, a path, a step number, a count, an assumption, a dependency. `grep` every file of the plan,
 the index and every phase file, for each old form. A hit in a phase the fix did not touch is fixed
 in the same pass, and the phase joins the ones the second pass reads. A correction that earns no
-second pass still gets the sweep.
+second pass still gets the sweep. A hit that a string replacement cannot fix, a call to a signature
+that changed shape, is the "changes the sequence" row of the table above.
 
-The sweep is part of the second pass, not a third: it searches for strings the first pass already
+The sweep is not a pass of its own, and never a third: it searches for strings the first pass already
 settled, and settles nothing new. Any other pass that ends in it cites this section rather than
 restating it.
 

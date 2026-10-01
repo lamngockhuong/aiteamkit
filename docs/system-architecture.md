@@ -115,7 +115,7 @@ Seventeen files hold what skills would otherwise repeat. The first three are cit
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
 
-Eleven are contracts between a named handful of skills rather than kit-wide rules:
+Twelve are contracts between a named handful of skills rather than kit-wide rules:
 
 - `plugins/atk/shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
