@@ -49,6 +49,12 @@ the record, or the Tech Lead where the team has none. The Dev who fixes a bug is
 serves; the QA who raised it is the one who retests it and closes it, unless the team's own flow names
 somebody else for closing.
 
+A record `atk:run-cases` wrote is the other way a run record comes to exist, and this skill never runs
+the cases itself under either. That record is owned by the person who started the agent's run, carries
+the host agent in `Run by` and in `Tester`, holds only results the agent observed in that run, and keeps
+its evidence in a directory beside it. `--bug` and `--retest` read it exactly as they read a tester's
+record, and its approver is the same QA lead.
+
 The results arrive in the session, as a filled sheet, or as a CSV. A sheet or CSV the tester filled is
 a copy outside the repository, or in a path the repository ignores, never the committed
 `docs/qa/test-cases-<slug>.csv`: it holds `Actual` values and links before any redaction, and
@@ -106,7 +112,8 @@ Before writing anything, have from the person, and ask for what is missing rathe
 - the scope: `full`, `smoke`, `regression`, or `ids` with the list of case IDs, since a run that
   covered part of the suite and reads as a full run is the release decision made on a guess;
 - who ran it, and on which dates;
-- a result for every case in scope: `Passed`, `Failed`, `Pending` (not yet run), or `N/A` (does not
+- a result for every case in scope: `Passed`, `Failed`, `Pending` (not yet run, or, in a record `atk:run-cases` wrote,
+  attempted and never settled, with the reason in the Note column), or `N/A` (does not
   apply to this build, and always with the reason, which goes in the Note column), plus the evidence
   the team keeps, a screenshot, a log, a recording;
 - for every `Failed` case, what actually happened, verbatim within the rule above, how often it

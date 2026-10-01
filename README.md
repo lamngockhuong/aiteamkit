@@ -1,6 +1,6 @@
 # AI Team Kit (`atk`)
 
-Twenty-three skills covering the software delivery lifecycle of a **company project team**. Every skill
+Twenty-four skills covering the software delivery lifecycle of a **company project team**. Every skill
 assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read
 by someone who was not in the conversation that produced them. Those are roles rather than a
 headcount: a solo developer holding all of them gets the same gates, and still gives each approval
@@ -30,7 +30,7 @@ flowchart TD
     end
     subgraph L3["5-6. Build and test"]
         direction LR
-        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"]
+        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"] --> RC["run-cases"]
         R -.->|Blocking findings| IM
     end
     subgraph L4["7-8. Release, operate, learn"]
@@ -77,6 +77,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences, written to a report and summarised in the session. |
 | `atk:qa` | A test plan, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria; afterwards the record of a test run, its defects raised as bugs, and the retest of a fix. |
+| `atk:run-cases` | Approved test cases executed by the agent on a deployed DEV or staging environment, never production or the local stack: every case triaged first, the scope agreed with QA before anything runs, and a run record holding only what was observed, ready for the QA lead and for `atk:qa --bug`. |
 | `atk:security` | A security record a Tech Lead can sign and a client can read: assets and trust boundaries, the project's own scanners run, threats walked per boundary, every finding traced from entry point to impact, a client or company checklist answered item by item, and residual risk left for a named person to accept. Also the threat model of a feature, kept current. |
 | `atk:git` | Finished work carried into the repository: the diff read before anything is staged, a scan that stops on a credential, commits that revert one at a time, and push, pull request and merge each behind a yes given for that action. |
 | `atk:release` | Release notes per audience, a checklist with an owner per step, migration reversibility, and a rollback path written before the deploy. |
@@ -106,6 +107,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:verify <module|paths|ticket|pr>      # --ui --report-only --out
 /atk:review <pr|branch|paths>             # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature|cases|run|issue> # --plan|--cases|--regression|--update|--record|--bug|--retest|--review --lang --out
+/atk:run-cases <cases-path>               # --env --only --dry-run --out
 /atk:security [branch|range|paths]        # --threat-model --checklist --lang --out
 /atk:git                                  # --commit|--pr|--merge|--rebase|--resolve|--stack --lang --out
 /atk:release <version|range>              # --notes|--checklist --audience --env --out
@@ -152,7 +154,10 @@ Code, after the verification passes and before anyone reviews it; `atk:review` p
 independent passes over a large diff when the host can run agents in parallel, and
 `atk:design-doc --challenge` puts one agent per signing role over a draft design. None of it is
 required: on a harness without them the step runs by hand, against the same list in
-[shared/tidy-pass.md](shared/tidy-pass.md), and the artifact says which way it ran. The rules are in
+[shared/tidy-pass.md](shared/tidy-pass.md), and the artifact says which way it ran. The one
+exception is `atk:run-cases`, which drives the application through the harness's browser automation:
+the browser is its work rather than an improvement to it, so without one it stops after the scope
+question and hands the agreed cases to `atk:qa --record` for a tester. The rules are in
 [shared/host-capabilities.md](shared/host-capabilities.md).
 
 ## Installation

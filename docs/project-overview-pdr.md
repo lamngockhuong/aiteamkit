@@ -2,7 +2,7 @@
 
 ## What atk is
 
-`atk` (AI Team Kit) is a plugin of 23 skills that cover the software delivery lifecycle of a
+`atk` (AI Team Kit) is a plugin of 24 skills that cover the software delivery lifecycle of a
 **company project team**. It is distributed to Claude Code, Cursor, and OpenAI Codex CLI from one
 content tree.
 
@@ -80,4 +80,4 @@ external client, frequently across Vietnamese, Japanese, and English. Roles are 
 
 - A new joiner can execute any skill's output without asking its author what it meant.
 - Every artifact answers who owns the open questions.
-- A team can adopt one skill at a time without adopting the other seventeen.
+- A team can adopt one skill at a time without adopting the other twenty-three.

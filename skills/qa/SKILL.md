@@ -32,8 +32,9 @@ needs, defining the QA entry and exit criteria, and afterwards recording what th
 execution found: the run record, its defects raised on the tracker, and the retest of a fixed bug.
 
 Does NOT handle: writing automated test code, which belongs to `atk:implement`; running the
-suite or executing the cases, which the testers do; deciding a result on the tester's behalf; or
-signing off a release (`atk:release`).
+suite or executing the cases, which the testers do, or `atk:run-cases` where an agent executes them
+on a deployed environment and writes a run record this skill's `--bug` and `--retest` read like any
+other; deciding a result on the tester's behalf; or signing off a release (`atk:release`).
 
 ## Roles
 

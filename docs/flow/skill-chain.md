@@ -25,6 +25,7 @@ flowchart TD
     A6b["Pull request<br/><small>the record as its body</small>"]
     A7["Review findings"]
     A8["Test plan and cases"]
+    A8b["Run record<br/><small>observed results, defects</small>"]
     A9["Verification report"]
     A9b["Security record<br/><small>findings, checklist, residual risk</small>"]
     A10["Release notes + checklist"]
@@ -50,6 +51,8 @@ flowchart TD
     A6 -->|security| A9b
     A9b -->|release| A10
     A8 -->|release| A10
+    A8 -->|run-cases| A8b
+    A8b -->|release| A10
     A10 -->|incident| A11
     A10 -->|retro| A12
 ```
@@ -90,6 +93,7 @@ lands, per `shared/spec-docs.md`.
 | `verify` | The running system | What was proven, and what was not | The reviewer of the change, on the pull request |
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit, and the convention gaps behind them | `implement`, `fix`, `convention` |
 | `qa` | Acceptance criteria, the change, the reference documents for expected values, the screen specs for `GUI` text or the Figma design where a screen has none, and the design for migration, rollback and rollout | Test plan, cases, regression matrix; afterwards run records with their defects, the bugs raised from them, and retest records | `fix` from a raised bug; `release` from a run record |
+| `run-cases` | An approved cases file, its test plan's environments, the code for routes and expected strings, and a deployed DEV or staging environment | A run record of observed results with defects and evidence beside it, plus a triage report and a run log | `qa --bug` and `--retest` from the record; `release` from it once the QA lead approves |
 | `security` | The code in scope, the project's scanners, the design and the threat model; under `--checklist`, the checklist a client or the company supplied | A security record with verified findings, an answered checklist and residual risk; under `--threat-model`, the threat model of a feature | `release`, `fix`, `implement`, and the approver who accepts each risk |
 | `git` | A finished change or artifact, and the record the calling skill wrote | Commits, a branch, and the pull request that carries the record | `review`, then the approver |
 | `release` | The diff since the last version | Notes, checklist, rollback path | `incident`, `retro` |

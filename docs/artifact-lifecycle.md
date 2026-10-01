@@ -75,11 +75,20 @@ that survived them.
 the pull request, a feedback record is a copy of what was filed on the kit repository, a catchup
 brief is rebuilt by running `atk:catchup` again, a review report by running `atk:review` again, or
 `atk:plan --review` where what was reviewed was a plan, or `atk:qa --review` where it was a cases
-file, and a setup-defect report by running
-`atk:onboard` again against the repository as it stands then. Any of those review runs, made
+file, a setup-defect report by running
+`atk:onboard` again against the repository as it stands then, and the triage report and the run log of
+`atk:run-cases` are what the run record they stand behind already cites and summarises. That holds
+only where a record followed them: after a dry run, on a harness with no browser automation, or after
+a run that wrote no record, the triage report is the only copy of the agreed scope and the run log the
+only list of what the run may have left on the environment, so keep both until a person has acted on
+them. Screenshots in its `evidence/` directory wait there for the person who started the run to confirm
+them, are the only copy until then, and are never committed while they wait. Any of those review runs, made
 without a `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
-only written copy: a reason to keep the directory, not a reason to fear deleting it. Four skills
-read one of the six, and all four read the review report: a second `atk:review` over the same target
+only written copy: a reason to keep the directory, not a reason to fear deleting it. Five skills
+read one of the eight. `atk:run-cases` reads the run log of an earlier run of the same cases file, to
+offer the cases that run deferred and to name data it created with no record after it; where that
+run wrote a record, the record lists the same, so the person names them with `--only` instead. The other four
+all read the review report: a second `atk:review` over the same target
 reads the newest one for that target, to carry its finding identifiers forward, and numbers from 1 and
 says so when there is none; `atk:plan --review` reads the newest one for the same plan, for the same
 identifiers and to tell a result the author has already declined from one a week of commits has just

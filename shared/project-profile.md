@@ -182,7 +182,7 @@ a section to delete.
 | Section | Holds | Read by |
 |---------|-------|---------|
 | Project | Name, repository, the shape from the four above, package manager, and, where the shape names them, the member repositories with their paths, remotes, owning teams, and how each is linked | all |
-| Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify |
+| Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify, run-cases |
 | Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
 | Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, whether the project writes its reference documents before the code or after it, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release; and every skill detecting a tracker, per `shared/ticket-adapters.md` |
@@ -216,7 +216,7 @@ or incomplete.
 | Group | Skills | Behavior when the profile is missing |
 |-------|--------|--------------------------------------|
 | Required | implement, fix, verify | Stop. Say what is missing and that `/atk:init` creates it. Change nothing. |
-| Required-soft | plan, review, qa, security, release, convention, spec | Continue, and state in the artifact that no profile was found, so every command and path in it is a guess. |
+| Required-soft | plan, review, qa, run-cases, security, release, convention, spec | Continue, and state in the artifact that no profile was found, so every command and path in it is a guess. |
 | Not needed | tailor, intake, catchup, estimate, design-doc, breakdown, incident, retro, onboard, handover | Never mention the profile. |
 
 `atk:init` is in no group. It is the skill that writes the profile, so a missing one is its input

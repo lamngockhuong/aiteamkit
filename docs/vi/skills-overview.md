@@ -1,6 +1,6 @@
 # Tổng quan các skill
 
-Hai mươi ba skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+Hai mươi bốn skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
 dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
@@ -24,7 +24,7 @@ flowchart TD
     end
     subgraph L3["5-6. Làm và kiểm thử"]
         direction LR
-        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"]
+        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"] --> RC["run-cases"]
         R -.->|Có phát hiện chặn| IM
     end
     subgraph L4["7-8. Phát hành, vận hành, rút kinh nghiệm"]
@@ -117,10 +117,10 @@ thứ một người không cài kit vẫn kiểm được, nên nó là một d
 `atk:review` thi hành. "`atk:review` nên kiểm thêm phần i18n của đội mình" là luật về skill và thuộc
 về đây. Khi cả hai cách đọc đều hợp, luật về mã nguồn thắng.
 
-**Thói quen tạo ra khác biệt.** Nó biết từ chối. `shared/project-overrides.md` liệt kê bảy thứ phần
+**Thói quen tạo ra khác biệt.** Nó biết từ chối. `shared/project-overrides.md` liệt kê tám thứ phần
 ghi đè không bao giờ được gỡ, trong đó có dòng người duyệt, luật một skill không quyết thứ mà một vai
 sở hữu, và ranh giới xin phép trước khi bất cứ gì rời khỏi repo cục bộ. Chỉ dẫn bị từ chối không bị
-bỏ trong im lặng: skill nói rõ nó phạm điều nào trong bảy điều, rồi đề nghị thứ gần nhất mà không
+bỏ trong im lặng: skill nói rõ nó phạm điều nào trong tám điều, rồi đề nghị thứ gần nhất mà không
 phạm, thường là một chỉ dẫn đưa quyết định ra sớm hơn thay vì một chỉ dẫn tự quyết.
 
 ---
@@ -512,10 +512,46 @@ tiên và dữ liệu test, và nhận các phát hiện ở mức `BLOCKING`, `
 `docs/derived/reviews/`. Skill không sửa gì, nên người viết tự sửa và người duyệt quyết định.
 
 **Không dùng khi.** Bạn muốn viết code test tự động. Skill này tạo bản kế hoạch để người chạy tay và
-để dev tự động hóa từ đó.
+để dev tự động hóa từ đó. Để agent chạy các case trên môi trường đã deploy thì dùng `atk:run-cases`,
+record của skill đó được `--bug` và `--retest` ở đây đọc như mọi record khác.
 
 **Thói quen tạo ra khác biệt.** Truy vết chạy cả hai chiều, nên tiêu chí chưa được test và test case
 không gắn tiêu chí nào đều lộ ra.
+
+---
+
+## `atk:run-cases`
+
+**Sinh ra.** Một run record trong `docs/records/test-runs/`, cùng hình dạng với record của
+`atk:qa --record`, chỉ chứa những kết quả agent đã tận mắt thấy khi chạy các test case đã duyệt trên
+môi trường DEV hoặc staging đã deploy, mỗi case hỏng một mục lỗi, ảnh chụp màn hình đặt ngay cạnh
+record. Phía sau là một triage report và một run log trong `docs/derived/run-cases/`.
+
+**Dùng khi.** File test case đã được duyệt, môi trường không phải production đã deploy, và team muốn
+agent chạy phần việc lặp lại của một lượt regression thay cho người bấm tay từng bước. `--dry-run`
+dừng sau bước phân loại và câu hỏi phạm vi, không gửi gì tới môi trường.
+
+**Không dùng khi.** Môi trường đích là stack local: đó là việc của `atk:verify`, bước lập trình viên tự
+kiểm trước khi bàn giao cho QA. Hoặc tester đã chạy xong và đang cầm kết quả: đó là việc của
+`atk:qa --record`. Skill từ chối thẳng production, và một dòng trong test plan không ghi tên người phụ
+trách thì skill dừng ngay trước request đầu tiên.
+
+**Thói quen tạo ra khác biệt.** Trước khi chạy bất cứ thứ gì, nó xác định những case nào chạy được mà kết
+quả vẫn đáng tin. Mỗi case được xếp vào một trong bốn loại: tự động được, bán tự động, chạy tay, hoặc bị chặn,
+kèm tên người gỡ vướng mắc mà lần chạy không tự gỡ được. Điểm chấm dựa trên những gì lần chạy thấy trên môi trường chứ
+không dựa trên điều case ngụ ý, và người khởi động lần chạy quyết định phiên này nhận bao nhiêu case.
+Khi số case nhiều hơn, skill đề xuất cắt theo mức ưu tiên và người đó chọn; skill không bao giờ tự bỏ
+case nào. Một case sẽ sửa dữ liệu người khác đang dùng, hoặc cố tình nhập sai thông tin đăng nhập,
+không bao giờ được tự động hoá, điểm cao đến đâu cũng vậy.
+
+Case chỉ được ghi `Passed` khi mọi phần của kết quả mong đợi đều được thấy trong lần chạy này; case hỏng
+được chạy lại một lần từ trạng thái sạch rồi mới thành lỗi; case vẫn chưa ngã ngũ sau ba vòng thành
+`Pending`, kèm lý do đủ cụ thể để người khác xử lý tiếp. Case nằm trong số được đề nghị mà lần chạy không
+đụng tới thì được hoãn: có tên trong danh sách nhưng không được đếm, nên tỷ lệ trong record không bao giờ
+trộn case đã chạy với case chưa chạy. Ảnh chụp chỉ vào record sau khi người khởi động lần chạy xác nhận
+trong ảnh không có dữ liệu của người thật; sau đó record nằm ở `IN REVIEW` chờ QA lead, và
+`atk:qa --bug` đọc nó như record của bất kỳ tester nào. Trên harness không có khả năng tự động hoá trình
+duyệt, lần chạy dừng sau câu hỏi phạm vi và chuyển phạm vi đã thống nhất sang `atk:qa --record`.
 
 ---
 

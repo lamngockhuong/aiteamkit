@@ -6,7 +6,7 @@ the behaviour per feature, and the components per screen as its design draws the
 `../../shared/spec-docs.md` relative to a skill file.
 
 Cited by `spec`, which writes them, by `design-doc`, `implement`, `fix`, `verify` and `review`,
-which have to leave them true, and by `qa` and `help`, which read them.
+which have to leave them true, and by `qa`, `run-cases` and `help`, which read them.
 
 ## What makes a document a reference document
 

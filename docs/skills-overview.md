@@ -1,6 +1,6 @@
 # Skills Overview
 
-Twenty-three skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+Twenty-four skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
 to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
@@ -23,7 +23,7 @@ flowchart TD
     end
     subgraph L3["5-6. Build and test"]
         direction LR
-        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"]
+        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"] --> RC["run-cases"]
         R -.->|Blocking findings| IM
     end
     subgraph L4["7-8. Release, operate, learn"]
@@ -116,10 +116,10 @@ needs a test" is checkable by a person with no kit installed, so it is a `CONV-N
 `atk:convention` writes and `atk:review` enforces. "`atk:review` should also check our i18n helper"
 is about the skill and belongs here. When both readings fit, the rule about the code wins.
 
-**The habit that matters.** It refuses. Seven things an override may never remove are listed in
+**The habit that matters.** It refuses. Eight things an override may never remove are listed in
 `shared/project-overrides.md`, and the approver line, the rule that a skill does not decide what a
 role owns, and the consent line before anything leaves the local repository are three of them. A
-refused instruction is not dropped in silence: the skill says which of the seven it breaks and
+refused instruction is not dropped in silence: the skill says which of the eight it breaks and
 offers the nearest thing that does not, which is usually an instruction that surfaces the decision
 earlier rather than one that takes it.
 
@@ -508,10 +508,46 @@ in a report under `docs/derived/reviews/`. It edits nothing, so the author fixes
 decides.
 
 **Do not use when.** You want automated test code written. This produces the plan a person executes
-and a developer can automate from.
+and a developer can automate from. Executing the cases with an agent on a deployed environment is
+`atk:run-cases`, whose record this skill's `--bug` and `--retest` read.
 
 **The habit that matters.** Traceability runs both ways, so an untested criterion and an untraced
 case are both visible.
+
+---
+
+## `atk:run-cases`
+
+**Produces.** A run record under `docs/records/test-runs/`, in the shape `atk:qa --record` writes,
+holding only the results the agent observed while it executed the approved cases on a deployed DEV or
+staging environment, with a defect per failure and the screenshots beside the record. Behind it, a
+triage report and a run log under `docs/derived/run-cases/`.
+
+**Use when.** The cases file is approved, a non-production environment is deployed, and the team
+wants the mechanical part of a regression pass run by the agent rather than clicked through by hand.
+`--dry-run` stops after the triage and the scope question, sending nothing to the environment.
+
+**Do not use when.** The target is the local stack: that is `atk:verify`, the developer's check before
+handing work to QA. Or a tester already executed the cases and has the results: that is
+`atk:qa --record`. The skill refuses production outright, and a test plan row with no named owner
+stops it before the first request.
+
+**The habit that matters.** It decides what it can run honestly before running anything. Every case is
+triaged as automatable, semi-automatable, manual, or blocked, with the person named who clears any
+obstacle the run cannot clear itself, scored against what the run saw on the environment rather than what the case implies, and
+the person who started the run sets how many cases this session takes. When the set is larger, the
+skill proposes what to cut by priority and that person chooses; it never drops a case itself. A case
+that would change data somebody else is using, or that submits wrong credentials, is never automated
+at all, whatever its score.
+
+A case is `Passed` only when every part of its expected result was observed in this run; a failure is
+re-run once from a clean state before it becomes a defect; what is still unresolved after three rounds
+is `Pending` with a reason a person can act on. Cases on offer that the run did not attempt are
+deferred: listed, never counted, so the record's shares never mix run and unrun cases. A screenshot
+reaches the record only after the person who started the run confirms it carries no real person's
+data; the record then waits at `IN REVIEW` for the QA lead, and `atk:qa --bug` reads it like any
+tester's record. Where the harness offers no browser automation, the run stops after the scope
+question and hands the agreed scope to `atk:qa --record`.
 
 ---
 
