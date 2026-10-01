@@ -24,6 +24,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 - Repository: lamngockhuong/aiteamkit <!-- source: git remote get-url origin -->
 - Shape: single repo <!-- source: no pnpm-workspace.yaml, go.work, nx.json, lerna.json or turbo.json -->
 - Package manager: none <!-- source: no lock file present; package.json is private with no dependencies -->
+- Release tags: `atk-v*` for `atk`, `atkx-v*` for `atkx`; tags before the split are `v*` and belong to `atk` <!-- source: release-please-config.json, one package per plugin with its component in the tag -->
 
 ## Layers
 

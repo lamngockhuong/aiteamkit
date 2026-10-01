@@ -12,6 +12,10 @@
 - changed-files:
   - any-glob-to-any-file: 'plugins/atk/shared/**'
 
+'area: atkx':
+- changed-files:
+  - any-glob-to-any-file: 'plugins/atkx/**'
+
 'area: hooks':
 - changed-files:
   - any-glob-to-any-file: 'plugins/atk/hooks/**'
