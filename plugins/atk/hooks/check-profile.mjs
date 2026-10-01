@@ -10,9 +10,12 @@
 // It is Node, registered in exec form on Claude Code, because that is the only
 // shape that behaves the same on Linux, macOS, and Windows. Codex registers the
 // same file through hooks/codex-hooks.json, where the path has to sit inside the
-// command string instead. docs/system-architecture.md explains both under "Why the
-// hook is Node and not a shell script" and "Why Codex has a registration file of
-// its own"; do not rewrite this as a shell script without reading them.
+// command string instead. The repository's system architecture document, which an
+// install does not carry,
+// https://github.com/lamngockhuong/aiteamkit/blob/main/docs/system-architecture.md,
+// explains both under "Why the hook is Node and not a shell script" and "Why Codex has a
+// registration file of its own"; do not rewrite this as a shell script without
+// reading them.
 //
 // Claude Code cannot block on SessionStart (its exit-code table says exit 2 takes
 // no blocking action here), so the reminder is safe by construction. Keep it that

@@ -35,12 +35,12 @@ Conventional Commits are required for the PR title (release-please uses them):
 <!-- Show evidence the change works. Paste command output, screenshots, or describe manual testing. -->
 
 - [ ] Every manifest and marketplace file still parses as JSON.
-- [ ] Every `plugins/atk/skills/*/SKILL.md` frontmatter still parses, with a lowercase hyphenated `name:` matching its folder and no `atk:` prefix.
+- [ ] Every `plugins/*/skills/*/SKILL.md` frontmatter still parses, with a lowercase hyphenated `name:` matching its folder and no `atk:` prefix.
 - [ ] No em-dashes introduced anywhere outside `docs/`.
 - [ ] If a document was added or renamed under `docs/`: the `docs/vi/` counterpart matches.
 - [ ] If a skill was added or removed: `README.md`, `docs/skills-overview.md`, `docs/vi/skills-overview.md`, `docs/codebase-summary.md`, the bug-report component dropdown, `.github/labeler.yml`, and the repository's `skill:` labels all list it.
 - [ ] If a skill's flags changed: the `## Invocation` block, `README.md`, and both `skills-overview.md` files agree.
-- [ ] If `release-please-config.json` touched: all `extra-files` paths exist and JSON parses.
+- [ ] If `release-please-config.json` touched: all `extra-files` paths exist, read relative to their package, where a leading `/` means the repository root, and JSON parses.
 
 ## Linked issues
 

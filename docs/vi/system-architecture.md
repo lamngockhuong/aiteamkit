@@ -25,7 +25,9 @@ aiteamkit/
     hooks/                        lời nhắc profile và bộ nạp file ghi đè, Claude Code và Codex
     assets/*.svg                  icon và logo cho trang marketplace
     CHANGELOG.md                  do release-please viết cho plugin này
+    LICENSE                       bản sao giấy phép ở gốc repo, vì bản cài không mang theo gì khác
   plugins/atkx/                       plugin thứ hai, ba manifest và thư mục skills/ còn trống
+    LICENSE                       cũng bản sao đó
   docs/, docs/vi/               tài liệu dự án song ngữ
   .atk/                         hồ sơ và file ghi đè của chính kit, để kit chạy skill lên chính mình
 ```
@@ -42,10 +44,11 @@ nó. Vì thế `atk:init` giữ quyền duyệt mặc định theo vai trong
 trên là của chính kit, chỉ đúng với `aiteamkit`, và nằm đó vì kit chạy skill của mình lên chính mình;
 nó ở trên thư mục plugin nên không bao giờ đến tay người dùng.
 
-## Một cây nội dung, ba manifest
+## Mỗi plugin một cây nội dung và ba manifest
 
 Ba thư mục manifest trong `plugins/atk/` cùng mô tả một thư mục `skills/` cho ba harness, và mỗi file
-marketplace ở gốc repo trỏ harness của nó tới `plugins/atk/`. Nội dung skill không bao giờ bị nhân
+marketplace ở gốc repo trỏ harness của nó tới `plugins/atk/`, và tới cả `plugins/atkx/`, nơi ba
+manifest làm đúng việc đó cho thư mục `skills/` của riêng nó như mục kế tiếp mô tả. Nội dung skill không bao giờ bị nhân
 bản theo từng harness. Các manifest chỉ khác nhau ở cách khai báo nội dung, và mọi đường dẫn bên
 trong chúng đều tính từ thư mục plugin:
 

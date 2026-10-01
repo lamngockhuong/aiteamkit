@@ -173,12 +173,16 @@ directory alone.
 
 Installed before the kit moved to `plugins/atk/`? Once the first `atk` release after the move is
 out, refresh the marketplace, then update the plugin; the update follows the new location, and there
-is nothing to uninstall. Until then the copy you have keeps working as it is:
+is nothing to uninstall:
 
 ```bash
 /plugin marketplace update atk
 /plugin update atk@atk
 ```
+
+Until that release, an install from GitHub keeps working as it is. An install from a local clone, or
+a Cursor copy, stops finding the skills once the clone is pulled past the move: re-add the
+marketplace from the clone, as under "Local development install", or copy `plugins/atk/` again.
 
 ### OpenAI Codex CLI
 
@@ -186,6 +190,9 @@ is nothing to uninstall. Until then the copy you have keeps working as it is:
 codex plugin marketplace add lamngockhuong/aiteamkit
 codex plugin add atk@atk
 ```
+
+Both commands were run against a local clone of this layout; the GitHub form above has not been
+tried yet, and an issue saying whether it works helps the next person.
 
 ### Cursor
 

@@ -86,6 +86,6 @@ body:
     id: version
     attributes:
       label: Version
-      description: The atk version from the plugin's .claude-plugin/plugin.json (plugins/atk/ in a clone), plus your harness version.
+      description: The version of the plugin concerned, atk or atkx, from its .claude-plugin/plugin.json (plugins/atk/ or plugins/atkx/ in a clone), plus your harness version.
     validations:
       required: false

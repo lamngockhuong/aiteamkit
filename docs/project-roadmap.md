@@ -104,8 +104,10 @@ role owns. The last category is a defect, not a preference.
 
 ## Phase 6: Publication
 
-List on the Claude Code, Cursor, and Codex marketplaces once phases 3 to 5 close. Graduate from
-pre-1.0 by dropping the two `bump-*-pre-major` flags in `release-please-config.json`.
+List on the Claude Code, Cursor, and Codex marketplaces once phases 3 to 5 close. Graduate a plugin from
+pre-1.0 by moving the two `bump-*-pre-major` flags in `release-please-config.json` from the top into
+the other package's block, as `CLAUDE.md` describes under "Release flow"; dropping them from the
+top alone would graduate both plugins at once.
 
 ## Open questions
 

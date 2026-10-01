@@ -22,9 +22,9 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 - Name: aiteamkit
 - Repository: lamngockhuong/aiteamkit <!-- source: git remote get-url origin -->
-- Shape: single repo <!-- source: no pnpm-workspace.yaml, go.work, nx.json, lerna.json or turbo.json -->
+- Shape: single repo <!-- source: no pnpm-workspace.yaml, go.work, nx.json, lerna.json or turbo.json. Two release packages, plugins/atk and plugins/atkx, but no build workspace, which is what atk:init reads a monorepo from; and the two shapes behave alike here, one root and no Repositories table, so the field stays what detection finds -->
 - Package manager: none <!-- source: no lock file present; package.json is private with no dependencies -->
-- Release tags: `atk-v*` for `atk`, `atkx-v*` for `atkx`; tags before the split are `v*` and belong to `atk` <!-- source: release-please-config.json, one package per plugin with its component in the tag -->
+- Release tags: `atk-v*` for `atk`, `atkx-v*` for `atkx`; tags before the split are `v*` and belong to `atk`, and `atk-v0.1.0` sits on the same commit as `v0.1.0` <!-- source: release-please-config.json, one package per plugin with its component in the tag -->
 
 ## Layers
 
@@ -34,7 +34,7 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 | docs | `docs/` | `CLAUDE.md`, sections "Docs are bilingual" and "Diagrams are Mermaid, except where they are not" | `docs/flow/skill-chain.md` |
 | hooks | `plugins/atk/hooks/` | `CLAUDE.md`, section "`hooks/` never holds a rule, and is never the only road to a behavior" | `plugins/atk/hooks/check-profile.mjs` |
 
-<!-- Not an application: the deliverable is Markdown skills plus three manifests. -->
+<!-- Not an application: the deliverable is two plugins of Markdown skills, three manifests each, listed by three marketplace files. -->
 <!-- Three rows because a change lands differently in each. A skill edit is one file with frontmatter
      and a 300-line ceiling. A docs edit is always two files, English and its `docs/vi/` mirror, with
      no frontmatter and no ceiling. A hook edit is executable Node whose standards are about runtime
@@ -60,7 +60,9 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
      them on purpose: an earlier profile pasted four of them inline and went stale when the repo
      gained hooks and trigger evals. Run the block, do not transcribe it. -->
 
-Three further checks live outside that section, each beside the rule it enforces:
+Four further checks live outside that section, each beside the rule it enforces:
+
+- No em-dash: `CLAUDE.md`, section "Em-dash policy"
 
 - No command from another kit: `CLAUDE.md`, section "The kit stands alone, but it may use the harness it runs on"
 - No hardcoded diagram fill: `CLAUDE.md`, section "Diagrams are Mermaid, except where they are not"
@@ -97,7 +99,7 @@ Three further checks live outside that section, each beside the rule it enforces
 <!-- One maintainer holds both roles. The kit's own premise is that author and approver differ, so
      a contributor who is not Khuong still needs his approval, and the two rows stay separate for
      the day someone else fills one. -->
-<!-- The issue reference format is not recorded here; shared/ticket-adapters.md owns it. -->
+<!-- The issue reference format is not recorded here; plugins/atk/shared/ticket-adapters.md owns it. -->
 
 ## Verify
 

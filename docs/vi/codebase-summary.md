@@ -23,7 +23,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `.claude-plugin/marketplace.json` | Marketplace của Claude Code, liệt kê `atk` ở `./plugins/atk` và `atkx` ở `./plugins/atkx`, không tự mang version |
 | `.cursor-plugin/marketplace.json` | Marketplace của Cursor, liệt kê `atk` và `atkx` ở `plugins/atk` và `plugins/atkx`, phần mô tả để `plugin.json` của từng plugin lo |
 | `.agents/plugins/marketplace.json` | Marketplace của Codex, liệt kê `atk` và `atkx` là plugin cục bộ ở `./plugins/atk` và `./plugins/atkx` |
-| `plugins/atk/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay. `feat:` và `fix:` hiện lên; các loại khác im lặng |
+| `plugins/*/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay, mỗi plugin một file kể từ lần phát hành đầu: hiện có `plugins/atk/CHANGELOG.md`, còn `plugins/atkx/CHANGELOG.md` có khi `atkx` được phát hành. `feat:` và `fix:` hiện lên; các loại khác im lặng |
 | `plugins/atk/LICENSE` | Bản sao của `LICENSE` ở gốc, vì bản cài chỉ mang thư mục plugin và MIT yêu cầu thông báo giấy phép đi cùng bản sao |
 | `plugins/atkx/LICENSE` | Bản sao như trên cho `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Metadata cho Cursor, có `displayName` và `"skills": "./skills/"` |
@@ -72,7 +72,7 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 | File | Mục đích |
 |------|----------|
-| `.atk/profile.md` | Profile của chính repo này: không có lệnh build cũng không có lệnh test, nên mục Commands mang bốn phép kiểm trong `CLAUDE.md` thay cho chúng, cộng một tầng nội dung, thư mục docs là `docs/`, `CLAUDE.md` vừa là nơi giữ quy ước vừa là nơi giữ review checklist, và tracker là GitHub Issues |
+| `.atk/profile.md` | Profile của chính repo này: không có lệnh build cũng không có lệnh test, nên mục Commands trỏ tới mục "Common verification commands" trong `CLAUDE.md` thay cho chúng, và tới bốn phép kiểm đặt cạnh quy tắc của nó, cộng ba tầng là nội dung, docs và hook, thư mục docs là `docs/`, `CLAUDE.md` vừa là nơi giữ quy ước vừa là nơi giữ review checklist, và tracker là GitHub Issues |
 | `.atk/overrides/review.md` | Phần ghi đè mà `atk:tailor` viết cho `atk:review` ở đây: diff chạm vào một khối lệnh kiểm tra trong `CLAUDE.md` thì phải kiểm bằng cách chạy khối đó chứ không phải bằng cách đọc, ở mức `BLOCKING`. Các luật về nội dung repo không nằm trong file này; chúng là những dòng `CONV-NNN` trong `CLAUDE.md` |
 
 ## Các skill
@@ -219,7 +219,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | File | Mục đích |
 |------|----------|
 | `docs/project-overview-pdr.md` | atk là gì, những kiểu hỏng quy trình nó nhắm tới, mục tiêu, phi mục tiêu, đối tượng, tiêu chí thành công |
-| `docs/system-architecture.md` | Một cây nội dung ba manifest, mô hình nạp và ngân sách kích thước, lớp `plugins/atk/shared/`, giải phẫu skill, luồng dữ liệu lúc chạy |
+| `docs/system-architecture.md` | Hai plugin, mỗi plugin ba manifest, được ba file marketplace liệt kê, mô hình nạp và ngân sách kích thước, lớp `plugins/atk/shared/`, giải phẫu skill, luồng dữ liệu lúc chạy |
 | `docs/skills-overview.md` | Theo từng skill: sinh ra gì, khi nào dùng, khi nào không, và thói quen làm nên khác biệt |
 | `docs/artifact-lifecycle.md` | Artifact nào nên commit, cái nào được phép xóa, xóa mỗi loại thì mất gì, và ba chính sách một đội có thể chọn |
 | `docs/codebase-summary.md` | Chính là file này |
@@ -241,6 +241,6 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `.github/PULL_REQUEST_TEMPLATE.md` | Hướng dẫn Conventional Commit, harness bị ảnh hưởng, và checklist kiểm tra gồm cả các mục đồng bộ chéo |
 | Các form `.github/ISSUE_TEMPLATE/*.yml` | Mỗi form gắn label loại của nó cùng `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Tắt issue trống, dẫn sang Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 24 skill, cộng profile, phần ghi đè, lớp dùng chung và các hook |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 24 skill, cộng profile, phần ghi đè, lớp dùng chung, các hook và `atkx` |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Form tính năng, hỏi tình huống của team trước khi hỏi năng lực đề xuất |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Form báo lần chạy skill, nhận bản ghi `--feedback`: đã yêu cầu gì, bước nào chạy, chỗ nào skill không nói, và team mong đợi gì |

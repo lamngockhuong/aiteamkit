@@ -102,8 +102,10 @@ cuối cùng là lỗi, không phải sở thích.
 
 ## Phase 6: Phát hành
 
-Đưa lên marketplace của Claude Code, Cursor và Codex sau khi phase 3 đến 5 đóng lại. Thoát giai đoạn
-tiền 1.0 bằng cách bỏ hai cờ `bump-*-pre-major` trong `release-please-config.json`.
+Đưa lên marketplace của Claude Code, Cursor và Codex sau khi phase 3 đến 5 đóng lại. Muốn đưa một plugin
+ra khỏi giai đoạn tiền 1.0 thì chuyển hai cờ `bump-*-pre-major` trong `release-please-config.json` từ
+đầu file vào khối của package còn lại, như `CLAUDE.md` mô tả ở mục "Release flow"; chỉ bỏ hai cờ ở
+đầu file thì cả hai plugin cùng thoát một lượt.
 
 ## Câu hỏi còn treo
 

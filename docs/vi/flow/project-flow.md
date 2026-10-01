@@ -155,8 +155,7 @@ flowchart TD
 Bảng ghi mỗi vai viết gì, chấp nhận gì và đọc lại ở đâu được `atk:init` đọc khi đề xuất cột
 `Approves` của profile, nên nó nằm trong kit, ở
 [`plugins/atk/skills/init/references/role-defaults.md`](../../../plugins/atk/skills/init/references/role-defaults.md),
-và viết bằng tiếng Anh. Bảng lấy từ bảng tra cứu theo pha ở trên và từ mục `## Roles` của từng
-skill.
+và viết bằng tiếng Anh. Các cột của bảng được gom từ mục `## Roles` của từng skill.
 
 ## Nằm ngoài chu trình
 

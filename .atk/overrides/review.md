@@ -14,7 +14,7 @@ root of the project being worked on. Run `/atk:tailor review` there to write you
 
 The rules about this repository's content are not here. They are the `CONV-NNN` rows in the "Review
 checklist" section of `CLAUDE.md`, written by `/atk:convention`, and `atk:review` has already read
-that section per `shared/review-checklist.md`. This file holds only what is true of the way the
+that section per `plugins/atk/shared/review-checklist.md`. This file holds only what is true of the way the
 skill works, which nobody can check without the kit installed.
 
 ## After

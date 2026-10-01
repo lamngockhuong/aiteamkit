@@ -23,7 +23,7 @@ removed, or renamed; update it in the same commit.
 | `.claude-plugin/marketplace.json` | Claude Code marketplace listing `atk` at `./plugins/atk` and `atkx` at `./plugins/atkx`, with no version of their own |
 | `.cursor-plugin/marketplace.json` | Cursor marketplace listing `atk` and `atkx` at `plugins/atk` and `plugins/atkx`, descriptions left to each `plugin.json` |
 | `.agents/plugins/marketplace.json` | Codex marketplace listing `atk` and `atkx` as local plugins at `./plugins/atk` and `./plugins/atkx` |
-| `plugins/atk/CHANGELOG.md` | Written by release-please from the commit types, never by hand. `feat:` and `fix:` appear; the other types are silent |
+| `plugins/*/CHANGELOG.md` | Written by release-please from the commit types, never by hand, one per plugin from its first release: `plugins/atk/CHANGELOG.md` now, `plugins/atkx/CHANGELOG.md` once `atkx` is released. `feat:` and `fix:` appear; the other types are silent |
 | `plugins/atk/LICENSE` | A copy of the root `LICENSE`, because an install carries the plugin directory alone and MIT asks for the notice to travel with the copy |
 | `plugins/atkx/LICENSE` | The same copy for `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Cursor plugin metadata with `displayName` and `"skills": "./skills/"` |
@@ -72,7 +72,7 @@ that it belongs to this repository, and no skill reads either for another projec
 
 | File | Purpose |
 |------|---------|
-| `.atk/profile.md` | This repository's own profile: no build and no test command, so the Commands section carries the four verification checks from `CLAUDE.md` instead, plus one content layer, `docs/` as the docs root, `CLAUDE.md` as both the conventions and the review checklist, and GitHub Issues as the tracker |
+| `.atk/profile.md` | This repository's own profile: no build and no test command, so the Commands section points at the "Common verification commands" section of `CLAUDE.md` instead, and at the four checks kept beside their rules, plus three layers, content, docs and hooks, `docs/` as the docs root, `CLAUDE.md` as both the conventions and the review checklist, and GitHub Issues as the tracker |
 | `.atk/overrides/review.md` | The override `atk:tailor` wrote for `atk:review` here: a diff touching a verification command block in `CLAUDE.md` has to be checked by running the block, not by reading it, at `BLOCKING`. The repository's content rules stay out of it; those are the `CONV-NNN` rows in `CLAUDE.md` |
 
 ## Skills
@@ -219,7 +219,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | File | Purpose |
 |------|---------|
 | `docs/project-overview-pdr.md` | What atk is, the process failures it addresses, goals, non-goals, audience, success criteria |
-| `docs/system-architecture.md` | One content tree with three manifests, the load model and its size budget, the `plugins/atk/shared/` layer, skill anatomy, runtime data flow |
+| `docs/system-architecture.md` | Two plugins with three manifests each, listed by three marketplace files, the load model and its size budget, the `plugins/atk/shared/` layer, skill anatomy, runtime data flow |
 | `docs/skills-overview.md` | Per skill: what it produces, when to use, when not to, and the one habit that makes it work |
 | `docs/artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, what each deletion costs, and the three policies a team can choose between |
 | `docs/codebase-summary.md` | This file |
@@ -241,6 +241,6 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/*.yml` forms | Each adds its type label plus `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 24 skills, plus the profile, the overrides, the shared layer, and the hooks |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 24 skills, plus the profile, the overrides, the shared layer, the hooks, and `atkx` |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Skill run form taking a `--feedback` record: what was asked, which steps ran, where the skill was silent, and what the team expected |

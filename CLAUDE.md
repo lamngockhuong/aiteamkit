@@ -51,9 +51,12 @@ plugins/atk/
   .cursor-plugin/     plugin.json
   .codex-plugin/      plugin.json (with `interface{}` block for marketplace listing)
   skills/, shared/, hooks/, assets/    shared content, NOT duplicated per harness
+  CHANGELOG.md        written by release-please
+  LICENSE             a copy of the root licence, since an install carries nothing above the plugin
 plugins/atkx/
   .claude-plugin/, .cursor-plugin/, .codex-plugin/    the same three manifests
   skills/             empty until a first skill passes the bar in its section below
+  LICENSE             the same copy; CHANGELOG.md arrives with the first atkx release
 ```
 
 Edit `plugins/atk/skills/<name>/SKILL.md` ONCE; all three manifests pick it up. Do not create
@@ -377,14 +380,17 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
    artifact the tree did not hold before. The per-group paragraphs name the kinds and count them, so
    a new one leaves two files disagreeing about what is safe to delete
 7. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 24
+8. All three manifest descriptions plus `.claude-plugin/marketplace.json` and `package.json`, if the count of 24
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `plugins/atk/shared/` layer or the profile is for
-10. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
-    all three `docs/vi/flow/` mirrors, and `plugins/atk/skills/init/references/role-defaults.md`.
-    Each names all 24 skills: the phase table, the consumes/produces table, and the role table
-    respectively, the last read by `atk:init` and shipped inside the kit for that reason
+10. The tables that name all 24 skills: the phase table in `docs/flow/project-flow.md`, the
+    consumes/produces table in `docs/flow/skill-chain.md`, and the role table in
+    `plugins/atk/skills/init/references/role-defaults.md`, the last read by `atk:init` and shipped
+    inside the kit for that reason. Both `docs/flow/` files have `docs/vi/flow/` mirrors; the role
+    table has none. `docs/flow/skill-lifecycle.md` and its mirror carry no table of all 24: they name
+    skills as examples of each kind of edge, and count the `SKILL.md` files and the mentions between
+    them, so a new skill changes those counts and, if it adds a kind of edge, the examples
 11. `plugins/atk/skills/help/references/state-signals.md`, if something on disk says the skill is the next one
     to run. A skill that answers an event a person reports has no row there, because nothing on
     disk announces the event
@@ -423,11 +429,13 @@ Japanese triggers silently breaks invocation for part of the audience.
 Do NOT use em-dashes (`—`, U+2014) anywhere in user-authored content (READMEs, manifests, skill
 prose, shared references, docs). Use hyphen `-`, comma, semicolon, or colon based on context.
 
-After edits, verify. The two exclusions are both files that quote the character in order to document
-this very check: this section, and the verification list inside `.atk/profile.md`.
+After edits, verify. `CLAUDE.md` is excluded because this section quotes the character in order to
+document this very check, and every `CHANGELOG.md` for the reason given under "The kit stands alone".
+The `plans/` and `docs/` filter is anchored to the path at the start of the line, so a line that
+only mentions one of those directories is still checked.
 
 ```bash
-grep -rn "—" . --exclude-dir=.git --exclude-dir=.atk --exclude=CLAUDE.md | grep -v -E '(plans|docs)/'
+grep -rn "—" . --exclude-dir=.git --exclude=CLAUDE.md --exclude=CHANGELOG.md | grep -v -E '^\./(plans|docs)/'
 ```
 
 Should print nothing (`grep` exits 1).
@@ -521,8 +529,8 @@ commits that touch `plugins/atk/`. Four files share its version, all driven by t
 
 The config sets three things the single-package layout did not need: `include-component-in-tag`,
 so each plugin's tags stay apart; `separate-pull-requests`, so each plugin gets a release pull
-request of its own; and `last-release-sha`, the `v0.1.0` commit, so the first release after the
-split does not walk the whole history looking for an `atk-v*` tag that was never made.
+request of its own; and `last-release-sha`, the `v0.1.0` commit, also tagged `atk-v0.1.0`, so the first
+release after the split has a boundary even though no GitHub release named `atk-v*` exists yet.
 
 `plugins/atkx` is a second package, tagged `atkx-v<version>`, whose three `plugin.json` files share
 its version. Its state starts at `0.0.0` with `"initial-version": "0.0.1"`: release-please treats a
@@ -703,7 +711,7 @@ python3 -c "
 import glob, json, os
 plugins = sorted(os.path.basename(d.rstrip('/')) for d in glob.glob('plugins/*/'))
 packages = json.load(open('release-please-config.json'))['packages']
-assert sorted(p.split('/', 1)[1] for p in packages) == plugins, 'release packages: %s' % sorted(packages)
+assert sorted(packages) == ['plugins/' + p for p in plugins], 'release packages: %s' % sorted(packages)
 for f in ('.claude-plugin/marketplace.json', '.cursor-plugin/marketplace.json',
           '.agents/plugins/marketplace.json'):
     entries = json.load(open(f))['plugins']
@@ -712,13 +720,16 @@ for f in ('.claude-plugin/marketplace.json', '.cursor-plugin/marketplace.json',
         assert 'version' not in e, '%s: %s carries a version' % (f, e['name'])
         src = e['source']['path'] if isinstance(e['source'], dict) else e['source']
         assert os.path.normpath(src) == 'plugins/' + e['name'], '%s: %s source %r' % (f, e['name'], src)
-for m in glob.glob('plugins/*/.*-plugin/plugin.json'):
+manifests = glob.glob('plugins/*/.*-plugin/plugin.json')
+assert len(manifests) == 3 * len(plugins), 'expected three manifests per plugin: %s' % sorted(manifests)
+PATH_KEYS = ('skills', 'hooks', 'composerIcon', 'logo')
+for m in manifests:
     root = m.split('/.', 1)[0]
     assert json.load(open(m))['name'] == os.path.basename(root), m + ': name differs from its folder'
-    def paths(o):
-        if isinstance(o, dict): return [x for v in o.values() for x in paths(v)]
-        if isinstance(o, list): return [x for v in o for x in paths(v)]
-        return [o] if isinstance(o, str) and o.startswith(('./', '../', '/')) else []
+    def paths(o, key=None):
+        if isinstance(o, dict): return [x for k, v in o.items() for x in paths(v, k)]
+        if isinstance(o, list): return [x for v in o for x in paths(v, key)]
+        return [o] if isinstance(o, str) and (key in PATH_KEYS or o.startswith(('./', '../', '/'))) else []
     for v in paths(json.load(open(m))):
         assert not v.startswith('/') and '..' not in v.split('/') and os.path.exists(os.path.join(root, v)), '%s: %s' % (m, v)
 assert json.load(open('plugins/atkx/.claude-plugin/plugin.json')).get('dependencies') == ['atk'], \

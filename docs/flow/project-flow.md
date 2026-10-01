@@ -153,8 +153,8 @@ flowchart TD
 
 The table of what each role writes, accepts, and reviews is read by `atk:init` when it proposes
 the `Approves` column of a profile, so it ships with the kit, in
-[`plugins/atk/skills/init/references/role-defaults.md`](../../plugins/atk/skills/init/references/role-defaults.md). It
-draws on the phase reference above and on each skill's own `## Roles` section.
+[`plugins/atk/skills/init/references/role-defaults.md`](../../plugins/atk/skills/init/references/role-defaults.md),
+and is written in English. Its columns are collected from each skill's own `## Roles` section.
 
 ## Outside the cycle
 

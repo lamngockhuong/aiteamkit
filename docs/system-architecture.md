@@ -25,7 +25,9 @@ aiteamkit/
     hooks/                        profile reminder and override loader, Claude Code and Codex
     assets/*.svg                  icon and logo for marketplace listings
     CHANGELOG.md                  written by release-please for this plugin
+    LICENSE                       a copy of the root licence, since the install carries nothing else
   plugins/atkx/                       a second plugin, three manifests and an empty skills/ for now
+    LICENSE                       the same copy
   docs/, docs/vi/               bilingual project documentation
   .atk/                         the kit's own profile and overrides, for running its skills on itself
 ```
@@ -43,10 +45,11 @@ default approvals per role in `plugins/atk/skills/init/references/role-defaults.
 `docs/`. The `.atk/` in the tree above is the kit's own, true of `aiteamkit` alone, and it is there
 because the kit runs its own skills on itself; it sits above the plugin, so it never reaches a user.
 
-## One content tree, three manifests
+## One content tree per plugin, three manifests each
 
 The three manifest folders inside `plugins/atk/` describe the same `skills/` directory to three
-harnesses, and each root marketplace file points its harness at `plugins/atk/`. Skill content is
+harnesses, and each root marketplace file points its harness at `plugins/atk/`, and at `plugins/atkx/`,
+whose three manifests do the same for its own `skills/` as the next section describes. Skill content is
 never duplicated per harness. The manifests differ only in how they declare content, and every path
 inside them is relative to the plugin:
 
