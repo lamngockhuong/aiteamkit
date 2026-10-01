@@ -129,7 +129,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (beside `skills/`, not under it)
 
-Sixteen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
+Seventeen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
 plugin root beside `skills/`, NOT under it, because a folder under `skills/` without a `SKILL.md` is
 ambiguous to the harnesses' skill discovery. The table names them as skills cite them, relative to
 `plugins/atk/`.
@@ -145,13 +145,14 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `plan`, `tailor`, `qa` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not, plus the gate rule: which CI job judges a layer, and what a local command weaker than it leaves unverified | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `security`, `incident` |
-| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, what counts as one turn of an interview, when a connection to an outside service may be named, and browser automation, the one capability whose absence stops a skill | `fix`, `implement`, `verify`, `review`, `design-doc`, `init`, `run-cases`, `design-sources.md` |
+| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, what counts as one turn of an interview, when a connection to an outside service may be named, and browser automation, the one capability whose absence stops a skill | `fix`, `implement`, `verify`, `review`, `design-doc`, `plan`, `init`, `run-cases`, `design-sources.md` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, what one is when the profile says `Contract: first` and the `implemented` field that says whether its code exists yet, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change including when the document lives in another repository, the `screen` kind with its always-present `implemented`, two-sided drift and split with `feature`, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `help` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
 | `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request), `qa` (`GUI` cases where no screen spec exists) |
 | `shared/feature-types.md` | The one classification of features: each type with the extra questions an understanding check adds and the QA risk an estimate reads, and the rule that a row is added with both filled | `catchup` (through `understanding-check.md`), `estimate` (through `complexity-drivers.md`) |
 | `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `qa --record`, and `run-cases` through that same record shape; `## Output` of `incident` |
+| `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -207,6 +208,12 @@ exists because the two classify the same features, one to ask questions and one 
 two tables would drift into a feature that is a payment flow in one and a plain form in the other.
 A new column for a third skill goes into the same table rather than into a table of its own.
 
+`independent-challenge.md` has two citers, `design-doc --challenge` and `plan --challenge`, each
+through a reference that keeps its own lenses, who settles an open objection, and where the result
+sits in its artifact. What the two share is the half that makes a challenge worth running: an agent
+that never sees the author's reasoning, and an objection that names its failure or is dropped. Two
+copies of that half would drift until one challenge let its agents read the conversation.
+
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
 where the incoming specification lives, and follow its three-group rule for what to do when that file
@@ -227,7 +234,7 @@ other kit's command.
 A capability the host agent itself ships is different, and is allowed: it arrived with the harness,
 so every team on that harness has it. `atk:implement`, `atk:fix` and `atk:verify` use the host's
 code clean-up capability, `/simplify` in Claude Code, and `atk:review` and
-`atk:design-doc --challenge` use the host's parallel agents. `plugins/atk/shared/host-capabilities.md` owns the rules: name the capability before its local name,
+`atk:design-doc --challenge` and `atk:plan --challenge` use the host's parallel agents. `plugins/atk/shared/host-capabilities.md` owns the rules: name the capability before its local name,
 resolve that name from the harness at the time of use, and degrade into doing the work by hand,
 recorded as such, on a harness that has none. No skill stops because a host capability is missing,
 apart from `atk:run-cases` without browser automation, which that file states as its one exception

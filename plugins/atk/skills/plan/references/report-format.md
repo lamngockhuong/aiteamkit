@@ -3,7 +3,7 @@
 Loaded by `atk:plan` under `--review`, when the results become a file. It holds the **shape** of that
 file. What goes into it is settled elsewhere and not repeated here: `references/plan-review-mode.md`
 for what may be reviewed, which results exist and what severity each one takes;
-`references/plan-self-review.md` for the six claims the pass reopens; and `shared/artifact-paths.md`
+`references/plan-self-review.md` for the eight claims the pass reopens; and `shared/artifact-paths.md`
 for the path and the front matter block.
 
 The shape is here for the reason `atk:review` keeps its own in a file: prose swallows structure. A
@@ -61,7 +61,7 @@ the author chose not to act on is still a result here rather than an argument.
 - **What the plan says:** quoted, short
 - **What the repository says:** the evidence, as `path:line`
 - **Following the plan:** what it produces, or where it stops
-- **Found by:** which of the six claims, or the backward test on the `Check` column
+- **Found by:** which of the eight claims, or the backward test on the `Check` column
 ```
 
 **There is no `Fix` label, and the absence is the rule rather than an omission.** `atk:review`
@@ -70,8 +70,8 @@ the change should have been. This mode fixes nothing: `references/plan-review-mo
 turns every disposition that would edit a plan into a result instead, so a label naming the
 correction would walk the report straight back across that line. State what goes wrong and stop.
 
-**`Found by` earns its line** because the six claims do not cost the same to re-run. An author
-looking at eight results wants to know which of them a fresh `--review` will raise again by itself,
+**`Found by` earns its line** because the eight claims do not cost the same to re-run. An author
+looking at a dozen results wants to know which of them a fresh `--review` will raise again by itself,
 and which came out of somebody reading.
 
 ## The report

@@ -43,7 +43,7 @@ chạy những case nó quan sát được kết quả và viết một run reco
 bao giờ tự chạy case và `verify` vẫn là bước lập trình viên tự kiểm trên stack local.
 
 Lớp `plugins/atk/shared/` giữ những gì lẽ ra phải lặp lại hai mươi bốn lần: từ vựng vai trò, quy ước đường dẫn
-artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười hai file còn lại là hợp đồng giữa
+artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười bốn file còn lại là hợp đồng giữa
 những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa sáu skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
@@ -51,7 +51,9 @@ cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để t�
 `host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không,
 `git`, skill phải tìm ra template pull request, và `init`, skill đọc định danh của cả đội trong
 `CODEOWNERS`, `design-sources.md` nói `spec`, `intake` và `qa` đọc design Figma ra sao, `feature-types.md` là
-cách phân loại tính năng duy nhất, `catchup` lấy câu hỏi từ đó còn `estimate` lấy mức rủi ro QA, `project-profile.md` mô tả
+cách phân loại tính năng duy nhất, `catchup` lấy câu hỏi từ đó còn `estimate` lấy mức rủi ro QA, `plain-writing.md` nói phần văn xuôi của một báo cáo được viết
+thế nào cho người chưa mở file nào nó trích dẫn, `independent-challenge.md` giữa `design-doc` và
+`plan`, về cách đưa một bản nháp cho các agent đọc nó từ đầu, `project-profile.md` mô tả
 `.atk/profile.md`, một file nằm trong dự án đích chứ không
 nằm trong kit, và `project-overrides.md` mô tả
 `.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ

@@ -304,7 +304,14 @@ must answer.
 somebody else designed and the steps are not obvious. `--review` points the same reading at a plan
 that is already written, including one in a pull request, and writes a report to
 `docs/derived/reviews/plan-<slug>-<date>.md` instead of a plan; `--comment` posts its results on the
-pull request that carries the plan, shown first and posted on a yes.
+pull request that carries the plan, shown first and posted on a yes. `--challenge` puts one agent per
+lens over the written plan: stopping halfway, assumptions, scope, and security when the plan crosses
+a trust boundary. Each kept objection is answered `Changed` or `Open` in the plan, and a scope
+objection never removes a step; it becomes an open question for whoever owns the request. Without
+the flag, the skill still says at hand-off whether a challenge is worth running, and why.
+`<plan-path> --answer` records the answers to the plan's open questions, each with who answered and
+when, edits only the phases an answer changes, reads the plan back again, and says once more whether
+a challenge is worth running, since an answer can bring a migration with it.
 
 **Do not use when.** The work has to be shared across several people, which is `atk:breakdown`; or
 it is one change in one file, where the plan costs more than the work. Reviewing the code that came
@@ -313,8 +320,11 @@ out of a plan is `atk:review`.
 **The habit that matters.** A phase that cannot end in something reviewable is not a phase, it is a
 pause. Steps are ordered so the tree still works at every boundary, which is what makes it safe to
 stop halfway. And the plan is read back before it is handed over: every path it cites is opened,
-every library it assumes is confirmed from the repository, and what neither can settle becomes an
-open question with a name rather than quietly disappearing.
+every library it assumes is confirmed from the repository, a claim about how existing code behaves
+is traced from entry point to target, every consumer of what the plan changes is counted and
+listed, and what none of that can settle becomes an open question with a name rather than quietly
+disappearing. A correction made on the way is then searched for in every plan file, not only the
+one it was made in.
 
 ---
 

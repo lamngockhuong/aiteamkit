@@ -43,7 +43,7 @@ the agent executes the cases it can observe honestly and writes a run record the
 while `qa` still never executes a case and `verify` stays the developer's check on the local stack.
 
 The `plugins/atk/shared/` layer holds what would otherwise be repeated twenty-four times: the role vocabulary,
-the artifact path convention, and the tracker adapters, cited by every skill. Twelve more files are
+the artifact path convention, and the tracker adapters, cited by every skill. Fourteen more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
 `diagram-conventions.md` between the six whose artifacts carry a diagram, `host-capabilities.md`
@@ -52,7 +52,10 @@ five skills that have to leave its documents true, `host-file-locations.md` betw
 which asks whether a collaboration file is missing, `git`, which has to find the pull request
 template, and `init`, which reads the team's handles out of `CODEOWNERS`, `design-sources.md`,
 which says how `spec`, `intake` and `qa` read a Figma design, `feature-types.md`, the one
-classification of features that `catchup` asks from and `estimate` sizes QA from, `project-profile.md`,
+classification of features that `catchup` asks from and `estimate` sizes QA from, `plain-writing.md`,
+how the prose of a run's report is written for a reader who opened none of its files,
+`independent-challenge.md` between `design-doc` and `plan`, for a draft put before agents that read
+it cold, `project-profile.md`,
 which describes `.atk/profile.md`, a file that lives in the target project rather than in the kit,
 and `project-overrides.md`, which describes `.atk/overrides/<skill>.md` and reaches every skill
 through rule 7 of `team-roles.md` rather than by being cited directly.

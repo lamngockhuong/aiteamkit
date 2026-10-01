@@ -12,12 +12,14 @@ that do check them are the ones this pass answers for.
 
 So this pass re-opens things. It does not re-read the plan looking for whether it reads well.
 
-## The six claims a plan makes
+## The eight claims a plan makes
 
 | The claim | Reopen | The failure it hides |
 |-----------|--------|----------------------|
 | About the code that exists | Every `path:line` the plan cites | A citation that was true of an older tree, so the implementer starts by looking for something that is not there |
+| About how the code that exists behaves | Every "A calls B", "X runs before Y", or "this is the only path" the plan builds on, traced from entry point to target | A citation right about the line and wrong about what happens, so the step lands where the request never passes |
 | About the code that does not exist yet | Every library, module registration, table, column, environment variable, or helper the plan assumes it can use | A step that cannot start, discovered on the morning it was scheduled |
+| About who uses what it changes | Every caller, test, import, and re-export of a signature, endpoint, or configuration key the plan changes | A consumer found in review, or in production, that nobody planned to touch |
 | About its phases | Every name a phase defines and a later phase consumes | Phase 3 written against an interface phase 1 shaped differently |
 | About its own index | The four fields the index and the phase file both carry: title, dependencies, status, `Delivers` | An index that disagrees with the phase it links to, where the reader believes whichever they opened |
 | About the request | Every acceptance criterion, against the steps | A criterion nobody planned for, found in review |
@@ -43,6 +45,24 @@ whether the library it just named is installed. Grep the package manifest for th
 module registration for the provider, the schema for the column, the configuration schema for the
 variable. A plan that intends to add one of these is not making this claim at all; what is checked
 here is only what the plan expects to find already there.
+
+**The behaviour.** A citation can be right about the line and wrong about what happens there. Where
+the plan builds on how existing code behaves, trace the path from the entry point the request comes
+in by to the target the plan changes, and cite each link as `path:line`. On the way, list what can
+turn the request aside before it arrives: an early return, a middleware or guard, an event listener,
+a decorator, and the order in which asynchronous steps actually run. A trace that ends somewhere
+other than the plan's target refutes the claim, and the step built on it is built on nothing.
+
+**The consumers.** Where the plan changes something that already exists, a function signature, an
+endpoint, a response field, a configuration key, `grep` for every caller, test, import, and
+re-export of it. Write the count into the `Files` cell of the step that makes the change, with the
+command that produced it, zero included, and list them, the first ten when there are more. Where the
+profile's `Shape` names member repositories, run it over the members checked out beside this one too,
+per `shared/project-profile.md`, and name any that is not. Zero hits for an endpoint, a response field,
+or an export that already exists is written as inconclusive rather than as no consumers: a caller
+outside the checked-out tree is exactly what a `grep` cannot see. "Update all callers" is not a step: it is the same count left for
+the implementer to discover. A consumer outside this repository makes the change a public contract,
+which is the Tech Lead boundary of `## Roles` in `SKILL.md`, not something this pass decides.
 
 **The names across phases.** Read each phase for what it defines and what it uses. A type, a
 function signature, a file path, an endpoint, a configuration key: where one phase produces it and
@@ -89,8 +109,8 @@ settled here, and removed.
 
 | What it is | What happens |
 |------------|--------------|
-| Wrong, and the repository says what is right | Fix the plan in place. A stale line number is not worth a person's attention |
-| Wrong, and fixing it changes the sequence | Fix it, then re-run this pass over the phases the fix touched |
+| Wrong, and the repository says what is right | Fix the plan in place, then the sweep below. A stale line number is not worth a person's attention |
+| Wrong, and fixing it changes the sequence | Fix it, run the sweep below over every plan file, then re-run this pass over the phases the fix touched |
 | Unconfirmable, and the plan depends on it | An open question in the phase that depends on it, naming who must answer |
 | Unconfirmable, and nothing depends on it | Out of the plan. An assumption nobody needs is noise in a document a person has to read |
 | A claim that could not run at all | Say so in the artifact, and name who would make it runnable |
@@ -128,7 +148,8 @@ longer lists. Then hand back the fork and stop.
 ## How many times this runs
 
 At most twice. The first pass fixes what it finds; a fix that changes the sequence earns one more
-pass over the phases it touched, and that is the end of it. A third round means the plan is being
+pass over the phases it touched, opened by the sweep in the next section, and that is the end of
+it. A third round means the plan is being
 rewritten rather than corrected, and what to do about that belongs to a person: write it as an open
 question naming the `approver:` from the index, or the person a `TBD` there points at, and hand over
 the plan as it stands.
@@ -143,6 +164,23 @@ and nobody can check. Two is enough here because a plan is shorter than a defect
 reading covers only the phases the first one changed.
 
 A rewrite the person asked for is a new plan, not a third round: it starts the count again.
+
+## The sweep after a correction
+
+A correction is made where it was found, and the old form survives everywhere else. Phase 1 renames
+a function, and phase 4, which nobody touched, still calls it by the old name; the second pass would
+not see it, because phase 4 is not among the phases the fix touched.
+
+So after each pass's corrections, and before the second pass when one is earned, list what was replaced: a
+name, a path, a step number, a count, an assumption, a dependency. `grep` every file of the plan,
+the index and every phase file, for each old form. A hit in a phase the fix did not touch is fixed
+in the same pass, and the phase joins the ones the second pass reads. A correction that earns no
+second pass still gets the sweep. A hit that a string replacement cannot fix, a call to a signature
+that changed shape, is the "changes the sequence" row of the table above.
+
+The sweep is not a pass of its own, and never a third: it searches for strings the first pass already
+settled, and settles nothing new. Any other pass that ends in it cites this section rather than
+restating it.
 
 ## What this pass is not
 

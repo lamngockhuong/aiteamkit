@@ -29,5 +29,8 @@
   { "query": "review this pull request against the design", "should_trigger": false },
   { "query": "implement the design in docs/records/design/260901-1100-queue.md", "should_trigger": false },
   { "query": "設計書どおりに実装して", "should_trigger": false },
-  { "query": "research the latest React release notes for me", "should_trigger": false }
+  { "query": "research the latest React release notes for me", "should_trigger": false },
+  { "query": "challenge the implementation plan in plans/261001-1308-queue before I start", "should_trigger": false },
+  { "query": "phản biện kế hoạch thực thi này giúp tôi trước khi code", "should_trigger": false },
+  { "query": "この実装計画に反論して", "should_trigger": false }
 ]

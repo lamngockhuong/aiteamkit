@@ -6,15 +6,18 @@ description: >
   tree working, what each step touches and how it is checked, what is deliberately out of scope, and
   what is still unclear with the name of whoever must answer.
   Also reviews a plan somebody has already written, against the repository it assumes and the
-  request behind it.
+  request behind it, challenges a written plan with one agent per way it can fail, and records the
+  answers to its open questions with who gave them.
   Use before starting work, when picking up something somebody else designed, when work is large
   enough that it needs stages but does not need splitting across people, or when a written plan
   needs checking before anyone builds from it.
   Triggers on: "plan this ticket", "implementation plan", "plan this in phases", "lập kế hoạch",
   "kế hoạch thực thi", "vạch bước", "chia giai đoạn", "làm ticket này thế nào", "実装計画",
   "作業計画", "段階に分けて", "review this plan", "check this plan", "soát lại plan",
-  "review kế hoạch", "計画をレビュー", "/atk:plan".
-argument-hint: "[ticket|design-path|description|plan-path] [--inline] [--review] [--comment] [--layer <name>] [--out <path>]"
+  "review kế hoạch", "計画をレビュー", "challenge this plan", "phản biện kế hoạch",
+  "計画に反論して", "record the answers in the plan", "ghi câu trả lời vào plan",
+  "計画に回答を反映して", "/atk:plan".
+argument-hint: "[ticket|design-path|description|plan-path] [--inline] [--challenge] [--answer] [--review] [--comment] [--layer <name>] [--out <path>]"
 ---
 
 # Implementation Plan (`atk:plan`)
@@ -39,8 +42,9 @@ Handles: reading the ticket or description and any design it points at, scanning
 what exists today, cutting the work into phases that each end in something mergeable, sequencing
 each phase into steps that leave the tree working, naming what each step touches and how it is
 checked, listing what is out of scope and what is still open, reading the written plan back against
-the repository it claims things about, and under `--review`, doing that reading for a plan somebody
-else wrote.
+the repository it claims things about; under `--review`, doing that reading for a plan somebody
+else wrote, under `--challenge`, putting agents over a written plan, and under `--answer`, recording
+the answers to its open questions.
 
 Does NOT handle: choosing between approaches or weighing trade-offs, which is `atk:design-doc` and
 ends in a decision somebody approves; splitting work across people, which is `atk:breakdown` and
@@ -75,8 +79,11 @@ step or on a phase, has started doing `atk:breakdown`'s work. See `shared/team-r
 /atk:plan "<description>"      # Plan from a description in the prompt
 /atk:plan --layer api          # Restrict the scan to one layer when the ticket is confined to it
 /atk:plan --inline             # Called by another skill: summarise and hand back, do not stop
+/atk:plan --challenge          # After the read-back, put one agent per lens over the written plan
+/atk:plan <plan-path> --challenge   # Challenge a plan already written: step 6, the challenge, stop
 /atk:plan --out <path>         # Override the default output path
 
+/atk:plan <plan-path> --answer # Record answers to its open questions, then read it back again
 /atk:plan <plan-path> --review # Review a written plan: a directory, one phase file, or a PR
 /atk:plan <pr> --review --comment   # Post the findings on the pull request carrying the plan
 ```
@@ -91,9 +98,9 @@ most recent. Where that directory is absent or empty, say so and stop; there is 
 one writes.
 
 `--comment` means something only under `--review`. On a planning run it changes nothing, and it is
-never consent: the index is still shown before it is offered, per `## Ticket`. `--inline` and
-`--layer` are ignored under `--review`, said rather than silently, because a layer filter would skip
-citations outside that layer and then report them as gone.
+never consent. How `--inline` and `--layer` behave beside `--review` opens
+`references/plan-review-mode.md`. `--review` with `--answer` or `--challenge` is refused in one line
+before anything is read: a review edits nothing, and both of those edit the plan.
 
 `.atk/profile.md` is useful but not required. Without it the steps can still be sequenced, but the
 per-step checks are guesses about commands this project may not have. Follow the Required-soft rule
@@ -109,6 +116,9 @@ in `shared/project-profile.md`: continue, and open the artifact with the sentenc
 Before step 1, read `.atk/overrides/plan.md` when it exists, per rule 7 of `shared/team-roles.md`.
 
 Under `--review` the seven steps do not run and `references/plan-review-mode.md` takes their place.
+Under `--answer`, `references/answer-mode.md` does, and ends in step 6 and the step 7 recommendation.
+Under `--challenge`, `references/plan-challenge.md` runs after step 6; given a plan path, steps 1 to
+5 do not run. With both flags, the answers come first, then the challenge, with no recommendation.
 The override is read either way: a team that wrote down what it wants from a plan is describing the
 same document whether this skill is writing one or reading one. Under `--review` its `## Before`
 applies to the pass and its `## After` to the report, since there are no numbered steps to anchor to.
@@ -175,19 +185,11 @@ plan directory would look like one.
 included, and again after any rewrite of the files. It runs at most twice per plan, and a rewrite the
 person asked for is a new plan that starts the count again, per the cap in that file.
 
-A plan states six things it cannot check from inside itself: that the code it cites is there, that
-the code it assumes exists does exist, that a name one phase defines is the name a later phase uses,
-that the index and the phase files still agree, that every acceptance criterion reaches a step, and
-that every command in a check is one this project has. Reopen each against the repository. Fix what
-the repository settles, and turn what it cannot settle, and the plan depends on, into an open
-question naming the person who must answer.
-
-A claim with nothing to run against, because the request carried no acceptance criteria or the
-project has no profile, is said in the artifact: left unsaid it reads as a claim that passed.
-
-The errors this skill actually makes come from writing four phase files at a stretch and reading none
-of them back: invisible in the sentence carrying them, obvious in the file it points at. Revising
-after a no at step 7 comes back through here before it goes out again.
+A plan makes claims it cannot check from inside itself, and the table of claims in that file lists
+them. Reopen each against the repository. Fix what the repository settles, and turn what it cannot
+settle, and the plan depends on, into an open question naming the person who must answer. A claim
+with nothing to run against, because the request carried no acceptance criteria or the project has
+no profile, is said in the artifact: left unsaid it reads as a claim that passed.
 
 ### 7. Hand off
 
@@ -200,10 +202,12 @@ ending, and only the caller knows which applies:
 | `--inline`, from a skill | Summarise the phases, ask one confirmation, hand back |
 
 Never assume the inline ending. Without the flag, a person asked for a plan and the plan is the
-deliverable.
+deliverable. Before either ending, say whether a challenge is worth running, per the table in
+`references/plan-challenge.md`, which also says how each caller gets it and when none is made.
 
 What `--inline` hands back is the directory path, the ordered phase list with each phase's file, and
-every open question step 6 raised, each with the person who must answer it and the phase it blocks.
+every open question step 6 or a challenge raised, and every objection a challenge left `Open`, each
+with the person who must answer it and the phase it blocks.
 A question the whole plan rests on blocks every phase, and is handed back saying so: it stops the
 work rather than holding one part of it.
 The caller can work through the phases without re-reading the index, and must not start a blocked
@@ -216,13 +220,10 @@ no, so somebody is deciding each time round, which is what the cap inside step 6
 for. Only the caller ends the run, and only when the person says to stop rather than to change
 something.
 
-Under `--inline` the Ticket section below does not run. The caller reaches
-`shared/finalize-steps.md` with its own consent prompts later, and asking twice for a comment on the
-same ticket, the first time before any code exists, is how a consent prompt stops being read.
-
 After the handback, the plan is the caller's to keep current. Whoever works through the phases sets
 each phase file's `status` as it goes; this skill writes them all as `pending` and does not come
-back. A phase left at `pending` after its work is done is a plan nobody will trust twice.
+back, except under `--answer`, which records an answer per `references/answer-mode.md`. A phase left
+at `pending` after its work is done is a plan nobody will trust twice.
 
 ## Output
 
@@ -234,9 +235,6 @@ Phases that are not a straight line get a Mermaid diagram in the index, per
 
 This is one of the three skills that write outside the docs root; that file says why, and what a
 project does when it keeps plans somewhere else.
-
-The directory is the shape even for a single phase, so a plan that grows a second phase halfway
-through does not have to be moved.
 
 Planning the same work again makes a new directory, because the name carries the time. Do not leave
 the old one looking current: set its index `status` to `SUPERSEDED` and link the replacement, per
@@ -257,7 +255,10 @@ running the review again. `--out <path>` moves that file as it moves a plan dire
 
 Under `--review` this section does not run; the `## Ticket` section of
 `references/plan-review-mode.md` applies instead, and what it posts goes to the pull request carrying
-the plan rather than to a ticket.
+the plan rather than to a ticket. Under `--inline`, `--answer` and `<plan-path> --challenge` it does
+not run either: the caller of `--inline` reaches `shared/finalize-steps.md` with its own consent
+prompts later, and the other two edit a plan whose index was offered when it was written. Asking
+again for the same ticket is how a consent prompt stops being read.
 
 Follow `shared/ticket-adapters.md`. The index is offered as a comment on the ticket, shown first and
 posted on a yes. Do not create sub-tasks from the phases or the steps: they are one person's
@@ -281,19 +282,16 @@ sequence, and turning work into tickets for other people is `atk:breakdown`'s ca
 - [ ] The written files were read back per step 6, and a fix that changed the sequence earned the one
       further pass the cap allows. Where the cap was reached, the plan says which fixes went out
       unverified.
-- [ ] Every cited `path:line` was opened, and a subject that moved was searched for before it was
-      called gone.
-- [ ] Every library, table, column, and variable the plan expects to find already there was
-      confirmed from the repository rather than from memory.
-- [ ] Every name one phase defines and another consumes was compared across both.
-- [ ] The index and the phase files agree on title, dependencies, status, and `Delivers`.
-- [ ] Every command in a check appears in the profile, or the artifact says the commands are inferred.
-- [ ] Every acceptance criterion reaches a step, or sits in the out-of-scope section with a reason.
-- [ ] A claim that had nothing to run against says so in the artifact and names who would change that.
+- [ ] Every claim in the table of `references/plan-self-review.md` was reopened by the method that
+      file gives, and one that had nothing to run against says so and names who would change that.
 - [ ] Nothing the repository could not settle was dropped silently: it is an open question with a
       name, or the plan no longer depends on it.
 - [ ] Under `--inline`, the open questions went back with the phase list, each naming the phase it
       blocks.
+- [ ] A challenge was recommended or declined with its reason per `references/plan-challenge.md`,
+      or, under `--challenge`, none made; one that ran wrote section 7, every kept objection
+      `Changed` or `Open`.
+- [ ] Under `--answer`, the definition of done in `references/answer-mode.md` holds instead.
 
 Under `--review` these do not apply. `references/plan-review-mode.md` carries its own list, because
 the pass fixes nothing and ends in findings rather than in a plan.

@@ -71,7 +71,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, and the components of each screen read from its Figma design, updated in place and checked against the code, and the design, for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, grouped by each language and technology it detects, each classified as enforced by tooling, checked in review, or merely aspirational. A project with nothing written gets one standards document per technology under `docs/standards/`. With `--suggest` it also proposes rules from published standards for that stack, each one waiting for the Tech Lead. Offers to draft the collaboration files the project has none of, and writes only the ones you pick. |
-| `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. Reads the written plan back against the repository, and reviews one somebody else wrote. |
+| `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. Reads the written plan back against the repository, reviews one somebody else wrote, challenges a written plan with `--challenge`, and records answers to its open questions with `--answer`. |
 | `atk:implement` | The code, written to the project's own conventions and reference modules, verified layer by layer with the project's own commands, and put through review before handover. |
 | `atk:fix` | The failure captured verbatim, the cause proven before a line changes, a stop after three ruled-out hypotheses rather than a guess, the smallest change that removes it, and a report of what was checked and what was not. |
 | `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |
@@ -101,7 +101,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:spec [subject]                       # --kind --from --design --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
 /atk:convention                           # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
-/atk:plan <ticket|design|text|plan-path>  # --inline --review --comment --layer --out
+/atk:plan <ticket|design|text|plan-path>  # --inline --challenge --answer --review --comment --layer --out
 /atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
 /atk:fix <issue|report|description>       # --layer --investigate-only --out
 /atk:verify <module|paths|ticket|pr>      # --ui --report-only --out
@@ -151,7 +151,8 @@ Where the harness offers capabilities of its own, the skills use them. `atk:impl
 and `atk:verify` tidy a change through the host's code clean-up capability, `/simplify` in Claude
 Code, after the verification passes and before anyone reviews it; `atk:review` puts several
 independent passes over a large diff when the host can run agents in parallel, and
-`atk:design-doc --challenge` puts one agent per signing role over a draft design. None of it is
+`atk:design-doc --challenge` puts one agent per signing role over a draft design, and
+`atk:plan --challenge` one agent per lens over a written plan. None of it is
 required: on a harness without them the step runs by hand, against the same list in
 [plugins/atk/shared/tidy-pass.md](plugins/atk/shared/tidy-pass.md), and the artifact says which way it ran. The one
 exception is `atk:run-cases`, which drives the application through the harness's browser automation:

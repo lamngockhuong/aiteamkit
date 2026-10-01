@@ -391,6 +391,13 @@ under Naming applies, so updating in place cannot happen by accident there. Plan
 old index `status` to `SUPERSEDED`, link the new directory from it, and link back. Otherwise the
 project accumulates plans that all look current.
 
+One narrow exception to the no-overwrite rule, for plans alone. `atk:plan --answer` and
+`atk:plan <plan-path> --challenge` edit an `APPROVED` plan in place while none of its phases is
+`done` or `in progress`, and move its index back to `IN REVIEW` with the same approver, who reads it
+again. Nothing has been built from it yet, and a new directory for every recorded answer would leave
+a chain of plans for one piece of work. Once a phase has started, both supersede it as above.
+`skills/plan/references/answer-mode.md` holds the procedure.
+
 Every record works this way, not only plans. A design that replaces an earlier design, a
 requirement document rewritten after the scope was renegotiated: the old file keeps its content,
 takes `SUPERSEDED`, and carries the link to what replaced it. Two files that both read as current

@@ -3,6 +3,10 @@
 Loaded by `atk:plan` under `--review`. It replaces the workflow in `SKILL.md` rather than extending
 it: nothing is planned, and no plan file is edited.
 
+`--comment` posts the findings on a yes, per `## Ticket` below; what it means on a planning run is
+in `SKILL.md`. `--inline` and `--layer` are ignored under `--review`, said rather than silently, because a layer
+filter would skip citations outside that layer and then report them as gone.
+
 `## Roles` in `SKILL.md` names the Tech Lead as the person who reads a plan that touches a schema, a
 public contract, or more than one service. This mode does the factual half of that reading: it
 settles what the plan claims about the repository, which is the half a person should not have to do
@@ -19,7 +23,7 @@ sound, whether the risk was understood: a clean report here says none of that.
 | A plan in some other shape | Whatever the file is, read as a plan: see below |
 
 **A plan this kit did not write** is still a plan. A hand-written `IMPLEMENTATION_PLAN.md`, or another
-tool's directory, is read for the same six claims, which do not depend on the template. Say which
+tool's directory, is read for the same eight claims, which do not depend on the template. Say which
 checks had nothing to run against. Refusing a real plan over its filename would miss the case this
 mode exists for.
 
@@ -63,7 +67,7 @@ have aged is an ordinary plan. All of those go to the citation check, where `gre
 
 ## The pass
 
-Run the six claims in `references/plan-self-review.md`, by the method that file gives: its
+Run the eight claims in `references/plan-self-review.md`, by the method that file gives: its
 `## How to reopen each one` is the procedure here too, and only its dispositions read differently.
 
 Read the phases against `references/step-ordering.md` as well, which step 6 does not: the author had
@@ -94,8 +98,8 @@ vocabularies.
 
 | Severity | In a plan |
 |----------|-----------|
-| `BLOCKING` | Following the plan produces the wrong thing, or stops: an acceptance criterion no step covers, a dependency pointing forward, a name two phases spell differently or define twice, an assumption the repository refutes, a phase file the index promises and does not have, two approaches still open where the plan sequences one |
-| `SHOULD FIX` | The plan works and costs more than it should: a step with no check of its own, a phase that is a pause, an index disagreeing with its phase file, an assumption the repository can neither confirm nor refute that a phase depends on, an assumption nothing confirms and nothing asks about, a citation into a generated or ignored file that resolves only on the author's machine |
+| `BLOCKING` | Following the plan produces the wrong thing, or stops: an acceptance criterion no step covers, a dependency pointing forward, a name two phases spell differently or define twice, an assumption the repository refutes, a behaviour the trace from entry point to target refutes, a consumer the plan does not list of something whose contract it changes, a phase file the index promises and does not have, two approaches still open where the plan sequences one |
+| `SHOULD FIX` | The plan works and costs more than it should: a step with no check of its own, a phase that is a pause, an index disagreeing with its phase file, an assumption the repository can neither confirm nor refute that a phase depends on, an assumption nothing confirms and nothing asks about, a citation into a generated or ignored file that resolves only on the author's machine, a consumer the plan does not list of something it only renames, where the compiler would catch the miss |
 | `NIT` | Preference and decay: a citation whose subject only moved, an open question the repository answers, a slug, a wording. Never blocks |
 
 Rank `BLOCKING` first, and separate it from the rest, per the same rule that governs `atk:review`:

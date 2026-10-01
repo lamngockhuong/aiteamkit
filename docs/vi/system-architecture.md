@@ -104,7 +104,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười sáu file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
+Mười bảy file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
 - `plugins/atk/shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -114,7 +114,7 @@ Mười sáu file giữ những gì các skill sẽ phải lặp lại. Ba file 
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
-Mười một file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Mười hai file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `plugins/atk/shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -145,7 +145,7 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
 - `plugins/atk/shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
   dùng, và cách xử lý trên harness không có chúng. Được `atk:fix`, `atk:implement` và `atk:verify`
   trích dẫn cho bước dọn mã ngay sau lượt kiểm chứng đạt, `atk:review` trích dẫn cho những lượt đọc
-  độc lập chạy song song, `atk:design-doc` trích dẫn cho lượt phản biện theo vai trò, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
+  độc lập chạy song song, `atk:design-doc` và `atk:plan` trích dẫn cho lượt phản biện của mình, và `atk:init` trích dẫn để biết một lượt hỏi được tính ra sao khi harness
   gửi được nhiều câu hỏi trong cùng một lần. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo
   một chiều: khả năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về
   một kit khác thì không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai
@@ -197,6 +197,13 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
   cùng mục `## Output` của `atk:incident`, vì đó là những report ghi lại một lần chạy và cần một người hành động theo. Một
   report đúng từng dòng vẫn không đọc được khi mỗi nhận định chỉ là một trích dẫn, và một quy tắc
   chép vào sáu template sẽ trôi thành sáu bản khác nhau.
+- `plugins/atk/shared/independent-challenge.md`: cách đưa một bản nháp cho các agent đọc nó từ đầu
+  mà không biết gì trước, mỗi agent được đưa gì và không bao giờ được đưa gì, một phản biện phải nêu
+  những gì, và agent gọi trả lời từng phản biện bằng `Changed` hay `Open` ra sao. `atk:design-doc
+  --challenge` trích dẫn file này với mỗi vai trò ký duyệt thiết kế là một góc nhìn, `atk:plan
+  --challenge` cũng vậy với mỗi kiểu một kế hoạch có thể hỏng là một góc nhìn. Mỗi skill giữ các góc
+  nhìn của mình trong một reference riêng; phần dùng chung là phần sẽ trôi dần, cho tới khi một lượt
+  phản biện để agent đọc cả lập luận của tác giả.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

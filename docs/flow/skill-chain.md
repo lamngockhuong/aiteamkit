@@ -87,7 +87,7 @@ lands, per `plugins/atk/shared/spec-docs.md`.
 | `spec` | The code, and the documents already in `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`; under `Contract: first`, the design too; for a screen, its Figma design or the images exported from it | Reference documents kept current, or a drift report | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | A design or an epic | Owned tasks, lanes, dependency graph | `plan`, `implement` |
 | `convention` | The code and its history, and the convention gaps in the review reports already written | Conventions classified by how they are enforced | `implement`, `review` |
-| `plan` | A ticket, design, or description; under `--review`, a plan already written | Phases and steps, or findings about a plan | `implement`; under `--review`, the plan's author |
+| `plan` | A ticket, design, or description; under `--review`, `--challenge` or `--answer`, a plan already written | Phases and steps, findings about a plan, the objections of a challenge, or recorded answers | `implement`; under `--review`, the plan's author |
 | `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body | `verify`, `review`, `qa` |
 | `fix` | A defect report | A proven cause and the smallest change | `verify`, `review` |
 | `verify` | The running system | What was proven, and what was not | The reviewer of the change, on the pull request |
