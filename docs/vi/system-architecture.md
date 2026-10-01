@@ -68,6 +68,19 @@ flowchart TD
 Không có lớp `commands/`. Mỗi skill tự là một slash command, lấy tên từ thư mục của nó, và được
 harness gắn namespace `atk:` lúc nạp dựa trên `plugin.json`.
 
+## Plugin thứ hai: atkx
+
+`plugins/atkx/` nằm cạnh `plugins/atk/` trong cùng marketplace, có đủ ba thư mục manifest như vậy và
+tạm thời một thư mục `skills/` còn trống. Nó dành cho các skill tiện ích không phụ thuộc artifact nào
+và không gắn với vòng đời giao hàng. Phụ thuộc chỉ đi một chiều: skill của `atkx` được gọi skill của
+`atk`, còn `atk` không bao giờ nhắc tới skill nào của `atkx`, nên `atk` cài riêng vẫn đầy đủ. Trên
+Claude Code, `"dependencies": ["atk"]` trong manifest của `atkx` cài `atk` theo cùng; Cursor và Codex
+không có trường này, nên ở đó người dùng cài cả hai, và skill của `atkx` kiểm tra skill `atk` mà nó
+gọi có mặt hay chưa rồi mới gọi. Không plugin nào đọc file của plugin kia, và không có symlink nào
+nối hai plugin. Mỗi plugin là một package release riêng, gắn tag `atk-v*` và `atkx-v*`. `CLAUDE.md`,
+mục "`atkx` sits beside `atk`, and the dependency runs one way", giữ các luật và tiêu chí nhận skill
+đầu tiên.
+
 ## Mô hình nạp
 
 Lúc khởi động, harness chỉ nạp phần frontmatter của mọi `SKILL.md`. Chính phần frontmatter đó, chủ

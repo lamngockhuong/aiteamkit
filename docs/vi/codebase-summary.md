@@ -26,6 +26,10 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `plugins/atk/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay. `feat:` và `fix:` hiện lên; các loại khác im lặng |
 | `plugins/atk/.cursor-plugin/plugin.json` | Metadata cho Cursor, có `displayName` và `"skills": "./skills/"` |
 | `plugins/atk/.codex-plugin/plugin.json` | Metadata cho Codex CLI, có `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, cộng khối `interface{}`: mô tả, `defaultPrompt`, `brandColor`, đường dẫn icon |
+| `plugins/atkx/.claude-plugin/plugin.json` | Metadata của `atkx` cho Claude Code, có `"dependencies": ["atk"]` nên cài nó là cài cả `atk` |
+| `plugins/atkx/.cursor-plugin/plugin.json` | Metadata của `atkx` cho Cursor, có `displayName` và `"skills": "./skills/"` |
+| `plugins/atkx/.codex-plugin/plugin.json` | Metadata của `atkx` cho Codex CLI, có `"skills": "./skills/"` và khối `interface{}` ghi rằng chưa có skill nào |
+| `plugins/atkx/skills/.gitkeep` | Giữ thư mục `skills/` còn trống của `atkx` trong cây cho tới khi có skill đầu tiên |
 
 ## Lớp dùng chung
 

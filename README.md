@@ -199,6 +199,18 @@ yet tried on this layout:
 
 If either works or fails for you, an issue saying which one helps the next person.
 
+### atkx
+
+`atkx` is a second plugin in the same marketplace, for utility skills that need no project profile
+and no delivery lifecycle. It has no skill yet, so installing it today adds nothing but `atk`.
+
+```bash
+/plugin install atkx@atk
+```
+
+On Claude Code that installs `atk` with it. On Codex, run `codex plugin add atk@atk` and
+`codex plugin add atkx@atk`, since Codex installs no dependency. `atk` never needs `atkx`.
+
 ## Local development install
 
 ```bash

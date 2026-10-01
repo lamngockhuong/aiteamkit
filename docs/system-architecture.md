@@ -68,6 +68,19 @@ flowchart TD
 There is no `commands/` layer. A skill is its own slash command, named from its folder, namespaced
 `atk:` by the harness at load time from `plugin.json`.
 
+## A second plugin: atkx
+
+`plugins/atkx/` sits beside `plugins/atk/` in the same marketplace, with the same three manifest
+folders and, for now, an empty `skills/`. It is for utility skills that depend on no artifact and on
+no delivery lifecycle. The dependency runs one way: an `atkx` skill may call an `atk` skill, and
+`atk` never names an `atkx` one, so `atk` installed alone stays whole. On Claude Code,
+`"dependencies": ["atk"]` in the `atkx` manifest installs `atk` with it; Cursor and Codex have no
+such field, so there the user installs both, and an `atkx` skill checks for the `atk` skill it calls
+before calling it. Neither plugin reads a file of the other's, and no symlink joins them. Each
+plugin is its own release package, tagged `atk-v*` and `atkx-v*`. `CLAUDE.md`, section "`atkx` sits
+beside `atk`, and the dependency runs one way", holds the rules and the acceptance bar for a first
+skill.
+
 ## Load model
 
 A harness loads only the frontmatter of every `SKILL.md` at startup. That frontmatter, mainly the

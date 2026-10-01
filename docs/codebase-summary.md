@@ -26,6 +26,10 @@ removed, or renamed; update it in the same commit.
 | `plugins/atk/CHANGELOG.md` | Written by release-please from the commit types, never by hand. `feat:` and `fix:` appear; the other types are silent |
 | `plugins/atk/.cursor-plugin/plugin.json` | Cursor plugin metadata with `displayName` and `"skills": "./skills/"` |
 | `plugins/atk/.codex-plugin/plugin.json` | Codex CLI metadata with `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, plus the `interface{}` listing block: descriptions, `defaultPrompt`, `brandColor`, icon paths |
+| `plugins/atkx/.claude-plugin/plugin.json` | Claude Code metadata for `atkx`, with `"dependencies": ["atk"]` so installing it installs `atk` |
+| `plugins/atkx/.cursor-plugin/plugin.json` | Cursor metadata for `atkx`, with `displayName` and `"skills": "./skills/"` |
+| `plugins/atkx/.codex-plugin/plugin.json` | Codex CLI metadata for `atkx`, with `"skills": "./skills/"` and an `interface{}` block saying it has no skill yet |
+| `plugins/atkx/skills/.gitkeep` | Keeps the empty `skills/` of `atkx` in the tree until its first skill arrives |
 
 ## Shared layer
 
