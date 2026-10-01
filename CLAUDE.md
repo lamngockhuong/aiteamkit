@@ -304,8 +304,9 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `shared/` layer or the profile is for
 10. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
-    all three `docs/vi/flow/` mirrors.
-    Each names all 24 skills: the phase table and the consumes/produces table respectively
+    all three `docs/vi/flow/` mirrors, and `skills/init/references/role-defaults.md`.
+    Each names all 24 skills: the phase table, the consumes/produces table, and the role table
+    respectively, the last read by `atk:init` and shipped inside the kit for that reason
 11. `skills/help/references/state-signals.md`, if something on disk says the skill is the next one
     to run. A skill that answers an event a person reports has no row there, because nothing on
     disk announces the event

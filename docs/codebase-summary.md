@@ -108,6 +108,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/help/references/state-signals.md` | Which artifacts gate the next skill while they wait for approval, the evidence on disk that names that skill, in the order to check it, and how the artifacts waiting on a person are collected |
 | `skills/init/references/detection.md` | How the project root and the repository shape are resolved before anything else, where to look for each profile field, and what to do when the repository gives several answers or none |
 | `skills/init/references/profile-template.md` | The shape of `.atk/profile.md` that `init` fills in, the Repositories table a multi-repository project carries, and the rule that every path is written from the project root |
+| `skills/init/references/role-defaults.md` | What each role authors, accepts, and reviews across the 24 skills; `init` proposes the Accepts column as each role's default approvals, and `shared/team-roles.md` cites it |
 | `skills/tailor/references/interview.md` | The five groups of question, the filter that sends an answer to `init` or `convention` instead, and a worked example per group |
 | `skills/tailor/references/audit.md` | The three `--audit` checks, why a conflict is a fact and a stale anchor is a question, and the rule that it changes nothing |
 | `skills/tailor/references/feedback.md` | The three-way fork a bad run splits into, what the `--feedback` record holds, the two things it may never hold, and how the mode changes for a skill that is not one of the kit's |

@@ -108,6 +108,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/help/references/state-signals.md` | Những artifact nào chặn skill tiếp theo khi còn chờ duyệt, những bằng chứng trên đĩa gọi tên skill đó, theo thứ tự cần kiểm, và cách gom các artifact đang chờ một người |
 | `skills/init/references/detection.md` | Cách xác định gốc dự án và hình dạng repository trước mọi thứ khác, tìm từng trường của profile ở đâu, và làm gì khi repo cho nhiều đáp án hoặc không cho đáp án nào |
 | `skills/init/references/profile-template.md` | Bố cục của `.atk/profile.md` mà `init` điền vào, bảng Repositories của một dự án nhiều repository, và luật mọi đường dẫn đều viết từ gốc dự án |
+| `skills/init/references/role-defaults.md` | Mỗi vai viết gì, chấp nhận gì và đọc lại ở đâu trong 24 skill; `init` lấy cột Accepts làm quyền duyệt mặc định đề xuất cho từng vai, và `shared/team-roles.md` dẫn tới nó |
 | `skills/tailor/references/interview.md` | Năm nhóm câu hỏi, bộ lọc đẩy câu trả lời sang `init` hoặc `convention`, và một ví dụ cho mỗi nhóm |
 | `skills/tailor/references/audit.md` | Ba phép kiểm của `--audit`, vì sao mâu thuẫn là khẳng định còn neo lỗi thời là nghi vấn, và luật nó không sửa gì |
 | `skills/tailor/references/feedback.md` | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, hai thứ nó không bao giờ được chứa, và chế độ này khác đi thế nào với skill không thuộc kit |
