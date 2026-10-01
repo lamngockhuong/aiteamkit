@@ -101,7 +101,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:spec [subject]                       # --kind --from --design --sync --check --lang --out
 /atk:breakdown <design|epic>              # --members --parallel --tdd --out
 /atk:convention                           # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
-/atk:plan <ticket|design|text|plan-path>  # --inline --review --comment --layer --out
+/atk:plan <ticket|design|text|plan-path>  # --inline --challenge --answer --review --comment --layer --out
 /atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
 /atk:fix <issue|report|description>       # --layer --investigate-only --out
 /atk:verify <module|paths|ticket|pr>      # --ui --report-only --out

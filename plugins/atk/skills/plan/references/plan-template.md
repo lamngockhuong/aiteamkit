@@ -114,6 +114,10 @@ how far they can get before it matters.
 
 Questions the repository can answer are not open questions. They are scanning that stopped early.
 
+An `Answered` subsection closes this section once `--answer` has recorded an answer, and is written
+only when it has a row. Its table and what each column holds are in `references/answer-mode.md`. It
+stays at the end of section 5 so that recording an answer renumbers nothing.
+
 ### 6. Verification for the whole work
 
 How the finished work is checked against section 1, beyond the per-phase checks: the commands from
@@ -121,6 +125,13 @@ the Commands section of `.atk/profile.md`, and what a person should look at by h
 
 Without a profile this section says which commands are inferred, per the Required-soft rule in
 `shared/project-profile.md`.
+
+### 7. Pre-review objections
+
+Present only after `--challenge` ran, and absent from every other plan. The shape, the opening line,
+and what goes below the table are in `references/plan-challenge.md`, under Where the result goes.
+A plan never challenged has no section 7 rather than an empty one, so a reader cannot mistake a
+challenge that found nothing for one that never ran.
 
 ## `phase-NN-<slug>.md`
 

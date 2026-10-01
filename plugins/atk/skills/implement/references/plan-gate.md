@@ -92,6 +92,10 @@ yes nor a no: change no file, name `atk:design-doc` and whoever owns the fork, a
 A no is an instruction to revise, not to abandon. Send the plan back for rework, and let that skill
 ask again. Only the person ends the run.
 
+"Challenge first" is the third answer that confirmation can take, offered when that skill
+recommends a challenge. It is neither a yes nor a no: that skill runs the challenge on its own plan,
+writes what it changed, and asks the same confirmation again. Write no code until the yes.
+
 Then work through the phases in order, setting each phase's `status` as it completes.
 
 ## Why medium carries on and large stops

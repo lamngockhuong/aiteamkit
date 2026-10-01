@@ -105,7 +105,7 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Sixteen files hold what skills would otherwise repeat. The first three are cited by all 24:
+Seventeen files hold what skills would otherwise repeat. The first three are cited by all 24:
 
 - `plugins/atk/shared/team-roles.md`: the role table and the eight rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -148,7 +148,7 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
 - `plugins/atk/shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
   does on a harness that has none. Cited by `atk:fix`, `atk:implement`, and `atk:verify` for the
   tidy step that follows a green verification, by `atk:review` for independent passes run in
-  parallel and by `atk:design-doc` for its role challenge, and by `atk:init` for what one turn of an interview counts as where the harness carries
+  parallel, by `atk:design-doc` and `atk:plan` for their challenges, and by `atk:init` for what one turn of an interview counts as where the harness carries
   several questions in a single prompt. It draws the line the kit had drawn only one way before: a
   capability the harness itself ships may be named and used, a command belonging to another kit may
   not, because the first is there for everyone who installed atk on that harness and the second is
@@ -200,6 +200,12 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
   `atk:incident`, the
   reports that record one run and ask a person to act on it. A report correct in every line is still
   unreadable when each claim is a citation, and a rule written into six templates would drift into six.
+- `plugins/atk/shared/independent-challenge.md`: how a draft is put before agents that read it cold, what
+  each is given and never given, what an objection must name, and how the calling agent answers each
+  one `Changed` or `Open`. Cited by `atk:design-doc --challenge`, whose lenses are the roles that
+  sign a design, and by `atk:plan --challenge`, whose lenses are the ways a plan fails. Each keeps its
+  lenses in a reference of its own; the shared half is the one that would drift into a challenge
+  whose agents had read the author's reasoning.
 
 The last two describe files that do not ship with the kit at all:
 

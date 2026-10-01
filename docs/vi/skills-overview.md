@@ -308,7 +308,15 @@ phải trả lời.
 người khác thiết kế mà các bước không hiển nhiên. Cờ `--review` hướng đúng cách đọc đó vào một bản
 kế hoạch đã viết sẵn, kể cả bản nằm trong pull request, và ghi báo cáo ra
 `docs/derived/reviews/plan-<slug>-<date>.md` thay vì một bản kế hoạch mới; cờ `--comment` đăng kết quả
-lên pull request mang bản kế hoạch đó, đưa danh sách ra trước rồi đăng khi được đồng ý.
+lên pull request mang bản kế hoạch đó, đưa danh sách ra trước rồi đăng khi được đồng ý. Cờ
+`--challenge` giao bản kế hoạch đã viết cho mỗi góc nhìn một agent: dừng giữa chừng, giả định, phạm
+vi, và bảo mật khi kế hoạch đi qua một ranh giới tin cậy. Mỗi phản biện được giữ lại đều có câu trả
+lời `Changed` hoặc `Open` ngay trong kế hoạch, và phản biện về phạm vi không bao giờ xóa một bước mà
+thành câu hỏi mở cho người sở hữu yêu cầu. Không có cờ này, lúc bàn giao skill vẫn nói có nên phản
+biện hay không, và vì sao. `<plan-path> --answer` ghi câu trả lời cho các câu hỏi mở của kế hoạch,
+mỗi câu kèm người trả lời và ngày trả lời, và chỉ sửa những phase mà câu trả lời làm thay đổi. Sau
+đó skill đọc lại kế hoạch rồi nói lại có nên phản biện hay không, vì một câu trả lời có thể kéo theo
+cả một migration.
 
 **Không dùng khi.** Việc phải chia cho nhiều người, đó là `atk:breakdown`; hoặc việc chỉ là một thay
 đổi trong một file, khi bản kế hoạch tốn hơn chính phần việc. Soát phần mã sinh ra từ một bản kế
@@ -317,8 +325,11 @@ hoạch là việc của `atk:review`.
 **Thói quen tạo ra khác biệt.** Một phase không kết thúc được bằng thứ đem duyệt được thì không phải
 phase, mà là một quãng nghỉ. Các bước được xếp sao cho cây mã vẫn chạy ở mọi ranh giới, và chính điều
 đó khiến việc dừng giữa chừng trở nên an toàn. Và bản kế hoạch được đọc lại trước khi bàn giao: mở
-từng đường dẫn nó trích, đối chiếu từng thư viện nó giả định là đã có với chính kho mã, còn thứ cả
-hai không xác nhận nổi thì thành câu hỏi mở kèm tên người, thay vì lặng lẽ biến mất.
+từng đường dẫn nó trích, đối chiếu từng thư viện nó giả định là đã có với chính kho mã. Mỗi nhận
+định về cách mã hiện có chạy được lần theo từ điểm vào đến đích, và mọi nơi đang dùng những gì kế
+hoạch thay đổi được đếm và liệt kê. Điều gì các bước đó không xác nhận nổi thì thành câu hỏi mở kèm
+tên người, thay vì lặng lẽ biến mất. Chỗ nào được sửa trong lúc đọc lại thì dạng cũ được tìm lại
+trong mọi file của kế hoạch, không chỉ trong file vừa sửa.
 
 ---
 
