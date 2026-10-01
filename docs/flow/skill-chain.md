@@ -46,10 +46,10 @@ flowchart TD
     A3 -.->|spec --from, Contract: first| A3b
     A3b -->|qa| A8
     A6 -->|qa| A8
-    A8 -->|verify| A9
-    A9 -->|security| A9b
+    A6 -->|verify| A9
+    A6 -->|security| A9b
     A9b -->|release| A10
-    A9 -->|release| A10
+    A8 -->|release| A10
     A10 -->|incident| A11
     A10 -->|retro| A12
 ```
@@ -85,11 +85,11 @@ lands, per `shared/spec-docs.md`.
 | `breakdown` | A design or an epic | Owned tasks, lanes, dependency graph | `plan`, `implement` |
 | `convention` | The code and its history, and the convention gaps in the review reports already written | Conventions classified by how they are enforced | `implement`, `review` |
 | `plan` | A ticket, design, or description; under `--review`, a plan already written | Phases and steps, or findings about a plan | `implement`; under `--review`, the plan's author |
-| `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body | `review`, `qa` |
+| `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body | `verify`, `review`, `qa` |
 | `fix` | A defect report | A proven cause and the smallest change | `verify`, `review` |
+| `verify` | The running system | What was proven, and what was not | The reviewer of the change, on the pull request |
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit, and the convention gaps behind them | `implement`, `fix`, `convention` |
-| `qa` | Acceptance criteria, the change, the reference documents for expected values, the screen specs for `GUI` text or the Figma design where a screen has none, and the design for migration, rollback and rollout | Test plan, cases, regression matrix; afterwards run records with their defects, the bugs raised from them, and retest records | `verify`; `fix` from a raised bug; `release` from a run record |
-| `verify` | The running system | What was proven, and what was not | `security`, `release` |
+| `qa` | Acceptance criteria, the change, the reference documents for expected values, the screen specs for `GUI` text or the Figma design where a screen has none, and the design for migration, rollback and rollout | Test plan, cases, regression matrix; afterwards run records with their defects, the bugs raised from them, and retest records | `fix` from a raised bug; `release` from a run record |
 | `security` | The code in scope, the project's scanners, the design and the threat model; under `--checklist`, the checklist a client or the company supplied | A security record with verified findings, an answered checklist and residual risk; under `--threat-model`, the threat model of a feature | `release`, `fix`, `implement`, and the approver who accepts each risk |
 | `git` | A finished change or artifact, and the record the calling skill wrote | Commits, a branch, and the pull request that carries the record | `review`, then the approver |
 | `release` | The diff since the last version | Notes, checklist, rollback path | `incident`, `retro` |

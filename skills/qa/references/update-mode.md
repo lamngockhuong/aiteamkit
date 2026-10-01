@@ -167,7 +167,7 @@ or tells the agent to, per rule 2 of `shared/team-roles.md`.
 - An existing CSV is regenerated in the same run, per the export rules in
   `references/test-case-template.md`. Where that CSV has anything in its execution columns, somebody
   typed results into the committed file: stop before regenerating it, say so, and ask for the results
-  to be moved into a copy outside `docs/qa/` or recorded with `--run` first, since regenerating would
+  to be moved into a copy outside `docs/qa/` or recorded with `--record` first, since regenerating would
   erase them.
 
 ## 5. The run summary

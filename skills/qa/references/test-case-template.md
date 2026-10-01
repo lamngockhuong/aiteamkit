@@ -286,7 +286,7 @@ and a removed case in it gets executed.
 ## Values a later run matches on
 
 Per rule 6 of `shared/team-roles.md`, these stay spelled exactly as here whatever language the rest of
-the file is written in, because `--update`, `--review`, `--run`, `atk:release`, or `atk:help` finds
+the file is written in, because `--update`, `--review`, `--record`, `atk:release`, or `atk:help` finds
 them by matching:
 
 - the headings `Sources`, `Summary`, `Coverage`, `Skipped`, `Cases`, `Open questions`, and the

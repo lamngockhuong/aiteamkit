@@ -21,9 +21,9 @@ flowchart TD
         direction LR
         D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     end
-    subgraph L3["5-6. Build and verify"]
+    subgraph L3["5-6. Build and test"]
         direction LR
-        IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"]
+        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"]
         R -.->|Blocking findings| IM
     end
     subgraph L4["7-8. Release, operate, learn"]
@@ -34,8 +34,9 @@ flowchart TD
     L4 -.-> NC["Next cycle<br/><small>starts again at intake</small>"]
 ```
 
-Three skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
-`onboard` when someone joins; `handover` when someone leaves or a phase ends. `help` answers a
+Four skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
+`security` on a schedule, or before or after a release; `onboard` when someone joins; `handover`
+when someone leaves or a phase ends. `help` answers a
 question instead: which of the others to run, read from the state of the project.
 
 `atk:init` runs once per project. It writes `.atk/profile.md`, which tells the skills that touch
@@ -371,6 +372,40 @@ a tidy-up of the surrounding file cannot be reverted cleanly.
 
 ---
 
+## `atk:verify`
+
+**Produces.** The application started the way this project starts it, exercised with real requests,
+side effects asserted in the data rather than in a status code, screens compared against the design
+when `--ui` is passed, and a report naming what was proven and what was not.
+
+**Use when.** The suite is green and nobody has yet seen the feature work, before handing a ticket to
+QA, or before a release goes out.
+
+**Do not use when.** The profile has no `Verify` section saying how to start the application and how
+to confirm a side effect. The skill stops rather than guess a start command, because a guessed
+command that exits zero reads as proof.
+
+**The habit that matters.** A 200 is not a result. The skill asserts the row, the file, or the
+message the request was supposed to produce. It also stops after three rounds and escalates to a
+named person, rather than patching until something passes. Code its rounds changed is tidied and the
+failing case re-run before the change is closed, because a fix made at the end of a long run is
+still a change somebody has to review.
+
+Before anything starts, it checks that the local data store matches the branch, and a mismatch
+stops the run with a question rather than a migration, because another worktree may be running
+against the same database. A database holding another branch's migrations is never migrated from
+the run, and one the run did not create is backed up, with its restore command in the report,
+before any preparation writes to it. What it writes into a cache or bucket other sessions read is removed by
+name at the end, and the report carries how many entries it listed before the first request, after
+the last, and after the removal. A mail catcher it reads a login code from is shared as well: it
+reads the message that arrived after its own request and deletes nothing, since a message another
+session waits for cannot be sent again. A case that would write to a
+database other sessions use waits for an answer first, because no listing can say which rows were
+this run's. A start that fails for missing configuration stops with a question too: the run never
+fills in values of its own, not even from the project's example file.
+
+---
+
 ## `atk:review`
 
 **Produces.** A review report at `docs/derived/reviews/<pr>-<date>.md`, written on every run, and a
@@ -456,7 +491,7 @@ rewritten with their execution cells cleared, removed ones are struck through, a
 reused. Once the file has been approved, a change to an existing case becomes a question for the
 approver rather than an edit.
 
-After the team has executed the cases, `--run` turns the results the testers give into a run record
+After the team has executed the cases, `--record` turns the results the testers give into a run record
 under `docs/records/test-runs/`, with a summary against the plan's exit criteria and one defect section
 per failed case, written so `atk:fix` can start from it. `--bug` raises the defects the person picks
 as issues on the tracker, never a security defect on a public one, and `--retest <issue>` (or
@@ -477,40 +512,6 @@ and a developer can automate from.
 
 **The habit that matters.** Traceability runs both ways, so an untested criterion and an untraced
 case are both visible.
-
----
-
-## `atk:verify`
-
-**Produces.** The application started the way this project starts it, exercised with real requests,
-side effects asserted in the data rather than in a status code, screens compared against the design
-when `--ui` is passed, and a report naming what was proven and what was not.
-
-**Use when.** The suite is green and nobody has yet seen the feature work, before handing a ticket to
-QA, or before a release goes out.
-
-**Do not use when.** The profile has no `Verify` section saying how to start the application and how
-to confirm a side effect. The skill stops rather than guess a start command, because a guessed
-command that exits zero reads as proof.
-
-**The habit that matters.** A 200 is not a result. The skill asserts the row, the file, or the
-message the request was supposed to produce. It also stops after three rounds and escalates to a
-named person, rather than patching until something passes. Code its rounds changed is tidied and the
-failing case re-run before the change is closed, because a fix made at the end of a long run is
-still a change somebody has to review.
-
-Before anything starts, it checks that the local data store matches the branch, and a mismatch
-stops the run with a question rather than a migration, because another worktree may be running
-against the same database. A database holding another branch's migrations is never migrated from
-the run, and one the run did not create is backed up, with its restore command in the report,
-before any preparation writes to it. What it writes into a cache or bucket other sessions read is removed by
-name at the end, and the report carries how many entries it listed before the first request, after
-the last, and after the removal. A mail catcher it reads a login code from is shared as well: it
-reads the message that arrived after its own request and deletes nothing, since a message another
-session waits for cannot be sent again. A case that would write to a
-database other sessions use waits for an answer first, because no listing can say which rows were
-this run's. A start that fails for missing configuration stops with a question too: the run never
-fills in values of its own, not even from the project's example file.
 
 ---
 

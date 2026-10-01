@@ -117,7 +117,7 @@ A link to the estimate or breakdown that holds the test effort and dates, or `no
 ## Values a later run matches on
 
 Per rule 6 of `shared/team-roles.md`, these stay spelled exactly as here whatever language the rest of
-the plan is written in, because `atk:qa --run`, `--update`, `--retest` and `atk:release` find them by
+the plan is written in, because `atk:qa --record`, `--update`, `--retest` and `atk:release` find them by
 matching: the headings `Regression` and `Defect severity`, the column names of both tables, the marks
 `MUST TEST`, `SPOT CHECK` and `NOT AFFECTED`, and the front matter keys and statuses. A severity's name
 is the plan's to choose, and stays however the plan spells it.

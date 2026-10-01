@@ -15,7 +15,7 @@ description: >
   "review these test cases", "review test case", "duyệt test case", "テスト計画", "テストケース",
   "テスト結果", "不具合報告", "再テスト", "テストケースレビュー", "how do we test this", "QA handoff",
   "/atk:qa".
-argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--plan|--cases|--regression|--update|--run|--bug|--retest|--review] [--lang <code>] [--out <path>]"
+argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--plan|--cases|--regression|--update|--record|--bug|--retest|--review] [--lang <code>] [--out <path>]"
 ---
 
 # QA Planning and Test Cases (`atk:qa`)
@@ -51,7 +51,7 @@ reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 /atk:qa --cases <feature>       # Test cases only
 /atk:qa --regression <release>  # Regression matrix for a release scope
 /atk:qa --update <cases-path>   # Bring existing cases level with a changed source
-/atk:qa --run <cases-path>      # Record the results of a test run the team executed
+/atk:qa --record <cases-path>   # Record the results of a test run the team executed
 /atk:qa --bug <run-path>        # Raise the defects of a run record on the tracker
 /atk:qa --retest <issue>        # Record a retest of a fixed bug and offer the verdict
 /atk:qa --retest <run-path>#D<n> # The same, for a defect never raised on a tracker
@@ -76,7 +76,7 @@ reference document.
 
 `--update` replaces the five steps with `references/update-mode.md`: it compares each source with what
 the cases file's Sources table recorded at the last run, and adds, rewrites, or strikes rows
-accordingly, keeping every ID, rather than writing the file again. `--run`, `--bug` and `--retest` replace them
+accordingly, keeping every ID, rather than writing the file again. `--record`, `--bug` and `--retest` replace them
 with `references/test-run.md`: recording what the team's own execution found, raising its defects,
 and confirming a fix. `--review` replaces them with `references/review-mode.md`, which reads a cases
 file against its sources and reports findings without editing it. The override is read either way.
@@ -199,5 +199,5 @@ who raised the bug closes it, or whoever the team's own flow names. The whole pr
 - [ ] Under `--update`, no ID changed or was reused, every rewritten case has empty execution cells,
       an approved file had its existing rows changed only through an answered question, and the run
       summary lists every row the diff touches.
-- [ ] Under `--run`, `--bug` and `--retest`, the definition of done in `references/test-run.md` holds.
+- [ ] Under `--record`, `--bug` and `--retest`, the definition of done in `references/test-run.md` holds.
 - [ ] Under `--review`, the definition of done in `references/review-mode.md` holds.

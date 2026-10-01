@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
 OpenAI Codex CLI. It packages 23 skills covering the delivery lifecycle of a company project team
 (`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`,
-`convention`, `plan`, `implement`, `fix`, `review`, `qa`, `verify`, `security`, `git`, `release`,
+`convention`, `plan`, `implement`, `fix`, `verify`, `review`, `qa`, `security`, `git`, `release`,
 `incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
 (`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
 
@@ -72,7 +72,7 @@ skills/<name>/
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
 neighbours it must not steal. `references/` is where they still differ: eighteen of them carry
 one (`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `convention`,
-`plan`, `implement`, `fix`, `review`, `qa`, `verify`, `security`, `git`, `onboard`), and the other five are
+`plan`, `implement`, `fix`, `verify`, `review`, `qa`, `security`, `git`, `onboard`), and the other five are
 still `SKILL.md` alone. `qa` holds the most, eight: its modes for updating cases, recording a run,
 and reviewing cases each keep their procedure in a file of their own, and its checklist is a list
 beside the file that governs it. Deepening a skill means adding `references/` files and pointing at
@@ -121,7 +121,7 @@ skill discovery.
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
 | `shared/design-sources.md` | How a skill reads a Figma design: finding the connection by what it can do, its three states and the fallback to exported images, the three reading passes, hidden layers, one link holding several screens, the node ID as the stable key, and the `design_*` fields a read records | `spec` (the `screen` kind), `intake` (a design as the request), `qa` (`GUI` cases where no screen spec exists) |
 | `shared/feature-types.md` | The one classification of features: each type with the extra questions an understanding check adds and the QA risk an estimate reads, and the rule that a row is added with both filled | `catchup` (through `understanding-check.md`), `estimate` (through `complexity-drivers.md`) |
-| `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `qa --run`; `## Output` of `incident` |
+| `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `qa --record`; `## Output` of `incident` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.

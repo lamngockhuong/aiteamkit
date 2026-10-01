@@ -1,6 +1,6 @@
 # Verification report template
 
-Loaded by `atk:verify` in step 5. The reader is QA, or the reviewer, or the person who picks this up
+Loaded by `atk:verify` in step 5. The reader is the reviewer of the change, or the person who picks this up
 next week: someone who was not watching the screen while the run happened and has to decide how much
 of it to believe. Every section exists so they can check a claim rather than trust one.
 
@@ -16,7 +16,7 @@ The shared block from `shared/artifact-paths.md`, with the values this skill fil
 title: "Verified: <what was verified, not what was fixed>"
 status: IN REVIEW
 owner: <the person who ran it>
-approver: <the person in QA who accepts it, or "TBD (ask <person>)">
+approver: <the reviewer of the change, who accepts it, or "TBD (ask <person>)">
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ticket: <id or URL, or none>
@@ -24,7 +24,7 @@ ticket: <id or URL, or none>
 ```
 
 The approver is a person, taken from the `Team` section of `.atk/profile.md` or asked for; when
-neither gives one, `TBD` naming who can assign them, per `shared/team-roles.md`. Writing `QA` there
+neither gives one, `TBD` naming who can assign them, per `shared/team-roles.md`. Writing `reviewer` there
 is writing a role, and a role approves nothing.
 
 `status` opens at `IN REVIEW` and never at `APPROVED`. This skill produces evidence; approving it is

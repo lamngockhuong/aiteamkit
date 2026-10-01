@@ -21,7 +21,7 @@ flowchart TD
     P2 --> P3["3. Thiết kế"]
     P3 --> P4["4. Chia việc và xếp thứ tự"]
     P4 --> P5["5. Làm"]
-    P5 --> P6["6. Kiểm chứng"]
+    P5 --> P6["6. Kiểm thử"]
     P6 --> P7["7. Phát hành"]
     P7 --> P8["8. Vận hành và rút kinh nghiệm"]
     P8 -.-> NC["Chu kỳ sau<br/><small>bắt đầu lại từ 1. Yêu cầu</small>"]
@@ -76,21 +76,19 @@ flowchart TD
     end
 
     subgraph S5["5. Làm"]
-        M0["atk:implement<br/><small>Dev</small>"] --> MG["atk:git<br/><small>commit, push, pull request</small>"]
+        M0["atk:implement<br/><small>Dev</small>"] --> MV["atk:verify<br/><small>Dev chạy thật hệ thống trước khi review</small>"]
+        MV -->|Phát hiện lỗi| M0
+        MV -->|Chạy đúng| MG["atk:git<br/><small>commit, push, pull request</small>"]
         MG --> M1["atk:review<br/><small>người review không bao giờ là tác giả</small>"]
         M1 -->|Có lỗi chặn| M0
         M1 -->|Đã duyệt| M2["Đã merge<br/><small>atk:git, gọi đúng số PR</small>"]
     end
 
-    subgraph S6["6. Kiểm chứng"]
-        V0["atk:qa<br/><small>QA viết kế hoạch và test case</small>"] --> V1["atk:verify<br/><small>chạy thật hệ thống</small>"]
+    subgraph S6["6. Kiểm thử"]
+        V0["atk:qa<br/><small>QA viết kế hoạch và test case</small>"] --> V1["Tester chạy các case<br/><small>ghi lại bằng atk:qa --record</small>"]
         V1 --> V2{"QA ký nhận"}
         V2 -->|Phát hiện lỗi| F0["atk:fix"]
         F0 --> V1
-        V2 -->|Đạt| V5{"Chạm tới xác thực, dữ liệu<br/>cá nhân, hay tiền?"}
-        V5 -->|Có| V3["atk:security<br/><small>Dev hoặc TL soạn</small>"]
-        V3 --> V4{"TL duyệt,<br/>rủi ro được chấp nhận có tên người"}
-        V4 -->|Phát hiện cần sửa| F0
     end
 
     subgraph S7["7. Phát hành"]
@@ -115,8 +113,9 @@ flowchart TD
     D1 -.->|Contract: first, spec --from| D3
     B2 --> M0
     M2 --> V0
-    V4 -->|Đã duyệt| L0
-    V5 -->|Không| L0
+    V2 -->|Đạt| L0
+    SC["atk:security<br/><small>nằm ngoài chu trình</small>"] -.->|Tùy chọn, trước khi phát hành:<br/>checklist đọc record của nó| L0
+    L2 -.->|Tùy chọn, sau khi triển khai| SC
     L2 --> O0
     L2 --> O1
     O1 -.->|Hành động chảy sang chu kỳ sau| R0
@@ -136,13 +135,13 @@ flowchart TD
 | 4. Chia việc | `atk:breakdown` | TL hoặc PM | Từng Dev nhận phần việc của mình | `IN REVIEW` sang `APPROVED` |
 | 4. Xếp thứ tự | `atk:plan` | Dev | Chính tác giả, trừ khi cửa kiểm tra đẩy lên TL | `DRAFT` |
 | 4. Quy ước | `atk:convention` | TL | Cả đội đồng thuận, ghi theo từng quy tắc | `IN REVIEW` sang `APPROVED` |
-| 5. Làm | `atk:implement` | Dev | Người review ở dòng dưới | không có |
+| 5. Làm | `atk:implement` | Dev | Người review thay đổi, qua `atk:review` | không có |
+| 5. Làm | `atk:verify` | Dev | Người review thay đổi, trước khi duyệt nó | `IN REVIEW` sang `APPROVED` |
 | 5. Làm | `atk:review` | Người review, không bao giờ là tác giả | TL, khi vòng lặp chạm trần | không có |
 | 5. Làm | `atk:git` | Dev | Người review, người duyệt pull request mà nó mở | không có |
-| 6. Kiểm chứng | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
-| 6. Kiểm chứng | `atk:qa --run`, `--retest` | QA đã chạy các case | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
-| 6. Kiểm chứng | `atk:verify` | Dev hoặc QA | QA ký nhận trước khi ticket chuyển trạng thái | `DRAFT` |
-| 6. Kiểm chứng | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận | `IN REVIEW` sang `APPROVED` |
+| 6. Kiểm thử | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
+| 6. Kiểm thử | `atk:qa --record`, `--retest` | QA đã chạy các case | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
+| Bất cứ lúc nào: định kỳ, hoặc trước hay sau khi phát hành | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận | `IN REVIEW` sang `APPROVED` |
 | 7. Phát hành | `atk:release` | PM cùng SRE | Stakeholder hoặc PM ra quyết định phát hành | `IN REVIEW` sang `APPROVED` |
 | 8. Vận hành | `atk:incident` | Incident Commander | TL và PM, về các hành động tiếp theo | `IN REVIEW` sang `APPROVED` |
 | 8. Rút kinh nghiệm | `atk:retro` | PM hoặc cả đội | Cả đội, về ba hành động chọn ra | `IN REVIEW` sang `APPROVED` |
@@ -158,9 +157,9 @@ theo pha ở trên và từ mục `## Roles` của từng skill. Ai cũng chạy
 |-----|------|-----------|-------------------------|
 | PM | Năng lực trong `estimate`, TL và Dev lo phần kích thước; `breakdown`, hoặc TL; `release`, cùng SRE; `retro`, hoặc cả đội | `estimate`, cùng Stakeholder; quyết định phát hành trong `release`, hoặc Stakeholder; các hành động tiếp theo trong `incident`, cùng TL; một phát hiện chưa sửa trong `security`, hoặc Stakeholder; override bằng `tailor` cho `intake`, `estimate`, `breakdown`, `release` hoặc `retro` | Phần tracker và đội trong `init`, do PM viết; `intake`, PM dẫn dắt cùng BrSE/BA; `catchup`, trả lời câu hỏi của người mới; tiêu chí kết thúc trong `qa`; liên lạc khách hàng trong `incident`; quyền truy cập trong `onboard` và `handover` |
 | BrSE/BA | `intake`; `spec` loại `screen` | `spec` loại `feature` và `screen`; override bằng `tailor` cho `design-doc` hoặc `spec` | `catchup`, trả lời câu hỏi của người mới; `design-doc`, thiết kế còn đáp ứng yêu cầu không; `qa`, test case có khớp ý đồ không |
-| TL | `init`, hoặc Dev; `tailor`; kích thước trong `estimate`, cùng Dev; `design-doc`, hoặc Dev; `breakdown`, hoặc PM; `convention`; `security`, hoặc Dev | `init`; `design-doc`; `spec` loại `api` và `db`; `plan`, khi nó chạm schema, hợp đồng công khai hoặc hai service; `qa`, hoặc QA lead; `security`, trừ khi đội có người phụ trách bảo mật; các hành động tiếp theo trong `incident`, cùng PM; override bằng `tailor` cho mọi skill không thuộc PM, BrSE/BA hay QA, và mọi override chạm tới cách viết hoặc review code | Tính khả thi trong `intake`; `implement`, ở cửa việc lớn và khi vòng review chạm trần; `fix`, khi bước kiểm tra ý đồ dừng lại; `review`, khi một phát hiện chặn bị tranh cãi; `verify`, khi chạm trần; rủi ro kỹ thuật trong `release`; nguyên nhân gốc trong `incident`; chỉ định người kèm trong `onboard`; khoảng trống trong `handover` |
-| Dev | `init`, hoặc TL; kích thước trong `estimate`; `design-doc`, hoặc TL; `spec`; `plan`; `implement`; `fix`; `review` thay đổi của người khác; `verify`, hoặc QA; `security`, hoặc TL; `git` | Phần việc của chính mình trong `breakdown`; `plan` của chính mình, dưới ngưỡng cần TL | `catchup`, là người đọc và tự làm bài kiểm tra hiểu bài; `convention`, đồng thuận từng quy tắc; bàn giao và dữ liệu test trong `qa` |
-| QA | `qa`, gồm kế hoạch, test case, và record của những lần chạy do mình thực hiện; `verify`, hoặc Dev; phần công sức test của mình trong `estimate` | `qa`, với vai QA lead, kể cả record của lần chạy; ký nhận trong `verify` trước khi ticket chuyển trạng thái; override bằng `tailor` cho `qa` | `intake`, mỗi tiêu chí có test được không; `catchup`, là người đọc vào giữa chừng; task test của mình trong `breakdown`; `fix`, triệu chứng đã hết theo bước tái hiện chưa; độ đầy đủ của test trong `review`; `security`, đọc khi ký nhận; kết quả test trong `release` |
+| TL | `init`, hoặc Dev; `tailor`; kích thước trong `estimate`, cùng Dev; `design-doc`, hoặc Dev; `breakdown`, hoặc PM; `convention`; `security`, hoặc Dev | `init`; `design-doc`; `spec` loại `api` và `db`; `plan`, khi nó chạm schema, hợp đồng công khai hoặc hai service; `qa`, hoặc QA lead; `security`, trừ khi đội có người phụ trách bảo mật; các hành động tiếp theo trong `incident`, cùng PM; override bằng `tailor` cho mọi skill không thuộc PM, BrSE/BA hay QA, và mọi override chạm tới cách viết hoặc review code | Tính khả thi trong `intake`; `implement`, ở cửa việc lớn và khi vòng review chạm trần; `fix`, khi bước kiểm tra ý đồ dừng lại; `verify`, khi chạm trần; `review`, khi một phát hiện chặn bị tranh cãi; rủi ro kỹ thuật trong `release`; nguyên nhân gốc trong `incident`; chỉ định người kèm trong `onboard`; khoảng trống trong `handover` |
+| Dev | `init`, hoặc TL; kích thước trong `estimate`; `design-doc`, hoặc TL; `spec`; `plan`; `implement`; `fix`; `verify`; `review` thay đổi của người khác; `security`, hoặc TL; `git` | Phần việc của chính mình trong `breakdown`; `plan` của chính mình, dưới ngưỡng cần TL; report `verify` của thay đổi mình review | `catchup`, là người đọc và tự làm bài kiểm tra hiểu bài; `convention`, đồng thuận từng quy tắc; bàn giao và dữ liệu test trong `qa` |
+| QA | `qa`, gồm kế hoạch, test case, và record của những lần chạy do mình thực hiện; phần công sức test của mình trong `estimate` | `qa`, với vai QA lead, kể cả record của lần chạy; override bằng `tailor` cho `qa` | `intake`, mỗi tiêu chí có test được không; `catchup`, là người đọc vào giữa chừng; task test của mình trong `breakdown`; `fix`, triệu chứng đã hết theo bước tái hiện chưa; độ đầy đủ của test trong `review`; `security`, đọc khi ký nhận; kết quả test trong `release` |
 | SRE | `release`, cùng PM | Không có gì trong chu trình | Triển khai, dữ liệu và năng lực trong `design-doc`; môi trường trong `verify`; cấu hình, hạ tầng và secret trong `security`; thực thi và rollback trong `release`; giảm thiểu sự cố trong `incident` |
 | Stakeholder | Không có gì trong chu trình | Phạm vi và tiêu chí trong `intake`; `estimate`, cùng PM; quyết định phát hành trong `release`, hoặc PM; một phát hiện chưa sửa trong `security`, hoặc PM | Các câu hỏi mở mà `intake` ghi tên họ |
 
@@ -170,7 +169,7 @@ Một số skill gọi tên người theo việc họ đang làm, bất kể vai
 
 ## Nằm ngoài chu trình
 
-Ba skill đáp lại một sự kiện chứ không thuộc pha nào, và một skill đáp lại một câu hỏi. Cả bốn đều có
+Bốn skill đáp lại một sự kiện chứ không thuộc pha nào, và một skill đáp lại một câu hỏi. Cả năm đều có
 thể chạy ở bất kỳ điểm nào bên trên.
 
 ```mermaid
@@ -179,6 +178,7 @@ flowchart LR
     X3["Có người vào đội"] --> X4["atk:onboard<br/><small>tuần đầu kết thúc bằng đóng góp của vai trò</small>"]
     X5["Có người rời đi,<br/>hoặc một pha khép lại"] --> X6["atk:handover<br/><small>người nhận kiểm lại rồi mới ký</small>"]
     X7["Không chắc bước<br/>tiếp theo là gì"] --> X8["atk:help<br/><small>đọc dự án, gọi tên một skill</small>"]
+    X9["Đến kỳ rà soát bảo mật"] --> X10["atk:security<br/><small>quét codebase hiện tại</small>"]
 ```
 
 `atk:help` không có cửa kiểm soát và không có người duyệt, vì nó không viết artifact nào. Thay vào
@@ -187,6 +187,13 @@ của nó, không bao giờ được báo là đã sẵn sàng cho pha kế ti�
 
 `atk:fix` là skill duy nhất thò tay ngược vào chu trình: lỗi bắt ở pha 6 thì sửa xong quay lại pha 6,
 còn lỗi lộ ra sau khi phát hành thì mở thẳng pha 8.
+
+`atk:security` không phải bước mà mọi thay đổi đều đi qua. Đội chạy nó định kỳ trên codebase hiện
+tại, và có thể chạy thêm quanh một lần phát hành: trước một bản phát hành chạm tới xác thực, dữ liệu
+cá nhân, thanh toán hay một tích hợp bên ngoài, khi đó `atk:release` đọc record của nó lúc soạn
+checklist; và sau khi triển khai. Đó là hai cạnh nét đứt trong sơ đồ chu trình, đi vào bước phát hành
+của pha 7 và đi ra từ lần triển khai, và cả hai đều là tùy chọn. Phát hiện nào nó để lại cần sửa
+thì đi sang `atk:fix` như mọi lỗi khác.
 
 `atk:git` vẽ ở pha 5 vì đó là nơi phần lớn công việc đi tới một pull request, nhưng nó không gắn với
 pha nào. Mọi skill làm xong việc đều giao lại cho nó, nên một artifact viết ở pha 1 và một bản vá làm
