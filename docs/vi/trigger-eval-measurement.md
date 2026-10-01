@@ -52,9 +52,9 @@ case, vì kỳ vọng đó sai.
 
 ## Chạy một lượt
 
-Script hook, file settings và dự án mồi đều nằm ngoài repository, vì kit không ship bộ chạy nào và
-thêm một bộ vào đây là bắt mọi team mang theo công cụ của người bảo trì. Những gì cần để dựng lại
-đều nằm dưới đây.
+Script hook, file settings và dự án mồi đều nằm ngoài repository, vì chưa ai quyết định giữ một bộ
+chạy trong đó. Một bộ đặt ngoài `plugins/` sẽ không được ship nên không team nào phải mang theo; đặt
+trong một plugin thì có. Những gì cần để dựng lại đều nằm dưới đây.
 
 Một hook ghi lại những lượt gọi tool mà nó nhận được, vào file mà `HOOK_LOG` chỉ tới:
 

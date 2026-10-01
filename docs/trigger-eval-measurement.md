@@ -52,9 +52,9 @@ was wrong.
 
 ## Running one
 
-The hook script, the settings file and the seed live outside the repository, because the kit ships
-no runner and adding one would make every team carry a maintainer's tool. Everything needed to
-rebuild it is here.
+The hook script, the settings file and the seed live outside the repository, because nobody has
+decided to keep a runner in it. One kept outside `plugins/` would not ship, so no team would carry
+it; inside a plugin it would. Everything needed to rebuild it is here.
 
 A hook that logs the tool calls it is given, to a file named by `HOOK_LOG`:
 
