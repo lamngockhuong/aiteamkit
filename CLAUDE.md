@@ -214,7 +214,7 @@ would drop any directory called `records` at any depth, including one under `ski
 take it out of a `BLOCKING` check.
 
 ```bash
-grep -rn "\bak:" skills/ shared/ README.md docs/ | grep -v -E '^docs/(records|derived)/'
+grep -rn "\bak:" plugins/atk/skills/ plugins/atk/shared/ README.md docs/ | grep -v -E '^docs/(records|derived)/'
 ```
 
 Should print nothing (the second `grep` exits 1).
@@ -373,8 +373,8 @@ After edits, verify. The one exclusion is the file that quotes the banned patter
 document it:
 
 ```bash
-grep -rn "style .* fill:#" skills/ shared/ docs/ README.md \
-  | grep -v shared/diagram-conventions.md
+grep -rn "style .* fill:#" plugins/atk/skills/ plugins/atk/shared/ docs/ README.md \
+  | grep -v plugins/atk/shared/diagram-conventions.md
 ```
 
 Should print nothing: a hardcoded fill is black text on a pale background for every reader in a dark
@@ -494,14 +494,14 @@ repository's tooling.
 ## Common verification commands
 
 ```bash
-# All 5 manifests parse
-for f in package.json .claude-plugin/plugin.json .claude-plugin/marketplace.json \
-         .cursor-plugin/plugin.json .codex-plugin/plugin.json; do
+# Every manifest and marketplace file parses
+for f in package.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json \
+         .agents/plugins/marketplace.json plugins/*/.*-plugin/plugin.json; do
   python3 -c "import json,sys; json.load(open('$f'))" && echo "OK $f"
 done
 
 # Every skill folder has a SKILL.md, and the name matches the folder
-for d in skills/*/; do
+for d in plugins/atk/skills/*/; do
   n=$(basename "$d")
   grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"
 done
@@ -513,11 +513,11 @@ diff <(cd docs && find . -name '*.md' -not -path './vi/*' \
 
 # Both registration files parse, the scripts are valid Node, and check-profile stays silent where a
 # profile exists
-for f in hooks/hooks.json hooks/codex-hooks.json; do
+for f in plugins/atk/hooks/hooks.json plugins/atk/hooks/codex-hooks.json; do
   python3 -c "import json,sys; json.load(open('$f'))" && echo "OK $f"
 done
-node --check hooks/check-profile.mjs && node --check hooks/load-overrides.mjs && echo "OK node"
-out=$(CLAUDE_PROJECT_DIR="$PWD" CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
+node --check plugins/atk/hooks/check-profile.mjs && node --check plugins/atk/hooks/load-overrides.mjs && echo "OK node"
+out=$(CLAUDE_PROJECT_DIR="$PWD" CLAUDE_PLUGIN_DATA=$(mktemp -d) node plugins/atk/hooks/check-profile.mjs)
 test -z "$out" && echo "OK silent with profile"   # fresh marker dir, so silence means the profile
 
 # The walk, which the line above never reaches: this repository's own profile answers on the first
@@ -528,11 +528,11 @@ printf 'Shape: parent + members\n| backend | `backend/` | origin o/r | Team | cl
   > "$t/parent/.atk/profile.md"
 for c in "parent/backend:silent" "parent/stray:reminds" "ws:reminds"; do
   dir=${c%%:*}; want=${c##*:}
-  out=$(CLAUDE_PROJECT_DIR="$t/$dir" CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
+  out=$(CLAUDE_PROJECT_DIR="$t/$dir" CLAUDE_PLUGIN_DATA=$(mktemp -d) node plugins/atk/hooks/check-profile.mjs)
   got=silent; test -n "$out" && got=reminds
   test "$got" = "$want" && echo "OK $dir $want" || echo "FAIL $dir: wanted $want, got $got"
 done
-out=$(CLAUDE_PROJECT_DIR=$(mktemp -d) CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
+out=$(CLAUDE_PROJECT_DIR=$(mktemp -d) CLAUDE_PLUGIN_DATA=$(mktemp -d) node plugins/atk/hooks/check-profile.mjs)
 test -z "$out" && echo "OK plain directory silent"; rm -rf "$t"
 
 # load-overrides answers only for atk: skills, and cannot read outside .atk/overrides/.
@@ -544,7 +544,7 @@ for payload in '{"tool_name":"Bash","tool_input":{}}' \
                '{"tool_name":"Skill","tool_input":{"skill":"ak:review"}}' \
                '{"tool_name":"Skill","tool_input":{"skill":"review"}}' \
                'not json'; do
-  out=$(echo "$payload" | CLAUDE_PROJECT_DIR="$PWD" node hooks/load-overrides.mjs)
+  out=$(echo "$payload" | CLAUDE_PROJECT_DIR="$PWD" node plugins/atk/hooks/load-overrides.mjs)
   test "$out" = "{}" || echo "LEAK on: $payload"
 done; echo "OK load-overrides quiet"
 
@@ -558,11 +558,11 @@ ln -s "$t/out" "$t/q/.atk/overrides"
 for c in "p:fix:{}" "q:fix:{}"; do
   IFS=: read -r dir skill want <<< "$c"
   out=$(echo "{\"tool_name\":\"Skill\",\"tool_input\":{\"skill\":\"atk:$skill\"}}" \
-    | CLAUDE_PROJECT_DIR="$t/$dir" node hooks/load-overrides.mjs)
+    | CLAUDE_PROJECT_DIR="$t/$dir" node plugins/atk/hooks/load-overrides.mjs)
   test "$out" = "$want" && echo "OK $dir symlink out refused" || echo "LEAK $dir: $out"
 done
 echo '{"tool_name":"Skill","tool_input":{"skill":"atk:plan"}}' \
-  | CLAUDE_PROJECT_DIR="$t/p" node hooks/load-overrides.mjs | grep -q inside \
+  | CLAUDE_PROJECT_DIR="$t/p" node plugins/atk/hooks/load-overrides.mjs | grep -q inside \
   && echo "OK symlink inside loads" || echo "FAIL symlink inside"; rm -rf "$t"
 
 # Each harness gets the registration it can read. Claude Code: exec form, since shell form would
@@ -588,29 +588,29 @@ def registered(path, script_of):
             for event, groups in json.load(open(path))['hooks'].items()
             for group in groups for h in group['hooks']}
 
-a = registered('hooks/hooks.json', claude)
-b = registered('hooks/codex-hooks.json', codex)
+a = registered('plugins/atk/hooks/hooks.json', claude)
+b = registered('plugins/atk/hooks/codex-hooks.json', codex)
 assert a == b, 'the two registrations have drifted apart: %s' % sorted(a ^ b)
 for event, matcher, script in sorted(a):
-    assert os.path.exists('hooks/' + script), 'no such hook script: hooks/' + script
-assert json.load(open('.codex-plugin/plugin.json')).get('hooks') == './hooks/codex-hooks.json', \
+    assert os.path.exists('plugins/atk/hooks/' + script), 'no such hook script: plugins/atk/hooks/' + script
+assert json.load(open('plugins/atk/.codex-plugin/plugin.json')).get('hooks') == './hooks/codex-hooks.json', \
     'the Codex manifest must point its hooks key at ./hooks/codex-hooks.json'
 print('OK registration, %d hooks in both files' % len(a))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow
 # docs/trigger-eval-measurement.md
-for f in skills/*/evals/trigger_evals.json; do
+for f in plugins/atk/skills/*/evals/trigger_evals.json; do
   python3 -c "import json,sys; d=json.load(open('$f')); assert isinstance(d,list) and d" || echo "FAIL $f"
 done; echo "OK evals"
 
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
 # holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs
 # unique and shaped `<component>-NN`, its dimension a number from 1 to 10, and its technique a code
-# that skills/qa/references/checklists.md defines
+# that plugins/atk/skills/qa/references/checklists.md defines
 python3 -c "
 import csv, glob, re
-for f in glob.glob('skills/*/references/*.tsv'):
+for f in glob.glob('plugins/atk/skills/*/references/*.tsv'):
     rows = list(csv.reader(open(f, newline=''), delimiter='\t', quoting=csv.QUOTE_NONE))
     head, body = rows[0], rows[1:]
     assert body, f + ': no records'
@@ -629,11 +629,11 @@ for f in glob.glob('skills/*/references/*.tsv'):
             assert r[head.index('technique')] in ('', 'EP', 'BVA', 'DT', 'ST', 'PW', 'EG'), '%s:%d: technique' % (f, n)
     print('OK %s, %d records' % (f, len(body)))"
 
-# No example of a dated artifact name has lost its time: shared/artifact-paths.md dates every name
+# No example of a dated artifact name has lost its time: plugins/atk/shared/artifact-paths.md dates every name
 # YYMMDD-HHMM, and a six-digit date followed by a slug, an extension, `/` or `)` is the shape it
 # replaced.
 # Should print nothing (grep exits 1)
-grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' skills/ shared/ README.md docs/ \
+grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/atk/skills/ plugins/atk/shared/ README.md docs/ \
   | grep -v -E '^docs/(records|derived)/'
 
 # Version agreement across the 6 version-bearing files
