@@ -40,9 +40,9 @@ body:
         - Skill - atk:plan
         - Skill - atk:implement
         - Skill - atk:fix
+        - Skill - atk:verify
         - Skill - atk:review
         - Skill - atk:qa
-        - Skill - atk:verify
         - Skill - atk:security
         - Skill - atk:git
         - Skill - atk:release

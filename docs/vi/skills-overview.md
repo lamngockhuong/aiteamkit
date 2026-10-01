@@ -22,9 +22,9 @@ flowchart TD
         direction LR
         D["design-doc"] --> SP["spec"] --> B["breakdown"] --> CV["convention"] --> P["plan"]
     end
-    subgraph L3["5-6. Làm và kiểm chứng"]
+    subgraph L3["5-6. Làm và kiểm thử"]
         direction LR
-        IM["implement"] --> R["review"] --> Q["qa"] --> V["verify"] --> S["security"]
+        IM["implement"] --> V["verify"] --> R["review"] --> Q["qa"]
         R -.->|Có phát hiện chặn| IM
     end
     subgraph L4["7-8. Phát hành, vận hành, rút kinh nghiệm"]
@@ -35,8 +35,8 @@ flowchart TD
     L4 -.-> NC["Chu kỳ sau<br/><small>bắt đầu lại từ intake</small>"]
 ```
 
-Ba skill đáp lại một sự kiện chứ không nằm trong phase nào: `fix` khi có lỗi được báo, ở bất kỳ
-điểm nào; `onboard` khi có người vào; `handover` khi có người rời đi, hoặc một phase kết thúc.
+Bốn skill đáp lại một sự kiện chứ không nằm trong phase nào: `fix` khi có lỗi được báo, ở bất kỳ
+điểm nào; `security` theo lịch định kỳ, hoặc trước hay sau một lần phát hành; `onboard` khi có người vào; `handover` khi có người rời đi, hoặc một phase kết thúc.
 `help` thì đáp lại một câu hỏi: nên chạy skill nào trong số còn lại, đọc từ trạng thái của dự án.
 
 `atk:init` chạy một lần cho mỗi dự án. Nó viết ra `.atk/profile.md`, file cho các skill có động tới
@@ -376,6 +376,41 @@ dọn dẹp cả file xung quanh thì không revert gọn được vào ngày c�
 
 ---
 
+## `atk:verify`
+
+**Sinh ra.** Ứng dụng được khởi động đúng cách dự án này khởi động nó, rồi được tác động bằng
+request thật. Tác động sinh ra được khẳng định trong dữ liệu chứ không phải trong mã trạng thái, màn
+hình được đối chiếu với bản thiết kế khi truyền `--ui`, và báo cáo nói rõ đã chứng minh được gì, chưa
+chứng minh được gì.
+
+**Dùng khi.** Bộ test đã xanh mà chưa ai nhìn thấy tính năng chạy, trước khi chuyển ticket cho QA,
+hoặc trước khi một bản release đi ra.
+
+**Không dùng khi.** Profile chưa có mục `Verify` nói cách khởi động ứng dụng và cách xác nhận một tác
+động. Skill dừng thay vì đoán lệnh khởi động, vì một lệnh đoán mà thoát 0 sẽ được đọc như bằng chứng.
+
+**Thói quen tạo ra khác biệt.** Một mã 200 không phải là kết quả. Skill khẳng định đúng cái dòng dữ
+liệu, cái file, hoặc cái tin nhắn mà request lẽ ra phải sinh ra. Nó cũng dừng sau ba vòng và báo lên
+một người có tên, thay vì cứ vá cho tới khi có thứ gì đó xanh. Mã mà các vòng thử đã đổi sẽ được dọn
+lại, rồi chạy lại đúng ca đang hỏng, trước khi thay đổi được đóng: một bản vá làm ở cuối một lượt
+chạy dài vẫn là thay đổi có người phải review.
+
+Trước khi khởi động gì, skill kiểm tra kho dữ liệu trên máy có khớp với branch hay không. Nếu lệch, run
+dừng lại và hỏi chứ không tự migrate, vì có thể một worktree khác đang chạy trên cùng database đó.
+Database đang chứa migration của branch khác thì không bao giờ được migrate từ run, còn database
+không do run tạo ra thì được sao lưu trước khi bất kỳ bước chuẩn bị nào ghi vào nó, và báo cáo ghi
+lại lệnh khôi phục.
+Những gì run ghi vào cache hay bucket mà session khác cũng đọc sẽ bị xoá theo tên khi kết thúc, và
+báo cáo ghi số mục của ba lần liệt kê: trước request đầu tiên, sau request cuối cùng, và sau khi
+xoá. Hộp thư giả lập mà run đọc mã đăng nhập từ đó cũng là kho dùng chung: run đọc thư đến sau
+request của chính nó và không xoá gì, vì thư mà session khác đang chờ thì không gửi lại được. Ca nào
+sẽ ghi vào database mà session khác
+cũng dùng thì phải chờ người dùng trả lời, vì không danh sách nào chỉ ra được dòng nào do run này
+ghi. Lệnh start thất bại vì thiếu cấu hình cũng dừng lại và hỏi: run không tự điền giá trị nào, kể
+cả từ file mẫu của dự án.
+
+---
+
 ## `atk:review`
 
 **Sinh ra.** Một báo cáo review ở `docs/derived/reviews/<pr>-<date>.md`, lần chạy nào cũng viết, kèm
@@ -481,41 +516,6 @@ tiên và dữ liệu test, và nhận các phát hiện ở mức `BLOCKING`, `
 
 **Thói quen tạo ra khác biệt.** Truy vết chạy cả hai chiều, nên tiêu chí chưa được test và test case
 không gắn tiêu chí nào đều lộ ra.
-
----
-
-## `atk:verify`
-
-**Sinh ra.** Ứng dụng được khởi động đúng cách dự án này khởi động nó, rồi được tác động bằng
-request thật. Tác động sinh ra được khẳng định trong dữ liệu chứ không phải trong mã trạng thái, màn
-hình được đối chiếu với bản thiết kế khi truyền `--ui`, và báo cáo nói rõ đã chứng minh được gì, chưa
-chứng minh được gì.
-
-**Dùng khi.** Bộ test đã xanh mà chưa ai nhìn thấy tính năng chạy, trước khi chuyển ticket cho QA,
-hoặc trước khi một bản release đi ra.
-
-**Không dùng khi.** Profile chưa có mục `Verify` nói cách khởi động ứng dụng và cách xác nhận một tác
-động. Skill dừng thay vì đoán lệnh khởi động, vì một lệnh đoán mà thoát 0 sẽ được đọc như bằng chứng.
-
-**Thói quen tạo ra khác biệt.** Một mã 200 không phải là kết quả. Skill khẳng định đúng cái dòng dữ
-liệu, cái file, hoặc cái tin nhắn mà request lẽ ra phải sinh ra. Nó cũng dừng sau ba vòng và báo lên
-một người có tên, thay vì cứ vá cho tới khi có thứ gì đó xanh. Mã mà các vòng thử đã đổi sẽ được dọn
-lại, rồi chạy lại đúng ca đang hỏng, trước khi thay đổi được đóng: một bản vá làm ở cuối một lượt
-chạy dài vẫn là thay đổi có người phải review.
-
-Trước khi khởi động gì, skill kiểm tra kho dữ liệu trên máy có khớp với branch hay không. Nếu lệch, run
-dừng lại và hỏi chứ không tự migrate, vì có thể một worktree khác đang chạy trên cùng database đó.
-Database đang chứa migration của branch khác thì không bao giờ được migrate từ run, còn database
-không do run tạo ra thì được sao lưu trước khi bất kỳ bước chuẩn bị nào ghi vào nó, và báo cáo ghi
-lại lệnh khôi phục.
-Những gì run ghi vào cache hay bucket mà session khác cũng đọc sẽ bị xoá theo tên khi kết thúc, và
-báo cáo ghi số mục của ba lần liệt kê: trước request đầu tiên, sau request cuối cùng, và sau khi
-xoá. Hộp thư giả lập mà run đọc mã đăng nhập từ đó cũng là kho dùng chung: run đọc thư đến sau
-request của chính nó và không xoá gì, vì thư mà session khác đang chờ thì không gửi lại được. Ca nào
-sẽ ghi vào database mà session khác
-cũng dùng thì phải chờ người dùng trả lời, vì không danh sách nào chỉ ra được dòng nào do run này
-ghi. Lệnh start thất bại vì thiếu cấu hình cũng dừng lại và hỏi: run không tự điền giá trị nào, kể
-cả từ file mẫu của dự án.
 
 ---
 

@@ -82,6 +82,10 @@
 - changed-files:
   - any-glob-to-any-file: 'skills/fix/**'
 
+'skill: verify':
+- changed-files:
+  - any-glob-to-any-file: 'skills/verify/**'
+
 'skill: review':
 - changed-files:
   - any-glob-to-any-file: 'skills/review/**'
@@ -89,10 +93,6 @@
 'skill: qa':
 - changed-files:
   - any-glob-to-any-file: 'skills/qa/**'
-
-'skill: verify':
-- changed-files:
-  - any-glob-to-any-file: 'skills/verify/**'
 
 'skill: security':
 - changed-files:

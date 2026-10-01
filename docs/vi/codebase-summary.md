@@ -87,9 +87,9 @@ năm skill còn lại thì chưa.
 | `skills/plan/SKILL.md` | Phát triển | Phase kết thúc bằng thứ đem duyệt được, bước giữ cây mã chạy được, ranh giới phạm vi; với `--review` là danh sách phát hiện về bản kế hoạch do người khác viết |
 | `skills/implement/SKILL.md` | Phát triển | Mã nguồn, kiểm chứng theo tầng, kèm bản ghi trở thành phần mô tả pull request |
 | `skills/fix/SKILL.md` | Phát triển | Nguyên nhân đã chứng minh, thay đổi nhỏ nhất gỡ được nó, và báo cáo đã kiểm những gì |
+| `skills/verify/SKILL.md` | Phát triển | Hệ thống chạy thật, khẳng định tác động trong dữ liệu, báo lên người có tên sau ba vòng |
 | `skills/review/SKILL.md` | Phát triển | Phát hiện xếp hạng blocking / should fix / nit, có thể đăng lên PR |
 | `skills/qa/SKILL.md` | Kiểm thử | Test plan, test case có truy vết, ma trận regression, tiêu chí vào và ra |
-| `skills/verify/SKILL.md` | Kiểm thử | Hệ thống chạy thật, khẳng định tác động trong dữ liệu, báo lên người có tên sau ba vòng |
 | `skills/security/SKILL.md` | Kiểm thử | Một bản ghi bảo mật: phạm vi và ranh giới tin cậy, các scanner đã chạy, mối đe dọa theo từng ranh giới, phát hiện đã kiểm chứng, một checklist trả lời từng mục, rủi ro còn lại để một người chấp nhận; và mô hình mối đe dọa của một tính năng |
 | `skills/git/SKILL.md` | Quản lý phiên bản | Đọc diff trước khi stage, quét dừng lại khi gặp thông tin đăng nhập, commit revert được một mình, và push, pull request, merge đều chờ lời đồng ý riêng |
 | `skills/release/SKILL.md` | Bàn giao | Ghi chú theo đối tượng, checklist có người phụ trách, migration, rollback, phê duyệt |
@@ -137,6 +137,9 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/spec/references/feature-spec-template.md` | Hình dạng tài liệu tính năng: lối vào gồm cả job, hành vi theo điều kiện, quyền theo vai trò |
 | `skills/spec/references/screen-spec-template.md` | Hình dạng tài liệu màn hình: bảng thành phần lấy node ID của Figma làm khóa, các trạng thái, đề xuất được đánh dấu và có nguồn, và cách đưa một design đã đổi vào tài liệu theo từng dòng |
 | `skills/spec/references/drift-check.md` | Bảng kiểm phủ, hình dạng một phát hiện, ba mức nghiêm trọng, và ranh giới chỉ đọc |
+| `skills/verify/references/runtime-checks.md` | Kiểm tra kho dữ liệu có khớp với branch, fixture cho từng ca, dựng ứng dụng lên, tác động vào nó, khẳng định một tác động thật, và dọn dẹp sau đó, kể cả kho dùng chung và tài nguyên run tự tạo |
+| `skills/verify/references/ui-checks.md` | Lượt chạy `--ui`: đối chiếu màn hình với bản thiết kế |
+| `skills/verify/references/report-template.md` | Báo cáo kiểm chứng, nêu rõ đã chứng minh được gì và chưa chứng minh được gì |
 | `skills/review/references/review-rounds.md` | Chín vòng review và mỗi vòng mở ra cái gì trước, ngưỡng số dòng thay đổi quyết định các vòng có chạy trong agent riêng hay không, vòng nào chạy nhiều bản khi có `--parallel` và vòng nào không bao giờ, dòng nào được tính vào bậc và vì sao tệp do máy sinh thì không, phải làm gì khi một agent không trở về, cách agent gọi phát trước một vòng khi điều phối mà không cho vòng nào thấy kết quả của vòng khác, và cách gộp phát hiện thành một danh sách xếp hạng trong từng vòng rồi giữa các vòng |
 | `skills/review/references/report-format.md` | Hình dạng báo cáo review: mã định danh phát hiện mang tiền tố mức nghiêm trọng và cách nó được giữ sang lượt review sau trên cùng đối tượng, các nhãn dưới mỗi phát hiện gồm cả rule quy ước mà nó viện dẫn, bảng các vòng, thứ tự các mục, ngôn ngữ viết chúng, và vì sao không mục nào trong đó có điểm số |
 | `skills/qa/references/case-dimensions.md` | Mười chiều mà mỗi tiêu chí chấp nhận được đi qua để tìm ca âm và ca biên, các kỹ thuật quyết định một chiều cho ra bao nhiêu ca (phân lớp tương đương, giá trị biên, bảng quyết định, chuyển trạng thái, ghép cặp, đoán lỗi), dấu `[ASSUMPTION]` cho giá trị phải suy luận, quy tắc rằng một chiều bị bỏ qua phải kèm giả định của nó, và mức ưu tiên một ca nhận từ thứ bị hỏng |
@@ -147,9 +150,6 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `skills/qa/references/test-run.md` | Các chế độ `--record`, `--bug` và `--retest`: tên record mang theo giờ và ba thay đổi duy nhất được phép sau khi ghi, những dữ liệu một record không bao giờ được chứa và cách che chúng, những gì một lần chạy cần tester cung cấp, hình dạng record của lần chạy với bảng tổng kết đối chiếu tiêu chí kết thúc và mục lỗi mang đủ những gì `atk:fix` cần, việc tạo issue cho các lỗi được chọn sau khi đã cho xem danh sách, và retest như một lần chạy mới phạm vi hẹp, kết luận được đề nghị đăng thành comment |
 | `skills/qa/references/review-mode.md` | Lượt `--review`: ai được chạy và vì sao không bao giờ là người viết, những nguồn nó mở, mười một lượt kiểm mỗi lượt hỏi một câu cho mọi dòng, lý do không có bản sửa sẵn, điểm số và bảng đếm, thang mức độ dùng chung với `atk:review`, những gì một phát hiện mang theo, và report dạng derived nó ghi mà không đụng vào file test case |
 | `skills/qa/references/test-plan-template.md` | Test plan: phạm vi, các cấp test từ UT tới UAT, loại test theo yêu cầu phi chức năng dự án thực sự nêu, môi trường, tương thích, mục Regression chứa ma trận regression và các case migration, rollback mà thiết kế yêu cầu, tiêu chí vào và ra theo từng cấp, severity của lỗi với thời hạn xử lý để PM điền, và đường dẫn tới lịch test thay vì chép lịch vào |
-| `skills/verify/references/runtime-checks.md` | Kiểm tra kho dữ liệu có khớp với branch, fixture cho từng ca, dựng ứng dụng lên, tác động vào nó, khẳng định một tác động thật, và dọn dẹp sau đó, kể cả kho dùng chung và tài nguyên run tự tạo |
-| `skills/verify/references/ui-checks.md` | Lượt chạy `--ui`: đối chiếu màn hình với bản thiết kế |
-| `skills/verify/references/report-template.md` | Báo cáo kiểm chứng, nêu rõ đã chứng minh được gì và chưa chứng minh được gì |
 | `skills/security/references/threat-checklist.md` | Thứ tự tìm các lệnh audit của dự án, các kiểm tra tự động, sáu câu hỏi STRIDE cho mỗi ranh giới tin cậy, bảng ánh xạ sang OWASP Top 10, và checklist nền được trả lời khi không ai cung cấp checklist |
 | `skills/security/references/record-template.md` | Ba kết luận và vì sao một ứng viên bị bác bỏ vẫn được giữ lại, bốn mức nghiêm trọng, quy tắc che thông tin nhạy cảm, và hình dạng của bản ghi bảo mật và mô hình mối đe dọa |
 | `skills/git/references/secret-scan.md` | Các mẫu quét trong phần đã stage, những đường dẫn tự nó đã là phát hiện, và vì sao một lần trúng chặn cả lượt chạy; `atk:security` chỉ đọc các mẫu và các đường dẫn, trên các file đã track |
@@ -180,9 +180,9 @@ bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 tro
 | `skills/plan/evals/trigger_evals.json` | Lập kế hoạch cho một người, đối lại `breakdown` và `design-doc` |
 | `skills/implement/evals/trigger_evals.json` | Làm việc xây dựng, đối lại lập kế hoạch và review |
 | `skills/fix/evals/trigger_evals.json` | Một lỗi, đối lại `incident`, việc triển khai thông thường, và việc log hay retest một bug, thuộc về `qa` |
+| `skills/verify/evals/trigger_evals.json` | Kiểm chứng lúc chạy, đối lại `qa` và `review` |
 | `skills/review/evals/trigger_evals.json` | Đọc một diff, đối lại `qa`, `verify`, `fix` và `catchup` |
 | `skills/qa/evals/trigger_evals.json` | Test case và test plan viết ra, việc cập nhật chúng sau khi spec đổi, việc ghi một lần chạy, các bug của nó và một lần retest, và việc review một file test case, đối lại `verify`, việc viết mã test tự động, việc kiểm tra tài liệu tham chiếu có lệch khỏi code không, và việc sửa một bug |
-| `skills/verify/evals/trigger_evals.json` | Kiểm chứng lúc chạy, đối lại `qa` và `review` |
 | `skills/security/evals/trigger_evals.json` | Review bảo mật, một checklist của khách hàng và một mô hình mối đe dọa, đối lại `review`, `git`, `qa`, `fix`, `incident` và `release` |
 | `skills/git/evals/trigger_evals.json` | Commit, pull request và rebase, đối lại `review`, `release` và `implement` |
 | `skills/release/evals/trigger_evals.json` | Ghi chú và checklist deploy, đối lại `incident` và `qa` |

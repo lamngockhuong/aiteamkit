@@ -87,9 +87,9 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Eight
 | `skills/plan/SKILL.md` | Development | Phases ending in something reviewable, steps that leave the tree working, scope boundary; under `--review`, findings about a plan somebody else wrote |
 | `skills/implement/SKILL.md` | Development | The code, verified by layer, plus the record that becomes the pull request body |
 | `skills/fix/SKILL.md` | Development | A proven cause, the smallest change removing it, and a report of what was checked |
+| `skills/verify/SKILL.md` | Development | The running system exercised, side effects asserted in data, escalation after three rounds |
 | `skills/review/SKILL.md` | Development | Findings ranked blocking / should fix / nit, optionally posted to the PR |
 | `skills/qa/SKILL.md` | Verification | Test plan, traced test cases, regression matrix, entry and exit criteria |
-| `skills/verify/SKILL.md` | Verification | The running system exercised, side effects asserted in data, escalation after three rounds |
 | `skills/security/SKILL.md` | Verification | A security record: scope and trust boundaries, scanners run, threats per boundary, verified findings, a checklist answered item by item, residual risk left for a person to accept; and the threat model of a feature |
 | `skills/git/SKILL.md` | Version control | The diff read before staging, a scan that stops on a credential, commits that revert alone, and push, pull request and merge each behind their own yes |
 | `skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, rollback, sign-offs |
@@ -137,6 +137,9 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/spec/references/feature-spec-template.md` | The feature document shape: entry points including jobs, behaviour by condition, permissions by role |
 | `skills/spec/references/screen-spec-template.md` | The screen document shape: the component table keyed by Figma node ID, states, proposals marked and cited, and how a changed design is folded in row by row |
 | `skills/spec/references/drift-check.md` | The coverage checklist, the shape of a finding, the three severities, and the read-only boundary |
+| `skills/verify/references/runtime-checks.md` | Checking the data store against the branch, fixtures for one case, bringing the application up, exercising it, asserting a real side effect, and cleaning up, shared stores and created resources included |
+| `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
+| `skills/verify/references/report-template.md` | The verification report, naming what was proven and what was not |
 | `skills/review/references/review-rounds.md` | The nine rounds and what each one opens first, the band of changed lines that decides whether they run in agents of their own, which of them take copies under `--parallel` and which never do, which changed lines count towards the band and why a generated file does not, what to do when an agent does not come back, how the calling agent drives them one round ahead without showing any of them what the others found, and how findings become one ranked list within a round and then across rounds |
 | `skills/review/references/report-format.md` | The shape of the review report: severity-prefixed finding identifiers and how they carry into a later review of the same target, the labels under each finding including the convention rule it cites, the round table, the sections in order, which language they are written in, and why no score appears in any of them |
 | `skills/qa/references/case-dimensions.md` | The ten dimensions each acceptance criterion is walked through for negative and boundary cases, the techniques that decide how many cases a dimension gives (equivalence partitioning, boundary values, decision tables, state transitions, pairwise, error guessing), the `[ASSUMPTION]` mark for an inferred value, the rule that a skipped dimension carries its assumption, and the priority a case takes from what breaks |
@@ -147,9 +150,6 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `skills/qa/references/test-run.md` | The `--record`, `--bug` and `--retest` modes: the record's time-stamped name and the only three changes allowed after it is written, the data a record must never carry and how it is redacted, what a run needs from the tester, the run record's shape with its summary against the exit criteria and a defect section carrying what `atk:fix` needs, raising chosen defects on the tracker after the list is shown, and a retest as a narrow new run whose verdict is offered as a comment |
 | `skills/qa/references/review-mode.md` | The `--review` pass: who may run it and why never the owner, the sources it opens, the eleven passes each asking one question of every row, why a corrected copy, a score, and count tables are left out, the severity scale shared with `atk:review`, what a finding carries, and the derived report it writes without touching the cases file |
 | `skills/qa/references/test-plan-template.md` | The test plan: scope, test levels UT to UAT, test types from the stated non-functional requirements, environments, compatibility, the Regression section holding the matrix and the design's migration and rollback cases, entry and exit per level, defect severity with response targets left to the PM, and a link to the schedule rather than a copy of it |
-| `skills/verify/references/runtime-checks.md` | Checking the data store against the branch, fixtures for one case, bringing the application up, exercising it, asserting a real side effect, and cleaning up, shared stores and created resources included |
-| `skills/verify/references/ui-checks.md` | The `--ui` pass: comparing a screen against the design |
-| `skills/verify/references/report-template.md` | The verification report, naming what was proven and what was not |
 | `skills/security/references/threat-checklist.md` | The order to find the project's audit commands in, the automated checks, the six STRIDE questions per trust boundary, the map to the OWASP Top 10, and the baseline checklist answered when nobody supplied one |
 | `skills/security/references/record-template.md` | The three verdicts and why a refuted candidate is kept, the four severities, the redaction rule, and the shapes of the security record and the threat model |
 | `skills/git/references/secret-scan.md` | The patterns scanned for in the staged diff, the paths that are a finding on their own, and why a hit stops the whole run; `atk:security` reads the patterns and the paths alone, over tracked files |
@@ -180,9 +180,9 @@ all three trigger languages. The kit ships no runner; see `docs/project-roadmap.
 | `skills/plan/evals/trigger_evals.json` | Planning one person's work against `breakdown` and `design-doc` |
 | `skills/implement/evals/trigger_evals.json` | Building against planning and reviewing |
 | `skills/fix/evals/trigger_evals.json` | A defect against `incident`, ordinary implementation, and logging or retesting a bug, which is `qa` |
+| `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
 | `skills/review/evals/trigger_evals.json` | Reading a diff, against `qa`, `verify`, `fix`, and `catchup` |
 | `skills/qa/evals/trigger_evals.json` | Written cases and plans, updating them after a spec change, recording a run, its bugs and a retest, and reviewing a cases file, against `verify`, automated test code, a drift check of reference documents, and fixing a bug |
-| `skills/verify/evals/trigger_evals.json` | Runtime confirmation against `qa` and `review` |
 | `skills/security/evals/trigger_evals.json` | Security review, a client checklist and a threat model, against `review`, `git`, `qa`, `fix`, `incident`, and `release` |
 | `skills/git/evals/trigger_evals.json` | Commits, pull requests and rebases, against `review`, `release` and `implement` |
 | `skills/release/evals/trigger_evals.json` | Notes and the deploy checklist, against `incident` and `qa` |

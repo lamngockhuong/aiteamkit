@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
 OpenAI Codex CLI. It packages 23 skills covering the delivery lifecycle of a company project team
 (`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`,
-`convention`, `plan`, `implement`, `fix`, `review`, `qa`, `verify`, `security`, `git`, `release`,
+`convention`, `plan`, `implement`, `fix`, `verify`, `review`, `qa`, `security`, `git`, `release`,
 `incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
 (`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
 
@@ -72,7 +72,7 @@ skills/<name>/
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
 neighbours it must not steal. `references/` is where they still differ: eighteen of them carry
 one (`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `convention`,
-`plan`, `implement`, `fix`, `review`, `qa`, `verify`, `security`, `git`, `onboard`), and the other five are
+`plan`, `implement`, `fix`, `verify`, `review`, `qa`, `security`, `git`, `onboard`), and the other five are
 still `SKILL.md` alone. `qa` holds the most, eight: its modes for updating cases, recording a run,
 and reviewing cases each keep their procedure in a file of their own, and its checklist is a list
 beside the file that governs it. Deepening a skill means adding `references/` files and pointing at
