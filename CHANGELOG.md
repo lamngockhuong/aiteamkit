@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.0](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.21...v0.1.0) (2026-10-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **qa:** /atk:qa --run is gone, with no alias. Use /atk:qa --record <cases-path>, which does the same thing. A project override under .atk/overrides/qa.md that mentions --run needs the word changed by hand.
+
+### Features
+
+* **qa:** rename --run to --record, move verify into the build phase, take security out of the cycle ([#85](https://github.com/lamngockhuong/aiteamkit/issues/85)) ([58aeb52](https://github.com/lamngockhuong/aiteamkit/commit/58aeb528e394aab780b61a8c8fa3ebc52f5285da))
+* **run-cases:** add atk:run-cases to execute approved cases on a deployed environment ([#87](https://github.com/lamngockhuong/aiteamkit/issues/87)) ([de8db11](https://github.com/lamngockhuong/aiteamkit/commit/de8db11fddbfd2d43497f2c20b9f9077ef8d9b01))
+
 ## [0.0.21](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.20...v0.0.21) (2026-09-30)
 
 
