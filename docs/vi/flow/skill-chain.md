@@ -24,6 +24,7 @@ flowchart TD
     A6b["Pull request<br/><small>bản ghi làm phần thân</small>"]
     A7["Kết quả review"]
     A8["Kế hoạch và test case"]
+    A8b["Run record<br/><small>kết quả đã quan sát, các lỗi</small>"]
     A9["Báo cáo kiểm chứng"]
     A9b["Bản ghi bảo mật<br/><small>phát hiện, checklist, rủi ro còn lại</small>"]
     A10["Ghi chú phát hành + checklist"]
@@ -49,6 +50,8 @@ flowchart TD
     A6 -->|security| A9b
     A9b -->|release| A10
     A8 -->|release| A10
+    A8 -->|run-cases| A8b
+    A8b -->|release| A10
     A10 -->|incident| A11
     A10 -->|retro| A12
 ```
@@ -88,6 +91,7 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | Người review thay đổi, trên pull request |
 | `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt, cùng những khoảng trống quy ước đứng sau chúng | `implement`, `fix`, `convention` |
 | `qa` | Tiêu chí nghiệm thu, thay đổi, tài liệu tham chiếu cho giá trị mong đợi, spec màn hình cho text của case `GUI` hoặc design Figma khi màn hình chưa có spec, và thiết kế cho migration, rollback và rollout | Kế hoạch test, test case, ma trận hồi quy; sau đó là record của lần chạy kèm các lỗi, bug được tạo từ đó, và record của lần retest | `fix` từ một bug đã tạo; `release` từ record của lần chạy |
+| `run-cases` | File test case đã duyệt, các môi trường trong test plan của nó, code để biết route và chuỗi mong đợi, và một môi trường DEV hoặc staging đã deploy | Một run record chứa kết quả đã quan sát, kèm các lỗi và evidence đặt cạnh, cộng một triage report và một run log | `qa --bug` và `--retest` từ record đó; `release` từ record khi QA Leader đã duyệt |
 | `security` | Mã trong phạm vi, các scanner của dự án, bản thiết kế và mô hình mối đe dọa; với `--checklist`, checklist do khách hàng hoặc công ty cung cấp | Một bản ghi bảo mật với các phát hiện đã kiểm chứng, một checklist đã trả lời và rủi ro còn lại; với `--threat-model`, mô hình mối đe dọa của một tính năng | `release`, `fix`, `implement`, và người duyệt chấp nhận từng rủi ro |
 | `git` | Một thay đổi hoặc artifact đã xong, cùng bản ghi mà skill gọi nó đã viết | Các commit, một nhánh, và pull request mang bản ghi đó | `review`, rồi tới người duyệt |
 | `release` | Diff kể từ phiên bản trước | Ghi chú, checklist, đường lui | `incident`, `retro` |

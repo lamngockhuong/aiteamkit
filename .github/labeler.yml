@@ -94,6 +94,10 @@
 - changed-files:
   - any-glob-to-any-file: 'skills/qa/**'
 
+'skill: run-cases':
+- changed-files:
+  - any-glob-to-any-file: 'skills/run-cases/**'
+
 'skill: security':
 - changed-files:
   - any-glob-to-any-file: 'skills/security/**'

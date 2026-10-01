@@ -76,10 +76,14 @@ trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi 
 `atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại `atk:review`, hoặc
 `atk:plan --review` nếu thứ được soát là một bản kế hoạch, hoặc `atk:qa --review` nếu đó là một file
 test case; còn báo cáo lỗi thiết lập thì chạy lại
-`atk:onboard` trên kho mã ở trạng thái lúc đó. Các lượt review ấy, khi chạy mà không kèm
+`atk:onboard` trên kho mã ở trạng thái lúc đó; triage report và run log của `atk:run-cases` thì đã được
+run record đứng trước chúng trích dẫn và tóm tắt. Các lượt review ấy, khi chạy mà không kèm
 `--comment`, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
-bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có bốn skill đọc một
-trong sáu loại, và cả bốn đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
+bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có năm skill đọc một
+trong tám loại. `atk:run-cases` đọc run log của lần chạy trước trên cùng file test case, để đề nghị
+chạy tiếp những case lần đó đã hoãn; mất file này thì các case ấy vẫn có tên trong record của lần chạy
+đó, cạnh những gì lần chạy để lại trên môi trường, nên người chạy tự nêu chúng qua `--only`. Bốn skill
+còn lại đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
 đọc báo cáo mới nhất của đối tượng đó để giữ lại mã định danh của các phát hiện, và khi không có báo cáo nào
 thì đánh số lại từ 1 và nói rõ điều đó; `atk:plan --review` đọc báo cáo mới nhất của cùng bản kế
 hoạch, cũng để giữ mã định danh, và để phân biệt một kết quả tác giả đã thấy mà không sửa với một

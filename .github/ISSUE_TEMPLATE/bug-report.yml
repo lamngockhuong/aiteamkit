@@ -43,6 +43,7 @@ body:
         - Skill - atk:verify
         - Skill - atk:review
         - Skill - atk:qa
+        - Skill - atk:run-cases
         - Skill - atk:security
         - Skill - atk:git
         - Skill - atk:release

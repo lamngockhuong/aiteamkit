@@ -1,6 +1,6 @@
 # Luồng dự án
 
-23 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
+24 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,
@@ -86,7 +86,9 @@ flowchart TD
 
     subgraph S6["6. Kiểm thử"]
         V0["atk:qa<br/><small>QA viết kế hoạch và test case</small>"] --> V1["Tester chạy các case<br/><small>ghi lại bằng atk:qa --record</small>"]
+        V0 --> VR["atk:run-cases<br/><small>agent chạy các case tự động được trên DEV hoặc staging</small>"]
         V1 --> V2{"QA ký nhận"}
+        VR --> V2
         V2 -->|Phát hiện lỗi| F0["atk:fix"]
         F0 --> V1
     end
@@ -141,6 +143,7 @@ flowchart TD
 | 5. Làm | `atk:git` | Dev | Người review, người duyệt pull request mà nó mở | không có |
 | 6. Kiểm thử | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm thử | `atk:qa --record`, `--retest` | QA đã chạy các case | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
+| 6. Kiểm thử | `atk:run-cases` | QA đã khởi động lần chạy | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | Bất cứ lúc nào: định kỳ, hoặc trước hay sau khi phát hành | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận | `IN REVIEW` sang `APPROVED` |
 | 7. Phát hành | `atk:release` | PM cùng SRE | Stakeholder hoặc PM ra quyết định phát hành | `IN REVIEW` sang `APPROVED` |
 | 8. Vận hành | `atk:incident` | Incident Commander | TL và PM, về các hành động tiếp theo | `IN REVIEW` sang `APPROVED` |
@@ -159,8 +162,8 @@ theo pha ở trên và từ mục `## Roles` của từng skill. Ai cũng chạy
 | BrSE/BA | `intake`; `spec` loại `screen` | `spec` loại `feature` và `screen`; override bằng `tailor` cho `design-doc` hoặc `spec` | `catchup`, trả lời câu hỏi của người mới; `design-doc`, thiết kế còn đáp ứng yêu cầu không; `qa`, test case có khớp ý đồ không |
 | TL | `init`, hoặc Dev; `tailor`; kích thước trong `estimate`, cùng Dev; `design-doc`, hoặc Dev; `breakdown`, hoặc PM; `convention`; `security`, hoặc Dev | `init`; `design-doc`; `spec` loại `api` và `db`; `plan`, khi nó chạm schema, hợp đồng công khai hoặc hai service; `qa`, hoặc QA lead; `security`, trừ khi đội có người phụ trách bảo mật; các hành động tiếp theo trong `incident`, cùng PM; override bằng `tailor` cho mọi skill không thuộc PM, BrSE/BA hay QA, và mọi override chạm tới cách viết hoặc review code | Tính khả thi trong `intake`; `implement`, ở cửa việc lớn và khi vòng review chạm trần; `fix`, khi bước kiểm tra ý đồ dừng lại; `verify`, khi chạm trần; `review`, khi một phát hiện chặn bị tranh cãi; rủi ro kỹ thuật trong `release`; nguyên nhân gốc trong `incident`; chỉ định người kèm trong `onboard`; khoảng trống trong `handover` |
 | Dev | `init`, hoặc TL; kích thước trong `estimate`; `design-doc`, hoặc TL; `spec`; `plan`; `implement`; `fix`; `verify`; `review` thay đổi của người khác; `security`, hoặc TL; `git` | Phần việc của chính mình trong `breakdown`; `plan` của chính mình, dưới ngưỡng cần TL; report `verify` của thay đổi mình review | `catchup`, là người đọc và tự làm bài kiểm tra hiểu bài; `convention`, đồng thuận từng quy tắc; bàn giao và dữ liệu test trong `qa` |
-| QA | `qa`, gồm kế hoạch, test case, và record của những lần chạy do mình thực hiện; phần công sức test của mình trong `estimate` | `qa`, với vai QA lead, kể cả record của lần chạy; override bằng `tailor` cho `qa` | `intake`, mỗi tiêu chí có test được không; `catchup`, là người đọc vào giữa chừng; task test của mình trong `breakdown`; `fix`, triệu chứng đã hết theo bước tái hiện chưa; độ đầy đủ của test trong `review`; `security`, đọc khi ký nhận; kết quả test trong `release` |
-| SRE | `release`, cùng PM | Không có gì trong chu trình | Triển khai, dữ liệu và năng lực trong `design-doc`; môi trường trong `verify`; cấu hình, hạ tầng và secret trong `security`; thực thi và rollback trong `release`; giảm thiểu sự cố trong `incident` |
+| QA | `qa`, gồm kế hoạch, test case, và record của những lần chạy do mình thực hiện; `run-cases`, record của lần chạy do mình khởi động; phần công sức test của mình trong `estimate` | `qa`, với vai QA lead, kể cả record của lần chạy, trong đó có record do `run-cases` viết; override bằng `tailor` cho `qa` | `intake`, mỗi tiêu chí có test được không; `catchup`, là người đọc vào giữa chừng; task test của mình trong `breakdown`; `fix`, triệu chứng đã hết theo bước tái hiện chưa; độ đầy đủ của test trong `review`; `security`, đọc khi ký nhận; kết quả test trong `release` |
+| SRE | `release`, cùng PM | Không có gì trong chu trình | Triển khai, dữ liệu và năng lực trong `design-doc`; môi trường trong `verify`; `run-cases`, khi test plan ghi họ là người phụ trách môi trường mà lần chạy nhắm tới; cấu hình, hạ tầng và secret trong `security`; thực thi và rollback trong `release`; giảm thiểu sự cố trong `incident` |
 | Stakeholder | Không có gì trong chu trình | Phạm vi và tiêu chí trong `intake`; `estimate`, cùng PM; quyết định phát hành trong `release`, hoặc PM; một phát hiện chưa sửa trong `security`, hoặc PM | Các câu hỏi mở mà `intake` ghi tên họ |
 
 Một số skill gọi tên người theo việc họ đang làm, bất kể vai: người mới vào đọc `catchup` và đi qua

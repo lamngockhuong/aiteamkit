@@ -10,7 +10,7 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-  skills/<name>/SKILL.md        23 skill, mỗi skill một thư mục
+  skills/<name>/SKILL.md        24 skill, mỗi skill một thư mục
   skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
   skills/<name>/references/*.tsv danh sách do một file tham chiếu quản, mỗi dòng một bản ghi
   skills/<name>/evals/*.json    bộ case kiểm trigger của description
@@ -44,7 +44,7 @@ nhân bản theo từng harness. Các manifest chỉ khác nhau ở cách khai b
 
 ```mermaid
 flowchart TD
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>23 thư mục, mỗi thư mục một SKILL.md</small>"]
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>24 thư mục, mỗi thư mục một SKILL.md</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
     SK --> SH["shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]
@@ -63,7 +63,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho cả 23 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho cả 24 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
@@ -72,7 +72,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 ## Lớp `shared/`
 
-Mười sáu file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 23 skill trích dẫn:
+Mười sáu file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
 - `shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
 - `shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -117,7 +117,10 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
   gửi được nhiều câu hỏi trong cùng một lần. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo
   một chiều: khả năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về
   một kit khác thì không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai
-  thì không.
+  thì không. `atk:run-cases` trích dẫn file này cho khả năng tự động hoá trình duyệt, thứ không thuộc loại nào ở
+  trên: nó được gọi theo việc nó làm, không bao giờ theo tên plugin hay server cung cấp nó, và là khả
+  năng duy nhất mà thiếu nó thì một skill phải dừng, vì với skill đó trình duyệt chính là công việc,
+  còn làm tay thì đã là `atk:qa --record`.
 - `shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
   phần không bao giờ đụng tới. Cùng ba skill sửa mã đó trích dẫn, thông qua `host-capabilities.md`.
   Nó tồn tại để bước dọn mã cho ra cùng một kết quả trên harness có sẵn khả năng dọn và trên harness
@@ -158,6 +161,7 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
   chưa mở file nào mà report trích dẫn. Gồm mục `In short` ở đầu report, năm quy tắc cho phần lời
   quanh bằng chứng, và những thứ không bao giờ đổi, trước hết là chính bằng chứng. Template report
   của `atk:fix`, `atk:verify`, `atk:review`, `atk:security` và `atk:qa --record` trích dẫn file này,
+  `atk:run-cases` cũng tới đây qua hình dạng run record nó dùng lại,
   cùng mục `## Output` của `atk:incident`, vì đó là những report ghi lại một lần chạy và cần một người hành động theo. Một
   report đúng từng dòng vẫn không đọc được khi mỗi nhận định chỉ là một trích dẫn, và một quy tắc
   chép vào sáu template sẽ trôi thành sáu bản khác nhau.
@@ -175,7 +179,7 @@ Hai file cuối mô tả những file không đi kèm kit:
 
 - `shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
   chỗ thư mục này nằm khi dự án trải trên nhiều repository, hai mục mà file đó được phép mang, và
-  bảy thứ phần ghi đè không bao giờ được gỡ. Bảy điều loại trừ
+  tám thứ phần ghi đè không bao giờ được gỡ. Tám điều loại trừ
   là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
   qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng. File ghi đè chỉ có hiệu
   lực khi người duyệt đã chuyển nó sang `APPROVED`; trước đó skill chạy như bản gốc và ghi rõ điều

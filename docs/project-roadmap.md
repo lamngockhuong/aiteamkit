@@ -5,9 +5,9 @@
 | Phase | State | Summary |
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
-| 2. Skill coverage | DONE | 23 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for eighteen, pending for the other five |
-| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 23 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
+| 2. Skill coverage | DONE | 24 `SKILL.md` files covering the lifecycle, sharing one section contract |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for nineteen, pending for the other five |
+| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 24 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
 
@@ -19,7 +19,7 @@ Repository layout mirroring a working multi-harness plugin: `.claude-plugin/`, `
 
 ## Phase 2: Skill coverage (done)
 
-Twenty-three skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
+Twenty-four skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
 with multilingual triggers, scope, roles, invocation, workflow, output, ticket, and a definition of
 done.
 
@@ -37,7 +37,11 @@ the project rather than from a list, so a skill added later is one it already kn
 `security` followed it, for the checklist a client asks for before acceptance: a record of what was
 checked and found, with every unfixed finding left for a named person to accept.
 
-The `shared/` layer holds what would otherwise be repeated twenty-three times: the role vocabulary,
+`run-cases` came after both, for the regression pass a team runs by hand on a deployed environment:
+the agent executes the cases it can observe honestly and writes a run record the QA lead approves,
+while `qa` still never executes a case and `verify` stays the developer's check on the local stack.
+
+The `shared/` layer holds what would otherwise be repeated twenty-four times: the role vocabulary,
 the artifact path convention, and the tracker adapters, cited by every skill. Twelve more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
@@ -54,7 +58,7 @@ through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Eighteen skills ship with `references/` already. The other five do not. Where the output is a
+Nineteen skills ship with `references/` already. The other five do not. Where the output is a
 document with a fixed shape and no reference holds that shape, the template is re-derived on every
 run:
 

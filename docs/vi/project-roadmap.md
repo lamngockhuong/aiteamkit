@@ -5,9 +5,9 @@
 | Phase | Trạng thái | Tóm tắt |
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
-| 2. Độ phủ skill | XONG | 23 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười tám skill đã có, năm skill còn lại chưa |
-| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 23 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
+| 2. Độ phủ skill | XONG | 24 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười chín skill đã có, năm skill còn lại chưa |
+| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 24 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
 
@@ -19,7 +19,7 @@ release-please chạy khi push lên `main`, cùng các template issue và pull r
 
 ## Phase 2: Độ phủ skill (xong)
 
-Hai mươi ba skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục:
+Hai mươi bốn skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục:
 frontmatter với trigger đa ngôn ngữ, scope, roles, invocation, workflow, output, ticket và
 definition of done.
 
@@ -37,7 +37,11 @@ thái của dự án chứ không từ một danh sách, nên một skill thêm 
 `security` đến sau nó, cho checklist mà khách hàng yêu cầu trước khi nghiệm thu: một bản ghi về những gì
 đã được kiểm tra và tìm thấy, với mọi phát hiện chưa sửa được để lại cho một người có tên chấp nhận.
 
-Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi ba lần: từ vựng vai trò, quy ước đường dẫn
+`run-cases` đến sau cả hai, cho lượt regression mà team vẫn chạy tay trên môi trường đã deploy: agent
+chạy những case nó quan sát được kết quả và viết một run record chờ QA Leader duyệt, còn `qa` vẫn không
+bao giờ tự chạy case và `verify` vẫn là bước lập trình viên tự kiểm trên stack local.
+
+Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi bốn lần: từ vựng vai trò, quy ước đường dẫn
 artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười hai file còn lại là hợp đồng giữa
 những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa sáu skill có
@@ -54,7 +58,7 @@ nằm trong kit, và `project-overrides.md` mô tả
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Mười tám skill đã có sẵn `references/`. Năm skill còn lại thì chưa. Chỗ nào output là tài liệu bố
+Mười chín skill đã có sẵn `references/`. Năm skill còn lại thì chưa. Chỗ nào output là tài liệu bố
 cục cố định mà chưa reference nào giữ bố cục ấy, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |

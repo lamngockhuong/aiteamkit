@@ -10,7 +10,7 @@ aiteamkit/
   .claude-plugin/     plugin.json + marketplace.json     Claude Code
   .cursor-plugin/     plugin.json                        Cursor
   .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-  skills/<name>/SKILL.md        23 skills, one folder each
+  skills/<name>/SKILL.md        24 skills, one folder each
   skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
   skills/<name>/references/*.tsv a list one reference file governs, one record per line
   skills/<name>/evals/*.json    trigger cases for the description
@@ -45,7 +45,7 @@ is never duplicated per harness. The manifests differ only in how they declare c
 
 ```mermaid
 flowchart TD
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>23 folders, one SKILL.md each</small>"]
+    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>24 folders, one SKILL.md each</small>"]
     UP[".cursor-plugin/plugin.json"] --> SK
     XP[".codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
     SK --> SH["shared/<br/><small>cited by the skills that need it</small>"]
@@ -64,7 +64,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for all 23 skills | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for all 24 skills | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
@@ -73,7 +73,7 @@ This produces the size discipline in the kit:
 
 ## The `shared/` layer
 
-Sixteen files hold what skills would otherwise repeat. The first three are cited by all 23:
+Sixteen files hold what skills would otherwise repeat. The first three are cited by all 24:
 
 - `shared/team-roles.md`: the role table and the eight rules every skill follows.
 - `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -120,7 +120,9 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
   several questions in a single prompt. It draws the line the kit had drawn only one way before: a
   capability the harness itself ships may be named and used, a command belonging to another kit may
   not, because the first is there for everyone who installed atk on that harness and the second is
-  not.
+  not. Cited by `atk:run-cases` for browser automation, which is neither: it is named by what it does
+  and never by the plugin or server supplying it, and it is the one capability whose absence stops a
+  skill, since for that skill the browser is the work and doing it by hand is `atk:qa --record`.
 - `shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one
@@ -161,7 +163,8 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
 - `shared/plain-writing.md`: how the prose of a run's report is written for a reader who has opened
   none of the files it cites: the `In short` section that opens it, five rules for the prose around
   the evidence, and what never changes, the evidence itself above all. Cited by the report templates
-  of `atk:fix`, `atk:verify`, `atk:review`, `atk:security` and `atk:qa --record`, and by `## Output` of
+  of `atk:fix`, `atk:verify`, `atk:review`, `atk:security` and `atk:qa --record`, the last also
+  reached by `atk:run-cases` through the run record shape it reuses, and by `## Output` of
   `atk:incident`, the
   reports that record one run and ask a person to act on it. A report correct in every line is still
   unreadable when each claim is a citation, and a rule written into six templates would drift into six.
@@ -179,7 +182,7 @@ The last two describe files that do not ship with the kit at all:
 
 - `shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
   where the directory sits when a project spans several repositories, the two sections it may carry,
-  and the seven things an override may never remove. The seven
+  and the eight things an override may never remove. The eight
   exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
   skill that skips part of an override says so in its artifact rather than silently. An override
   applies only once its approver has moved it to `APPROVED`; before that the skill runs as shipped

@@ -1,6 +1,6 @@
 # Project Flow
 
-How the 23 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
+How the 24 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,
@@ -85,7 +85,9 @@ flowchart TD
 
     subgraph S6["6. Test"]
         V0["atk:qa<br/><small>QA writes the plan and cases</small>"] --> V1["Testers run the cases<br/><small>recorded with atk:qa --record</small>"]
+        V0 --> VR["atk:run-cases<br/><small>the agent runs the automatable cases on DEV or staging</small>"]
         V1 --> V2{"QA signs off"}
+        VR --> V2
         V2 -->|Defect found| F0["atk:fix"]
         F0 --> V1
     end
@@ -140,6 +142,7 @@ flowchart TD
 | 5. Build | `atk:git` | Dev | The reviewer, who approves the pull request it opens | n/a |
 | 6. Test | `atk:qa` | QA | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | 6. Test | `atk:qa --record`, `--retest` | QA who ran the cases | QA lead or TL | `IN REVIEW` to `APPROVED` |
+| 6. Test | `atk:run-cases` | QA who started the run | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | Any time: scheduled, or before or after a release | `atk:security` | Dev or TL | TL, or the security officer where the team has one; each unfixed finding accepted by the PM or the Stakeholder | `IN REVIEW` to `APPROVED` |
 | 7. Release | `atk:release` | PM with SRE | Stakeholder or PM gives the go decision | `IN REVIEW` to `APPROVED` |
 | 8. Operate | `atk:incident` | Incident Commander | TL and PM on the follow-up actions | `IN REVIEW` to `APPROVED` |
@@ -158,8 +161,8 @@ run `atk:help`, and it is in no row.
 | BrSE/BA | `intake`; `spec` of kind `screen` | `spec` of kinds `feature` and `screen`; a `tailor` override of `design-doc` or `spec` | `catchup`, answering what a newcomer asks; `design-doc`, that it still meets the requirement; `qa`, that the cases match the intent |
 | TL | `init`, or Dev; `tailor`; `estimate` sizes, with Dev; `design-doc`, or Dev; `breakdown`, or PM; `convention`; `security`, or Dev | `init`; `design-doc`; `spec` of kinds `api` and `db`; `plan`, when it touches a schema, a public contract, or two services; `qa`, or the QA lead; `security`, unless the team has a security officer; the follow-up actions in `incident`, with PM; a `tailor` override of any skill not listed for PM, BrSE/BA, or QA, and any override touching how code is written or reviewed | `intake` feasibility; `implement`, at the large gate and the review ceiling; `fix`, when the intent check stops; `verify`, at the ceiling; `review`, on a disputed blocking finding; `release` technical risk; `incident` root cause; a buddy for `onboard`; gaps in `handover` |
 | Dev | `init`, or TL; `estimate` sizes; `design-doc`, or TL; `spec`; `plan`; `implement`; `fix`; `verify`; `review` of someone else's change; `security`, or TL; `git` | Their own tasks in `breakdown`; their own `plan`, below the TL boundary; the `verify` report of a change they review | `catchup`, as the reader who takes the understanding check; `convention`, agreeing rule by rule; `qa` handoff and test data |
-| QA | `qa`, the plan, the cases, and the run records of the cases they ran; its own test effort in `estimate` | `qa`, as QA lead, run records included; a `tailor` override of `qa` | `intake`, that each criterion is testable; `catchup`, as a reader joining work in flight; its own test tasks in `breakdown`; `fix`, that the symptom is gone against the reproduction; `review` test adequacy; `security`, read at sign-off; `release` test result |
-| SRE | `release`, with PM | Nothing in the cycle | `design-doc` deployment, data, and capacity; `verify` environment; `security` configuration, infrastructure, and secrets; `release` execution and rollback; `incident` mitigation |
+| QA | `qa`, the plan, the cases, and the run records of the cases they ran; `run-cases`, the record of a run they started; its own test effort in `estimate` | `qa`, as QA lead, run records included, those `run-cases` wrote among them; a `tailor` override of `qa` | `intake`, that each criterion is testable; `catchup`, as a reader joining work in flight; its own test tasks in `breakdown`; `fix`, that the symptom is gone against the reproduction; `review` test adequacy; `security`, read at sign-off; `release` test result |
+| SRE | `release`, with PM | Nothing in the cycle | `design-doc` deployment, data, and capacity; `verify` environment; `run-cases`, when the test plan names them as the owner of its environment; `security` configuration, infrastructure, and secrets; `release` execution and rollback; `incident` mitigation |
 | Stakeholder | Nothing in the cycle | `intake` scope and criteria; `estimate`, with PM; the go in `release`, or PM; an unfixed finding in `security`, or PM | Open questions `intake` names them against |
 
 Some skills name a person by what they are doing, whatever their role: whoever joins reads

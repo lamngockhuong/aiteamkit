@@ -70,18 +70,18 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another a hundred and forty-two times across the twenty-three `SKILL.md` files,
-counting the `atk:` mentions, in ninety-eight ordered pairs, which sounds like a dense graph. It is
+One skill names another a hundred and seventy-two times across the twenty-four `SKILL.md` files,
+counting the `atk:` mentions, in a hundred and seven ordered pairs, which sounds like a dense graph. It is
 not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at
 run time.
 
 | Kind | What happens to the work | Where it appears |
 |------|--------------------------|------------------|
 | Calls, and carries on | The other skill runs, returns, and this one continues | `implement` to `plan`, `implement` to `review`, `implement` to `spec`, and every finishing skill to `git` |
-| Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc` |
+| Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc`, `run-cases` to `qa --record` where the harness has no browser automation |
 | Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
-| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record |
+| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record, `run-cases` to `qa --bug` and `--retest` through the run record it writes |
 
 ```mermaid
 flowchart TD
