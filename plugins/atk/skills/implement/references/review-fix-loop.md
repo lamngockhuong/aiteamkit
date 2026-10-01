@@ -22,8 +22,8 @@ The second call reviews the fix, not one round picked because it raised the find
 whole change again. The change is still uncommitted at this point, so nothing in git marks where the
 first review stopped, and the call has to say it: in the prompt, name the first report's path as the
 earlier report, never as a path to review, and list every file the fixes touched. `atk:review`
-takes that list and what it reaches, per Called again after a fix in its
-`references/review-rounds.md`. The record says which rounds ran the second time.
+takes that list and what it reaches, per Called again after a fix in
+`skills/review/references/review-rounds.md`. The record says which rounds ran the second time.
 
 ## Calling the review
 

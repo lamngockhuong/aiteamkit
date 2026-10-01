@@ -65,7 +65,9 @@ per-harness copies.
 An install copies one plugin directory, `plugins/atk/` or `plugins/atkx/`, and nothing above it. A skill, a shared file
 or a hook that reads a file outside that directory reads nothing on a user's machine, and no manifest
 path may leave it: no `..`, no absolute path. That is why `atk:init` keeps its default approvals in
-`plugins/atk/skills/init/references/role-defaults.md` rather than in `docs/`.
+`plugins/atk/skills/init/references/role-defaults.md` rather than in `docs/`. `CONV-012` holds the
+rule, and its check under "Common verification commands" fails on a citation that resolves outside
+the plugin or nowhere.
 
 | Manifest | `skills` key | Extra |
 |----------|--------------|-------|
@@ -573,7 +575,7 @@ not a second set of rules. The `source` column says where the prose lives.
 
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
-| `CONV-001` | Adding, renaming, or removing a skill touches all twelve groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-001` | Adding, renaming, or removing a skill touches all twelve groups of file listed for it | `REVIEWED` | none for eleven groups; the labeler check below for group 12 | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
@@ -584,6 +586,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
 | `CONV-011` | `atk` never invokes or names an `atkx` skill, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
+| `CONV-012` | A plugin reads nothing outside its own directory: every `shared/` or `references/` file a plugin file cites exists inside that plugin, and no plugin file names one of this repository's documents except as a GitHub link | `REVIEWED` | the citation check below | `BLOCKING` | "Multi-manifest layout (non-obvious)" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
@@ -735,6 +738,62 @@ for m in manifests:
 assert json.load(open('plugins/atkx/.claude-plugin/plugin.json')).get('dependencies') == ['atk'], \
     'atkx must declare atk as its dependency'
 print('OK marketplaces and plugins agree, %d plugins' % len(plugins))"
+
+# A plugin reads nothing outside itself. Every shared/ or references/ file a plugin file cites exists
+# inside that plugin, and no plugin file names one of this repository's own documents or climbs out
+# with ../../../. A citation that resolves nowhere fails nothing else: atk:init, for one, would
+# propose an empty Approves column with every other check green. A link to the repository on GitHub
+# is a pointer for a reader, not a read, and is allowed
+python3 -c "
+import glob, os, re
+own = [f for f in glob.glob('docs/**/*.md', recursive=True)
+       if not f.startswith(('docs/vi/', 'docs/derived/', 'docs/records/'))]
+cite = re.compile(r'(?<![\w./-])(?:\.\./)*(plugins/[\w-]+/)?(?:skills/([\w-]+)/)?(shared|references)/([\w.-]+\.(?:md|tsv))')
+bad, n = [], 0
+for p in sorted(d.rstrip('/') for d in glob.glob('plugins/*/')):
+    for f in [os.path.join(d, x) for d, _, xs in os.walk(p) for x in xs]:
+        if not f.endswith(('.md', '.mjs', '.json', '.tsv')) or f.endswith('CHANGELOG.md'):
+            continue
+        parts = os.path.relpath(f, p).split('/')
+        skill = parts[1] if parts[0] == 'skills' and len(parts) > 2 else None
+        for i, line in enumerate(open(f), 1):
+            where = '%s:%d' % (f, i)
+            if 'github.com/' not in line:
+                bad += ['%s: names %s' % (where, d) for d in own if d in line]
+                if '../../../' in line: bad.append(where + ': climbs out of the plugin')
+            for m in cite.finditer(line):
+                n += 1
+                home, other, kind, name = m.groups()
+                if home and home != p + '/':
+                    bad.append('%s: cites another plugin, %s' % (where, m.group(0))); continue
+                if kind == 'shared':
+                    target = os.path.join(p, 'shared', name)
+                elif other or skill:
+                    target = os.path.join(p, 'skills', other or skill, 'references', name)
+                else:
+                    bad.append('%s: references/ outside a skill, %s' % (where, m.group(0))); continue
+                if not os.path.exists(target): bad.append('%s: %s resolves to %s, which does not exist' % (where, m.group(0), target))
+assert not bad, chr(10).join(bad)
+print('OK plugins read nothing outside themselves, %d citations resolved' % n)"
+
+# .github/labeler.yml stays true to the tree: every glob matches a tracked file, and every skill folder
+# has its own skill: entry and no entry names a skill that is gone. A glob that matches nothing
+# never labels anything, and nothing reports it
+python3 -c "
+import glob, os, re, subprocess
+text = open('.github/labeler.yml').read()
+tracked = subprocess.run(['git', 'ls-files'], capture_output=True, text=True, check=True).stdout.split()
+globs = [g for line in re.findall(r'any-glob-to-any-file: (.+)', text) for g in re.findall(r\"'([^']+)'\", line)]
+def rx(g):
+    return re.compile('^' + re.escape(g).replace(r'\*\*', '.*').replace(r'\*', '[^/]*') + '$')
+dead = [g for g in globs if not any(rx(g).match(f) for f in tracked)]
+assert not dead, 'labeler globs matching no tracked file: %s' % dead
+labelled = set(re.findall(r\"^'skill: ([\w-]+)':\", text, re.M))
+folders = {os.path.basename(d.rstrip('/')) for d in glob.glob('plugins/atk/skills/*/')}
+assert labelled == folders, 'skill labels and folders differ: %s' % sorted(labelled ^ folders)
+for s in folders:
+    assert 'plugins/atk/skills/%s/**' % s in globs, 'skill: %s has no glob for its folder' % s
+print('OK labeler, %d globs, %d skills' % (len(globs), len(folders)))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow
