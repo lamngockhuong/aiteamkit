@@ -5,7 +5,7 @@ approval gates between them are in [project-flow.md](./project-flow.md), and how
 calls another is in [skill-lifecycle.md](./skill-lifecycle.md); this document is about the
 artifacts.
 
-Exact output paths are not repeated here. They live in one place, `shared/artifact-paths.md`, and
+Exact output paths are not repeated here. They live in one place, `plugins/atk/shared/artifact-paths.md`, and
 that file is the authority when the two disagree.
 
 ## The chain
@@ -71,7 +71,7 @@ is why the arrow into them comes from the code rather than from the design that 
 project whose profile says `Contract: first` adds a second arrow, from the design into `spec`: the
 contract is written from the design while it is in review, so frontend, backend and QA build against
 it before the code exists, and the arrow from the code then moves each item onto the code as it
-lands, per `shared/spec-docs.md`.
+lands, per `plugins/atk/shared/spec-docs.md`.
 
 ## What each skill consumes
 
@@ -108,7 +108,7 @@ A link is only as good as the artifact behind it, and four breaks are common eno
 
 **No profile.** Skills that run the project's own commands stop and ask for `atk:init` rather than
 guessing a test command. Skills that only read a diff carry on and record that the profile was
-absent. `shared/project-profile.md` says which skill does which.
+absent. `plugins/atk/shared/project-profile.md` says which skill does which.
 
 **An artifact that was never approved.** A design at `DRAFT` is a proposal, and building from it
 means the first review comment is about the design. Check the `status` field in the front matter
@@ -117,8 +117,8 @@ before consuming an artifact, not the file's existence.
 **A reference document nobody carried.** A contract changed and its document did not, so the next
 person designing against it designs against something that stopped being true. `atk:review` raises
 this as a blocking finding, and `atk:spec --check` finds the ones that got through. The obligation
-and the six changes that trigger it are in `shared/spec-docs.md`.
+and the six changes that trigger it are in `plugins/atk/shared/spec-docs.md`.
 
 **A superseded artifact still looking current.** Planning the same work twice makes a second
 directory, and nothing marks the first one dead automatically. The rule for retiring it is at the
-end of `shared/artifact-paths.md`.
+end of `plugins/atk/shared/artifact-paths.md`.

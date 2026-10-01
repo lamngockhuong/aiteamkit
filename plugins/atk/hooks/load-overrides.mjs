@@ -11,7 +11,8 @@
 // the one that is correct.
 //
 // It is Node, registered in exec form on Claude Code and as a string command on
-// Codex, for the reason check-profile.mjs gives and docs/system-architecture.md
+// Codex, for the reason check-profile.mjs gives and the repository's architecture
+// document, https://github.com/lamngockhuong/aiteamkit/blob/main/docs/system-architecture.md,
 // records under "Why the hook is Node and not a shell script" and "Why Codex has a
 // registration file of its own".
 //

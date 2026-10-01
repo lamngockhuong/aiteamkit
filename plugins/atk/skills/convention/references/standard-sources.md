@@ -34,7 +34,8 @@ tech  name  repo  path  license  checked  note
 Tabs rather than commas because a note routinely holds a comma, and a comma-separated line would
 have to quote it; a quote forgotten by hand shifts `license` and `checked` one column over, and
 those two fields decide whether a line may be used at all. A new source is one more line, with no
-tab inside any field. `CLAUDE.md`, under "Common verification commands", checks the field count and
+tab inside any field. The kit repository's `CLAUDE.md`, which does not ship with the plugin, under
+"Common verification commands", checks the field count and
 the date of every line.
 
 Seven lines carry an empty `checked`, and all seven miss the same condition: their licence terms

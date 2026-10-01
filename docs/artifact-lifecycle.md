@@ -5,7 +5,7 @@ named below; `atk:help` writes nothing, because it answers in the session. A tea
 asks two questions in its first week: do we commit all of this, and may we delete any of it later. This
 document answers both and says what each answer costs, so the team decides rather than guesses.
 
-Where each artifact is written is in [shared/artifact-paths.md](../shared/artifact-paths.md), and
+Where each artifact is written is in [plugins/atk/shared/artifact-paths.md](../plugins/atk/shared/artifact-paths.md), and
 that file is the authority whenever the two disagree. This one is about what happens to a file after
 the work that produced it is merged.
 

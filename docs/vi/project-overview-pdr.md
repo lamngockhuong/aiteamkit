@@ -24,7 +24,7 @@ giờ kết thúc trước khi người review có thứ để đọc.
 
 Đó là câu nói về chỗ một skill dừng lại, không phải câu nói về dự án có bao nhiêu người. Một người
 giữ mọi vai trò vẫn được hỗ trợ, và các cửa kiểm soát không vì thế mà nới ra: việc duyệt vẫn do
-chính họ làm, như với bất kỳ người duyệt nào khác. Luật nằm ở `shared/team-roles.md`.
+chính họ làm, như với bất kỳ người duyệt nào khác. Luật nằm ở `plugins/atk/shared/team-roles.md`.
 
 ## Vấn đề mà atk giải quyết
 
@@ -73,7 +73,7 @@ trong công ty gặp những kiểu hỏng khác, và chúng là hỏng về quy
 
 Các team dự án ở công ty phần mềm, thường từ năm đến mười lăm người, hay làm việc với khách hàng bên
 ngoài, thường xuyên dùng lẫn tiếng Việt, tiếng Nhật và tiếng Anh. Danh sách vai trò nằm trong
-`shared/team-roles.md`.
+`plugins/atk/shared/team-roles.md`.
 
 ## Tiêu chí thành công
 

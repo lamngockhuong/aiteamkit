@@ -42,7 +42,7 @@ design document, so that every skill under test has something it could act on.
 **Other kits must be out of the room.** With the maintainer's own configuration, every installed
 plugin competes, and a loss to a skill from another kit says nothing about a team that installed
 only this one. Run with a `CLAUDE_CONFIG_DIR` pointing at a directory that holds only the
-credentials file, and load the kit with `--plugin-dir` pointing at the repository.
+credentials file, and load the kit with `--plugin-dir` pointing at the plugin, `plugins/atk/` in the repository.
 
 **Claude Code's own skills stay in the room.** The built-in `code-review` skill cannot be removed
 and should not be: a team using this kit on Claude Code meets exactly that competition. When a
@@ -52,9 +52,9 @@ was wrong.
 
 ## Running one
 
-The hook script, the settings file and the seed live outside the repository, because the kit ships
-no runner and adding one would make every team carry a maintainer's tool. Everything needed to
-rebuild it is here.
+The hook script, the settings file and the seed live outside the repository, because nobody has
+decided to keep a runner in it. One kept outside `plugins/` would not ship, so no team would carry
+it; inside a plugin it would. Everything needed to rebuild it is here.
 
 A hook that logs the tool calls it is given, to a file named by `HOOK_LOG`:
 
@@ -84,7 +84,7 @@ One query, in a freshly seeded project directory:
 
 ```bash
 HOOK_LOG=$log CLAUDE_CONFIG_DIR=$isolated_config \
-  claude -p "$query" --settings "$settings" --plugin-dir "$kit_repo" --model sonnet
+  claude -p "$query" --settings "$settings" --plugin-dir "$kit_repo/plugins/atk" --model sonnet
 ```
 
 A trigger is a logged payload whose `tool_name` is `Skill` and whose `tool_input.skill` equals

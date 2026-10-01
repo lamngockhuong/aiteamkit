@@ -24,8 +24,8 @@ look in the next.
 | Ticket | What is offered to the tracker, and what is never done to it |
 | Definition of done | The checklist a reviewer can hold the run to |
 
-Longer detail sits in `skills/<name>/references/*.md` and is opened only by the step that needs it.
-Rules shared with other skills sit in `shared/*.md` and are opened only when cited. Nothing else
+Longer detail sits in `plugins/atk/skills/<name>/references/*.md` and is opened only by the step that needs it.
+Rules shared with other skills sit in `plugins/atk/shared/*.md` and are opened only when cited. Nothing else
 loads: the body of a `SKILL.md` on invocation, a reference when a step reaches it, and
 `.atk/profile.md` once per run in the skills that need project facts.
 
@@ -44,7 +44,7 @@ Not every skill has all five, and the ones it skips are as informative as the on
 
 **Precondition.** The skills that run project commands read `.atk/profile.md` first and stop when it
 is missing, because a guessed test command that exits zero is the worst evidence available. The
-skills that work from a chat message ignore it entirely. `shared/project-profile.md` says which is
+skills that work from a chat message ignore it entirely. `plugins/atk/shared/project-profile.md` says which is
 which.
 
 **Gate.** Most skills check something before doing anything: `atk:implement` scores how much
@@ -57,15 +57,15 @@ conventions and commands rather than invented ones.
 
 **Verification.** Evidence, sized to the skill: a suite run per layer for the code skills, a
 traceability check for `atk:qa`, a re-read of the cited source for a document. What a run proves and
-what it does not is in `shared/layer-verification.md` for the three that change code.
+what it does not is in `plugins/atk/shared/layer-verification.md` for the three that change code.
 
-**Artifact.** A Markdown file at the path in `shared/artifact-paths.md`, opening with the front
+**Artifact.** A Markdown file at the path in `plugins/atk/shared/artifact-paths.md`, opening with the front
 matter that carries the owner, the approver, and the approval state. Written for somebody who was not
 in the conversation. `atk:help` is the one skill with no artifact: everyone its answer is for is
 present.
 
 **Handover.** The artifact is offered to the tracker, never posted before it is shown. For a code
-change, `shared/finalize-steps.md` draws the line: everything up to the commit stays local, and
+change, `plugins/atk/shared/finalize-steps.md` draws the line: everything up to the commit stays local, and
 everything past it is asked for every time.
 
 ## How one skill reaches another
@@ -115,7 +115,7 @@ work that touches a schema, a public contract, a shared module, or more than one
 file until somebody has approved how.
 
 The edge into `atk:spec` is drawn from `implement` alone to keep the picture readable, but `fix` and
-`verify` carry the same obligation through the same first step of `shared/finalize-steps.md`. Any of
+`verify` carry the same obligation through the same first step of `plugins/atk/shared/finalize-steps.md`. Any of
 the three that changes an endpoint, a response, an error code, a column, or an enum carries the
 reference document with it.
 
@@ -142,12 +142,12 @@ to put several independent passes over a large diff. Both are improvements on wo
 owns, never preconditions: on a harness that ships neither, the skill does the pass itself and the
 artifact says which way it ran.
 
-`shared/host-capabilities.md` holds the rules and the boundary, and `shared/tidy-pass.md` holds what
+`plugins/atk/shared/host-capabilities.md` holds the rules and the boundary, and `plugins/atk/shared/tidy-pass.md` holds what
 the clean-up looks for.
 
 ## Reading one yourself
 
-Open `skills/<name>/SKILL.md` and read three things in this order: the pipeline at the top of
+Open `plugins/atk/skills/<name>/SKILL.md` and read three things in this order: the pipeline at the top of
 `## Workflow`, which is the whole skill in one line; the numbered steps under it; and
 `## Definition of done`, which is what the skill can be held to afterwards. The `references/` files
 are the detail behind a step, and are worth opening only when that step is the one in question.

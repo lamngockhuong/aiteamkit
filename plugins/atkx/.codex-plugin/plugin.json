@@ -1,0 +1,33 @@
+{
+  "name": "atkx",
+  "version": "0.0.0",
+  "description": "AI Team Kit extras - utility skills that depend on no artifact and on no delivery lifecycle, and may call atk skills. No skill yet; it needs atk, so install atk as well.",
+  "author": {
+    "name": "Lam Ngoc Khuong",
+    "email": "hi@khuong.dev",
+    "url": "https://github.com/lamngockhuong"
+  },
+  "homepage": "https://github.com/lamngockhuong/aiteamkit",
+  "repository": "https://github.com/lamngockhuong/aiteamkit",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "utilities",
+    "atk"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Team Kit extras",
+    "shortDescription": "Utility skills beside atk. No skill yet.",
+    "longDescription": "AI Team Kit extras - utility skills that depend on no artifact and on no delivery lifecycle, and may call atk skills. No skill yet; it needs atk, so install atk as well.",
+    "developerName": "Lam Ngoc Khuong",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}

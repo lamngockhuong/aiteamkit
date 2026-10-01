@@ -52,6 +52,12 @@ lệnh của `atkx`.
   rồi cài lại.
 - Quy tắc nào cả hai kit cùng cần thì được viết ở mỗi kit, và bản chép ghi rõ lấy từ file nào.
 
+Ghi chú thêm ngày 2026-10-01, trước khi thay đổi được merge: hai dự đoán ở trên không xảy ra. `v0.1.0`
+đã được phát hành trước khi chuyển thư mục, nên các tag đầu tiên sau đó là `atk-v0.1.1` và
+`atkx-v0.0.1`, còn `atk-v0.1.0` được gắn vào commit của `v0.1.0` để làm mốc. Trên Claude Code, bản
+cài làm ở `v0.1.0` khi cập nhật đã đi theo `source` mới, miễn là phiên bản đã tăng qua `0.1.0`, nên không ai phải cài lại. Bản thân quyết
+định không đổi.
+
 ## Phương án bị loại
 
 - **Thư mục con `atkx/`, để `atk` ở gốc.** `atk` vẫn sẽ cài cả repository, kể cả `atkx/`.

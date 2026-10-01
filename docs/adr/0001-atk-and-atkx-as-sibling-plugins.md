@@ -50,6 +50,12 @@ dependency field.
   install again.
 - A rule both kits need is written in each, and the copy names the file it came from.
 
+Note added 2026-10-01, before the move merged: two of the predictions above did not hold. `v0.1.0`
+was released before the move, so the first tags after it are `atk-v0.1.1` and `atkx-v0.0.1`, and
+`atk-v0.1.0` was tagged on the `v0.1.0` commit as the boundary. An update from an install made at
+`v0.1.0` followed the new `source` on Claude Code once the version moved past `0.1.0`, so nobody has to reinstall there. The decision
+itself is unchanged.
+
 ## Alternatives rejected
 
 - **An `atkx/` subdirectory with `atk` left at the root.** `atk` would still ship the whole

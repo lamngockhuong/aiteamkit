@@ -7,7 +7,7 @@ Companion documents: [skill-chain.md](./skill-chain.md) for what each skill cons
 [skill-lifecycle.md](./skill-lifecycle.md) for how one skill runs and when it reaches for another,
 [../skills-overview.md](../skills-overview.md) for when to use a skill and when not to.
 
-Roles are the ones in `shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE, and Stakeholder. A
+Roles are the ones in `plugins/atk/shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE, and Stakeholder. A
 small team maps several of them onto one person; the point of naming them separately is that the
 author of an artifact and its approver are two entries, even when they resolve to the same face.
 
@@ -151,24 +151,10 @@ flowchart TD
 
 ## By role
 
-The same gates read from the other side: what a person in each role writes, what waits on their
-acceptance, and where a skill asks them to read or answer without owning the artifact. All three
-columns draw on both the phase reference above and each skill's own `## Roles` section. Anyone can
-run `atk:help`, and it is in no row.
-
-| Role | Authors | Accepts | Reviews or answers in |
-|------|---------|---------|------------------------|
-| PM | `estimate` capacity, with TL and Dev on sizes; `breakdown`, or TL; `release`, with SRE; `retro`, or the team | `estimate`, with the Stakeholder; the go in `release`, or the Stakeholder; the follow-up actions in `incident`, with TL; an unfixed finding in `security`, or the Stakeholder; a `tailor` override of `intake`, `estimate`, `breakdown`, `release`, or `retro` | `init` tracker and team sections, which PM writes; `intake`, which PM leads with BrSE/BA; `catchup`, answering what a newcomer asks; `qa` exit criteria; `incident` client communication; access in `onboard` and `handover` |
-| BrSE/BA | `intake`; `spec` of kind `screen` | `spec` of kinds `feature` and `screen`; a `tailor` override of `design-doc` or `spec` | `catchup`, answering what a newcomer asks; `design-doc`, that it still meets the requirement; `qa`, that the cases match the intent |
-| TL | `init`, or Dev; `tailor`; `estimate` sizes, with Dev; `design-doc`, or Dev; `breakdown`, or PM; `convention`; `security`, or Dev | `init`; `design-doc`; `spec` of kinds `api` and `db`; `plan`, when it touches a schema, a public contract, or two services; `qa` and `run-cases` records, or the QA lead; `security`, unless the team has a security officer; the follow-up actions in `incident`, with PM; a `tailor` override of any skill not listed for PM, BrSE/BA, or QA, and any override touching how code is written or reviewed | `intake` feasibility; `implement`, at the large gate and the review ceiling; `fix`, when the intent check stops; `verify`, at the ceiling; `review`, on a disputed blocking finding; `release` technical risk; `incident` root cause; a buddy for `onboard`; gaps in `handover` |
-| Dev | `init`, or TL; `estimate` sizes; `design-doc`, or TL; `spec`; `plan`; `implement`; `fix`; `verify`; `review` of someone else's change; `security`, or TL; `git` | Their own tasks in `breakdown`; their own `plan`, below the TL boundary; the `verify` report of a change they review | `catchup`, as the reader who takes the understanding check; `convention`, agreeing rule by rule; `qa` handoff and test data |
-| QA | `qa`, the plan, the cases, and the run records of the cases they ran; `run-cases`, the record of a run they started; its own test effort in `estimate` | `qa`, as QA lead, run records included, those `run-cases` wrote among them; a `tailor` override of `qa` | `intake`, that each criterion is testable; `catchup`, as a reader joining work in flight; its own test tasks in `breakdown`; `fix`, that the symptom is gone against the reproduction; `review` test adequacy; `security`, read at sign-off; `release` test result |
-| SRE | `release`, with PM | Nothing in the cycle | `design-doc` deployment, data, and capacity; `verify` environment; `run-cases`, when the test plan names them as the owner of its environment; `security` configuration, infrastructure, and secrets; `release` execution and rollback; `incident` mitigation |
-| Stakeholder | Nothing in the cycle | `intake` scope and criteria; `estimate`, with PM; the go in `release`, or PM; an unfixed finding in `security`, or PM | Open questions `intake` names them against |
-
-Some skills name a person by what they are doing, whatever their role: whoever joins reads
-`catchup` and walks through `onboard`, the leaver writes `handover` and the receiver accepts it, the
-Incident Commander writes `incident`, and the whole team accepts the actions in `retro`.
+The table of what each role writes, accepts, and reviews is read by `atk:init` when it proposes
+the `Approves` column of a profile, so it ships with the kit, in
+[`plugins/atk/skills/init/references/role-defaults.md`](../../plugins/atk/skills/init/references/role-defaults.md),
+and is written in English. Its columns are collected from each skill's own `## Roles` section.
 
 ## Outside the cycle
 
@@ -204,7 +190,7 @@ phase 1 and a fix made in phase 8 both close the same way.
 
 `atk:spec` is drawn in phase 3 because that is where a team first writes down what an area does, but
 the dotted edge from the merge is the one that fires most often. A change altering a contract carries
-its reference document in the same pull request, per `shared/spec-docs.md`, which is why the document
+its reference document in the same pull request, per `plugins/atk/shared/spec-docs.md`, which is why the document
 outlives the phase it was first written in. Under `Contract: first` phase 3 is also where it is
 written from the design while that design is in review, so the contract and the decision are
 reviewed together and the phases after it build against the same page.
@@ -213,5 +199,5 @@ reviewed together and the phases after it build against the same page.
 
 It does not set your sprint length, your branch strategy, or who your approvers are by name. Those
 are team decisions, and the kit records them rather than choosing them: approvers per artifact type
-go in `.atk/profile.md` (see `shared/project-profile.md`), and branch and commit rules are whatever
+go in `.atk/profile.md` (see `plugins/atk/shared/project-profile.md`), and branch and commit rules are whatever
 `atk:convention` finds in the repository.

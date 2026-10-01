@@ -15,7 +15,8 @@
 
 Bố cục repo theo đúng hình dạng một plugin đa harness đang chạy được: `.claude-plugin/`,
 `.cursor-plugin/`, `.codex-plugin/`, `skills/`, `shared/`, `assets/`, `docs/` song ngữ,
-release-please chạy khi push lên `main`, cùng các template issue và pull request của GitHub.
+release-please chạy khi push lên `main`, cùng các template issue và pull request của GitHub. Sau đó
+kit đã chuyển vào `plugins/atk/`, với một file marketplace cho mỗi harness ở gốc repo.
 
 ## Phase 2: Độ phủ skill (xong)
 
@@ -41,7 +42,7 @@ thái của dự án chứ không từ một danh sách, nên một skill thêm 
 chạy những case nó quan sát được kết quả và viết một run record chờ QA Leader duyệt, còn `qa` vẫn không
 bao giờ tự chạy case và `verify` vẫn là bước lập trình viên tự kiểm trên stack local.
 
-Lớp `shared/` giữ những gì lẽ ra phải lặp lại hai mươi bốn lần: từ vựng vai trò, quy ước đường dẫn
+Lớp `plugins/atk/shared/` giữ những gì lẽ ra phải lặp lại hai mươi bốn lần: từ vựng vai trò, quy ước đường dẫn
 artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười hai file còn lại là hợp đồng giữa
 những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa sáu skill có
@@ -63,11 +64,11 @@ cục cố định mà chưa reference nào giữ bố cục ấy, template ph�
 
 | Skill | Reference cần thêm |
 |-------|--------------------|
-| `intake` | Ngân hàng câu hỏi phỏng vấn. Template requirement đã xong: `skills/intake/references/requirement-template.md` |
-| `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang. Template bảng ước lượng và các yếu tố độ phức tạp đã xong: `skills/estimate/references/estimate-template.md`, `skills/estimate/references/complexity-drivers.md` |
-| `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án. Chế độ spike và lượt phản biện theo vai trò đã xong: `skills/design-doc/references/spike.md`, `skills/design-doc/references/role-challenge.md` |
+| `intake` | Ngân hàng câu hỏi phỏng vấn. Template requirement đã xong: `plugins/atk/skills/intake/references/requirement-template.md` |
+| `estimate` | Các thang ước lượng kèm một ví dụ đã tính cho mỗi thang. Template bảng ước lượng và các yếu tố độ phức tạp đã xong: `plugins/atk/skills/estimate/references/estimate-template.md`, `plugins/atk/skills/estimate/references/complexity-drivers.md` |
+| `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án. Chế độ spike và lượt phản biện theo vai trò đã xong: `plugins/atk/skills/design-doc/references/spike.md`, `plugins/atk/skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Schema bảng task và luật sở hữu file cho các làn song song |
-| `qa` | Schema bảng test case. Các chiều cho case âm và biên đã xong: `skills/qa/references/case-dimensions.md` |
+| `qa` | Schema bảng test case. Các chiều cho case âm và biên đã xong: `plugins/atk/skills/qa/references/case-dimensions.md` |
 | `release` | Template checklist theo môi trường, quy tắc hành văn cho ghi chú gửi khách |
 | `incident` | Thang mức nghiêm trọng, định dạng timeline, template postmortem |
 | `retro` | Bộ lệnh thu thập bằng chứng từ git, CI và từng tracker |
@@ -101,8 +102,10 @@ cuối cùng là lỗi, không phải sở thích.
 
 ## Phase 6: Phát hành
 
-Đưa lên marketplace của Claude Code, Cursor và Codex sau khi phase 3 đến 5 đóng lại. Thoát giai đoạn
-tiền 1.0 bằng cách bỏ hai cờ `bump-*-pre-major` trong `release-please-config.json`.
+Đưa lên marketplace của Claude Code, Cursor và Codex sau khi phase 3 đến 5 đóng lại. Muốn đưa một plugin
+ra khỏi giai đoạn tiền 1.0 thì chuyển hai cờ `bump-*-pre-major` trong `release-please-config.json` từ
+đầu file vào khối của package còn lại, như `CLAUDE.md` mô tả ở mục "Release flow"; chỉ bỏ hai cờ ở
+đầu file thì cả hai plugin cùng thoát một lượt.
 
 ## Câu hỏi còn treo
 
@@ -114,7 +117,7 @@ tiền 1.0 bằng cách bỏ hai cờ `bump-*-pre-major` trong `release-please-c
   script. Bộ nạp file ghi đè cũng đã đăng ký trên Codex, và chưa ai thấy nó khớp một lần gọi skill
   nào ở đó. Cursor cũng đóng gói hook được; nuôi thêm một file đăng ký nữa có đáng không, khi cổng
   thật vốn nằm trong skill?
-- `shared/project-profile.md` xếp `review`, `qa`, `release` và `convention` vào nhóm Required-soft,
+- `plugins/atk/shared/project-profile.md` xếp `review`, `qa`, `release` và `convention` vào nhóm Required-soft,
   tức chạy tiếp khi thiếu profile và nói rõ điều đó trong artifact. `plan` và `convention` đã cài đặt
   luật này; `review`, `qa` và `release` không hề nhắc tới profile, nên với ba skill đó không có gì
   cài đặt. Hoặc bổ sung cho ba skill kia, hoặc chuyển chúng sang nhóm không cần profile.

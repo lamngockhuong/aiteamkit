@@ -8,7 +8,7 @@ Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill 
 skill khác, [../skills-overview.md](../skills-overview.md) cho biết khi nào nên dùng một skill và
 khi nào không.
 
-Các vai trò lấy từ `shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE và Stakeholder. Đội nhỏ thì
+Các vai trò lấy từ `plugins/atk/shared/team-roles.md`: PM, BrSE/BA, TL, Dev, QA, SRE và Stakeholder. Đội nhỏ thì
 một người gánh vài vai; lý do vẫn tách tên ra là vì người viết artifact và người duyệt nó là hai
 dòng riêng, kể cả khi hai dòng đó trỏ về cùng một khuôn mặt.
 
@@ -152,24 +152,10 @@ flowchart TD
 
 ## Tra cứu theo vai
 
-Vẫn là các cửa duyệt ấy, nhưng nhìn từ phía người làm: mỗi vai viết gì, cái gì chờ họ chấp nhận, và
-ở đâu một skill cần họ đọc hoặc trả lời dù họ không sở hữu artifact. Cả ba cột lấy từ bảng tra cứu
-theo pha ở trên và từ mục `## Roles` của từng skill. Ai cũng chạy được `atk:help`, nên nó không nằm
-ở dòng nào.
-
-| Vai | Viết | Chấp nhận | Đọc lại hoặc trả lời ở |
-|-----|------|-----------|-------------------------|
-| PM | Năng lực trong `estimate`, TL và Dev lo phần kích thước; `breakdown`, hoặc TL; `release`, cùng SRE; `retro`, hoặc cả đội | `estimate`, cùng Stakeholder; quyết định phát hành trong `release`, hoặc Stakeholder; các hành động tiếp theo trong `incident`, cùng TL; một phát hiện chưa sửa trong `security`, hoặc Stakeholder; override bằng `tailor` cho `intake`, `estimate`, `breakdown`, `release` hoặc `retro` | Phần tracker và đội trong `init`, do PM viết; `intake`, PM dẫn dắt cùng BrSE/BA; `catchup`, trả lời câu hỏi của người mới; tiêu chí kết thúc trong `qa`; liên lạc khách hàng trong `incident`; quyền truy cập trong `onboard` và `handover` |
-| BrSE/BA | `intake`; `spec` loại `screen` | `spec` loại `feature` và `screen`; override bằng `tailor` cho `design-doc` hoặc `spec` | `catchup`, trả lời câu hỏi của người mới; `design-doc`, thiết kế còn đáp ứng yêu cầu không; `qa`, test case có khớp ý đồ không |
-| TL | `init`, hoặc Dev; `tailor`; kích thước trong `estimate`, cùng Dev; `design-doc`, hoặc Dev; `breakdown`, hoặc PM; `convention`; `security`, hoặc Dev | `init`; `design-doc`; `spec` loại `api` và `db`; `plan`, khi nó chạm schema, hợp đồng công khai hoặc hai service; record của `qa` và `run-cases`, hoặc QA lead; `security`, trừ khi đội có người phụ trách bảo mật; các hành động tiếp theo trong `incident`, cùng PM; override bằng `tailor` cho mọi skill không thuộc PM, BrSE/BA hay QA, và mọi override chạm tới cách viết hoặc review code | Tính khả thi trong `intake`; `implement`, ở cửa việc lớn và khi vòng review chạm trần; `fix`, khi bước kiểm tra ý đồ dừng lại; `verify`, khi chạm trần; `review`, khi một phát hiện chặn bị tranh cãi; rủi ro kỹ thuật trong `release`; nguyên nhân gốc trong `incident`; chỉ định người kèm trong `onboard`; khoảng trống trong `handover` |
-| Dev | `init`, hoặc TL; kích thước trong `estimate`; `design-doc`, hoặc TL; `spec`; `plan`; `implement`; `fix`; `verify`; `review` thay đổi của người khác; `security`, hoặc TL; `git` | Phần việc của chính mình trong `breakdown`; `plan` của chính mình, dưới ngưỡng cần TL; report `verify` của thay đổi mình review | `catchup`, là người đọc và tự làm bài kiểm tra hiểu bài; `convention`, đồng thuận từng quy tắc; bàn giao và dữ liệu test trong `qa` |
-| QA | `qa`, gồm kế hoạch, test case, và record của những lần chạy do mình thực hiện; `run-cases`, record của lần chạy do mình khởi động; phần công sức test của mình trong `estimate` | `qa`, với vai QA lead, kể cả record của lần chạy, trong đó có record do `run-cases` viết; override bằng `tailor` cho `qa` | `intake`, mỗi tiêu chí có test được không; `catchup`, là người đọc vào giữa chừng; task test của mình trong `breakdown`; `fix`, triệu chứng đã hết theo bước tái hiện chưa; độ đầy đủ của test trong `review`; `security`, đọc khi ký nhận; kết quả test trong `release` |
-| SRE | `release`, cùng PM | Không có gì trong chu trình | Triển khai, dữ liệu và năng lực trong `design-doc`; môi trường trong `verify`; `run-cases`, khi test plan ghi họ là người phụ trách môi trường mà lần chạy nhắm tới; cấu hình, hạ tầng và secret trong `security`; thực thi và rollback trong `release`; giảm thiểu sự cố trong `incident` |
-| Stakeholder | Không có gì trong chu trình | Phạm vi và tiêu chí trong `intake`; `estimate`, cùng PM; quyết định phát hành trong `release`, hoặc PM; một phát hiện chưa sửa trong `security`, hoặc PM | Các câu hỏi mở mà `intake` ghi tên họ |
-
-Một số skill gọi tên người theo việc họ đang làm, bất kể vai: người mới vào đọc `catchup` và đi qua
-`onboard`, người rời đi viết `handover` và người nhận chấp nhận nó, Incident Commander viết
-`incident`, và cả đội chấp nhận các hành động trong `retro`.
+Bảng ghi mỗi vai viết gì, chấp nhận gì và đọc lại ở đâu được `atk:init` đọc khi đề xuất cột
+`Approves` của profile, nên nó nằm trong kit, ở
+[`plugins/atk/skills/init/references/role-defaults.md`](../../../plugins/atk/skills/init/references/role-defaults.md),
+và viết bằng tiếng Anh. Các cột của bảng được gom từ mục `## Roles` của từng skill.
 
 ## Nằm ngoài chu trình
 
@@ -205,7 +191,7 @@ pha nào. Mọi skill làm xong việc đều giao lại cho nó, nên một art
 
 `atk:spec` vẽ ở pha 3 vì đó là lúc một đội lần đầu viết ra vùng này làm gì, nhưng cạnh nét đứt đi từ
 chỗ merge mới là cạnh chạy thường xuyên nhất. Thay đổi nào đụng tới hợp đồng thì mang theo tài liệu
-tham chiếu trong cùng pull request, theo `shared/spec-docs.md`, và đó là lý do tài liệu sống lâu hơn
+tham chiếu trong cùng pull request, theo `plugins/atk/shared/spec-docs.md`, và đó là lý do tài liệu sống lâu hơn
 cái pha sinh ra nó. Khi `Contract: first`, pha 3 cũng là lúc tài liệu được viết từ thiết kế ngay khi
 thiết kế đang được review, nên contract và quyết định được review cùng nhau, và các pha sau làm theo
 cùng một trang.
@@ -214,5 +200,5 @@ cùng một trang.
 
 Nó không định độ dài sprint, chiến lược nhánh, hay tên cụ thể của người duyệt. Đó là quyết định của
 đội, và kit chỉ ghi lại chứ không chọn thay: người duyệt theo từng loại artifact nằm trong
-`.atk/profile.md` (xem `shared/project-profile.md`), còn quy tắc nhánh và commit là bất cứ thứ gì
+`.atk/profile.md` (xem `plugins/atk/shared/project-profile.md`), còn quy tắc nhánh và commit là bất cứ thứ gì
 `atk:convention` tìm thấy trong repo.

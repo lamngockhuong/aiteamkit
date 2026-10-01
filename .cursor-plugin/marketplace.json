@@ -1,0 +1,20 @@
+{
+  "name": "atk",
+  "owner": {
+    "name": "Lam Ngoc Khuong",
+    "email": "hi@khuong.dev"
+  },
+  "metadata": {
+    "description": "AI Team Kit marketplace"
+  },
+  "plugins": [
+    {
+      "name": "atk",
+      "source": "plugins/atk"
+    },
+    {
+      "name": "atkx",
+      "source": "plugins/atkx"
+    }
+  ]
+}

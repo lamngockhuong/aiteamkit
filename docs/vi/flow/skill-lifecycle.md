@@ -24,8 +24,8 @@ trong skill kế tiếp.
 | Ticket | Thứ được đề nghị đẩy lên tracker, và thứ không bao giờ được làm với ticket |
 | Definition of done | Danh sách kiểm mà người review có thể đối chiếu lại sau khi chạy |
 
-Phần chi tiết dài nằm ở `skills/<name>/references/*.md` và chỉ được mở bởi đúng bước cần tới nó. Quy
-tắc dùng chung với skill khác nằm ở `shared/*.md` và chỉ mở khi được trích dẫn. Ngoài ra không có gì
+Phần chi tiết dài nằm ở `plugins/atk/skills/<name>/references/*.md` và chỉ được mở bởi đúng bước cần tới nó. Quy
+tắc dùng chung với skill khác nằm ở `plugins/atk/shared/*.md` và chỉ mở khi được trích dẫn. Ngoài ra không có gì
 nạp thêm: thân `SKILL.md` khi được gọi, một file reference khi có bước với tới, và `.atk/profile.md`
 một lần mỗi lượt chạy, ở những skill cần dữ kiện của dự án.
 
@@ -44,7 +44,7 @@ Không phải skill nào cũng có đủ năm chặng, và chặng bị bỏ qua
 
 **Điều kiện cần.** Skill nào chạy lệnh của dự án thì đọc `.atk/profile.md` trước và dừng lại khi
 thiếu nó, vì một lệnh test đoán bừa mà thoát 0 là thứ bằng chứng tệ nhất có thể có. Skill nào làm
-việc từ một tin nhắn chat thì không đụng tới profile. `shared/project-profile.md` nói rõ skill nào
+việc từ một tin nhắn chat thì không đụng tới profile. `plugins/atk/shared/project-profile.md` nói rõ skill nào
 thuộc nhóm nào.
 
 **Cổng.** Phần lớn skill kiểm một điều gì đó trước khi động tay: `atk:implement` chấm xem phần việc
@@ -57,16 +57,16 @@ theo đúng quy ước và lệnh của chính dự án chứ không phải theo
 
 **Kiểm chứng.** Bằng chứng, đúng cỡ của skill: chạy bộ test theo tầng với các skill sửa mã, kiểm
 truy vết hai chiều với `atk:qa`, đọc lại nguồn đã trích với một tài liệu. Một lượt chạy đạt chứng
-minh được gì và không chứng minh được gì thì nằm ở `shared/layer-verification.md`, cho ba skill sửa
+minh được gì và không chứng minh được gì thì nằm ở `plugins/atk/shared/layer-verification.md`, cho ba skill sửa
 mã.
 
-**Artifact.** Một file Markdown ở đường dẫn trong `shared/artifact-paths.md`, mở đầu bằng khối front
+**Artifact.** Một file Markdown ở đường dẫn trong `plugins/atk/shared/artifact-paths.md`, mở đầu bằng khối front
 matter mang chủ sở hữu, người duyệt, và trạng thái phê duyệt. Viết cho người không có mặt trong cuộc
 trao đổi. `atk:help` là skill duy nhất không có artifact: mọi người mà câu trả lời của nó hướng tới
 đều đang có mặt.
 
 **Bàn giao.** Artifact được đề nghị đẩy lên tracker, không bao giờ đăng trước khi cho xem. Với một
-thay đổi mã, `shared/finalize-steps.md` vạch ranh giới: mọi thứ tới hết commit ở lại máy, mọi thứ sau
+thay đổi mã, `plugins/atk/shared/finalize-steps.md` vạch ranh giới: mọi thứ tới hết commit ở lại máy, mọi thứ sau
 commit đều phải hỏi, hỏi lại từng lần.
 
 ## Một skill với sang skill khác thế nào
@@ -116,7 +116,7 @@ lớn: phần việc chạm vào schema, một hợp đồng công khai, một m
 service thì không file nào được đổi cho tới khi có người duyệt cách làm.
 
 Cạnh đi vào `atk:spec` chỉ vẽ từ `implement` cho sơ đồ còn đọc được, nhưng `fix` và `verify` mang
-đúng nghĩa vụ đó qua cùng một bước đầu của `shared/finalize-steps.md`. Cả ba, hễ đổi một endpoint,
+đúng nghĩa vụ đó qua cùng một bước đầu của `plugins/atk/shared/finalize-steps.md`. Cả ba, hễ đổi một endpoint,
 một response, một mã lỗi, một cột hay một giá trị enum, đều phải mang tài liệu tham chiếu đi cùng.
 
 ## Thứ không phải là cạnh
@@ -143,12 +143,12 @@ song song của agent chủ để đặt vài lượt đọc độc lập lên m
 cho việc skill vốn đã tự làm, không phải điều kiện bắt buộc: trên harness không có cả hai, skill tự
 chạy lượt đó và artifact nói rõ nó đã chạy theo đường nào.
 
-`shared/host-capabilities.md` giữ phần quy tắc và ranh giới, `shared/tidy-pass.md` giữ phần lượt dọn
+`plugins/atk/shared/host-capabilities.md` giữ phần quy tắc và ranh giới, `plugins/atk/shared/tidy-pass.md` giữ phần lượt dọn
 mã đi tìm những gì.
 
 ## Tự đọc một skill
 
-Mở `skills/<name>/SKILL.md` và đọc ba thứ theo thứ tự này: đường ống ở đầu mục `## Workflow`, vốn là
+Mở `plugins/atk/skills/<name>/SKILL.md` và đọc ba thứ theo thứ tự này: đường ống ở đầu mục `## Workflow`, vốn là
 cả skill gói trong một dòng; các bước đánh số ngay dưới nó; và `## Definition of done`, tức thứ có
 thể mang ra đối chiếu sau khi chạy xong. Các file trong `references/` là phần chi tiết đứng sau một
 bước, và chỉ đáng mở khi đúng bước đó là thứ đang cần biết.

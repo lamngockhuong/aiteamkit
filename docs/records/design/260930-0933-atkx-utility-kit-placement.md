@@ -251,7 +251,7 @@ In `plugins/atkx/` or in a section of the root `CLAUDE.md` of its own:
 | Error and edge cases | `atk` missing: the dependency on Claude Code, the install line elsewhere. A symlink between the plugins: rejected in review |
 | Backward compatibility | The plugin id `atk@atk` stays. The source moves from `./` to `./plugins/atk`, accepted by the maintainer. Whether an update follows the new source is not documented; step 4 of Migration finds out, and if it does not, the release notes tell users to uninstall and install again, as the maintainer decided on 2026-10-01 |
 | Feature flag or rollout | `N/A`: step 4 of Migration is the gate |
-| Rollback | Before a release: revert the move commit. After one: move back and release again, since users follow the `source` in the marketplace file |
+| Rollback | Before a release: revert the move commit. After one: move back and release again, since users follow the `source` in the marketplace file. The release after moving back carries a `Release-As:` footer above the highest `atk-v*` version: release-please would otherwise count from `v0.1.0` and propose `0.1.1`, which a user already on `atk-v0.1.1` never updates to. Untried |
 | Observability | `N/A` |
 | Security and permission | An install no longer carries `.atk/`, `docs/` or `plans/`. An `atkx` skill runs with the user's host permissions like any skill |
 | Performance | Each installed skill adds its `description` to every session's context. `atkx` is optional, so an `atk`-only user pays nothing |
@@ -270,7 +270,7 @@ In `plugins/atkx/` or in a section of the root `CLAUDE.md` of its own:
 
 | Question | Who answers |
 |----------|-------------|
-| Is `atk` listed in OpenAI's plugin directory, which `README.md` points Codex users at? If it is, does the listing follow the new `.agents/plugins/marketplace.json`. Unknown on 2026-10-01; step 4 of Migration installs from the repository with `codex plugin marketplace add`, which works either way | Lam Ngoc Khuong, PM |
+| ~~Is `atk` listed in OpenAI's plugin directory, which `README.md` points Codex users at? If it is, does the listing follow the new `.agents/plugins/marketplace.json`.~~ Answered 2026-10-01: `atk` is in no OpenAI or Cursor directory, and users install it only from this repository, so the move strands no listing | Lam Ngoc Khuong, PM |
 
 ## Reviewers
 

@@ -339,7 +339,7 @@ turn for the identifiers), the working language, where the spec lives, and who a
 
 The team question arrives with its `Approves` column already proposed, so the user confirms or
 corrects a default instead of composing one. The default per role is the kit's own: the Accepts
-column of the role table in `docs/flow/project-flow.md` in the kit, which collects what each skill's
+column of the role table in `references/role-defaults.md`, which collects what each skill's
 `## Roles` section names and which `shared/team-roles.md` points at. A proposal is not an answer; a
 row the user neither confirms nor corrects is `TBD` like any other, and a role the team does not
 fill takes no default.

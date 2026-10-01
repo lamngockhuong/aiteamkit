@@ -10,6 +10,8 @@ OpenAI Codex CLI. It packages 24 skills covering the delivery lifecycle of a com
 `convention`, `plan`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `security`, `git`,
 `release`, `incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
 (`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
+A second plugin, `atkx`, sits beside it in the same marketplace with no skill yet; see "`atkx` sits
+beside `atk`, and the dependency runs one way".
 
 This is content plus manifests, not a runtime application: there is no build step, no bundler, no
 test suite, and `package.json` is `private: true` with no `scripts` block. "Validation" means JSON
@@ -32,29 +34,55 @@ A change that makes a skill act like a solo assistant, deciding on the team's be
 artifact with no owner, is a regression even if it reads more helpfully. Supporting a solo developer
 is a different thing and is in scope: one person holding every role still gets the gates, and the
 approval is still their own act, whether they edit the state or tell the agent to.
-`shared/team-roles.md` owns that distinction.
+`plugins/atk/shared/team-roles.md` owns that distinction.
 
 ## Multi-manifest layout (non-obvious)
 
-Three sibling manifest folders point to the SAME content at repo root:
+The repository is a marketplace holding two plugins: `atk` at `plugins/atk/`, and `atkx` beside it
+at `plugins/atkx/`. One marketplace file per harness lists both, and inside each plugin three sibling
+manifest folders point to the SAME content:
 
 ```
-.claude-plugin/     plugin.json + marketplace.json
-.cursor-plugin/     plugin.json
-.codex-plugin/      plugin.json (with `interface{}` block for marketplace listing)
-skills/, shared/, assets/    shared content, NOT duplicated per harness
+.claude-plugin/marketplace.json     Claude Code: lists atk and atkx at ./plugins/<name>
+.cursor-plugin/marketplace.json     Cursor: lists atk and atkx at plugins/<name>
+.agents/plugins/marketplace.json    Codex: lists atk and atkx at ./plugins/<name>
+plugins/atk/
+  .claude-plugin/     plugin.json
+  .cursor-plugin/     plugin.json
+  .codex-plugin/      plugin.json (with `interface{}` block for marketplace listing)
+  skills/, shared/, hooks/, assets/    shared content, NOT duplicated per harness
+  CHANGELOG.md        written by release-please
+  LICENSE             a copy of the root licence, since an install carries nothing above the plugin
+plugins/atkx/
+  .claude-plugin/, .cursor-plugin/, .codex-plugin/    the same three manifests
+  skills/             empty until a first skill passes the bar in its section below
+  LICENSE             the same copy; CHANGELOG.md arrives with the first atkx release
 ```
 
-Edit `skills/<name>/SKILL.md` ONCE; all three manifests pick it up. Do not create per-harness copies.
+Edit `plugins/atk/skills/<name>/SKILL.md` ONCE; all three manifests pick it up. Do not create
+per-harness copies.
+
+An install copies one plugin directory, `plugins/atk/` or `plugins/atkx/`, and nothing above it. A skill, a shared file
+or a hook that reads a file outside that directory reads nothing on a user's machine, and no manifest
+path may leave it: no `..`, no absolute path. That is why `atk:init` keeps its default approvals in
+`plugins/atk/skills/init/references/role-defaults.md` rather than in `docs/`. `CONV-012` holds the
+rule, and its check under "Common verification commands" fails on a citation that resolves outside
+the plugin or nowhere.
 
 | Manifest | `skills` key | Extra |
 |----------|--------------|-------|
-| `.claude-plugin/plugin.json` | absent (Claude auto-discovers `skills/`) | paired with `marketplace.json` |
-| `.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
-| `.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with `defaultPrompt`, icons, `brandColor`; `hooks` pointing at `./hooks/codex-hooks.json` |
+| `plugins/atk/.claude-plugin/plugin.json` | absent (Claude auto-discovers `skills/`) | listed by the root `.claude-plugin/marketplace.json` |
+| `plugins/atk/.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
+| `plugins/atk/.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with `defaultPrompt`, icons, `brandColor`; `hooks` pointing at `./hooks/codex-hooks.json` |
+| `plugins/atkx/.claude-plugin/plugin.json` | absent | `"dependencies": ["atk"]` |
+| `plugins/atkx/.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
+| `plugins/atkx/.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with no icon and no `hooks` |
+
+Paths inside a manifest are relative to its plugin, so they did not change when the kit moved under
+`plugins/atk/`; paths in this file are relative to the repository root.
 
 There is no `commands/` directory and no `commands` key in any manifest. A skill is its own slash
-command: `skills/qa/SKILL.md` is what `/atk:qa` invokes, on all three harnesses. Do not add a
+command: `plugins/atk/skills/qa/SKILL.md` is what `/atk:qa` invokes, on all three harnesses. Do not add a
 `commands/<name>.md` wrapper beside a same-named skill. Claude Code counts `commands/` entries and
 `SKILL.md` skills in one inventory, so a wrapper registers the name a second time and every entry
 shows up duplicated in the `/` menu, at a real always-on token cost for no behavior.
@@ -62,7 +90,7 @@ shows up duplicated in the `/` menu, at a real always-on token cost for no behav
 ## Skill folder layout
 
 ```
-skills/<name>/
+plugins/atk/skills/<name>/
   SKILL.md                    required; frontmatter + workflow, kept under 300 lines
   references/*.md             optional, lazily loaded detail (templates, checklists, schemas)
   references/*.tsv            optional, a list a reference file governs, one record per line
@@ -99,11 +127,12 @@ step would hide a rule the other step also has to obey. That is the bar for an e
 the workflow points at from more than one place, in a skill that does something no other skill does.
 Anything narrower goes inside the step it belongs to.
 
-## `shared/` is the DRY layer (repo-root, outside `skills/`)
+## `shared/` is the DRY layer (beside `skills/`, not under it)
 
-Sixteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
-`skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
-skill discovery.
+Sixteen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
+plugin root beside `skills/`, NOT under it, because a folder under `skills/` without a `SKILL.md` is
+ambiguous to the harnesses' skill discovery. The table names them as skills cite them, relative to
+`plugins/atk/`.
 
 | File | Owns | Cited by |
 |------|------|----------|
@@ -143,9 +172,9 @@ comment on them.
 
 `layer-verification.md` is a contract between the same three: each runs a check and then has to say
 what the result means, and the answer to that second half has to be the same in all three. Each keeps
-its own half beside its own workflow, which is why `skills/fix/references/layer-playbooks.md` still
-holds where a cause hides, `skills/implement/references/verification.md` still holds the order to run
-things in, and `skills/verify/references/runtime-checks.md` still holds how to assert against a
+its own half beside its own workflow, which is why `plugins/atk/skills/fix/references/layer-playbooks.md` still
+holds where a cause hides, `plugins/atk/skills/implement/references/verification.md` still holds the order to run
+things in, and `plugins/atk/skills/verify/references/runtime-checks.md` still holds how to assert against a
 running system.
 
 `host-capabilities.md` decides a boundary rather than a format: a capability the harness itself ships
@@ -162,12 +191,12 @@ the test, not the count.
 `spec-docs.md` is a contract of the same kind and the widest of them: `atk:spec` writes the
 reference documents, and five other skills have to leave them true. It holds the tense distinction
 because both `spec` and `design-doc` need it stated identically, and it holds the sync obligation
-because `shared/finalize-steps.md` now opens with it, which makes every code-changing skill a party
+because `plugins/atk/shared/finalize-steps.md` now opens with it, which makes every code-changing skill a party
 to the rule. The drift-versus-open-question line lives there for the same reason as the rule record
 format in `review-checklist.md`: two skills have to answer it the same way, so neither of them owns
 it.
 
-`design-sources.md` has three citers, `spec`, `intake` and `qa`, and sits in `shared/` because how a
+`design-sources.md` has three citers, `spec`, `intake` and `qa`, and sits in `plugins/atk/shared/` because how a
 design is read is none of theirs to own: the rule that the connection is found by what it can do, told apart in three
 states, and replaced by exported images when it is not ready is what every skill that ever reads a
 design has to answer the same way. It leans on the connection row of `host-capabilities.md`, which
@@ -183,7 +212,7 @@ project rather than in the kit. Cite it from any skill that needs build commands
 where the incoming specification lives, and follow its three-group rule for what to do when that file
 is missing.
 
-When adding a rule that two or more skills need, put it in `shared/` and reference it. Do not paste
+When adding a rule that two or more skills need, put it in `plugins/atk/shared/` and reference it. Do not paste
 it into each `SKILL.md`.
 
 ## The kit stands alone, but it may use the harness it runs on
@@ -198,7 +227,7 @@ other kit's command.
 A capability the host agent itself ships is different, and is allowed: it arrived with the harness,
 so every team on that harness has it. `atk:implement`, `atk:fix` and `atk:verify` use the host's
 code clean-up capability, `/simplify` in Claude Code, and `atk:review` and
-`atk:design-doc --challenge` use the host's parallel agents. `shared/host-capabilities.md` owns the rules: name the capability before its local name,
+`atk:design-doc --challenge` use the host's parallel agents. `plugins/atk/shared/host-capabilities.md` owns the rules: name the capability before its local name,
 resolve that name from the harness at the time of use, and degrade into doing the work by hand,
 recorded as such, on a harness that has none. No skill stops because a host capability is missing,
 apart from `atk:run-cases` without browser automation, which that file states as its one exception
@@ -210,55 +239,109 @@ reason: they hold what a skill wrote, not what this repository authors. A fix re
 left alone once written.
 
 The exclusion is anchored to those two paths, not to the directory names. `--exclude-dir=records`
-would drop any directory called `records` at any depth, including one under `skills/`, and quietly
+would drop any directory called `records` at any depth, including one under `plugins/atk/skills/`, and quietly
 take it out of a `BLOCKING` check.
 
 ```bash
-grep -rn "\bak:" skills/ shared/ README.md docs/ | grep -v -E '^docs/(records|derived)/'
+grep -rn "\bak:" plugins/ README.md docs/ --exclude=CHANGELOG.md | grep -v -E '^docs/(records|derived)/'
 ```
 
 Should print nothing (the second `grep` exits 1).
+
+Every `CHANGELOG.md` is excluded here, in the checks of `CONV-007` and `CONV-011`, and in the
+dated-name check: release-please writes one per plugin from commit messages, it is never edited by hand, and a commit that
+quotes a command or a fill would otherwise fail a `BLOCKING` check with no legitimate fix.
+
+## `atkx` sits beside `atk`, and the dependency runs one way
+
+`plugins/atkx/` is a second plugin in the same marketplace: utility skills that depend on no
+artifact and on no delivery lifecycle. It has no skill yet. `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md`
+records why it is a sibling plugin rather than a folder inside `atk`, and
+`docs/records/design/260930-0933-atkx-utility-kit-placement.md` holds the design this section
+writes down.
+
+An `atkx` skill may call an `atk` skill. `atk` never calls, names, or points at an `atkx` skill:
+the kit stands alone, and a team that installed only `atk` must never meet a pointer it cannot
+follow. That is `CONV-011`:
+
+```bash
+grep -rn "\batkx:" plugins/atk/ --exclude=CHANGELOG.md
+```
+
+Should print nothing (`grep` exits 1).
+
+A skill qualifies for `atkx` when it passes all three of these, and a skill that fails one belongs
+in `atk` or nowhere:
+
+- It runs without `.atk/profile.md`.
+- It writes nothing into the team's repository that a teammate is asked to review.
+- Its `SKILL.md` states which harnesses it fully supports. Trigger measurement, for one, needs the
+  `PreToolUse` hook in `docs/trigger-eval-measurement.md`, which Codex has not been seen to fire for
+  a skill and Cursor does not have, so a skill that measures triggers says "Claude Code only" for
+  that mode.
+
+How an `atkx` skill calls `atk`:
+
+- **At install, on Claude Code.** `plugins/atkx/.claude-plugin/plugin.json` declares
+  `"dependencies": ["atk"]`, so installing `atkx@atk` installs `atk@atk` with it, and Claude Code
+  refuses to disable `atk` while `atkx` is enabled, naming `atkx` as what still needs it.
+- **At run time, everywhere.** Cursor and Codex document no dependency field, and Codex installs
+  `atkx` alone. So an `atkx` skill checks that `atk:<skill>` is in the host's live skill list before
+  invoking it. When it is not, it prints one line naming the kit and how to install it, then stops or
+  continues without that step, as its own `SKILL.md` says.
+- It names the `atk` skill by its full name, passes only arguments listed in that skill's
+  `argument-hint`, and leaves the called skill's gates to the user: its profile check, its
+  interview, its approval states.
+
+Each plugin carries every file it reads, because an install copies one plugin directory and nothing
+beside it. A rule both kits need is written in each, and the copy in `atkx` names the `atk` file it
+came from, so a later reader can compare the two. No symlink crosses from one plugin to the other:
+Claude Code would copy its target into the cache, but Cursor and Codex document no such behaviour.
+`atkx` has no hooks of its own to begin with, so a user with both kits sees the `atk` profile
+reminder once.
+
+```bash
+find plugins -type l
+```
+
+Should print nothing.
 
 ## `.atk/` in the target project
 
 Skills that need project facts (build commands, layer layout, where the spec lives) read
 `.atk/profile.md` from the root of the **target project**, never from the kit. `atk:init` creates
-it; `shared/project-profile.md` defines what it holds and what each skill does when it is missing.
+it; `plugins/atk/shared/project-profile.md` defines what it holds and what each skill does when it is missing.
 
 No skill writes another project's facts into the kit. The kit's own `.atk/` at the repository root
-is not that: it describes `aiteamkit`, because the kit runs its own skills on itself. End users
-receive it, and that is accepted rather than worked around. No field of `plugin.json` or of a
-marketplace entry excludes files, and the install copies the plugin directory as it stands, so
-`"source": "./"` ships the whole repository. Only the source shape changes what ships, and every
-option costs more than it saves here: `git-subdir` or a subdirectory path means moving `skills/`,
-`shared/`, `hooks/` and `assets/` down one level and rewriting every path in the docs, while `npm`
-and `archive` mean a publish step this repository does not have. Nothing reads `.atk/` for the
-user's project, because every citation resolves it from the root of the target project, and both
-files say as much in their first line.
+is not that: it describes `aiteamkit`, because the kit runs its own skills on itself. It does not
+ship: the marketplace entry's `source` is `./plugins/atk`, and the install copies that directory
+alone, so `.atk/`, `docs/`, `plans/` and the root files stay in the repository. Nothing reads `.atk/`
+for the user's project either way, because every citation resolves it from the root of the target
+project, and both files say as much in their first line.
 
 ## `hooks/` never holds a rule, and is never the only road to a behavior
 
 Two hooks, and both boundaries have to hold or the kit stops being the same kit on three harnesses.
 
-`SessionStart` runs `hooks/check-profile.mjs`, which prints one line when a project has no
-`.atk/profile.md` at or above it, walking up the way `shared/project-profile.md` says a skill does
+`SessionStart` runs `plugins/atk/hooks/check-profile.mjs`, which prints one line when a project has no
+`.atk/profile.md` at or above it, walking up the way `plugins/atk/shared/project-profile.md` says a skill does
 and accepting a profile found above only when it names the directory the walk started in. A member
 repository of a project whose profile sits in the parent is left alone; an unrelated repository that
 happens to sit under the same folder is not. It must stay
 answerable in one sentence: "does this project have a profile yet".
 The moment it answers a second question, the precondition rule exists in two places, and the copy in
-`shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: ten skills
+`plugins/atk/shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: ten skills
 need no profile at all, so a hook that blocked would stop `atk:intake` from turning a chat message
 into requirements.
 
-`PreToolUse` with matcher `Skill` runs `hooks/load-overrides.mjs`, which puts
+`PreToolUse` with matcher `Skill` runs `plugins/atk/hooks/load-overrides.mjs`, which puts
 `.atk/overrides/<skill>.md` in front of the skill that owns it. It decides nothing and skips nothing;
 what it saves is one file read. Every skill names its own override file at the top of its
 `## Workflow` and opens it when no hook put it there, which is what happens on any harness the hook
 does not reach: Cursor, which has no matching event; Codex, where the entry is registered through
-`hooks/codex-hooks.json` but has never been observed matching a skill invocation; and Claude Code
+`plugins/atk/hooks/codex-hooks.json` but has never been observed matching a skill invocation; and Claude Code
 with the hook turned off. The test that keeps this honest: run a skill against a project that has an
-override for it twice, once with the `PreToolUse` entry in `hooks/hooks.json` and once with it
+override for it twice, once with the `PreToolUse` entry in `plugins/atk/hooks/hooks.json` and once with it
 removed, and compare the two results. A difference means a behavior has moved into the hook, and
 every harness the hook does not reach has silently lost it.
 
@@ -271,18 +354,18 @@ code 2 included. The script exits 0 on every path regardless, prints nothing whe
 say, and writes its "already reminded" marker to `${CLAUDE_PLUGIN_DATA}` or the user's state
 directory, never into the user's repository.
 
-**Keep both hooks in `hooks/hooks.json` in exec form, and keep them Node.** The entry is
+**Keep both hooks in `plugins/atk/hooks/hooks.json` in exec form, and keep them Node.** The entry is
 `"command": "node"` with `${CLAUDE_PLUGIN_ROOT}` inside `args`. Rewriting it as a shell script, or
 moving it to shell form, breaks Windows. `docs/system-architecture.md` holds the reasoning under
 "Why the hook is Node and not a shell script"; read it before changing the shape, and keep the
 exec-form check in the verification block below passing.
 
-`hooks/codex-hooks.json` is the same two hooks for Codex, and it is the one place a string `command`
+`plugins/atk/hooks/codex-hooks.json` is the same two hooks for Codex, and it is the one place a string `command`
 is correct. Codex replaces `${PLUGIN_ROOT}` inside `command` before anything runs, and replaces
 nothing inside `args`, so the exec-form entry Claude Code needs reaches Node as a literal
 `${CLAUDE_PLUGIN_ROOT}/hooks/check-profile.mjs` and the session shows a failed startup hook.
-`.codex-plugin/plugin.json` points its `hooks` key at that file, which is what keeps Codex off the
-default `hooks/hooks.json`. Two files, one pair of scripts: the Node is shared, only the registration
+`plugins/atk/.codex-plugin/plugin.json` points its `hooks` key at that file, which is what keeps Codex off the
+default `hooks/hooks.json` at the plugin root. Two files, one pair of scripts: the Node is shared, only the registration
 differs, and neither file may grow a rule. There is still no Cursor wrapper, because that event
 contract could not be tested here. That costs a reminder, not a safeguard.
 
@@ -290,23 +373,27 @@ contract could not be tested here. That costs a reminder, not a safeguard.
 
 Nothing generates these, so they drift silently. When adding, renaming, or removing a **skill**:
 
-1. `skills/<name>/SKILL.md`
+1. `plugins/atk/skills/<name>/SKILL.md`
 2. `README.md` (the skills table AND the invocation block)
 3. `docs/skills-overview.md` and `docs/vi/skills-overview.md`
 4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
-5. `shared/artifact-paths.md` (the default output path row)
+5. `plugins/atk/shared/artifact-paths.md` (the default output path row)
 6. `docs/artifact-lifecycle.md` and `docs/vi/artifact-lifecycle.md`, if the skill produces a kind of
    artifact the tree did not hold before. The per-group paragraphs name the kinds and count them, so
    a new one leaves two files disagreeing about what is safe to delete
 7. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 24
+8. All three manifest descriptions plus `.claude-plugin/marketplace.json` and `package.json`, if the count of 24
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
-   `shared/` layer or the profile is for
-10. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
-    all three `docs/vi/flow/` mirrors.
-    Each names all 24 skills: the phase table and the consumes/produces table respectively
-11. `skills/help/references/state-signals.md`, if something on disk says the skill is the next one
+   `plugins/atk/shared/` layer or the profile is for
+10. The tables that name all 24 skills: the phase table in `docs/flow/project-flow.md`, the
+    consumes/produces table in `docs/flow/skill-chain.md`, and the role table in
+    `plugins/atk/skills/init/references/role-defaults.md`, the last read by `atk:init` and shipped
+    inside the kit for that reason. Both `docs/flow/` files have `docs/vi/flow/` mirrors; the role
+    table has none. `docs/flow/skill-lifecycle.md` and its mirror carry no table of all 24: they name
+    skills as examples of each kind of edge, and count the `SKILL.md` files and the mentions between
+    them, so a new skill changes those counts and, if it adds a kind of edge, the examples
+11. `plugins/atk/skills/help/references/state-signals.md`, if something on disk says the skill is the next one
     to run. A skill that answers an event a person reports has no row there, because nothing on
     disk announces the event
 12. The `skill: <name>` label on the GitHub repository and its entry in `.github/labeler.yml`,
@@ -322,12 +409,12 @@ the `/` menu shows, so a trigger phrase belongs there and nowhere else.
 
 ## SKILL.md `name` field convention (catches lint)
 
-Each `skills/<folder>/SKILL.md` frontmatter `name:` MUST be:
+Each `plugins/atk/skills/<folder>/SKILL.md` frontmatter `name:` MUST be:
 
 - Lowercase letters, numbers, hyphens only (NO colons)
 - Match the folder name exactly
 
-Example: `skills/design-doc/SKILL.md` -> `name: design-doc` (NOT `atk:design-doc`).
+Example: `plugins/atk/skills/design-doc/SKILL.md` -> `name: design-doc` (NOT `atk:design-doc`).
 
 The `atk:` namespace is added automatically by the harness from `plugin.json`. The fully-qualified
 invocation identifier is `atk:design-doc`, but it is constructed at load time, not stored in the
@@ -344,11 +431,13 @@ Japanese triggers silently breaks invocation for part of the audience.
 Do NOT use em-dashes (`—`, U+2014) anywhere in user-authored content (READMEs, manifests, skill
 prose, shared references, docs). Use hyphen `-`, comma, semicolon, or colon based on context.
 
-After edits, verify. The two exclusions are both files that quote the character in order to document
-this very check: this section, and the verification list inside `.atk/profile.md`.
+After edits, verify. `CLAUDE.md` is excluded because this section quotes the character in order to
+document this very check, and every `CHANGELOG.md` for the reason given under "The kit stands alone".
+The `plans/` and `docs/` filter is anchored to the path at the start of the line, so a line that
+only mentions one of those directories is still checked.
 
 ```bash
-grep -rn "—" . --exclude-dir=.git --exclude-dir=.atk --exclude=CLAUDE.md | grep -v -E '(plans|docs)/'
+grep -rn "—" . --exclude-dir=.git --exclude=CLAUDE.md --exclude=CHANGELOG.md | grep -v -E '^\./(plans|docs)/'
 ```
 
 Should print nothing (`grep` exits 1).
@@ -356,7 +445,7 @@ Should print nothing (`grep` exits 1).
 ## Diagrams are Mermaid, except where they are not
 
 Every flow, graph, and diagram in a doc, in the README, or in an artifact a skill produces is a
-fenced `mermaid` block. The drawing rules are in `shared/diagram-conventions.md`, which is also what
+fenced `mermaid` block. The drawing rules are in `plugins/atk/shared/diagram-conventions.md`, which is also what
 the six diagram-producing skills cite; do not restate them here or in a `SKILL.md`.
 
 Two places keep plain ASCII on purpose:
@@ -372,8 +461,8 @@ After edits, verify. The one exclusion is the file that quotes the banned patter
 document it:
 
 ```bash
-grep -rn "style .* fill:#" skills/ shared/ docs/ README.md \
-  | grep -v shared/diagram-conventions.md
+grep -rn "style .* fill:#" plugins/ docs/ README.md --exclude=CHANGELOG.md \
+  | grep -v plugins/atk/shared/diagram-conventions.md
 ```
 
 Should print nothing: a hardcoded fill is black text on a pale background for every reader in a dark
@@ -397,9 +486,10 @@ its Layers table, and the mirror check below excludes both paths.
 | `skills-overview.md` | Reader-facing explanation of every skill: what it produces, when to use, when not to |
 | `artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, and what each deletion costs |
 | `project-overview-pdr.md` | What atk is, goals, non-goals |
-| `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
+| `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
 | `flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
@@ -427,27 +517,45 @@ reviewer after.
 
 ## Release flow (release-please, pre-1.0 mode)
 
-Versions are bumped automatically by release-please on push to `main`. Five files share the version,
-all driven by `release-please-config.json` `extra-files`:
+Versions are bumped automatically by release-please on push to `main`. `plugins/atk` is its own
+release package in `release-please-config.json`, tagged `atk-v<version>`, and it counts only the
+commits that touch `plugins/atk/`. Four files share its version, all driven by that package's
+`extra-files`:
 
 | File | jsonpath |
 |------|----------|
-| `package.json` | `$.version` |
-| `.claude-plugin/plugin.json` | `$.version` |
-| `.claude-plugin/marketplace.json` | `$.plugins[0].version` |
-| `.cursor-plugin/plugin.json` | `$.version` |
-| `.codex-plugin/plugin.json` | `$.version` |
+| `package.json` | `$.version`, written `/package.json` because a leading `/` resolves from the repository root rather than from the package |
+| `plugins/atk/.claude-plugin/plugin.json` | `$.version` |
+| `plugins/atk/.cursor-plugin/plugin.json` | `$.version` |
+| `plugins/atk/.codex-plugin/plugin.json` | `$.version` |
 
-A sixth file, `.release-please-manifest.json`, also holds the version but is NOT an `extra-file`:
-release-please owns it natively as its state file. Never hand-edit it.
+The config sets three things the single-package layout did not need: `include-component-in-tag`,
+so each plugin's tags stay apart; `separate-pull-requests`, so each plugin gets a release pull
+request of its own; and `last-release-sha`, the `v0.1.0` commit, also tagged `atk-v0.1.0`, so the first
+release after the split has a boundary even though no GitHub release named `atk-v*` exists yet.
+
+`plugins/atkx` is a second package, tagged `atkx-v<version>`, whose three `plugin.json` files share
+its version. Its state starts at `0.0.0` with `"initial-version": "0.0.1"`: release-please treats a
+`0.0.0` package as never released and would open its first release at `1.0.0` without that line.
+
+The marketplace files carry no version: each harness reads it from the plugin's own `plugin.json`,
+so a copy in the marketplace entry would be one more place for it to disagree.
+
+A fifth file, `.release-please-manifest.json`, also holds the version, keyed by the package path, but
+is NOT an `extra-file`: release-please owns it natively as its state file. Never hand-edit it. The
+changelog is `plugins/atk/CHANGELOG.md`, inside the package, which is where release-please writes it.
 
 Pre-1.0 config keeps experimental versioning:
 
 - `bump-patch-for-minor-pre-major: true` means `feat:` commits bump patch (0.0.x).
 - `bump-minor-pre-major: true` means `feat!:` and breaking-change commits bump minor (0.x.0).
 
-To force a specific version, append a `Release-As: X.Y.Z` footer to a commit. To graduate to 1.0 and
-above, drop the two `bump-*-pre-major` flags.
+To force a specific version, append a `Release-As: X.Y.Z` footer to a commit that touches the
+package it is for, `plugins/atk/` or `plugins/atkx/`: release-please files a commit under the package
+paths it touches, so the footer on a commit touching only root files reaches no package, and on one
+touching both it forces both. The two `bump-*-pre-major` flags sit at the top of
+`release-please-config.json` and hold for both packages; to graduate one plugin to 1.0 and above,
+move the flags into the other package's block and drop them from the top.
 
 ## Commits
 
@@ -458,7 +566,7 @@ above, drop the two `bump-*-pre-major` flags.
 ## Review checklist
 
 This is the section `atk:review` reads and cites by ID, in the record format from
-`shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks, because this
+`plugins/atk/shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks, because this
 repository has no CI that runs anything. `.github/workflows/` carries release-please and the
 labeler, and neither checks content, so no rule here is `ENFORCED` and none is enforced by a tool failing a build.
 
@@ -467,23 +575,25 @@ not a second set of rules. The `source` column says where the prose lives.
 
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
-| `CONV-001` | Adding, renaming, or removing a skill touches all twelve groups of file listed for it | `REVIEWED` | none | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-001` | Adding, renaming, or removing a skill touches all twelve groups of file listed for it | `REVIEWED` | none for eleven groups; the labeler check below for group 12 | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
-| `CONV-008` | The five manifests and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
-| `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
+| `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
+| `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
+| `CONV-011` | `atk` never invokes or names an `atkx` skill, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
+| `CONV-012` | A plugin reads nothing outside its own directory: every `shared/` or `references/` file a plugin file cites exists inside that plugin, and no plugin file names one of this repository's documents except as a GitHub link | `REVIEWED` | the citation check below | `BLOCKING` | "Multi-manifest layout (non-obvious)" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
 
 Three things worth automating, proposed and not installed. A CI job running the block below would
 move most of this table to `ENFORCED` and stop a reviewer spending attention on it. `CONV-001` is the
-one that would need writing rather than wiring: a check that a diff touching `skills/` also touches
+one that would need writing rather than wiring: a check that a diff touching `plugins/atk/skills/` also touches
 the twelve groups. The third is a profile check, and it belongs to a project rather than to this
 repository: that a `.atk/profile.md` whose `Shape` names members carries a Repositories table, that
 one whose shape does not carries none, and that every path and every `Repository` cell elsewhere in
@@ -493,14 +603,14 @@ repository's tooling.
 ## Common verification commands
 
 ```bash
-# All 5 manifests parse
-for f in package.json .claude-plugin/plugin.json .claude-plugin/marketplace.json \
-         .cursor-plugin/plugin.json .codex-plugin/plugin.json; do
+# Every manifest and marketplace file parses
+for f in package.json .claude-plugin/marketplace.json .cursor-plugin/marketplace.json \
+         .agents/plugins/marketplace.json plugins/*/.*-plugin/plugin.json; do
   python3 -c "import json,sys; json.load(open('$f'))" && echo "OK $f"
 done
 
 # Every skill folder has a SKILL.md, and the name matches the folder
-for d in skills/*/; do
+for d in plugins/*/skills/*/; do
   n=$(basename "$d")
   grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"
 done
@@ -512,11 +622,11 @@ diff <(cd docs && find . -name '*.md' -not -path './vi/*' \
 
 # Both registration files parse, the scripts are valid Node, and check-profile stays silent where a
 # profile exists
-for f in hooks/hooks.json hooks/codex-hooks.json; do
+for f in plugins/atk/hooks/hooks.json plugins/atk/hooks/codex-hooks.json; do
   python3 -c "import json,sys; json.load(open('$f'))" && echo "OK $f"
 done
-node --check hooks/check-profile.mjs && node --check hooks/load-overrides.mjs && echo "OK node"
-out=$(CLAUDE_PROJECT_DIR="$PWD" CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
+node --check plugins/atk/hooks/check-profile.mjs && node --check plugins/atk/hooks/load-overrides.mjs && echo "OK node"
+out=$(CLAUDE_PROJECT_DIR="$PWD" CLAUDE_PLUGIN_DATA=$(mktemp -d) node plugins/atk/hooks/check-profile.mjs)
 test -z "$out" && echo "OK silent with profile"   # fresh marker dir, so silence means the profile
 
 # The walk, which the line above never reaches: this repository's own profile answers on the first
@@ -527,11 +637,11 @@ printf 'Shape: parent + members\n| backend | `backend/` | origin o/r | Team | cl
   > "$t/parent/.atk/profile.md"
 for c in "parent/backend:silent" "parent/stray:reminds" "ws:reminds"; do
   dir=${c%%:*}; want=${c##*:}
-  out=$(CLAUDE_PROJECT_DIR="$t/$dir" CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
+  out=$(CLAUDE_PROJECT_DIR="$t/$dir" CLAUDE_PLUGIN_DATA=$(mktemp -d) node plugins/atk/hooks/check-profile.mjs)
   got=silent; test -n "$out" && got=reminds
   test "$got" = "$want" && echo "OK $dir $want" || echo "FAIL $dir: wanted $want, got $got"
 done
-out=$(CLAUDE_PROJECT_DIR=$(mktemp -d) CLAUDE_PLUGIN_DATA=$(mktemp -d) node hooks/check-profile.mjs)
+out=$(CLAUDE_PROJECT_DIR=$(mktemp -d) CLAUDE_PLUGIN_DATA=$(mktemp -d) node plugins/atk/hooks/check-profile.mjs)
 test -z "$out" && echo "OK plain directory silent"; rm -rf "$t"
 
 # load-overrides answers only for atk: skills, and cannot read outside .atk/overrides/.
@@ -543,7 +653,7 @@ for payload in '{"tool_name":"Bash","tool_input":{}}' \
                '{"tool_name":"Skill","tool_input":{"skill":"ak:review"}}' \
                '{"tool_name":"Skill","tool_input":{"skill":"review"}}' \
                'not json'; do
-  out=$(echo "$payload" | CLAUDE_PROJECT_DIR="$PWD" node hooks/load-overrides.mjs)
+  out=$(echo "$payload" | CLAUDE_PROJECT_DIR="$PWD" node plugins/atk/hooks/load-overrides.mjs)
   test "$out" = "{}" || echo "LEAK on: $payload"
 done; echo "OK load-overrides quiet"
 
@@ -557,11 +667,11 @@ ln -s "$t/out" "$t/q/.atk/overrides"
 for c in "p:fix:{}" "q:fix:{}"; do
   IFS=: read -r dir skill want <<< "$c"
   out=$(echo "{\"tool_name\":\"Skill\",\"tool_input\":{\"skill\":\"atk:$skill\"}}" \
-    | CLAUDE_PROJECT_DIR="$t/$dir" node hooks/load-overrides.mjs)
+    | CLAUDE_PROJECT_DIR="$t/$dir" node plugins/atk/hooks/load-overrides.mjs)
   test "$out" = "$want" && echo "OK $dir symlink out refused" || echo "LEAK $dir: $out"
 done
 echo '{"tool_name":"Skill","tool_input":{"skill":"atk:plan"}}' \
-  | CLAUDE_PROJECT_DIR="$t/p" node hooks/load-overrides.mjs | grep -q inside \
+  | CLAUDE_PROJECT_DIR="$t/p" node plugins/atk/hooks/load-overrides.mjs | grep -q inside \
   && echo "OK symlink inside loads" || echo "FAIL symlink inside"; rm -rf "$t"
 
 # Each harness gets the registration it can read. Claude Code: exec form, since shell form would
@@ -587,29 +697,118 @@ def registered(path, script_of):
             for event, groups in json.load(open(path))['hooks'].items()
             for group in groups for h in group['hooks']}
 
-a = registered('hooks/hooks.json', claude)
-b = registered('hooks/codex-hooks.json', codex)
+a = registered('plugins/atk/hooks/hooks.json', claude)
+b = registered('plugins/atk/hooks/codex-hooks.json', codex)
 assert a == b, 'the two registrations have drifted apart: %s' % sorted(a ^ b)
 for event, matcher, script in sorted(a):
-    assert os.path.exists('hooks/' + script), 'no such hook script: hooks/' + script
-assert json.load(open('.codex-plugin/plugin.json')).get('hooks') == './hooks/codex-hooks.json', \
+    assert os.path.exists('plugins/atk/hooks/' + script), 'no such hook script: plugins/atk/hooks/' + script
+assert json.load(open('plugins/atk/.codex-plugin/plugin.json')).get('hooks') == './hooks/codex-hooks.json', \
     'the Codex manifest must point its hooks key at ./hooks/codex-hooks.json'
 print('OK registration, %d hooks in both files' % len(a))"
+
+# The marketplaces and the plugins agree: every plugins/<name>/ is listed in all three marketplace
+# files and is a release package, every listed source is a plugin of that name, no marketplace entry
+# carries a version, no manifest path leaves its plugin, and atkx still declares atk. Each of these is
+# true by construction today and silent when it stops being true, which is why it is asserted here
+python3 -c "
+import glob, json, os
+plugins = sorted(os.path.basename(d.rstrip('/')) for d in glob.glob('plugins/*/'))
+packages = json.load(open('release-please-config.json'))['packages']
+assert sorted(packages) == ['plugins/' + p for p in plugins], 'release packages: %s' % sorted(packages)
+for f in ('.claude-plugin/marketplace.json', '.cursor-plugin/marketplace.json',
+          '.agents/plugins/marketplace.json'):
+    entries = json.load(open(f))['plugins']
+    assert sorted(e['name'] for e in entries) == plugins, '%s lists %s' % (f, [e['name'] for e in entries])
+    for e in entries:
+        assert 'version' not in e, '%s: %s carries a version' % (f, e['name'])
+        src = e['source']['path'] if isinstance(e['source'], dict) else e['source']
+        assert os.path.normpath(src) == 'plugins/' + e['name'], '%s: %s source %r' % (f, e['name'], src)
+manifests = glob.glob('plugins/*/.*-plugin/plugin.json')
+assert len(manifests) == 3 * len(plugins), 'expected three manifests per plugin: %s' % sorted(manifests)
+PATH_KEYS = ('skills', 'hooks', 'composerIcon', 'logo')
+for m in manifests:
+    root = m.split('/.', 1)[0]
+    assert json.load(open(m))['name'] == os.path.basename(root), m + ': name differs from its folder'
+    def paths(o, key=None):
+        if isinstance(o, dict): return [x for k, v in o.items() for x in paths(v, k)]
+        if isinstance(o, list): return [x for v in o for x in paths(v, key)]
+        return [o] if isinstance(o, str) and (key in PATH_KEYS or o.startswith(('./', '../', '/'))) else []
+    for v in paths(json.load(open(m))):
+        assert not v.startswith('/') and '..' not in v.split('/') and os.path.exists(os.path.join(root, v)), '%s: %s' % (m, v)
+assert json.load(open('plugins/atkx/.claude-plugin/plugin.json')).get('dependencies') == ['atk'], \
+    'atkx must declare atk as its dependency'
+print('OK marketplaces and plugins agree, %d plugins' % len(plugins))"
+
+# A plugin reads nothing outside itself. Every shared/ or references/ file a plugin file cites exists
+# inside that plugin, and no plugin file names one of this repository's own documents or climbs out
+# with ../../../. A citation that resolves nowhere fails nothing else: atk:init, for one, would
+# propose an empty Approves column with every other check green. A link to the repository on GitHub
+# is a pointer for a reader, not a read, and is allowed
+python3 -c "
+import glob, os, re
+own = [f for f in glob.glob('docs/**/*.md', recursive=True)
+       if not f.startswith(('docs/vi/', 'docs/derived/', 'docs/records/'))]
+cite = re.compile(r'(?<![\w./-])(?:\.\./)*(plugins/[\w-]+/)?(?:skills/([\w-]+)/)?(shared|references)/([\w.-]+\.(?:md|tsv))')
+bad, n = [], 0
+for p in sorted(d.rstrip('/') for d in glob.glob('plugins/*/')):
+    for f in [os.path.join(d, x) for d, _, xs in os.walk(p) for x in xs]:
+        if not f.endswith(('.md', '.mjs', '.json', '.tsv')) or f.endswith('CHANGELOG.md'):
+            continue
+        parts = os.path.relpath(f, p).split('/')
+        skill = parts[1] if parts[0] == 'skills' and len(parts) > 2 else None
+        for i, line in enumerate(open(f), 1):
+            where = '%s:%d' % (f, i)
+            if 'github.com/' not in line:
+                bad += ['%s: names %s' % (where, d) for d in own if d in line]
+                if '../../../' in line: bad.append(where + ': climbs out of the plugin')
+            for m in cite.finditer(line):
+                n += 1
+                home, other, kind, name = m.groups()
+                if home and home != p + '/':
+                    bad.append('%s: cites another plugin, %s' % (where, m.group(0))); continue
+                if kind == 'shared':
+                    target = os.path.join(p, 'shared', name)
+                elif other or skill:
+                    target = os.path.join(p, 'skills', other or skill, 'references', name)
+                else:
+                    bad.append('%s: references/ outside a skill, %s' % (where, m.group(0))); continue
+                if not os.path.exists(target): bad.append('%s: %s resolves to %s, which does not exist' % (where, m.group(0), target))
+assert not bad, chr(10).join(bad)
+print('OK plugins read nothing outside themselves, %d citations resolved' % n)"
+
+# .github/labeler.yml stays true to the tree: every glob matches a tracked file, and every skill folder
+# has its own skill: entry and no entry names a skill that is gone. A glob that matches nothing
+# never labels anything, and nothing reports it
+python3 -c "
+import glob, os, re, subprocess
+text = open('.github/labeler.yml').read()
+tracked = subprocess.run(['git', 'ls-files'], capture_output=True, text=True, check=True).stdout.split()
+globs = [g for line in re.findall(r'any-glob-to-any-file: (.+)', text) for g in re.findall(r\"'([^']+)'\", line)]
+def rx(g):
+    return re.compile('^' + re.escape(g).replace(r'\*\*', '.*').replace(r'\*', '[^/]*') + '$')
+dead = [g for g in globs if not any(rx(g).match(f) for f in tracked)]
+assert not dead, 'labeler globs matching no tracked file: %s' % dead
+labelled = set(re.findall(r\"^'skill: ([\w-]+)':\", text, re.M))
+folders = {os.path.basename(d.rstrip('/')) for d in glob.glob('plugins/atk/skills/*/')}
+assert labelled == folders, 'skill labels and folders differ: %s' % sorted(labelled ^ folders)
+for s in folders:
+    assert 'plugins/atk/skills/%s/**' % s in globs, 'skill: %s has no glob for its folder' % s
+print('OK labeler, %d globs, %d skills' % (len(globs), len(folders)))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow
 # docs/trigger-eval-measurement.md
-for f in skills/*/evals/trigger_evals.json; do
+for f in plugins/*/skills/*/evals/trigger_evals.json; do
   python3 -c "import json,sys; d=json.load(open('$f')); assert isinstance(d,list) and d" || echo "FAIL $f"
 done; echo "OK evals"
 
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
 # holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs
 # unique and shaped `<component>-NN`, its dimension a number from 1 to 10, and its technique a code
-# that skills/qa/references/checklists.md defines
+# that plugins/atk/skills/qa/references/checklists.md defines
 python3 -c "
 import csv, glob, re
-for f in glob.glob('skills/*/references/*.tsv'):
+for f in glob.glob('plugins/*/skills/*/references/*.tsv'):
     rows = list(csv.reader(open(f, newline=''), delimiter='\t', quoting=csv.QUOTE_NONE))
     head, body = rows[0], rows[1:]
     assert body, f + ': no records'
@@ -628,15 +827,25 @@ for f in glob.glob('skills/*/references/*.tsv'):
             assert r[head.index('technique')] in ('', 'EP', 'BVA', 'DT', 'ST', 'PW', 'EG'), '%s:%d: technique' % (f, n)
     print('OK %s, %d records' % (f, len(body)))"
 
-# No example of a dated artifact name has lost its time: shared/artifact-paths.md dates every name
+# No example of a dated artifact name has lost its time: plugins/atk/shared/artifact-paths.md dates every name
 # YYMMDD-HHMM, and a six-digit date followed by a slug, an extension, `/` or `)` is the shape it
 # replaced.
 # Should print nothing (grep exits 1)
-grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' skills/ shared/ README.md docs/ \
+grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/ README.md docs/ \
+  --exclude=CHANGELOG.md \
   | grep -v -E '^docs/(records|derived)/'
 
-# Version agreement across the 6 version-bearing files
-grep -h '"version"' package.json .claude-plugin/plugin.json .cursor-plugin/plugin.json \
-     .codex-plugin/plugin.json; grep -h '"version"' .claude-plugin/marketplace.json; \
-     cat .release-please-manifest.json
+# Version agreement: per release package, its extra-files and its entry in the release-please
+# manifest name one version. Read from the config itself, so a package added there is checked too
+python3 -c "
+import json, os
+cfg = json.load(open('release-please-config.json'))
+state = json.load(open('.release-please-manifest.json'))
+for pkg, conf in cfg['packages'].items():
+    seen = {'.release-please-manifest.json': state[pkg]}
+    for e in conf['extra-files']:
+        f = e['path'][1:] if e['path'].startswith('/') else os.path.join(pkg, e['path'])
+        seen[f] = json.load(open(f))['version']
+    assert len(set(seen.values())) == 1, '%s disagrees: %s' % (pkg, seen)
+    print('OK %s at %s, %d files' % (pkg, state[pkg], len(seen)))"
 ```

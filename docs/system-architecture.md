@@ -3,56 +3,88 @@
 ## Shape
 
 `atk` is content plus manifests. There is no build step, no bundler, and no runtime: the harness
-reads Markdown and JSON directly from the repository tree.
+reads Markdown and JSON directly from the plugin directory.
+
+The repository is a marketplace with two plugins in it. `atk` lives at `plugins/atk/`, `atkx` beside
+it at `plugins/atkx/`, and each harness finds them through a marketplace file at the root.
 
 ```
 aiteamkit/
-  .claude-plugin/     plugin.json + marketplace.json     Claude Code
-  .cursor-plugin/     plugin.json                        Cursor
-  .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-  skills/<name>/SKILL.md        24 skills, one folder each
-  skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
-  skills/<name>/references/*.tsv a list one reference file governs, one record per line
-  skills/<name>/evals/*.json    trigger cases for the description
-  shared/*.md                   DRY layer shared by the skills that cite it
-  hooks/                        profile reminder and override loader, Claude Code and Codex
-  assets/*.svg                  icon and logo for marketplace listings
+  .claude-plugin/marketplace.json     lists atk and atkx for Claude Code
+  .cursor-plugin/marketplace.json     lists atk and atkx for Cursor
+  .agents/plugins/marketplace.json    lists atk and atkx for OpenAI Codex CLI
+  plugins/atk/                        the plugin; an install copies this directory and nothing above it
+    .claude-plugin/     plugin.json                        Claude Code
+    .cursor-plugin/     plugin.json                        Cursor
+    .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
+    skills/<name>/SKILL.md        24 skills, one folder each
+    skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
+    skills/<name>/references/*.tsv a list one reference file governs, one record per line
+    skills/<name>/evals/*.json    trigger cases for the description
+    shared/*.md                   DRY layer shared by the skills that cite it
+    hooks/                        profile reminder and override loader, Claude Code and Codex
+    assets/*.svg                  icon and logo for marketplace listings
+    CHANGELOG.md                  written by release-please for this plugin
+    LICENSE                       a copy of the root licence, since the install carries nothing else
+  plugins/atkx/                       a second plugin, three manifests and an empty skills/ for now
+    LICENSE                       the same copy
   docs/, docs/vi/               bilingual project documentation
   .atk/                         the kit's own profile and overrides, for running its skills on itself
 ```
 
 Nothing in this tree describes the project the kit is installed into. That lives in one file in the
 **target project**, `.atk/profile.md`, written by `atk:init` and, in the ordinary case, committed
-with the project; `shared/project-profile.md` holds the two shapes where nothing tracks it. The
+with the project; `plugins/atk/shared/project-profile.md` holds the two shapes where nothing tracks it. The
 plugin directory is read-only and shared by every project on the machine, so it is the wrong place
 for a fact that is true of one of them.
 
-The `.atk/` in the tree above is the kit's own, true of `aiteamkit` alone, and it is there because
-the kit runs its own skills on itself. An install copies the repository whole, and no manifest field
-filters files out, so it reaches everyone who installs the plugin. No skill reads it for their
-project: every citation of `.atk/` resolves from the root of the target project.
+Only the plugin directories ship, each on its own. A skill, a shared file or a hook that reads a
+file outside its plugin reads
+nothing on a user's machine, and no manifest path may leave it, which is why `atk:init` keeps the
+default approvals per role in `plugins/atk/skills/init/references/role-defaults.md` and not in
+`docs/`. The `.atk/` in the tree above is the kit's own, true of `aiteamkit` alone, and it is there
+because the kit runs its own skills on itself; it sits above the plugin, so it never reaches a user.
 
-## One content tree, three manifests
+## One content tree per plugin, three manifests each
 
-The three manifest folders describe the same `skills/` directory to three harnesses. Skill content
-is never duplicated per harness. The manifests differ only in how they declare content:
+The three manifest folders inside `plugins/atk/` describe the same `skills/` directory to three
+harnesses, and each root marketplace file points its harness at `plugins/atk/`, and at `plugins/atkx/`,
+whose three manifests do the same for its own `skills/` as the next section describes. Skill content is
+never duplicated per harness. The manifests differ only in how they declare content, and every path
+inside them is relative to the plugin:
 
 | Manifest | How skills are declared | Harness-specific extra |
 |----------|-------------------------|------------------------|
-| `.claude-plugin/plugin.json` | omitted; Claude Code auto-discovers `skills/` | `marketplace.json` beside it |
-| `.cursor-plugin/plugin.json` | `"skills": "./skills/"` | `displayName` |
-| `.codex-plugin/plugin.json` | `"skills": "./skills/"` | `interface{}` with `defaultPrompt`, icons, `brandColor` |
+| `plugins/atk/.claude-plugin/plugin.json` | omitted; Claude Code auto-discovers `skills/` | listed by the root `.claude-plugin/marketplace.json` |
+| `plugins/atk/.cursor-plugin/plugin.json` | `"skills": "./skills/"` | `displayName`; listed by the root `.cursor-plugin/marketplace.json` |
+| `plugins/atk/.codex-plugin/plugin.json` | `"skills": "./skills/"` | `interface{}` with `defaultPrompt`, icons, `brandColor`; listed by `.agents/plugins/marketplace.json` |
 
 ```mermaid
 flowchart TD
-    CP[".claude-plugin/plugin.json<br/><small>+ marketplace.json</small>"] --> SK["skills/<br/><small>24 folders, one SKILL.md each</small>"]
-    UP[".cursor-plugin/plugin.json"] --> SK
-    XP[".codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
-    SK --> SH["shared/<br/><small>cited by the skills that need it</small>"]
+    MK["marketplace files at the root<br/><small>one per harness, each pointing at plugins/atk and plugins/atkx</small>"] --> CP
+    MK --> UP
+    MK --> XP
+    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>24 folders, one SKILL.md each</small>"]
+    UP["plugins/atk/.cursor-plugin/plugin.json"] --> SK
+    XP["plugins/atk/.codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
+    SK --> SH["plugins/atk/shared/<br/><small>cited by the skills that need it</small>"]
 ```
 
 There is no `commands/` layer. A skill is its own slash command, named from its folder, namespaced
 `atk:` by the harness at load time from `plugin.json`.
+
+## A second plugin: atkx
+
+`plugins/atkx/` sits beside `plugins/atk/` in the same marketplace, with the same three manifest
+folders and, for now, an empty `skills/`. It is for utility skills that depend on no artifact and on
+no delivery lifecycle. The dependency runs one way: an `atkx` skill may call an `atk` skill, and
+`atk` never names an `atkx` one, so `atk` installed alone stays whole. On Claude Code,
+`"dependencies": ["atk"]` in the `atkx` manifest installs `atk` with it; Cursor and Codex have no
+such field, so there the user installs both, and an `atkx` skill checks for the `atk` skill it calls
+before calling it. Neither plugin reads a file of the other's, and no symlink joins them. Each
+plugin is its own release package, tagged `atk-v*` and `atkx-v*`. `CLAUDE.md`, section "`atkx` sits
+beside `atk`, and the dependency runs one way", holds the rules and the acceptance bar for a first
+skill.
 
 ## Load model
 
@@ -68,24 +100,24 @@ This produces the size discipline in the kit:
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
-| `shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
+| `plugins/atk/shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
 | `.atk/profile.md` | Once per run, in the skills that need project facts | A page of pointers and commands, never prose |
 
 ## The `shared/` layer
 
 Sixteen files hold what skills would otherwise repeat. The first three are cited by all 24:
 
-- `shared/team-roles.md`: the role table and the eight rules every skill follows.
-- `shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
+- `plugins/atk/shared/team-roles.md`: the role table and the eight rules every skill follows.
+- `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
   root moves it, which repository an artifact lands in where the project spans several, naming
   rules, and front matter.
-- `shared/ticket-adapters.md`: tracker detection and its three outcomes, including the one where a
+- `plugins/atk/shared/ticket-adapters.md`: tracker detection and its three outcomes, including the one where a
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
 
 Eleven are contracts between a named handful of skills rather than kit-wide rules:
 
-- `shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
+- `plugins/atk/shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
   that a project which already writes conventions keeps its own shape, the route that carries a
   convention gap out of a review report and back to `atk:convention`, and the baseline items that
@@ -95,7 +127,7 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
   that went straight to one would report a team with a directory of standards documents as having
   recorded nothing. `atk:implement` reads the file for that resolution and for the baseline items,
   which it falls back to when a project really has recorded no conventions of its own.
-- `shared/finalize-steps.md`: the closing sequence for a finished piece of work, the consent
+- `plugins/atk/shared/finalize-steps.md`: the closing sequence for a finished piece of work, the consent
   line that every action past the commit has to cross, and the order a change spanning several
   repositories is carried in. `atk:git` is what carries it out; this file
   stays the contract, which is what lets the code-changing skills and the artifact-writing ones
@@ -103,17 +135,17 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
   `atk:git`, by `atk:plan`, `atk:tailor` and `atk:qa` for the consent line alone, and by every skill that
   writes an artifact for the section about a change that produced only a document. Nothing leaves
   the local repository without being asked for.
-- `shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
+- `plugins/atk/shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
   proves, and what it does not, and the gate rule: which CI job judges a layer, and what a local
   command weaker than that job leaves unverified. Cited by the same three. Each of them runs a check
   and then has to say what the result means, and the second half of that answer has to be identical
   in all three.
-- `shared/diagram-conventions.md`: when a diagram earns its place in an artifact, the four shapes
+- `plugins/atk/shared/diagram-conventions.md`: when a diagram earns its place in an artifact, the four shapes
   the kit draws, and the rules that keep them readable in a pull request on either theme. Cited by
   `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:security`, and `atk:incident`,
   the six skills whose artifacts carry a diagram. Diagrams are Mermaid, so they render where the
   artifact is read and nothing has to be committed as an image.
-- `shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
+- `plugins/atk/shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
   does on a harness that has none. Cited by `atk:fix`, `atk:implement`, and `atk:verify` for the
   tidy step that follows a green verification, by `atk:review` for independent passes run in
   parallel and by `atk:design-doc` for its role challenge, and by `atk:init` for what one turn of an interview counts as where the harness carries
@@ -123,14 +155,14 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
   not. Cited by `atk:run-cases` for browser automation, which is neither: it is named by what it does
   and never by the plugin or server supplying it, and it is the one capability whose absence stops a
   skill, since for that skill the browser is the work and doing it by hand is `atk:qa --record`.
-- `shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
+- `plugins/atk/shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one
   where the skill works through the list itself, and it is why the kit ships no `simplify` skill of
   its own: the content belongs to the skills that already run it, not to a slash command that would
   produce no artifact and answer to no approver.
 
-- `shared/spec-docs.md`: what separates a reference document from a design document, what one is
+- `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is
   in a project whose profile says `Contract: first` and the `implemented` field that tracks whether
   its code exists yet, whose shape wins when a project already keeps documents of its own, the six
   kinds of change that oblige a pull request to carry its reference document, what that obligation
@@ -138,29 +170,29 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
   and a question nobody has answered. Cited by `atk:spec`, which writes those documents, by
   `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave
   them true, and by `atk:qa`, `atk:run-cases` and `atk:help`, which read them. It is the widest of these contracts,
-  because `shared/finalize-steps.md` now opens with its obligation, which makes every code-changing
+  because `plugins/atk/shared/finalize-steps.md` now opens with its obligation, which makes every code-changing
   skill a party to it.
-- `shared/host-file-locations.md`: how the code host is detected, every location each host reads
+- `plugins/atk/shared/host-file-locations.md`: how the code host is detected, every location each host reads
   `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one of them counts as
   present. Cited by `atk:convention`, which decides from it whether a file is missing and therefore
   worth offering to draft, by `atk:git`, which finds the template it has to fill, and by `atk:init`,
   which reads the team's host identifiers out of `CODEOWNERS` instead of spending an interview turn
   on them. The first two ask the same question from opposite ends, and a narrower answer in either
   one is how a repository ends up with a second template that outranks the team's own.
-- `shared/design-sources.md`: how a skill reads a Figma design, through whatever connection to
+- `plugins/atk/shared/design-sources.md`: how a skill reads a Figma design, through whatever connection to
   Figma the harness has, found by what it can do rather than by a tool name, told apart in three
   states because a connector can be listed and still not signed in, and replaced by exported images
   when none is ready, so no skill stops for want of it. It also holds the node ID as the stable key
   of a component and the fingerprint a read records, which is what lets a second run touch only the
   rows that changed. Cited by `atk:spec` for the `screen` kind, the one kind whose source is a
   design, by `atk:intake`, which takes a design as the request, and by `atk:qa`, which reads the design
-  for `GUI` cases only when the screen has no screen spec yet. It is the reason `shared/host-capabilities.md` now has a row for a connection to an
+  for `GUI` cases only when the screen has no screen spec yet. It is the reason `plugins/atk/shared/host-capabilities.md` now has a row for a connection to an
   outside service: the service may be named, a command of the plugin carrying it may not.
-- `shared/feature-types.md`: the one classification of features in the kit, each type carrying the
+- `plugins/atk/shared/feature-types.md`: the one classification of features in the kit, each type carrying the
   extra questions `atk:catchup` adds to an understanding check and the QA risk `atk:estimate` sizes
   testing from. One table, because a feature classified one way for questions and another way for
   effort is a payment flow to the developer and a plain form to whoever sizes its testing.
-- `shared/plain-writing.md`: how the prose of a run's report is written for a reader who has opened
+- `plugins/atk/shared/plain-writing.md`: how the prose of a run's report is written for a reader who has opened
   none of the files it cites: the `In short` section that opens it, five rules for the prose around
   the evidence, and what never changes, the evidence itself above all. Cited by the report templates
   of `atk:fix`, `atk:verify`, `atk:review`, `atk:security` and `atk:qa --record`, the last also
@@ -171,16 +203,16 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
 
 The last two describe files that do not ship with the kit at all:
 
-- `shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, where the
+- `plugins/atk/shared/project-profile.md`: what `.atk/profile.md` holds in the **target project**, where the
   project root is and how a skill walks up to it, the four shapes a project can have with what a
   parent holding member repositories and a workspace holding none of its own each cost, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message ignore it entirely.
   One Docs entry, `Contract`, changes what a skill does rather than where it writes, and its meaning
-  lives in `shared/spec-docs.md`.
+  lives in `plugins/atk/shared/spec-docs.md`.
   `atk:init` writes the profile, so it belongs to no group.
 
-- `shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
+- `plugins/atk/shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
   where the directory sits when a project spans several repositories, the two sections it may carry,
   and the eight things an override may never remove. The eight
   exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
@@ -190,13 +222,13 @@ The last two describe files that do not ship with the kit at all:
   on the team's behalf.
 
 The override mechanism is the one that reaches every skill in two halves, and the split is
-deliberate. Rule 7 of `shared/team-roles.md` holds the behaviour, stated once. Each `## Workflow`
+deliberate. Rule 7 of `plugins/atk/shared/team-roles.md` holds the behaviour, stated once. Each `## Workflow`
 carries one line naming its own override file and pointing at that rule, because a shared file is
 only read when something makes a skill open it, and a citation under `## Roles` does not. The line
 costs a few tokens per invocation and buys the guarantee that the mechanism runs at all; putting the
 behaviour itself in 20 files instead would be 20 copies of one rule, drifting.
 
-`shared/` sits at the repository root rather than under `skills/`, because a folder inside `skills/`
+`shared/` sits at the plugin root, `plugins/atk/shared/`, beside `skills/` rather than under it, because a folder inside `skills/`
 without a `SKILL.md` is ambiguous to skill discovery. Skills cite the files as `shared/<file>.md`,
 which resolves to `../../shared/<file>.md` from a skill file; both spellings appear in each shared
 file's header. `.atk/profile.md` is the exception: it is cited from the root of the target project,
@@ -204,16 +236,16 @@ because it is not part of the kit.
 
 ## The session-start hook
 
-`hooks/hooks.json` registers one `SessionStart` hook that runs `hooks/check-profile.mjs`, and
-`hooks/codex-hooks.json` registers the same script on Codex. It answers a single question, "does
-this project have a profile yet", reading the project the way `shared/project-profile.md` does,
+`plugins/atk/hooks/hooks.json` registers one `SessionStart` hook that runs `plugins/atk/hooks/check-profile.mjs`, and
+`plugins/atk/hooks/codex-hooks.json` registers the same script on Codex. It answers a single question, "does
+this project have a profile yet", reading the project the way `plugins/atk/shared/project-profile.md` does,
 which is the nearest profile at or above the directory the session opened in, and it reminds without
 blocking.
 
 The boundary is the point. A hook that blocked would put the rule in two places, and the rule is not
 uniform anyway: ten skills need no profile, and a hook that stopped everything would stop
 `atk:intake` from turning a chat message into requirements, which needs nothing from the repository.
-Which skill needs what, and what it does without it, stays in `shared/project-profile.md`.
+Which skill needs what, and what it does without it, stays in `plugins/atk/shared/project-profile.md`.
 
 The boundary also holds by construction on this harness. Claude Code's hook contract says
 `SessionStart` cannot block: exit code 2 takes no blocking action there, and any exit code sends
@@ -228,7 +260,7 @@ repository and never into a world-writable directory.
 This section is the reason of record. `CLAUDE.md` and the comment at the top of the script point
 here rather than restating it.
 
-In `hooks/hooks.json`, which is the registration Claude Code reads, the hook is registered in
+In `plugins/atk/hooks/hooks.json`, which is the registration Claude Code reads, the hook is registered in
 **exec form**: `"command": "node"` plus an `args` array. Claude Code documents exec form as resolving
 the executable on `PATH` and spawning it directly, substituting `${CLAUDE_PLUGIN_ROOT}` itself, with
 no shell involved on any platform. Codex needs the opposite shape, for the reason the next section
@@ -251,8 +283,8 @@ in the `command` string and substitutes nothing in `args`, so Node received the 
 `${CLAUDE_PLUGIN_ROOT}/hooks/check-profile.mjs`, resolved it against the workspace, and exited with
 `MODULE_NOT_FOUND`.
 
-`hooks/codex-hooks.json` carries the same two hooks with the path inside `command`, and the `hooks`
-key in `.codex-plugin/plugin.json` points Codex at it, which is also what stops Codex reading the
+`plugins/atk/hooks/codex-hooks.json` carries the same two hooks with the path inside `command`, and the `hooks`
+key in `plugins/atk/.codex-plugin/plugin.json` points Codex at it, which is also what stops Codex reading the
 Claude Code file. Nothing about the scripts changes: they are the same two Node files, they read the
 same environment, and neither registration file holds a rule. Measured against codex-cli 0.155.1: a
 repository with no profile gets the reminder and the hook completes, a repository with one stays
@@ -276,16 +308,16 @@ Two limits, accepted:
 The kit runs two hooks and will accept a third on one condition: the kit behaves the same when it is
 missing.
 
-`hooks/load-overrides.mjs` is the case that makes the rule concrete. It fires on `PreToolUse` with
+`plugins/atk/hooks/load-overrides.mjs` is the case that makes the rule concrete. It fires on `PreToolUse` with
 matcher `Skill` and puts `.atk/overrides/<skill>.md` in front of the skill that owns it. Every skill
 also names that file at the top of its own `## Workflow` and opens it when nothing put it there, so
 a harness the hook does not reach produces the same result one file read slower. Cursor has no
-matching event; Codex carries the entry in `hooks/codex-hooks.json` and has never been seen matching
+matching event; Codex carries the entry in `plugins/atk/hooks/codex-hooks.json` and has never been seen matching
 a skill invocation, which the accepted limits above record.
 
 The alternative was available and was rejected. Putting the override mechanism in the hook alone
 would have cost no edits to any `SKILL.md`, and it would have given two of the three harnesses
-nothing at all. `shared/project-profile.md` already refused the same move for the precondition rule,
+nothing at all. `plugins/atk/shared/project-profile.md` already refused the same move for the precondition rule,
 for a reason that holds here and is worth repeating: three hook dialects mean three implementations
 of one rule, and three implementations of one rule drift apart.
 
@@ -332,6 +364,8 @@ Artifacts are written into the **target project**, never into the atk kit itself
 
 ## Versioning
 
-One version spans six files, five of them driven by `release-please-config.json` `extra-files`, with
-`.release-please-manifest.json` owned natively by release-please. The release workflow runs on push
+Each plugin is its own release package in `release-please-config.json`, tagged `atk-v*` and
+`atkx-v*`. A package's version lives in its three `plugin.json` files, plus the root `package.json`
+for `atk`, all driven by that package's `extra-files`, with `.release-please-manifest.json` owned
+natively by release-please. The marketplace files carry no version. The release workflow runs on push
 to `main`. Details in `CLAUDE.md`.

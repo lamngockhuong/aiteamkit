@@ -260,7 +260,7 @@ Repository này phải xử lý thêm hai chuyện:
 | Lỗi và trường hợp biên | Thiếu `atk`: phụ thuộc trên Claude Code, dòng hướng dẫn cài ở các harness khác. Symlink giữa hai plugin: bị từ chối khi review |
 | Tương thích ngược | Định danh `atk@atk` giữ nguyên. Nguồn chuyển từ `./` sang `./plugins/atk`, người bảo trì đã chấp nhận. Tài liệu không nói khi cập nhật thì bản cài có đi theo nguồn mới không; bước 4 của phần Chuyển đổi sẽ cho biết, và nếu không thì ghi chú phát hành hướng dẫn người dùng gỡ ra rồi cài lại, theo quyết định của người bảo trì ngày 2026-10-01 |
 | Feature flag hoặc triển khai dần | `N/A`: bước 4 của phần Chuyển đổi là cửa kiểm soát |
-| Rollback | Trước khi phát hành: revert commit dời thư mục. Sau khi phát hành: dời lại rồi phát hành tiếp, vì người dùng đi theo `source` trong file marketplace |
+| Rollback | Trước khi phát hành: revert commit dời thư mục. Sau khi phát hành: dời lại rồi phát hành tiếp, vì người dùng đi theo `source` trong file marketplace. Bản phát hành sau khi dời lại phải có footer `Release-As:` cao hơn phiên bản `atk-v*` lớn nhất: nếu không, release-please đếm từ `v0.1.0` và đề xuất `0.1.1`, trùng với số phiên bản mà người dùng ở `atk-v0.1.1` đang có, nên họ sẽ không bao giờ nhận bản đó. Chưa thử |
 | Quan sát hệ thống | `N/A` |
 | Bảo mật và quyền truy cập | Bản cài không còn mang `.atk/`, `docs/` hay `plans/`. Skill `atkx` chạy với quyền host của người dùng như mọi skill khác |
 | Hiệu năng | Mỗi skill được cài thêm `description` của nó vào ngữ cảnh của mọi session. `atkx` là tùy chọn, nên người chỉ cài `atk` không tốn thêm gì |
@@ -279,7 +279,7 @@ Repository này phải xử lý thêm hai chuyện:
 
 | Câu hỏi | Người trả lời |
 |---------|---------------|
-| `atk` có nằm trong danh mục plugin của OpenAI, nơi `README.md` hướng người dùng Codex tới, không? Nếu có, danh mục đó có đi theo `.agents/plugins/marketplace.json` mới không. Chưa rõ tính đến 2026-10-01; bước 4 của phần Chuyển đổi cài thẳng từ repository bằng `codex plugin marketplace add`, cách này chạy được trong cả hai trường hợp | Lam Ngoc Khuong, PM |
+| ~~`atk` có nằm trong danh mục plugin của OpenAI, nơi `README.md` hướng người dùng Codex tới, không? Nếu có, danh mục đó có đi theo `.agents/plugins/marketplace.json` mới không.~~ Đã trả lời ngày 2026-10-01: `atk` không nằm trong danh mục nào của OpenAI hay Cursor, người dùng chỉ cài từ repository này, nên việc dời thư mục không làm hỏng danh mục nào | Lam Ngoc Khuong, PM |
 
 ## Người review
 

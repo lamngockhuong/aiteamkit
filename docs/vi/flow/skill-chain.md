@@ -5,7 +5,7 @@ Mỗi skill đọc gì, để lại gì, và skill nào nhặt thứ đó lên t
 nào thì ở [skill-lifecycle.md](./skill-lifecycle.md); tài liệu này nói về artifact.
 
 Đường dẫn output chính xác không chép lại ở đây. Chúng nằm một chỗ duy nhất là
-`shared/artifact-paths.md`, và khi hai bên lệch nhau thì file đó đúng.
+`plugins/atk/shared/artifact-paths.md`, và khi hai bên lệch nhau thì file đó đúng.
 
 ## Chuỗi
 
@@ -69,7 +69,7 @@ thiết kế kế tiếp và test plan kế tiếp, vừa là đầu ra của m�
 mũi tên đi vào nó xuất phát từ code, không phải từ bản thiết kế đề xuất ra nó. Dự án có profile ghi
 `Contract: first` thêm một mũi tên thứ hai, từ thiết kế vào `spec`: contract được viết từ thiết kế
 ngay khi nó đang được review, để frontend, backend và QA làm theo nó trước khi có code, rồi mũi tên
-từ code chuyển từng mục sang code khi mục đó được làm xong, theo `shared/spec-docs.md`.
+từ code chuyển từng mục sang code khi mục đó được làm xong, theo `plugins/atk/shared/spec-docs.md`.
 
 ## Mỗi skill ăn vào gì
 
@@ -106,7 +106,7 @@ Một mắt xích chỉ tốt bằng artifact nằm sau nó, và có bốn chỗ
 
 **Không có profile.** Skill nào chạy lệnh của chính dự án thì dừng lại và đòi `atk:init`, thay vì
 đoán bừa lệnh test. Skill nào chỉ đọc diff thì chạy tiếp và ghi rằng lúc đó không có profile.
-`shared/project-profile.md` nói skill nào rơi vào nhóm nào.
+`plugins/atk/shared/project-profile.md` nói skill nào rơi vào nhóm nào.
 
 **Artifact chưa từng được duyệt.** Một thiết kế ở trạng thái `DRAFT` mới là đề xuất, và xây từ đó có
 nghĩa là bình luận review đầu tiên sẽ nhắm vào chính thiết kế. Hãy xem trường `status` trong front
@@ -115,8 +115,8 @@ matter trước khi dùng một artifact, đừng chỉ xem file có tồn tại
 **Tài liệu tham chiếu không ai mang theo.** Hợp đồng đổi mà tài liệu đứng yên, nên người thiết kế
 tiếp theo thiết kế dựa trên thứ đã hết đúng. `atk:review` nêu đây là phát hiện mức chặn, còn
 `atk:spec --check` tìm ra những chỗ đã lọt. Nghĩa vụ này và sáu loại thay đổi kích hoạt nó nằm trong
-`shared/spec-docs.md`.
+`plugins/atk/shared/spec-docs.md`.
 
 **Artifact đã bị thay thế nhưng trông vẫn như bản hiện hành.** Lập kế hoạch lại cho cùng một việc sẽ
 tạo thư mục thứ hai, và không có gì tự đánh dấu thư mục đầu là đã chết. Quy tắc khai tử nó nằm ở
-cuối `shared/artifact-paths.md`.
+cuối `plugins/atk/shared/artifact-paths.md`.

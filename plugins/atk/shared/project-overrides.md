@@ -29,10 +29,10 @@ A freshly installed `atk` behaves the same in every project, and that is the gap
 a team that needs one more step, one more section in an artifact, or one more constraint writes it
 down once and every run picks it up once it is approved. The kit ships no overrides for that project.
 
-It does carry one of its own, `.atk/overrides/review.md`, for the reason
-`shared/project-profile.md` gives about the profile: the kit runs these skills on itself, and a
-plugin install copies the repository whole. It binds runs inside the kit repository and nowhere
-else.
+It does keep one of its own, `.atk/overrides/review.md`, for the reason
+`shared/project-profile.md` gives about the profile: the kit runs these skills on itself, and the file sits
+above the plugin directory a plugin install copies, so it never reaches a user. It binds runs inside
+the kit repository and nowhere else.
 
 ## Why `.atk/` and not somewhere else
 

@@ -41,8 +41,8 @@ id  component  target  viewpoint  expected  dimension  technique
   transition, `PW` pairwise, `EG` error guessing. Empty when the viewpoint gives one case.
 
 Tabs rather than commas, for the reason `skills/convention/references/standard-sources.md` gives: a
-viewpoint routinely holds a comma. No field holds a tab. `CLAUDE.md`, under "Common verification
-commands", checks the field count of every line, that every `id` is unique and matches its
+viewpoint routinely holds a comma. No field holds a tab. The kit repository's `CLAUDE.md`, which does
+not ship with the plugin, under "Common verification commands", checks the field count of every line, that every `id` is unique and matches its
 `component`, that `dimension` is 1 to 10, and that `technique` is one of the six codes or empty.
 
 ## Components
