@@ -214,7 +214,8 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/flow/project-flow.md` | 23 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, vòng quay lại khi artifact bị trả về, và cùng các cửa duyệt ấy tra theo vai |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
-| `docs/vi/**/*.md` | Bản tiếng Việt mirror mười file trên, đặt ở cùng đường dẫn tương đối |
+| `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | Bản ghi quyết định kiến trúc đầu tiên: `atk` chuyển vào `plugins/atk/`, còn `atkx`, bộ kit skill tiện ích được gọi `atk` nhưng không bao giờ bị `atk` gọi, được tạo ở `plugins/atkx/`, hai plugin không dùng chung file nào, và `atk` thêm `CONV-011` để giữ phụ thuộc chỉ theo một chiều |
+| `docs/vi/**/*.md` | Bản tiếng Việt mirror mười một file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub
 
