@@ -1,6 +1,6 @@
 # Test runs, bugs, and retests
 
-Loaded by `atk:qa` under `--run`, `--bug`, and `--retest`, in place of the five workflow steps. The
+Loaded by `atk:qa` under `--record`, `--bug`, and `--retest`, in place of the five workflow steps. The
 cases file says what to test; a run record says what happened when somebody tested it, on one build,
 in one environment, on one day. The two are kept apart on purpose: the cases file is a reference
 document updated in place, and a pass written into it would be true of one build and read as true of
@@ -95,7 +95,7 @@ or an application log counts as carrying session cookies and tokens unless the t
 scrubbed. A link to storage anyone
 holding the link can open is named as such in the session, since `--bug` would publish it.
 
-## `--run <cases-path>`: record a run
+## `--record <cases-path>`: record a run
 
 ### What the run needs
 
@@ -291,7 +291,7 @@ and the defect's ID, `docs/records/test-runs/<file>.md#D2`.
    own cases file whose `Page` or `Source` touches what the fix changed. Show the candidate cases to the QA who retests, say plainly
    when the list holds only the defect's own case, and record the scope that QA chooses, with the
    reason for any candidate left out.
-3. **Record it** with `--run`'s shape: `Scope: retest`, the chosen case IDs on the `Case IDs:` part of the Scope line,
+3. **Record it** with `--record`'s shape: `Scope: retest`, the chosen case IDs on the `Case IDs:` part of the Scope line,
    `Retest of` filled, and the build carrying the fix. A retested case that fails again gets a defect
    section whose `Ticket` is the issue being retested, or `not raised: retest of <defect>` where there
    is no issue, so no second issue is raised for a bug already open.

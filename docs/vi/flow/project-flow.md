@@ -140,7 +140,7 @@ flowchart TD
 | 5. Làm | `atk:review` | Người review, không bao giờ là tác giả | TL, khi vòng lặp chạm trần | không có |
 | 5. Làm | `atk:git` | Dev | Người review, người duyệt pull request mà nó mở | không có |
 | 6. Kiểm chứng | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
-| 6. Kiểm chứng | `atk:qa --run`, `--retest` | QA đã chạy các case | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
+| 6. Kiểm chứng | `atk:qa --record`, `--retest` | QA đã chạy các case | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm chứng | `atk:verify` | Dev hoặc QA | QA ký nhận trước khi ticket chuyển trạng thái | `DRAFT` |
 | 6. Kiểm chứng | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận | `IN REVIEW` sang `APPROVED` |
 | 7. Phát hành | `atk:release` | PM cùng SRE | Stakeholder hoặc PM ra quyết định phát hành | `IN REVIEW` sang `APPROVED` |

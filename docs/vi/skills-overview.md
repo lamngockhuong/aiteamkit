@@ -461,7 +461,7 @@ theo kịp thay vì viết lại từ đầu: case mới nhận ID mới, case b
 chạy, case bị bỏ thì gạch ngang, và không ID nào bị dùng lại. Khi file đã được duyệt, mọi thay đổi trên
 một case có sẵn thành câu hỏi cho người duyệt thay vì được sửa thẳng.
 
-Sau khi team đã chạy các case, `--run` biến kết quả tester đưa vào thành record của lần chạy trong
+Sau khi team đã chạy các case, `--record` biến kết quả tester đưa vào thành record của lần chạy trong
 `docs/records/test-runs/`, kèm bảng tổng kết đối chiếu với tiêu chí kết thúc của kế hoạch và một mục lỗi
 cho mỗi case thất bại, viết sao cho `atk:fix` bắt đầu được từ đó. `--bug` tạo issue trên tracker cho các
 lỗi người dùng chọn, không bao giờ đưa lỗi bảo mật lên tracker công khai, còn `--retest <issue>`

@@ -139,7 +139,7 @@ flowchart TD
 | 5. Build | `atk:review` | Reviewer, never the author | TL when the loop hits its ceiling | n/a |
 | 5. Build | `atk:git` | Dev | The reviewer, who approves the pull request it opens | n/a |
 | 6. Verify | `atk:qa` | QA | QA lead or TL | `IN REVIEW` to `APPROVED` |
-| 6. Verify | `atk:qa --run`, `--retest` | QA who ran the cases | QA lead or TL | `IN REVIEW` to `APPROVED` |
+| 6. Verify | `atk:qa --record`, `--retest` | QA who ran the cases | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | 6. Verify | `atk:verify` | Dev or QA | QA sign-off before the ticket moves | `DRAFT` |
 | 6. Verify | `atk:security` | Dev or TL | TL, or the security officer where the team has one; each unfixed finding accepted by the PM or the Stakeholder | `IN REVIEW` to `APPROVED` |
 | 7. Release | `atk:release` | PM with SRE | Stakeholder or PM gives the go decision | `IN REVIEW` to `APPROVED` |

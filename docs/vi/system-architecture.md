@@ -157,7 +157,7 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
 - `shared/plain-writing.md`: cách viết phần lời của một report ghi lại một lần chạy, cho người đọc
   chưa mở file nào mà report trích dẫn. Gồm mục `In short` ở đầu report, năm quy tắc cho phần lời
   quanh bằng chứng, và những thứ không bao giờ đổi, trước hết là chính bằng chứng. Template report
-  của `atk:fix`, `atk:verify`, `atk:review`, `atk:security` và `atk:qa --run` trích dẫn file này,
+  của `atk:fix`, `atk:verify`, `atk:review`, `atk:security` và `atk:qa --record` trích dẫn file này,
   cùng mục `## Output` của `atk:incident`, vì đó là những report ghi lại một lần chạy và cần một người hành động theo. Một
   report đúng từng dòng vẫn không đọc được khi mỗi nhận định chỉ là một trích dẫn, và một quy tắc
   chép vào sáu template sẽ trôi thành sáu bản khác nhau.
