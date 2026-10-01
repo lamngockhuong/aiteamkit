@@ -10,6 +10,8 @@ OpenAI Codex CLI. It packages 24 skills covering the delivery lifecycle of a com
 `convention`, `plan`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `security`, `git`,
 `release`, `incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
 (`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
+A second plugin, `atkx`, sits beside it in the same marketplace with no skill yet; see "`atkx` sits
+beside `atk`, and the dependency runs one way".
 
 This is content plus manifests, not a runtime application: there is no build step, no bundler, no
 test suite, and `package.json` is `private: true` with no `scripts` block. "Validation" means JSON
@@ -234,6 +236,60 @@ grep -rn "\bak:" plugins/atk/skills/ plugins/atk/shared/ README.md docs/ | grep 
 ```
 
 Should print nothing (the second `grep` exits 1).
+
+## `atkx` sits beside `atk`, and the dependency runs one way
+
+`plugins/atkx/` is a second plugin in the same marketplace: utility skills that depend on no
+artifact and on no delivery lifecycle. It has no skill yet. `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md`
+records why it is a sibling plugin rather than a folder inside `atk`, and
+`docs/records/design/260930-0933-atkx-utility-kit-placement.md` holds the design this section
+writes down.
+
+An `atkx` skill may call an `atk` skill. `atk` never calls, names, or points at an `atkx` skill:
+the kit stands alone, and a team that installed only `atk` must never meet a pointer it cannot
+follow. That is `CONV-011`:
+
+```bash
+grep -rn "\batkx:" plugins/atk/
+```
+
+Should print nothing (`grep` exits 1).
+
+A skill qualifies for `atkx` when it passes all three of these, and a skill that fails one belongs
+in `atk` or nowhere:
+
+- It runs without `.atk/profile.md`.
+- It writes nothing into the team's repository that a teammate is asked to review.
+- Its `SKILL.md` states which harnesses it fully supports. Trigger measurement, for one, needs the
+  `PreToolUse` hook in `docs/trigger-eval-measurement.md`, which Codex has not been seen to fire for
+  a skill and Cursor does not have, so a skill that measures triggers says "Claude Code only" for
+  that mode.
+
+How an `atkx` skill calls `atk`:
+
+- **At install, on Claude Code.** `plugins/atkx/.claude-plugin/plugin.json` declares
+  `"dependencies": ["atk"]`, so installing `atkx@atk` installs `atk@atk` with it, and Claude Code
+  refuses to disable `atk` while `atkx` is enabled, naming `atkx` as what still needs it.
+- **At run time, everywhere.** Cursor and Codex document no dependency field, and Codex installs
+  `atkx` alone. So an `atkx` skill checks that `atk:<skill>` is in the host's live skill list before
+  invoking it. When it is not, it prints one line naming the kit and how to install it, then stops or
+  continues without that step, as its own `SKILL.md` says.
+- It names the `atk` skill by its full name, passes only arguments listed in that skill's
+  `argument-hint`, and leaves the called skill's gates to the user: its profile check, its
+  interview, its approval states.
+
+Each plugin carries every file it reads, because an install copies one plugin directory and nothing
+beside it. A rule both kits need is written in each, and the copy in `atkx` names the `atk` file it
+came from, so a later reader can compare the two. No symlink crosses from one plugin to the other:
+Claude Code would copy its target into the cache, but Cursor and Codex document no such behaviour.
+`atkx` has no hooks of its own to begin with, so a user with both kits sees the `atk` profile
+reminder once.
+
+```bash
+find plugins -type l
+```
+
+Should print nothing.
 
 ## `.atk/` in the target project
 
@@ -495,6 +551,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the version-bearing files of each release package agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`plugins/atk/hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
+| `CONV-011` | `atk` never invokes or names an `atkx` skill, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
@@ -518,7 +575,7 @@ for f in package.json .claude-plugin/marketplace.json .cursor-plugin/marketplace
 done
 
 # Every skill folder has a SKILL.md, and the name matches the folder
-for d in plugins/atk/skills/*/; do
+for d in plugins/*/skills/*/; do
   n=$(basename "$d")
   grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"
 done
@@ -617,7 +674,7 @@ print('OK registration, %d hooks in both files' % len(a))"
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow
 # docs/trigger-eval-measurement.md
-for f in plugins/atk/skills/*/evals/trigger_evals.json; do
+for f in plugins/*/skills/*/evals/trigger_evals.json; do
   python3 -c "import json,sys; d=json.load(open('$f')); assert isinstance(d,list) and d" || echo "FAIL $f"
 done; echo "OK evals"
 
