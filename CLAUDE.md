@@ -539,8 +539,12 @@ Pre-1.0 config keeps experimental versioning:
 - `bump-patch-for-minor-pre-major: true` means `feat:` commits bump patch (0.0.x).
 - `bump-minor-pre-major: true` means `feat!:` and breaking-change commits bump minor (0.x.0).
 
-To force a specific version, append a `Release-As: X.Y.Z` footer to a commit. To graduate to 1.0 and
-above, drop the two `bump-*-pre-major` flags.
+To force a specific version, append a `Release-As: X.Y.Z` footer to a commit that touches the
+package it is for, `plugins/atk/` or `plugins/atkx/`: release-please files a commit under the package
+paths it touches, so the footer on a commit touching only root files reaches no package, and on one
+touching both it forces both. The two `bump-*-pre-major` flags sit at the top of
+`release-please-config.json` and hold for both packages; to graduate one plugin to 1.0 and above,
+move the flags into the other package's block and drop them from the top.
 
 ## Commits
 
