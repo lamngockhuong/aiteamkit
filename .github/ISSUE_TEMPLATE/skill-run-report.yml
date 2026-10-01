@@ -38,7 +38,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: The atk version from .claude-plugin/plugin.json, plus your harness version.
+      description: The atk version from the plugin's .claude-plugin/plugin.json (plugins/atk/ in a clone), plus your harness version.
     validations:
       required: true
 
@@ -67,7 +67,7 @@ body:
     attributes:
       label: Where the skill was silent
       description: Every place the run had to guess, citing the skill as path:line.
-      placeholder: skills/convention/SKILL.md:37 says "change nothing" without saying whether a report may be saved.
+      placeholder: plugins/atk/skills/convention/SKILL.md:37 says "change nothing" without saying whether a report may be saved.
     validations:
       required: true
 

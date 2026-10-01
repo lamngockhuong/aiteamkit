@@ -32,29 +32,44 @@ A change that makes a skill act like a solo assistant, deciding on the team's be
 artifact with no owner, is a regression even if it reads more helpfully. Supporting a solo developer
 is a different thing and is in scope: one person holding every role still gets the gates, and the
 approval is still their own act, whether they edit the state or tell the agent to.
-`shared/team-roles.md` owns that distinction.
+`plugins/atk/shared/team-roles.md` owns that distinction.
 
 ## Multi-manifest layout (non-obvious)
 
-Three sibling manifest folders point to the SAME content at repo root:
+The repository is a marketplace, and `atk` is one plugin inside it, at `plugins/atk/`. One
+marketplace file per harness lists it, and three sibling manifest folders inside the plugin point to
+the SAME content:
 
 ```
-.claude-plugin/     plugin.json + marketplace.json
-.cursor-plugin/     plugin.json
-.codex-plugin/      plugin.json (with `interface{}` block for marketplace listing)
-skills/, shared/, assets/    shared content, NOT duplicated per harness
+.claude-plugin/marketplace.json     Claude Code: lists atk at ./plugins/atk
+.cursor-plugin/marketplace.json     Cursor: lists atk at plugins/atk
+.agents/plugins/marketplace.json    Codex: lists atk at ./plugins/atk
+plugins/atk/
+  .claude-plugin/     plugin.json
+  .cursor-plugin/     plugin.json
+  .codex-plugin/      plugin.json (with `interface{}` block for marketplace listing)
+  skills/, shared/, hooks/, assets/    shared content, NOT duplicated per harness
 ```
 
-Edit `skills/<name>/SKILL.md` ONCE; all three manifests pick it up. Do not create per-harness copies.
+Edit `plugins/atk/skills/<name>/SKILL.md` ONCE; all three manifests pick it up. Do not create
+per-harness copies.
+
+An install copies the plugin directory, `plugins/atk/`, and nothing above it. A skill, a shared file
+or a hook that reads a file outside that directory reads nothing on a user's machine, and no manifest
+path may leave it: no `..`, no absolute path. That is why `atk:init` keeps its default approvals in
+`plugins/atk/skills/init/references/role-defaults.md` rather than in `docs/`.
 
 | Manifest | `skills` key | Extra |
 |----------|--------------|-------|
-| `.claude-plugin/plugin.json` | absent (Claude auto-discovers `skills/`) | paired with `marketplace.json` |
-| `.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
-| `.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with `defaultPrompt`, icons, `brandColor`; `hooks` pointing at `./hooks/codex-hooks.json` |
+| `plugins/atk/.claude-plugin/plugin.json` | absent (Claude auto-discovers `skills/`) | listed by the root `.claude-plugin/marketplace.json` |
+| `plugins/atk/.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
+| `plugins/atk/.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with `defaultPrompt`, icons, `brandColor`; `hooks` pointing at `./hooks/codex-hooks.json` |
+
+Paths inside a manifest are relative to the plugin, so they did not change when the kit moved under
+`plugins/atk/`; paths in this file are relative to the repository root.
 
 There is no `commands/` directory and no `commands` key in any manifest. A skill is its own slash
-command: `skills/qa/SKILL.md` is what `/atk:qa` invokes, on all three harnesses. Do not add a
+command: `plugins/atk/skills/qa/SKILL.md` is what `/atk:qa` invokes, on all three harnesses. Do not add a
 `commands/<name>.md` wrapper beside a same-named skill. Claude Code counts `commands/` entries and
 `SKILL.md` skills in one inventory, so a wrapper registers the name a second time and every entry
 shows up duplicated in the `/` menu, at a real always-on token cost for no behavior.
@@ -62,7 +77,7 @@ shows up duplicated in the `/` menu, at a real always-on token cost for no behav
 ## Skill folder layout
 
 ```
-skills/<name>/
+plugins/atk/skills/<name>/
   SKILL.md                    required; frontmatter + workflow, kept under 300 lines
   references/*.md             optional, lazily loaded detail (templates, checklists, schemas)
   references/*.tsv            optional, a list a reference file governs, one record per line
@@ -99,11 +114,12 @@ step would hide a rule the other step also has to obey. That is the bar for an e
 the workflow points at from more than one place, in a skill that does something no other skill does.
 Anything narrower goes inside the step it belongs to.
 
-## `shared/` is the DRY layer (repo-root, outside `skills/`)
+## `shared/` is the DRY layer (beside `skills/`, not under it)
 
-Sixteen files hold what skills would otherwise repeat. They sit at the repo root, NOT under
-`skills/`, because a folder under `skills/` without a `SKILL.md` is ambiguous to the harnesses'
-skill discovery.
+Sixteen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
+plugin root beside `skills/`, NOT under it, because a folder under `skills/` without a `SKILL.md` is
+ambiguous to the harnesses' skill discovery. The table names them as skills cite them, relative to
+`plugins/atk/`.
 
 | File | Owns | Cited by |
 |------|------|----------|
@@ -143,9 +159,9 @@ comment on them.
 
 `layer-verification.md` is a contract between the same three: each runs a check and then has to say
 what the result means, and the answer to that second half has to be the same in all three. Each keeps
-its own half beside its own workflow, which is why `skills/fix/references/layer-playbooks.md` still
-holds where a cause hides, `skills/implement/references/verification.md` still holds the order to run
-things in, and `skills/verify/references/runtime-checks.md` still holds how to assert against a
+its own half beside its own workflow, which is why `plugins/atk/skills/fix/references/layer-playbooks.md` still
+holds where a cause hides, `plugins/atk/skills/implement/references/verification.md` still holds the order to run
+things in, and `plugins/atk/skills/verify/references/runtime-checks.md` still holds how to assert against a
 running system.
 
 `host-capabilities.md` decides a boundary rather than a format: a capability the harness itself ships
@@ -162,12 +178,12 @@ the test, not the count.
 `spec-docs.md` is a contract of the same kind and the widest of them: `atk:spec` writes the
 reference documents, and five other skills have to leave them true. It holds the tense distinction
 because both `spec` and `design-doc` need it stated identically, and it holds the sync obligation
-because `shared/finalize-steps.md` now opens with it, which makes every code-changing skill a party
+because `plugins/atk/shared/finalize-steps.md` now opens with it, which makes every code-changing skill a party
 to the rule. The drift-versus-open-question line lives there for the same reason as the rule record
 format in `review-checklist.md`: two skills have to answer it the same way, so neither of them owns
 it.
 
-`design-sources.md` has three citers, `spec`, `intake` and `qa`, and sits in `shared/` because how a
+`design-sources.md` has three citers, `spec`, `intake` and `qa`, and sits in `plugins/atk/shared/` because how a
 design is read is none of theirs to own: the rule that the connection is found by what it can do, told apart in three
 states, and replaced by exported images when it is not ready is what every skill that ever reads a
 design has to answer the same way. It leans on the connection row of `host-capabilities.md`, which
@@ -183,7 +199,7 @@ project rather than in the kit. Cite it from any skill that needs build commands
 where the incoming specification lives, and follow its three-group rule for what to do when that file
 is missing.
 
-When adding a rule that two or more skills need, put it in `shared/` and reference it. Do not paste
+When adding a rule that two or more skills need, put it in `plugins/atk/shared/` and reference it. Do not paste
 it into each `SKILL.md`.
 
 ## The kit stands alone, but it may use the harness it runs on
@@ -198,7 +214,7 @@ other kit's command.
 A capability the host agent itself ships is different, and is allowed: it arrived with the harness,
 so every team on that harness has it. `atk:implement`, `atk:fix` and `atk:verify` use the host's
 code clean-up capability, `/simplify` in Claude Code, and `atk:review` and
-`atk:design-doc --challenge` use the host's parallel agents. `shared/host-capabilities.md` owns the rules: name the capability before its local name,
+`atk:design-doc --challenge` use the host's parallel agents. `plugins/atk/shared/host-capabilities.md` owns the rules: name the capability before its local name,
 resolve that name from the harness at the time of use, and degrade into doing the work by hand,
 recorded as such, on a harness that has none. No skill stops because a host capability is missing,
 apart from `atk:run-cases` without browser automation, which that file states as its one exception
@@ -210,7 +226,7 @@ reason: they hold what a skill wrote, not what this repository authors. A fix re
 left alone once written.
 
 The exclusion is anchored to those two paths, not to the directory names. `--exclude-dir=records`
-would drop any directory called `records` at any depth, including one under `skills/`, and quietly
+would drop any directory called `records` at any depth, including one under `plugins/atk/skills/`, and quietly
 take it out of a `BLOCKING` check.
 
 ```bash
@@ -223,42 +239,38 @@ Should print nothing (the second `grep` exits 1).
 
 Skills that need project facts (build commands, layer layout, where the spec lives) read
 `.atk/profile.md` from the root of the **target project**, never from the kit. `atk:init` creates
-it; `shared/project-profile.md` defines what it holds and what each skill does when it is missing.
+it; `plugins/atk/shared/project-profile.md` defines what it holds and what each skill does when it is missing.
 
 No skill writes another project's facts into the kit. The kit's own `.atk/` at the repository root
-is not that: it describes `aiteamkit`, because the kit runs its own skills on itself. End users
-receive it, and that is accepted rather than worked around. No field of `plugin.json` or of a
-marketplace entry excludes files, and the install copies the plugin directory as it stands, so
-`"source": "./"` ships the whole repository. Only the source shape changes what ships, and every
-option costs more than it saves here: `git-subdir` or a subdirectory path means moving `skills/`,
-`shared/`, `hooks/` and `assets/` down one level and rewriting every path in the docs, while `npm`
-and `archive` mean a publish step this repository does not have. Nothing reads `.atk/` for the
-user's project, because every citation resolves it from the root of the target project, and both
-files say as much in their first line.
+is not that: it describes `aiteamkit`, because the kit runs its own skills on itself. It does not
+ship: the marketplace entry's `source` is `./plugins/atk`, and the install copies that directory
+alone, so `.atk/`, `docs/`, `plans/` and the root files stay in the repository. Nothing reads `.atk/`
+for the user's project either way, because every citation resolves it from the root of the target
+project, and both files say as much in their first line.
 
 ## `hooks/` never holds a rule, and is never the only road to a behavior
 
 Two hooks, and both boundaries have to hold or the kit stops being the same kit on three harnesses.
 
-`SessionStart` runs `hooks/check-profile.mjs`, which prints one line when a project has no
-`.atk/profile.md` at or above it, walking up the way `shared/project-profile.md` says a skill does
+`SessionStart` runs `plugins/atk/hooks/check-profile.mjs`, which prints one line when a project has no
+`.atk/profile.md` at or above it, walking up the way `plugins/atk/shared/project-profile.md` says a skill does
 and accepting a profile found above only when it names the directory the walk started in. A member
 repository of a project whose profile sits in the parent is left alone; an unrelated repository that
 happens to sit under the same folder is not. It must stay
 answerable in one sentence: "does this project have a profile yet".
 The moment it answers a second question, the precondition rule exists in two places, and the copy in
-`shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: ten skills
+`plugins/atk/shared/project-profile.md` is the one that is correct. That rule is not uniform anyway: ten skills
 need no profile at all, so a hook that blocked would stop `atk:intake` from turning a chat message
 into requirements.
 
-`PreToolUse` with matcher `Skill` runs `hooks/load-overrides.mjs`, which puts
+`PreToolUse` with matcher `Skill` runs `plugins/atk/hooks/load-overrides.mjs`, which puts
 `.atk/overrides/<skill>.md` in front of the skill that owns it. It decides nothing and skips nothing;
 what it saves is one file read. Every skill names its own override file at the top of its
 `## Workflow` and opens it when no hook put it there, which is what happens on any harness the hook
 does not reach: Cursor, which has no matching event; Codex, where the entry is registered through
-`hooks/codex-hooks.json` but has never been observed matching a skill invocation; and Claude Code
+`plugins/atk/hooks/codex-hooks.json` but has never been observed matching a skill invocation; and Claude Code
 with the hook turned off. The test that keeps this honest: run a skill against a project that has an
-override for it twice, once with the `PreToolUse` entry in `hooks/hooks.json` and once with it
+override for it twice, once with the `PreToolUse` entry in `plugins/atk/hooks/hooks.json` and once with it
 removed, and compare the two results. A difference means a behavior has moved into the hook, and
 every harness the hook does not reach has silently lost it.
 
@@ -271,18 +283,18 @@ code 2 included. The script exits 0 on every path regardless, prints nothing whe
 say, and writes its "already reminded" marker to `${CLAUDE_PLUGIN_DATA}` or the user's state
 directory, never into the user's repository.
 
-**Keep both hooks in `hooks/hooks.json` in exec form, and keep them Node.** The entry is
+**Keep both hooks in `plugins/atk/hooks/hooks.json` in exec form, and keep them Node.** The entry is
 `"command": "node"` with `${CLAUDE_PLUGIN_ROOT}` inside `args`. Rewriting it as a shell script, or
 moving it to shell form, breaks Windows. `docs/system-architecture.md` holds the reasoning under
 "Why the hook is Node and not a shell script"; read it before changing the shape, and keep the
 exec-form check in the verification block below passing.
 
-`hooks/codex-hooks.json` is the same two hooks for Codex, and it is the one place a string `command`
+`plugins/atk/hooks/codex-hooks.json` is the same two hooks for Codex, and it is the one place a string `command`
 is correct. Codex replaces `${PLUGIN_ROOT}` inside `command` before anything runs, and replaces
 nothing inside `args`, so the exec-form entry Claude Code needs reaches Node as a literal
 `${CLAUDE_PLUGIN_ROOT}/hooks/check-profile.mjs` and the session shows a failed startup hook.
-`.codex-plugin/plugin.json` points its `hooks` key at that file, which is what keeps Codex off the
-default `hooks/hooks.json`. Two files, one pair of scripts: the Node is shared, only the registration
+`plugins/atk/.codex-plugin/plugin.json` points its `hooks` key at that file, which is what keeps Codex off the
+default `plugins/atk/hooks/hooks.json`. Two files, one pair of scripts: the Node is shared, only the registration
 differs, and neither file may grow a rule. There is still no Cursor wrapper, because that event
 contract could not be tested here. That costs a reminder, not a safeguard.
 
@@ -290,11 +302,11 @@ contract could not be tested here. That costs a reminder, not a safeguard.
 
 Nothing generates these, so they drift silently. When adding, renaming, or removing a **skill**:
 
-1. `skills/<name>/SKILL.md`
+1. `plugins/atk/skills/<name>/SKILL.md`
 2. `README.md` (the skills table AND the invocation block)
 3. `docs/skills-overview.md` and `docs/vi/skills-overview.md`
 4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
-5. `shared/artifact-paths.md` (the default output path row)
+5. `plugins/atk/shared/artifact-paths.md` (the default output path row)
 6. `docs/artifact-lifecycle.md` and `docs/vi/artifact-lifecycle.md`, if the skill produces a kind of
    artifact the tree did not hold before. The per-group paragraphs name the kinds and count them, so
    a new one leaves two files disagreeing about what is safe to delete
@@ -302,12 +314,12 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
 8. All three manifest descriptions plus `marketplace.json` and `package.json`, if the count of 24
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
-   `shared/` layer or the profile is for
+   `plugins/atk/shared/` layer or the profile is for
 10. `docs/flow/project-flow.md`, `docs/flow/skill-chain.md` and `docs/flow/skill-lifecycle.md`, plus
-    all three `docs/vi/flow/` mirrors, and `skills/init/references/role-defaults.md`.
+    all three `docs/vi/flow/` mirrors, and `plugins/atk/skills/init/references/role-defaults.md`.
     Each names all 24 skills: the phase table, the consumes/produces table, and the role table
     respectively, the last read by `atk:init` and shipped inside the kit for that reason
-11. `skills/help/references/state-signals.md`, if something on disk says the skill is the next one
+11. `plugins/atk/skills/help/references/state-signals.md`, if something on disk says the skill is the next one
     to run. A skill that answers an event a person reports has no row there, because nothing on
     disk announces the event
 12. The `skill: <name>` label on the GitHub repository and its entry in `.github/labeler.yml`,
@@ -323,12 +335,12 @@ the `/` menu shows, so a trigger phrase belongs there and nowhere else.
 
 ## SKILL.md `name` field convention (catches lint)
 
-Each `skills/<folder>/SKILL.md` frontmatter `name:` MUST be:
+Each `plugins/atk/skills/<folder>/SKILL.md` frontmatter `name:` MUST be:
 
 - Lowercase letters, numbers, hyphens only (NO colons)
 - Match the folder name exactly
 
-Example: `skills/design-doc/SKILL.md` -> `name: design-doc` (NOT `atk:design-doc`).
+Example: `plugins/atk/skills/design-doc/SKILL.md` -> `name: design-doc` (NOT `atk:design-doc`).
 
 The `atk:` namespace is added automatically by the harness from `plugin.json`. The fully-qualified
 invocation identifier is `atk:design-doc`, but it is constructed at load time, not stored in the
@@ -357,7 +369,7 @@ Should print nothing (`grep` exits 1).
 ## Diagrams are Mermaid, except where they are not
 
 Every flow, graph, and diagram in a doc, in the README, or in an artifact a skill produces is a
-fenced `mermaid` block. The drawing rules are in `shared/diagram-conventions.md`, which is also what
+fenced `mermaid` block. The drawing rules are in `plugins/atk/shared/diagram-conventions.md`, which is also what
 the six diagram-producing skills cite; do not restate them here or in a `SKILL.md`.
 
 Two places keep plain ASCII on purpose:
@@ -398,7 +410,7 @@ its Layers table, and the mirror check below excludes both paths.
 | `skills-overview.md` | Reader-facing explanation of every skill: what it produces, when to use, when not to |
 | `artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, and what each deletion costs |
 | `project-overview-pdr.md` | What atk is, goals, non-goals |
-| `system-architecture.md` | Multi-harness layout, the `shared/` layer, and the load model |
+| `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
@@ -464,7 +476,7 @@ above, drop the two `bump-*-pre-major` flags.
 ## Review checklist
 
 This is the section `atk:review` reads and cites by ID, in the record format from
-`shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks, because this
+`plugins/atk/shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks, because this
 repository has no CI that runs anything. `.github/workflows/` carries release-please and the
 labeler, and neither checks content, so no rule here is `ENFORCED` and none is enforced by a tool failing a build.
 
@@ -481,7 +493,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the version-bearing files of each release package agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
-| `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
+| `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`plugins/atk/hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
@@ -489,7 +501,7 @@ deleted, so a review that cited it stays readable.
 
 Three things worth automating, proposed and not installed. A CI job running the block below would
 move most of this table to `ENFORCED` and stop a reviewer spending attention on it. `CONV-001` is the
-one that would need writing rather than wiring: a check that a diff touching `skills/` also touches
+one that would need writing rather than wiring: a check that a diff touching `plugins/atk/skills/` also touches
 the twelve groups. The third is a profile check, and it belongs to a project rather than to this
 repository: that a `.atk/profile.md` whose `Shape` names members carries a Repositories table, that
 one whose shape does not carries none, and that every path and every `Repository` cell elsewhere in

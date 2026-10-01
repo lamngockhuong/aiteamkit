@@ -16,7 +16,7 @@ Conventional Commits are required for the PR title (release-please uses them):
 - [ ] Bug fix (`fix:`)
 - [ ] New skill / new slash command (`feat:`)
 - [ ] Skill content edit (`feat:` if new behavior, `fix:` if correction)
-- [ ] Shared reference change (`shared/`)
+- [ ] Shared reference change (`plugins/atk/shared/`)
 - [ ] Manifest / metadata change (`feat:` / `fix:` / `chore:`)
 - [ ] Release automation / CI (`ci:`)
 - [ ] Documentation (`docs:`)
@@ -34,8 +34,8 @@ Conventional Commits are required for the PR title (release-please uses them):
 
 <!-- Show evidence the change works. Paste command output, screenshots, or describe manual testing. -->
 
-- [ ] All 5 manifest files still parse as JSON.
-- [ ] Every `skills/*/SKILL.md` frontmatter still parses, with a lowercase hyphenated `name:` matching its folder and no `atk:` prefix.
+- [ ] Every manifest and marketplace file still parses as JSON.
+- [ ] Every `plugins/atk/skills/*/SKILL.md` frontmatter still parses, with a lowercase hyphenated `name:` matching its folder and no `atk:` prefix.
 - [ ] No em-dashes introduced anywhere outside `docs/`.
 - [ ] If a document was added or renamed under `docs/`: the `docs/vi/` counterpart matches.
 - [ ] If a skill was added or removed: `README.md`, `docs/skills-overview.md`, `docs/vi/skills-overview.md`, `docs/codebase-summary.md`, the bug-report component dropdown, `.github/labeler.yml`, and the repository's `skill:` labels all list it.

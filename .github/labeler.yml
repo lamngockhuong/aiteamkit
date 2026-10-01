@@ -6,23 +6,23 @@
 
 'area: skill':
 - changed-files:
-  - any-glob-to-any-file: 'skills/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/**'
 
 'area: shared':
 - changed-files:
-  - any-glob-to-any-file: 'shared/**'
+  - any-glob-to-any-file: 'plugins/atk/shared/**'
 
 'area: hooks':
 - changed-files:
-  - any-glob-to-any-file: 'hooks/**'
+  - any-glob-to-any-file: 'plugins/atk/hooks/**'
 
 'area: manifest':
 - changed-files:
-  - any-glob-to-any-file: ['.claude-plugin/**', '.cursor-plugin/**', '.codex-plugin/**', 'package.json']
+  - any-glob-to-any-file: ['.claude-plugin/**', '.cursor-plugin/**', '.agents/plugins/**', 'plugins/*/.claude-plugin/**', 'plugins/*/.cursor-plugin/**', 'plugins/*/.codex-plugin/**', 'package.json']
 
 'area: profile':
 - changed-files:
-  - any-glob-to-any-file: ['shared/project-profile.md', 'shared/project-overrides.md']
+  - any-glob-to-any-file: ['plugins/atk/shared/project-profile.md', 'plugins/atk/shared/project-overrides.md']
 
 'area: ci':
 - changed-files:
@@ -32,96 +32,96 @@
 
 'skill: help':
 - changed-files:
-  - any-glob-to-any-file: 'skills/help/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/help/**'
 
 'skill: init':
 - changed-files:
-  - any-glob-to-any-file: 'skills/init/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/init/**'
 
 'skill: tailor':
 - changed-files:
-  - any-glob-to-any-file: 'skills/tailor/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/tailor/**'
 
 'skill: intake':
 - changed-files:
-  - any-glob-to-any-file: 'skills/intake/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/intake/**'
 
 'skill: catchup':
 - changed-files:
-  - any-glob-to-any-file: 'skills/catchup/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/catchup/**'
 
 'skill: estimate':
 - changed-files:
-  - any-glob-to-any-file: 'skills/estimate/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/estimate/**'
 
 'skill: design-doc':
 - changed-files:
-  - any-glob-to-any-file: 'skills/design-doc/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/design-doc/**'
 
 'skill: spec':
 - changed-files:
-  - any-glob-to-any-file: 'skills/spec/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/spec/**'
 
 'skill: breakdown':
 - changed-files:
-  - any-glob-to-any-file: 'skills/breakdown/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/breakdown/**'
 
 'skill: convention':
 - changed-files:
-  - any-glob-to-any-file: 'skills/convention/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/convention/**'
 
 'skill: plan':
 - changed-files:
-  - any-glob-to-any-file: 'skills/plan/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/plan/**'
 
 'skill: implement':
 - changed-files:
-  - any-glob-to-any-file: 'skills/implement/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/implement/**'
 
 'skill: fix':
 - changed-files:
-  - any-glob-to-any-file: 'skills/fix/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/fix/**'
 
 'skill: verify':
 - changed-files:
-  - any-glob-to-any-file: 'skills/verify/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/verify/**'
 
 'skill: review':
 - changed-files:
-  - any-glob-to-any-file: 'skills/review/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/review/**'
 
 'skill: qa':
 - changed-files:
-  - any-glob-to-any-file: 'skills/qa/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/qa/**'
 
 'skill: run-cases':
 - changed-files:
-  - any-glob-to-any-file: 'skills/run-cases/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/run-cases/**'
 
 'skill: security':
 - changed-files:
-  - any-glob-to-any-file: 'skills/security/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/security/**'
 
 'skill: git':
 - changed-files:
-  - any-glob-to-any-file: 'skills/git/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/git/**'
 
 'skill: release':
 - changed-files:
-  - any-glob-to-any-file: 'skills/release/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/release/**'
 
 'skill: incident':
 - changed-files:
-  - any-glob-to-any-file: 'skills/incident/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/incident/**'
 
 'skill: retro':
 - changed-files:
-  - any-glob-to-any-file: 'skills/retro/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/retro/**'
 
 'skill: onboard':
 - changed-files:
-  - any-glob-to-any-file: 'skills/onboard/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/onboard/**'
 
 'skill: handover':
 - changed-files:
-  - any-glob-to-any-file: 'skills/handover/**'
+  - any-glob-to-any-file: 'plugins/atk/skills/handover/**'

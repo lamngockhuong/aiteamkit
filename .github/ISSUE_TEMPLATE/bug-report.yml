@@ -53,8 +53,8 @@ body:
         - Skill - atk:handover
         - Project profile (.atk/profile.md)
         - Project overrides (.atk/overrides/)
-        - Shared references (shared/)
-        - Hooks (hooks/)
+        - Shared references (plugins/atk/shared/)
+        - Hooks (plugins/atk/hooks/)
         - Plugin manifest / installation
         - Documentation
         - Other / unsure
@@ -85,6 +85,6 @@ body:
     id: version
     attributes:
       label: Version
-      description: The atk version from .claude-plugin/plugin.json, plus your harness version.
+      description: The atk version from the plugin's .claude-plugin/plugin.json (plugins/atk/ in a clone), plus your harness version.
     validations:
       required: false

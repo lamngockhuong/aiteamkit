@@ -4,12 +4,12 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-18
-updated: 2026-09-21
+updated: 2026-10-01
 ticket: none
 ---
 
 This override belongs to the `aiteamkit` repository itself, not to your project. A plugin install
-copies the repository whole, so it arrives with the kit; `atk:review` reads only the override at the
+copies `plugins/atk/` alone, so it never reaches a user; `atk:review` reads only the override at the
 root of the project being worked on. Run `/atk:tailor review` there to write your own.
 
 The rules about this repository's content are not here. They are the `CONV-NNN` rows in the "Review

@@ -4,16 +4,16 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-17
-updated: 2026-09-21
+updated: 2026-10-01
 ticket: none
 ---
 
 # atk project profile
 
 This is the profile of the `aiteamkit` repository itself, not of your project. A plugin install
-copies the repository whole, so this file arrives with the kit; no skill reads it for another
-project, because every citation of `.atk/profile.md` resolves from the root of the project being
-worked on. Run `/atk:init` there to write your own.
+copies `plugins/atk/` alone, so this file stays in the repository and never reaches a user; no skill
+reads it for another project either, because every citation of `.atk/profile.md` resolves from the
+root of the project being worked on. Run `/atk:init` there to write your own.
 
 Written by `/atk:init`. Read by the atk skills that need project facts. Committed on purpose: the
 next person on the team inherits it. Re-check it with `/atk:init --audit`.
@@ -29,9 +29,9 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 | Layer | Directory | Standards | Reference module |
 |-------|-----------|-----------|------------------|
-| content | `skills/`, `shared/` | `CLAUDE.md` | `skills/review/` |
+| content | `plugins/atk/skills/`, `plugins/atk/shared/` | `CLAUDE.md` | `plugins/atk/skills/review/` |
 | docs | `docs/` | `CLAUDE.md`, sections "Docs are bilingual" and "Diagrams are Mermaid, except where they are not" | `docs/flow/skill-chain.md` |
-| hooks | `hooks/` | `CLAUDE.md`, section "`hooks/` never holds a rule, and is never the only road to a behavior" | `hooks/check-profile.mjs` |
+| hooks | `plugins/atk/hooks/` | `CLAUDE.md`, section "`hooks/` never holds a rule, and is never the only road to a behavior" | `plugins/atk/hooks/check-profile.mjs` |
 
 <!-- Not an application: the deliverable is Markdown skills plus three manifests. -->
 <!-- Three rows because a change lands differently in each. A skill edit is one file with frontmatter
