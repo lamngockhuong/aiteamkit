@@ -214,7 +214,8 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/flow/project-flow.md` | The 23 skills placed in delivery phases, with the author and the approver of each artifact, the loop back when one is rejected, and the same gates read by role |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
-| `docs/vi/**/*.md` | Vietnamese mirror of the ten files above, at the same relative paths |
+| `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | The first architecture decision record: `atk` moves to `plugins/atk/` and `atkx`, a kit of utility skills that may call `atk` and is never called by it, is created at `plugins/atkx/`, the two sharing no file, and `atk` gains `CONV-011` to keep the dependency one-way |
+| `docs/vi/**/*.md` | Vietnamese mirror of the eleven files above, at the same relative paths |
 
 ## GitHub
 
