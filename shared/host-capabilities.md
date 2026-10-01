@@ -6,8 +6,9 @@ it. Referenced from `skills/<name>/SKILL.md` as `shared/host-capabilities.md`, w
 
 Cited by `implement`, `fix`, and `verify` for the tidy step, by `review` and `design-doc` for
 parallel reviewers, by `init`, and through it `tailor`, for what counts as one turn of an interview,
-and by `design-sources.md` for naming a connection to a design tool. What the tidy step looks for is
-in `shared/tidy-pass.md`, which is the same list whichever way the step runs.
+by `design-sources.md` for naming a connection to a design tool, and by `run-cases` for browser
+automation. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
+way the step runs.
 
 ## What may be named
 
@@ -52,6 +53,33 @@ No skill stops for a missing host capability. Every capability below improves wo
 owns; none of them is a precondition for it. That is the opposite of `.atk/profile.md`, whose
 absence does stop three skills, and the difference is that the profile carries facts nobody else can
 supply.
+
+Browser automation, below, is the one exception, and it is not a host capability in the sense of
+this section.
+
+## Browser automation
+
+Driving a web browser from the agent: opening a page, reading its accessibility tree, clicking,
+typing, taking a screenshot, reading the requests a page made. What supplies it differs from one
+machine to the next, a plugin, an MCP server, or an integration the harness offers and a team may
+not have turned on, so whether it is there cannot be assumed from the harness alone, and it is not a
+connection to an outside service either: the browser is not a service the team works in. A skill
+names it by what it does, "the harness's browser automation", and never by the plugin, server,
+integration, or tool that supplies it on one machine, since that name is a requirement on every team
+that set up something else.
+
+Resolve it the way a host capability is resolved: from what the harness lists at the time of use,
+never carried from another session or machine. Where several are listed, use the one the person
+names, or ask.
+
+`atk:run-cases` is the only skill that requires it, because for that skill the browser is the work
+rather than an improvement to it: an execution run done without one is a person executing the cases,
+which is what `atk:qa --record` records. So the degradation is not to do the work by hand. Where the
+harness has no browser automation, the run stops after the scope question, writes no run record,
+keeps the triage report, and hands the agreed scope to `atk:qa --record` for a tester to execute,
+saying in the session that the harness offered none. That is the exception to "No skill stops for a
+missing host capability" above, and it stays the only one: a skill whose work a browser only
+improves degrades the usual way.
 
 ## Several questions in one prompt
 

@@ -28,5 +28,7 @@
 
   {"query": "run PR 82 for real and check the feature actually works", "should_trigger": true},
   {"query": "chạy thử thật PR 82 xem tính năng có hoạt động không", "should_trigger": true},
-  {"query": "PR 82 を実機確認して", "should_trigger": true}
+  {"query": "PR 82 を実機確認して", "should_trigger": true},
+  {"query": "execute the test cases file against the DEV environment", "should_trigger": false},
+  {"query": "thực thi bộ test case này trên môi trường DEV", "should_trigger": false}
 ]

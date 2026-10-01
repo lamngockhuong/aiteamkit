@@ -38,5 +38,8 @@
   { "query": "fix the bug in issue #412", "should_trigger": false },
   { "query": "sửa bug này giúp tôi", "should_trigger": false },
   { "query": "review giúp pull request này", "should_trigger": false },
-  { "query": "このプルリクエストをレビューして", "should_trigger": false }
+  { "query": "このプルリクエストをレビューして", "should_trigger": false },
+  {"query": "run the approved test cases on staging and record what the agent observed", "should_trigger": false},
+  {"query": "chạy test case trên STG giúp tôi", "should_trigger": false},
+  {"query": "STGでテストケースを実行して", "should_trigger": false}
 ]

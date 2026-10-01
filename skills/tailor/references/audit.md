@@ -14,12 +14,12 @@ A file whose name matches no installed skill is reported and not parsed: the tea
 it for a skill they have not installed yet, or misspelled the name, and the audit cannot tell which.
 Say both readings and let the reader pick.
 
-## Check 1: does it break one of the seven
+## Check 1: does it break one of the eight
 
 Read each `## Before` and `## After` against the table in `shared/project-overrides.md`.
 
-Report a match as a fact. The seven are fixed, they are written down, and an instruction either asks
-for one of them or does not. Quote the instruction, name which of the seven it breaks, and name the
+Report a match as a fact. The eight are fixed, they are written down, and an instruction either asks
+for one of them or does not. Quote the instruction, name which of the eight it breaks, and name the
 approver from the file's front matter.
 
 ```
@@ -29,7 +29,7 @@ BREAKS   .atk/overrides/release.md
          Approver: Nguyen Thi A
 ```
 
-This check has a false negative worth knowing about. An instruction can break one of the seven
+This check has a false negative worth knowing about. An instruction can break one of the eight
 through what it implies rather than what it says: "kết thúc luôn cho nhanh" does not name the consent
 line, but a skill following it skips asking. The audit reports what it can read; the run itself
 catches the rest, and that is why a skipped instruction is reported in the artifact at the time.

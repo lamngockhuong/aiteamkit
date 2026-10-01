@@ -5,7 +5,8 @@ the files it cites can read it once and know what happened and what they have to
 `skills/<name>/SKILL.md` and its references as `shared/plain-writing.md`, which is
 `../../shared/plain-writing.md` relative to a skill file.
 
-Cited by the report templates of `fix`, `verify`, `review`, `security`, and `qa --record`, and by
+Cited by the report templates of `fix`, `verify`, `review`, `security`, and `qa --record`, the last
+also reached by `run-cases` through the run record shape it reuses, and by
 `## Output` of `incident`, which has no template file: the reports that record one run and ask a person to act on it. It is what rule 4 of
 `shared/team-roles.md`, write for the absent reader, means for their prose.
 

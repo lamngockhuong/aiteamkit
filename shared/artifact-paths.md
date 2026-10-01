@@ -141,6 +141,7 @@ to `docs/adr/` as well.
 | `verify` | `docs/records/verification/<date>-<ticket>-<slug>.md`, with any screenshots in `docs/records/verification/<date>-<ticket>-<slug>/` beside it |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--record` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes once committed only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
+| `run-cases` | A run record at the path `qa` uses for one, `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids.md`, under the same rules, with its evidence in `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids/` beside it; the triage report and the run log at `docs/derived/run-cases/<run-id>/` |
 | `security` | `docs/records/security/<date>-<ticket>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
 | `release` | `docs/records/releases/<version>.md` |
@@ -228,7 +229,7 @@ merged and which directory it goes in.
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
+| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -273,15 +274,18 @@ on the pull request, a catchup brief is rebuilt by running `atk:catchup` again, 
 running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, or
 `atk:qa --review` where it was a cases file, a feedback
 record is a copy of what was filed with whoever owns the skill it is about, and a setup-defect
-report is rebuilt by running `atk:onboard` again against the repository as it stands then.
+report is rebuilt by running `atk:onboard` again against the repository as it stands then. The
+triage report and the run log of `atk:run-cases` hold the detail behind a run record whose `In short`
+already lists what they would be needed for.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
-directory rather than a break in the chain. Four skills read one of the six, and all four read the
-review report: a second `atk:review` over the same target reads the newest one for that target, to carry
+directory rather than a break in the chain. Five skills read one of the eight. `atk:run-cases` reads
+the run log of an earlier run of the same cases file, to offer the cases it deferred, which that run's
+record also lists. The other four read the review report: a second `atk:review` over the same target reads the newest one for that target, to carry
 its finding identifiers forward, and starts numbering at 1 and says so when there is none;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
-Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the six, and losing a
+Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the eight, and losing a
 report costs a set of identifiers and a list of gaps the next review raises again, rather than a step
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that

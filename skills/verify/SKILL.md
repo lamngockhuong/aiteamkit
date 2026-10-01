@@ -32,8 +32,8 @@ three times, escalating by name past that, and stopping every process it started
 
 Does NOT handle: writing the test plan or the test cases, which is `atk:qa`; proving the cause of a defect (`atk:fix`); building the change
 (`atk:implement`), whose layer verification runs the suite rather than the application; approving a
-release (`atk:release`); or signing off that a feature is accepted, which is QA's word and never
-this skill's.
+release (`atk:release`); executing test cases on a deployed environment, which is `atk:run-cases`;
+or signing off that a feature is accepted, which is QA's word and never this skill's.
 
 The boundary with `atk:qa` is worth stating plainly, because both talk about testing. `atk:qa`
 decides what should be checked and writes it down. This skill takes what is already agreed, runs it
@@ -42,8 +42,9 @@ to check goes back to `atk:qa` as a new case, not into this report as a passing 
 
 ## Roles
 
-Dev runs this, before the change goes to review, and owns the evidence. The reviewer of the change
-accepts the report, reading it as input rather than as a verdict. Tech Lead is the name the ceiling escalates to, and the person who
+Dev runs this, on the local stack, before the change goes to review, and owns the evidence. A
+deployed environment is not this skill's target: running the agreed cases there is
+`atk:run-cases`. The reviewer of the change accepts the report, reading it as input rather than as a verdict. Tech Lead is the name the ceiling escalates to, and the person who
 answers when the failure turns out to be a design question. SRE owns the environment when the run
 turns out not to be pointed at a local one. See `shared/team-roles.md`.
 

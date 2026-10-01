@@ -56,9 +56,13 @@ One row per non-functional requirement the project actually states, and none for
 
 ## 4. Environments
 
-| Environment | Used for | URL or location | Data | Provided by |
-|-------------|----------|-----------------|------|-------------|
-| <name> | <levels> | <URL, or empty with who will give it> | <how the data is prepared> | <TL> |
+| Environment | Kind | Used for | URL or location | Data | Provided by |
+|-------------|------|----------|-----------------|------|-------------|
+| <name> | <production, staging, development, or local> | <levels> | <URL, or empty with who will give it> | <how the data is prepared, the test accounts by role, and how many failed logins lock one> | <TL> |
+
+`Kind` is one of `production`, `staging`, `development`, or `local`, or the project's own term with one
+of those four beside it, `UAT (staging)`. It exists so that a skill sending real requests can tell
+from the plan whether a row may be touched: `atk:run-cases` refuses `production` and `local`.
 
 ## 5. Compatibility
 
