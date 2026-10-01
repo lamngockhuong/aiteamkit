@@ -428,19 +428,24 @@ reviewer after.
 
 ## Release flow (release-please, pre-1.0 mode)
 
-Versions are bumped automatically by release-please on push to `main`. Five files share the version,
-all driven by `release-please-config.json` `extra-files`:
+Versions are bumped automatically by release-please on push to `main`. `plugins/atk` is its own
+release package in `release-please-config.json`, tagged `atk-v<version>`, and it counts only the
+commits that touch `plugins/atk/`. Four files share its version, all driven by that package's
+`extra-files`:
 
 | File | jsonpath |
 |------|----------|
-| `package.json` | `$.version` |
-| `.claude-plugin/plugin.json` | `$.version` |
-| `.claude-plugin/marketplace.json` | `$.plugins[0].version` |
-| `.cursor-plugin/plugin.json` | `$.version` |
-| `.codex-plugin/plugin.json` | `$.version` |
+| `package.json` | `$.version`, written `/package.json` because a leading `/` resolves from the repository root rather than from the package |
+| `plugins/atk/.claude-plugin/plugin.json` | `$.version` |
+| `plugins/atk/.cursor-plugin/plugin.json` | `$.version` |
+| `plugins/atk/.codex-plugin/plugin.json` | `$.version` |
 
-A sixth file, `.release-please-manifest.json`, also holds the version but is NOT an `extra-file`:
-release-please owns it natively as its state file. Never hand-edit it.
+The marketplace files carry no version: each harness reads it from the plugin's own `plugin.json`,
+so a copy in the marketplace entry would be one more place for it to disagree.
+
+A fifth file, `.release-please-manifest.json`, also holds the version, keyed by the package path, but
+is NOT an `extra-file`: release-please owns it natively as its state file. Never hand-edit it. The
+changelog is `plugins/atk/CHANGELOG.md`, inside the package, which is where release-please writes it.
 
 Pre-1.0 config keeps experimental versioning:
 
@@ -475,7 +480,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
-| `CONV-008` | The five manifests and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the six version-bearing files agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
+| `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the version-bearing files of each release package agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
 
@@ -636,8 +641,17 @@ for f in glob.glob('plugins/atk/skills/*/references/*.tsv'):
 grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/atk/skills/ plugins/atk/shared/ README.md docs/ \
   | grep -v -E '^docs/(records|derived)/'
 
-# Version agreement across the 6 version-bearing files
-grep -h '"version"' package.json .claude-plugin/plugin.json .cursor-plugin/plugin.json \
-     .codex-plugin/plugin.json; grep -h '"version"' .claude-plugin/marketplace.json; \
-     cat .release-please-manifest.json
+# Version agreement: per release package, its extra-files and its entry in the release-please
+# manifest name one version. Read from the config itself, so a package added there is checked too
+python3 -c "
+import json, os
+cfg = json.load(open('release-please-config.json'))
+state = json.load(open('.release-please-manifest.json'))
+for pkg, conf in cfg['packages'].items():
+    seen = {'.release-please-manifest.json': state[pkg]}
+    for e in conf['extra-files']:
+        f = e['path'][1:] if e['path'].startswith('/') else os.path.join(pkg, e['path'])
+        seen[f] = json.load(open(f))['version']
+    assert len(set(seen.values())) == 1, '%s disagrees: %s' % (pkg, seen)
+    print('OK %s at %s, %d files' % (pkg, state[pkg], len(seen)))"
 ```
