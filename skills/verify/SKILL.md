@@ -30,8 +30,7 @@ readiness signal, exercising the change with real requests or real interaction, 
 effect in data, queue, and logs, comparing screens against the design under `--ui`, retrying at most
 three times, escalating by name past that, and stopping every process it started.
 
-Does NOT handle: writing the test plan or the test cases, which is `atk:qa` and happens before this
-skill has anything to run; proving the cause of a defect (`atk:fix`); building the change
+Does NOT handle: writing the test plan or the test cases, which is `atk:qa`; proving the cause of a defect (`atk:fix`); building the change
 (`atk:implement`), whose layer verification runs the suite rather than the application; approving a
 release (`atk:release`); or signing off that a feature is accepted, which is QA's word and never
 this skill's.
@@ -43,8 +42,8 @@ to check goes back to `atk:qa` as a new case, not into this report as a passing 
 
 ## Roles
 
-Dev runs this and owns the evidence. QA owns whether the criteria are met, and reads this report as
-input rather than as a verdict. Tech Lead is the name the ceiling escalates to, and the person who
+Dev runs this, before the change goes to review, and owns the evidence. The reviewer of the change
+accepts the report, reading it as input rather than as a verdict. Tech Lead is the name the ceiling escalates to, and the person who
 answers when the failure turns out to be a design question. SRE owns the environment when the run
 turns out not to be pointed at a local one. See `shared/team-roles.md`.
 
@@ -260,7 +259,7 @@ Follow `shared/ticket-adapters.md`. The report is offered as the comment on the 
 and posted on a yes, per the consent line in `shared/finalize-steps.md`. From a pull request, it is
 offered on that pull request first, where its reviewer reads it, and on the linked issue second.
 Do not move the ticket to done or to any accepted state. This skill produces evidence; accepting it
-is QA's act, and the distance between those two is the whole reason the kit separates the roles.
+is the reviewer's act, and the distance between those two is the whole reason the kit separates the roles.
 
 ## Definition of done
 
