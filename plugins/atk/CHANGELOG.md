@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.0...atk-v0.1.1) (2026-10-01)
+
+
+### Bug Fixes
+
+* move atk into plugins/atk/ and add an empty atkx beside it ([#88](https://github.com/lamngockhuong/aiteamkit/issues/88)) ([ed02384](https://github.com/lamngockhuong/aiteamkit/commit/ed02384e061b3a496ca2b220957b132b69608679))
+
 ## [0.1.0](https://github.com/lamngockhuong/aiteamkit/compare/v0.0.21...v0.1.0) (2026-10-01)
 
 
