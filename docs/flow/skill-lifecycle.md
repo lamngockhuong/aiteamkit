@@ -70,8 +70,8 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another a hundred and seventy-two times across the twenty-four `SKILL.md` files,
-counting the `atk:` mentions, in a hundred and seven ordered pairs, which sounds like a dense graph. It is
+One skill names another a hundred and seventy-four times across the twenty-four `SKILL.md` files,
+counting the `atk:` mentions, in a hundred and eight ordered pairs, which sounds like a dense graph. It is
 not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at
 run time.
 

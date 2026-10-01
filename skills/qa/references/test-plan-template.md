@@ -58,7 +58,7 @@ One row per non-functional requirement the project actually states, and none for
 
 | Environment | Kind | Used for | URL or location | Data | Provided by |
 |-------------|------|----------|-----------------|------|-------------|
-| <name> | <production, staging, development, or local> | <levels> | <URL, or empty with who will give it> | <how the data is prepared, the test accounts by role, and how many failed logins lock one> | <TL> |
+| <name> | <production, staging, development, or local> | <levels> | <URL, or empty with who will give it> | <how the data is prepared, the test accounts by role, and how many failed logins lock one> | <the TL's name> |
 
 `Kind` is one of `production`, `staging`, `development`, or `local`, or the project's own term with one
 of those four beside it, `UAT (staging)`. It exists so that a skill sending real requests can tell

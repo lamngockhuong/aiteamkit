@@ -134,7 +134,7 @@ Mười một file tiếp theo là hợp đồng giữa một nhóm skill có t�
   đổi buộc pull request phải mang theo tài liệu tham chiếu, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác với
   code, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
   viết ra những tài liệu đó, `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và
-  `atk:verify` có nghĩa vụ để chúng đúng, còn `atk:qa` và `atk:help` đọc chúng. Đây là hợp đồng
+  `atk:verify` có nghĩa vụ để chúng đúng, còn `atk:qa`, `atk:run-cases` và `atk:help` đọc chúng. Đây là hợp đồng
   rộng nhất trong nhóm, vì `shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi
   skill đổi mã nguồn đều là một bên của nó.
 - `shared/host-file-locations.md`: cách nhận ra code host, mọi vị trí mà từng host đọc

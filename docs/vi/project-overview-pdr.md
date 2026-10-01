@@ -79,4 +79,4 @@ ngoài, thường xuyên dùng lẫn tiếng Việt, tiếng Nhật và tiếng 
 
 - Một người mới vào có thể thực thi output của bất kỳ skill nào mà không cần hỏi lại tác giả.
 - Mọi artifact đều trả lời được ai chịu trách nhiệm cho các câu hỏi còn treo.
-- Một team có thể áp dụng từng skill một, không cần áp dụng cả mười bảy skill còn lại.
+- Một team có thể áp dụng từng skill một, không cần áp dụng cả hai mươi ba skill còn lại.

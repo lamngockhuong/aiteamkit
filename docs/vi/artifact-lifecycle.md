@@ -77,12 +77,17 @@ trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi 
 `atk:plan --review` nếu thứ được soát là một bản kế hoạch, hoặc `atk:qa --review` nếu đó là một file
 test case; còn báo cáo lỗi thiết lập thì chạy lại
 `atk:onboard` trên kho mã ở trạng thái lúc đó; triage report và run log của `atk:run-cases` thì đã được
-run record đứng trước chúng trích dẫn và tóm tắt. Các lượt review ấy, khi chạy mà không kèm
+run record đứng trước chúng trích dẫn và tóm tắt. Điều đó chỉ đúng khi đã có record theo sau: sau
+một lần chạy thử, trên harness không có khả năng tự động hoá trình duyệt, hoặc sau một lần chạy không
+viết record, triage report là bản duy nhất ghi phạm vi đã thống nhất và run log là danh sách duy nhất
+những gì lần chạy có thể đã để lại trên môi trường, nên giữ cả hai cho tới khi có người xử lý. Ảnh
+chụp trong thư mục `evidence/` của lần chạy ấy chờ người khởi động lần chạy xác nhận, là bản duy nhất
+cho tới lúc đó, và không bao giờ được commit khi còn chờ. Các lượt review ấy, khi chạy mà không kèm
 `--comment`, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
 bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có năm skill đọc một
 trong tám loại. `atk:run-cases` đọc run log của lần chạy trước trên cùng file test case, để đề nghị
-chạy tiếp những case lần đó đã hoãn; mất file này thì các case ấy vẫn có tên trong record của lần chạy
-đó, cạnh những gì lần chạy để lại trên môi trường, nên người chạy tự nêu chúng qua `--only`. Bốn skill
+chạy tiếp những case lần đó đã hoãn và để nêu dữ liệu đã tạo mà không có record theo sau; nếu lần đó
+có viết record thì record ghi đúng những thứ ấy, nên người chạy tự nêu các case qua `--only`. Bốn skill
 còn lại đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
 đọc báo cáo mới nhất của đối tượng đó để giữ lại mã định danh của các phát hiện, và khi không có báo cáo nào
 thì đánh số lại từ 1 và nói rõ điều đó; `atk:plan --review` đọc báo cáo mới nhất của cùng bản kế

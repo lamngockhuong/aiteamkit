@@ -178,7 +178,7 @@ being about a team.
 | 5 | The stop after three ruled-out hypotheses | `skills/fix/SKILL.md` |
 | 6 | The stop after three verification rounds | `skills/verify/SKILL.md` |
 | 7 | The read-only boundary of drift checking | `skills/spec/SKILL.md` |
-| 8 | Never automating a case that changes data the run did not create, or that submits wrong credentials | `skills/run-cases/references/environment-safety.md` |
+| 8 | The limits of an agent-executed run: never against production or the local stack, never automating a case that changes data the run did not create or that submits wrong credentials, never recording a result it did not observe, and the stop after three rounds | `skills/run-cases/references/environment-safety.md` |
 
 An override that conflicts with one of these is skipped in the part that conflicts. The rest of the
 file still applies, because a single bad paragraph rarely means the whole file is wrong.

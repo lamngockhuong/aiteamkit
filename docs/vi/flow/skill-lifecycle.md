@@ -72,7 +72,7 @@ commit đều phải hỏi, hỏi lại từng lần.
 ## Một skill với sang skill khác thế nào
 
 Trong hai mươi bốn file `SKILL.md`, đếm những lần nhắc `atk:`, một skill gọi tên skill khác một trăm
-bảy mươi hai lượt, thành một trăm lẻ bảy cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
+bảy mươi bốn lượt, thành một trăm lẻ tám cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
 phần lớn trong số đó là ranh giới chứ không phải cạnh. Có năm loại, và chỉ bốn loại đầu xảy ra lúc
 chạy.
 

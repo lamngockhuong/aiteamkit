@@ -137,7 +137,7 @@ Eleven are contracts between a named handful of skills rather than kit-wide rule
   becomes when the document lives in a repository other than the code's, and the line between drift
   and a question nobody has answered. Cited by `atk:spec`, which writes those documents, by
   `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave
-  them true, and by `atk:qa` and `atk:help`, which read them. It is the widest of these contracts,
+  them true, and by `atk:qa`, `atk:run-cases` and `atk:help`, which read them. It is the widest of these contracts,
   because `shared/finalize-steps.md` now opens with its obligation, which makes every code-changing
   skill a party to it.
 - `shared/host-file-locations.md`: how the code host is detected, every location each host reads

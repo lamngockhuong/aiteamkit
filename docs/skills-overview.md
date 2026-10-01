@@ -533,8 +533,8 @@ handing work to QA. Or a tester already executed the cases and has the results: 
 stops it before the first request.
 
 **The habit that matters.** It decides what it can run honestly before running anything. Every case is
-triaged as automatable, semi-automatable with the person who clears its one obstacle named, manual, or
-blocked, scored against what the run saw on the environment rather than what the case implies, and
+triaged as automatable, semi-automatable, manual, or blocked, with the person named who clears any
+obstacle the run cannot clear itself, scored against what the run saw on the environment rather than what the case implies, and
 the person who started the run sets how many cases this session takes. When the set is larger, the
 skill proposes what to cut by priority and that person chooses; it never drops a case itself. A case
 that would change data somebody else is using, or that submits wrong credentials, is never automated
@@ -542,11 +542,12 @@ at all, whatever its score.
 
 A case is `Passed` only when every part of its expected result was observed in this run; a failure is
 re-run once from a clean state before it becomes a defect; what is still unresolved after three rounds
-is `Pending` with a reason a person can act on. Cases the session never reached are deferred: listed,
-never counted, so the record's shares never mix run and unrun cases. The record waits at `IN REVIEW`
-for the QA lead, with every screenshot marked `unchecked` until a person confirms it carries no real
-person's data, and `atk:qa --bug` reads it like any tester's record. Where the harness offers no
-browser automation, the run stops after triage and hands the agreed scope to `atk:qa --record`.
+is `Pending` with a reason a person can act on. Cases on offer that the run did not attempt are
+deferred: listed, never counted, so the record's shares never mix run and unrun cases. A screenshot
+reaches the record only after the person who started the run confirms it carries no real person's
+data; the record then waits at `IN REVIEW` for the QA lead, and `atk:qa --bug` reads it like any
+tester's record. Where the harness offers no browser automation, the run stops after the scope
+question and hands the agreed scope to `atk:qa --record`.
 
 ---
 

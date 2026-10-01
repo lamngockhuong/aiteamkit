@@ -54,8 +54,7 @@ owns; none of them is a precondition for it. That is the opposite of `.atk/profi
 absence does stop three skills, and the difference is that the profile carries facts nobody else can
 supply.
 
-Browser automation, below, is the one exception, and it is not a host capability in the sense of
-this section.
+Browser automation, below, is the one exception to this rule, for the reason that section gives.
 
 ## Browser automation
 

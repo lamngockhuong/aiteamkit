@@ -3,7 +3,8 @@ name: run-cases
 description: >
   Execute approved test cases against a deployed DEV or staging environment through the browser:
   refuse production and the local stack, recon the accounts and data, triage every case as
-  automatable, semi-automatable with a named person, manual, or blocked, agree the scope with the
+  automatable, semi-automatable, manual, or blocked, naming the person who clears any obstacle the
+  run cannot clear itself, agree the scope with the
   person before any case runs, run in at most three rounds, and write only the results it observed
   into a run record the QA lead approves and `atk:qa --bug` reads.
   Use when a cases file is approved, a non-production environment is deployed, and the team wants
@@ -50,17 +51,18 @@ the environment: a local target is refused here and is that skill's.
 ## Roles
 
 QA starts the run, answers the scope question, sets the security flag of each defect, sets its
-severity or leaves it `TBD` for the QA lead, and owns the record. The QA lead approves it, or the Tech Lead where
-the team has none. The environment owner, the `Provided by` of the test plan's row, is the person a
-stop names. Each obstacle a semi-automatable case carries is cleared by a person named for it before
-the case enters the scope. See `shared/team-roles.md`.
+severity or leaves it `TBD` for the QA lead, confirms every screenshot before the record links it, and
+owns the record. The QA lead approves it, or the Tech Lead where the team has none. The environment
+owner, the `Provided by` of the test plan's row and often the SRE, is the person a stop names and the
+one who decides about data the run left behind. The obstacle of a `SEMI-2` or `SEMI-3` case is cleared
+by a person named for it before the case enters the scope. See `shared/team-roles.md`.
 
 ## Invocation
 
 ```bash
 /atk:run-cases <cases-path>               # Triage, agree the scope, run, and record
 /atk:run-cases <cases-path> --env <name>  # Name the test plan's environment row up front
-/atk:run-cases <cases-path> --only <IDs>  # Run only these case IDs; triage still covers the file
+/atk:run-cases <cases-path> --only <IDs>  # Offer only these case IDs at the scope question
 /atk:run-cases <cases-path> --dry-run     # Triage and the scope question, with no request to the environment
 /atk:run-cases <cases-path> --out <path>  # Override the run record's path; its evidence goes beside it
 ```
@@ -83,7 +85,8 @@ Before step 1, read `.atk/overrides/run-cases.md` when it exists, per rule 7 of 
 
 ### 1. Load
 
-Read the cases file and its test plan, `docs/qa/test-plan-<slug>.md`. Note the cases file's `status`
+Read the cases file and its test plan, `docs/qa/test-plan-<slug>.md`, skipping the rows struck
+through as removed, per The cases to triage in `references/triage.md`. Note the cases file's `status`
 and whether it has uncommitted changes, for the record's header. A file that is not `APPROVED` is
 asked about before anything else: the person may run it all the same, and the record says so, as
 `skills/qa/references/test-run.md` does under What the cases were.
@@ -93,16 +96,18 @@ Check whether the harness offers browser automation, per Browser automation in
 step 5, handing the agreed scope to `atk:qa --record`, and the session says so now rather than after
 the triage.
 
-Where a run log of an earlier run of this cases file lists deferred cases, say so and offer them as
-`--only`, so a run split over several sessions picks up where it stopped.
+Read the newest run log of an earlier run of this cases file, per The run log in
+`references/execution.md`: offer its deferred cases as `--only`, so a run split over several sessions
+picks up where it stopped, and name to the person any data it shows created with no record after it.
 
 ### 2. Target
 
 Choose and check the environment per `references/environment-safety.md`: the test plan's row, its
 `Kind`, the person's confirmation, the refusals for production and for the local stack, the owner
 by name, the reachability check, the lock threshold, and where credentials may come from. Every stop
-in that file happens here, before any login. Under `--dry-run` the reachability check is skipped, since
-a dry run sends nothing.
+about the target happens here, before any login; the lock and credential rules in that file apply
+again at every login after it, which is why later steps reopen it. Under `--dry-run` the reachability
+check is skipped, since a dry run sends nothing.
 
 ### 3. Recon
 
@@ -119,9 +124,10 @@ so the person answering the scope question can open it.
 ### 5. Scope
 
 Ask the scope question in `references/triage.md`, and wait for the answer. No case runs before it, and
-no case is dropped on the skill's own judgement. Under `--dry-run`, or with no browser automation, the
-run ends here: the triage report is the output, and the session names `atk:qa --record` as the way the
-agreed scope gets executed by hand.
+no case is dropped on the skill's own judgement. The answer goes into the triage report and the run
+log. Under `--dry-run`, with no browser automation, or with a budget of zero, the run ends here: the
+triage report, with the agreed scope written into it, is the output, and the session names
+`atk:qa --record` as the way that scope gets executed by hand.
 
 ### 6. Run rounds
 
@@ -137,32 +143,37 @@ reached are deferred, not `Pending`.
 
 Delete what the run created, by the identifiers the run log holds and never by pattern, keep what a
 defect needs to be reproduced, sign out, and close the browser session this run opened, per Clean-up
-in `references/execution.md`. Every early stop after step 3 runs this as far as it can, and the
+in `references/execution.md`. Every early stop from step 3 on runs this as far as it can, and the
 record is written after it, so it can say what the run left on the environment.
 
 ### 8. Record
 
-Write the run record per The record in `references/execution.md`, in the shape of
-`skills/qa/references/test-run.md`, at `status: IN REVIEW`, with its evidence beside it, every
-screenshot checked against The data a record must not carry and marked `unchecked` until the person
-confirms it. Recount the summary from `Results`, then offer `atk:qa --bug <record>` for the defects.
+Show the person every screenshot the record would link, per Evidence in `references/execution.md`:
+a confirmed one moves beside the record, one not confirmed is deleted. Then write the run record per
+The record in that file, in the shape of `skills/qa/references/test-run.md`, at `status: IN REVIEW`.
+Where no case ran, no record is written. Recount the summary from `Results`, then offer
+`atk:qa --bug <record>` for the defects.
 
 ## Output
 
 | Artifact | Path | Group, per `shared/artifact-paths.md` |
 |----------|------|---------------------------------------|
 | Run record | `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids.md`, never written over | record, committed |
-| Evidence | `docs/records/test-runs/<record name>/`, beside the record | committed with it |
+| Evidence | `docs/records/test-runs/<record name>/`, beside the record, `<record name>` being its file name without `.md`; held until confirmed in `docs/derived/run-cases/<run-id>/evidence/` | committed with it, once confirmed |
 | Triage report | `docs/derived/run-cases/<run-id>/triage.md` | derived |
 | Run log | `docs/derived/run-cases/<run-id>/run-log.md` | derived |
 
-`<run-id>` is `<YYMMDD-HHMM>-<slug>`, the time the run started and the cases file's slug, taking the
-next free suffix, `-2`, `-3`, when a run in the same minute already holds the directory. `--out`
-moves the record, and its evidence directory moves with it; a path that already exists is never
-written over, as `skills/qa/references/test-run.md` requires. The record
+`<run-id>` is `<YYMMDD-HHMM>-<slug>-<handle>`, the time the run started, the cases file's slug, and the
+code host handle of the person who started it from the `Team` section of the profile, or their
+initials, so two people starting the same minute on two machines never share a directory or a
+marker; the next free suffix, `-2`, `-3`, covers the same person twice in one minute. `--out` moves the
+record, and its evidence directory moves with it; a path that already exists is never written over and
+takes the next free suffix, as `skills/qa/references/test-run.md` requires. The record
 opens with the shared front matter block and its `## In short` section follows
 `shared/plain-writing.md`, as the shape it reuses already requires. Committing the record and its
-evidence is `atk:git`'s, after the QA lead has said where a record naming a security defect lives.
+evidence is `atk:git`'s, after the QA lead has said where a record naming a security defect lives,
+which holds back the evidence directory and this run's `docs/derived/run-cases/<run-id>/` with it, per
+The record in `references/execution.md`.
 
 ## Ticket
 
@@ -176,21 +187,22 @@ ticket into or out of testing is the QA lead's act, never this run's.
 - [ ] The target was a test plan row whose kind is staging or development, confirmed by the person; a
       production or local target, or a row with no named owner, stopped the run before any request.
 - [ ] No case that changes data the run did not create, and no case submitting wrong credentials, was
-      automated; failed logins per account stayed below the lock threshold, or at one where the
-      threshold is `TBD`.
-- [ ] Every case in the file has a triage verdict, every `SEMI` case in scope a named person, and the
-      triage report was written before the scope question.
+      automated; no account reached its lock threshold, and none was tried again after a failed
+      login where the threshold is `TBD`.
+- [ ] Every case in the file but the removed rows has a triage verdict, every `SEMI-2` and `SEMI-3`
+      case in scope a named person, and the triage report was written before the scope question.
 - [ ] No case ran before the person answered the scope question, and none was left out except by
       their choice.
-- [ ] Every `Passed` and `Failed` was observed in this run; every failure was re-run once from a clean
-      state; nothing unresolved was written as `Passed`.
+- [ ] Every `Passed` and `Failed` was observed in this run against the case's own expected result;
+      every failure was re-run once, in its round, from a clean state; nothing unresolved was
+      written as `Passed`.
 - [ ] No more than three rounds ran; every case attempted and still unresolved is `Pending` with a
       concrete reason; deferred cases are listed in `In short` and are neither rows nor counted.
 - [ ] The record has the shape and path of `skills/qa/references/test-run.md`, `status: IN REVIEW`,
       the host agent in `Run by` and `Tester`, the QA lead as approver, and its summary recounted
       from `Results`.
 - [ ] No credential, one-time code, or real person's data is in the record, the triage report, the run
-      log, or a screenshot, and every evidence link nobody confirmed is marked `unchecked`.
+      log, or a screenshot, and no screenshot reached the record without the person confirming it.
 - [ ] Nothing about one project, its stack, its login provider, its thresholds, or its file formats,
       was taken from anywhere but the test plan, the profile, the code, or the person.
 - [ ] Every record the run created was deleted by its identifier or kept with the reason, and the

@@ -80,4 +80,4 @@ external client, frequently across Vietnamese, Japanese, and English. Roles are 
 
 - A new joiner can execute any skill's output without asking its author what it meant.
 - Every artifact answers who owns the open questions.
-- A team can adopt one skill at a time without adopting the other seventeen.
+- A team can adopt one skill at a time without adopting the other twenty-three.

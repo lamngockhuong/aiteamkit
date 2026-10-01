@@ -537,8 +537,8 @@ kiểm trước khi bàn giao cho QA. Hoặc tester đã chạy xong và đang c
 trách thì skill dừng ngay trước request đầu tiên.
 
 **Thói quen tạo ra khác biệt.** Trước khi chạy bất cứ thứ gì, nó xác định những case nào chạy được mà kết
-quả vẫn đáng tin. Mỗi case được xếp vào một trong bốn loại: tự động được, bán tự động kèm tên người gỡ vướng mắc
-duy nhất của nó, chạy tay, hoặc bị chặn. Điểm chấm dựa trên những gì lần chạy thấy trên môi trường chứ
+quả vẫn đáng tin. Mỗi case được xếp vào một trong bốn loại: tự động được, bán tự động, chạy tay, hoặc bị chặn,
+kèm tên người gỡ vướng mắc mà lần chạy không tự gỡ được. Điểm chấm dựa trên những gì lần chạy thấy trên môi trường chứ
 không dựa trên điều case ngụ ý, và người khởi động lần chạy quyết định phiên này nhận bao nhiêu case.
 Khi số case nhiều hơn, skill đề xuất cắt theo mức ưu tiên và người đó chọn; skill không bao giờ tự bỏ
 case nào. Một case sẽ sửa dữ liệu người khác đang dùng, hoặc cố tình nhập sai thông tin đăng nhập,
@@ -546,12 +546,12 @@ không bao giờ được tự động hoá, điểm cao đến đâu cũng vậ
 
 Case chỉ được ghi `Passed` khi mọi phần của kết quả mong đợi đều được thấy trong lần chạy này; case hỏng
 được chạy lại một lần từ trạng thái sạch rồi mới thành lỗi; case vẫn chưa ngã ngũ sau ba vòng thành
-`Pending`, kèm lý do đủ cụ thể để người khác xử lý tiếp. Case mà phiên chạy chưa kịp tới thì được hoãn:
-có tên trong danh sách nhưng không được đếm, nên tỷ lệ trong record không bao giờ trộn case đã chạy với
-case chưa chạy. Record nằm ở `IN REVIEW` chờ QA lead, mọi ảnh chụp mang dấu `unchecked` cho tới khi
-có người xác nhận trong ảnh không có dữ liệu của người thật, và `atk:qa --bug` đọc nó như record của bất
-kỳ tester nào. Trên harness không có khả năng tự động hoá trình duyệt, lần chạy dừng sau bước phân loại và chuyển
-phạm vi đã thống nhất sang `atk:qa --record`.
+`Pending`, kèm lý do đủ cụ thể để người khác xử lý tiếp. Case nằm trong số được đề nghị mà lần chạy không
+đụng tới thì được hoãn: có tên trong danh sách nhưng không được đếm, nên tỷ lệ trong record không bao giờ
+trộn case đã chạy với case chưa chạy. Ảnh chụp chỉ vào record sau khi người khởi động lần chạy xác nhận
+trong ảnh không có dữ liệu của người thật; sau đó record nằm ở `IN REVIEW` chờ QA lead, và
+`atk:qa --bug` đọc nó như record của bất kỳ tester nào. Trên harness không có khả năng tự động hoá trình
+duyệt, lần chạy dừng sau câu hỏi phạm vi và chuyển phạm vi đã thống nhất sang `atk:qa --record`.
 
 ---
 

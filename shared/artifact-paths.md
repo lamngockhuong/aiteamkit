@@ -276,12 +276,17 @@ running `atk:review` again, or `atk:plan --review` where what was reviewed was a
 record is a copy of what was filed with whoever owns the skill it is about, and a setup-defect
 report is rebuilt by running `atk:onboard` again against the repository as it stands then. The
 triage report and the run log of `atk:run-cases` hold the detail behind a run record whose `In short`
-already lists what they would be needed for.
+already lists what they would be needed for, except where no record followed them: a dry run, a
+harness with no browser automation, a run where no case ran, or a run that stopped before it wrote
+one. Then the triage report holds the only written copy of the agreed scope, and the run log the only
+list of what the run may have created on the environment, and both are kept until a person has acted
+on them. Screenshots under its `evidence/` directory are the only copy until the person who started
+the run confirms them, and they are never committed while they wait.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. Five skills read one of the eight. `atk:run-cases` reads
-the run log of an earlier run of the same cases file, to offer the cases it deferred, which that run's
-record also lists. The other four read the review report: a second `atk:review` over the same target reads the newest one for that target, to carry
+the run log of an earlier run of the same cases file, to offer the cases it deferred and to name data
+created with no record after it; where that run wrote a record, the record lists the same. The other four read the review report: a second `atk:review` over the same target reads the newest one for that target, to carry
 its finding identifiers forward, and starts numbering at 1 and says so when there is none;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per

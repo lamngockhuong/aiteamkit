@@ -23,5 +23,9 @@
   { "query": "run the unit tests", "should_trigger": false },
   { "query": "write a Playwright end-to-end test for the checkout flow", "should_trigger": false },
   { "query": "run the test cases against production tonight", "should_trigger": true },
-  { "query": "テストケースを書いて", "should_trigger": false }
+  { "query": "テストケースを書いて", "should_trigger": false },
+  { "query": "review the security of this release before it goes out", "should_trigger": false },
+  { "query": "the order total is wrong on staging, find the cause and fix it", "should_trigger": false },
+  { "query": "write the release notes and the deploy checklist for 2.4", "should_trigger": false },
+  { "query": "昨日テスターが手動で実施したテスト結果を記録して", "should_trigger": false }
 ]

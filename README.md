@@ -156,8 +156,8 @@ independent passes over a large diff when the host can run agents in parallel, a
 required: on a harness without them the step runs by hand, against the same list in
 [shared/tidy-pass.md](shared/tidy-pass.md), and the artifact says which way it ran. The one
 exception is `atk:run-cases`, which drives the application through the harness's browser automation:
-the browser is its work rather than an improvement to it, so without one it stops after triage and
-hands the agreed cases to `atk:qa --record` for a tester. The rules are in
+the browser is its work rather than an improvement to it, so without one it stops after the scope
+question and hands the agreed cases to `atk:qa --record` for a tester. The rules are in
 [shared/host-capabilities.md](shared/host-capabilities.md).
 
 ## Installation
