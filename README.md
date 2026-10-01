@@ -121,7 +121,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 
 Artifacts are Markdown, written into the **target project** under `docs/`, one folder per lifecycle
 stage. The full path table, the naming rules, and the shared front matter live in
-[shared/artifact-paths.md](shared/artifact-paths.md).
+[plugins/atk/shared/artifact-paths.md](plugins/atk/shared/artifact-paths.md).
 
 Not every artifact has the same fate. A reference document is updated in place forever, a record is
 never edited and rarely deleted, and one directory is safe to delete or leave out of git entirely.
@@ -130,10 +130,10 @@ Which is which, what each deletion costs, and the three policies a team can choo
 ([Tiếng Việt](docs/vi/artifact-lifecycle.md)).
 
 `atk` is tool-agnostic: the Markdown artifact is the source of truth and a tracker holds a pointer
-to it. [shared/ticket-adapters.md](shared/ticket-adapters.md) maps the vocabulary to GitHub Issues,
+to it. [plugins/atk/shared/ticket-adapters.md](plugins/atk/shared/ticket-adapters.md) maps the vocabulary to GitHub Issues,
 Jira, Backlog, and Redmine, and no skill creates tickets without showing the list and getting a yes.
 
-The role vocabulary every skill shares is in [shared/team-roles.md](shared/team-roles.md).
+The role vocabulary every skill shares is in [plugins/atk/shared/team-roles.md](plugins/atk/shared/team-roles.md).
 
 The skills that touch code read one file that the kit does not ship for the project it is installed
 into: `.atk/profile.md`, written by `/atk:init` into the target project and committed with it.
@@ -141,10 +141,10 @@ into: `.atk/profile.md`, written by `/atk:init` into the target project and comm
 `atk:plan` continues and says in the artifact which commands and paths it had to infer. Every other
 skill runs without it. What the profile holds, which skills are meant to degrade rather than stop,
 and why the kit's own copy of that file travels with an install without ever being read for your
-project, is in [shared/project-profile.md](shared/project-profile.md).
+project, is in [plugins/atk/shared/project-profile.md](plugins/atk/shared/project-profile.md).
 
 `atk:convention` and `atk:review` share one more file,
-[shared/review-checklist.md](shared/review-checklist.md), so a team rule is written once and
+[plugins/atk/shared/review-checklist.md](plugins/atk/shared/review-checklist.md), so a team rule is written once and
 enforced in the same words: `convention` records each rule with an ID and a default severity, and
 `review` cites that ID in its findings instead of restating the rule from memory.
 
@@ -154,13 +154,16 @@ Code, after the verification passes and before anyone reviews it; `atk:review` p
 independent passes over a large diff when the host can run agents in parallel, and
 `atk:design-doc --challenge` puts one agent per signing role over a draft design. None of it is
 required: on a harness without them the step runs by hand, against the same list in
-[shared/tidy-pass.md](shared/tidy-pass.md), and the artifact says which way it ran. The one
+[plugins/atk/shared/tidy-pass.md](plugins/atk/shared/tidy-pass.md), and the artifact says which way it ran. The one
 exception is `atk:run-cases`, which drives the application through the harness's browser automation:
 the browser is its work rather than an improvement to it, so without one it stops after the scope
 question and hands the agreed cases to `atk:qa --record` for a tester. The rules are in
-[shared/host-capabilities.md](shared/host-capabilities.md).
+[plugins/atk/shared/host-capabilities.md](plugins/atk/shared/host-capabilities.md).
 
 ## Installation
+
+This repository is a marketplace. The plugin itself is `plugins/atk/`, and an install copies that
+directory alone.
 
 ### Claude Code
 
@@ -169,17 +172,32 @@ question and hands the agreed cases to `atk:qa --record` for a tester. The rules
 /plugin install atk@atk
 ```
 
-### Cursor
+Installed before the kit moved to `plugins/atk/`? Refresh the marketplace, then update the plugin;
+the update follows the new location, and there is nothing to uninstall:
 
-In Cursor Agent chat:
-
-```
-/add-plugin atk
+```bash
+/plugin marketplace update atk
+/plugin update atk@atk
 ```
 
 ### OpenAI Codex CLI
 
-Open plugin search with `/plugins`, search for "atk", then Install Plugin.
+```bash
+codex plugin marketplace add lamngockhuong/aiteamkit
+codex plugin add atk@atk
+```
+
+### Cursor
+
+Cursor reads `.cursor-plugin/marketplace.json`, which lists `atk` at `plugins/atk`. Two routes, neither
+yet tried on this layout:
+
+- Copy `plugins/atk/` from a clone to `~/.cursor/plugins/local/atk`, then run Developer: Reload
+  Window. This is the route Cursor's own documentation describes.
+- In the Cursor CLI, `cursor-agent plugin marketplace add https://github.com/lamngockhuong/aiteamkit`,
+  then install `atk` from the interactive `/plugin` menu.
+
+If either works or fails for you, an issue saying which one helps the next person.
 
 ## Local development install
 
@@ -189,6 +207,8 @@ cd aiteamkit
 /plugin marketplace add .
 /plugin install atk@atk
 ```
+
+The same clone works on Codex with `codex plugin marketplace add .` and `codex plugin add atk@atk`.
 
 ## Relationship to other kits
 

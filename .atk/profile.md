@@ -49,11 +49,11 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 
 | App or package | Test                                                | Build | Lint | Extra |
 | -------------- | --------------------------------------------------- | ----- | ---- | ----- |
-| repo           | `CLAUDE.md`, section "Common verification commands" | none  | none | none  |
+| repo           | `CLAUDE.md`, section "Common verification commands" | none  | none | `claude plugin validate .`; install from a clone with `claude plugin marketplace add <clone>` then `claude plugin install atk@atk`, and on Codex `codex plugin marketplace add <clone>` then `codex plugin add atk@atk`, each under a scratch `CLAUDE_CONFIG_DIR` or `CODEX_HOME` |
 
 - Setup: none
 
-<!-- source: CLAUDE.md -> "Common verification commands" -->
+<!-- source: CLAUDE.md -> "Common verification commands"; Extra: run on 2026-10-01 against a clone, Cursor's routes left out because none was run -->
 <!-- No package scripts and no test CI; .github/workflows/ carries release-please and the labeler.
      Those blocks are what stands in for a test suite, and CLAUDE.md is the single copy of
      them on purpose: an earlier profile pasted four of them inline and went stale when the repo
