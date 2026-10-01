@@ -38,25 +38,28 @@ approval is still their own act, whether they edit the state or tell the agent t
 
 ## Multi-manifest layout (non-obvious)
 
-The repository is a marketplace, and `atk` is one plugin inside it, at `plugins/atk/`. One
-marketplace file per harness lists it, and three sibling manifest folders inside the plugin point to
-the SAME content:
+The repository is a marketplace holding two plugins: `atk` at `plugins/atk/`, and `atkx` beside it
+at `plugins/atkx/`. One marketplace file per harness lists both, and inside each plugin three sibling
+manifest folders point to the SAME content:
 
 ```
-.claude-plugin/marketplace.json     Claude Code: lists atk at ./plugins/atk
-.cursor-plugin/marketplace.json     Cursor: lists atk at plugins/atk
-.agents/plugins/marketplace.json    Codex: lists atk at ./plugins/atk
+.claude-plugin/marketplace.json     Claude Code: lists atk and atkx at ./plugins/<name>
+.cursor-plugin/marketplace.json     Cursor: lists atk and atkx at plugins/<name>
+.agents/plugins/marketplace.json    Codex: lists atk and atkx at ./plugins/<name>
 plugins/atk/
   .claude-plugin/     plugin.json
   .cursor-plugin/     plugin.json
   .codex-plugin/      plugin.json (with `interface{}` block for marketplace listing)
   skills/, shared/, hooks/, assets/    shared content, NOT duplicated per harness
+plugins/atkx/
+  .claude-plugin/, .cursor-plugin/, .codex-plugin/    the same three manifests
+  skills/             empty until a first skill passes the bar in its section below
 ```
 
 Edit `plugins/atk/skills/<name>/SKILL.md` ONCE; all three manifests pick it up. Do not create
 per-harness copies.
 
-An install copies the plugin directory, `plugins/atk/`, and nothing above it. A skill, a shared file
+An install copies one plugin directory, `plugins/atk/` or `plugins/atkx/`, and nothing above it. A skill, a shared file
 or a hook that reads a file outside that directory reads nothing on a user's machine, and no manifest
 path may leave it: no `..`, no absolute path. That is why `atk:init` keeps its default approvals in
 `plugins/atk/skills/init/references/role-defaults.md` rather than in `docs/`.
@@ -66,8 +69,11 @@ path may leave it: no `..`, no absolute path. That is why `atk:init` keeps its d
 | `plugins/atk/.claude-plugin/plugin.json` | absent (Claude auto-discovers `skills/`) | listed by the root `.claude-plugin/marketplace.json` |
 | `plugins/atk/.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
 | `plugins/atk/.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with `defaultPrompt`, icons, `brandColor`; `hooks` pointing at `./hooks/codex-hooks.json` |
+| `plugins/atkx/.claude-plugin/plugin.json` | absent | `"dependencies": ["atk"]` |
+| `plugins/atkx/.cursor-plugin/plugin.json` | `"./skills/"` | `displayName` |
+| `plugins/atkx/.codex-plugin/plugin.json` | `"./skills/"` | `interface{}` block with no icon and no `hooks` |
 
-Paths inside a manifest are relative to the plugin, so they did not change when the kit moved under
+Paths inside a manifest are relative to its plugin, so they did not change when the kit moved under
 `plugins/atk/`; paths in this file are relative to the repository root.
 
 There is no `commands/` directory and no `commands` key in any manifest. A skill is its own slash
@@ -237,8 +243,8 @@ grep -rn "\bak:" plugins/ README.md docs/ --exclude=CHANGELOG.md | grep -v -E '^
 
 Should print nothing (the second `grep` exits 1).
 
-`plugins/atk/CHANGELOG.md` is excluded here and in the checks of `CONV-007` and `CONV-011`:
-release-please writes it from commit messages, it is never edited by hand, and a commit that
+Every `CHANGELOG.md` is excluded here, in the checks of `CONV-007` and `CONV-011`, and in the
+dated-name check: release-please writes one per plugin from commit messages, it is never edited by hand, and a commit that
 quotes a command or a fill would otherwise fail a `BLOCKING` check with no legitimate fix.
 
 ## `atkx` sits beside `atk`, and the dependency runs one way
@@ -561,7 +567,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
-| `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, and the version-bearing files of each release package agree | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
+| `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
 | `CONV-011` | `atk` never invokes or names an `atkx` skill, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
@@ -683,6 +689,36 @@ for event, matcher, script in sorted(a):
 assert json.load(open('plugins/atk/.codex-plugin/plugin.json')).get('hooks') == './hooks/codex-hooks.json', \
     'the Codex manifest must point its hooks key at ./hooks/codex-hooks.json'
 print('OK registration, %d hooks in both files' % len(a))"
+
+# The marketplaces and the plugins agree: every plugins/<name>/ is listed in all three marketplace
+# files and is a release package, every listed source is a plugin of that name, no marketplace entry
+# carries a version, no manifest path leaves its plugin, and atkx still declares atk. Each of these is
+# true by construction today and silent when it stops being true, which is why it is asserted here
+python3 -c "
+import glob, json, os
+plugins = sorted(os.path.basename(d.rstrip('/')) for d in glob.glob('plugins/*/'))
+packages = json.load(open('release-please-config.json'))['packages']
+assert sorted(p.split('/', 1)[1] for p in packages) == plugins, 'release packages: %s' % sorted(packages)
+for f in ('.claude-plugin/marketplace.json', '.cursor-plugin/marketplace.json',
+          '.agents/plugins/marketplace.json'):
+    entries = json.load(open(f))['plugins']
+    assert sorted(e['name'] for e in entries) == plugins, '%s lists %s' % (f, [e['name'] for e in entries])
+    for e in entries:
+        assert 'version' not in e, '%s: %s carries a version' % (f, e['name'])
+        src = e['source']['path'] if isinstance(e['source'], dict) else e['source']
+        assert os.path.normpath(src) == 'plugins/' + e['name'], '%s: %s source %r' % (f, e['name'], src)
+for m in glob.glob('plugins/*/.*-plugin/plugin.json'):
+    root = m.split('/.', 1)[0]
+    assert json.load(open(m))['name'] == os.path.basename(root), m + ': name differs from its folder'
+    def paths(o):
+        if isinstance(o, dict): return [x for v in o.values() for x in paths(v)]
+        if isinstance(o, list): return [x for v in o for x in paths(v)]
+        return [o] if isinstance(o, str) and o.startswith(('./', '../', '/')) else []
+    for v in paths(json.load(open(m))):
+        assert not v.startswith('/') and '..' not in v.split('/') and os.path.exists(os.path.join(root, v)), '%s: %s' % (m, v)
+assert json.load(open('plugins/atkx/.claude-plugin/plugin.json')).get('dependencies') == ['atk'], \
+    'atkx must declare atk as its dependency'
+print('OK marketplaces and plugins agree, %d plugins' % len(plugins))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow

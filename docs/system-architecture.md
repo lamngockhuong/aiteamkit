@@ -10,9 +10,9 @@ it at `plugins/atkx/`, and each harness finds them through a marketplace file at
 
 ```
 aiteamkit/
-  .claude-plugin/marketplace.json     lists atk for Claude Code
-  .cursor-plugin/marketplace.json     lists atk for Cursor
-  .agents/plugins/marketplace.json    lists atk for OpenAI Codex CLI
+  .claude-plugin/marketplace.json     lists atk and atkx for Claude Code
+  .cursor-plugin/marketplace.json     lists atk and atkx for Cursor
+  .agents/plugins/marketplace.json    lists atk and atkx for OpenAI Codex CLI
   plugins/atk/                        the plugin; an install copies this directory and nothing above it
     .claude-plugin/     plugin.json                        Claude Code
     .cursor-plugin/     plugin.json                        Cursor
@@ -36,7 +36,8 @@ with the project; `plugins/atk/shared/project-profile.md` holds the two shapes w
 plugin directory is read-only and shared by every project on the machine, so it is the wrong place
 for a fact that is true of one of them.
 
-Only `plugins/atk/` ships. A skill, a shared file or a hook that reads a file outside it reads
+Only the plugin directories ship, each on its own. A skill, a shared file or a hook that reads a
+file outside its plugin reads
 nothing on a user's machine, and no manifest path may leave it, which is why `atk:init` keeps the
 default approvals per role in `plugins/atk/skills/init/references/role-defaults.md` and not in
 `docs/`. The `.atk/` in the tree above is the kit's own, true of `aiteamkit` alone, and it is there
@@ -57,7 +58,7 @@ inside them is relative to the plugin:
 
 ```mermaid
 flowchart TD
-    MK["marketplace files at the root<br/><small>one per harness, each pointing at plugins/atk</small>"] --> CP
+    MK["marketplace files at the root<br/><small>one per harness, each pointing at plugins/atk and plugins/atkx</small>"] --> CP
     MK --> UP
     MK --> XP
     CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>24 folders, one SKILL.md each</small>"]

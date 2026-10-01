@@ -10,9 +10,9 @@ Repo là một marketplace chứa hai plugin. `atk` nằm ở `plugins/atk/`, `a
 
 ```
 aiteamkit/
-  .claude-plugin/marketplace.json     liệt kê atk cho Claude Code
-  .cursor-plugin/marketplace.json     liệt kê atk cho Cursor
-  .agents/plugins/marketplace.json    liệt kê atk cho OpenAI Codex CLI
+  .claude-plugin/marketplace.json     liệt kê atk và atkx cho Claude Code
+  .cursor-plugin/marketplace.json     liệt kê atk và atkx cho Cursor
+  .agents/plugins/marketplace.json    liệt kê atk và atkx cho OpenAI Codex CLI
   plugins/atk/                        plugin; bản cài sao thư mục này và không gì ở trên nó
     .claude-plugin/     plugin.json                        Claude Code
     .cursor-plugin/     plugin.json                        Cursor
@@ -35,8 +35,8 @@ Không chỗ nào trong cây này mô tả dự án mà kit được cài vào. 
 `plugins/atk/shared/project-profile.md` giữ hai hình dạng mà không gì theo dõi nó. Thư mục plugin chỉ đọc
 và dùng chung cho mọi dự án trên máy, nên nó là chỗ sai để giữ một sự thật chỉ đúng với một dự án.
 
-Chỉ `plugins/atk/` được phát hành. Skill, file dùng chung hay hook nào đọc một file nằm ngoài thư mục
-đó thì trên máy người dùng sẽ không đọc được gì, và không đường dẫn nào trong manifest được ra khỏi
+Chỉ các thư mục plugin được phát hành, mỗi thư mục một bản riêng. Skill, file dùng chung hay hook
+nào đọc một file nằm ngoài plugin của nó thì trên máy người dùng sẽ không đọc được gì, và không đường dẫn nào trong manifest được ra khỏi
 nó. Vì thế `atk:init` giữ quyền duyệt mặc định theo vai trong
 `plugins/atk/skills/init/references/role-defaults.md` chứ không để trong `docs/`. `.atk/` trong cây
 trên là của chính kit, chỉ đúng với `aiteamkit`, và nằm đó vì kit chạy skill của mình lên chính mình;
@@ -57,7 +57,7 @@ trong chúng đều tính từ thư mục plugin:
 
 ```mermaid
 flowchart TD
-    MK["các file marketplace ở gốc<br/><small>mỗi harness một file, đều trỏ tới plugins/atk</small>"] --> CP
+    MK["các file marketplace ở gốc<br/><small>mỗi harness một file, đều trỏ tới plugins/atk và plugins/atkx</small>"] --> CP
     MK --> UP
     MK --> XP
     CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>24 thư mục, mỗi thư mục một SKILL.md</small>"]

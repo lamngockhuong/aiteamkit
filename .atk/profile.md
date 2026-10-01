@@ -60,10 +60,11 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
      them on purpose: an earlier profile pasted four of them inline and went stale when the repo
      gained hooks and trigger evals. Run the block, do not transcribe it. -->
 
-Two further checks live outside that section, each beside the rule it enforces:
+Three further checks live outside that section, each beside the rule it enforces:
 
 - No command from another kit: `CLAUDE.md`, section "The kit stands alone, but it may use the harness it runs on"
 - No hardcoded diagram fill: `CLAUDE.md`, section "Diagrams are Mermaid, except where they are not"
+- `atk` never names `atkx`, and no symlink crosses between the plugins: `CLAUDE.md`, section "`atkx` sits beside `atk`, and the dependency runs one way"
 
 ## Docs
 
