@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.1...atk-v0.1.2) (2026-10-01)
+
+
+### Features
+
+* **plan:** read behaviour and consumers back, add --challenge and --answer ([#93](https://github.com/lamngockhuong/aiteamkit/issues/93)) ([3822017](https://github.com/lamngockhuong/aiteamkit/commit/382201743967d5a00d5b89cf946fb429b89ba5b3))
+
 ## [0.1.1](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.0...atk-v0.1.1) (2026-10-01)
 
 
