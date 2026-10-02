@@ -77,7 +77,10 @@ harness gắn namespace `atk:` lúc nạp dựa trên `plugin.json`.
 `plugins/atkx/` nằm cạnh `plugins/atk/` trong cùng marketplace, có đủ ba thư mục manifest như vậy và
 một skill, `skill-eval`. Nó dành cho các skill tiện ích không phụ thuộc artifact nào
 và không gắn với vòng đời giao hàng. Phụ thuộc chỉ đi một chiều: skill của `atkx` được gọi skill của
-`atk`, còn `atk` không bao giờ nhắc tới skill nào của `atkx`, nên `atk` cài riêng vẫn đầy đủ. Trên
+`atk`, còn `atk` không bao giờ gọi skill nào của `atkx`, nên `atk` cài riêng vẫn đầy đủ. Chỗ duy
+nhất `atk` nhắc tới `atkx` là `atk:help`: với câu hỏi không skill `atk` nào lo được, nó gợi ý skill
+`atkx` phù hợp kèm lệnh cài. Danh sách đó nằm ở `plugins/atk/skills/help/references/atkx-skills.md`,
+vì trên máy người dùng thư mục `atkx` không nằm cạnh `atk`. Trên
 Claude Code, `"dependencies": ["atk"]` trong manifest của `atkx` cài `atk` theo cùng; Cursor và Codex
 không có trường này, nên ở đó người dùng cài cả hai, và skill của `atkx` kiểm tra skill `atk` mà nó
 gọi có mặt hay chưa rồi mới gọi. Không plugin nào đọc file của plugin kia, và không có symlink nào

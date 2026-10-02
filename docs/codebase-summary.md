@@ -113,6 +113,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 
 | File | Purpose |
 |------|---------|
+| `plugins/atk/skills/help/references/atkx-skills.md` | The one file under `plugins/atk/` that lists `atkx` skills: what each is used for, its invocation and harnesses, the install commands per harness, which of an `atk` and an `atkx` skill wins a question, and what `Needs first` and `Approved by` say for one |
 | `plugins/atk/skills/help/references/state-signals.md` | Which artifacts gate the next skill while they wait for approval, the evidence on disk that names that skill, in the order to check it, and how the artifacts waiting on a person are collected |
 | `plugins/atk/skills/init/references/detection.md` | How the project root and the repository shape are resolved before anything else, where to look for each profile field, and what to do when the repository gives several answers or none |
 | `plugins/atk/skills/init/references/profile-template.md` | The shape of `.atk/profile.md` that `init` fills in, the Repositories table a multi-repository project carries, and the rule that every path is written from the project root |
@@ -251,7 +252,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and the approver of each artifact, the loop back when one is rejected, and a pointer to the role table that `init` now carries |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
-| `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | The first architecture decision record: `atk` moves to `plugins/atk/` and `atkx`, a kit of utility skills that may call `atk` and is never called by it, is created at `plugins/atkx/`, the two sharing no file, and `atk` gains `CONV-011` to keep the dependency one-way |
+| `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | The first architecture decision record: `atk` moves to `plugins/atk/` and `atkx`, a kit of utility skills that may call `atk` and is never called by it, is created at `plugins/atkx/`, the two sharing no file, and `atk` gains `CONV-011` to keep the dependency one-way, amended on 2026-10-02 so that `atk:help` alone may name `atkx` |
 | `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` | The second: `atkx:skill-eval` keeps the checks that must repeat in Node scripts and leaves judgment to the agent |
 | `docs/vi/**/*.md` | Vietnamese mirror of the twelve files above, at the same relative paths |
 

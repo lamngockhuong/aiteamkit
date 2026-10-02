@@ -78,7 +78,10 @@ There is no `commands/` layer. A skill is its own slash command, named from its 
 `plugins/atkx/` sits beside `plugins/atk/` in the same marketplace, with the same three manifest
 folders and one skill, `skill-eval`. It is for utility skills that depend on no artifact and on
 no delivery lifecycle. The dependency runs one way: an `atkx` skill may call an `atk` skill, and
-`atk` never names an `atkx` one, so `atk` installed alone stays whole. On Claude Code,
+`atk` never calls an `atkx` one, so `atk` installed alone stays whole. The one place `atk` names
+`atkx` is `atk:help`, which suggests an `atkx` skill, with its install commands, for a question no
+`atk` skill covers; it keeps that list in `plugins/atk/skills/help/references/atkx-skills.md`
+because the `atkx` directory is not beside it on a user's machine. On Claude Code,
 `"dependencies": ["atk"]` in the `atkx` manifest installs `atk` with it; Cursor and Codex have no
 such field, so there the user installs both, and an `atkx` skill checks for the `atk` skill it calls
 before calling it. Neither plugin reads a file of the other's, and no symlink joins them. Each

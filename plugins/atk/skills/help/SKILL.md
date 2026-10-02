@@ -28,8 +28,8 @@ person who asked, and the next person asks again and gets the answer true for th
 
 Handles: reading the project state that decides which skill comes next, routing a question or a
 situation to one skill, explaining what one skill produces and what it needs first, naming the
-artifacts that are waiting on a person and who that person is, and saying plainly when a request is
-outside this kit.
+artifacts that are waiting on a person and who that person is, naming the companion `atkx` skill
+for a question no `atk` skill covers, and saying plainly when a request is outside this kit.
 
 Does NOT handle: running the skill it recommends, which the person asking does by typing the line;
 getting a new member started on the project itself (`atk:onboard`, which writes the onboarding
@@ -69,7 +69,7 @@ Three modes, decided by the argument:
 | Argument | Mode |
 |----------|------|
 | none | **State**: read the project and say what to run next |
-| a skill name, with or without the `atk:` prefix | **Skill**: explain that skill |
+| a skill name, with or without the `atk:` prefix, or an `atkx` name, with or without its prefix | **Skill**: explain that skill |
 | anything else | **Question**: route the question or situation to one skill |
 
 A bare word that is both a skill name and an ordinary word, `review` or `plan`, is a skill name. A
@@ -83,6 +83,9 @@ no copy of it lives in this skill, so a skill added to the kit is one this skill
 
 Read nothing else from a skill in question mode. In skill mode read the whole `SKILL.md` of the
 skill asked about, because its `## Invocation` and `## Roles` are part of the answer.
+
+The companion plugin's skills are not beside this file. `references/atkx-skills.md` lists them,
+says when to read it, and replaces the `SKILL.md` that skill mode would read for one of them.
 
 ### 3. Read the project
 
@@ -125,12 +128,14 @@ Load `references/state-signals.md`.
   second half of the answer.
 - **Question mode.** Match the question against the descriptions from step 2. Where two skills fit,
   the one a `Does NOT handle` line points at wins over the one whose description merely sounds
-  close, because that line is the kit saying which of the pair owns the case. Where the question
+  close, because that line is the kit saying which of the pair owns the case. The rows of
+  `references/atkx-skills.md` are candidates too, ranked by its Which one wins. Where the question
   still fits two, ask one question that separates them, and no more than one.
 - **Skill mode.** Nothing to match. What the skill needs first is its group under The precondition
-  rule in `shared/project-profile.md`, plus the input its `## Invocation` takes.
+  rule in `shared/project-profile.md`, plus the input its `## Invocation` takes; for an `atkx`
+  skill, both come from `references/atkx-skills.md`.
 
-Where nothing in the kit fits, say it is outside this kit and stop there, naming nothing that
+Where nothing in either list fits, say it is outside this kit and stop there, naming nothing that
 `shared/host-capabilities.md` rules out.
 
 A missing profile is never a reason to stop this skill. It is one of the states the answer reports:
@@ -151,7 +156,8 @@ No file. The answer is given in the session, in this shape:
 
 ```
 Mode: state | question | skill, and what settled it
-Run: /atk:<skill> <arguments>
+Run: /atk:<skill> <arguments>, or /atkx:<skill> <arguments>
+Install: <the commands for the asker's harness>, only for an atkx skill that is not installed
 Because: <the evidence, each item with the path or the command it came from>
 Needs first: <its precondition group and the input it takes, or "nothing">
 Approved by: <the role that accepts its output, and the person where the project names one>
@@ -185,6 +191,8 @@ Nothing is posted, the answer included.
 
 - [ ] The mode was stated, with what settled it, before the answer.
 - [ ] The skill list came from the kit's `skills/*/SKILL.md`, not from memory or a copy.
+- [ ] An `atkx` skill, from `references/atkx-skills.md` or the live skill list, was named only where
+      it wins by that file's Which one wins, with `Install` when it is not installed.
 - [ ] Nothing in the project was changed: no file written, no state entered, no ticket posted.
 - [ ] The answer names one skill to run, names the approver the work is waiting on, or says the
       request is outside this kit.
@@ -192,5 +200,6 @@ Nothing is posted, the answer included.
 - [ ] `Needs first` and `Approved by` are filled, and a `TBD` approver keeps its named person.
 - [ ] No more than one question was asked: to separate two skills that still fit, or, where no
       signal held, to learn what the asker is about to do.
-- [ ] No command belonging to another kit was named.
+- [ ] No command belonging to another kit was named, apart from the companion plugin's, which
+      `shared/host-capabilities.md` allows this skill alone.
 - [ ] The recommended skill was not started.

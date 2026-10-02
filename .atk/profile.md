@@ -66,7 +66,7 @@ Four further checks live outside that section, each beside the rule it enforces:
 
 - No command from another kit: `CLAUDE.md`, section "The kit stands alone, but it may use the harness it runs on"
 - No hardcoded diagram fill: `CLAUDE.md`, section "Diagrams are Mermaid, except where they are not"
-- `atk` never names `atkx`, and no symlink crosses between the plugins: `CLAUDE.md`, section "`atkx` sits beside `atk`, and the dependency runs one way"
+- `atk` never calls `atkx` and only `atk:help` names it, and no symlink crosses between the plugins: `CLAUDE.md`, section "`atkx` sits beside `atk`, and the dependency runs one way"
 
 ## Docs
 

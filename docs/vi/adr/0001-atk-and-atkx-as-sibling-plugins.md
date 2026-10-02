@@ -4,7 +4,7 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-30
-updated: 2026-10-01
+updated: 2026-10-02
 ticket: none
 ---
 
@@ -57,6 +57,11 @@ Ghi chú thêm ngày 2026-10-01, trước khi thay đổi được merge: hai d�
 `atkx-v0.0.1`, còn `atk-v0.1.0` được gắn vào commit của `v0.1.0` để làm mốc. Trên Claude Code, bản
 cài làm ở `v0.1.0` khi cập nhật đã đi theo `source` mới, miễn là phiên bản đã tăng qua `0.1.0`, nên không ai phải cài lại. Bản thân quyết
 định không đổi.
+
+Sửa đổi ngày 2026-10-02: `CONV-011` giờ có một ngoại lệ. Khi không skill `atk` nào khớp, `atk:help`
+nêu tên skill `atkx` phù hợp, kèm lệnh cài nếu skill đó chưa được cài. Danh sách skill `atkx` nằm
+ngay trong skill `help`. Mọi phần khác của `atk` vẫn không nhắc tới `atkx`, và `atk` vẫn không gọi
+skill nào của `atkx`. Quyết định được ghi ở `docs/records/design/261002-0525-help-names-atkx.md`.
 
 ## Phương án bị loại
 
