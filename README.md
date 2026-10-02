@@ -224,7 +224,7 @@ and no delivery lifecycle. It holds one skill so far:
 /atkx:skill-eval <skill-path> --trigger --runs 5 --model opus
 /atkx:skill-eval <skill-path> --draft-cases  # also draft trigger cases into a temporary file
 /atkx:skill-eval <skill-path> --review       # also review the skill's run earlier in the conversation
-/atkx:skill-eval <skill-path> --out <path>   # also save the report
+/atkx:skill-eval <skill-path> --out <path>   # also save the report, without asking
 ```
 
 Its scripts need Node, which the `atk` hooks already ask for.

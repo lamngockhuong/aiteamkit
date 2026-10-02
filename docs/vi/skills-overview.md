@@ -728,8 +728,9 @@ tới, sau khi cho biết sẽ mở bao nhiêu phiên và được người dùn
 cổng bảo mật, và skill trong plugin được nạp cùng hook của chính plugin đó, các hook này chạy trong
 những phiên ấy như sau khi cài đặt. `--draft-cases`
 soạn nháp trigger case vào một file tạm và chỉ ghi vào skill khi người dùng đồng ý; `--review` dò lại
-một lần chạy skill trước đó trong cuộc hội thoại theo từng bước của nó, đặt ở mục riêng và không bao
-giờ tính vào điểm; `--out` lưu báo cáo ra file. Nếu máy đã cài NVIDIA SkillEvaluator, phần kiểm
+một lần chạy skill trước đó trong cuộc hội thoại theo từng bước của nó, ghi lại chỗ nào agent tự làm
+theo cách khác và việc nào không phục vụ bước nào, xếp mỗi chỗ lệch theo mức nghiêm trọng, đặt ở mục riêng và không bao
+giờ tính vào điểm; `--out` lưu báo cáo ra file; không có cờ này thì sau khi in báo cáo, skill hỏi có lưu ra file không. Nếu máy đã cài NVIDIA SkillEvaluator, phần kiểm
 tra tĩnh sẽ đề nghị chạy thêm các phép kiểm Tier 1 không cần khóa API của nó và báo chúng thành một nhóm
 riêng, không tính vào điểm; nếu chưa cài, một dòng ghi rõ điều đó và mọi phép kiểm khác vẫn chạy.
 

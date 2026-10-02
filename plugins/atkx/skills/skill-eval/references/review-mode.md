@@ -21,21 +21,30 @@ there to read.
 Number the workflow of the evaluated `SKILL.md` as it numbers itself, `### 1.` headings or a
 numbered list under `## Workflow`. For each step record:
 
-| Step | Status | Where in the conversation |
-|------|--------|---------------------------|
-| 1. Establish intent | executed | the agent's second message, which named the requirement |
-| 2. Read the diff | partly done | read three of five changed files; the two tests were not opened |
-| 3. Choose the rounds | skipped | no round was chosen; the review went straight to findings |
+| Step | Status | Method | Where in the conversation |
+|------|--------|--------|---------------------------|
+| 1. Establish intent | executed | as prescribed | the agent's second message, which named the requirement |
+| 2. Read the diff | partly done | improvised: `cat` on each file instead of `git diff` | read three of five changed files; the two tests were not opened |
+| 3. Choose the rounds | skipped | n/a | no round was chosen; the review went straight to findings |
 
 `Status` is `executed`, `skipped`, `partly done`, or `unclear` when nothing in the conversation can
 be pointed at. `Where` points at something a reader can find: a message, a tool call, an output. An
 `unclear` row carries the reason instead of a pointer, since a status with nothing to point at is a
 guess.
 
+`Method` says how the step was done against what the skill names for it: `as prescribed` when the
+run used the command, script or tool the step names; `improvised`, with what was used instead, when
+it did something else; `n/a` when the step names no means or did not run. A step that ran before a
+step the skill puts ahead of it says so in `Where`: `ran before step 2`.
+
+Below the table, list the extra work: each action that served no step of the skill, with the tool
+calls it took. A command run twice because its first output was not read, or a file opened that no
+step needed, is extra work; a step done by other means is not, since its row already says so.
+
 ## Classify each deviation
 
-Every step not `executed`, and every point where the run did something the skill does not say, is
-one of:
+Every step not `executed`, every step `improvised` or out of order, and every item of extra work is
+one deviation, and each is one of:
 
 - **skill gap**: the skill does not say what to do here, or says it so loosely that the agent had
   to invent. The fix is in `SKILL.md`.
@@ -52,6 +61,27 @@ as a diff:
 ```
 
 Shown, never applied. The evaluated `SKILL.md` is the same after the review as before it.
+
+## Rank each deviation
+
+Each deviation also carries a severity, so the author knows which to fix first:
+
+- **high**: it changed what the run produced, broke a rule the skill states plainly, or cost more
+  than two tool calls that served nothing.
+- **medium**: the result was usable but weaker, or the agent had to guess at a decision that
+  mattered.
+- **low**: a small inefficiency or a cosmetic difference that a reader of the output would not
+  notice.
+
+The deviations are reported as one table, highest severity first:
+
+| # | Step | Deviation | Severity | Class | Fix |
+|---|------|-----------|----------|-------|-----|
+| 1 | 3. Choose the rounds | skipped; findings written with no round chosen | high | skill gap | diff below |
+| 2 | 2. Read the diff | the two test files were not opened | medium | execution error | none in the skill; the run should have read them |
+| 3 | 2. Read the diff | each file read with `cat` rather than `git diff` | low | ambiguous | diff below |
+
+Severity orders the findings of this one run. It is not a score and is never summed into one.
 
 A review is not a score. It describes one run, so it is reported in its own section and is never
 an input to `score.mjs`. A team that wants a recurring correction kept as its own rule, rather than

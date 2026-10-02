@@ -44,9 +44,12 @@ section of its own.
 
 ## The report
 
-Printed in the session. Written to a file only when `--out <path>` was passed, to that path and no
-other, with the same content, asking first when a file is already there. Without `--out`, no report
-is written anywhere. The operating system's temporary directory holds only what a mode needs while
+Printed in the session. Written to a file when `--out <path>` was passed, to that path and no
+other, with the same content, asking first when a file is already there. Without `--out`, one
+question follows the printed report: save it or not. A yes writes it to
+`<temp dir>/skill-eval-<name>-<YYMMDD-HHMM>.md`, `<name>` being the evaluated skill's, or to a path
+the user types instead, with the same check for a file already there. A no, or no answer, writes
+nothing. The operating system's temporary directory holds only what a mode needs while
 it runs: a drafted case set before the yes, SkillEvaluator's output, and the trigger runner's own
 directory, which it removes when it ends.
 
