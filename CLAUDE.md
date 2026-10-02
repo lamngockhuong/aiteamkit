@@ -923,6 +923,12 @@ grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/ README.md docs/
   --exclude=CHANGELOG.md \
   | grep -v -E '^docs/(records|derived)/'
 
+# No reference document template carries a ticket line: a reference document has no ticket field,
+# per Front matter in plugins/atk/shared/artifact-paths.md, and a template that regains one stamps
+# it on every document the next run writes.
+# Should print nothing (grep exits 1)
+grep -n '^ticket:' plugins/atk/skills/spec/references/*-template.md
+
 # Version agreement: per release package, its extra-files and its entry in the release-please
 # manifest name one version. Read from the config itself, so a package added there is checked too
 python3 -c "

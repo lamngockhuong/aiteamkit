@@ -600,7 +600,7 @@ the artifact fills it, with only the checklist items this run verified ticked.
 
 **Use when.** A skill or a person has finished and verified a piece of work and it needs to reach the
 repository. Also when a branch has fallen behind its base, when a conflict is in the way, or when a
-stack of dependent pull requests needs moving.
+stack of dependent pull requests needs moving. With `--draft`, the pull request opens as a draft.
 
 **Do not use when.** The work is not finished. This skill decides nothing about whether it is: that
 belongs to whoever did it. For a single ad-hoc command, the host agent is faster.
@@ -608,7 +608,7 @@ belongs to whoever did it. For a single ad-hoc command, the host agent is faster
 **The habit that matters.** It never stages what it has not read, and a credential in the staged diff
 stops the whole run rather than being reported and committed around. A merge happens only for a pull
 request a person named, on that run, and only after a gate that refuses on a conflict, a failing
-check, or a requested change, saying which of the three refused it. A change touching more than one
+check, a requested change, or a draft, saying which of the four refused it. A change touching more than one
 repository runs the same sequence once per repository, in the order that keeps a submodule pointer
 from naming a commit nobody can fetch, and asks for each push, pull request and merge by the name of
 the repository it belongs to. A branch that has moved apart from its remote is established as such

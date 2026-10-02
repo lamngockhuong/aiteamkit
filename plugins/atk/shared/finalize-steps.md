@@ -107,7 +107,8 @@ named, and never request a review from someone because they touched the file las
 ## 5. Issue comment and tracker
 
 Follow `shared/ticket-adapters.md`. Show the comment text first, post it on a yes, and link it both
-ways: the artifact front matter carries the ticket, the ticket carries the artifact path.
+ways: the artifact front matter carries the ticket, the ticket carries the artifact path. A reference
+document is the exception, linked one way only, per Linking rule in `shared/ticket-adapters.md`.
 
 Move the ticket to the status the team's flow calls "in review" or its local equivalent. Do not move
 it to done. Done is the approver's word, and this skill is the author.
@@ -127,8 +128,9 @@ Three conditions, and none of them is optional:
 
 - **Consent for this merge.** Asked every time, never inherited from a yes given earlier in the run
   or on another pull request. A pull request opened moments ago is not merged in the same breath.
-- **A readiness gate.** Refuse on a conflict, on a check that is failing, and on a review that
-  requested changes. Say which of the three refused it, because "not ready" sends the user to look
+- **A readiness gate.** Refuse on a conflict, on a check that is failing, on a review that
+  requested changes, and on a pull request that is still a draft, which the host will not merge. Say
+  which of the four refused it, because "not ready" sends the user to look
   for the reason the skill already knows.
 - **Never as a side effect.** No merge follows from a push, from a green build, or from the user
   saying yes to something else.

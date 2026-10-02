@@ -605,7 +605,8 @@ vào, chỉ tick những mục checklist mà lượt chạy này thực sự ki�
 
 **Dùng khi.** Một skill hoặc một người đã làm xong và kiểm chứng xong một phần việc, và nó cần đi vào
 repository. Cũng dùng khi một nhánh đã tụt lại sau nhánh gốc, khi có conflict chắn đường, hoặc khi
-một chồng pull request phụ thuộc nhau cần dịch chuyển.
+một chồng pull request phụ thuộc nhau cần dịch chuyển. Với `--draft`, pull request được mở ở dạng
+nháp.
 
 **Không dùng khi.** Việc chưa xong. Skill này không quyết định giúp bạn chuyện đó, việc ấy thuộc về
 người đã làm. Với một lệnh lẻ dùng ngay, gọi thẳng agent của harness nhanh hơn.
@@ -613,8 +614,8 @@ người đã làm. Với một lệnh lẻ dùng ngay, gọi thẳng agent củ
 **Thói quen tạo ra khác biệt.** Nó không bao giờ stage thứ nó chưa đọc, và một thông tin đăng nhập
 nằm trong phần đã stage sẽ chặn cả lượt chạy, chứ không phải được báo rồi commit vòng qua. Một lần
 merge chỉ xảy ra với pull request mà một người đã gọi tên, trong chính lượt chạy đó, và chỉ sau một
-cửa kiểm tra biết từ chối khi có conflict, có kiểm tra đang hỏng, hoặc có người yêu cầu sửa, kèm câu
-nói rõ cái nào trong ba cái đã từ chối. Một thay đổi chạm tới nhiều hơn một repository chạy đúng
+cửa kiểm tra biết từ chối khi có conflict, có kiểm tra đang hỏng, có người yêu cầu sửa, hoặc pull request
+vẫn là bản nháp, kèm câu nói rõ cái nào trong bốn cái đã từ chối. Một thay đổi chạm tới nhiều hơn một repository chạy đúng
 trình tự ấy một lần cho mỗi repository, theo thứ tự giữ cho con trỏ submodule không trỏ vào commit
 không ai fetch được, và hỏi đồng ý cho từng lần push, từng pull request, từng lần merge kèm tên
 repository. Một nhánh đã lệch khỏi bản trên remote được xác định ngay từ đầu, trước khi push được

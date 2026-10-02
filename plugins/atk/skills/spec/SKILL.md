@@ -119,7 +119,9 @@ When the directory already holds documents of this kind, read one and follow it,
 in `shared/spec-docs.md`. Use `references/api-spec-template.md`, `references/db-spec-template.md`, or
 `references/feature-spec-template.md`, or `references/screen-spec-template.md`, only when there is
 nothing to copy from. Say in the run summary
-which of the two happened, so a reviewer knows whether the shape was inherited or invented.
+which of the two happened, so a reviewer knows whether the shape was inherited or invented. The
+front matter is not part of the shape: it carries the approval state, so step 4 writes it even where
+the neighbours have none, and the summary says it was added.
 
 ### 3. Read the source
 
@@ -136,13 +138,18 @@ them and the code is exactly what this document exists to expose. Where they dis
 finding for step 5, not something to smooth over while writing.
 
 `--from` is the one exception, and it has two sources, each cited. What the design decided is taken
-from the design named, citing its section in place of `path:line`. What the design leaves to the
+from the design named, citing its section in place of `path:line`. Where a reader of the pull request cannot reach the
+design's path, by the test in Front matter in `shared/artifact-paths.md`, the committed document cannot
+point there: cite the ticket the design was written for instead.
+What the design leaves to the
 reference document, which under `Contract: first` is the full shape (fields, types, limits, status
 and error codes), is asked of the person running the skill, who is this document's author: list
 every gap in one prompt, and write each answer as the author's proposal, citing the author by name,
 for the approver to accept or change. A gap the author cannot answer becomes an open question for
 the document's approver rather than a plausible value filled in. A ticket or a Figma file is still
-not a source, even here; the design and its author are, because the approver reviews both.
+not a source, even here; the design and its author are, because the approver reviews both. A
+ticket cited in place of an unreachable design stands in for the citation only: what the item says
+still comes from the design.
 
 For `--sync`, read the diff of the change on the current branch rather than the whole module, and
 touch only what the diff touched. A sync that rewrites sections the change never reached is an
@@ -166,14 +173,22 @@ why the two differ.
 ### 4. Write
 
 Front matter per `shared/artifact-paths.md`, with `approver` set per kind from the Roles section
-above. A `screen` document adds the four `design_*` fields from the read. An update that changes what the document promises sets `status` back to `IN REVIEW`; a
+above, and no `ticket`. A `ticket` line an existing document already carries is removed on any
+write, `--sync` included: it is front matter, not a section the sync scope protects, and the summary
+names each document it was removed from. A `screen` document adds the four `design_*` fields from the read. An update that changes what the document promises sets `status` back to `IN REVIEW`; a
 correction of wording does not.
+
+Where the docs root is partitioned by language and the document has copies in other language branches, an
+update that changes what it says carries them in the same run, or names each one left behind and
+asks before the run ends, per A root partitioned by language in `shared/artifact-paths.md`.
 
 On every kind but `screen`, under `Contract: first` the front matter also carries `implemented`,
 set per `shared/spec-docs.md`. `--from` sets `no` on a document it creates. Run again on a document that exists, which is also how a
 design that changed in review is carried over, it rewrites every item that cites a design from the
 design named, adds the items the design adds, marked unless the document is at `no`, marks the items it changes that are cited to the code,
-and leaves the rest as they were. The value is then `no` if no item cites the code, and `partial`
+and leaves the rest as they were. An item citing the ticket in place of an unreachable design counts
+as citing the design, and is matched to it by the item itself, the endpoint, the column or the rule,
+since it carries no section number to match by. The value is then `no` if no item cites the code, and `partial`
 otherwise. `--sync` moves it on as the items land, and sets `yes` in the change that takes the last
 mark off, so the value becomes true when that change merges. A document written from a design still `IN REVIEW` says so
 under its title, and stays `IN REVIEW` itself until that design is `APPROVED`. Under `Contract: code`
@@ -225,22 +240,27 @@ it falls into, per `shared/artifact-paths.md`.
 
 ## Ticket
 
-Follow `shared/ticket-adapters.md`. Link the document from the ticket that changed it, and record the
-ticket in the `ticket:` field. A drift report becomes a comment or an issue only when the user asks,
+Follow `shared/ticket-adapters.md`. Link the document from the ticket that changed it. The document
+carries no `ticket:` field, since many tickets change it over its life, per Front matter in
+`shared/artifact-paths.md`. A drift report becomes a comment or an issue only when the user asks,
 one issue per finding, never one issue listing everything.
 
 ## Definition of done
 
 - [ ] Every statement about behaviour is read from the code and cited, never copied from a ticket or
-      a design document; under `--from`, every statement it wrote cites the design or names its author.
+      a design document; under `--from`, every statement it wrote cites the design, or the ticket where the design
+      cannot be reached, or names its author.
 - [ ] `--from` ran only where the profile says `Contract: first` and the design was `IN REVIEW` or
       `APPROVED`, and `implemented` is `no` exactly when no item cites the code.
-- [ ] Under `Contract: first`, `implemented` matches the items: at `no` every item cites the design or its
-      author and none carries a mark; at `partial` every item without the mark is cited to the code; at `yes` no
+- [ ] Under `Contract: first`, `implemented` matches the items: at `no` every item cites the design, the ticket
+      standing in for an unreachable design, or its author, and none carries a mark; at `partial` every item without the mark is cited to the code; at `yes` no
       mark is left.
 - [ ] The document's shape matches its neighbours when the directory was not empty, and the summary
       says whether the shape was inherited or came from a template.
-- [ ] The file is named after its subject, with no ticket and no date in the name.
+- [ ] The file is named after its subject, with no ticket and no date in the name, and its front
+      matter carries no `ticket`.
+- [ ] No citation points at a path the project ignores, and every copy of the document in another
+      language branch was updated or named to the person running the skill.
 - [ ] `approver` matches the kind: Tech Lead for `api` and `db`, BrSE/BA for `feature` and `screen`.
 - [ ] A `screen` document records `design_source`, `design_node`, `design_read`, and
       `design_fingerprint`, carries
@@ -250,5 +270,6 @@ one issue per finding, never one issue listing everything.
 - [ ] Nothing unverified was deleted; what looked wrong went into the drift report instead.
 - [ ] Every open question carries the name of the person who must answer it.
 - [ ] `--check` changed no file.
-- [ ] `--sync` touched only what the change on the branch touched.
+- [ ] `--sync` touched only what the change on the branch touched, apart from the front matter
+      step 4 always writes, and a `ticket` line it removed is named in the summary.
 - [ ] A finding that the document never settled was reported as an open question, not as drift.

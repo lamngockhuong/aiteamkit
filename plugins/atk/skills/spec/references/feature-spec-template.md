@@ -17,7 +17,6 @@ owner: <person>
 approver: <BrSE/BA>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-ticket: <the ticket that last changed this, or none>
 implemented: no | partial | yes   # only where the profile says Contract: first; delete otherwise
 ---
 
@@ -93,5 +92,6 @@ Each with the name of the person who must answer it.
 - Under `Contract: first` the unit that carries the not-implemented mark is the behaviour rule, per
   `shared/spec-docs.md`, and only at `implemented: partial`. Its subsection under Behaviour opens with one line: `Not implemented yet.`,
   or `Not implemented yet: <what the contract changes>.` for a rule that exists and is changing.
-  Until the mark comes off, the rule cites the design section it came from, or the author who
+  Until the mark comes off, the rule cites the design section it came from, or the ticket where the
+  design cannot be reached, per Front matter in `shared/artifact-paths.md`, or the author who
   proposed a detail the design left open, instead of the code.

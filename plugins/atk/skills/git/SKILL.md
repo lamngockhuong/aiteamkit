@@ -12,7 +12,7 @@ description: >
   "rebase", "resolve the conflict", "stacked PRs", "branch", "tạo commit", "commit giúp", "đẩy code",
   "mở pull request", "merge PR", "gỡ conflict", "rebase nhánh", "chia commit", "コミット",
   "プルリクエスト", "マージ", "リベース", "コンフリクト解消", "/atk:git".
-argument-hint: "[--commit|--pr|--merge <pr>|--rebase|--resolve|--stack] [--lang <code>] [--out <path>]"
+argument-hint: "[--commit|--pr|--merge <pr>|--rebase|--resolve|--stack] [--draft] [--lang <code>] [--out <path>]"
 ---
 
 # Version Control (`atk:git`)
@@ -53,6 +53,7 @@ person who asks for it, and closing the issue stays with whoever reported it. Se
 /atk:git                      # Read the state, then run the closing sequence as far as consent allows
 /atk:git --commit             # Stop after the commit, push nothing
 /atk:git --pr                 # Through to the pull request, then stop
+/atk:git --pr --draft         # The same, with the pull request opened as a draft
 /atk:git --merge <pr>         # Merge one pull request that is ready, asked for by number
 /atk:git --rebase             # Bring this branch onto its base branch
 /atk:git --resolve            # Work through a conflict already in the working tree
@@ -152,7 +153,11 @@ requirement met, the check that ran. Never name the tool that produced the chang
 Never commit onto the default branch, and check the current branch name against the rule just
 resolved before committing onto it either. Both cases are step 2 of `shared/finalize-steps.md`:
 create the conforming branch now and carry the changes across, rather than finding out at the push
-question that four commits sit on a name the project will not take.
+question that four commits sit on a name the project will not take. Create it with `--no-track`,
+whatever it starts from: from a remote ref such as `origin/main` git otherwise records that ref as
+its upstream, and from the local default branch `branch.autoSetupMerge=inherit` copies that
+branch's upstream, so either way a bare `git push` under `push.default=upstream` then lands on the
+default branch. The push in step 4 sets the upstream to the branch's own name.
 
 A write-mode pre-commit hook changes what the commit holds after step 2 read it.
 `references/commit-craft.md` holds which hooks do this and how to find out: the secret scan is re-run
@@ -165,7 +170,9 @@ Both are asked for, every time, and the request shows what will be pushed. Where
 diverged and `references/repair.md` found the remote holding nothing that is not also here, the
 request shows which commits stop existing and the evidence that each has a twin in what replaces
 them, and the push carries the pinned lease that file specifies rather than a plain `--force`. Where
-it found anything else, there is no force to ask for. On a yes, push.
+it found anything else, there is no force to ask for. On a yes, push with `git push -u <remote>
+HEAD`, naming the branch's own remote rather than assuming `origin`, since
+`references/multi-repo.md` may drive several, so the upstream becomes the branch's own name.
 
 Then the pull request, and `gh pr list --state open --head <branch>` says which case this is before
 anything is written. `gh pr view` is the wrong question: it answers with the branch's most relevant
@@ -175,6 +182,12 @@ artifact the calling skill produced as the body, so the reviewer reads the evide
 alone. With one already open, leave the body alone and offer the artifact as a comment instead: the
 body is what the reviewer has already read, and replacing it takes back the version they are holding
 without telling them. Never open a second pull request for a branch that has one.
+
+`--draft` opens the new pull request as a draft, `gh pr create --draft` on GitHub, with or without
+`--pr`. It changes nothing on one already open: say that its state was left as it is. On a host with
+no draft state, say so and ask before opening one ready for review. Given with `--commit`,
+`--merge`, `--rebase` or `--resolve`, none of which opens a pull request, say that `--draft` is
+ignored and why.
 
 Where the project keeps a pull request template, it is the shape of that body and the artifact fills
 it, per `references/pr-body.md`, which also holds where the template is found. Passing the artifact
@@ -188,18 +201,20 @@ the author, request no review and say so in the pull request; that person still 
 themselves, per rule 2 of `shared/team-roles.md`.
 
 Then the ticket, per `shared/ticket-adapters.md`: show the comment, post it on a yes, link both
-ways, and move the ticket to the team's "in review" state. Never to done. With no ticket behind the
-change, report the step as `N/A` rather than skipping it quietly, per step 5 of
-`shared/finalize-steps.md`.
+ways, a reference document excepted per Linking rule there, and move the ticket to the team's
+"in review" state. Never to done. With no ticket behind the change, report the step as `N/A`
+rather than skipping it quietly, per step 5 of `shared/finalize-steps.md`.
 
 ### 5. Merge
 
 Only for a pull request the user has named, on this run, by number. Consent is asked for that merge
 and never inherited from a yes given earlier, including a yes given to the push that created it.
 
-Before merging, run the readiness gate and refuse on any of three: a conflict with the base branch, a
-check that is failing, or a review that requested changes. Name which one refused it. A user who is
-told only "not ready" goes looking for a reason the skill already has.
+Before merging, run the readiness gate and refuse on any of four: a conflict with the base branch, a
+check that is failing, a review that requested changes, or a pull request that is still a draft,
+which the host will not merge, `--auto` included. Name which one refused it. For a draft, offer
+`gh pr ready` on a separate yes, since marking it ready asks for the review its author held back. A
+user who is told only "not ready" goes looking for a reason the skill already has.
 
 Checks still running are not checks passed. Where the host can merge once they pass, say that is
 what is being set up and do not call it merged until it is.
@@ -239,7 +254,7 @@ ticket, per `shared/finalize-steps.md`.
       as its reviewer last read it.
 - [ ] A step with nothing to run, the ticket step above all, was reported as `N/A` rather than
       passed over in silence.
-- [ ] The readiness gate ran before any merge, and a refusal said which of the three caused it.
+- [ ] The readiness gate ran before any merge, and a refusal said which of the four caused it.
 - [ ] No pull request opened in this run was merged in the same run without a separate yes.
 - [ ] How far the branch and its remote had moved apart was read in step 1, after noting what the
       remote held before the fetch, and a diverged branch was separated into the kind that may be

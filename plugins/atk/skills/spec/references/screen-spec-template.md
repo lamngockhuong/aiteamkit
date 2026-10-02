@@ -19,7 +19,6 @@ owner: <person>
 approver: <BrSE/BA>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-ticket: <the ticket that last changed this, or none>
 implemented: no | partial | yes
 design_source: <https://www.figma.com/design/<key>/<name>, the image directory, or retired (was <link>)>
 design_node: [<screen frame node ID>, <each state frame node ID>]   # or the image file names
