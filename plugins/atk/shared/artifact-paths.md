@@ -101,6 +101,13 @@ in order to fill the gap.
 An explicit `--lang` overrides the working language for this run and does not have to agree with
 it. What neither of them may do is move a language onto another language's path.
 
+A Reference artifact updated in place leaves its mirrors behind unless the run carries them. Where
+the same filename exists in another branch, the run that changes what one copy says brings every
+existing copy level in the same run, or, before it ends, names each copy it left behind and asks
+whether to update it. A mirror that already exists is not a language nobody asked for: somebody
+asked for it when it was written, and a copy that now says something else is the stale line this
+group exists to prevent.
+
 A project that wrote its artifact before any of this already has a file at the unpartitioned path,
 and the run that now lands in a branch leaves it behind. Say so rather than walking past it: name
 the older file, say that the tree expects the document at the branch path from now on, and let the
@@ -357,11 +364,24 @@ When the contract comes before the code in `shared/spec-docs.md`. A `screen` doc
 `implemented` under either `Contract` line, per The `screen` kind in that file, and the four
 `design_*` fields of What a read records in `shared/design-sources.md`.
 
+One kind drops a field. A reference document written by `atk:spec`, whatever its kind, carries no
+`ticket`. It is updated in place by every change to its subject over the life of the project, so one
+ticket in its front matter reads as though the whole document belonged to that ticket, and a list of
+them is a history the document does not keep. The ticket links to the document instead, and
+`git log` says which change touched which line.
+
 A finding or a defect with no issue of its own is referenced by the record that holds it and its ID,
 `<record path>#<ID>`: `#D2` of an `atk:qa` run record, `#SF1` of an `atk:security` record. Several
 references are separated by commas. A record that is not committed has no path a reader can follow,
 so `ticket` is `none` and the body names the ID and the record's date instead: a path to an
 uncommitted file breaks for everyone but its author.
+
+The same holds for a path cited anywhere in the body of a committed artifact. Before citing a file,
+run `git check-ignore -v` on its path; where the project ignores it, cite what the reader can reach
+instead, usually the ticket the file was written for, and drop the section numbers and question IDs
+that only that file resolves. Ask the person running the skill which source stands in when none is
+obvious. A design document and an ADR are the cases that matter, since a project may keep both out
+of its repository while its reference documents are committed.
 
 ## Before writing
 

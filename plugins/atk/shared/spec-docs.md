@@ -40,7 +40,7 @@ somebody has not answered a question yet. Changing the line is the Tech Lead's c
 |---|---|---|
 | Exists before the code | no | yes, written from a design once it is in review |
 | Answers | what does it do today | what the code is held to |
-| Cites | the code, as `path:line` | the design section a decision came from, or the author who proposed a detail the design left open, until the code exists, then the code |
+| Cites | the code, as `path:line` | the design section a decision came from, or the ticket where the design is not committed, or the author who proposed a detail the design left open, until the code exists, then the code |
 | When the two disagree | the document is stale | the code differs from an agreed contract |
 | Written by | `atk:spec` | `atk:spec`, from the design first, then from the code as it lands |
 
@@ -184,7 +184,8 @@ disagree nobody knows which one was meant.
 ## The project's own shape wins
 
 When the directory already holds documents of this kind, the shape comes from them: heading order,
-depth of detail, table columns, language. A template in the kit is the fallback for an empty
+depth of detail, table columns, language. Not the front matter, which carries the approval state and
+is written whatever the neighbours carry. A template in the kit is the fallback for an empty
 directory, never a correction applied to a team that already agreed on something.
 
 This holds even when the existing shape is worse than the template. A directory of 29 documents in

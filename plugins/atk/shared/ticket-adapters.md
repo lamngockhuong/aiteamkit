@@ -197,3 +197,6 @@ Both directions, every time:
 - The ticket body carries a link to the artifact path in the repository.
 
 An artifact with no ticket sets `ticket: none`. Do not invent an ID.
+
+A reference document written by `atk:spec` is linked one way only: the ticket links to it, and the
+document carries no `ticket` field, per Front matter in `shared/artifact-paths.md`.

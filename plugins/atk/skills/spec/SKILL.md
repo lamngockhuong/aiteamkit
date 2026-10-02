@@ -119,7 +119,9 @@ When the directory already holds documents of this kind, read one and follow it,
 in `shared/spec-docs.md`. Use `references/api-spec-template.md`, `references/db-spec-template.md`, or
 `references/feature-spec-template.md`, or `references/screen-spec-template.md`, only when there is
 nothing to copy from. Say in the run summary
-which of the two happened, so a reviewer knows whether the shape was inherited or invented.
+which of the two happened, so a reviewer knows whether the shape was inherited or invented. The
+front matter is not part of the shape: it carries the approval state, so step 4 writes it even where
+the neighbours have none, and the summary says it was added.
 
 ### 3. Read the source
 
@@ -136,7 +138,10 @@ them and the code is exactly what this document exists to expose. Where they dis
 finding for step 5, not something to smooth over while writing.
 
 `--from` is the one exception, and it has two sources, each cited. What the design decided is taken
-from the design named, citing its section in place of `path:line`. What the design leaves to the
+from the design named, citing its section in place of `path:line`. Where the project ignores the
+design's path, which `git check-ignore -v` on it answers, the committed document cannot point there:
+cite the ticket the design was written for, per Front matter in `shared/artifact-paths.md`.
+What the design leaves to the
 reference document, which under `Contract: first` is the full shape (fields, types, limits, status
 and error codes), is asked of the person running the skill, who is this document's author: list
 every gap in one prompt, and write each answer as the author's proposal, citing the author by name,
@@ -166,8 +171,12 @@ why the two differ.
 ### 4. Write
 
 Front matter per `shared/artifact-paths.md`, with `approver` set per kind from the Roles section
-above. A `screen` document adds the four `design_*` fields from the read. An update that changes what the document promises sets `status` back to `IN REVIEW`; a
+above, and no `ticket`. A `screen` document adds the four `design_*` fields from the read. An update that changes what the document promises sets `status` back to `IN REVIEW`; a
 correction of wording does not.
+
+Where the docs root is partitioned by language and the document has copies in other branches, an
+update that changes what it says carries them in the same run, or names each one left behind and
+asks before the run ends, per A root partitioned by language in `shared/artifact-paths.md`.
 
 On every kind but `screen`, under `Contract: first` the front matter also carries `implemented`,
 set per `shared/spec-docs.md`. `--from` sets `no` on a document it creates. Run again on a document that exists, which is also how a
@@ -225,8 +234,9 @@ it falls into, per `shared/artifact-paths.md`.
 
 ## Ticket
 
-Follow `shared/ticket-adapters.md`. Link the document from the ticket that changed it, and record the
-ticket in the `ticket:` field. A drift report becomes a comment or an issue only when the user asks,
+Follow `shared/ticket-adapters.md`. Link the document from the ticket that changed it. The document
+carries no `ticket:` field, since many tickets change it over its life, per Front matter in
+`shared/artifact-paths.md`. A drift report becomes a comment or an issue only when the user asks,
 one issue per finding, never one issue listing everything.
 
 ## Definition of done
@@ -240,7 +250,10 @@ one issue per finding, never one issue listing everything.
       mark is left.
 - [ ] The document's shape matches its neighbours when the directory was not empty, and the summary
       says whether the shape was inherited or came from a template.
-- [ ] The file is named after its subject, with no ticket and no date in the name.
+- [ ] The file is named after its subject, with no ticket and no date in the name, and its front
+      matter carries no `ticket`.
+- [ ] No citation points at a path the project ignores, and every copy of the document in another
+      language branch was updated or named to the person running the skill.
 - [ ] `approver` matches the kind: Tech Lead for `api` and `db`, BrSE/BA for `feature` and `screen`.
 - [ ] A `screen` document records `design_source`, `design_node`, `design_read`, and
       `design_fingerprint`, carries

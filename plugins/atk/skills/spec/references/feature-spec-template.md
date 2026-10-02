@@ -17,7 +17,6 @@ owner: <person>
 approver: <BrSE/BA>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
-ticket: <the ticket that last changed this, or none>
 implemented: no | partial | yes   # only where the profile says Contract: first; delete otherwise
 ---
 
