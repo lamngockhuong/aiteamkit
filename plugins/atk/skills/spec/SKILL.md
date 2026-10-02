@@ -1,14 +1,12 @@
 ---
 name: spec
 description: >
-  Write and keep current the reference documents a team reads long after the work that produced them
-  merged: the API contract per resource, the schema per table, the behaviour of a feature, and the
-  components of a screen as its Figma design draws them. Also compares what those documents claim
-  against what the code does, and for a screen against its design as well, and reports drift.
-  In a project that works contract-first, writes them from the design before the code exists, so
-  frontend, backend and QA can work against one agreed contract.
-  Use when a project has no written contract, when a merged change left one behind, when nobody
-  trusts the documents any more, or when the contract has to exist before anyone writes the code.
+  Write and keep current the reference documents a team reads long after the work merged: the API
+  contract per resource, the schema per table, the behaviour of a feature, and a screen's components
+  as its Figma design draws them. Also reports where they drift from the code, and a screen from its
+  design. In a contract-first project, writes them from the design before the code exists. Use when
+  a project has no written contract, when a merged change left one behind, or when the contract has
+  to exist before the code.
   Triggers on: "spec", "api spec", "database spec", "feature spec", "đặc tả", "tài liệu API",
   "tài liệu database", "spec bị lệch", "cập nhật tài liệu", "仕様書", "API仕様", "spec drift",
   "document this endpoint", "is the doc still true", "api docs before the code", "contract first",
