@@ -1,16 +1,17 @@
 // atkx:skill-eval trigger runner: measures, on Claude Code, which skill each trigger case reaches.
 //
 // Each observable case runs in a child `claude -p` session, several times, in a temporary copy of
-// the repository that holds the skill, under a temporary CLAUDE_CONFIG_DIR that holds only
-// credentials, with hook-log.mjs registered on PreToolUse for the Skill tool. The hook records the
+// the repository that holds the skill, under an empty temporary CLAUDE_CONFIG_DIR, with the login
+// in its environment rather than on disk, and hook-log.mjs registered on PreToolUse for the Skill tool. The hook records the
 // selected skill and denies the call, so the skill never runs; the runner stops the session as soon
 // as that first call is logged, since nothing after it is counted. references/trigger-mode.md is
 // the method this implements, and the reasons for each part of it.
 //
 // A plugin skill loads with its plugin, hooks included, because that is what an install runs. So
-// the runner refuses a skill whose static check reports a credential or a gate failure, leaves the
-// repository's own .claude settings out of the seed, and the agent says before asking for the yes
-// that the plugin's hooks will run.
+// the runner refuses a skill whose static check, or the static check of the hooks of its plugin and
+// of the plugins it depends on, reports a credential or a gate failure; it leaves the repository's
+// own .claude settings out of the seed, gives each session only the environment variables a session
+// needs, and lists the hook commands that will run, which the agent shows before asking for the yes.
 //
 // It starts sessions only under --yes, which the agent passes after the user has seen the count
 // from --dry-run and said yes; --dry-run copies nothing and starts nothing. Case text reaches a
@@ -32,7 +33,7 @@ import {
 import { homedir, tmpdir } from 'node:os';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describeSkill, evaluate, findRoot } from './static-check.mjs';
+import { describeSkill, evaluate, evaluateHooks, findRoot } from './static-check.mjs';
 
 const PREFIX = 'skill-eval-run-';
 const RUN_DIR_NAME = /^skill-eval-run-[A-Za-z0-9]{6}$/;
@@ -197,7 +198,10 @@ function seedCopy(repo, dest, list) {
       const r = relative(realRepo, target);
       if (r.split(sep)[0] === '..' || isAbsolute(r)) continue;
       mkdirSync(dirname(to), { recursive: true });
-      symlinkSync(readlinkSync(from), to);
+      // An absolute link would still name the original, so a write through it in the seed would land
+      // there; it becomes the relative link to the seed's copy of its target.
+      const raw = readlinkSync(from);
+      symlinkSync(isAbsolute(raw) ? relative(dirname(to), join(dest, r)) || '.' : raw, to);
       links++;
       continue;
     }
@@ -210,23 +214,38 @@ function seedCopy(repo, dest, list) {
   return { files, links };
 }
 
-// A copied login is only safe while its access token outlives the run. A child holding an expired
-// one tries to refresh it, which either fails, so every session reads as an error, or spends a
-// refresh token the user's own session still needs. So a token that would expire before the run's
-// worst-case end is not copied at all, and under --dry-run nothing is copied, only checked.
-function credentials(config, worstCaseSeconds) {
-  if (process.env.CLAUDE_CODE_OAUTH_TOKEN || process.env.ANTHROPIC_API_KEY) return { how: 'environment' };
+// The saved login reaches each session as CLAUDE_CODE_OAUTH_TOKEN, its access token alone, and never
+// as a file: a copy on disk outlives a runner killed outright, refresh token included. A token that
+// would expire before the run's worst-case end is not used, since a session cannot refresh it.
+function credentials(worstCaseSeconds) {
+  if (process.env.CLAUDE_CODE_OAUTH_TOKEN || process.env.ANTHROPIC_API_KEY) return { how: 'environment', env: {} };
   const home = process.env.CLAUDE_CONFIG_DIR || join(homedir(), '.claude');
   const file = join(home, '.credentials.json');
   if (!existsSync(file)) return null;
-  let expiresAt = null;
-  try { expiresAt = JSON.parse(readFileSync(file, 'utf8'))?.claudeAiOauth?.expiresAt ?? null; } catch { /* unreadable: copied as it is */ }
-  const minutesLeft = typeof expiresAt === 'number' ? Math.floor((expiresAt - Date.now()) / 60000) : null;
+  let oauth = null;
+  try { oauth = JSON.parse(readFileSync(file, 'utf8'))?.claudeAiOauth ?? null; } catch { oauth = null; }
+  if (typeof oauth?.accessToken !== 'string' || !oauth.accessToken) return null;
+  const minutesLeft = typeof oauth.expiresAt === 'number' ? Math.floor((oauth.expiresAt - Date.now()) / 60000) : null;
   if (minutesLeft !== null && minutesLeft * 60 < worstCaseSeconds + 300) return { how: 'expiring', minutesLeft };
-  if (!config) return { how: 'file, to be copied', minutesLeft };
-  copyFileSync(file, join(config, '.credentials.json'));
-  chmodSync(join(config, '.credentials.json'), 0o600);
-  return { how: 'copied file', minutesLeft };
+  return { how: 'saved login, as an environment token', minutesLeft, env: { CLAUDE_CODE_OAUTH_TOKEN: oauth.accessToken } };
+}
+
+// What a session needs from the runner's environment: finding programs and its home, the locale and
+// the temporary directory, a proxy and its certificates, the login, and the settings Claude Code reads
+// from its own variables. Everything else, a cloud key or a token for another service, stays behind,
+// since the hooks of the evaluated plugin run in the session.
+const ENV_KEEP = /^(?:PATH|PATHEXT|HOME|USER|LOGNAME|USERNAME|USERPROFILE|HOMEDRIVE|HOMEPATH|SHELL|COMSPEC|SYSTEMROOT|SYSTEMDRIVE|WINDIR|APPDATA|LOCALAPPDATA|PROGRAMDATA|PROGRAMFILES|TMPDIR|TEMP|TMP|LANG|LANGUAGE|LC_[A-Z]+|TERM|TZ|XDG_[A-Z_]+|HTTPS?_PROXY|NO_PROXY|ALL_PROXY|NODE_EXTRA_CA_CERTS|SSL_CERT_FILE|SSL_CERT_DIR|ANTHROPIC_[A-Z0-9_]+|CLAUDE_CODE_[A-Z0-9_]+)$/i;
+function childEnv(extra) {
+  const env = {};
+  for (const [k, v] of Object.entries(process.env)) if (ENV_KEEP.test(k)) env[k] = v;
+  return { ...env, ...extra };
+}
+
+// The plugin directories a session loads, the skill's own and every dependency found beside it.
+function pluginDirs(skill) {
+  if (!skill.pluginRoot) return [];
+  return [skill.pluginRoot, ...skill.dependencies.map((dep) => join(dirname(skill.pluginRoot), dep))
+    .filter((d) => existsSync(join(d, '.claude-plugin', 'plugin.json')))];
 }
 
 // A plugin skill loads through --plugin-dir, from the seed copy when the plugin is there, with
@@ -356,6 +375,17 @@ async function main() {
   if (verdict.credentials || verdict.gate) {
     fail('gate-failed', `the static check found ${verdict.credentials} credential and ${verdict.gate} security gate findings; fix them before measuring triggers`);
   }
+  // The hooks of every plugin a session loads run in it, so they pass the same gate.
+  let declared = '';
+  try { declared = readFileSync(join(dir, 'SKILL.md'), 'utf8'); } catch { declared = ''; }
+  const hookReports = pluginDirs(skill).map((d) => evaluateHooks(d, declared));
+  const hookFails = hookReports.filter((h) => h.summary.credentials || h.summary.gate);
+  if (hookFails.length) {
+    fail('gate-failed', `the hooks of ${hookFails.map((h) => h.plugin).join(', ')} failed the static check; a session would run them, so triggers are not measured`, {
+      hookFindings: hookFails.flatMap((h) => h.checks.filter((c) => c.status === 'fail').map((c) => ({ plugin: h.plugin, ...c }))),
+    });
+  }
+  const hookCommands = hookReports.flatMap((h) => h.commands.map((c) => ({ plugin: h.plugin, ...c })));
 
   const cases = readCases(join(dir, 'evals', 'trigger_evals.json'));
   const isSlash = (c) => c.query.trimStart().startsWith('/');
@@ -380,12 +410,12 @@ async function main() {
   const base = {
     fullName: skill.fullName, model: opts.model, runs: opts.runs, date: new Date().toISOString().slice(0, 10),
     cases: cases.length, observable: observable.length, skipped, sessions, worstCaseSeconds, worstCaseUsd,
-    timeoutSeconds: opts.timeout, parallel: opts.parallel, removedStale: removed,
+    timeoutSeconds: opts.timeout, parallel: opts.parallel, removedStale: removed, hookCommands,
   };
   const list = seedFiles(repo);
 
   if (opts.dryRun) {
-    const auth = credentials(null, worstCaseSeconds);
+    const auth = credentials(worstCaseSeconds);
     const load = loading(skill, repo, null, null);
     print({
       status: 'dry-run', ...base, how: load.how, missingDependencies: load.missing, seedFiles: list.length,
@@ -397,8 +427,8 @@ async function main() {
   makeRunDir();
   const config = join(runDir, 'config');
   const seed = join(runDir, 'seed');
-  const auth = credentials(config, worstCaseSeconds);
-  if (!auth) fail('no-credentials', 'no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY in the environment and no .credentials.json to copy; on macOS the login sits in the keychain, so set CLAUDE_CODE_OAUTH_TOKEN', base);
+  const auth = credentials(worstCaseSeconds);
+  if (!auth) fail('no-credentials', 'no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY in the environment and no access token in .credentials.json; on macOS the login sits in the keychain, so set CLAUDE_CODE_OAUTH_TOKEN', base);
   if (auth.how === 'expiring') {
     fail('no-credentials', `the saved login expires in ${auth.minutesLeft} minutes, before this run could end (up to ${Math.ceil(worstCaseSeconds / 60)}); run any claude command to refresh it, or set CLAUDE_CODE_OAUTH_TOKEN, then start again`, base);
   }
@@ -418,7 +448,7 @@ async function main() {
   let n = 0;
   const results = await pool(jobs, opts.parallel, async ({ c, ci, r }) => {
     const log = join(runDir, 'logs', `${ci}-${r}.jsonl`);
-    const env = { ...process.env, CLAUDE_CONFIG_DIR: config, SKILL_EVAL_LOG: log };
+    const env = childEnv({ ...auth.env, CLAUDE_CONFIG_DIR: config, SKILL_EVAL_LOG: log });
     const res = await session({ query: c.query, log, args, cwd: seed, env, timeout: opts.timeout });
     const what = res.error ? `error: ${res.error}` : (res.selected || 'none') + (res.timedOut ? ' (timed out)' : '');
     process.stderr.write(`[${++n}/${jobs.length}] ${what}: ${c.query.slice(0, 60)}\n`);
