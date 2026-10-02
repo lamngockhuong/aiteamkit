@@ -57,7 +57,8 @@ every artifact still waiting on a named approver.
 
 **Use when.** You do not know which skill fits, you want to know what the project is waiting on and
 what comes next, or you want to know what one skill is for before running it. `/atk:help <skill>` explains
-one skill; a question routes that situation to one skill.
+one skill; a question routes that situation to one skill. A question no `atk` skill covers but an
+`atkx` skill does gets that skill, with the line that installs it when it is not installed yet.
 
 **Do not use when.** You already know the work. "Help me fix this bug" is `atk:fix`, and a new
 member getting started on the project is `atk:onboard`, which writes the document they follow.

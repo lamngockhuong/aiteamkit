@@ -243,6 +243,10 @@ dead end would be invisible until they followed the pointer.
 Say "which the author does" or "outside this kit", or name an `atk:` skill. Never `ak:cook` or any
 other kit's command.
 
+One exception, and only one: `atk:help` may name a skill of `atkx`, the companion kit from this
+marketplace, always with the line that installs it, so the pointer is never a dead end. See
+"`atkx` sits beside `atk`, and the dependency runs one way" and `CONV-011`.
+
 A capability the host agent itself ships is different, and is allowed: it arrived with the harness,
 so every team on that harness has it. `atk:implement`, `atk:fix` and `atk:verify` use the host's
 code clean-up capability, `/simplify` in Claude Code, and `atk:review` and
@@ -280,17 +284,23 @@ records why it is a sibling plugin rather than a folder inside `atk`, and
 `docs/records/design/260930-0933-atkx-utility-kit-placement.md` holds the design this section
 writes down.
 
-An `atkx` skill may call an `atk` skill. `atk` never invokes, names, or points at `atkx`, whether
-as a command or in prose: the kit stands alone, and a team that installed only `atk` must never meet
-a pointer it cannot follow. A sentence telling an `atk` user to install `atkx` for something is the
-same dead end as an `atkx:` command, which is why the check matches the word and not only the
-command. That is `CONV-011`:
+An `atkx` skill may call an `atk` skill. `atk` never invokes `atkx`, and names it in one place
+only: `atk:help`, the skill a person asks which skill to run. The maintainer chose this on
+2026-10-02, accepting that a team with only `atk` installed will then see a suggestion to install
+`atkx`; `docs/records/design/261002-0525-help-names-atkx.md` holds the reasons.
+
+The exception is narrow on purpose. `atk:help` names an `atkx` skill only where no `atk` skill
+handles the request by its `## Scope`, never in its state mode, and adds the install commands when the skill is not in the host's
+live skill list. It reads them from a copy, `plugins/atk/skills/help/references/atkx-skills.md`,
+per `CONV-012`, and `plugins/atk/shared/host-capabilities.md` carries the matching row without the
+word. Every other skill, every shared file, and every hook still names nothing
+of `atkx`: a skill that stops hands back to `atk:help` or to a person. That is `CONV-011`:
 
 ```bash
-grep -rn "\batkx\b" plugins/atk/ --exclude=CHANGELOG.md
+grep -rn "\batkx\b" plugins/atk/ --exclude=CHANGELOG.md | grep -v '^plugins/atk/skills/help/'
 ```
 
-Should print nothing (`grep` exits 1).
+Should print nothing (the second `grep` exits 1).
 
 A skill qualifies for `atkx` when it passes all three of these, and a skill that fails one belongs
 in `atk` or nowhere:
@@ -432,7 +442,7 @@ the `/` menu shows, so a trigger phrase belongs there and nowhere else.
 
 When adding, renaming, or removing an **`atkx` skill**, the list is shorter, because an `atkx` skill
 writes no team artifact and sits in no delivery phase. Eight of the twelve groups apply, read for
-`atkx`:
+`atkx`, plus one of its own:
 
 1. `plugins/atkx/skills/<name>/SKILL.md`
 2. `README.md`, the `atkx` section rather than the `atk` skills table and invocation block
@@ -445,12 +455,16 @@ writes no team artifact and sits in no delivery phase. Eight of the twelve group
    layout or the `atkx` plugin is for
 8. The `skill: <name>` label on the GitHub repository and its entry in `.github/labeler.yml`, with the
    glob `plugins/atkx/skills/<name>/**`
+9. The Skills table in `plugins/atk/skills/help/references/atkx-skills.md`, which is how `atk:help`
+   knows the skill exists; the check under "Common verification commands" fails on a folder missing
+   from it or a row for a skill that is gone
 
 The other groups do not apply. The count of 24 is `atk`'s, and `package.json` carries it.
 `plugins/atk/shared/artifact-paths.md` and `docs/artifact-lifecycle.md` list team artifacts, which an
 `atkx` skill does not write. `plugins/atk/skills/init/references/role-defaults.md`, the tables in
 `docs/flow/`, and `plugins/atk/skills/help/references/state-signals.md` place skills in delivery
-phases. And no file under `plugins/atk/` may name `atkx` at all, per `CONV-011`.
+phases. And no file under `plugins/atk/` other than those of `atk:help` may name `atkx`, per
+`CONV-011`.
 
 `atkx` adds three things of its own: the harness-support line its acceptance bar asks for, in
 "`atkx` sits beside `atk`"; the run-time check for any `atk:<skill>` the skill calls; and a name no
@@ -636,9 +650,9 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
-| `CONV-011` | `atk` never invokes, names, or points at `atkx`, in a command or in prose, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
+| `CONV-011` | `atk` never invokes `atkx`, and only `atk:help` names it, where no `atk` skill handles the request and with the install commands when it is not installed; no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
 | `CONV-012` | A plugin reads nothing outside its own directory: every `shared/` or `references/` file a plugin file cites exists inside that plugin, and no plugin file names one of this repository's documents except as a GitHub link | `REVIEWED` | the citation check below | `BLOCKING` | "Multi-manifest layout (non-obvious)" |
-| `CONV-013` | Adding, renaming, or removing an `atkx` skill touches every group of the `atkx` list | `REVIEWED` | none for seven groups; the labeler check below for the label group | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-013` | Adding, renaming, or removing an `atkx` skill touches every group of the `atkx` list | `REVIEWED` | none for seven groups; the labeler check below for the label group; the `atkx-skills.md` check below for group 9 | `BLOCKING` | "Adding or changing a skill touches several files" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
@@ -857,6 +871,17 @@ for s in folders:
     g = 'plugins/%s/skills/%s/**' % (homes[s][0], s)
     assert g in globs, 'skill: %s has no glob %s' % (s, g)
 print('OK labeler, %d globs, %d skills' % (len(globs), len(folders)))"
+
+# atk:help's list of atkx skills names every atkx skill folder and nothing else. atk:help is the one skill
+# under plugins/atk/ that may name atkx, and a row for a skill that is gone sends the asker to a
+# command that does not exist
+python3 -c "
+import glob, os, re
+rows = set(re.findall(r'^\| \x60atkx:([\w-]+)\x60 \|', open('plugins/atk/skills/help/references/atkx-skills.md').read(), re.M))
+folders = {os.path.basename(d.rstrip('/')) for d in glob.glob('plugins/atkx/skills/*/')}
+assert rows == folders, 'atkx-skills.md and plugins/atkx/skills/ differ: %s' % sorted(rows ^ folders)
+assert 'references/atkx-skills.md' in open('plugins/atk/skills/help/SKILL.md').read(), 'help no longer reads atkx-skills.md'
+print('OK atk:help knows %d atkx skills' % len(rows))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow

@@ -12,6 +12,8 @@
   { "query": "is anything in this project waiting on someone's approval before I can move on", "should_trigger": true },
   { "query": "client just sent a feature request, which atk command do I start with", "should_trigger": true },
   { "query": "back after two weeks, which atk skill do I run now", "should_trigger": true },
+  { "query": "/atk:help atkx:skill-eval", "should_trigger": true },
+  { "query": "which atk skill do I use to check a skill I wrote before sharing it?", "should_trigger": true },
 
   { "query": "help me fix this failing test", "should_trigger": false },
   { "query": "onboard a new developer joining next week", "should_trigger": false },

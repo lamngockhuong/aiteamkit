@@ -113,6 +113,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 
 | File | Mục đích |
 |------|----------|
+| `plugins/atk/skills/help/references/atkx-skills.md` | File duy nhất dưới `plugins/atk/` liệt kê skill của `atkx`: mỗi skill dùng khi nào, gọi thế nào, chạy trên harness nào, lệnh cài cho từng harness, giữa một skill `atk` và một skill `atkx` thì skill nào được chọn, và `Needs first` cùng `Approved by` ghi gì cho skill `atkx` |
 | `plugins/atk/skills/help/references/state-signals.md` | Những artifact nào chặn skill tiếp theo khi còn chờ duyệt, những bằng chứng trên đĩa gọi tên skill đó, theo thứ tự cần kiểm, và cách gom các artifact đang chờ một người |
 | `plugins/atk/skills/init/references/detection.md` | Cách xác định gốc dự án và hình dạng repository trước mọi thứ khác, tìm từng trường của profile ở đâu, và làm gì khi repo cho nhiều đáp án hoặc không cho đáp án nào |
 | `plugins/atk/skills/init/references/profile-template.md` | Bố cục của `.atk/profile.md` mà `init` điền vào, bảng Repositories của một dự án nhiều repository, và luật mọi đường dẫn đều viết từ gốc dự án |
@@ -252,7 +253,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/flow/project-flow.md` | 24 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, vòng quay lại khi artifact bị trả về, và lối dẫn tới bảng vai trò mà `init` giờ mang theo |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
-| `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | Bản ghi quyết định kiến trúc đầu tiên: `atk` chuyển vào `plugins/atk/`, còn `atkx`, bộ kit skill tiện ích được gọi `atk` nhưng không bao giờ bị `atk` gọi, được tạo ở `plugins/atkx/`, hai plugin không dùng chung file nào, và `atk` thêm `CONV-011` để giữ phụ thuộc chỉ theo một chiều |
+| `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | Bản ghi quyết định kiến trúc đầu tiên: `atk` chuyển vào `plugins/atk/`, còn `atkx`, bộ kit skill tiện ích được gọi `atk` nhưng không bao giờ bị `atk` gọi, được tạo ở `plugins/atkx/`, hai plugin không dùng chung file nào, và `atk` thêm `CONV-011` để giữ phụ thuộc chỉ theo một chiều, được sửa ngày 2026-10-02 để riêng `atk:help` được nhắc tới `atkx` |
 | `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` | Bản ghi thứ hai: `atkx:skill-eval` để những phép kiểm tra cần lặp lại y hệt trong script Node, còn phần cần phán đoán để agent làm |
 | `docs/vi/**/*.md` | Bản tiếng Việt của mười hai file trên, đặt ở cùng đường dẫn tương đối |
 

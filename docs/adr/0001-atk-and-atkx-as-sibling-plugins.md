@@ -4,7 +4,7 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-30
-updated: 2026-10-01
+updated: 2026-10-02
 ticket: none
 ---
 
@@ -55,6 +55,11 @@ was released before the move, so the first tags after it are `atk-v0.1.1` and `a
 `atk-v0.1.0` was tagged on the `v0.1.0` commit as the boundary. An update from an install made at
 `v0.1.0` followed the new `source` on Claude Code once the version moved past `0.1.0`, so nobody has to reinstall there. The decision
 itself is unchanged.
+
+Amended 2026-10-02: `CONV-011` now has one exception. `atk:help` names an `atkx` skill where no
+`atk` skill fits, with the install commands when it is not installed, from a list kept inside the
+`help` skill. Every other part of `atk` still names nothing of `atkx`, and `atk` still invokes none
+of it. `docs/records/design/261002-0525-help-names-atkx.md` holds the decision.
 
 ## Alternatives rejected
 

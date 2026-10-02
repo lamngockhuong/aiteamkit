@@ -23,12 +23,17 @@ harness, because it arrived with the harness rather than with a kit.
 | A capability the host ships, written as a capability first and a local name second | yes |
 | An `atk:` skill | yes |
 | A connection to an outside service, such as a design tool's MCP server or connector, named after the service, with the fallback for a harness that has none | yes |
+| A skill of the companion plugin from the kit's own marketplace, named by `atk:help` alone, with the line that installs it | yes |
 | A command belonging to another kit or marketplace plugin | no |
 
 The connection row is how `shared/design-sources.md` can say "the Figma connection": the service is
 what the team already works in, and the skill reads it as a source. The row names the service, never
 a skill or command that the plugin carrying the connection also ships, and every use of it says what
 happens without it.
+
+The companion row is one skill's exception, recorded in the kit repository's review checklist:
+`atk:help` answers which skill to run, and the same marketplace ships skills `atk` does not. Every
+other skill, and every other file in `shared/`, still names none of them.
 
 The last row is the rule the kit repository's `CLAUDE.md` states as "the kit stands alone", and it has not moved. A team
 that installed only atk still has its harness; it does not have somebody else's kit. A pointer at a

@@ -57,7 +57,8 @@ artifact còn đang chờ một người duyệt có tên.
 
 **Dùng khi.** Bạn không biết skill nào phù hợp, bạn muốn biết dự án đang chờ ai và việc gì đến tiếp
 theo, hoặc bạn muốn biết một skill dùng để làm gì trước khi chạy nó. `/atk:help <skill>` giải thích một
-skill; một câu hỏi thì đưa tình huống đó về một skill.
+skill; một câu hỏi thì đưa tình huống đó về một skill. Câu hỏi nào không skill `atk` nào lo được
+nhưng có skill `atkx` lo được thì câu trả lời nêu skill đó, kèm lệnh cài nếu bạn chưa cài.
 
 **Không dùng khi.** Bạn đã biết việc cần làm. "Giúp tôi sửa bug này" là `atk:fix`, còn một thành
 viên mới bắt đầu vào dự án là `atk:onboard`, skill viết ra tài liệu họ sẽ làm theo.
