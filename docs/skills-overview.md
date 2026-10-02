@@ -731,8 +731,9 @@ which is `atk:review`.
 
 **The habit that matters.** It reads and never runs. A script inside the evaluated skill is read as
 text, a link leaving the skill is reported without opening its target, and nothing in the skill
-changes. Its own sample skills, a good one, a weak one and a malicious one, are scanned like any
-other file, so `atkx:skill-eval` run on itself grades itself F and names each fixture line.
+changes. The security gate is a list of patterns, so a clean gate means none of the listed forms was
+found, not that the skill is safe; a skill from a source you do not trust is still read before it is
+installed.
 
 ---
 

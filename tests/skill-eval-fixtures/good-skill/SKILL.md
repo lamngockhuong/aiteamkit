@@ -17,4 +17,4 @@ A fixture. Its expected verdict is in `expected.json`, one directory up, read by
 2. Read `assets/style.md` for the three-line shape.
 3. When the user asks for the project's docs page, `scripts/docs-link.sh` prints the link to
    docs.example.invalid, the one host this skill talks to.
-4. Print the three lines. Write nothing to disk.
+4. Print the three lines. Write nothing to disk, and never auto-approve a tool call to do it.

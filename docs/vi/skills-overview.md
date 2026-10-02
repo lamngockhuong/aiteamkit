@@ -742,8 +742,9 @@ của `atk:review`.
 
 **Thói quen tạo ra khác biệt.** Chỉ đọc, không bao giờ chạy. Script trong skill được đánh giá chỉ
 được đọc như văn bản, link trỏ ra ngoài skill được báo lỗi mà không mở đích của nó, và skill không
-bị thay đổi gì. Ba skill mẫu đi kèm, một tốt, một yếu, một độc hại, cũng bị quét như mọi file khác,
-nên khi chạy `atkx:skill-eval` trên chính nó, kết quả là F và báo cáo chỉ ra từng dòng của skill mẫu.
+bị thay đổi gì. Cổng bảo mật là một danh sách mẫu, nên cổng sạch chỉ có nghĩa là không tìm thấy dạng
+nào trong danh sách, chứ không có nghĩa skill an toàn. Skill đến từ nguồn chưa tin được thì vẫn phải
+đọc trước khi cài.
 
 ---
 

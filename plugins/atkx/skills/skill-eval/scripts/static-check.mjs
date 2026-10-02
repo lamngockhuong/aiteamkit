@@ -2,9 +2,9 @@
 // one skill directory, printed as JSON for the agent to report.
 //
 // The answer has to be the same on every run, which is why this is a script and not an
-// instruction: the sample skills under evals/fixtures/ are checked against expected.json, and a
-// count done by hand drifts. references/static-checks.md says what each check looks for and how to
-// do it by hand on a host without Node.
+// instruction: the sample skills in tests/skill-eval-fixtures/ are checked against expected.json,
+// and a count done by hand drifts. references/static-checks.md says what each check looks for and
+// how to do it by hand on a host without Node.
 //
 // Two promises hold on every path. It opens files for reading only, and it never starts a
 // process: a script inside the evaluated skill is read as text and never run. A symbolic link
@@ -15,7 +15,7 @@
 
 import { existsSync, lstatSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
 import { basename, dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
 
 const DESCRIPTION_LIMIT = 1024;
 const LINE_LIMIT = 300;
@@ -34,9 +34,19 @@ const MARKDOWN_EXT = new Set(['.md', '.mdx', '.markdown']);
 const BINARY_EXT = new Set(['.exe', '.dll', '.so', '.dylib', '.node', '.wasm', '.jar', '.class', '.com']);
 const EXECUTABLE_MAGIC = [[0x7f, 0x45, 0x4c, 0x46], [0x4d, 0x5a], [0xcf, 0xfa, 0xed, 0xfe], [0xce, 0xfa, 0xed, 0xfe],
   [0xfe, 0xed, 0xfa, 0xcf], [0xca, 0xfe, 0xba, 0xbe], [0x00, 0x61, 0x73, 0x6d]];
+// Images, fonts and documents by their first bytes. Their executable bit is ignored, since it is set
+// on every file of a Windows drive mounted in WSL and of a zip extracted on Windows.
+const DATA_MAGIC = [[0x89, 0x50, 0x4e, 0x47], [0xff, 0xd8, 0xff], [0x47, 0x49, 0x46, 0x38], [0x25, 0x50, 0x44, 0x46],
+  [0x52, 0x49, 0x46, 0x46], [0x00, 0x00, 0x01, 0x00], [0x42, 0x4d], [0x77, 0x4f, 0x46, 0x46], [0x77, 0x4f, 0x46, 0x32],
+  [0x00, 0x01, 0x00, 0x00], [0x4f, 0x54, 0x54, 0x4f]];
+const startsWith = (buf, sigs) => sigs.some((m) => m.every((b, i) => buf[i] === b));
+const hasExecBit = (f) => {
+  if (process.platform === 'win32') return false;
+  try { return (statSync(f).mode & 0o111) !== 0; } catch { return false; }
+};
 const isExecutableBinary = (buf, f) => BINARY_EXT.has(extname(f).toLowerCase())
-  || EXECUTABLE_MAGIC.some((m) => m.every((b, i) => buf[i] === b))
-  || (process.platform !== 'win32' && (statSync(f).mode & 0o111) !== 0);
+  || startsWith(buf, EXECUTABLE_MAGIC)
+  || (!startsWith(buf, DATA_MAGIC) && hasExecBit(f));
 
 // ---------------------------------------------------------------------------------------------
 // Frontmatter: a small YAML reader, enough for skill frontmatter. Top-level keys only; a nested
@@ -115,7 +125,8 @@ export function parseFrontmatter(text) {
     keyLines[key] = i + 2;
     i++;
     const block = [];
-    while (i < body.length && (body[i].trim() === '' || /^\s/.test(body[i]))) block.push(body[i++]);
+    // A block is the indented lines below the key, and a list written at column 0 under it.
+    while (i < body.length && (body[i].trim() === '' || /^\s/.test(body[i]) || /^-(?:\s|$)/.test(body[i]))) block.push(body[i++]);
     while (block.length && block[block.length - 1].trim() === '') block.pop();
     const indent = Math.min(...block.filter((l) => l.trim()).map((l) => l.match(/^\s*/)[0].length), Infinity);
     const stripped = block.map((l) => (l.trim() === '' ? '' : l.slice(indent)));
@@ -177,18 +188,20 @@ function insideTarget(p, realRoot) {
 // ---------------------------------------------------------------------------------------------
 // Walking the skill directory. A link out of the skill is a finding, never a read. A link to a
 // directory inside the skill is walked by the link's own path, since that is the path SKILL.md
-// names and a harness runs.
+// names and a harness runs. A file reached by several paths is read once, and every path that
+// reaches it is kept, since each one is a name a harness may run it by.
 
 function walk(root, problems) {
   const files = [];
   const links = [];
   const realRoot = realpathSync(root);
   const seen = new Set();
-  const seenFiles = new Set();
+  const aliases = new Map();
   const addFile = (p) => {
     let real;
     try { real = realpathSync(p); } catch { real = p; }
-    if (!seenFiles.has(real)) { seenFiles.add(real); files.push(p); }
+    if (!aliases.has(real)) { aliases.set(real, []); files.push(real); }
+    aliases.get(real).push(p);
   };
   const visit = (dir) => {
     let real;
@@ -214,20 +227,26 @@ function walk(root, problems) {
     }
   };
   visit(root);
-  return { files, links };
+  return { files: files.map((real) => aliases.get(real)), links };
 }
 
 // ---------------------------------------------------------------------------------------------
 // Patterns. Written with character classes and joined at run time so that this file, which is
-// itself a script the gate reads, does not match its own patterns.
+// itself a script the gate reads, does not match its own patterns. They are a list, and a list
+// misses what nobody wrote into it: references/static-checks.md says so to the reader.
 
-const mask = (v) => v.slice(0, 4) + '********';
+// A prefixed token keeps its prefix, which says what kind it is; anything else, a password above
+// all, keeps nothing, since four characters of an eight-character password is half of it.
+const TOKEN_PREFIX = /^(?:sk-|gh[pousr]_|github_pat_|AKIA|xox[baprs]-)/;
+const mask = (v) => (TOKEN_PREFIX.exec(v)?.[0] ?? '') + '********';
+const secretOf = (m) => m.groups?.v ?? m[1] ?? m[0];
+// Every credential on the value is masked, not only the first one found.
 const maskIfSecret = (v) => {
-  for (const c of CREDENTIALS) {
-    const m = c.re.exec(v);
-    if (m) return v.replace(m[1] || m[0], mask(m[1] || m[0]));
+  let out = v;
+  for (const re of CREDENTIALS_ALL) {
+    for (const m of out.matchAll(re)) out = out.replace(m[0], m[0].replace(secretOf(m), mask(secretOf(m))));
   }
-  return v;
+  return out;
 };
 
 const CREDENTIALS = [
@@ -236,95 +255,152 @@ const CREDENTIALS = [
   { kind: 'github-token', re: /\b(gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{22,})/ },
   { kind: 'aws-key', re: /\b(AKIA[0-9A-Z]{16})\b/ },
   { kind: 'slack-token', re: /\b(xox[baprs]-[A-Za-z0-9-]{10,})/ },
-  // A literal assigned to a secret-named key: quoted after = or :, or bare in a dotenv-style line.
-  // A value read from the environment or a call, process.env.API_KEY or getpass(), is not a literal.
+  // A literal assigned to a secret-named key: quoted after = or :, or in a dotenv-style line, bare
+  // or quoted. A value read from the environment or a call, process.env.API_KEY or getpass(), is
+  // not a literal.
   {
     kind: 'password-assignment',
-    re: /\b(?:pass(?:word|wd)?|secret|api[_-]?key|access[_-]?token)\b["']?\s*[:=]\s*["']([^\s"'`<>${}]{8,})["']/i,
+    re: /\b(?:pass(?:word|wd)?|secret|api[_-]?key|access[_-]?token)\b["']?\s*[:=]\s*["'](?<v>[^\s"'`<>${}]{8,})["']/i,
   },
   {
     kind: 'password-assignment',
-    re: /^\s*(?:export\s+)?[A-Z0-9_]*(?:PASSWORD|PASSWD|SECRET|API_KEY|ACCESS_TOKEN)[A-Z0-9_]*\s*=\s*([^\s"'`<>${}()]{8,})\s*$/,
+    re: /^\s*(?:export\s+)?[A-Z0-9_]*(?:PASSWORD|PASSWD|SECRET|API_KEY|ACCESS_TOKEN)[A-Z0-9_]*\s*=\s*(["']?)(?<v>[^\s"'`<>${}()]{8,})\1\s*$/,
   },
 ];
+const CREDENTIALS_ALL = CREDENTIALS.map((c) => new RegExp(c.re.source, c.re.flags + 'g'));
 
 const word = (s) => s.split('~').join('');
 // The command-line downloaders are named on their own, since piping into a shell needs one of them.
 const DOWNLOADERS = ['c~u~r~l', 'w~g~e~t'].map(word);
-const FETCHERS = [...DOWNLOADERS, `${word('f~e~t~c~h')}(?=\\s*\\()`, ...['a~x~i~o~s', 'u~r~l~l~i~b'].map(word),
-  ...['Invoke-Web~Request', 'Invoke-Rest~Method', 'i~w~r', 'i~r~m'].map(word),
-  'requests\\.(?:get|post|put)', 'https?\\.(?:get|request)'];
-const PS_DOWNLOADERS = ['i~w~r', 'i~r~m'].map(word);
+const PS_DOWNLOADERS = ['i~w~r', 'i~r~m', 'Invoke-Web~Request', 'Invoke-Rest~Method'].map(word);
+const FETCHERS = [...DOWNLOADERS, ...PS_DOWNLOADERS, `${word('f~e~t~c~h')}(?=\\s*\\()`,
+  ...['a~x~i~o~s', 'u~r~l~l~i~b', 'Net\\.Web~Client', 'Download~String', 'Download~File'].map(word),
+  'requests\\.(?:get|post|put|request)', 'https?\\.(?:get|request)', `${word('r~e~q~u~i~r~e')}\\s*\\(\\s*["'](?:node:)?https?["']`,
+  'https?\\.client', 'HTTPS?Connection', ...['s~c~p', 'r~s~y~n~c', 's~f~t~p'].map(word)];
 const NETWORK = new RegExp(`(?:^|[^\\w.-])(?:${FETCHERS.join('|')})\\b`, 'i');
-// Raw sockets name their host as an argument; with none written there is nothing to report.
-const SOCKETS = new RegExp(`(?:^|[^\\w.-])(?:${['n~c', 'n~c~a~t'].map(word).join('|')})\\s+\\S`, 'i');
-// git's own transport subcommands talk to the repository's remotes, not to a host the skill picks.
+// Raw sockets name their host as an argument.
+const SOCKET_TOOLS = ['n~c', 'n~c~a~t', 's~o~c~a~t'].map(word);
+const SOCKETS = new RegExp(`(?:^|[^\\w.-])(?:${SOCKET_TOOLS.join('|')})\\s+\\S`, 'i');
+// git's own transport subcommands talk to the repository's remotes, unless a URL or host follows.
 const GIT_REMOTE = /\bgit\s+(?:fetch|pull|push|clone|ls-remote|remote)\b/i;
 const URL_TOKEN = new RegExp('\\b[a-z][a-z0-9+.-]*:\\/' + '\\/[^\\s"\'`<>)]+', 'gi');
-// A bare host argument to a downloader: host.tld/... or host.tld:port/...
-const BARE_HOST = new RegExp(`(?:${DOWNLOADERS.join('|')})\\b[^|\\n]*?\\s["']?((?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,}|\\d{1,3}(?:\\.\\d{1,3}){3})(?::\\d+)?\\/`, 'i');
-const SHELLS = ['sh', 'bash', 'zsh', 'dash', 'python3?', 'node', 'perl', 'ruby', 'iex', 'pwsh', 'powershell'];
+const HOST = '(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,}|\\d{1,3}(?:\\.\\d{1,3}){3}';
+// A file name is not a host: notes.txt given to -T is the upload, not where it goes.
+const FILE_TLD = /\.(?:txt|md|json|ya?ml|sh|js|mjs|ts|py|rb|html?|csv|log|tar|gz|tgz|zip|xml|conf|cfg|ini|env|pem|key|crt|png|jpe?g|gif|svg|pdf|lock|toml|out|bin|tmp)$/i;
+// A bare host argument to a downloader, host.tld with an optional port and path.
+const BARE_HOST = new RegExp(`(?:${DOWNLOADERS.join('|')})\\b([^|;&\\n]*)`, 'i');
+const BARE_ARG = new RegExp(`(?:^|\\s)["']?(${HOST})(?::\\d+)?(?=[/"'\\s]|$)`, 'g');
+// user@host: and host: as the copy tools write them, and the host a remote shell session opens.
+const REMOTE_SHELL = new RegExp(`\\b(?:${['s~c~p', 'r~s~y~n~c', 's~f~t~p', 's~s~h'].map(word).join('|')})\\b[^\\n]*?\\s(?:[\\w.-]+@)?(${HOST})(?=[:\\s]|$)`, 'i');
+const SOCKET_HOST = new RegExp(`(?:${SOCKET_TOOLS.slice(0, 2).join('|')})\\s+(?:-\\S+\\s+(?:\\d+\\s+)?)*([A-Za-z0-9][\\w.-]*)`, 'i');
+const SOCAT_HOST = /\b(?:TCP|UDP|SSL|OPENSSL)[46]?(?:-CONNECT)?:([^:\s]+):/gi;
+// A shell, by name or by path, behind an optional sudo, env, xargs, exec, command or busybox.
+const SHELLS = ['sh', 'bash', 'zsh', 'dash', 'ksh', 'python3?', 'node', 'perl', 'ruby', 'iex', 'Invoke-Expression', 'pwsh', 'powershell'];
+const SHELL = `(?:(?:sudo|env|xargs|exec|command|busybox)(?:\\s+-\\S+)*\\s+)*(?:\\S*\\/)?(?:${SHELLS.join('|')})\\b`;
 const DECODERS = 'base64|atob|Buffer\\.from|fromCharCode|decode';
+const DL = `(?:${DOWNLOADERS.join('|')})\\b`;
 const REMOTE_EXEC = [
-  // a download piped, through any number of pipes and a sudo with flags, into a shell
-  new RegExp(`(?:${[...DOWNLOADERS, ...PS_DOWNLOADERS].join('|')})\\b.*\\|\\s*(?:sudo(?:\\s+-\\S+)*\\s+)?(?:${SHELLS.join('|')})\\b`, 'i'),
-  // a download run through command or process substitution, $(...), <(...) or backticks
-  new RegExp(`(?:[$<]\\(|\`)\\s*(?:${DOWNLOADERS.join('|')})\\b`, 'i'),
-  // a download saved to a file and then run: -o file ... && sh file, or ./file, or source file
-  new RegExp(`(?:${DOWNLOADERS.join('|')})\\b[^\\n]*?\\s-(?:[A-Za-z]*[oO]|-output)\\s*\\S+[^\\n]*?(?:&&|;|\\|\\|)\\s*(?:sudo\\s+)?(?:(?:${SHELLS.join('|')}|source|\\.)\\s+\\S|\\.\\/)`, 'i'),
+  // a download piped, through any number of pipes, into a shell
+  { re: new RegExp(`(?:${[...DOWNLOADERS, ...PS_DOWNLOADERS].join('|')})\\b[^\\n]*\\|\\s*${SHELL}`, 'i') },
+  // a download run through command or process substitution, $(...) or <(...)
+  { re: new RegExp(`[$<]\\(\\s*${DL}`, 'i') },
+  // and through backticks, which in Markdown open a code span: only in a script or a fenced block
+  { re: new RegExp(`\`\\s*${DL}`, 'i'), shellOnly: true },
+  // PowerShell's own: the expression cmdlet given a web request or a WebClient download in brackets
+  { re: new RegExp(`(?:\\biex|Invoke-Expression)\\s*\\(+\\s*(?:${PS_DOWNLOADERS.join('|')}|New-Object\\s+Net\\.WebClient)\\b`, 'i') },
+  // a download saved to a file, by -o or a redirect, and then run, sourced, or made executable
+  { re: new RegExp(`${DL}[^\\n]*?(?:\\s-(?:[A-Za-z]*[oO]|-output)\\s*|>>?\\s*)\\S+[^\\n]*?(?:&&|;|\\|\\|)\\s*(?:(?:sudo\\s+)?(?:${SHELL}|source|\\.)\\s+\\S|\\.\\/|chmod\\s+\\S*x|[~/]\\S*\\s*(?:$|[;&|]))`, 'i') },
+  // encoded content decoded straight into a shell
+  { re: new RegExp(`\\bbase64\\s+(?:-[A-Za-z]*[dD]\\b|--decode)[^\\n]*\\|\\s*${SHELL}`, 'i') },
   // decoded or fetched content evaluated: a call form, never the word inside a name such as skill-eval
-  new RegExp(`(?<![\\w:-])${word('e~v~a~l')}\\s*(?:\\(|\\s+["'$])[^\\n]{0,60}?(?:${DOWNLOADERS.join('|')}|${word('f~e~t~c~h')}|${DECODERS})`, 'i'),
-  new RegExp(`(?<![\\w.])(?:new\\s+${word('F~u~n~c~t~i~o~n')}|${word('e~x~e~c')}(?:Sync|File|FileSync)?|spawnSync)\\s*\\([^\\n]{0,60}?(?:${DECODERS})`, 'i'),
+  { re: new RegExp(`(?<![\\w:-])${word('e~v~a~l')}\\s*(?:\\(|\\s+["'$])[^\\n]{0,60}?(?:${DOWNLOADERS.join('|')}|${word('f~e~t~c~h')}|${DECODERS})`, 'i') },
+  { re: new RegExp(`(?<![\\w.])(?:new\\s+${word('F~u~n~c~t~i~o~n')}|${word('e~x~e~c')}(?:Sync|File|FileSync)?|spawnSync)\\s*\\([^\\n]{0,60}?(?:${DECODERS})`, 'i') },
 ];
 const SAFETY_OFF = [
-  /\bauto[- ]?approv(?:e|es|ed|ing|al)\b/i,
-  /\bdangerously[-_ ]skip[-_ ]permissions\b/i,
-  /\bbypass[-_ ]?permissions\b/i,
-  /\b(?:dis[a]ble|turn\s+off|switch\s+off|skip)\s+(?:the\s+|all\s+|every\s+)?(?:safety|sandbox(?:ing)?|permission|approval)s?\b/i,
-  /\bapprove\s+(?:all|every)\s+(?:tool\s+)?(?:calls?|commands?|actions?)\b/i,
-  /--yo[l]o\b/,
+  /\bauto[- ]?approv(?:e|es|ed|ing|al)\b/gi,
+  /\bdangerously[-_ ](?:skip[-_ ]permissions|bypass[-_ ]approvals)\b/gi,
+  /\bbypass[-_ ]?permissions\b/gi,
+  // switching a check off, but not skipping the setup of one
+  /\b(?:dis[a]ble|turn\s+off|switch\s+off|skip)\s+(?:the\s+|all\s+|every\s+)?(?:safety|sandbox(?:ing)?|permission|approval)s?\b(?!\s+(?:setup|set-up|installation|install|configuration|config)\b)/gi,
+  /\bapprove\s+(?:all|every)\s+(?:tool\s+)?(?:calls?|commands?|actions?)\b/gi,
+  /--yo[l]o\b/g,
+  // Codex's own: the bypass flag, the unsandboxed mode, full-auto, and never asking
+  /\bdanger-full-access\b/gi,
+  new RegExp('--full' + '-auto\\b', 'g'),
+  /--ask-for-approval[ =]never\b/g,
+  /\bacceptEdits\b/g,
 ];
-// A sentence forbidding the thing is not an instruction to do it.
-const NEGATION = /\b(?:never|not|don't|do\s+not|must\s+not|mustn't|no)\b(?!-)/i;
+// A sentence forbidding the thing is not an instruction to do it, but only when the negation governs
+// the verb, as "never" or "nothing gets" right before the match does. "Don't forget to" and "not
+// optional to" before it instruct, which is why the words allowed between the negation and the
+// match are a short list and not any three words.
+const NEGATION = /\b(?:never|not|don't|doesn't|do\s+not|does\s+not|must\s+not|mustn't|cannot|can't|should\s+not|shouldn't|nothing|nobody|without)\s+(?:(?:ever|be|been|is|are|get|gets|got|used|to|you|we|it|they|the|just|automatically|accidentally|run|use|pipe|execute|call|type|paste|copy|try)\s+)*[`'"]?$/i;
 const BASE64_RUN = /[A-Za-z0-9+/=]{201,}/;
 const CODE_SPAN = /`([^`\s]+)`/g;
 const LINK_TARGET = /\]\(([^)\s]+)\)/g;
 const ABSOLUTE = /^(?:~[\\/]|\/(?:home|Users|root|etc|usr|var|opt|mnt|srv|tmp|private|Volumes|Library|workspace|proc)[\\/]|[A-Za-z]:[\\/])/;
 const LONG_LINE = 1000;
+const FENCE = /^\s*(`{3,}|~{3,})/;
+// A comment line in a script, where a URL is a reference for the reader and not a call.
+const COMMENT = /^\s*(?:#|\/\/|\/\*|\*|--\s|REM\b|::)/i;
 
-// A match is negated only by a negation within the three words right before it, in the same clause:
-// "never disable the sandbox" forbids, "No worries, disable the sandbox" instructs.
 function negated(line, index) {
-  const clause = line.slice(0, index).split(/[.;:!?,]/).pop();
-  return NEGATION.test(clause.trim().split(/\s+/).slice(-3).join(' '));
+  return NEGATION.test(line.slice(0, index).split(/[.;:!?,]/).pop());
 }
 
-function safetyOff(line) {
+// Every match on the line is examined, so a negated one does not hide the instruction after it.
+// In a file a skill can run there is no prose, and nothing is negated.
+function safetyOff(line, prose) {
   for (const r of SAFETY_OFF) {
-    const m = r.exec(line);
-    if (m && !negated(line, m.index)) return true;
+    for (const m of line.matchAll(r)) if (!(prose && negated(line, m.index))) return true;
   }
   return false;
 }
 
 // In prose a download-and-run that the sentence forbids is not an instruction; in a script it is.
-function remoteExec(line, prose) {
-  for (const r of REMOTE_EXEC) {
-    const m = r.exec(line);
-    if (m && !(prose && negated(line, m.index))) return true;
+// `shell` is false for Markdown prose outside a fenced block, where a backtick opens a code span.
+function remoteExec(line, prose, shell) {
+  const l = line.replace(/[\u2028\u2029\u0085]/g, ' ');
+  for (const { re, shellOnly } of REMOTE_EXEC) {
+    if (shellOnly && !shell) continue;
+    const m = re.exec(l);
+    if (m && !(prose && negated(l, m.index))) return true;
   }
   return false;
 }
 
+// The parts of a line a shell runs one after another, so a git command beside a download does not
+// take the download with it.
+const segments = (line) => line.split(/;|&&|\|\||\|/);
+
 function hostsOf(line) {
-  const hosts = [];
+  const hosts = new Set();
   for (const m of line.matchAll(URL_TOKEN)) {
     const token = m[0].replace(/[.,;:!?'")\]]+$/, '');
-    try { hosts.push(new URL(token).hostname.toLowerCase().replace(/^\[|\]$/g, '')); } catch { /* not a URL */ }
+    try { hosts.add(new URL(token).hostname.toLowerCase().replace(/^\[|\]$/g, '')); } catch { /* not a URL */ }
   }
-  const bare = BARE_HOST.exec(line);
-  if (bare && !hosts.includes(bare[1].toLowerCase())) hosts.push(bare[1].toLowerCase());
-  return hosts.filter(Boolean);
+  const noUrls = line.replace(URL_TOKEN, ' ');
+  for (const seg of segments(noUrls)) {
+    const args = BARE_HOST.exec(seg)?.[1];
+    if (args) for (const m of args.matchAll(BARE_ARG)) if (!FILE_TLD.test(m[1])) hosts.add(m[1].toLowerCase());
+    const remote = REMOTE_SHELL.exec(seg)?.[1];
+    if (remote && !FILE_TLD.test(remote)) hosts.add(remote.toLowerCase());
+    const sock = SOCKET_HOST.exec(seg)?.[1];
+    if (sock && SOCKETS.test(seg)) hosts.add(sock.toLowerCase());
+    for (const m of seg.matchAll(SOCAT_HOST)) hosts.add(m[1].toLowerCase());
+  }
+  return [...hosts].filter(Boolean);
+}
+
+// A line that calls out: a fetcher or a socket in any part of it, a git transport command only when
+// a URL or a host follows it, and, in a file a skill can run, any URL outside a comment.
+function networkCall(line, runnable) {
+  const parts = segments(line);
+  const fetches = parts.some((s) => NETWORK.test(s) && !GIT_REMOTE.test(s));
+  const gitOut = parts.some((s) => GIT_REMOTE.test(s) && hostsOf(s).length > 0);
+  const socket = parts.some((s) => SOCKETS.test(s));
+  const url = runnable && !COMMENT.test(line) && hostsOf(line.match(URL_TOKEN)?.join(' ') ?? '').length > 0;
+  return { any: fetches || gitOut || socket || url };
 }
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -379,7 +455,7 @@ export function describeSkill(dir) {
 function main() {
   const arg = process.argv[2];
   if (!arg) {
-    console.error('usage: node static-check.mjs <skill-dir>');
+    console.error('usage: node static-check.mjs <skill-dir | skill-dir/SKILL.md>');
     process.exit(2);
   }
   let root = resolve(arg);
@@ -480,7 +556,8 @@ export function evaluate(dir) {
 
   // Walk every file once for the remaining checks
   const problems = [];
-  const { files, links } = walk(root, problems);
+  const { files: reached, links } = walk(root, problems);
+  const files = reached.map((paths) => paths[0]);
   if (links.length) for (const l of links) add({ id: 'symlink-outside', status: 'fail', value: l, detail: 'link leaves the skill; not followed, target not read', file: l });
   else add({ id: 'symlinks', status: 'pass', value: 0 });
 
@@ -522,7 +599,7 @@ export function evaluate(dir) {
 
   // Credentials (AC 1.3) in every text file. The gate (AC 1.7, 1.8): every file a skill can run
   // gets every pattern, every Markdown file the remote-exec and safety-off patterns, and no path
-  // is exempt, evals/fixtures/ included (AC 9.4)
+  // is exempt (AC 9.4)
   let creds = 0;
   let gate = 0;
   // A file or directory that cannot be read is one the gate did not read: a gate failure, not a skip.
@@ -530,16 +607,25 @@ export function evaluate(dir) {
     gate++;
     add({ id: 'gate-unreadable', kind: 'unreadable', status: 'fail', file: p.file, line: 1, detail: `cannot be read (${p.detail}), so the gate did not read it` });
   }
-  // Hosts are declared by the skill's own SKILL.md, the one a harness reads; a nested one declares nothing.
-  const declared = text;
-  for (const f of files) {
+  // Hosts are declared by the skill's own SKILL.md, the one a harness reads; a nested one declares
+  // nothing, and neither does a line of it that is itself a call, or two calls would declare each other.
+  const declared = text.split('\n').filter((l) => !networkCall(l, false).any).join('\n');
+  for (const paths of reached) {
+    const f = paths[0];
     if (!texts.has(f)) continue;
-    const rel = relative(root, f);
-    const parts = rel.split(sep);
     const content = texts.get(f);
-    const isMarkdown = MARKDOWN_EXT.has(extname(f).toLowerCase());
-    const runnable = !isMarkdown && (SCRIPT_EXT.has(extname(f).toLowerCase()) || SCRIPT_NAMES.has(basename(f))
-      || parts.some((p) => SCRIPT_DIRS.has(p)) || (typeof content === 'string' && content.replace(/^\uFEFF/, '').startsWith('#!')));
+    // A file is judged by the strongest of the names it is reached by: run by one, it is a script,
+    // and reached as the root SKILL.md, it is that.
+    const isMdPath = (p) => MARKDOWN_EXT.has(extname(p).toLowerCase());
+    const runnableAt = (p) => !isMdPath(p) && (SCRIPT_EXT.has(extname(p).toLowerCase()) || SCRIPT_NAMES.has(basename(p))
+      || relative(root, p).split(sep).some((d) => SCRIPT_DIRS.has(d))
+      || (typeof content === 'string' && content.replace(/^\uFEFF/, '').startsWith('#!'))
+      || (extname(p) === '' && hasExecBit(f)));
+    const isRootSkillMd = paths.includes(skillFile);
+    const runnable = !isRootSkillMd && paths.some(runnableAt);
+    const isMarkdown = !runnable && paths.some(isMdPath);
+    const shown = isRootSkillMd ? skillFile : paths.find(runnableAt) || f;
+    const rel = relative(root, shown);
     const fail = (kind, i, detail) => { gate++; add({ id: `gate-${kind}`, kind, status: 'fail', file: rel, line: i + 1, detail }); };
     if (content === null) {
       // Binary content: a gate failure when it is Markdown or something a machine runs; an image is not.
@@ -552,29 +638,30 @@ export function evaluate(dir) {
     lines.forEach((l, i) => {
       for (const c of CREDENTIALS) {
         const m = c.re.exec(l);
-        if (m) { creds++; add({ id: 'credential', kind: c.kind, status: 'fail', file: rel, line: i + 1, value: mask(m[1] || m[0]) }); break; }
+        if (m) { creds++; add({ id: 'credential', kind: c.kind, status: 'fail', file: rel, line: i + 1, value: c.kind === 'private-key' ? m[0] : mask(secretOf(m)) }); break; }
       }
     });
-    const isRootSkillMd = f === skillFile;
     // Any other text file, data or prose a tool might still run, gets the download-and-run check.
     if (!runnable && !isMarkdown) {
-      lines.forEach((l, i) => { if (remoteExec(l, false)) fail('remote-exec', i, 'download piped into a shell, or fetched or decoded content evaluated'); });
+      lines.forEach((l, i) => { if (remoteExec(l, false, true)) fail('remote-exec', i, 'download piped into a shell, or fetched or decoded content evaluated'); });
       continue;
     }
+    let fence = null;
     lines.forEach((l, i) => {
-      const network = NETWORK.test(l) && !GIT_REMOTE.test(l);
-      if ((runnable || basename(f) === 'SKILL.md') && (network || SOCKETS.test(l))) {
+      // Inside a fenced block of Markdown a backtick is shell again, outside it opens a code span.
+      const f0 = isMarkdown ? FENCE.exec(l) : null;
+      if (f0) fence = fence === null ? f0[1][0] : (f0[1][0] === fence ? null : fence);
+      const call = networkCall(l, runnable);
+      if ((runnable || basename(shown) === 'SKILL.md') && call.any) {
         const hosts = hostsOf(l);
-        // The root SKILL.md's own line cannot declare its host: the text searched leaves that line out.
-        const text = isRootSkillMd ? lines.filter((_, j) => j !== i).join('\n') : declared;
-        if (!hosts.length && runnable && network) fail('network', i, 'network call whose host is not written on the line, so it cannot be checked against SKILL.md');
+        if (!hosts.length && runnable) fail('network', i, 'network call whose host is not written on the line, so it cannot be checked against SKILL.md');
         for (const host of hosts) {
-          if (names(text, host)) add({ id: 'gate-network', kind: 'network', status: 'info', file: rel, line: i + 1, value: host, detail: `network call to ${host}, named in SKILL.md` });
+          if (names(declared, host)) add({ id: 'gate-network', kind: 'network', status: 'info', file: rel, line: i + 1, value: host, detail: `network call to ${host}, named in SKILL.md` });
           else fail('network', i, `network call to ${host}, not named in SKILL.md`);
         }
       }
-      if (remoteExec(l, isMarkdown)) fail('remote-exec', i, 'download piped into a shell, or fetched or decoded content evaluated');
-      if (safetyOff(l)) fail('safety-off', i, 'instruction to approve automatically or to switch off a permission or safety check');
+      if (remoteExec(l, isMarkdown, !isMarkdown || fence !== null)) fail('remote-exec', i, 'download piped into a shell, or fetched or decoded content evaluated');
+      if (safetyOff(l, isMarkdown)) fail('safety-off', i, 'instruction to approve automatically or to switch off a permission or safety check');
       if (runnable) {
         if (l.length > LONG_LINE) fail('unreadable', i, `line of ${l.length} characters, not readable as source`);
         else if (BASE64_RUN.test(l)) fail('unreadable', i, 'encoded run of more than 200 characters');
@@ -606,4 +693,7 @@ function loadKeyTable() {
   return table;
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) main();
+// Compared by real path: run through a linked directory, argv[1] is the link and import.meta.url
+// the target, and a plain comparison would skip main() and print nothing.
+const invoked = (() => { try { return realpathSync(process.argv[1]); } catch { return null; } })();
+if (invoked && invoked === realpathSync(fileURLToPath(import.meta.url))) main();

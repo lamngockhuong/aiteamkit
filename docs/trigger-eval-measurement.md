@@ -75,8 +75,8 @@ whose static check found a credential or a security gate failure. A plugin skill
 its plugin's own hooks, which the static check does not read, so the consent before a run names
 them; how to isolate the sessions from that code is an open design question.
 
-A trigger is still a logged payload whose `tool_name` is `Skill` and whose `tool_input.skill` equals
-the full name of the skill under test, `atk:<name>` for one of this kit's. Compare exactly. Testing
+A trigger is a session whose *first* logged `Skill` payload has a `tool_input.skill` equal to the
+full name of the skill under test, `atk:<name>` for one of this kit's. Compare exactly. Testing
 whether the skill name appears inside the value counts the built-in `code-review` as a hit for
 `review`, which is the same empty pass the broken harness produces, reached from the other
 direction.

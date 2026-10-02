@@ -50,15 +50,21 @@ Three conditions, each learned by getting it wrong:
    and stop at the draft. Nothing is measured against cases nobody has read.
 2. **Count.** Run `node <this skill>/scripts/trigger-run.mjs <skill-path> --dry-run`, with `--runs`
    and `--model` when the user passed them. It prints the cases, the skipped ones, the sessions it
-   would start, `worstCaseSeconds`, the model, how the skill would load, whether a login would be
-   copied and how long it has left, and how many leftover directories of a killed earlier run it
-   removed. It copies nothing and starts no session. It refuses, as `gate-failed`, a skill whose
-   static check found a credential or a security gate failure: such a skill is not run, hooks and
-   all, in sessions that hold the user's login.
-3. **Ask.** Show the number of sessions, the model, and the worst case from `worstCaseSeconds`. For
-   a plugin skill, say that the plugin loads with its own hooks, which run in every session exactly
-   as they would after an install, so the mode is for a plugin the user would install anyway. Ask
-   once whether to start. Start nothing without a yes.
+   would start, `worstCaseSeconds`, `worstCaseUsd`, the model, how the skill would load, the plugins
+   it declares that are missing, and whether a login would be copied and how long it has left. It
+   copies nothing, starts no session, and removes nothing: leftover directories of a killed earlier
+   run are removed by the `--yes` run, which reports how many in `removedStale`. It refuses, as
+   `gate-failed`, a skill whose static check found a credential or a security gate failure: such a
+   skill is not run, hooks and all, in sessions that hold the user's login.
+3. **Ask.** When `credentials` is `none found` or `expiring`, do not ask: report it with the fix the
+   `--yes` run would give, since that run would stop at once, and stop. Otherwise show the number of
+   sessions, the model, the worst case from `worstCaseSeconds`, and the most the run can spend,
+   `worstCaseUsd`, since each session stops at a budget of US$1. When `missingDependencies` is not
+   empty, name each missing plugin and say that cases whose `belongs_to` is one of its skills cannot
+   reach it, so they skew precision and recall; the report carries the same warning. For a plugin
+   skill, say that the plugin loads with its own hooks, which run in every session exactly as they
+   would after an install, so the mode is for a plugin the user would install anyway. Ask once
+   whether to start. Start nothing without a yes.
 4. **Run.** On yes, start the same command with `--yes` in place of `--dry-run`, through the host's
    background run, so the run can be watched and is stopped with the session. Do not end the turn
    before its summary has arrived: in a non-interactive session, `claude -p` for one, a turn that
@@ -82,6 +88,7 @@ The timeout is at most an hour and at most 16 sessions run at a time.
 | `error` | every session failed before measuring, a login or a model name | the error line, and that nothing was measured |
 | `gate-failed` | the static check found a credential or a gate failure | that triggers were not measured, and why |
 | `no-cases`, `no-observable-cases`, `no-seed`, `no-credentials`, `no-skill` | it stopped before starting anything | its `detail`, as given |
+| `usage` | the arguments were wrong, exit code 2 | its `detail`, and the command corrected before running it again |
 
 A `measured` summary carries `score`, the share of correct runs among the runs that measured;
 `precision` and `recall` over runs, with `recallIsLowerBound` true, since a run that selected nothing
@@ -91,7 +98,9 @@ which count as having selected nothing; `errors`, sessions that failed, counted 
 
 Report the model, the runs per case, the date, the skipped count, precision, and recall labelled as
 a lower bound, then one row per case with what each run selected. A failed case names the skill
-that took it.
+that took it. When `missingDependencies` is not empty, say which plugins were missing and that the
+cases belonging to their skills could not reach them, so precision and recall lean on cases the
+measurement could not answer fairly.
 
 ## Credentials
 
@@ -119,9 +128,9 @@ file exists, so the environment token is the route there.
 - On exit, on `SIGINT`, `SIGTERM` and `SIGHUP`, the runner stops every session it started and removes
   its one temporary directory: config, seed and logs.
 - A runner killed outright cannot clean up. Its directory stays in the temporary directory, the
-  copied credentials with it, until the next run of the runner, `--dry-run` included, which stops
-  that run's sessions, removes every such directory of this user whose runner is gone, and reports
-  how many.
+  copied credentials with it, until the next `--yes` run of the runner, which stops that run's
+  sessions, removes every such directory of this user whose runner is gone, and reports how many.
+  A `--dry-run` and a refused run touch none of it.
 
 ## Limits a result states
 

@@ -30,7 +30,7 @@ The rules it applies:
 | All three measured | trigger 0.60, static 0.25, conventions 0.15 | A at 90 and above, B at 80, C at 70, D at 60, F below |
 | No project conventions | trigger 0.60 / 0.85, static 0.25 / 0.85 | as above |
 | Triggers not run, or broken | the remaining weights, in the same proportion | none: the score is labelled "without triggers" |
-| Any credential or gate failure | unchanged | F whatever the figures, each finding named as the reason |
+| Any credential or gate failure | unchanged | F whatever the figures, each finding named as the reason, with or without triggers: the F overrides the missing grade |
 
 Example: trigger 85, static 90, conventions 80 gives 85.5, grade B.
 

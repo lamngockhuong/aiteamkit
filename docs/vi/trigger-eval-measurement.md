@@ -75,8 +75,8 @@ phần kiểm tra tĩnh tìm ra credential hoặc lỗi cổng bảo mật. Skil
 hook của plugin đó, mà phần kiểm tra tĩnh không đọc, nên lời xin đồng ý trước khi chạy phải nêu tên
 các hook này; cách tách các phiên con khỏi đoạn mã đó vẫn là câu hỏi thiết kế chưa đóng.
 
-Một trigger vẫn là một payload đã ghi có `tool_name` bằng `Skill` và `tool_input.skill` bằng đúng
-tên đầy đủ của skill đang đo, `atk:<tên>` với skill của kit này. So khớp chính xác. Nếu chỉ kiểm tên
+Một trigger là một phiên mà payload `Skill` *đầu tiên* được ghi có `tool_input.skill` bằng đúng tên
+đầy đủ của skill đang đo, `atk:<tên>` với skill của kit này. So khớp chính xác. Nếu chỉ kiểm tên
 skill có nằm trong giá trị đó không thì `code-review` dựng sẵn sẽ được tính thành một lượt trúng của
 `review`, và đó cũng là kiểu đạt rỗng mà bộ chạy hỏng tạo ra, chỉ đi tới từ hướng ngược lại.
 

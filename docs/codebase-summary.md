@@ -23,7 +23,7 @@ removed, or renamed; update it in the same commit.
 | `.claude-plugin/marketplace.json` | Claude Code marketplace listing `atk` at `./plugins/atk` and `atkx` at `./plugins/atkx`, with no version of their own |
 | `.cursor-plugin/marketplace.json` | Cursor marketplace listing `atk` and `atkx` at `plugins/atk` and `plugins/atkx`, descriptions left to each `plugin.json` |
 | `.agents/plugins/marketplace.json` | Codex marketplace listing `atk` and `atkx` as local plugins at `./plugins/atk` and `./plugins/atkx` |
-| `plugins/*/CHANGELOG.md` | Written by release-please from the commit types, never by hand, one per plugin from its first release: `plugins/atk/CHANGELOG.md` now, `plugins/atkx/CHANGELOG.md` once `atkx` is released. `feat:` and `fix:` appear; the other types are silent |
+| `plugins/*/CHANGELOG.md` | Written by release-please from the commit types, never by hand, one per plugin from its first release: `plugins/atk/CHANGELOG.md` and `plugins/atkx/CHANGELOG.md`. `feat:` and `fix:` appear; the other types are silent |
 | `plugins/atk/LICENSE` | A copy of the root `LICENSE`, because an install carries the plugin directory alone and MIT asks for the notice to travel with the copy |
 | `plugins/atkx/LICENSE` | The same copy for `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Cursor plugin metadata with `displayName` and `"skills": "./skills/"` |
@@ -226,7 +226,7 @@ all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` 
 | `plugins/atkx/skills/skill-eval/references/review-mode.md` | Walking a run in the conversation against the skill's steps, and classifying each deviation |
 | `plugins/atkx/skills/skill-eval/references/report-format.md` | The scoring rules and the report's shape, score line first |
 | `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Evaluating a skill, against `tailor`, `review`, `convention`, `security`, `help` and `qa` |
-| `plugins/atkx/skills/skill-eval/evals/fixtures/` | A good, a weak and a malicious sample skill, and `expected.json` with the verdict each must get; the check is in `CLAUDE.md` |
+| `tests/skill-eval-fixtures/` | A good, a weak and a malicious sample skill for `atkx:skill-eval`, and `expected.json` with the verdict each must get; the check is in `CLAUDE.md`. Outside the plugin, because Codex lists a `SKILL.md` found at any depth under `skills/` as a skill of its own |
 
 ## Assets
 

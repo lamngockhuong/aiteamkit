@@ -65,9 +65,13 @@ function main() {
       : 'No project conventions found: their weight is shared between the other dimensions in proportion.');
   }
   const withoutTriggers = scores.trigger === null;
+  const cred = input.static.credentials;
+  const gate = input.static.gate;
+  // The veto overrides the missing grade: a skill holding a credential is F with or without triggers.
+  const vetoed = cred > 0 || gate > 0;
   if (withoutTriggers) {
     const why = input.trigger?.status === 'broken' ? 'Trigger measurement did not work' : 'Triggers were not measured';
-    notes.push(`${why}: the score covers the other dimensions only and carries no grade.`);
+    notes.push(`${why}: the score covers the other dimensions only${vetoed ? '' : ' and carries no grade'}.`);
   }
 
   const present = Object.keys(WEIGHTS).filter((k) => scores[k] !== null);
@@ -77,8 +81,6 @@ function main() {
   const composite = round(present.reduce((a, k) => a + (scores[k] * WEIGHTS[k]) / sum, 0), 1);
 
   const reasons = [];
-  const cred = input.static.credentials;
-  const gate = input.static.gate;
   if (cred) reasons.push(`${cred} credential finding${cred > 1 ? 's' : ''}`);
   if (gate) reasons.push(`${gate} security gate failure${gate > 1 ? 's' : ''}`);
   let grade = withoutTriggers ? null : band(composite);

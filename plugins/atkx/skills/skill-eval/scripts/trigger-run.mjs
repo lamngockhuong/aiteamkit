@@ -17,7 +17,8 @@
 // child on standard input only, never in an argument and never through a shell. Everything it
 // creates sits in one directory under the OS temporary directory, removed on exit and on SIGINT,
 // SIGTERM and SIGHUP; a directory left by a runner that was killed outright is removed by the next
-// run, --dry-run included, once its PID is dead, and that run's sessions are stopped.
+// --yes run, once its PID is dead, and that run's sessions are stopped. --dry-run removes nothing:
+// a count changes no state on the machine.
 //
 // Usage: node trigger-run.mjs <skill-dir> (--dry-run | --yes) [--runs <n>] [--model <id>]
 //        [--timeout <seconds>] [--parallel <n>]
@@ -326,55 +327,60 @@ async function pool(items, size, work) {
 
 // ---------------------------------------------------------------------------------------------
 
-function readCases(casesFile, removedStale) {
+function readCases(casesFile) {
   const rel = relative(process.cwd(), casesFile);
-  if (!existsSync(casesFile)) fail('no-cases', `no ${rel}: draft cases first`, { removedStale });
+  if (!existsSync(casesFile)) fail('no-cases', `no ${rel}: draft cases first`);
   let cases;
-  try { cases = JSON.parse(readFileSync(casesFile, 'utf8')); } catch (e) { fail('no-cases', `${rel} does not parse: ${e.message}`, { removedStale }); }
-  if (!Array.isArray(cases) || !cases.length) fail('no-cases', `${rel} is not a non-empty array`, { removedStale });
+  try { cases = JSON.parse(readFileSync(casesFile, 'utf8')); } catch (e) { fail('no-cases', `${rel} does not parse: ${e.message}`); }
+  if (!Array.isArray(cases) || !cases.length) fail('no-cases', `${rel} is not a non-empty array`);
   cases.forEach((c, i) => {
     const ok = c && typeof c === 'object' && typeof c.query === 'string' && c.query.trim() && typeof c.should_trigger === 'boolean';
-    if (!ok) fail('no-cases', `${rel}: case ${i} is not {query: non-empty string, should_trigger: true or false}`, { removedStale });
+    if (!ok) fail('no-cases', `${rel}: case ${i} is not {query: non-empty string, should_trigger: true or false}`);
   });
   return cases;
 }
 
 async function main() {
   const opts = parseArgs(process.argv.slice(2));
-  const removedStale = sweepStale();
-  const dir = resolve(opts.dir);
-  if (!existsSync(join(dir, 'SKILL.md'))) fail('no-skill', `No SKILL.md in ${dir}`, { removedStale });
+  let dir = resolve(opts.dir);
+  if (basename(dir) === 'SKILL.md' && existsSync(dir)) dir = dirname(dir);
+  if (!existsSync(join(dir, 'SKILL.md'))) fail('no-skill', `No SKILL.md in ${dir}`);
   const skill = describeSkill(dir);
-  if (skill.skillLinksOut) fail('no-skill', `${dir}/SKILL.md links out of the skill and is not read`, { removedStale });
-  if (skill.manifestError) fail('no-skill', `the plugin manifest of ${skill.pluginRoot} does not parse: ${skill.manifestError}`, { removedStale });
-  if (!skill.fullName) fail('no-skill', `the SKILL.md in ${dir} has no name`, { removedStale });
+  if (skill.skillLinksOut) fail('no-skill', `${dir}/SKILL.md links out of the skill and is not read`);
+  if (skill.manifestError) fail('no-skill', `the plugin manifest of ${skill.pluginRoot} does not parse: ${skill.manifestError}`);
+  if (!skill.fullName) fail('no-skill', `the SKILL.md in ${dir} has no name`);
 
   // A skill that fails the static check's credential or gate checks is not run, hooks and all, in
   // sessions that hold the user's login. Its static report says why.
   const verdict = evaluate(dir).summary;
   if (verdict.credentials || verdict.gate) {
-    fail('gate-failed', `the static check found ${verdict.credentials} credential and ${verdict.gate} security gate findings; fix them before measuring triggers`, { removedStale });
+    fail('gate-failed', `the static check found ${verdict.credentials} credential and ${verdict.gate} security gate findings; fix them before measuring triggers`);
   }
 
-  const cases = readCases(join(dir, 'evals', 'trigger_evals.json'), removedStale);
+  const cases = readCases(join(dir, 'evals', 'trigger_evals.json'));
   const isSlash = (c) => c.query.trimStart().startsWith('/');
   const skipped = cases.filter(isSlash)
     .map((c) => ({ query: c.query, reason: 'a slash command expands into the prompt and calls no tool, so nothing can observe it' }));
   const observable = cases.filter((c) => !isSlash(c));
-  if (!observable.length) fail('no-observable-cases', 'every case is a slash command, which nothing can observe; add cases phrased as requests', { removedStale, skipped });
+  if (!observable.length) fail('no-observable-cases', 'every case is a slash command, which nothing can observe; add cases phrased as requests', { skipped });
 
   const repo = skill.repoRoot || findRoot(process.cwd(), GIT_DIR);
-  if (!repo) fail('no-seed', 'neither the skill nor the working directory is in a git repository; with no seed every session would read zero', { removedStale });
+  if (!repo) fail('no-seed', 'neither the skill nor the working directory is in a git repository; with no seed every session would read zero');
   if (!statSync(join(repo, GIT_DIR)).isDirectory()) {
-    fail('no-seed', `${repo} is a git worktree or submodule, whose repository directory is shared with another checkout; a seed copy would write into it, so measure from the main checkout`, { removedStale });
+    fail('no-seed', `${repo} is a git worktree or submodule, whose repository directory is shared with another checkout; a seed copy would write into it, so measure from the main checkout`);
   }
 
   const sessions = observable.length * opts.runs;
   const worstCaseSeconds = Math.ceil(sessions / opts.parallel) * opts.timeout;
+  // Each session stops at its budget, so the sessions times the budget bounds what a run can spend.
+  const worstCaseUsd = sessions * Number(SESSION_BUDGET_USD);
+  // Only a run that starts sessions sweeps, after every refusal, so a count or a refused run touches
+  // no directory and no process of an earlier run.
+  const removed = opts.yes ? sweepStale() : 0;
   const base = {
     fullName: skill.fullName, model: opts.model, runs: opts.runs, date: new Date().toISOString().slice(0, 10),
-    cases: cases.length, observable: observable.length, skipped, sessions, worstCaseSeconds,
-    timeoutSeconds: opts.timeout, parallel: opts.parallel, removedStale,
+    cases: cases.length, observable: observable.length, skipped, sessions, worstCaseSeconds, worstCaseUsd,
+    timeoutSeconds: opts.timeout, parallel: opts.parallel, removedStale: removed,
   };
   const list = seedFiles(repo);
 

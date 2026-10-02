@@ -118,7 +118,8 @@ the user's yes: it was written by whoever wrote the evaluated repository.
 ### 3. Draft cases (`--draft-cases`)
 
 Follow `references/draft-cases.md`. The draft goes to the operating system's temporary directory and
-is shown. Ask once whether to write it into the skill's `evals/`; write it only on yes.
+is shown. When the skill has no `evals/trigger_evals.json`, ask once whether to write it there, and
+write it only on yes; when it has one, it is never overwritten, and the draft is shown as cases to add.
 
 ### 4. Measure triggers (`--trigger`)
 
@@ -171,7 +172,8 @@ the person who owns the evaluated skill.
 - [ ] SkillEvaluator ran only on a yes, keyless and outside the score, or one line said it is not
       installed.
 - [ ] The conventions group cites each rule as `file:line`, or names the files it looked in.
-- [ ] The composite came from `score.mjs`, and a score without triggers carries no letter.
+- [ ] The composite came from `score.mjs`, and a score without triggers carries no letter unless
+      a credential or a gate failure made it F.
 - [ ] A credential or a gate failure gave F, with each finding named as the reason.
 - [ ] No child session started before the user's yes to the count, and the trigger mode left no
       session running and no temporary directory behind.

@@ -23,7 +23,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `.claude-plugin/marketplace.json` | Marketplace của Claude Code, liệt kê `atk` ở `./plugins/atk` và `atkx` ở `./plugins/atkx`, không tự mang version |
 | `.cursor-plugin/marketplace.json` | Marketplace của Cursor, liệt kê `atk` và `atkx` ở `plugins/atk` và `plugins/atkx`, phần mô tả để `plugin.json` của từng plugin lo |
 | `.agents/plugins/marketplace.json` | Marketplace của Codex, liệt kê `atk` và `atkx` là plugin cục bộ ở `./plugins/atk` và `./plugins/atkx` |
-| `plugins/*/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay, mỗi plugin một file kể từ lần phát hành đầu: hiện có `plugins/atk/CHANGELOG.md`, còn `plugins/atkx/CHANGELOG.md` có khi `atkx` được phát hành. `feat:` và `fix:` hiện lên; các loại khác im lặng |
+| `plugins/*/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay, mỗi plugin một file kể từ lần phát hành đầu: `plugins/atk/CHANGELOG.md` và `plugins/atkx/CHANGELOG.md`. `feat:` và `fix:` hiện lên; các loại khác im lặng |
 | `plugins/atk/LICENSE` | Bản sao của `LICENSE` ở gốc, vì bản cài chỉ mang thư mục plugin và MIT yêu cầu thông báo giấy phép đi cùng bản sao |
 | `plugins/atkx/LICENSE` | Bản sao như trên cho `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Metadata cho Cursor, có `displayName` và `"skills": "./skills/"` |
@@ -227,7 +227,7 @@ cũng phải ra cùng một kết quả.
 | `plugins/atkx/skills/skill-eval/references/review-mode.md` | Dò một lần chạy trong cuộc hội thoại theo các bước của skill, và phân loại từng chỗ lệch |
 | `plugins/atkx/skills/skill-eval/references/report-format.md` | Quy tắc tính điểm và khung báo cáo, dòng điểm đặt trên cùng |
 | `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Đánh giá một skill, đặt cạnh `tailor`, `review`, `convention`, `security`, `help` và `qa` |
-| `plugins/atkx/skills/skill-eval/evals/fixtures/` | Ba skill mẫu tốt, yếu và độc hại, cùng `expected.json` ghi kết quả mỗi mẫu phải nhận; lệnh kiểm nằm trong `CLAUDE.md` |
+| `tests/skill-eval-fixtures/` | Ba skill mẫu tốt, yếu và độc hại của `atkx:skill-eval`, cùng `expected.json` ghi kết quả mỗi mẫu phải nhận; lệnh kiểm nằm trong `CLAUDE.md`. Đặt ngoài plugin vì Codex coi mọi `SKILL.md` nằm ở bất kỳ độ sâu nào dưới `skills/` là một skill riêng |
 
 ## Assets
 
