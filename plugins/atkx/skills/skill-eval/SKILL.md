@@ -71,6 +71,11 @@ that decision, not the decision. This skill names no approver and moves no state
 `<skill-path>` is the directory holding `SKILL.md`. Flags combine. The scripts are under this
 skill's own `scripts/`; run them by their full path so the working directory does not matter.
 
+With no `<skill-path>`, never pick one. Under `--review`, list every skill run earlier in this
+conversation, each with its invocation and where it ran, and ask which to review; one question, all
+of them as answers, and nothing evaluated before the answer. Without `--review`, ask for the path.
+Choosing what is evaluated belongs to the person who asked, not to the run.
+
 ## Workflow
 
 ```
