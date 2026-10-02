@@ -364,8 +364,9 @@ When the contract comes before the code in `shared/spec-docs.md`. A `screen` doc
 `implemented` under either `Contract` line, per The `screen` kind in that file, and the four
 `design_*` fields of What a read records in `shared/design-sources.md`.
 
-One kind drops a field. A reference document written by `atk:spec`, whatever its kind, carries no
-`ticket`. It is updated in place by every change to its subject over the life of the project, so one
+One kind drops a field. A reference document, of any kind `shared/spec-docs.md` covers, carries no
+`ticket`, whoever writes it: `atk:spec`, or a person updating it by hand per
+`shared/finalize-steps.md`. It is updated in place by every change to its subject over the life of the project, so one
 ticket in its front matter reads as though the whole document belonged to that ticket, and a list of
 them is a history the document does not keep. The ticket links to the document instead, and
 `git log` says which change touched which line.
@@ -377,7 +378,12 @@ so `ticket` is `none` and the body names the ID and the record's date instead: a
 uncommitted file breaks for everyone but its author.
 
 The same holds for a path cited anywhere in the body of a committed artifact. Before citing a file,
-run `git check-ignore -v` on its path; where the project ignores it, cite what the reader can reach
+check that a reader of the pull request can reach it: it is inside this repository, not ignored, and
+committed, or committed in the same change. `git check-ignore -v` on its path answers the first two:
+exit 0 means ignored, exit 1 means not ignored, and exit 128 with `is outside repository` means the
+file sits in another repository, as a design in the parent does for a member repository, which a
+reader of this one cannot follow either. Exit 1 alone does not make a file reachable, since an
+untracked file is not ignored either. Where the file cannot be reached, cite what the reader can reach
 instead, usually the ticket the file was written for, and drop the section numbers and question IDs
 that only that file resolves. Ask the person running the skill which source stands in when none is
 obvious. A design document and an ADR are the cases that matter, since a project may keep both out
