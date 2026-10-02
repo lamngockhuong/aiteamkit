@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.3...atk-v0.1.4) (2026-10-02)
+
+
+### Features
+
+* **help:** name atkx skills where no atk skill handles the request ([#103](https://github.com/lamngockhuong/aiteamkit/issues/103)) ([96eebbb](https://github.com/lamngockhuong/aiteamkit/commit/96eebbbb4f937b627385ba2ba24097c07104668e))
+
 ## [0.1.3](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.2...atk-v0.1.3) (2026-10-02)
 
 
