@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.1...atkx-v0.0.2) (2026-10-02)
+
+
+### Features
+
+* **skill-eval:** add atkx:skill-eval, the first atkx skill ([#96](https://github.com/lamngockhuong/aiteamkit/issues/96)) ([043e024](https://github.com/lamngockhuong/aiteamkit/commit/043e0241f7736024103fe61d877990292702f720))
+
 ## 0.0.1 (2026-10-01)
 
 
