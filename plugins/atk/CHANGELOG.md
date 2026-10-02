@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.4...atk-v0.1.5) (2026-10-02)
+
+
+### Bug Fixes
+
+* **spec,git:** close gaps found in spec and git runs ([#107](https://github.com/lamngockhuong/aiteamkit/issues/107)) ([a33ede6](https://github.com/lamngockhuong/aiteamkit/commit/a33ede68d91848cb2a053c86d225c7d1fa4fcb72))
+
 ## [0.1.4](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.3...atk-v0.1.4) (2026-10-02)
 
 
