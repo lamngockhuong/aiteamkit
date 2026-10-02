@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.2...atk-v0.1.3) (2026-10-02)
+
+
+### Bug Fixes
+
+* keep four skill descriptions within the 1024-character limit ([#98](https://github.com/lamngockhuong/aiteamkit/issues/98)) ([22b4c08](https://github.com/lamngockhuong/aiteamkit/commit/22b4c0894c68d387c4e1768b4cd1fa381ff55a90))
+
 ## [0.1.2](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.1...atk-v0.1.2) (2026-10-01)
 
 
