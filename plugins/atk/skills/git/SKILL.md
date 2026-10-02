@@ -152,7 +152,10 @@ requirement met, the check that ran. Never name the tool that produced the chang
 Never commit onto the default branch, and check the current branch name against the rule just
 resolved before committing onto it either. Both cases are step 2 of `shared/finalize-steps.md`:
 create the conforming branch now and carry the changes across, rather than finding out at the push
-question that four commits sit on a name the project will not take.
+question that four commits sit on a name the project will not take. Started from a remote ref such
+as `origin/main`, create it with `--no-track`: git otherwise records that ref as its upstream, and a
+bare `git push` under `push.default=upstream` then lands on the default branch. The push in step 4
+sets the upstream to the branch's own name, `git push -u origin HEAD`.
 
 A write-mode pre-commit hook changes what the commit holds after step 2 read it.
 `references/commit-craft.md` holds which hooks do this and how to find out: the secret scan is re-run
