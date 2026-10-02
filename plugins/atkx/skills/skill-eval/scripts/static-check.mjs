@@ -340,6 +340,8 @@ const CODE_SPAN = /`([^`\s]+)`/g;
 const LINK_TARGET = /\]\(([^)\s]+)\)/g;
 const ABSOLUTE = /^(?:~[\\/]|\/(?:home|Users|root|etc|usr|var|opt|mnt|srv|tmp|private|Volumes|Library|workspace|proc)[\\/]|[A-Za-z]:[\\/])/;
 const LONG_LINE = 1000;
+// Where an interpreter or a device a hook command names lives, rather than code of its own.
+const SYSTEM_PATH = /^(?:\/(?:bin|sbin|dev|usr\/bin|usr\/sbin|usr\/local\/bin|opt\/homebrew\/bin)\/|[A-Za-z]:[\\/]Windows[\\/])/i;
 const FENCE = /^\s*(`{3,}|~{3,})/;
 // A comment line in a script, where a URL is a reference for the reader and not a call.
 const COMMENT = /^\s*(?:#|\/\/|\/\*|\*|--\s|REM\b|::)/i;
@@ -607,13 +609,29 @@ export function evaluate(dir) {
     gate++;
     add({ id: 'gate-unreadable', kind: 'unreadable', status: 'fail', file: p.file, line: 1, detail: `cannot be read (${p.detail}), so the gate did not read it` });
   }
-  // Hosts are declared by the skill's own SKILL.md, the one a harness reads; a nested one declares
-  // nothing, and neither does a line of it that is itself a call, or two calls would declare each other.
-  const declared = text.split('\n').filter((l) => !networkCall(l, false).any).join('\n');
-  for (const paths of reached) {
+  const declared = declaredHosts(text);
+  const items = reached.filter((paths) => texts.has(paths[0])).map((paths) => ({ paths, content: texts.get(paths[0]) }));
+  const found = gateItems(items, { root, skillFile, declared, add });
+  creds += found.creds;
+  gate += found.gate;
+  if (!creds) add({ id: 'credentials', status: 'pass', value: 0 });
+  if (!gate) add({ id: 'gate', status: 'pass', value: 0 });
+  return finish(creds, gate);
+}
+
+// Hosts are declared by the skill's own SKILL.md, the one a harness reads; a nested one declares
+// nothing, and neither does a line of it that is itself a call, or two calls would declare each other.
+const declaredHosts = (skillText) => skillText.split('\n').filter((l) => !networkCall(l, false).any).join('\n');
+
+// The credential and gate checks over a list of files, each { paths, content }, where content is
+// null for binary. An item may carry runnable: true, for text a harness runs that is not a file of
+// its own, such as the command line of a hook.
+function gateItems(items, { root, skillFile, declared, add }) {
+  let creds = 0;
+  let gate = 0;
+  for (const item of items) {
+    const { paths, content } = item;
     const f = paths[0];
-    if (!texts.has(f)) continue;
-    const content = texts.get(f);
     // A file is judged by the strongest of the names it is reached by: run by one, it is a script,
     // and reached as the root SKILL.md, it is that.
     const isMdPath = (p) => MARKDOWN_EXT.has(extname(p).toLowerCase());
@@ -621,10 +639,10 @@ export function evaluate(dir) {
       || relative(root, p).split(sep).some((d) => SCRIPT_DIRS.has(d))
       || (typeof content === 'string' && content.replace(/^\uFEFF/, '').startsWith('#!'))
       || (extname(p) === '' && hasExecBit(f)));
-    const isRootSkillMd = paths.includes(skillFile);
-    const runnable = !isRootSkillMd && paths.some(runnableAt);
+    const isRootSkillMd = skillFile !== null && paths.includes(skillFile);
+    const runnable = item.runnable === true || (!isRootSkillMd && paths.some(runnableAt));
     const isMarkdown = !runnable && paths.some(isMdPath);
-    const shown = isRootSkillMd ? skillFile : paths.find(runnableAt) || f;
+    const shown = isRootSkillMd ? skillFile : (item.runnable ? f : paths.find(runnableAt) || f);
     const rel = relative(root, shown);
     const fail = (kind, i, detail) => { gate++; add({ id: `gate-${kind}`, kind, status: 'fail', file: rel, line: i + 1, detail }); };
     if (content === null) {
@@ -668,9 +686,100 @@ export function evaluate(dir) {
       }
     });
   }
-  if (!creds) add({ id: 'credentials', status: 'pass', value: 0 });
+  return { creds, gate };
+}
+
+// The hooks a plugin brings with it, which run in every session that loads the plugin: the
+// registrations in hooks/hooks.json and in the manifest's hooks key, every file under hooks/, every
+// file inside the plugin a hook command names, and each command line itself as a script. The trigger
+// runner refuses a plugin that fails this as it refuses a skill that fails evaluate(). A command
+// naming a file outside the plugin is a gate failure, since that file is not read. `declared` is the
+// SKILL.md text whose hosts a hook may call.
+export function evaluateHooks(pluginRoot, declared = '') {
+  const root = resolve(pluginRoot);
+  const realRoot = realpathSync(root);
+  const checks = [];
+  const add = (c) => checks.push(c);
+  const commands = [];
+  let gate = 0;
+  const unread = (file, detail) => { gate++; add({ id: 'gate-unreadable', kind: 'unreadable', status: 'fail', file, line: 1, detail }); };
+
+  const registrations = [];
+  const readRegistration = (p) => {
+    const rel = relative(root, p);
+    if (!existsSync(p)) return;
+    if (!insideTarget(p, realRoot)) { unread(rel, 'hook registration links out of the plugin; not followed, target not read'); return; }
+    try { registrations.push({ file: rel, data: JSON.parse(readFileSync(p, 'utf8')) }); } catch { unread(rel, 'hook registration does not parse, so the gate cannot tell what it runs'); }
+  };
+  readRegistration(join(root, 'hooks', 'hooks.json'));
+  let manifest = null;
+  try { manifest = JSON.parse(readFileSync(join(root, '.claude-plugin', 'plugin.json'), 'utf8')); } catch { manifest = null; }
+  const declaredHooks = manifest?.hooks;
+  for (const h of [declaredHooks].flat()) {
+    if (typeof h === 'string') {
+      const p = resolve(root, h);
+      if (!within(root, p)) unread(h, 'hook registration outside the plugin; not read');
+      else if (p !== join(root, 'hooks', 'hooks.json')) readRegistration(p);
+    } else if (h && typeof h === 'object') registrations.push({ file: '.claude-plugin/plugin.json', data: { hooks: h.hooks ?? h } });
+  }
+
+  // Every command, and every file inside the plugin it names
+  const named = new Set();
+  const lines = [];
+  for (const { file, data } of registrations) {
+    for (const [event, groups] of Object.entries(data?.hooks ?? {})) {
+      for (const group of [groups].flat()) {
+        for (const h of group?.hooks ?? []) {
+          const line = [h.command, ...(Array.isArray(h.args) ? h.args : [])].filter((x) => typeof x === 'string').join(' ');
+          commands.push({ event, matcher: group.matcher ?? null, type: h.type ?? null, command: maskIfSecret(line), file });
+          if (h.type !== 'command') continue;
+          lines.push(line);
+          const expanded = line.replace(/\$\{(?:CLAUDE_PLUGIN_ROOT|PLUGIN_ROOT)\}|\$(?:CLAUDE_PLUGIN_ROOT|PLUGIN_ROOT)\b/g, root);
+          for (const token of expanded.split(/[\s"'=;&|()<>]+/)) {
+            if (!/[\\/]/.test(token) || /^[a-z][a-z0-9+.-]*:\/\//i.test(token)) continue;
+            if (!isAbsolute(token)) continue; // relative to the session's directory, not to the plugin
+            if (!within(root, token)) {
+              // An interpreter or a device, /usr/bin/env or /dev/null, is the system's; any other file
+              // outside the plugin is code the gate never read.
+              if (!SYSTEM_PATH.test(token)) unread(token, `hook in ${file} runs a file outside the plugin, which the gate does not read`);
+              continue;
+            }
+            if (existsSync(token) && statSync(token).isFile()) named.add(token);
+          }
+        }
+      }
+    }
+  }
+
+  const problems = [];
+  const items = [];
+  const hooksDir = join(root, 'hooks');
+  if (existsSync(hooksDir)) {
+    const { files: reached, links } = walk(hooksDir, problems);
+    for (const l of links) unread(join('hooks', l), 'link leaves the hooks directory; not followed, target not read');
+    for (const paths of reached) items.push({ paths });
+  }
+  const inHooks = new Set(items.map((i) => i.paths[0]));
+  for (const p of named) {
+    const real = insideTarget(p, realRoot);
+    if (!real) unread(relative(root, p), 'a file a hook runs links out of the plugin; not followed, target not read');
+    else if (!inHooks.has(real)) items.push({ paths: [p], runnable: true });
+  }
+  for (const p of problems) unread(join('hooks', p.file), `cannot be read (${p.detail}), so the gate did not read it`);
+  const readable = [];
+  for (const item of items) {
+    try {
+      const buf = readFileSync(item.paths[0]);
+      readable.push({ ...item, content: isBinary(buf) && !decode(buf).encoding ? null : decode(buf).text });
+    } catch (e) { unread(relative(root, item.paths[0]), `cannot be read (${e.code || e.message}), so the gate did not read it`); }
+  }
+  if (lines.length) readable.push({ paths: [join(root, 'hooks', 'commands')], content: lines.join('\n'), runnable: true });
+
+  const found = gateItems(readable, { root, skillFile: null, declared, add });
+  gate += found.gate;
+  if (!found.creds) add({ id: 'credentials', status: 'pass', value: 0 });
   if (!gate) add({ id: 'gate', status: 'pass', value: 0 });
-  return finish(creds, gate);
+  return { plugin: root, commands, checks, summary: { credentials: found.creds, gate } };
 }
 
 function lstatOk(p) {

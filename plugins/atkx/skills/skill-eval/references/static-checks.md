@@ -185,6 +185,14 @@ The patterns are in the script, written so that the script does not match itself
 more than one kind, a download piped into a shell from an undeclared host fails both `network` and
 `remote-exec`, and each is its own finding. Any gate failure makes the grade F.
 
+**A plugin's hooks.** The trigger mode loads a plugin skill with its plugin, and the hooks of that
+plugin and of its dependencies run in every session, so `evaluateHooks` in
+`scripts/static-check.mjs` runs the same credential and gate checks over them: every file under the
+plugin's `hooks/`, every file inside the plugin a registered command names, and each command line as
+a script. A command naming a file outside the plugin, other than an interpreter or a device of the
+system such as `/usr/bin/env` or `/dev/null`, is `unreadable`. The static report of a skill does
+not include it; `trigger-run.mjs` calls it before any session starts.
+
 **What a clean gate means.** The gate is a list of patterns, and a list catches the forms somebody
 wrote into it. A form nobody listed, a client this file does not name or a command assembled from
 pieces at run time, passes. So a gate with no failure says that none of the forms above was found,

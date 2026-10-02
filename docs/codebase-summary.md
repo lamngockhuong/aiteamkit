@@ -215,8 +215,8 @@ all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` 
 | File | Purpose |
 |------|---------|
 | `plugins/atkx/skills/skill-eval/SKILL.md` | Evaluates a skill directory: static check, project conventions, trigger measurement on Claude Code, drafted cases, review of a run, composite score |
-| `plugins/atkx/skills/skill-eval/scripts/static-check.mjs` | Structure, metadata, size, credentials and the security gate of one skill, printed as JSON; reads only, starts no process, follows no link out of the skill |
-| `plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs` | The trigger runner: seed copy, isolated config, child sessions three at a time, the count, and cleanup on exit, `SIGINT`, `SIGTERM` and `SIGHUP`, plus the sweep of what a killed run left; refuses a skill whose static check fails the gate |
+| `plugins/atkx/skills/skill-eval/scripts/static-check.mjs` | Structure, metadata, size, credentials and the security gate of one skill, and the same gate over the hooks of a plugin, printed as JSON; reads only, starts no process, follows no link out of the skill |
+| `plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs` | The trigger runner: seed copy, isolated config, child sessions three at a time, the count, and cleanup on exit, `SIGINT`, `SIGTERM` and `SIGHUP`, plus the sweep of what a killed run left; refuses a skill whose static check fails the gate or whose plugins' hooks do, gives each session only the environment variables it needs, and passes the login as an environment token rather than a file |
 | `plugins/atkx/skills/skill-eval/scripts/hook-log.mjs` | The child sessions' `PreToolUse` hook: logs each payload and denies the `Skill` call, so the selected skill is recorded and never runs |
 | `plugins/atkx/skills/skill-eval/scripts/score.mjs` | The composite, its weights, the grade or none, and a note per rule applied |
 | `plugins/atkx/skills/skill-eval/references/static-checks.md` | What each static check looks for, why, and how to do it by hand without Node |

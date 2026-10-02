@@ -130,9 +130,10 @@ write it only on yes; when it has one, it is never overwritten, and the draft is
 
 Follow `references/trigger-mode.md`. Not on Claude Code: print the one line it gives and go on to
 the next step. Otherwise run the runner with `--dry-run`. It refuses a skill whose static check
-found a credential or a gate failure, and that refusal is the result. Show the number of sessions,
-the model, the worst case from its `worstCaseSeconds`, and that a plugin skill loads with its
-plugin's own hooks, which run in each session as they would after an install; ask once and start
+found a credential or a gate failure, or whose plugin, or a plugin it depends on, has hooks that fail
+the same check, and that refusal is the result. Show the number of sessions, the model, the worst
+case from its `worstCaseSeconds`, and that a plugin skill loads with its plugins' own hooks, which
+run in each session as they would after an install, listing every entry of `hookCommands`; ask once and start
 nothing without a yes. On yes, start it with `--yes` through the host's background run, and do not
 end the turn before its summary has arrived: a session that ends first stops the run with it.
 Report the model, runs per case, date, skipped cases, precision, and recall as a lower bound, and

@@ -216,8 +216,8 @@ cũng phải ra cùng một kết quả.
 | File | Mục đích |
 |------|---------|
 | `plugins/atkx/skills/skill-eval/SKILL.md` | Đánh giá một thư mục skill: kiểm tra tĩnh, quy ước dự án, đo trigger trên Claude Code, soạn nháp case, xem lại một lần chạy, điểm tổng hợp |
-| `plugins/atkx/skills/skill-eval/scripts/static-check.mjs` | Cấu trúc, metadata, độ dài, credential và cổng bảo mật của một skill, in ra dạng JSON; chỉ đọc, không khởi chạy tiến trình nào, không đi theo link ra ngoài skill |
-| `plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs` | Bộ chạy đo trigger: bản sao mồi, config cô lập, các phiên con chạy mỗi lúc ba phiên, phép đếm, dọn dẹp khi thoát, khi nhận `SIGINT`, `SIGTERM` và `SIGHUP`, quét dọn những gì một lượt bị giết để lại, và từ chối skill mà phần kiểm tra tĩnh báo lỗi cổng bảo mật |
+| `plugins/atkx/skills/skill-eval/scripts/static-check.mjs` | Cấu trúc, metadata, độ dài, credential và cổng bảo mật của một skill, cùng cổng đó chạy trên hooks của một plugin, in ra dạng JSON; chỉ đọc, không khởi chạy tiến trình nào, không đi theo link ra ngoài skill |
+| `plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs` | Bộ chạy đo trigger: bản sao mồi, config cô lập, các phiên con chạy mỗi lúc ba phiên, phép đếm, dọn dẹp khi thoát, khi nhận `SIGINT`, `SIGTERM` và `SIGHUP`, quét dọn những gì một lượt bị giết để lại, từ chối skill mà phần kiểm tra tĩnh, hoặc hooks của plugin chứa nó, báo lỗi cổng bảo mật, chỉ chuyển cho mỗi phiên những biến môi trường nó cần, và đưa thông tin đăng nhập qua biến môi trường thay vì chép file |
 | `plugins/atkx/skills/skill-eval/scripts/hook-log.mjs` | Hook `PreToolUse` của các phiên con: ghi lại từng payload và từ chối lượt gọi `Skill`, nên skill được chọn có được ghi nhận nhưng không bao giờ chạy |
 | `plugins/atkx/skills/skill-eval/scripts/score.mjs` | Điểm tổng hợp, trọng số đã dùng, xếp loại hoặc không có, và một ghi chú cho mỗi quy tắc áp dụng |
 | `plugins/atkx/skills/skill-eval/references/static-checks.md` | Mỗi phép kiểm tra tĩnh tìm gì, vì sao, và cách làm tay khi máy không có Node |

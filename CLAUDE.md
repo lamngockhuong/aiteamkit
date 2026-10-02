@@ -969,7 +969,8 @@ test -z "$x" && echo "OK no executable file in atkx" || echo "FAIL executable fi
 # lands in the tree or stays on the machine: a credential found and masked, a SKILL.md linking out of
 # the skill reported without its target being read, the one-line stop with no SKILL.md, the script
 # run through a linked path, the negation rule both ways, the score rules, the hook's deny and its
-# log line, and the trigger runner refusing a skill that fails the gate
+# log line, the trigger runner refusing a skill that fails the gate, and refusing a plugin whose hook
+# calls out or runs a file outside the plugin while letting a harmless hook through
 python3 -c "
 import json, os, shutil, subprocess, tempfile
 d = 'plugins/atkx/skills/skill-eval/scripts/'
@@ -1014,13 +1015,30 @@ assert json.loads(open(log).read().splitlines()[0])['tool_input']['skill'] == 'x
 assert run([d + 'hook-log.mjs'], json.dumps({'tool_name': 'Bash'})).stdout == '{}'
 g = json.loads(run([d + 'trigger-run.mjs', 'tests/skill-eval-fixtures/malicious-skill', '--dry-run']).stdout)
 assert g['status'] == 'gate-failed', g
+hp = os.path.join(t, 'hp'); os.makedirs(os.path.join(hp, '.claude-plugin')); os.makedirs(os.path.join(hp, 'hooks'))
+os.makedirs(os.path.join(hp, 'skills', 's'))
+open(os.path.join(hp, '.claude-plugin', 'plugin.json'), 'w').write(json.dumps({'name': 'hp'}))
+open(os.path.join(hp, 'skills', 's', 'SKILL.md'), 'w').write('---\nname: s\ndescription: probe\n---\nbody\n')
+def hooked(script, command):
+    open(os.path.join(hp, 'hooks', 'h.mjs'), 'w').write(script)
+    open(os.path.join(hp, 'hooks', 'hooks.json'), 'w').write(json.dumps({'hooks': {'SessionStart': [{'hooks': [{'type': 'command', 'command': command}]}]}}))
+    return json.loads(run([d + 'trigger-run.mjs', os.path.join(hp, 'skills', 's'), '--dry-run']).stdout)
+call = 'aw' + 'ait fe' + 'tch(' + chr(39) + 'https://drop.example.invalid/x' + chr(39) + ');' + chr(10)
+r = hooked(call, 'node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs')
+assert r['status'] == 'gate-failed' and any(f['kind'] == 'network' for f in r['hookFindings']), 'a hook calling out passed the gate'
+r = hooked('// nothing' + chr(10), 'bash ' + os.path.join(t, 'outside.sh'))
+assert r['status'] == 'gate-failed' and any(f['kind'] == 'unreadable' for f in r['hookFindings']), 'a hook running a file outside the plugin passed the gate'
+r = hooked('// nothing' + chr(10), 'node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs 2>/dev/null')
+assert r['status'] != 'gate-failed', 'a harmless hook failed the gate: %s' % r
 shutil.rmtree(t); shutil.rmtree(e)
 print('OK skill-eval behaviours outside the fixtures')"
 
 # The trigger runner's counting, against a stand-in for claude that answers like a session would:
 # it runs the hook from --settings with a Skill call, pp:sk for a query naming review and another
 # skill otherwise. A dry run counts and removes nothing; a --yes run measures 100 on both cases,
-# leaves no run directory behind, and the seed was a copy, since the scratch repository is unchanged
+# leaves no run directory behind, and the seed was a copy, since the scratch repository is unchanged.
+# The session sees none of the runner's environment it does not need, and an absolute link in the
+# seed has become a relative one, so nothing written through it lands in the original
 python3 -c "
 import json, os, shutil, stat, subprocess, tempfile
 t = tempfile.mkdtemp(); repo = os.path.join(t, 'repo'); sk = os.path.join(repo, 'p', 'skills', 'sk')
@@ -1029,16 +1047,20 @@ open(os.path.join(repo, 'p', '.claude-plugin', 'plugin.json'), 'w').write('{\"na
 open(os.path.join(sk, 'SKILL.md'), 'w').write('---\nname: sk\ndescription: probe\n---\nbody\n')
 json.dump([{'query': 'please review this', 'should_trigger': True}, {'query': 'write a poem', 'should_trigger': False}],
           open(os.path.join(sk, 'evals', 'trigger_evals.json'), 'w'))
+open(os.path.join(repo, 'real.txt'), 'w').write('data')
+os.symlink(os.path.join(repo, 'real.txt'), os.path.join(repo, 'abs-link'))
 subprocess.run(['git', 'init', '-q', repo], check=True)
 bin_ = os.path.join(t, 'bin'); os.makedirs(bin_); fake = os.path.join(bin_, 'claude')
+probe = os.path.join(t, 'probe.json')
 open(fake, 'w').write('''#!/usr/bin/env node
 const fs = require('fs'), cp = require('child_process');
 const a = process.argv.slice(2), cfg = JSON.parse(fs.readFileSync(a[a.indexOf('--settings') + 1], 'utf8'));
 const q = fs.readFileSync(0, 'utf8'), skill = /review/.test(q) ? 'pp:sk' : 'other:x';
+fs.writeFileSync(''' + json.dumps(probe) + ''', JSON.stringify({ secret: 'SKILL_EVAL_PROBE_SECRET' in process.env, link: fs.readlinkSync('abs-link') }));
 cp.execSync(cfg.hooks.PreToolUse[0].hooks[0].command, { input: JSON.stringify({ tool_name: 'Skill', tool_input: { skill } }) });
 ''')
 os.chmod(fake, os.stat(fake).st_mode | stat.S_IXUSR)
-env = dict(os.environ, PATH=bin_ + os.pathsep + os.environ['PATH'], ANTHROPIC_API_KEY='stand-in')
+env = dict(os.environ, PATH=bin_ + os.pathsep + os.environ['PATH'], ANTHROPIC_API_KEY='stand-in', SKILL_EVAL_PROBE_SECRET='x')
 runner = os.path.abspath('plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs')
 def trig(*a):
     return json.loads(subprocess.run(['node', runner, sk, *a], capture_output=True, text=True, env=env, cwd=t).stdout)
@@ -1050,7 +1072,10 @@ assert (m['status'], m['score'], m['precision'], m['recall']) == ('measured', 10
 assert [c['selected'] for c in m['perCase']] == [['pp:sk', 'pp:sk'], ['other:x', 'other:x']], m['perCase']
 after = sorted(n for n in os.listdir(tempfile.gettempdir()) if n.startswith('skill-eval-run-'))
 assert after == before, 'the run left its directory behind'
-assert subprocess.run(['git', '-C', repo, 'status', '--porcelain'], capture_output=True, text=True).stdout.count(chr(10)) == 1, 'the scratch repository changed'
+assert subprocess.run(['git', '-C', repo, 'status', '--porcelain'], capture_output=True, text=True).stdout.count(chr(10)) == 3, 'the scratch repository changed'
+seen = json.load(open(probe))
+assert not seen['secret'], 'a session saw an environment variable it does not need'
+assert seen['link'] == 'real.txt', 'an absolute link in the seed still names the original: %s' % seen['link']
 shutil.rmtree(t)
 print('OK trigger runner counts')"
 ```

@@ -30,12 +30,16 @@ Three conditions, each learned by getting it wrong:
   commits and any uncommitted change are there. Two files are left out, `.claude/settings.json` and
   `.claude/settings.local.json`, because their hooks and pre-approved permissions would run in every
   session. A link is copied as a link when its target is inside the repository and left out when it
-  is not, so no file from outside lands in the seed. The original is only read; its `git status` and
+  is not, so no file from outside lands in the seed; an absolute link becomes the relative link to
+  the seed's copy of its target, so a write through it stays in the seed. The original is only read; its `git status` and
   `git stash list` are the same after the run as before it. A git worktree or submodule, whose
   repository directory another checkout shares, is refused: a copy of it would write into the
   original.
-- **Other kits out of the room.** Each session gets a temporary `CLAUDE_CONFIG_DIR` holding only
-  credentials, and the skill is loaded explicitly: a plugin skill with `--plugin-dir` from the seed
+- **Other kits out of the room.** Each session gets an empty temporary `CLAUDE_CONFIG_DIR`, the
+  login in its environment, and of the runner's other environment variables only those a session
+  needs: finding programs and its home, the locale and the temporary directory, a proxy and its
+  certificates, and the `ANTHROPIC_*` and `CLAUDE_CODE_*` settings. A cloud key or a token for
+  another service stays behind. The skill is loaded explicitly: a plugin skill with `--plugin-dir` from the seed
   copy, together with the plugins it declares as dependencies; a skill under `.claude/skills/` is
   already in the seed; any other skill is copied into the temporary config. MCP servers are switched
   off for the session. Skills an organisation provisions for the account, and Claude Code's built-in
@@ -51,19 +55,25 @@ Three conditions, each learned by getting it wrong:
 2. **Count.** Run `node <this skill>/scripts/trigger-run.mjs <skill-path> --dry-run`, with `--runs`
    and `--model` when the user passed them. It prints the cases, the skipped ones, the sessions it
    would start, `worstCaseSeconds`, `worstCaseUsd`, the model, how the skill would load, the plugins
-   it declares that are missing, and whether a login would be copied and how long it has left. It
-   copies nothing, starts no session, and removes nothing: leftover directories of a killed earlier
+   it declares that are missing, `hookCommands`, every hook command the loaded plugins register, and
+   which login would be used and how long it has left. It copies nothing, starts no session, and removes nothing: leftover directories of a killed earlier
    run are removed by the `--yes` run, which reports how many in `removedStale`. It refuses, as
-   `gate-failed`, a skill whose static check found a credential or a security gate failure: such a
-   skill is not run, hooks and all, in sessions that hold the user's login.
+   `gate-failed`, a skill whose static check found a credential or a security gate failure, and a
+   plugin whose hooks fail the same check, listed in `hookFindings`: the hooks of the skill's plugin
+   and of each dependency found beside it, meaning every file under `hooks/`, every file inside the
+   plugin a hook command names, and each command line itself. A command naming a file outside the
+   plugin, other than an interpreter or a device of the system, fails too, since that file is not
+   read. Such a skill is not run in sessions that hold the user's login.
 3. **Ask.** When `credentials` is `none found` or `expiring`, do not ask: report it with the fix the
    `--yes` run would give, since that run would stop at once, and stop. Otherwise show the number of
    sessions, the model, the worst case from `worstCaseSeconds`, and the most the run can spend,
    `worstCaseUsd`, since each session stops at a budget of US$1. When `missingDependencies` is not
    empty, name each missing plugin and say that cases whose `belongs_to` is one of its skills cannot
    reach it, so they skew precision and recall; the report carries the same warning. For a plugin
-   skill, say that the plugin loads with its own hooks, which run in every session exactly as they
-   would after an install, so the mode is for a plugin the user would install anyway. Ask once
+   skill, say that the plugins load with their own hooks, which run in every session exactly as they
+   would after an install, and list each entry of `hookCommands` with its plugin and event: the gate
+   reads for known patterns and does not prove a hook harmless, so the person deciding sees what will
+   run. Ask once
    whether to start. Start nothing without a yes.
 4. **Run.** On yes, start the same command with `--yes` in place of `--dry-run`, through the host's
    background run, so the run can be watched and is stopped with the session. Do not end the turn
@@ -105,10 +115,10 @@ measurement could not answer fairly.
 ## Credentials
 
 The runner uses `CLAUDE_CODE_OAUTH_TOKEN` or `ANTHROPIC_API_KEY` from the environment when either is
-set. Otherwise it copies the user's `.credentials.json` into the temporary config, mode 0600 inside
-a 0700 directory, and only when its access token outlives the run's worst case: a session holding an
-expired copy would try to refresh it, failing, or spending a refresh token the user's own session
-still needs. When it refuses, it says how many minutes are left; any `claude` command refreshes the
+set. Otherwise it reads the access token from the user's `.credentials.json` and hands it to each
+session as `CLAUDE_CODE_OAUTH_TOKEN`, never as a file, so a runner killed outright leaves no copy of
+the login on disk and the refresh token never leaves the user's own config. It does so only when the
+access token outlives the run's worst case, since a session cannot refresh it. When it refuses, it says how many minutes are left; any `claude` command refreshes the
 login, or `claude setup-token` gives a token to set. On macOS the login sits in the keychain and no
 file exists, so the environment token is the route there.
 
@@ -119,16 +129,16 @@ file exists, so the environment token is the route there.
   permission flag, and the seed carries none of the repository's own settings, so a tool call that
   would need approval is refused.
 - What still runs is the evaluated plugin's own hooks, and those of the plugins it depends on,
-  loaded as an install loads them. The static gate reads the skill's own directory, not the plugin's
-  `hooks/`, so the refusal does not cover them: the question in step 3 does, and the mode is for a
-  plugin the user would install anyway. How the child sessions are isolated from such code is an
-  open design question, recorded with this skill's plan.
+  loaded as an install loads them. They pass the static gate before any session starts, step 2 says
+  what it reads, and the question in step 3 shows each command. A hook still runs with the user's
+  login in its environment: the gate finds known patterns, not every harmful hook, which is why the
+  commands are shown rather than only judged.
 - A session is stopped at 180 seconds, and each one carries a spending cap of one US dollar, which
   also bounds a session nobody is left to stop.
 - On exit, on `SIGINT`, `SIGTERM` and `SIGHUP`, the runner stops every session it started and removes
   its one temporary directory: config, seed and logs.
-- A runner killed outright cannot clean up. Its directory stays in the temporary directory, the
-  copied credentials with it, until the next `--yes` run of the runner, which stops that run's
+- A runner killed outright cannot clean up. Its directory stays in the temporary directory, with no
+  login in it, until the next `--yes` run of the runner, which stops that run's
   sessions, removes every such directory of this user whose runner is gone, and reports how many.
   A `--dry-run` and a refused run touch none of it.
 
