@@ -3,12 +3,11 @@ name: qa
 description: >
   Plan and write the team's testing: a test plan with scope and exit criteria, test cases traced to
   acceptance criteria, a regression matrix, test data and environment needs, and the handoff a
-  developer owes QA before a ticket moves to testing. Afterwards, records a test run the team
-  executed, raises its failed cases as bugs, and records the retest of a fixed bug. Also brings
-  existing cases level with a changed spec.
-  Use when a feature reaches QA, when a release needs a regression pass, when a team has no
-  written test cases, when the spec changed under existing cases, when test results need recording
-  and their defects logging, or when a cases file needs a second person's review before approval.
+  developer owes QA. Afterwards, records a test run, raises its failed cases as bugs, and records
+  the retest of a fixed bug. Also brings existing cases level with a changed spec. Use when a
+  feature reaches QA, when a release needs a regression pass, when a team has no written test cases,
+  when the spec changed under existing cases, when results need recording, or when cases need review
+  before approval.
   Triggers on: "test plan", "test case", "QA", "kiểm thử", "viết test case", "regression",
   "update the test cases", "cập nhật test case", "テストケース更新",
   "test results", "log the failed cases as bugs", "retest", "ghi kết quả test", "log bug",

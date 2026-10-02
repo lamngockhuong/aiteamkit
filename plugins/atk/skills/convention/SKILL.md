@@ -3,12 +3,10 @@ name: convention
 description: >
   Extract, record, and enforce the coding conventions a team actually follows: branch and commit
   rules, naming, layering, error handling, test layout, review etiquette, and the tooling that
-  enforces each rule automatically.
-  Also offers to draft the collaboration files the project has none of, `CONTRIBUTING.md`, the
-  pull request template, and `CODEOWNERS`, writing only the ones the team picks.
-  Use when a team has no written convention, when the written one no longer matches the code, when
-  reviews keep repeating the same comment, or when the repository has no contribution guide, pull
-  request template, or owners file.
+  enforces each rule. Also drafts the collaboration files the project lacks, `CONTRIBUTING.md`, the
+  pull request template, and `CODEOWNERS`, writing only the ones the team picks. Use when a team has
+  no written convention, when the written one no longer matches the code, or when reviews keep
+  repeating the same comment.
   Triggers on: "convention", "coding standard", "quy ước code", "coding rule", "style guide",
   "branch strategy", "commit convention", "コーディング規約", "our team rules", "CONTRIBUTING.md",
   "CODEOWNERS", "contribution guide", "set up a pull request template", "tạo CONTRIBUTING",

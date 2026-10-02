@@ -1,16 +1,12 @@
 ---
 name: plan
 description: >
-  Turn a piece of work into the phases and steps that implement it: what the code does today with
-  file paths, phases that each end in something reviewable, steps inside each phase that leave the
-  tree working, what each step touches and how it is checked, what is deliberately out of scope, and
-  what is still unclear with the name of whoever must answer.
-  Also reviews a plan somebody has already written, against the repository it assumes and the
-  request behind it, challenges a written plan with one agent per way it can fail, and records the
-  answers to its open questions with who gave them.
-  Use before starting work, when picking up something somebody else designed, when work is large
-  enough that it needs stages but does not need splitting across people, or when a written plan
-  needs checking before anyone builds from it.
+  Turn a piece of work into phases and steps: today's code with file paths, phases that each end in
+  something reviewable, steps that leave the tree working and how each is checked, what is out of
+  scope, and what is unclear with who must answer. Also reviews a written plan against the
+  repository and the request, challenges it with one agent per way it can fail, and records the
+  answers to its open questions. Use before starting work, on work somebody else designed, when work
+  needs stages but one owner, or when a plan needs checking before anyone builds on it.
   Triggers on: "plan this ticket", "implementation plan", "plan this in phases", "lập kế hoạch",
   "kế hoạch thực thi", "vạch bước", "chia giai đoạn", "làm ticket này thế nào", "実装計画",
   "作業計画", "段階に分けて", "review this plan", "check this plan", "soát lại plan",
