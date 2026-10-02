@@ -717,21 +717,23 @@ bởi người tiếp quản, không bao giờ do người rời đi tự tuyên
 ## `atkx:skill-eval`
 
 **Sinh ra.** Một báo cáo in ngay trong phiên: trên cùng là một điểm tổng hợp kèm xếp loại, bên dưới
-mỗi chiều đánh giá có một mục với số liệu riêng. Phần kiểm tra tĩnh xem cấu trúc, siêu dữ liệu, độ dài,
-credential, và một cổng bảo mật soi những gì skill làm: gọi mạng tới host mà `SKILL.md` không nêu
-tên, tải về rồi chạy như code, câu lệnh bảo agent tắt một lớp kiểm tra an toàn, script không ai đọc
-nổi. Nhóm quy ước dự án đối chiếu skill với những quy tắc về skill mà chính repo chứa nó đã viết ra,
-mỗi quy tắc trích nguồn dạng `file:line`. Khi chưa đo trigger, điểm được ghi rõ là chưa tính trigger
-và không có xếp loại; chỉ cần một credential hay một lỗi ở cổng bảo mật là xếp loại F. `--trigger`,
-chỉ có trên Claude Code, chạy từng trigger case trong các phiên con và nêu tên skill mà mỗi case tìm
-tới, sau khi cho biết sẽ mở bao nhiêu phiên và được người dùng đồng ý. Nó từ chối skill không qua
-cổng bảo mật, và skill trong plugin được nạp cùng hook của chính plugin đó, các hook này chạy trong
-những phiên ấy như sau khi cài đặt. `--draft-cases`
-soạn nháp trigger case vào một file tạm và chỉ ghi vào skill khi người dùng đồng ý; `--review` dò lại
-một lần chạy skill trước đó trong cuộc hội thoại theo từng bước của nó, đặt ở mục riêng và không bao
-giờ tính vào điểm; `--out` lưu báo cáo ra file. Nếu máy đã cài NVIDIA SkillEvaluator, phần kiểm
-tra tĩnh sẽ đề nghị chạy thêm các phép kiểm Tier 1 không cần khóa API của nó và báo chúng thành một nhóm
-riêng, không tính vào điểm; nếu chưa cài, một dòng ghi rõ điều đó và mọi phép kiểm khác vẫn chạy.
+mỗi chiều đánh giá có một mục với số liệu riêng. Phần kiểm tra tĩnh xem cấu trúc, siêu dữ liệu, độ
+dài, credential, và một cổng bảo mật soi những gì skill làm: gọi mạng tới host mà `SKILL.md` không
+nêu tên, tải về rồi chạy như code, câu lệnh bảo agent tắt một lớp kiểm tra an toàn, script không ai
+đọc nổi. Nhóm quy ước dự án đối chiếu skill với những quy tắc về skill mà chính repo chứa nó đã viết
+ra, mỗi quy tắc trích nguồn dạng `file:line`. Khi chưa đo trigger, điểm được ghi rõ là chưa tính
+trigger và không có xếp loại; chỉ cần một credential hay một lỗi ở cổng bảo mật là xếp loại F.
+`--trigger`, chỉ có trên Claude Code, chạy từng trigger case trong các phiên con và nêu tên skill mà
+mỗi case tìm tới, sau khi cho biết sẽ mở bao nhiêu phiên và được người dùng đồng ý. Nó từ chối skill
+không qua cổng bảo mật, và skill trong plugin được nạp cùng hook của chính plugin đó, các hook này
+chạy trong những phiên ấy như sau khi cài đặt. `--draft-cases` soạn nháp trigger case vào một file
+tạm và chỉ ghi vào skill khi người dùng đồng ý; `--review` dò lại một lần chạy skill trước đó trong
+cuộc hội thoại theo từng bước của nó, ghi lại chỗ nào agent tự làm theo cách khác và việc nào không
+phục vụ bước nào, xếp mỗi chỗ lệch theo mức nghiêm trọng, đặt ở mục riêng và không bao giờ tính vào
+điểm; `--out` lưu báo cáo ra file; không có cờ này thì sau khi in báo cáo, skill hỏi có lưu ra file
+không. Nếu máy đã cài NVIDIA SkillEvaluator, phần kiểm tra tĩnh sẽ đề nghị chạy thêm các phép kiểm
+Tier 1 không cần khóa API của nó và báo chúng thành một nhóm riêng, không tính vào điểm; nếu chưa
+cài, một dòng ghi rõ điều đó và mọi phép kiểm khác vẫn chạy.
 
 **Dùng khi.** Một skill sắp được chia sẻ hoặc cài đặt, vừa đổi description, hoặc cứ bị gọi nhầm cho
 những yêu cầu thuộc về skill khác.
