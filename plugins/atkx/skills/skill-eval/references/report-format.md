@@ -47,11 +47,16 @@ section of its own.
 Printed in the session. Written to a file when `--out <path>` was passed, to that path and no
 other, with the same content, asking first when a file is already there. Without `--out`, one
 question follows the printed report: save it or not. A yes writes it to
-`<temp dir>/skill-eval-<name>-<YYMMDD-HHMM>.md`, `<name>` being the evaluated skill's, or to a path
-the user types instead, with the same check for a file already there. A no, or no answer, writes
-nothing. The operating system's temporary directory holds only what a mode needs while
-it runs: a drafted case set before the yes, SkillEvaluator's output, and the trigger runner's own
-directory, which it removes when it ends.
+`<temp dir>/skill-eval-<slug>-<YYMMDD-HHMM>.md`, or to a path the user types instead, with the same
+check for a file already there. `<slug>` is the evaluated skill's folder name, never its frontmatter
+`name`, reduced to lowercase letters, digits and hyphens, and `skill` when nothing is left. The
+question shows that path resolved in full, so the yes is to the real file. A no, or no answer,
+writes nothing.
+
+The operating system's temporary directory holds what a mode needs while it runs: a drafted case
+set before the yes, SkillEvaluator's output, and the trigger runner's own directory, which it
+removes when it ends. The one thing left there on purpose is the report, when the user said yes to
+saving it there.
 
 ```markdown
 # Skill evaluation: <fullName>

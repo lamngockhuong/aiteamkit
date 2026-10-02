@@ -715,13 +715,14 @@ each cited by `file:line`. Without trigger measurement the score is labelled as 
 grade, and any credential or gate failure makes the grade F. `--trigger`, on Claude Code only, runs
 each trigger case in child sessions and names the skill each one reached, after showing how many
 sessions it will start and getting a yes. It refuses a skill that fails the security gate, and a
-plugin skill loads with its plugin's own hooks, which run in those sessions as after an install. `--draft-cases` drafts trigger cases
-into a temporary file and writes them into the skill only on a yes; `--review` walks a run of the
-skill earlier in the conversation against its steps, noting where it improvised and what work served
-no step, and ranks each deviation by severity, in a section of its own that is never scored;
-`--out` saves the report, and without it the skill asks after printing whether to save one. When NVIDIA SkillEvaluator is installed, the static check offers its
-keyless Tier 1 checks and reports them as a group of their own, outside the score; when it is not,
-one line says so and every other check runs.
+plugin skill loads with its plugin's own hooks, which run in those sessions as after an install.
+`--draft-cases` drafts trigger cases into a temporary file and writes them into the skill only on a
+yes; `--review` walks a run of the skill earlier in the conversation against its steps, noting where
+it improvised and what work served no step, and ranks each deviation by severity, in a section of
+its own that is never scored; `--out` saves the report, and without it the skill asks after printing
+whether to save one. When NVIDIA SkillEvaluator is installed, the static check offers its keyless
+Tier 1 checks and reports them as a group of their own, outside the score; when it is not, one line
+says so and every other check runs.
 
 **Use when.** A skill is about to be shared or installed, its description has just changed, or it
 keeps firing on requests that belong to another skill.
