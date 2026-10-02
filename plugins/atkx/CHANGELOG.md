@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.3](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.2...atkx-v0.0.3) (2026-10-02)
+
+
+### Features
+
+* **skill-eval:** rank review deviations and offer to save the report ([#102](https://github.com/lamngockhuong/aiteamkit/issues/102)) ([3f1805f](https://github.com/lamngockhuong/aiteamkit/commit/3f1805f168dea0f61706a041fcd728f55a733611))
+
+
+### Bug Fixes
+
+* **skill-eval:** ask which skill to evaluate instead of picking one ([#100](https://github.com/lamngockhuong/aiteamkit/issues/100)) ([87997c8](https://github.com/lamngockhuong/aiteamkit/commit/87997c8516aeef2f1985b292b98eccc825adebce))
+
 ## [0.0.2](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.1...atkx-v0.0.2) (2026-10-02)
 
 
