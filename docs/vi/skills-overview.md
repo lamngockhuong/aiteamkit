@@ -605,7 +605,8 @@ vào, chỉ tick những mục checklist mà lượt chạy này thực sự ki�
 
 **Dùng khi.** Một skill hoặc một người đã làm xong và kiểm chứng xong một phần việc, và nó cần đi vào
 repository. Cũng dùng khi một nhánh đã tụt lại sau nhánh gốc, khi có conflict chắn đường, hoặc khi
-một chồng pull request phụ thuộc nhau cần dịch chuyển.
+một chồng pull request phụ thuộc nhau cần dịch chuyển. Với `--draft`, pull request được mở ở dạng
+nháp.
 
 **Không dùng khi.** Việc chưa xong. Skill này không quyết định giúp bạn chuyện đó, việc ấy thuộc về
 người đã làm. Với một lệnh lẻ dùng ngay, gọi thẳng agent của harness nhanh hơn.

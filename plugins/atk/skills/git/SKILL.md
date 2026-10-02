@@ -12,7 +12,7 @@ description: >
   "rebase", "resolve the conflict", "stacked PRs", "branch", "tạo commit", "commit giúp", "đẩy code",
   "mở pull request", "merge PR", "gỡ conflict", "rebase nhánh", "chia commit", "コミット",
   "プルリクエスト", "マージ", "リベース", "コンフリクト解消", "/atk:git".
-argument-hint: "[--commit|--pr|--merge <pr>|--rebase|--resolve|--stack] [--lang <code>] [--out <path>]"
+argument-hint: "[--commit|--pr|--merge <pr>|--rebase|--resolve|--stack] [--draft] [--lang <code>] [--out <path>]"
 ---
 
 # Version Control (`atk:git`)
@@ -53,6 +53,7 @@ person who asks for it, and closing the issue stays with whoever reported it. Se
 /atk:git                      # Read the state, then run the closing sequence as far as consent allows
 /atk:git --commit             # Stop after the commit, push nothing
 /atk:git --pr                 # Through to the pull request, then stop
+/atk:git --pr --draft         # The same, with the pull request opened as a draft
 /atk:git --merge <pr>         # Merge one pull request that is ready, asked for by number
 /atk:git --rebase             # Bring this branch onto its base branch
 /atk:git --resolve            # Work through a conflict already in the working tree
@@ -178,6 +179,10 @@ artifact the calling skill produced as the body, so the reviewer reads the evide
 alone. With one already open, leave the body alone and offer the artifact as a comment instead: the
 body is what the reviewer has already read, and replacing it takes back the version they are holding
 without telling them. Never open a second pull request for a branch that has one.
+
+`--draft` opens the new pull request as a draft, `gh pr create --draft` on GitHub, with or without
+`--pr`. It changes nothing on one already open: say that its state was left as it is. On a host with
+no draft state, say so and ask before opening one ready for review.
 
 Where the project keeps a pull request template, it is the shape of that body and the artifact fills
 it, per `references/pr-body.md`, which also holds where the template is found. Passing the artifact

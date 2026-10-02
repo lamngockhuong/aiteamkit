@@ -600,7 +600,7 @@ the artifact fills it, with only the checklist items this run verified ticked.
 
 **Use when.** A skill or a person has finished and verified a piece of work and it needs to reach the
 repository. Also when a branch has fallen behind its base, when a conflict is in the way, or when a
-stack of dependent pull requests needs moving.
+stack of dependent pull requests needs moving. With `--draft`, the pull request opens as a draft.
 
 **Do not use when.** The work is not finished. This skill decides nothing about whether it is: that
 belongs to whoever did it. For a single ad-hoc command, the host agent is faster.
