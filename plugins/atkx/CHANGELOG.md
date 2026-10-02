@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.3...atkx-v0.0.4) (2026-10-02)
+
+
+### Bug Fixes
+
+* **skill-eval:** gate a plugin's hooks before measuring triggers ([#105](https://github.com/lamngockhuong/aiteamkit/issues/105)) ([1e28a61](https://github.com/lamngockhuong/aiteamkit/commit/1e28a61487c5f904e2619a995d36306b80f14015))
+
 ## [0.0.3](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.2...atkx-v0.0.3) (2026-10-02)
 
 
