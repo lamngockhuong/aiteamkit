@@ -1,0 +1,31 @@
+key	harness	meaning	source	checked
+name	Claude Code	Command name in the / menu; defaults to the directory name	https://code.claude.com/docs/en/skills	2026-10-01
+name	Codex	Identifier used in invocation and discovery	https://learn.chatgpt.com/docs/build-skills	2026-10-01
+name	Cursor	Skill identifier, lowercase letters, digits and hyphens	https://cursor.com/docs/context/skills	2026-10-01
+description	Claude Code	What the skill does and when to use it; matched to decide when to load it	https://code.claude.com/docs/en/skills	2026-10-01
+description	Codex	When the skill should and should not trigger; used for implicit matching	https://learn.chatgpt.com/docs/build-skills	2026-10-01
+description	Cursor	What the skill does and when to use it	https://cursor.com/docs/context/skills	2026-10-01
+when_to_use	Claude Code	Extra context for when to invoke, appended to the description	https://code.claude.com/docs/en/skills	2026-10-01
+argument-hint	Claude Code	Hint shown during autocomplete for the expected arguments	https://code.claude.com/docs/en/skills	2026-10-01
+arguments	Claude Code	Named positional arguments substituted into the skill body	https://code.claude.com/docs/en/skills	2026-10-01
+disable-model-invocation	Claude Code	true keeps the model from loading the skill on its own	https://code.claude.com/docs/en/skills	2026-10-01
+disable-model-invocation	Cursor	true includes the skill only when explicitly invoked	https://cursor.com/docs/context/skills	2026-10-01
+user-invocable	Claude Code	false hides the skill from the / menu	https://code.claude.com/docs/en/skills	2026-10-01
+allowed-tools	Claude Code	Tools usable without asking during the invoking turn	https://code.claude.com/docs/en/skills	2026-10-01
+disallowed-tools	Claude Code	Tools removed while the skill is active	https://code.claude.com/docs/en/skills	2026-10-01
+model	Claude Code	Model used while the skill is active	https://code.claude.com/docs/en/skills	2026-10-01
+effort	Claude Code	Effort level while the skill is active	https://code.claude.com/docs/en/skills	2026-10-01
+context	Claude Code	fork runs the skill in a forked subagent	https://code.claude.com/docs/en/skills	2026-10-01
+agent	Claude Code	Subagent type used with context: fork	https://code.claude.com/docs/en/skills	2026-10-01
+background	Claude Code	false waits for the forked subagent instead of running it in the background	https://code.claude.com/docs/en/skills	2026-10-01
+hooks	Claude Code	Hooks registered while the skill runs	https://code.claude.com/docs/en/skills	2026-10-01
+paths	Claude Code	Glob patterns that limit when the skill is activated	https://code.claude.com/docs/en/skills	2026-10-01
+paths	Cursor	Glob patterns that limit when the skill is visible	https://cursor.com/docs/context/skills	2026-10-01
+globs	Cursor	Legacy form of paths	https://cursor.com/docs/context/skills	2026-10-01
+shell	Claude Code	Shell for inline command blocks, bash or powershell	https://code.claude.com/docs/en/skills	2026-10-01
+metadata	Claude Code	Free-form map for the author	https://code.claude.com/docs/en/skills	2026-10-01
+metadata	Cursor	Arbitrary key-value pairs	https://cursor.com/docs/context/skills	2026-10-01
+license	Claude Code	Licence covering the skill	https://code.claude.com/docs/en/skills	2026-10-01
+compatibility	Claude Code	Environment requirements for the skill	https://code.claude.com/docs/en/skills	2026-10-01
+icon	Cursor	Badge icon when the skill runs as a custom mode	https://cursor.com/docs/context/skills	2026-10-01
+color	Cursor	Badge colour when the skill runs as a custom mode	https://cursor.com/docs/context/skills	2026-10-01

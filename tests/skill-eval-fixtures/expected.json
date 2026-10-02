@@ -1,0 +1,32 @@
+{
+  "good-skill": {
+    "band": "A",
+    "credentials": 0,
+    "gate": [],
+    "includes": [
+      { "id": "frontmatter-key", "status": "info", "value": "argument-hint" },
+      { "id": "gate-network", "status": "info", "value": "docs.example.invalid" }
+    ]
+  },
+  "weak-skill": {
+    "band": "D",
+    "credentials": 0,
+    "gate": [],
+    "includes": [
+      { "id": "name-format", "status": "fail" },
+      { "id": "name-matches-dir", "status": "fail" },
+      { "id": "cited-path", "status": "fail", "value": "assets/rules.md" },
+      { "id": "outside-path", "status": "fail", "value": "/home/someone/notes/team.md" }
+    ]
+  },
+  "malicious-skill": {
+    "grade": "F",
+    "credentials": 0,
+    "gate": ["network", "remote-exec", "safety-off", "unreadable"],
+    "includes": [
+      { "id": "gate-network", "status": "info", "value": "docs.example.invalid" },
+      { "id": "gate-safety-off", "status": "fail", "file": "SKILL.md" },
+      { "id": "gate-unreadable", "status": "fail", "file": "scripts/payload.js" }
+    ]
+  }
+}

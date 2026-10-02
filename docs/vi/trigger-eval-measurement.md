@@ -4,7 +4,8 @@ Skill nào cũng mang theo `evals/trigger_evals.json`, một mảng `{query, sho
 cách nói nào phải gọi được skill đó và cách nói nào thì không. Viết ra các file ấy thì dễ. Đo chúng
 mới khó, và cách đo hiển nhiên nhất trả về một con số trông như kết quả nhưng không phải kết quả.
 
-Tài liệu này dành cho người bảo trì muốn kiểm một thay đổi ở `description` bằng chính bộ case đó.
+Tài liệu này dành cho người bảo trì muốn kiểm một thay đổi ở `description` bằng chính bộ case đó,
+và cũng là cách đo mà bộ chạy trong `atkx:skill-eval` hiện thực.
 Các file ấy chứa gì và sinh ra để làm gì thì đọc phase 4 trong [project-roadmap.md](project-roadmap.md);
 ở đây chỉ nói cách lấy được một số đo đúng từ chúng.
 
@@ -37,7 +38,9 @@ biết description nào đã nói mạnh hơn description của bạn, và thua 
 **Dự án mồi phải có việc thật.** Trong một thư mục trắng, model không gọi skill nào cả, với bất kỳ
 query nào, và kết quả không phân biệt được với một description chẳng khớp gì. Hãy đưa cho phiên con
 một repository có commit, có thay đổi chưa commit, có nhánh, có tài liệu yêu cầu và tài liệu thiết
-kế, để skill nào đang được đo cũng có cái để làm.
+kế, để skill nào đang được đo cũng có cái để làm. Bộ chạy sao chép nguyên trạng repository chứa
+skill, nên phép đo chỉ tốt bằng những gì repository đó đang có; hãy chạy từ một thư mục làm việc đang có
+việc dở dang.
 
 **Các kit khác phải ở ngoài phòng.** Nếu dùng chính cấu hình của người bảo trì thì mọi plugin đã cài
 đều tranh nhau, mà thua một skill của kit khác thì không nói được gì về một team chỉ cài mỗi kit
@@ -52,45 +55,30 @@ case, vì kỳ vọng đó sai.
 
 ## Chạy một lượt
 
-Script hook, file settings và dự án mồi đều nằm ngoài repository, vì chưa ai quyết định giữ một bộ
-chạy trong đó. Một bộ đặt ngoài `plugins/` sẽ không được ship nên không team nào phải mang theo; đặt
-trong một plugin thì có. Những gì cần để dựng lại đều nằm dưới đây.
-
-Một hook ghi lại những lượt gọi tool mà nó nhận được, vào file mà `HOOK_LOG` chỉ tới:
-
-```javascript
-import { readFileSync, appendFileSync } from "node:fs";
-let raw = "";
-try { raw = readFileSync(0, "utf8"); } catch {}
-let payload;
-try { payload = JSON.parse(raw); } catch { payload = { unparsed: raw.slice(0, 400) }; }
-appendFileSync(process.env.HOOK_LOG, JSON.stringify(payload) + "\n");
-process.stdout.write("{}");
-```
-
-File settings đăng ký nó, truyền vào bằng `--settings`:
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      { "matcher": "Skill", "hooks": [{ "type": "command", "command": "node /path/to/hooklog.mjs" }] }
-    ]
-  }
-}
-```
-
-Một query, chạy trong thư mục dự án mồi vừa dựng:
+Bộ chạy nằm trong `atkx`, ngay trong skill dùng nó: `atkx:skill-eval --trigger` gọi nó, còn hai
+script của nó ở `plugins/atkx/skills/skill-eval/scripts/`. `hook-log.mjs` là hook mà mọi phiên con
+chạy, còn `trigger-run.mjs` dựng bản sao mồi và config cô lập, khởi chạy các phiên, đếm kết quả rồi
+dọn sạch. Reference của nó, `plugins/atkx/skills/skill-eval/references/trigger-mode.md`, giữ các
+bước, lời xin đồng ý trước khi mở bất kỳ phiên nào, quy tắc về thông tin đăng nhập, và cách dọn dẹp.
 
 ```bash
-HOOK_LOG=$log CLAUDE_CONFIG_DIR=$isolated_config \
-  claude -p "$query" --settings "$settings" --plugin-dir "$kit_repo/plugins/atk" --model sonnet
+node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --dry-run
+node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --yes --runs 3 --model sonnet
 ```
 
-Một trigger là một payload đã ghi có `tool_name` bằng `Skill` và `tool_input.skill` bằng đúng
-`atk:<tên>`. So khớp chính xác. Nếu chỉ kiểm tên skill có nằm trong giá trị đó không thì `code-review`
-dựng sẵn sẽ được tính thành một lượt trúng của `review`, và đó cũng là kiểu đạt rỗng mà bộ chạy hỏng
-tạo ra, chỉ đi tới từ hướng ngược lại.
+`--dry-run` đếm số phiên, không sao chép gì và không mở phiên nào; `--yes` chạy chúng, mỗi lúc ba
+phiên. Hook ghi lại lượt gọi `Skill` rồi từ chối lượt gọi đó, nên skill được chọn không bao giờ chạy
+trong bản mồi, và bộ chạy dừng phiên ngay khi lượt gọi đầu tiên được ghi, vì sau đó không còn gì
+được đếm. Dừng ở đó thì một phiên chỉ mất vài giây, thay vì vài phút cho trọn một lượt chạy skill.
+Bản mồi bỏ ra ngoài `.claude/settings*.json` của chính repository, và bộ chạy từ chối một skill mà
+phần kiểm tra tĩnh tìm ra credential hoặc lỗi cổng bảo mật. Skill trong plugin vẫn được nạp cùng
+hook của plugin đó, mà phần kiểm tra tĩnh không đọc, nên lời xin đồng ý trước khi chạy phải nêu tên
+các hook này; cách tách các phiên con khỏi đoạn mã đó vẫn là câu hỏi thiết kế chưa đóng.
+
+Một trigger là một phiên mà payload `Skill` *đầu tiên* được ghi có `tool_input.skill` bằng đúng tên
+đầy đủ của skill đang đo, `atk:<tên>` với skill của kit này. So khớp chính xác. Nếu chỉ kiểm tên
+skill có nằm trong giá trị đó không thì `code-review` dựng sẵn sẽ được tính thành một lượt trúng của
+`review`, và đó cũng là kiểu đạt rỗng mà bộ chạy hỏng tạo ra, chỉ đi tới từ hướng ngược lại.
 
 ## Những giới hạn phải nói rõ trong mọi kết quả
 

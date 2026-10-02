@@ -23,15 +23,14 @@ removed, or renamed; update it in the same commit.
 | `.claude-plugin/marketplace.json` | Claude Code marketplace listing `atk` at `./plugins/atk` and `atkx` at `./plugins/atkx`, with no version of their own |
 | `.cursor-plugin/marketplace.json` | Cursor marketplace listing `atk` and `atkx` at `plugins/atk` and `plugins/atkx`, descriptions left to each `plugin.json` |
 | `.agents/plugins/marketplace.json` | Codex marketplace listing `atk` and `atkx` as local plugins at `./plugins/atk` and `./plugins/atkx` |
-| `plugins/*/CHANGELOG.md` | Written by release-please from the commit types, never by hand, one per plugin from its first release: `plugins/atk/CHANGELOG.md` now, `plugins/atkx/CHANGELOG.md` once `atkx` is released. `feat:` and `fix:` appear; the other types are silent |
+| `plugins/*/CHANGELOG.md` | Written by release-please from the commit types, never by hand, one per plugin from its first release: `plugins/atk/CHANGELOG.md` and `plugins/atkx/CHANGELOG.md`. `feat:` and `fix:` appear; the other types are silent |
 | `plugins/atk/LICENSE` | A copy of the root `LICENSE`, because an install carries the plugin directory alone and MIT asks for the notice to travel with the copy |
 | `plugins/atkx/LICENSE` | The same copy for `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Cursor plugin metadata with `displayName` and `"skills": "./skills/"` |
 | `plugins/atk/.codex-plugin/plugin.json` | Codex CLI metadata with `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, plus the `interface{}` listing block: descriptions, `defaultPrompt`, `brandColor`, icon paths |
 | `plugins/atkx/.claude-plugin/plugin.json` | Claude Code metadata for `atkx`, with `"dependencies": ["atk"]` so installing it installs `atk` |
 | `plugins/atkx/.cursor-plugin/plugin.json` | Cursor metadata for `atkx`, with `displayName` and `"skills": "./skills/"` |
-| `plugins/atkx/.codex-plugin/plugin.json` | Codex CLI metadata for `atkx`, with `"skills": "./skills/"` and an `interface{}` block saying it has no skill yet |
-| `plugins/atkx/skills/.gitkeep` | Keeps the empty `skills/` of `atkx` in the tree until its first skill arrives |
+| `plugins/atkx/.codex-plugin/plugin.json` | Codex CLI metadata for `atkx`, with `"skills": "./skills/"` and an `interface{}` block naming `skill-eval` |
 
 ## Shared layer
 
@@ -179,7 +178,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 ### Trigger evals
 
 One per skill, each an array of `{query, should_trigger}` testing that skill's `description`, in
-all three trigger languages. The kit ships no runner; see `docs/project-roadmap.md` phase 4.
+all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` measures them, per `docs/trigger-eval-measurement.md`.
 
 | File | Purpose |
 |------|---------|
@@ -208,6 +207,27 @@ all three trigger languages. The kit ships no runner; see `docs/project-roadmap.
 | `plugins/atk/skills/onboard/evals/trigger_evals.json` | A person joining, against `handover`, `init`, and `catchup` |
 | `plugins/atk/skills/handover/evals/trigger_evals.json` | A person leaving, against `onboard` and `catchup` |
 
+## The `atkx` skill
+
+`skill-eval` is the one skill with `scripts/`: Node, for the checks whose answer must repeat.
+
+| File | Purpose |
+|------|---------|
+| `plugins/atkx/skills/skill-eval/SKILL.md` | Evaluates a skill directory: static check, project conventions, trigger measurement on Claude Code, drafted cases, review of a run, composite score |
+| `plugins/atkx/skills/skill-eval/scripts/static-check.mjs` | Structure, metadata, size, credentials and the security gate of one skill, printed as JSON; reads only, starts no process, follows no link out of the skill |
+| `plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs` | The trigger runner: seed copy, isolated config, child sessions three at a time, the count, and cleanup on exit, `SIGINT`, `SIGTERM` and `SIGHUP`, plus the sweep of what a killed run left; refuses a skill whose static check fails the gate |
+| `plugins/atkx/skills/skill-eval/scripts/hook-log.mjs` | The child sessions' `PreToolUse` hook: logs each payload and denies the `Skill` call, so the selected skill is recorded and never runs |
+| `plugins/atkx/skills/skill-eval/scripts/score.mjs` | The composite, its weights, the grade or none, and a note per rule applied |
+| `plugins/atkx/skills/skill-eval/references/static-checks.md` | What each static check looks for, why, and how to do it by hand without Node |
+| `plugins/atkx/skills/skill-eval/references/frontmatter-keys.tsv` | Which of Claude Code, Codex and Cursor reads which frontmatter key, each line with its source and `checked` date |
+| `plugins/atkx/skills/skill-eval/references/project-conventions.md` | Where the project's rules about skills are found, which apply, and how each is checked and cited |
+| `plugins/atkx/skills/skill-eval/references/trigger-mode.md` | The trigger method, the consent before any session starts, credentials, containment and cleanup, and the limits a result states |
+| `plugins/atkx/skills/skill-eval/references/draft-cases.md` | Drafting trigger cases outside the repository, negatives named by the skill they belong to, written only on a yes |
+| `plugins/atkx/skills/skill-eval/references/review-mode.md` | Walking a run in the conversation against the skill's steps, and classifying each deviation |
+| `plugins/atkx/skills/skill-eval/references/report-format.md` | The scoring rules and the report's shape, score line first |
+| `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Evaluating a skill, against `tailor`, `review`, `convention`, `security`, `help` and `qa` |
+| `tests/skill-eval-fixtures/` | A good, a weak and a malicious sample skill for `atkx:skill-eval`, and `expected.json` with the verdict each must get; the check is in `CLAUDE.md`. Outside the plugin, because Codex lists a `SKILL.md` found at any depth under `skills/` as a skill of its own |
+
 ## Assets
 
 | File | Purpose |
@@ -227,12 +247,13 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/artifact-lifecycle.md` | Which artifacts to commit, which may be deleted, what each deletion costs, and the three policies a team can choose between |
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
-| `docs/trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`: why a generic harness reports a vacuous score, the `PreToolUse` hook that does measure selection, the three conditions a run needs, and the cases nothing can observe |
+| `docs/trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`: why a generic harness reports a vacuous score, the `PreToolUse` hook that does measure selection, the three conditions a run needs, the cases nothing can observe, and where the runner that implements it lives |
 | `docs/flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and the approver of each artifact, the loop back when one is rejected, and a pointer to the role table that `init` now carries |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | The first architecture decision record: `atk` moves to `plugins/atk/` and `atkx`, a kit of utility skills that may call `atk` and is never called by it, is created at `plugins/atkx/`, the two sharing no file, and `atk` gains `CONV-011` to keep the dependency one-way |
-| `docs/vi/**/*.md` | Vietnamese mirror of the eleven files above, at the same relative paths |
+| `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` | The second: `atkx:skill-eval` keeps the checks that must repeat in Node scripts and leaves judgment to the agent |
+| `docs/vi/**/*.md` | Vietnamese mirror of the twelve files above, at the same relative paths |
 
 ## GitHub
 
@@ -240,10 +261,10 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 |------|---------|
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
 | `.github/workflows/labeler.yml` | Labels each pull request from the paths it changes, using `.github/labeler.yml` |
-| `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill, which must list all 24 |
+| `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill of either plugin: the 24 of `atk` and each `atkx` skill |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/*.yml` forms | Each adds its type label plus `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 24 skills, plus the profile, the overrides, the shared layer, the hooks, and `atkx` |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 24 `atk` skills, plus the profile, the overrides, the shared layer, the hooks, `atkx`, and one `Skill - atkx:<name>` entry per `atkx` skill |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Skill run form taking a `--feedback` record: what was asked, which steps ran, where the skill was silent, and what the team expected |

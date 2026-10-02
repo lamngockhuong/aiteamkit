@@ -23,15 +23,14 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `.claude-plugin/marketplace.json` | Marketplace của Claude Code, liệt kê `atk` ở `./plugins/atk` và `atkx` ở `./plugins/atkx`, không tự mang version |
 | `.cursor-plugin/marketplace.json` | Marketplace của Cursor, liệt kê `atk` và `atkx` ở `plugins/atk` và `plugins/atkx`, phần mô tả để `plugin.json` của từng plugin lo |
 | `.agents/plugins/marketplace.json` | Marketplace của Codex, liệt kê `atk` và `atkx` là plugin cục bộ ở `./plugins/atk` và `./plugins/atkx` |
-| `plugins/*/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay, mỗi plugin một file kể từ lần phát hành đầu: hiện có `plugins/atk/CHANGELOG.md`, còn `plugins/atkx/CHANGELOG.md` có khi `atkx` được phát hành. `feat:` và `fix:` hiện lên; các loại khác im lặng |
+| `plugins/*/CHANGELOG.md` | Do release-please sinh ra từ loại của commit, không bao giờ viết tay, mỗi plugin một file kể từ lần phát hành đầu: `plugins/atk/CHANGELOG.md` và `plugins/atkx/CHANGELOG.md`. `feat:` và `fix:` hiện lên; các loại khác im lặng |
 | `plugins/atk/LICENSE` | Bản sao của `LICENSE` ở gốc, vì bản cài chỉ mang thư mục plugin và MIT yêu cầu thông báo giấy phép đi cùng bản sao |
 | `plugins/atkx/LICENSE` | Bản sao như trên cho `atkx` |
 | `plugins/atk/.cursor-plugin/plugin.json` | Metadata cho Cursor, có `displayName` và `"skills": "./skills/"` |
 | `plugins/atk/.codex-plugin/plugin.json` | Metadata cho Codex CLI, có `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, cộng khối `interface{}`: mô tả, `defaultPrompt`, `brandColor`, đường dẫn icon |
 | `plugins/atkx/.claude-plugin/plugin.json` | Metadata của `atkx` cho Claude Code, có `"dependencies": ["atk"]` nên cài nó là cài cả `atk` |
 | `plugins/atkx/.cursor-plugin/plugin.json` | Metadata của `atkx` cho Cursor, có `displayName` và `"skills": "./skills/"` |
-| `plugins/atkx/.codex-plugin/plugin.json` | Metadata của `atkx` cho Codex CLI, có `"skills": "./skills/"` và khối `interface{}` ghi rằng chưa có skill nào |
-| `plugins/atkx/skills/.gitkeep` | Giữ thư mục `skills/` còn trống của `atkx` trong cây cho tới khi có skill đầu tiên |
+| `plugins/atkx/.codex-plugin/plugin.json` | Metadata của `atkx` cho Codex CLI, có `"skills": "./skills/"` và khối `interface{}` nêu tên `skill-eval` |
 
 ## Lớp dùng chung
 
@@ -179,7 +178,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 ### Thư mục `evals/`
 
 Mỗi skill một file, là mảng `{query, should_trigger}` kiểm phần `description` của chính skill đó,
-bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 trong `docs/vi/project-roadmap.md`.
+bằng cả ba ngôn ngữ trigger. `atk` không kèm bộ chạy; `atkx:skill-eval --trigger` đo chúng, theo `docs/trigger-eval-measurement.md`.
 
 | File | Mục đích |
 |------|----------|
@@ -208,6 +207,28 @@ bằng cả ba ngôn ngữ trigger. Kit không kèm bộ chạy; xem phase 4 tro
 | `plugins/atk/skills/onboard/evals/trigger_evals.json` | Một người vào dự án, đối lại `handover`, `init` và `catchup` |
 | `plugins/atk/skills/handover/evals/trigger_evals.json` | Một người rời việc, đối lại `onboard` và `catchup` |
 
+## Skill của `atkx`
+
+`skill-eval` là skill duy nhất có `scripts/`: viết bằng Node, cho những phép kiểm tra mà lần nào chạy
+cũng phải ra cùng một kết quả.
+
+| File | Mục đích |
+|------|---------|
+| `plugins/atkx/skills/skill-eval/SKILL.md` | Đánh giá một thư mục skill: kiểm tra tĩnh, quy ước dự án, đo trigger trên Claude Code, soạn nháp case, xem lại một lần chạy, điểm tổng hợp |
+| `plugins/atkx/skills/skill-eval/scripts/static-check.mjs` | Cấu trúc, metadata, độ dài, credential và cổng bảo mật của một skill, in ra dạng JSON; chỉ đọc, không khởi chạy tiến trình nào, không đi theo link ra ngoài skill |
+| `plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs` | Bộ chạy đo trigger: bản sao mồi, config cô lập, các phiên con chạy mỗi lúc ba phiên, phép đếm, dọn dẹp khi thoát, khi nhận `SIGINT`, `SIGTERM` và `SIGHUP`, quét dọn những gì một lượt bị giết để lại, và từ chối skill mà phần kiểm tra tĩnh báo lỗi cổng bảo mật |
+| `plugins/atkx/skills/skill-eval/scripts/hook-log.mjs` | Hook `PreToolUse` của các phiên con: ghi lại từng payload và từ chối lượt gọi `Skill`, nên skill được chọn có được ghi nhận nhưng không bao giờ chạy |
+| `plugins/atkx/skills/skill-eval/scripts/score.mjs` | Điểm tổng hợp, trọng số đã dùng, xếp loại hoặc không có, và một ghi chú cho mỗi quy tắc áp dụng |
+| `plugins/atkx/skills/skill-eval/references/static-checks.md` | Mỗi phép kiểm tra tĩnh tìm gì, vì sao, và cách làm tay khi máy không có Node |
+| `plugins/atkx/skills/skill-eval/references/frontmatter-keys.tsv` | Claude Code, Codex và Cursor mỗi bên đọc khóa frontmatter nào, mỗi dòng có nguồn và ngày `checked` |
+| `plugins/atkx/skills/skill-eval/references/project-conventions.md` | Tìm quy tắc về skill của dự án ở đâu, quy tắc nào áp dụng, kiểm và trích nguồn từng quy tắc ra sao |
+| `plugins/atkx/skills/skill-eval/references/trigger-mode.md` | Cách đo trigger, lời xin đồng ý trước khi mở phiên nào, thông tin đăng nhập, cách khoanh vùng và dọn dẹp, và những giới hạn mà một kết quả phải nói rõ |
+| `plugins/atkx/skills/skill-eval/references/draft-cases.md` | Soạn nháp trigger case ngoài repo, case âm ghi rõ thuộc về skill nào, chỉ ghi vào skill khi được đồng ý |
+| `plugins/atkx/skills/skill-eval/references/review-mode.md` | Dò một lần chạy trong cuộc hội thoại theo các bước của skill, và phân loại từng chỗ lệch |
+| `plugins/atkx/skills/skill-eval/references/report-format.md` | Quy tắc tính điểm và khung báo cáo, dòng điểm đặt trên cùng |
+| `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Đánh giá một skill, đặt cạnh `tailor`, `review`, `convention`, `security`, `help` và `qa` |
+| `tests/skill-eval-fixtures/` | Ba skill mẫu tốt, yếu và độc hại của `atkx:skill-eval`, cùng `expected.json` ghi kết quả mỗi mẫu phải nhận; lệnh kiểm nằm trong `CLAUDE.md`. Đặt ngoài plugin vì Codex coi mọi `SKILL.md` nằm ở bất kỳ độ sâu nào dưới `skills/` là một skill riêng |
+
 ## Assets
 
 | File | Mục đích |
@@ -227,12 +248,13 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/artifact-lifecycle.md` | Artifact nào nên commit, cái nào được phép xóa, xóa mỗi loại thì mất gì, và ba chính sách một đội có thể chọn |
 | `docs/codebase-summary.md` | Chính là file này |
 | `docs/project-roadmap.md` | Kế hoạch theo phase và trạng thái |
-| `docs/trigger-eval-measurement.md` | Cách lấy một số đo đúng từ `evals/trigger_evals.json`: vì sao một bộ chạy thông thường báo ra điểm số rỗng, hook `PreToolUse` đo được việc chọn skill, ba điều kiện một lượt chạy cần có, và những case không gì quan sát được |
+| `docs/trigger-eval-measurement.md` | Cách lấy một số đo đúng từ `evals/trigger_evals.json`: vì sao một bộ chạy thông thường báo ra điểm số rỗng, hook `PreToolUse` đo được việc chọn skill, ba điều kiện một lượt chạy cần có, những case không gì quan sát được, và bộ chạy hiện thực cách đo đó nằm ở đâu |
 | `docs/flow/project-flow.md` | 24 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, vòng quay lại khi artifact bị trả về, và lối dẫn tới bảng vai trò mà `init` giờ mang theo |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
 | `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | Bản ghi quyết định kiến trúc đầu tiên: `atk` chuyển vào `plugins/atk/`, còn `atkx`, bộ kit skill tiện ích được gọi `atk` nhưng không bao giờ bị `atk` gọi, được tạo ở `plugins/atkx/`, hai plugin không dùng chung file nào, và `atk` thêm `CONV-011` để giữ phụ thuộc chỉ theo một chiều |
-| `docs/vi/**/*.md` | Bản tiếng Việt mirror mười một file trên, đặt ở cùng đường dẫn tương đối |
+| `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` | Bản ghi thứ hai: `atkx:skill-eval` để những phép kiểm tra cần lặp lại y hệt trong script Node, còn phần cần phán đoán để agent làm |
+| `docs/vi/**/*.md` | Bản tiếng Việt của mười hai file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub
 
@@ -240,10 +262,10 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 |------|----------|
 | `.github/workflows/release-please.yml` | Chạy release-please khi push lên `main` |
 | `.github/workflows/labeler.yml` | Gắn label cho từng pull request theo đường dẫn file nó thay đổi, dựa trên `.github/labeler.yml` |
-| `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill một label `skill:`, phải có đủ 24 skill |
+| `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill của cả hai plugin một label `skill:`, gồm 24 skill của `atk` và từng skill của `atkx` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Hướng dẫn Conventional Commit, harness bị ảnh hưởng, và checklist kiểm tra gồm cả các mục đồng bộ chéo |
 | Các form `.github/ISSUE_TEMPLATE/*.yml` | Mỗi form gắn label loại của nó cùng `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Tắt issue trống, dẫn sang Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 24 skill, cộng profile, phần ghi đè, lớp dùng chung, các hook và `atkx` |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 24 skill của `atk`, cộng profile, phần ghi đè, lớp dùng chung, các hook, `atkx`, và mỗi skill của `atkx` một mục `Skill - atkx:<name>` |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Form tính năng, hỏi tình huống của team trước khi hỏi năng lực đề xuất |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Form báo lần chạy skill, nhận bản ghi `--feedback`: đã yêu cầu gì, bước nào chạy, chỗ nào skill không nói, và team mong đợi gì |

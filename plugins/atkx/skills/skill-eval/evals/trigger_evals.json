@@ -1,0 +1,27 @@
+[
+  { "query": "evaluate the skill in .claude/skills/release-notes before we share it", "should_trigger": true },
+  { "query": "check the quality of this SKILL.md and give it a score", "should_trigger": true },
+  { "query": "is this skill safe to install? it came from another team", "should_trigger": true },
+  { "query": "optimise this skill, it keeps firing on the wrong requests", "should_trigger": true },
+  { "query": "does the description of our deploy skill still fit under the limit", "should_trigger": true },
+  { "query": "/atkx:skill-eval plugins/atk/skills/review", "should_trigger": true },
+  { "query": "đánh giá skill này trước khi đưa cho cả team dùng", "should_trigger": true },
+  { "query": "chấm điểm skill viết cho Codex trong thư mục skills/", "should_trigger": true },
+  { "query": "このスキルを評価して、点数を付けてほしい", "should_trigger": true },
+  { "query": "スキルの品質チェックをお願いします", "should_trigger": true },
+  { "query": "draft trigger cases for this skill, it has none", "should_trigger": true },
+  { "query": "review how the intake skill ran just now against what it is supposed to do", "should_trigger": true },
+  { "query": "measure whether requests actually reach our release skill or go somewhere else", "should_trigger": true },
+  { "query": "đo xem description của skill này có kích hoạt đúng không", "should_trigger": true },
+
+  { "query": "the review skill keeps doing this wrong for our team, make it always check migrations", "should_trigger": false, "belongs_to": "atk:tailor" },
+  { "query": "turn what went wrong in that run into an override for our project", "should_trigger": false, "belongs_to": "atk:tailor" },
+  { "query": "ghi lại lỗi của lần chạy skill vừa rồi thành một bản báo cáo gửi về kit", "should_trigger": false, "belongs_to": "atk:tailor" },
+  { "query": "このスキルの動きをチーム用に上書きしたい", "should_trigger": false, "belongs_to": "atk:tailor" },
+  { "query": "review this pull request before I approve it", "should_trigger": false, "belongs_to": "atk:review" },
+  { "query": "duyệt code nhánh feature/export giúp tôi", "should_trigger": false, "belongs_to": "atk:review" },
+  { "query": "write the team's coding conventions down", "should_trigger": false, "belongs_to": "atk:convention" },
+  { "query": "security review of this branch before the release", "should_trigger": false, "belongs_to": "atk:security" },
+  { "query": "which atk skill should I run next", "should_trigger": false, "belongs_to": "atk:help" },
+  { "query": "write the test cases for this feature", "should_trigger": false, "belongs_to": "atk:qa" }
+]

@@ -7,7 +7,7 @@
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
 | 2. Độ phủ skill | XONG | 24 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
 | 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười chín skill đã có, năm skill còn lại chưa |
-| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 24 skill. Kit không kèm bộ chạy; cách đo nằm ở `docs/trigger-eval-measurement.md` |
+| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 24 skill. `atk` không kèm bộ chạy; `atkx:skill-eval --trigger` có một bộ, và cách nó đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
 
@@ -90,8 +90,9 @@ giá là các cặp dễ nhầm giữa skill kề nhau, và giờ cặp nào cũ
 `onboard` với `handover`. Mỗi file đều phủ cả ba ngôn ngữ trigger, nên bỏ phần tiếng Việt hoặc tiếng
 Nhật khỏi một `description` sẽ làm rớt case chứ không trôi qua im lặng.
 
-Kit cố ý không kèm bộ chạy: thêm một slash command không sinh artifact, không có người duyệt, không
-phải thứ kit này nhắm tới. Đo một case không đơn giản là chĩa một bộ chạy thông thường vào file, vì
+`atk` cố ý không kèm bộ chạy: thêm một slash command không sinh artifact, không có người duyệt, không
+phải thứ kit đó nhắm tới. Bộ chạy nằm trong `atkx`, plugin tiện ích đặt cạnh nó, dưới dạng chế độ đo
+trigger của `atkx:skill-eval`. Đo một case không đơn giản là chĩa một bộ chạy thông thường vào file, vì
 nó báo ra một điểm số rỗng khi skill đã cài dưới dạng plugin;
 [trigger-eval-measurement.md](trigger-eval-measurement.md) giữ cách đo được và những case không gì
 quan sát nổi.
