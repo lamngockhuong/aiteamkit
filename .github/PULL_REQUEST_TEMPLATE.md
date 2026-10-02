@@ -38,7 +38,8 @@ Conventional Commits are required for the PR title (release-please uses them):
 - [ ] Every `plugins/*/skills/*/SKILL.md` frontmatter still parses, with a lowercase hyphenated `name:` matching its folder and no `atk:` prefix.
 - [ ] No em-dashes introduced anywhere outside `docs/`.
 - [ ] If a document was added or renamed under `docs/`: the `docs/vi/` counterpart matches.
-- [ ] If a skill was added or removed: `README.md`, `docs/skills-overview.md`, `docs/vi/skills-overview.md`, `docs/codebase-summary.md`, the bug-report component dropdown, `.github/labeler.yml`, and the repository's `skill:` labels all list it.
+- [ ] If an `atk` skill was added or removed: `README.md`, `docs/skills-overview.md`, `docs/vi/skills-overview.md`, `docs/codebase-summary.md`, the bug-report component dropdown, `.github/labeler.yml`, and the repository's `skill:` labels all list it.
+- [ ] If an `atkx` skill was added or removed: every group of the `atkx` list in `CLAUDE.md`, "Adding or changing a skill touches several files", lists it, its `skill:` label included.
 - [ ] If a skill's flags changed: the `## Invocation` block, `README.md`, and both `skills-overview.md` files agree.
 - [ ] If `release-please-config.json` touched: all `extra-files` paths exist, read relative to their package, where a leading `/` means the repository root, and JSON parses.
 

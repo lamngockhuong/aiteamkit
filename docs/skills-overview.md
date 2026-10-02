@@ -5,6 +5,9 @@ to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
 
+`atkx`, the plugin beside `atk`, adds a skill that belongs to no phase: `atkx:skill-eval`, described
+after the last `atk` skill.
+
 ## Where they sit
 
 ```mermaid
@@ -698,6 +701,38 @@ about to be away for a long time.
 
 **The habit that matters.** The receiver is the approver. A handover is accepted by the person taking
 it, never declared complete by the person leaving.
+
+---
+
+## `atkx:skill-eval`
+
+**Produces.** A report in the session: one composite score with a grade at the top, then a section
+per dimension with its own figures. The static check covers structure, metadata, size, credentials,
+and a security gate for what the skill does: a network call to a host its `SKILL.md` does not name,
+a download run as code, an instruction that switches off a safety check, a script nobody can read.
+The project conventions group checks the rules the skill's own repository wrote down about skills,
+each cited by `file:line`. Without trigger measurement the score is labelled as such and carries no
+grade, and any credential or gate failure makes the grade F. `--trigger`, on Claude Code only, runs
+each trigger case in child sessions and names the skill each one reached, after showing how many
+sessions it will start and getting a yes. It refuses a skill that fails the security gate, and a
+plugin skill loads with its plugin's own hooks, which run in those sessions as after an install. `--draft-cases` drafts trigger cases
+into a temporary file and writes them into the skill only on a yes; `--review` walks a run of the
+skill earlier in the conversation against its steps, in a section of its own that is never scored;
+`--out` saves the report. When NVIDIA SkillEvaluator is installed, the static check offers its
+keyless Tier 1 checks and reports them as a group of their own, outside the score; when it is not,
+one line says so and every other check runs.
+
+**Use when.** A skill is about to be shared or installed, its description has just changed, or it
+keeps firing on requests that belong to another skill.
+
+**Do not use when.** You want the skill changed, which its author does from the report; you want a
+correction kept as your team's rule, which is `atk:tailor`; or the thing to read is a pull request,
+which is `atk:review`.
+
+**The habit that matters.** It reads and never runs. A script inside the evaluated skill is read as
+text, a link leaving the skill is reported without opening its target, and nothing in the skill
+changes. Its own sample skills, a good one, a weak one and a malicious one, are scanned like any
+other file, so `atkx:skill-eval` run on itself grades itself F and names each fixture line.
 
 ---
 

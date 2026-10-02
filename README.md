@@ -210,11 +210,24 @@ If either works or fails for you, an issue saying which one helps the next perso
 ### atkx
 
 `atkx` is a second plugin in the same marketplace, for utility skills that need no project profile
-and no delivery lifecycle. It has no skill yet, so installing it today adds nothing but `atk`.
+and no delivery lifecycle. It holds one skill so far:
+
+| Skill | What it does |
+|-------|--------------|
+| `atkx:skill-eval` | Evaluates a skill a project has written, for Claude Code, Codex or Cursor: a static check with a security gate, the project's own conventions, trigger measurement on Claude Code, drafted trigger cases, a review of one run, and a composite score with a grade. Changes nothing in the skill it reads |
 
 ```bash
 /plugin install atkx@atk
+
+/atkx:skill-eval <skill-path>                # static check, project conventions, then the score
+/atkx:skill-eval <skill-path> --trigger      # also measure triggers (Claude Code only): 3 runs on sonnet
+/atkx:skill-eval <skill-path> --trigger --runs 5 --model opus
+/atkx:skill-eval <skill-path> --draft-cases  # also draft trigger cases into a temporary file
+/atkx:skill-eval <skill-path> --review       # also review the skill's run earlier in the conversation
+/atkx:skill-eval <skill-path> --out <path>   # also save the report
 ```
+
+Its scripts need Node, which the `atk` hooks already ask for.
 
 On Claude Code that installs `atk` with it. On Codex, run `codex plugin add atk@atk` and
 `codex plugin add atkx@atk`, since Codex installs no dependency. `atk` never needs `atkx`.

@@ -17,7 +17,7 @@
     },
     {
       "name": "atkx",
-      "description": "AI Team Kit extras - utility skills that depend on no artifact and on no delivery lifecycle, and may call atk skills. No skill yet; installing it installs atk.",
+      "description": "AI Team Kit extras - utility skills that depend on no artifact and on no delivery lifecycle, and may call atk skills. One skill, skill-eval, which evaluates a skill a project has written: a static check with a security gate, the project's own conventions, trigger measurement on Claude Code, drafted trigger cases, a review of one run, and a composite score. Installing it installs atk.",
       "source": "./plugins/atkx",
       "author": {
         "name": "Lam Ngoc Khuong",

@@ -4,7 +4,8 @@ Every skill ships `evals/trigger_evals.json`, an array of `{query, should_trigge
 phrasings must reach that skill and which must not. Writing those files is easy. Measuring them is
 not, and the obvious way of doing it returns a number that looks like a result and is not one.
 
-This document is for the maintainer who wants to check a `description` change against the cases.
+This document is for the maintainer who wants to check a `description` change against the cases,
+and it is the method the runner in `atkx:skill-eval` implements.
 What the files hold and why they exist is in [project-roadmap.md](project-roadmap.md) phase 4; this
 one is only about how to get a true reading out of them.
 
@@ -37,7 +38,9 @@ case lost to another skill tells you which description out-argued yours, and in 
 **The seed project must have real work in it.** In an empty directory the model calls no skill at
 all, for any query, and the result is indistinguishable from a description nothing matches. Give the
 child a repository with a commit, an uncommitted change, a branch, a requirement document and a
-design document, so that every skill under test has something it could act on.
+design document, so that every skill under test has something it could act on. The runner copies
+the repository that holds the skill as it stands, so a measurement is as good as what that
+repository holds; run it from a checkout with work in flight.
 
 **Other kits must be out of the room.** With the maintainer's own configuration, every installed
 plugin competes, and a loss to a skill from another kit says nothing about a team that installed
@@ -52,45 +55,31 @@ was wrong.
 
 ## Running one
 
-The hook script, the settings file and the seed live outside the repository, because nobody has
-decided to keep a runner in it. One kept outside `plugins/` would not ship, so no team would carry
-it; inside a plugin it would. Everything needed to rebuild it is here.
-
-A hook that logs the tool calls it is given, to a file named by `HOOK_LOG`:
-
-```javascript
-import { readFileSync, appendFileSync } from "node:fs";
-let raw = "";
-try { raw = readFileSync(0, "utf8"); } catch {}
-let payload;
-try { payload = JSON.parse(raw); } catch { payload = { unparsed: raw.slice(0, 400) }; }
-appendFileSync(process.env.HOOK_LOG, JSON.stringify(payload) + "\n");
-process.stdout.write("{}");
-```
-
-The settings file that registers it, passed with `--settings`:
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      { "matcher": "Skill", "hooks": [{ "type": "command", "command": "node /path/to/hooklog.mjs" }] }
-    ]
-  }
-}
-```
-
-One query, in a freshly seeded project directory:
+The runner ships in `atkx`, inside the skill that uses it: `atkx:skill-eval --trigger` runs it, and
+its two scripts sit in `plugins/atkx/skills/skill-eval/scripts/`. `hook-log.mjs` is the hook every
+child session runs, and `trigger-run.mjs` builds the seed copy and the isolated config, starts the
+sessions, counts, and cleans up. Its reference, `plugins/atkx/skills/skill-eval/references/trigger-mode.md`,
+holds the steps, the consent before any session starts, the credentials rule and the cleanup.
 
 ```bash
-HOOK_LOG=$log CLAUDE_CONFIG_DIR=$isolated_config \
-  claude -p "$query" --settings "$settings" --plugin-dir "$kit_repo/plugins/atk" --model sonnet
+node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --dry-run
+node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --yes --runs 3 --model sonnet
 ```
 
-A trigger is a logged payload whose `tool_name` is `Skill` and whose `tool_input.skill` equals
-`atk:<name>`. Compare exactly. Testing whether the skill name appears inside the value counts the
-built-in `code-review` as a hit for `review`, which is the same empty pass the broken harness
-produces, reached from the other direction.
+`--dry-run` counts the sessions, copies nothing and starts none; `--yes` runs them, three at a
+time. The hook denies the `Skill` call after logging it, so the selected skill never runs in the
+seed, and the runner stops each session as soon as that first call is logged, since nothing after it
+is counted. A session stopped there takes seconds rather than the minutes a skill's full run would.
+The seed leaves out the repository's own `.claude/settings*.json`, and the runner refuses a skill
+whose static check found a credential or a security gate failure. A plugin skill still loads with
+its plugin's own hooks, which the static check does not read, so the consent before a run names
+them; how to isolate the sessions from that code is an open design question.
+
+A trigger is still a logged payload whose `tool_name` is `Skill` and whose `tool_input.skill` equals
+the full name of the skill under test, `atk:<name>` for one of this kit's. Compare exactly. Testing
+whether the skill name appears inside the value counts the built-in `code-review` as a hit for
+`review`, which is the same empty pass the broken harness produces, reached from the other
+direction.
 
 ## Limits to state in any result
 

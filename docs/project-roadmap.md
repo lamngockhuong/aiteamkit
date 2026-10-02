@@ -7,7 +7,7 @@
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
 | 2. Skill coverage | DONE | 24 `SKILL.md` files covering the lifecycle, sharing one section contract |
 | 3. Reference depth | IN PROGRESS | `references/` per skill. Done for nineteen, pending for the other five |
-| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 24 skills. The kit ships no runner; `docs/trigger-eval-measurement.md` says how to measure one |
+| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 24 skills. `atk` ships no runner; `atkx:skill-eval --trigger` carries one, and `docs/trigger-eval-measurement.md` says how it measures |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
 
@@ -93,8 +93,9 @@ against `qa`, `qa` against `verify`, `onboard` against `handover`. Each file als
 trigger languages, so dropping the Vietnamese or Japanese phrasings from a `description` fails a
 case rather than passing unnoticed.
 
-The kit ships no runner on purpose: one more slash command with no artifact and no approver is not
-what the kit is for. Measuring a case is not as simple as pointing a generic harness at the file,
+`atk` ships no runner on purpose: one more slash command with no artifact and no approver is not
+what that kit is for. The runner lives in `atkx`, the utility plugin beside it, as the trigger mode
+of `atkx:skill-eval`. Measuring a case is not as simple as pointing a generic harness at the file,
 which reports a vacuous score against an installed plugin;
 [trigger-eval-measurement.md](trigger-eval-measurement.md) holds the method that works and the
 cases nothing can observe.

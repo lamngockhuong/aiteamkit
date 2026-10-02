@@ -26,7 +26,7 @@ aiteamkit/
     assets/*.svg                  icon and logo for marketplace listings
     CHANGELOG.md                  written by release-please for this plugin
     LICENSE                       a copy of the root licence, since the install carries nothing else
-  plugins/atkx/                       a second plugin, three manifests and an empty skills/ for now
+  plugins/atkx/                       a second plugin, three manifests, and skills/skill-eval/
     LICENSE                       the same copy
   docs/, docs/vi/               bilingual project documentation
   .atk/                         the kit's own profile and overrides, for running its skills on itself
@@ -76,7 +76,7 @@ There is no `commands/` layer. A skill is its own slash command, named from its 
 ## A second plugin: atkx
 
 `plugins/atkx/` sits beside `plugins/atk/` in the same marketplace, with the same three manifest
-folders and, for now, an empty `skills/`. It is for utility skills that depend on no artifact and on
+folders and one skill, `skill-eval`. It is for utility skills that depend on no artifact and on
 no delivery lifecycle. The dependency runs one way: an `atkx` skill may call an `atk` skill, and
 `atk` never names an `atkx` one, so `atk` installed alone stays whole. On Claude Code,
 `"dependencies": ["atk"]` in the `atkx` manifest installs `atk` with it; Cursor and Codex have no
@@ -96,7 +96,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for all 24 skills | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for every installed skill: the 24 of `atk`, and `atkx`'s when it is installed | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
@@ -347,6 +347,13 @@ title + intro      what this produces and the one habit that makes it work
 ## Ticket          how it reaches the team's tracker
 ## Definition of done   a checklist the skill must satisfy before reporting success
 ```
+
+An `atk` skill is that file, its `references/` and its `evals/`, and nothing that runs.
+`atkx:skill-eval` is the one skill with a `scripts/` directory beside them, Node like the hooks and
+for the same reason. Its sample skills must get the same verdict on every run, and a credential
+masked, a host matched against the `SKILL.md`, or a weighted score added up by an agent comes out
+slightly different each time. So the checks whose answer must repeat are scripts, and what needs
+reading stays in `references/`. ADR 0002 records the choice.
 
 ## Data flow at runtime
 

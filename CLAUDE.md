@@ -10,8 +10,9 @@ OpenAI Codex CLI. It packages 24 skills covering the delivery lifecycle of a com
 `convention`, `plan`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `security`, `git`,
 `release`, `incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
 (`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
-A second plugin, `atkx`, sits beside it in the same marketplace with no skill yet; see "`atkx` sits
-beside `atk`, and the dependency runs one way".
+A second plugin, `atkx`, sits beside it in the same marketplace with one skill, `skill-eval`, which
+evaluates a skill a project has written; see "`atkx` sits beside `atk`, and the dependency runs one
+way".
 
 This is content plus manifests, not a runtime application: there is no build step, no bundler, no
 test suite, and `package.json` is `private: true` with no `scripts` block. "Validation" means JSON
@@ -113,6 +114,11 @@ run may do with a line. `qa` does the same with its component checklist, `refere
 beside `references/checklists.md`. The rules stay in Markdown; only the records move. Tabs rather than commas,
 because a free-text field routinely holds a comma and a quote forgotten by hand shifts every field
 after it.
+
+An `atkx` skill may also carry `scripts/`, Node only, for the checks whose answer must be the same on
+every run, and only those; judgment stays in `references/`. `skill-eval` is the one that does, for
+the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records: its sample skills
+under `evals/fixtures/` must get the same verdict every time. An `atk` skill carries no `scripts/`.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
@@ -262,17 +268,20 @@ quotes a command or a fill would otherwise fail a `BLOCKING` check with no legit
 ## `atkx` sits beside `atk`, and the dependency runs one way
 
 `plugins/atkx/` is a second plugin in the same marketplace: utility skills that depend on no
-artifact and on no delivery lifecycle. It has no skill yet. `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md`
+artifact and on no delivery lifecycle. It has one skill, `skill-eval`, whose design is
+`docs/records/design/261001-1510-atkx-skill-eval.md`. `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md`
 records why it is a sibling plugin rather than a folder inside `atk`, and
 `docs/records/design/260930-0933-atkx-utility-kit-placement.md` holds the design this section
 writes down.
 
-An `atkx` skill may call an `atk` skill. `atk` never calls, names, or points at an `atkx` skill:
-the kit stands alone, and a team that installed only `atk` must never meet a pointer it cannot
-follow. That is `CONV-011`:
+An `atkx` skill may call an `atk` skill. `atk` never invokes, names, or points at `atkx`, whether
+as a command or in prose: the kit stands alone, and a team that installed only `atk` must never meet
+a pointer it cannot follow. A sentence telling an `atk` user to install `atkx` for something is the
+same dead end as an `atkx:` command, which is why the check matches the word and not only the
+command. That is `CONV-011`:
 
 ```bash
-grep -rn "\batkx:" plugins/atk/ --exclude=CHANGELOG.md
+grep -rn "\batkx\b" plugins/atk/ --exclude=CHANGELOG.md
 ```
 
 Should print nothing (`grep` exits 1).
@@ -414,6 +423,33 @@ frontmatter, the `README.md` invocation block, and both `skills-overview.md` fil
 `SKILL.md` is the single implementation. Its `description:` is what the harness matches on and what
 the `/` menu shows, so a trigger phrase belongs there and nowhere else.
 
+When adding, renaming, or removing an **`atkx` skill**, the list is shorter, because an `atkx` skill
+writes no team artifact and sits in no delivery phase. Eight of the twelve groups apply, read for
+`atkx`:
+
+1. `plugins/atkx/skills/<name>/SKILL.md`
+2. `README.md`, the `atkx` section rather than the `atk` skills table and invocation block
+3. `docs/skills-overview.md` and `docs/vi/skills-overview.md`
+4. `docs/codebase-summary.md` and `docs/vi/codebase-summary.md`
+5. `.github/ISSUE_TEMPLATE/bug-report.yml`, a `Skill - atkx:<name>` entry beside the `atkx` line
+6. The three `plugins/atkx/.*-plugin/plugin.json` descriptions, the Codex copy inside
+   `interface.longDescription` included, and the `atkx` entry of `.claude-plugin/marketplace.json`
+7. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
+   layout or the `atkx` plugin is for
+8. The `skill: <name>` label on the GitHub repository and its entry in `.github/labeler.yml`, with the
+   glob `plugins/atkx/skills/<name>/**`
+
+The other groups do not apply. The count of 24 is `atk`'s, and `package.json` carries it.
+`plugins/atk/shared/artifact-paths.md` and `docs/artifact-lifecycle.md` list team artifacts, which an
+`atkx` skill does not write. `plugins/atk/skills/init/references/role-defaults.md`, the tables in
+`docs/flow/`, and `plugins/atk/skills/help/references/state-signals.md` place skills in delivery
+phases. And no file under `plugins/atk/` may name `atkx` at all, per `CONV-011`.
+
+`atkx` adds three things of its own: the harness-support line its acceptance bar asks for, in
+"`atkx` sits beside `atk`"; the run-time check for any `atk:<skill>` the skill calls; and a name no
+`atk` skill already uses, since the two kits share the `skill:` label namespace and the labeler check
+below fails on a folder name found in both.
+
 ## SKILL.md `name` field convention (catches lint)
 
 Each `plugins/atk/skills/<folder>/SKILL.md` frontmatter `name:` MUST be:
@@ -496,7 +532,7 @@ its Layers table, and the mirror check below excludes both paths.
 | `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval` |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
 | `flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
@@ -582,7 +618,7 @@ not a second set of rules. The `source` column says where the prose lives.
 
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
-| `CONV-001` | Adding, renaming, or removing a skill touches all twelve groups of file listed for it | `REVIEWED` | none for eleven groups; the labeler check below for group 12 | `BLOCKING` | "Adding or changing a skill touches several files" |
+| `CONV-001` | Adding, renaming, or removing an `atk` skill touches all twelve groups of file listed for it | `REVIEWED` | none for eleven groups; the labeler check below for group 12 | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `diff` of the two `find` listings below | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
@@ -592,8 +628,9 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
-| `CONV-011` | `atk` never invokes or names an `atkx` skill, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
+| `CONV-011` | `atk` never invokes, names, or points at `atkx`, in a command or in prose, and no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
 | `CONV-012` | A plugin reads nothing outside its own directory: every `shared/` or `references/` file a plugin file cites exists inside that plugin, and no plugin file names one of this repository's documents except as a GitHub link | `REVIEWED` | the citation check below | `BLOCKING` | "Multi-manifest layout (non-obvious)" |
+| `CONV-013` | Adding, renaming, or removing an `atkx` skill touches every group of the `atkx` list | `REVIEWED` | none for seven groups; the labeler check below for the label group | `BLOCKING` | "Adding or changing a skill touches several files" |
 
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
@@ -784,8 +821,9 @@ assert not bad, chr(10).join(bad)
 print('OK plugins read nothing outside themselves, %d citations resolved' % n)"
 
 # .github/labeler.yml stays true to the tree: every glob matches a tracked file, and every skill folder
-# has its own skill: entry and no entry names a skill that is gone. A glob that matches nothing
-# never labels anything, and nothing reports it
+# of either plugin has its own skill: entry globbing the plugin it is in, and no entry names a skill
+# that is gone. A glob that matches nothing never labels anything, and nothing reports it. The two
+# kits share the skill: namespace, so a folder name used in both plugins fails here
 python3 -c "
 import glob, os, re, subprocess
 text = open('.github/labeler.yml').read()
@@ -796,10 +834,16 @@ def rx(g):
 dead = [g for g in globs if not any(rx(g).match(f) for f in tracked)]
 assert not dead, 'labeler globs matching no tracked file: %s' % dead
 labelled = set(re.findall(r\"^'skill: ([\w-]+)':\", text, re.M))
-folders = {os.path.basename(d.rstrip('/')) for d in glob.glob('plugins/atk/skills/*/')}
+homes = {}
+for d in glob.glob('plugins/*/skills/*/'):
+    homes.setdefault(os.path.basename(d.rstrip('/')), []).append(d.split('/')[1])
+shared = sorted(s for s, ps in homes.items() if len(ps) > 1)
+assert not shared, 'skill folder names used in both plugins: %s' % shared
+folders = set(homes)
 assert labelled == folders, 'skill labels and folders differ: %s' % sorted(labelled ^ folders)
 for s in folders:
-    assert 'plugins/atk/skills/%s/**' % s in globs, 'skill: %s has no glob for its folder' % s
+    g = 'plugins/%s/skills/%s/**' % (homes[s][0], s)
+    assert g in globs, 'skill: %s has no glob %s' % (s, g)
 print('OK labeler, %d globs, %d skills' % (len(globs), len(folders)))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
@@ -855,4 +899,67 @@ for pkg, conf in cfg['packages'].items():
         seen[f] = json.load(open(f))['version']
     assert len(set(seen.values())) == 1, '%s disagrees: %s' % (pkg, seen)
     print('OK %s at %s, %d files' % (pkg, state[pkg], len(seen)))"
+
+# atkx:skill-eval still judges its sample skills as expected.json says: the static check and the
+# score on each fixture, every expectation compared, and no script of a fixture run, which the
+# marker file one of them would create is what shows. No executable bit anywhere in atkx either
+python3 -c "
+import json, os, subprocess, tempfile
+d = 'plugins/atkx/skills/skill-eval'
+marker = os.path.join(tempfile.gettempdir(), 'skill-eval-fixture-ran')
+assert not os.path.exists(marker), 'stale marker, remove it first: ' + marker
+expected = json.load(open(d + '/evals/fixtures/expected.json'))
+for name, want in sorted(expected.items()):
+    got = json.loads(subprocess.run(['node', d + '/scripts/static-check.mjs', d + '/evals/fixtures/' + name],
+                                    capture_output=True, text=True, check=True).stdout)
+    s = got['summary']
+    score = json.loads(subprocess.run(['node', d + '/scripts/score.mjs'], input=json.dumps(
+        {'static': s, 'conventions': None, 'trigger': {'status': 'not-run'}}), capture_output=True, text=True, check=True).stdout)
+    assert s['credentials'] == want['credentials'], '%s: credentials %d' % (name, s['credentials'])
+    kinds = sorted({c['kind'] for c in got['checks'] if c['id'].startswith('gate-') and c['status'] == 'fail'})
+    assert kinds == sorted(want['gate']), '%s: gate kinds %s' % (name, kinds)
+    if 'band' in want: assert score['band'] == want['band'], '%s: band %s' % (name, score['band'])
+    if 'grade' in want: assert score['grade'] == want['grade'], '%s: grade %s' % (name, score['grade'])
+    for w in want['includes']:
+        assert any(all(c.get(k) == v for k, v in w.items()) for c in got['checks']), '%s: no check %s' % (name, w)
+    print('OK fixture %s' % name)
+assert not os.path.exists(marker), 'a fixture script ran: ' + marker"
+x=$(find plugins/atkx -type f -perm -u+x)
+test -z "$x" && echo "OK no executable file in atkx" || echo "FAIL executable files in atkx: $x"
+
+# The behaviours no fixture exercises, each on a scratch directory so that nothing lands in the tree:
+# a credential found and masked, a SKILL.md linking out of the skill reported without its target
+# being read, the one-line stop with no SKILL.md, the score rules, the hook's deny, and the trigger
+# runner refusing a skill that fails the gate
+python3 -c "
+import json, os, subprocess, tempfile
+d = 'plugins/atkx/skills/skill-eval/scripts/'
+def run(args, stdin=None):
+    return subprocess.run(['node'] + args, input=stdin, capture_output=True, text=True)
+t = tempfile.mkdtemp(); sk = os.path.join(t, 'sk'); os.makedirs(sk)
+open(os.path.join(sk, 'SKILL.md'), 'w').write('---\nname: sk\ndescription: probe\n---\n')
+open(os.path.join(sk, 'notes.txt'), 'w').write('api_key = ' + chr(34) + 'ZZTO' + 'PSECRETVALUE123456' + chr(34) + chr(10))
+out = run([d + 'static-check.mjs', sk]).stdout
+assert json.loads(out)['summary']['credentials'] == 1 and 'ZZTO********' in out and 'SECRETVALUE' not in out, 'credential not found or not masked'
+os.remove(os.path.join(sk, 'SKILL.md'))
+open(os.path.join(t, 'target.md'), 'w').write('---\nname: LEAKED\n---\n')
+os.symlink(os.path.join(t, 'target.md'), os.path.join(sk, 'SKILL.md'))
+out = run([d + 'static-check.mjs', sk]).stdout
+assert 'symlink-outside' in out and 'LEAKED' not in out, 'a SKILL.md linking out was read'
+e = tempfile.mkdtemp(); r = run([d + 'static-check.mjs', e])
+assert r.returncode == 2 and r.stdout.count(chr(10)) == 1, 'no-SKILL.md stop is not one line with exit 2'
+def score(i): return json.loads(run([d + 'score.mjs'], json.dumps(i)).stdout)
+s = score({'trigger': {'status': 'measured', 'score': 85}, 'static': {'score': 90, 'credentials': 0, 'gate': 0}, 'conventions': {'score': 80}})
+assert (s['composite'], s['grade']) == (85.5, 'B'), s
+s = score({'trigger': {'status': 'measured', 'score': 85}, 'static': {'score': 90, 'credentials': 0, 'gate': 0}, 'conventions': None})
+assert (s['weights']['trigger'], s['weights']['static']) == (0.706, 0.294), s
+assert score({'trigger': {'status': 'not-run'}, 'static': {'score': 90, 'credentials': 0, 'gate': 0}, 'conventions': None})['grade'] is None
+assert score({'trigger': {'status': 'measured', 'score': 99}, 'static': {'passed': 9, 'failed': 1, 'gate': 1, 'credentials': 0}, 'conventions': None})['grade'] == 'F'
+assert run([d + 'score.mjs'], json.dumps({'static': {'score': 90}})).returncode == 2, 'static without gate and credentials was scored'
+h = json.loads(run([d + 'hook-log.mjs'], json.dumps({'tool_name': 'Skill', 'tool_input': {'skill': 'x'}})).stdout)
+assert h['hookSpecificOutput']['permissionDecision'] == 'deny', h
+assert run([d + 'hook-log.mjs'], json.dumps({'tool_name': 'Bash'})).stdout == '{}'
+g = json.loads(run([d + 'trigger-run.mjs', 'plugins/atkx/skills/skill-eval', '--dry-run']).stdout)
+assert g['status'] == 'gate-failed', g
+print('OK skill-eval behaviours outside the fixtures')"
 ```

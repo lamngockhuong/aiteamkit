@@ -32,7 +32,7 @@
 - changed-files:
   - any-glob-to-any-file: ['.github/**', 'release-please-config.json']
 
-# One entry per skill, in lifecycle order. Adding or renaming a skill adds its entry here.
+# One entry per atk skill, in lifecycle order. Adding or renaming a skill adds its entry here.
 
 'skill: help':
 - changed-files:
@@ -129,3 +129,10 @@
 'skill: handover':
 - changed-files:
   - any-glob-to-any-file: 'plugins/atk/skills/handover/**'
+
+# atkx skills, one entry each. The two kits share the skill: namespace, so a name used here is
+# never also an atk skill's.
+
+'skill: skill-eval':
+- changed-files:
+  - any-glob-to-any-file: 'plugins/atkx/skills/skill-eval/**'

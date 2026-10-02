@@ -26,7 +26,7 @@ aiteamkit/
     assets/*.svg                  icon và logo cho trang marketplace
     CHANGELOG.md                  do release-please viết cho plugin này
     LICENSE                       bản sao giấy phép ở gốc repo, vì bản cài không mang theo gì khác
-  plugins/atkx/                       plugin thứ hai, ba manifest và thư mục skills/ còn trống
+  plugins/atkx/                       plugin thứ hai, ba manifest, và skills/skill-eval/
     LICENSE                       cũng bản sao đó
   docs/, docs/vi/               tài liệu dự án song ngữ
   .atk/                         hồ sơ và file ghi đè của chính kit, để kit chạy skill lên chính mình
@@ -75,7 +75,7 @@ harness gắn namespace `atk:` lúc nạp dựa trên `plugin.json`.
 ## Plugin thứ hai: atkx
 
 `plugins/atkx/` nằm cạnh `plugins/atk/` trong cùng marketplace, có đủ ba thư mục manifest như vậy và
-tạm thời một thư mục `skills/` còn trống. Nó dành cho các skill tiện ích không phụ thuộc artifact nào
+một skill, `skill-eval`. Nó dành cho các skill tiện ích không phụ thuộc artifact nào
 và không gắn với vòng đời giao hàng. Phụ thuộc chỉ đi một chiều: skill của `atkx` được gọi skill của
 `atk`, còn `atk` không bao giờ nhắc tới skill nào của `atkx`, nên `atk` cài riêng vẫn đầy đủ. Trên
 Claude Code, `"dependencies": ["atk"]` trong manifest của `atkx` cài `atk` theo cùng; Cursor và Codex
@@ -95,7 +95,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho cả 24 skill | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho mọi skill đã cài: 24 skill của `atk`, và skill của `atkx` khi đã cài plugin này | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
@@ -338,6 +338,13 @@ tiêu đề + mở đầu   skill này sinh ra gì và thói quen nào làm nó 
 ## Ticket          cách đưa kết quả vào tracker của team
 ## Definition of done   checklist skill phải thỏa trước khi báo hoàn thành
 ```
+
+Một skill của `atk` gồm file đó, `references/` và `evals/`, không có gì để chạy. `atkx:skill-eval`
+là skill duy nhất có thêm thư mục `scripts/`, viết bằng Node như hook và cùng lý do. Các skill mẫu
+của nó phải nhận cùng một kết luận ở mọi lần chạy, trong khi che một credential, so một host với
+`SKILL.md`, hay cộng một điểm có trọng số thì mỗi lần agent làm lại ra một chút khác. Vì vậy phép
+kiểm tra nào cần ra kết quả lặp lại được viết thành script, còn phần cần đọc hiểu nằm trong
+`references/`. ADR 0002 ghi lại lựa chọn này.
 
 ## Luồng dữ liệu lúc chạy
 
