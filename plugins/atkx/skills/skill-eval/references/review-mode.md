@@ -7,8 +7,10 @@ in the skill from a slip by the agent. It reads the conversation and the skill, 
 ## Find the run
 
 Look back through this conversation for an invocation of the skill: its slash command, a `Skill`
-tool call naming it, or its instructions loaded into the turn. Take the most recent one; name it
-when there were several.
+tool call naming it, or its instructions loaded into the turn. When the skill ran more than once,
+list the runs and ask which one, rather than taking the most recent; the earlier run may be the
+one that went wrong. When no `<skill-path>` was given, SKILL.md's Invocation section says what to
+do first.
 
 None found: print one line, `<fullName> was not run earlier in this conversation; nothing to review.`,
 and review nothing. A run from another session is out of reach, since only this conversation is
