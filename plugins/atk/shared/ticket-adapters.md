@@ -166,6 +166,15 @@ The first two give paths, counts, and hunks, never whole files. A skill that has
 change touches, rather than read what changed in it, needs the third: on a pull request that edits an
 existing document, the hunks alone show a fraction of it, and everything outside them looks absent.
 
+`atk:review` also reads what earlier reviews posted, to carry their identifiers forward. A summary
+posted as a review is a review body, which `--json comments` does not return, and an inline comment
+is in neither field, so the read takes both lines:
+
+```bash
+gh pr view <number> --json comments,reviews            # summaries, posted as a comment or a review
+gh api repos/{owner}/{repo}/pulls/<number>/comments    # inline comments, which open with their IDs
+```
+
 `atk:verify` reads a pull request for its acceptance criteria rather than its files, so it needs a
 different line, and never the checkout above, because the application it exercises runs from the
 working tree:

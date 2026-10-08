@@ -433,7 +433,8 @@ pull request thread, and a second review of the same pull request reads the firs
 summary the first posted on the pull request, to keep those identifiers pointing at the same findings. The report has a fixed shape rather than one rebuilt per run, and it carries no
 score of any kind, because the reviewer is not the approver. `--out` moves the file, `--comment`
 posts the findings as inline PR comments, with one summary comment that lists every finding the
-review kept, collapsed, so a reader of the pull request never needs the report.
+review kept and every open question, collapsed, so a reader of the pull request reaches every
+finding without the report.
 
 **Use when.** Before approving a pull request, or when a review needs a second opinion.
 

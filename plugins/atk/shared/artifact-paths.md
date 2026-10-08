@@ -293,12 +293,13 @@ A record nobody has filed yet is the only copy there is, and a review run withou
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. Five skills read one of the eight. `atk:run-cases` reads
 the run log of an earlier run of the same cases file, to offer the cases it deferred and to name data
-created with no record after it; where that run wrote a record, the record lists the same. The other four read the review report: a second `atk:review` over the same target reads the newest one for that target, to carry
-its finding identifiers forward, and starts numbering at 1 and says so when there is none;
+created with no record after it; where that run wrote a record, the record lists the same. The other four read the review report: a second `atk:review` over the same target reads the newest one for that target, and on a pull
+request the newest `atk:review` summary posted there beside it, to carry its finding identifiers
+forward, and starts numbering at 1 and says so only when there is neither;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
 Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the eight, and losing a
-report costs a set of identifiers and a list of gaps the next review raises again, rather than a step
+report costs a set of identifiers, unless a `--comment` run posted them, and a list of gaps the next review raises again, rather than a step
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked.

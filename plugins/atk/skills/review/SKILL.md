@@ -210,9 +210,9 @@ A convention violation takes the severity recorded against its rule. Raise it on
 failure is worse than the rule anticipated, and say why.
 
 The report carries every finding step 5 kept, `BLOCKING` first, a `NIT` in the one-row form of
-`references/report-format.md` if need be. The cap is on attention, not on the record: the summary
-and the inline comments carry at most ten findings, or twenty under `--strict`, cutting `NIT` first,
-then `SHOULD FIX`, and the summary says how many are in the report alone, at what severity.
+`references/report-format.md` if need be. The cap is on attention, not on the record: the summary,
+inline comments and visible part of a posted summary carry at most ten findings, or twenty under
+`--strict`, cutting `NIT` first, then `SHOULD FIX`, and say how many are left out, at what severity.
 `BLOCKING` is never cut; where it alone exceeds the cap, carry it all and say so: what to do with a
 change in that state is the Tech Lead's call, not a trimming decision the reviewer makes quietly.
 
@@ -269,8 +269,8 @@ consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
 - [ ] Nothing was refuted for being unlikely: every drop rests on a line, a type, a guard, or the
       absence of any observable effect.
 - [ ] Preferences are labelled `NIT` and do not block.
-- [ ] The report carries every verified finding; the summary and any inline comments are within the
-      cap, and a cut says how many are in the report alone and at what severity.
+- [ ] The report carries every verified finding; the summary, inline comments and the visible part
+      of a posted summary are within the cap, and a cut names how many it left out, at what severity.
 - [ ] A sweep for gaps ran once against the verified list, in its own agent above band 1 where one
       could be spawned or inside the band-1 reviewer agent, and returned nothing rather than padding.
 - [ ] New behavior without a test is reported as a finding.

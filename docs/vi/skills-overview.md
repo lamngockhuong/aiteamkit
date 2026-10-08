@@ -439,8 +439,8 @@ hiện trong buổi họp nhanh hay trong một luồng trao đổi trên pull r
 cùng pull request đọc lại báo cáo đầu, hoặc bản tóm tắt lượt đầu đã đăng trên pull request, để những mã ấy vẫn trỏ đúng vào các phát hiện cũ. Báo cáo có hình dạng cố định
 chứ không phải mỗi lần chạy dựng lại một kiểu, và không mang điểm số nào, vì người review không phải
 người duyệt. Cờ `--out` đổi chỗ file, cờ `--comment` đăng phát hiện thành comment inline trên PR,
-kèm một comment tóm tắt liệt kê, ở dạng thu gọn, mọi phát hiện mà lượt review giữ lại, nên người đọc
-pull request không bao giờ cần tới báo cáo.
+kèm một comment tóm tắt liệt kê, ở dạng thu gọn, mọi phát hiện mà lượt review giữ lại và mọi câu hỏi
+mở, nên người đọc pull request đọc được mọi phát hiện mà không cần tới báo cáo.
 
 **Dùng khi.** Trước khi approve một pull request, hoặc khi cần một ý kiến thứ hai.
 

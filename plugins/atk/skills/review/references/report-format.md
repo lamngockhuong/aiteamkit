@@ -30,12 +30,18 @@ request is what the identifier was built for, and an author who was asked to fix
 number above the highest that report used, never one left free by a finding since fixed.
 
 **On a pull request, the thread is an earlier report too.** The earlier review may have run on
-another machine, so its file is not here while its identifiers are on the thread. Read the newest
-summary comment on the pull request that opens with `atk:review`, per *Under `--comment`*: its
-collapsed list holds every identifier that run issued, and a summary posted before that list existed
-leaves the rest to the inline comments of the same review, which open with their IDs. Where a file
-and a comment both exist, each severity continues above the highest number either one used. Where
-there is neither, because no review was written or posted, numbering starts at 1 and
+another machine, so its file is not here while its identifiers are on the thread. Read the reviews,
+the comments and the inline comments of the pull request together, with the commands in
+`shared/ticket-adapters.md`: a summary posted as a review is not among the comments. The earlier
+summary is the newest that opens with `atk:review`, per *Under `--comment`*, and its collapsed list
+holds every identifier that run issued. A summary posted before that opening existed is found by what
+it carries instead: counts per severity beside IDs shaped `B1`, `S1` or `N1`, with the inline
+comments of the same review, which open with their IDs, supplying any it did not list. Where a file
+and the thread both exist, each severity continues above the highest number either one used. Where
+the two gave one ID to different findings, the thread's stands, since it is the one the author has
+seen, and the finding from the file takes the next free number and names the old one, as
+`(was S1)` does below. Where there is neither, because no review was written or posted, numbering
+starts at 1 and
 `## What this was reviewed against` says so, so nobody reads a fresh `B1` as the old one.
 
 **Severity wins over continuity when the two collide.** A finding that was `S3` and comes back
@@ -179,8 +185,8 @@ conventions document resolved per `shared/review-checklist.md` belongs here too,
 what to repeat.
 
 **Cap.** Nothing is cut from this file. This section names, by identifier, the findings the session
-summary and the inline comments left out, so a reader of the thread knows it is not the whole
-review. `None.` when the cap cut nothing.
+summary, the inline comments and the visible part of a posted summary left out, so a reader knows
+those are not the whole review. `None.` when the cap cut nothing.
 
 **Rounds.** The band and the count that put the change in it, then one row per round:
 
@@ -258,9 +264,11 @@ The summary comment opens with `atk:review` and the target, so a later run can t
 comment, then carries the counts per severity and the blocking titles with their IDs. Below them, in a
 `<details>` block the reader opens on purpose, it lists every finding the review kept, one line each:
 the ID, the title, and the `file:line` it cites, plus the failure in one sentence for a finding the
-cap kept off the thread. The cap of step 6 is on attention, and a collapsed block costs none; what
-the list buys is that a reader of the pull request reaches every finding without the report, and a
-later review finds every identifier this one issued.
+cap kept off the thread. The same block lists each open question with the person who must answer
+it, and the number of convention gaps, since the report is not there to hold them. The cap of step 6
+is on attention, and a collapsed block costs none; what the list buys is that a reader of the pull
+request reaches every finding and every question without the report, and a later review finds every
+identifier this one issued.
 
 The summary never points at the report as the place the rest lives. The report sits in the
 reviewer's working tree under `docs/derived/`, which `shared/artifact-paths.md` lets a project leave

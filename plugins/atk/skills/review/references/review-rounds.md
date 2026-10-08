@@ -376,7 +376,8 @@ the difference in scope is the point:
 - The instruction to change nothing and start nothing, per the rule that a reviewer changes nothing
   in `shared/host-capabilities.md`: no edited file, no install, no service, container or database, no
   migration applied anywhere. A finding that only running the change would settle comes back with
-  that check named, for step 5 to weigh as `PLAUSIBLE`.
+  that check named, for step 5 to give it a verdict: `CONFIRMED` when reading settles it after all,
+  `PLAUSIBLE` when only running would.
 - The severity scale from the skill, and the instruction to return every candidate whose mechanism it
   can name, together with the trigger that mechanism depends on. An agent that quietly drops what it
   half believes has decided the verdict alone and skipped step 5, which is where most missed defects
