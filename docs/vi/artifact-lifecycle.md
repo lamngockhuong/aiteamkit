@@ -89,13 +89,14 @@ trong tám loại. `atk:run-cases` đọc run log của lần chạy trước tr
 chạy tiếp những case lần đó đã hoãn và để nêu dữ liệu đã tạo mà không có record theo sau; nếu lần đó
 có viết record thì record ghi đúng những thứ ấy, nên người chạy tự nêu các case qua `--only`. Bốn skill
 còn lại đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
-đọc báo cáo mới nhất của đối tượng đó để giữ lại mã định danh của các phát hiện, và khi không có báo cáo nào
+đọc báo cáo mới nhất của đối tượng đó để giữ lại mã định danh của các phát hiện, cùng với bản tóm tắt
+mới nhất mà một lượt chạy `--comment` trước đã đăng trên cùng pull request, và khi không có cả hai
 thì đánh số lại từ 1 và nói rõ điều đó; `atk:plan --review` đọc báo cáo mới nhất của cùng bản kế
 hoạch, cũng để giữ mã định danh, và để phân biệt một kết quả tác giả đã thấy mà không sửa với một
 kết quả vừa mới sinh ra sau một tuần commit; `atk:qa --review` đọc báo cáo mới nhất của cùng file test
 case, cũng để giữ mã định danh; còn `atk:convention` đọc mục `Convention gaps` của báo
 cáo, đó là đường đi để một luật mà lượt review muốn có tới được tài liệu ghi luật. Xóa báo cáo ấy làm lượt
-review sau mất một bộ mã định danh và mất những khoảng trống quy ước đáng lẽ được mang sang, chứ
+review sau mất một bộ mã định danh, trừ khi một lượt chạy `--comment` đã đăng chúng lên pull request, và mất những khoảng trống quy ước đáng lẽ được mang sang, chứ
 không đứt mắt xích nào.
 
 ## Lịch sử git không phải đường lùi

@@ -167,6 +167,13 @@ What stays here is the policy the procedure may not overrule:
 - Every agent within a round receives the same scope. Agents split by file agree trivially and prove
   nothing; the point of running copies is independent passes over one diff. Scope differs between
   rounds on purpose, because each round is a different question over that same whole diff.
+- A reviewer reads; it changes nothing. No agent a review or a challenge spawns edits a file other
+  than the report it was asked to write, installs anything, or starts a service, a container or a
+  database, and none applies the change to a store. A command that reads the tree and exits, such as the type check the calling
+  agent runs once, is reading. A check that needs more than that comes back as a candidate naming
+  the check that would settle it, and running the change is `atk:verify`'s work, where a person has
+  stated what may be started. The machine's stores may serve other sessions, and an agent cannot see
+  whose they are.
 - Synthesis, severity, and the report stay with the calling agent. A reviewer sees one pass and
   cannot judge whether a finding is consensus or noise.
 - A finding only one reviewer raised is checked against the code before it reaches the report.
