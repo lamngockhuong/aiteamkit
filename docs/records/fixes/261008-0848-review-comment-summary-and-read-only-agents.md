@@ -198,11 +198,47 @@ content change can affect:
 ## 7. Not verified
 
 No `atk:review --comment` run was made against a pull request with the new wording, so neither the
-collapsed list nor the reading of an earlier summary from the thread has been seen working. No round
+collapsed list nor the reading of an earlier summary from the thread has been seen working. The run
+that would settle it is one on a scratch pull request already carrying a summary posted by 0.1.5. No round
 agent has been run with the new instruction to observe that it no longer starts a container. Each
 needs a real review on a pull request, which is the reporter's next run on that project.
 
+## 5b. After the first review of this change
+
+`atk:review` on the pull request, report `docs/derived/reviews/109-261008-0936.md` (not committed),
+kept eight `SHOULD FIX` findings and one `NIT`. Lam Ngoc Khuong chose which to land here.
+
+- S3, confirmed: at `0f6f23f` the summary had no fixed opening (`report-format.md:250-252`), so the
+  `atk:review` opening line alone would not find a summary posted before this change, which is the R2
+  case. `report-format.md` now finds one of those by its content, counts per severity beside `B1`,
+  `S1` or `N1` IDs, with that review's inline comments filling in.
+- S7: the summary is posted as a review body, which `gh pr view --json comments` does not return.
+  `shared/ticket-adapters.md` now names the read, `--json comments,reviews` plus the inline comments
+  through `gh api`. Both lines were run on this pull request and returned.
+- S6: where the report file and the thread gave one ID to different findings, the thread's stands
+  and the file's finding takes the next free number with `(was S1)`.
+- S2: `shared/artifact-paths.md` now says a second review also reads the posted summary, numbers
+  from 1 only when there is neither, and keeps the identifiers when a `--comment` run posted them.
+- S1: step 6, the done item, and `## Cap` in `report-format.md` now put the cap on the visible part of
+  a posted summary, so the collapsed list is outside it. `SKILL.md` is still 299 lines.
+- S4: the collapsed block also lists each open question with the person who must answer it, and the
+  number of convention gaps; the overview sentence in both languages says "reaches every finding
+  without the report" instead of "never needs the report".
+- S5: `review-rounds.md` no longer pre-labels a finding `PLAUSIBLE`; step 5 gives the verdict, as
+  `shared/host-capabilities.md` already said.
+
+After these edits the same checks as in section 6 pass: no em-dash, no `ak:`, no `atkx` outside
+`atk:help`, the mirror `diff` empty, no dated name without its time, and
+`OK plugins read nothing outside themselves, 947 citations resolved`.
+
+S8, a real `--comment` run, stays in section 7. N1, the allowance for type checks that write build
+caches, is left for later below.
+
 ## 9. Left for later
+
+- N1 of the review: "a command that reads the tree and exits" in `shared/host-capabilities.md` is
+  narrower than type checks that write ignored build caches, such as `tsc --incremental`; naming the
+  allowance by its effect is a follow-up.
 
 - `atk:plan --review --comment` and `atk:qa --review` post to a tracker too and carry identifiers
   across runs; whether their summaries have the same dead pointer was not checked here.
