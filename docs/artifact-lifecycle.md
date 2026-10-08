@@ -89,13 +89,14 @@ read one of the eight. `atk:run-cases` reads the run log of an earlier run of th
 offer the cases that run deferred and to name data it created with no record after it; where that
 run wrote a record, the record lists the same, so the person names them with `--only` instead. The other four
 all read the review report: a second `atk:review` over the same target
-reads the newest one for that target, to carry its finding identifiers forward, and numbers from 1 and
-says so when there is none; `atk:plan --review` reads the newest one for the same plan, for the same
+reads the newest one for that target, to carry its finding identifiers forward, together with the
+newest summary an earlier `--comment` run posted on the same pull request, and numbers from 1 and
+says so when there is neither; `atk:plan --review` reads the newest one for the same plan, for the same
 identifiers and to tell a result the author has already declined from one a week of commits has just
 created; `atk:qa --review` reads the newest one for the same cases file, for the same identifiers;
 and `atk:convention` reads its `Convention gaps` section, which is how a rule the review
 wanted reaches the file that records it. Deleting that report costs the next review a set of
-identifiers and the gaps it would have carried across, not a step in the chain.
+identifiers, unless a `--comment` run posted them on the pull request, and the gaps it would have carried across, not a step in the chain.
 
 ## Git history is not a fallback
 

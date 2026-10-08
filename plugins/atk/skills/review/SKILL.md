@@ -242,8 +242,8 @@ under each finding, the round table, and the sections in order. This section dec
 report goes and what reaches the session; that file decides its shape, so a report does not get
 rebuilt from nothing once per run.
 
-Read the newest earlier report on the same target first. A second review of the same target reuses
-the identifiers of the first, so an author asked to fix `B1` finds `B1` again;
+Read the newest earlier report on the same target first, and on a pull request its newest
+`atk:review` summary. A second review reuses the first's identifiers, so `B1` stays `B1`;
 `references/report-format.md` holds what happens when a finding changes severity, and what to do
 when no earlier report exists. This report is the one derived artifact the kit reads rather than
 only writes, here, in `atk:plan --review` and `atk:qa --review` for their own reports, and in step 1
@@ -255,10 +255,10 @@ them.
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Under `--comment`, post the findings the cap in step 6 allows as
-inline comments on the lines they cite, and the summary as one review comment that names the rest by
-identifier and points at the report. Post nothing before showing the list. In band 1 the reviewer
-agent only writes the report; the session shows the list from it and posts on consent. A `BLOCKING`
-finding requests changes; `NIT` findings never do.
+inline comments on the lines they cite, and the summary as one review comment that lists every
+finding itself, collapsed, per `references/report-format.md`. Post nothing before showing the list.
+In band 1 the reviewer agent only writes the report; the session shows the list from it and posts on
+consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
 
 ## Definition of done
 
@@ -286,8 +286,8 @@ finding requests changes; `NIT` findings never do.
       and a copy count the machine forced down.
 - [ ] A round or a sweep that died was re-run once or reported as not run, and neither was left to
       read as a round that looked and found nothing.
-- [ ] Every finding carries a severity-prefixed identifier, carried over from the earlier report on
-      the same target where there is one, and the report follows `references/report-format.md`.
+- [ ] Every finding carries a severity-prefixed identifier, carried over from the earlier report or
+      pull request summary where there is one, and the report follows `references/report-format.md`.
 - [ ] Every agent within a round received the same scope, and a finding only one copy of a round
       raised was checked against the code before it was reported.
 - [ ] No spawned round was shown what an earlier round found, the closing sweep excepted. Where
