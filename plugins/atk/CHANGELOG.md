@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.5...atk-v0.1.6) (2026-10-08)
+
+
+### Bug Fixes
+
+* **review:** list every finding in the --comment summary, carry identifiers from the thread, and keep reviewer agents from starting services ([#109](https://github.com/lamngockhuong/aiteamkit/issues/109)) ([6346212](https://github.com/lamngockhuong/aiteamkit/commit/6346212276cef6d365d29cf5daf52dc175ff2f1f))
+
 ## [0.1.5](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.4...atk-v0.1.5) (2026-10-02)
 
 
