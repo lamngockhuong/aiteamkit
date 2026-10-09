@@ -30,8 +30,9 @@ Three conditions, each learned by getting it wrong:
   commits and any uncommitted change are there. Two files are left out, `.claude/settings.json` and
   `.claude/settings.local.json`, because their hooks and pre-approved permissions would run in every
   session. A link is copied as a link when its target is inside the repository and left out when it
-  is not, so no file from outside lands in the seed; an absolute link becomes the relative link to
-  the seed's copy of its target, so a write through it stays in the seed. The original is only read; its `git status` and
+  is not, so no file from outside lands in the seed; every link becomes the shortest relative link to
+  the seed's copy of its target, so a write through it stays in the seed, an absolute link or one
+  with more `..` than the seed is deep included. The original is only read; its `git status` and
   `git stash list` are the same after the run as before it. A git worktree or submodule, whose
   repository directory another checkout shares, is refused: a copy of it would write into the
   original.

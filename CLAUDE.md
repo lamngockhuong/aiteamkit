@@ -1213,6 +1213,7 @@ json.dump([{'query': 'please review this', 'should_trigger': True}, {'query': 'w
           open(os.path.join(sk, 'evals', 'trigger_evals.json'), 'w'))
 open(os.path.join(repo, 'real.txt'), 'w').write('data')
 os.symlink(os.path.join(repo, 'real.txt'), os.path.join(repo, 'abs-link'))
+os.symlink('../' * 40 + os.path.realpath(repo).lstrip('/') + '/real.txt', os.path.join(repo, 'up-link'))
 subprocess.run(['git', 'init', '-q', repo], check=True)
 bin_ = os.path.join(t, 'bin'); os.makedirs(bin_); fake = os.path.join(bin_, 'claude')
 probe = os.path.join(t, 'probe.json')
@@ -1220,13 +1221,14 @@ open(fake, 'w').write('''#!/usr/bin/env node
 const fs = require('fs'), cp = require('child_process');
 const a = process.argv.slice(2), cfg = JSON.parse(fs.readFileSync(a[a.indexOf('--settings') + 1], 'utf8'));
 const q = fs.readFileSync(0, 'utf8'), skill = /review/.test(q) ? 'pp:sk' : 'other:x';
-fs.writeFileSync(''' + json.dumps(probe) + ''', JSON.stringify({ secret: 'SKILL_EVAL_PROBE_SECRET' in process.env, link: fs.readlinkSync('abs-link'),
+fs.writeFileSync(''' + json.dumps(probe) + ''', JSON.stringify({ secret: 'SKILL_EVAL_PROBE_SECRET' in process.env || 'CLAUDE_CODE_MESSAGING_TOKEN' in process.env,
+  link: fs.readlinkSync('abs-link'), up: fs.realpathSync('up-link'),
   dirs: a.filter((x, i) => a[i - 1] === '--plugin-dir'), env: fs.existsSync('q/.env'),
   git: a.filter((x, i) => a[i - 1] === '--plugin-dir').map((d) => fs.existsSync(require('path').join(d, '.' + 'git'))) }));
 cp.execSync(cfg.hooks.PreToolUse[0].hooks[0].command, { input: JSON.stringify({ tool_name: 'Skill', tool_input: { skill } }) });
 ''')
 os.chmod(fake, os.stat(fake).st_mode | stat.S_IXUSR)
-env = dict(os.environ, PATH=bin_ + os.pathsep + os.environ['PATH'], ANTHROPIC_API_KEY='stand-in', SKILL_EVAL_PROBE_SECRET='x')
+env = dict(os.environ, PATH=bin_ + os.pathsep + os.environ['PATH'], ANTHROPIC_API_KEY='stand-in', SKILL_EVAL_PROBE_SECRET='x', CLAUDE_CODE_MESSAGING_TOKEN='x')
 runner = os.path.abspath('plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs')
 def trig(*a):
     return json.loads(subprocess.run(['node', runner, sk, *a], capture_output=True, text=True, env=env, cwd=t).stdout)
@@ -1238,10 +1240,11 @@ assert (m['status'], m['score'], m['precision'], m['recall']) == ('measured', 10
 assert [c['selected'] for c in m['perCase']] == [['pp:sk', 'pp:sk'], ['other:x', 'other:x']], m['perCase']
 after = sorted(n for n in os.listdir(tempfile.gettempdir()) if n.startswith('skill-eval-run-'))
 assert after == before, 'the run left its directory behind'
-assert subprocess.run(['git', '-C', repo, 'status', '--porcelain'], capture_output=True, text=True).stdout.count(chr(10)) == 3, 'the scratch repository changed'
+assert subprocess.run(['git', '-C', repo, 'status', '--porcelain'], capture_output=True, text=True).stdout.count(chr(10)) == 4, 'the scratch repository changed'
 seen = json.load(open(probe))
 assert not seen['secret'], 'a session saw an environment variable it does not need'
 assert seen['link'] == 'real.txt', 'an absolute link in the seed still names the original: %s' % seen['link']
+assert not seen['up'].startswith(os.path.realpath(repo) + os.sep), 'a link with surplus .. in the seed still reaches the original: %s' % seen['up']
 ip = os.path.join(repo, 'q'); isk = os.path.join(ip, 'skills', 'sk')
 os.makedirs(os.path.join(isk, 'evals')); os.makedirs(os.path.join(ip, '.claude-plugin')); os.makedirs(os.path.join(ip, 'hooks'))
 open(os.path.join(ip, '.claude-plugin', 'plugin.json'), 'w').write('{\"name\": \"qq\"}')
@@ -1289,6 +1292,19 @@ for tamper, want in (('// later', 'unread-code'), ('aw' + 'ait fe' + 'tch(' + ch
     r = json.loads(subprocess.run(['node', runner, osk, '--yes', '--read', od['codeDigest'], '--runs', '1', '--timeout', '30'], capture_output=True, text=True, cwd=repo,
                                   env=dict(env, NODE_OPTIONS='--require ' + pre, TAMPER=tamper)).stdout)
     assert r['status'] == want, 'a copy changed after the check was not refused as %s: %s' % (want, r)
+broken = os.path.join(t, 'broken.cjs')
+open(broken, 'w').write('''const fs = require('node:fs'), path = require('node:path'), cp = fs.cpSync;
+fs.cpSync = (from, to, o) => { if (to.includes(path.sep + 'plugins' + path.sep)) throw Object.assign(new Error('denied'), { code: 'EACCES' }); cp(from, to, o); };
+require('node:module').syncBuiltinESMExports();
+''')
+r = json.loads(subprocess.run(['node', runner, osk, '--yes', '--read', od['codeDigest'], '--runs', '1', '--timeout', '30'], capture_output=True, text=True, cwd=repo,
+                              env=dict(env, NODE_OPTIONS='--require ' + broken)).stdout)
+assert r['status'] == 'gate-failed', 'a plugin that could not be copied was not refused: %s' % r
+if os.geteuid() != 0:
+    os.chmod(os.path.join(repo, 'real.txt'), 0)
+    r = subprocess.run(['node', runner, osk, '--yes', '--read', od['codeDigest'], '--runs', '1', '--timeout', '30'], capture_output=True, text=True, env=env, cwd=repo)
+    os.chmod(os.path.join(repo, 'real.txt'), 0o644)
+    assert json.loads(r.stdout)['status'] == 'no-seed', 'a seed file that cannot be read did not end in one summary: %s' % r.stdout
 assert sorted(n for n in os.listdir(tempfile.gettempdir()) if n.startswith('skill-eval-run-')) == before, 'a refused copy left its run directory behind'
 np_ = os.path.join(t, 'out', 'np'); nsk = os.path.join(np_, 'skills', 'sk')
 os.makedirs(os.path.join(nsk, 'evals')); os.makedirs(os.path.join(np_, '.claude-plugin'))

@@ -17,7 +17,7 @@
 // only with --read naming the digest of the code that was shown. Every plugin a session loads is
 // checked again where it is loaded from, its place in the seed when git carries it there, a copy in
 // the run directory when it registers a process, and its own directory otherwise, so what runs is what
-// was read.
+// was shown.
 //
 // It starts sessions only under --yes, which the agent passes after the user has seen the count
 // from --dry-run and said yes; --dry-run copies nothing and starts nothing. Case text reaches a
@@ -34,7 +34,7 @@
 import { spawn, spawnSync } from 'node:child_process';
 import {
   chmodSync, copyFileSync, cpSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readdirSync, readFileSync,
-  readlinkSync, realpathSync, rmSync, statSync, symlinkSync, writeFileSync,
+  realpathSync, rmSync, statSync, symlinkSync, writeFileSync,
 } from 'node:fs';
 import { homedir, tmpdir } from 'node:os';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
@@ -182,7 +182,8 @@ function makeRunDir() {
 // Seed: the files git lists, tracked and untracked but not ignored, plus the repository's own
 // directory, so the branch, the commits and any uncommitted change are all there. The original is
 // only read. A link is recreated as a link when it stays inside the repository and left out when
-// it does not, so no file from outside the repository ever lands in the seed.
+// it does not, so no file from outside the repository ever lands in the seed. A seed that cannot be
+// copied stops the run with its reason.
 
 function seedFiles(repo) {
   const res = spawnSync('git', ['-C', repo, 'ls-files', '-z', '--cached', '--others', '--exclude-standard'], {
@@ -190,6 +191,11 @@ function seedFiles(repo) {
   });
   if (res.status !== 0) fail('no-seed', `git could not list the files of ${repo}`);
   return [...new Set(res.stdout.split('\0').filter(Boolean))].filter((rel) => !SEED_EXCLUDE.has(rel.split(sep).join('/')));
+}
+
+// A copy that fails stops the run with one summary rather than a stack trace.
+function copyOrStop(what, copy) {
+  try { copy(); } catch (e) { fail('no-seed', `${what} (${e.code || e.message})`); }
 }
 
 function seedCopy(repo, dest, list) {
@@ -207,19 +213,21 @@ function seedCopy(repo, dest, list) {
       const r = relative(realRepo, target);
       if (r.split(sep)[0] === '..' || isAbsolute(r)) continue;
       mkdirSync(dirname(to), { recursive: true });
-      // An absolute link would still name the original, so a write through it in the seed would land
-      // there; it becomes the relative link to the seed's copy of its target.
-      const raw = readlinkSync(from);
-      symlinkSync(isAbsolute(raw) ? relative(dirname(to), join(dest, r)) || '.' : raw, to);
+      // A link written absolutely, or with more .. than the seed is deep, would still reach the
+      // original from the seed, so a write through it would land there. Every link becomes the
+      // shortest relative link to the seed's copy of its target, which git lists by its real path, so
+      // no directory on the way is a link.
+      symlinkSync(relative(dirname(to), join(dest, r)) || '.', to);
       links++;
       continue;
     }
     if (!st.isFile()) continue;
     mkdirSync(dirname(to), { recursive: true });
-    copyFileSync(from, to);
+    copyOrStop(`${rel} cannot be copied into the seed`, () => copyFileSync(from, to));
     files++;
   }
-  cpSync(join(repo, GIT_DIR), join(dest, GIT_DIR), { recursive: true, verbatimSymlinks: true });
+  copyOrStop('the repository directory cannot be copied into the seed',
+    () => cpSync(join(repo, GIT_DIR), join(dest, GIT_DIR), { recursive: true, verbatimSymlinks: true }));
   return { files, links };
 }
 
@@ -241,9 +249,10 @@ function credentials(worstCaseSeconds) {
 
 // What a session needs from the runner's environment: finding programs and its home, the locale and
 // the temporary directory, a proxy and its certificates, the login, and the settings Claude Code reads
-// from its own variables. Everything else, a cloud key or a token for another service, stays behind,
-// since the hooks of the evaluated plugin run in the session.
-const ENV_KEEP = /^(?:PATH|PATHEXT|HOME|USER|LOGNAME|USERNAME|USERPROFILE|HOMEDRIVE|HOMEPATH|SHELL|COMSPEC|SYSTEMROOT|SYSTEMDRIVE|WINDIR|APPDATA|LOCALAPPDATA|PROGRAMDATA|PROGRAMFILES|TMPDIR|TEMP|TMP|LANG|LANGUAGE|LC_[A-Z]+|TERM|TZ|XDG_[A-Z_]+|HTTPS?_PROXY|NO_PROXY|ALL_PROXY|NODE_EXTRA_CA_CERTS|SSL_CERT_FILE|SSL_CERT_DIR|ANTHROPIC_[A-Z0-9_]+|CLAUDE_CODE_[A-Z0-9_]+)$/i;
+// from its own variables. Everything else, a cloud key, a token for another service, or what the
+// parent session sets for its own children, a messaging token and a session ID among them, stays
+// behind, since the processes of the evaluated plugin run in the session.
+const ENV_KEEP = /^(?:PATH|PATHEXT|HOME|USER|LOGNAME|USERNAME|USERPROFILE|HOMEDRIVE|HOMEPATH|SHELL|COMSPEC|SYSTEMROOT|SYSTEMDRIVE|WINDIR|APPDATA|LOCALAPPDATA|PROGRAMDATA|PROGRAMFILES|TMPDIR|TEMP|TMP|LANG|LANGUAGE|LC_[A-Z]+|TERM|TZ|XDG_[A-Z_]+|HTTPS?_PROXY|NO_PROXY|ALL_PROXY|NODE_EXTRA_CA_CERTS|SSL_CERT_FILE|SSL_CERT_DIR|ANTHROPIC_[A-Z0-9_]+|CLAUDE_CODE_(?:OAUTH_TOKEN|USE_BEDROCK|USE_VERTEX|USE_FOUNDRY|SKIP_BEDROCK_AUTH|SKIP_VERTEX_AUTH|SKIP_FOUNDRY_AUTH|CLIENT_CERT|CLIENT_KEY|CLIENT_KEY_PASSPHRASE|GIT_BASH_PATH|MAX_OUTPUT_TOKENS|DISABLE_NONESSENTIAL_TRAFFIC))$/i;
 function childEnv(extra) {
   const env = {};
   for (const [k, v] of Object.entries(process.env)) if (ENV_KEEP.test(k)) env[k] = v;
@@ -309,7 +318,7 @@ function loading(skill, repo, seed, config, copies = new Map()) {
   const rel = relative(repo, skill.path);
   const projectSkill = rel.split(sep).slice(0, 2).join('/') === '.claude/skills';
   if (projectSkill && (!seed || existsSync(join(seed, rel, 'SKILL.md')))) return { args: [], how: 'project skill', missing: [] };
-  if (config) cpSync(skill.path, join(config, 'skills', basename(skill.path)), { recursive: true });
+  if (config) copyOrStop('the skill cannot be copied into the config', () => cpSync(skill.path, join(config, 'skills', basename(skill.path)), { recursive: true }));
   return { args: [], how: 'copied into the config', missing: [] };
 }
 
@@ -569,4 +578,6 @@ async function main() {
   });
 }
 
-main();
+// Any other failure still ends in the one JSON summary the agent reads, and the exit handler removes
+// the run directory.
+main().catch((e) => fail('error', `the runner stopped: ${e.code || e.message}`));
