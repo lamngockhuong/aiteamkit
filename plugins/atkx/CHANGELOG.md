@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.5](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.4...atkx-v0.0.5) (2026-10-09)
+
+
+### Bug Fixes
+
+* **skill-eval:** start no plugin process whose code the person has not read ([#111](https://github.com/lamngockhuong/aiteamkit/issues/111)) ([b181ed7](https://github.com/lamngockhuong/aiteamkit/commit/b181ed7c329a9ef4028943ad556cfe3a3375144d))
+
 ## [0.0.4](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.3...atkx-v0.0.4) (2026-10-02)
 
 
