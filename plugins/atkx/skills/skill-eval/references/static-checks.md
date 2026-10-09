@@ -203,14 +203,23 @@ Each of these is `unreadable`:
   such as `/usr/bin/env` or `/dev/null`;
 - a path that resolves to nothing, or one built from `~` or another variable, since the gate cannot
   tell what it names;
-- a named file the walk of the plugin does not reach, such as one under its own `.git`.
+- a named file the walk of the plugin does not reach, such as one under its own `.git`;
+- a registration whose shape the gate cannot read, such as a hook group whose `hooks` is not a list,
+  a hook or a monitor that is not an object, or servers that are not a map of names, since what a
+  harness makes of it is unknown.
+
+With no repository there is no session directory, so a relative path or `${CLAUDE_PROJECT_DIR}`
+cannot be resolved; the trigger runner reports that as `no-seed`, not as a failure of the plugin.
 
 For a plugin that registers any process, each of these is `unreadable` as well:
 
 - a link whose target leaves the plugin, or one written as an absolute path, which a copy of the
-  plugin would still resolve to the original;
-- a file that is neither text nor an image or data file, an executable binary or a script holding a
-  NUL byte among them, since nobody can read it;
+  plugin would still resolve to the original, a link to a directory the walk already read included;
+- for a plugin inside the repository, a link whose target git does not carry into the seed, where it
+  would resolve to nothing;
+- any file that is not text, an image, a font or an executable binary among them, since nobody can
+  read it and a process can still run it whatever its name or first bytes, Node as a module and a
+  shell line by line; a logo is SVG, which is text, or lives outside a plugin that starts processes;
 - text holding bidirectional controls or marks, zero-width or tag characters, ESC, or a carriage
   return that is not a line ending, all of which read differently from what runs; Markdown may keep
   the zero-width joiners emoji need;
@@ -224,8 +233,8 @@ plugin.
 
 For a plugin that registers any process, it also returns `codeFiles`, every registration file, every
 non-Markdown text file of the plugin, and every Markdown file one of those names by its path, each
-with its line count and sha256, and the links that reach it; and `codeDigest`, a sha256 over every
-file of the plugin and every path that reaches it, shown or not. For a plugin inside the repository
+with its line count and sha256, and the links that reach it; and `codeDigest`, a sha256 over every file of the
+plugin, every path that reaches it, and every link and its target, shown or not. For a plugin inside the repository
 the plugin is what git carries into the seed, so an ignored `.env` or `node_modules` is neither read
 nor copied. A file Node can load as code needs no script extension, which is why the list is that wide. The
 static report of a skill does not include any of this; `trigger-run.mjs` calls it before any session

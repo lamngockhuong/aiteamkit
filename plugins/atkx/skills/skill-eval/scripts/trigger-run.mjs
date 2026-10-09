@@ -15,8 +15,9 @@
 // commands and the code files that will run, which the agent shows in full before asking for the yes.
 // A gate reads for patterns and cannot clear code, so a plugin that registers a process is started
 // only with --read naming the digest of the code that was shown. Every plugin a session loads is
-// checked again where it is loaded from, its place in the seed when git carries it there and a copy
-// in the run directory otherwise, so what runs is what was read.
+// checked again where it is loaded from, its place in the seed when git carries it there, a copy in
+// the run directory when it registers a process, and its own directory otherwise, so what runs is what
+// was read.
 //
 // It starts sessions only under --yes, which the agent passes after the user has seen the count
 // from --dry-run and said yes; --dry-run copies nothing and starts nothing. Case text reaches a
@@ -268,9 +269,13 @@ function codeOf(reports) {
 }
 
 // Where each plugin a session loads lies: its place in the seed when git carries its manifest there,
-// otherwise nowhere in the seed, and then the runner copies it whole. `files` is the seed's file list.
+// otherwise nowhere in the seed, and then the runner copies it whole. `files` is the seed's file list;
+// a directory is carried when a file under it is, which is what a link to a directory resolves to.
+// With no repository nothing is in a seed.
 function placesOf(dirs, repo, files) {
+  if (!repo) return dirs.map((d) => ({ dir: d, inSeed: false, include: null }));
   const listed = new Set(files.map((f) => f.split(sep).join('/')));
+  for (const f of [...listed]) for (let i = f.indexOf('/'); i > 0; i = f.indexOf('/', i + 1)) listed.add(f.slice(0, i));
   return dirs.map((d) => {
     const rel = relative(repo, d).split(sep).join('/');
     const inSeed = within(repo, d) && listed.has(`${rel ? rel + '/' : ''}.claude-plugin/plugin.json`);
@@ -408,26 +413,29 @@ async function main() {
   if (verdict.credentials || verdict.gate) {
     fail('gate-failed', `the static check found ${verdict.credentials} credential and ${verdict.gate} security gate findings; fix them before measuring triggers`);
   }
+  // The processes every plugin a session loads registers, hooks, monitors, LSP and MCP servers, run
+  // in it, so they pass the same gate. A relative path in a command resolves where a session runs,
+  // the seed, which holds the same files as the repository. With no repository the gate still runs,
+  // with nowhere to resolve a relative path, so its finding comes before the missing seed.
   const repo = skill.repoRoot || findRoot(process.cwd(), GIT_DIR);
+  let declared = '';
+  try { declared = readFileSync(join(dir, 'SKILL.md'), 'utf8'); } catch { declared = ''; }
+  const list = repo ? seedFiles(repo) : [];
+  const places = placesOf(pluginDirs(skill), repo, list);
+  const hookReports = places.map((p) => evaluateHooks(p.dir, declared, repo, p.include));
+  // With no repository, a path only a session directory would resolve is the missing seed's finding.
+  const failing = (h) => h.checks.filter((c) => c.status === 'fail' && !(c.needsCwd && !repo));
+  const hookFails = hookReports.filter((h) => failing(h).length);
+  if (hookFails.length) {
+    const findings = hookFails.flatMap((h) => failing(h).map((c) => ({ plugin: h.plugin, ...c })));
+    const kinds = [...new Set(findings.map((c) => c.kind))];
+    fail('gate-failed', `the processes registered by ${hookFails.map((h) => h.plugin).join(', ')} failed the static check (${kinds.join(', ')}); a session would run them, so triggers are not measured`, {
+      hookFindings: findings,
+    });
+  }
   if (!repo) fail('no-seed', 'neither the skill nor the working directory is in a git repository; with no seed every session would read zero');
   if (!statSync(join(repo, GIT_DIR)).isDirectory()) {
     fail('no-seed', `${repo} is a git worktree or submodule, whose repository directory is shared with another checkout; a seed copy would write into it, so measure from the main checkout`);
-  }
-
-  // The processes every plugin a session loads registers, hooks, monitors, LSP and MCP servers, run
-  // in it, so they pass the same gate. A relative path in a command resolves where a session runs,
-  // the seed, which holds the same files as the repository.
-  let declared = '';
-  try { declared = readFileSync(join(dir, 'SKILL.md'), 'utf8'); } catch { declared = ''; }
-  const list = seedFiles(repo);
-  const places = placesOf(pluginDirs(skill), repo, list);
-  const hookReports = places.map((p) => evaluateHooks(p.dir, declared, repo, p.include));
-  const hookFails = hookReports.filter((h) => h.summary.credentials || h.summary.gate);
-  if (hookFails.length) {
-    const kinds = [...new Set(hookFails.flatMap((h) => h.commands.map((c) => c.kind)))];
-    fail('gate-failed', `the ${kinds.length ? kinds.join(', ') + ' registrations' : 'registrations'} of ${hookFails.map((h) => h.plugin).join(', ')} failed the static check; a session would run them, so triggers are not measured`, {
-      hookFindings: hookFails.flatMap((h) => h.checks.filter((c) => c.status === 'fail').map((c) => ({ plugin: h.plugin, ...c }))),
-    });
   }
   const hookCommands = hookReports.flatMap((h) => h.commands.map((c) => ({ plugin: h.plugin, ...c })));
   const code = codeOf(hookReports);
@@ -481,11 +489,12 @@ async function main() {
   // Every plugin a session loads runs from a copy that is checked again where it lies: its place in
   // the seed when git carries it there, which holds the files git lists and nothing it ignores; a
   // whole copy in the run directory otherwise, taken from the real directory so a plugin that is a
-  // link is copied rather than linked. An edit after the check above, a process registered since,
-  // or a link that still names the original fails here.
+  // link is copied rather than linked. A plugin outside the seed that registers no process runs from
+  // where it lies, as it did before any of this, and is checked there. An edit after the check above,
+  // a process registered since, or a link that still names the original fails here.
   const copies = new Map();
   for (const [i, p] of places.entries()) {
-    if (p.inSeed) continue;
+    if (p.inSeed || !hookReports[i].registers) continue;
     const to = join(runDir, 'plugins', `${i}-${basename(p.dir)}`);
     // Without its own .git, which the gate does not read and which git would run commands from.
     const from = realpathSync(p.dir);
@@ -495,7 +504,7 @@ async function main() {
     }
     copies.set(resolve(p.dir), to);
   }
-  const loadedDirs = places.map((p) => (p.inSeed ? join(seed, p.rel) : copies.get(resolve(p.dir))));
+  const loadedDirs = places.map((p) => (p.inSeed ? join(seed, p.rel) : copies.get(resolve(p.dir)) ?? p.dir));
   const again = loadedDirs.map((d) => evaluateHooks(d, declared, seed));
   const failed = again.filter((h) => h.summary.credentials || h.summary.gate);
   if (failed.length) {

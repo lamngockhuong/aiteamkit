@@ -198,11 +198,13 @@ function insideTarget(p, realRoot) {
 // Walking the skill directory. A link out of the skill is a finding, never a read. A link to a
 // directory inside the skill is walked by the link's own path, since that is the path SKILL.md
 // names and a harness runs. A file reached by several paths is read once, and every path that
-// reaches it is kept, since each one is a name a harness may run it by.
+// reaches it is kept, since each one is a name a harness may run it by. Every link that stays
+// inside is listed in `inner`, a link to a directory already walked included.
 
 function walk(root, problems) {
   const files = [];
   const links = [];
+  const inner = [];
   const realRoot = realpathSync(root);
   const seen = new Set();
   const aliases = new Map();
@@ -226,6 +228,7 @@ function walk(root, problems) {
       try { st = lstatSync(p); } catch (e) { problems.push({ file: relative(root, p), detail: e.code || e.message }); continue; }
       if (st.isSymbolicLink()) {
         if (!insideTarget(p, realRoot)) { links.push(relative(root, p)); continue; }
+        inner.push(p);
         const t = statSync(p);
         if (t.isDirectory()) visit(p);
         else if (t.isFile()) addFile(p);
@@ -236,7 +239,7 @@ function walk(root, problems) {
     }
   };
   visit(root);
-  return { files: files.map((real) => aliases.get(real)), links };
+  return { files: files.map((real) => aliases.get(real)), links, inner };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -730,9 +733,6 @@ const PROJECT_VARS = /\$\{CLAUDE_PROJECT_DIR\}|\$CLAUDE_PROJECT_DIR\b/g;
 // them. Markdown keeps the zero-width joiners, which emoji and some scripts need.
 const INVISIBLE = /[\u202A-\u202E\u2066-\u2069\u200E\u200F\u061C\u200B\u2060-\u2064\u00AD\u180E\u001B]|\r(?!\n)|(?<!^)\uFEFF|\uDB40[\uDC00-\uDC7F]/;
 const JOINERS = /[\u200C\u200D]/;
-// What a plugin that starts processes may hold that is not text: an image, a font or a document, by its
-// extension as well as its signature, since a script can begin with the bytes of one.
-const DATA_EXT = /\.(?:png|jpe?g|gif|webp|ico|bmp|tiff?|woff2?|ttf|otf|pdf)$/i;
 // Files that hold credentials by their name, the path list of atk's secret scan.
 const SECRET_FILE = /(?:^|\/)(?:\.env(?:\.(?!example$|sample$)[^/]*)?|id_rsa|id_ed25519|credentials\.json|secrets\.[^/]+|serviceAccount[^/]*\.json|[^/]+\.(?:pem|key|p12|pfx|jks))$/;
 
@@ -743,24 +743,26 @@ const SECRET_FILE = /(?:^|\/)(?:\.env(?:\.(?!example$|sample$)[^/]*)?|id_rsa|id_
 function commandLines(kind, key, data, inline = false) {
   const line = (e) => [e?.command, e?.args, e?.url, e?.cwd, e?.env && typeof e.env === 'object' ? Object.values(e.env) : null]
     .flat(2).filter((x) => typeof x === 'string').join(' ');
-  const objects = (v) => (Array.isArray(v) ? v : []).filter((x) => x && typeof x === 'object');
+  const isObject = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);
+  // A shape the gate cannot read comes back as { malformed }, since what a harness makes of it is
+  // unknown, and the gate does not pass what it did not read.
+  const entries = (list, what, read) => list.map((x) => (isObject(x) ? read(x) : { malformed: what }));
   if (kind === 'hook') {
-    const out = [];
     const events = data?.hooks ?? data;
-    for (const [event, groups] of Object.entries(events && typeof events === 'object' ? events : {})) {
-      for (const group of objects([groups].flat())) {
-        for (const h of objects(group.hooks)) out.push({ event, matcher: group.matcher ?? null, type: h.type ?? null, line: line(h) });
-      }
-    }
-    return out;
+    if (!isObject(events)) return [{ malformed: 'its hooks are not a map of events' }];
+    return Object.entries(events).flatMap(([event, groups]) => entries([groups].flat(), `a group of ${event} that is not an object`, (group) => (
+      Array.isArray(group.hooks)
+        ? entries(group.hooks, `a hook of ${event} that is not an object`, (h) => ({ event, matcher: group.matcher ?? null, type: h.type ?? null, line: line(h) }))
+        : [{ malformed: `a group of ${event} whose hooks are not a list` }])).flat());
   }
   if (kind === 'monitor') {
-    const list = Array.isArray(data) ? data : Array.isArray(data?.monitors) ? data.monitors : data?.command ? [data] : [];
-    return objects(list).map((m) => ({ name: m.name ?? null, type: 'command', line: line(m) }));
+    const list = Array.isArray(data) ? data : Array.isArray(data?.monitors) ? data.monitors : data?.command ? [data] : null;
+    if (!list) return [{ malformed: 'monitors that are not a list' }];
+    return entries(list, 'a monitor that is not an object', (m) => ({ name: m.name ?? null, type: 'command', line: line(m) }));
   }
   const servers = inline ? data : data?.[key] ?? data;
-  return Object.entries(servers && typeof servers === 'object' && !Array.isArray(servers) ? servers : {})
-    .filter(([, s]) => s && typeof s === 'object').map(([name, s]) => ({ name, type: 'command', line: line(s) }));
+  if (!isObject(servers)) return [{ malformed: 'servers that are not a map of names' }];
+  return Object.entries(servers).map(([name, s]) => (isObject(s) ? { name, type: 'command', line: line(s) } : { malformed: `a server ${name} that is not an object` }));
 }
 
 // The processes a plugin brings with it, which run in every session that loads the plugin: hooks,
@@ -788,7 +790,9 @@ export function evaluateHooks(pluginRoot, declared = '', cwd = null, include = n
   const commands = [];
   let gate = 0;
   let creds = 0;
-  const unread = (file, detail) => { gate++; add({ id: 'gate-unreadable', kind: 'unreadable', status: 'fail', file: maskIfSecret(file), line: 1, detail }); };
+  // `needsCwd` marks a finding that only a missing session directory causes, which the runner reports
+  // as the missing repository instead.
+  const unread = (file, detail, needsCwd = false) => { gate++; add({ id: 'gate-unreadable', kind: 'unreadable', status: 'fail', file: maskIfSecret(file), line: 1, detail, ...(needsCwd ? { needsCwd } : {}) }); };
   const kept = (rel) => !include || include(rel.split(sep).join('/'));
 
   let manifest = null;
@@ -834,6 +838,7 @@ export function evaluateHooks(pluginRoot, declared = '', cwd = null, include = n
   const lines = new Map();
   for (const { kind, file, data, inline } of registrations) {
     for (const c of commandLines(kind, REGISTRATIONS.find((r) => r.kind === kind).key, data, inline)) {
+      if (c.malformed) { unread(file, `${kind} registration has ${c.malformed}, so the gate cannot tell what it runs`); continue; }
       commands.push({ kind, event: c.event ?? null, matcher: c.matcher ?? null, name: c.name ?? null, type: c.type, command: maskIfSecret(c.line), file });
       // An http hook sends the event to its URL, which the network check reads like any call.
       if ((c.type !== 'command' && c.type !== 'http') || !c.line) continue;
@@ -848,6 +853,10 @@ export function evaluateHooks(pluginRoot, declared = '', cwd = null, include = n
           try { token = fileURLToPath(token); } catch { unread(piece, `${kind} command in ${file} names a file: URL the gate cannot resolve`); continue; }
         } else if (/^[a-z][a-z0-9+.-]*:\/\//i.test(token)) continue;
         const slash = /[\\/]/.test(token);
+        if (!cwd && /\$\{?CLAUDE_PROJECT_DIR\b/.test(piece)) {
+          unread(piece, `${kind} command in ${file} names the project directory, with no session directory to resolve it against`, true);
+          continue;
+        }
         if (token.startsWith('~') || (token.includes('$') && slash)) {
           unread(piece, `${kind} command in ${file} builds a path from ~ or a variable, which the gate cannot resolve`);
           continue;
@@ -860,7 +869,7 @@ export function evaluateHooks(pluginRoot, declared = '', cwd = null, include = n
         let p;
         if (isAbsolute(token)) { if (!explicit) continue; p = token; }
         else if (cwd) p = resolve(cwd, token);
-        else { unread(piece, `${kind} command in ${file} names a relative path, with no session directory to resolve it against`); continue; }
+        else { unread(piece, `${kind} command in ${file} names a relative path, with no session directory to resolve it against`, true); continue; }
         const exists = lstatOk(p);
         if (!within(root, p) && !within(realRoot, p)) {
           // An interpreter or a device, /usr/bin/env or /dev/null, is the system's; any other file
@@ -889,7 +898,6 @@ export function evaluateHooks(pluginRoot, declared = '', cwd = null, include = n
   }
   const files = [];
   const byReal = new Map();
-  const absoluteLinks = new Set();
   for (const aliases of all.files) {
     let paths = aliases.filter((p) => kept(relative(root, p)));
     if (!paths.length) {
@@ -907,32 +915,34 @@ export function evaluateHooks(pluginRoot, declared = '', cwd = null, include = n
     files.push(file);
     byReal.set(real, file);
     if (!registers) continue;
-    if (file.text === null && (isExecutableBinary(buf, paths[0]) || !startsWith(buf, DATA_MAGIC) || !DATA_EXT.test(rel))) {
-      unread(rel, 'not text and not an image or data file, in a plugin that starts processes; it cannot be read');
-    }
+    // A file that is not text cannot be shown, and whatever its name or first bytes, a process can run
+    // it: Node as a module, a shell line by line. So a plugin that starts processes holds none.
+    if (file.text === null) unread(rel, 'not text, in a plugin that starts processes; it cannot be shown, and a process could run it');
     const markdown = MARKDOWN_EXT.has(extname(rel).toLowerCase());
     if (file.text !== null && (INVISIBLE.test(file.text) || (!markdown && JOINERS.test(file.text)))) {
       unread(rel, 'invisible or bidirectional control characters, so the text read is not the text that runs');
     }
     if (SECRET_FILE.test(rel.split(sep).join('/'))) { creds++; add({ id: 'credential', kind: 'secret-file', status: 'fail', file: rel, line: 1, value: '********' }); }
     else if (file.text !== null) creds += credentialsIn(file.text, rel, add);
-    // A link named absolutely still names the original once the plugin is copied, whether it is the
-    // file itself or a directory on its way.
-    for (const p of paths) {
-      const parts = relative(root, p).split(sep);
-      for (let k = 1; k <= parts.length; k++) {
-        const step = join(root, ...parts.slice(0, k));
-        if (absoluteLinks.has(step)) continue;
-        let st;
-        try { st = lstatSync(step); } catch { continue; }
-        if (st.isSymbolicLink() && isAbsolute(readlinkSync(step))) {
-          absoluteLinks.add(step);
-          unread(relative(root, step), 'link named by an absolute path, which a copy of the plugin would still resolve to the original');
-        }
-      }
-    }
   }
   files.sort((a, b) => (a.rel < b.rel ? -1 : a.rel > b.rel ? 1 : 0));
+
+  // Every link inside the plugin, a link to a directory already walked included. One named absolutely
+  // still names the original once the plugin is copied; one whose target git does not carry dangles
+  // in the seed. Each is part of the digest, so a link re-pointed changes it.
+  const linkEntries = [];
+  if (registers) {
+    for (const p of all.inner) {
+      const rel = relative(root, p);
+      // A link inside a directory reached through another link is listed by git where it really sits.
+      if (!kept(rel) && !kept(relative(realRoot, join(realpathSync(dirname(p)), basename(p))))) continue;
+      const raw = readlinkSync(p);
+      linkEntries.push(`${rel}\0->${raw}\n`);
+      if (isAbsolute(raw)) { unread(rel, 'link named by an absolute path, which a copy of the plugin would still resolve to the original'); continue; }
+      const target = relative(realRoot, realpathSync(p));
+      if (!kept(target)) unread(rel, 'link to a path git does not carry into the seed, so it would resolve to nothing there');
+    }
+  }
 
   // What the gate reads: every file under hooks/, by its real place, and every file a command names
   const hooksDir = join(root, 'hooks');
@@ -961,7 +971,7 @@ export function evaluateHooks(pluginRoot, declared = '', cwd = null, include = n
     const names = (md) => [...shown].some((f) => f.text.includes(md.rel) || f.text.includes(relative(dirname(f.rel), md.rel)));
     codeFiles = files.filter((f) => shown.has(f) || (f.text !== null && isMarkdown(f) && names(f)))
       .map((f) => ({ path: f.rel, lines: f.text.split('\n').length, sha256: f.sha, ...(f.paths.length > 1 ? { reachedBy: f.paths.map((p) => relative(root, p)) } : {}) }));
-    codeDigest = sha256(files.flatMap((f) => f.paths.map((p) => `${relative(root, p)}\0${f.sha}\n`)).sort().join(''));
+    codeDigest = sha256([...files.flatMap((f) => f.paths.map((p) => `${relative(root, p)}\0${f.sha}\n`)), ...linkEntries].sort().join(''));
   }
 
   for (const [kind, ls] of lines) readable.push({ paths: [join(root, `${kind} commands`)], content: ls.join('\n'), runnable: true, commandLine: true });

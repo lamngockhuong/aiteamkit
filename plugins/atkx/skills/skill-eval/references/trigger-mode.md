@@ -41,7 +41,8 @@ Three conditions, each learned by getting it wrong:
   certificates, and the `ANTHROPIC_*` and `CLAUDE_CODE_*` settings. A cloud key or a token for
   another service stays behind. The skill is loaded explicitly: a plugin skill with `--plugin-dir`,
   together with the plugins it declares as dependencies, each from the seed when git carries it
-  there and otherwise from a whole copy in the run directory; a skill under `.claude/skills/` is
+  there, from a whole copy in the run directory when it registers a process, and otherwise from where
+  it lies, as before any process was gated; a skill under `.claude/skills/` is
   already in the seed; any other skill is copied into the temporary config. `--strict-mcp-config`
   leaves out every MCP server the session would otherwise read; a plugin's own MCP servers are still
   gated and shown like its other processes, since no run has yet confirmed that the flag stops them.
@@ -107,7 +108,7 @@ The timeout is at most an hour and at most 16 sessions run at a time.
 | `measured` | at least one session selected a skill | the figures below |
 | `broken` | no session selected any skill | "the measurement did not work", no precision, recall or score |
 | `error` | every session failed before measuring, a login or a model name | the error line, and that nothing was measured |
-| `gate-failed` | the static check found a credential or a gate failure | that triggers were not measured, and why |
+| `gate-failed` | the static check found a credential or a gate failure; for a plugin's processes, its `detail` names the kinds that failed, and it comes before `no-seed` unless only a missing repository caused it | that triggers were not measured, and why |
 | `unread-code` | a loaded plugin registers a process and `--read` was missing or no longer matched its code | that nothing ran; show the new dry run's files and ask again |
 | `no-cases`, `no-observable-cases`, `no-seed`, `no-credentials`, `no-skill` | it stopped before starting anything | its `detail`, as given |
 | `usage` | the arguments were wrong, exit code 2 | its `detail`, and the command corrected before running it again |
@@ -145,7 +146,8 @@ file exists, so the environment token is the route there.
   static gate before any session starts, step 2 says what it reads, and the question in step 3 shows
   each command and every file of `codeFiles`. They run only under `--read` with the digest of that
   code, from a copy checked again before the first session: the seed's, which holds only what git
-  carries, for a plugin the seed contains, and a whole copy in the run directory for any other. So
+  carries, for a plugin the seed contains, and a whole copy in the run directory for any other that
+  registers a process. So
   what runs is what was shown. It
   still runs with the user's login in its environment: the gate finds known patterns, and reading
   the code is what judges the rest, which is why a person who has not read it should say no.
