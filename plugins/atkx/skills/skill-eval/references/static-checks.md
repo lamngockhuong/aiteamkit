@@ -188,7 +188,10 @@ more than one kind, a download piped into a shell from an undeclared host fails 
 **A plugin's processes.** The trigger mode loads a plugin skill with its plugin, and every process
 that plugin and its dependencies register starts in every session: hooks, from `hooks/hooks.json`
 and the manifest's `hooks` key; monitors, from `monitors/monitors.json` and `monitors`; LSP servers,
-from `.lsp.json` and `lspServers`; and MCP servers, from `.mcp.json` and `mcpServers`.
+from `.lsp.json` and `lspServers`; and MCP servers, from `.mcp.json` and `mcpServers`. The trigger
+mode's `--strict-mcp-config` kept a plugin's MCP server from starting on Claude Code 2.1.295, and
+`references/trigger-mode.md` says what was and was not seen to start; the gate reads all four kinds
+either way, since an install starts them.
 `evaluateHooks` in `scripts/static-check.mjs` runs the same credential and gate checks over them:
 every registration, every file under the plugin's `hooks/`, every file inside the plugin a command
 names, and each command line as a script. A command line holds the command, its arguments, a URL,

@@ -44,8 +44,10 @@ Three conditions, each learned by getting it wrong:
   there, from a whole copy in the run directory when it registers a process, and otherwise from where
   it lies, as before any process was gated; a skill under `.claude/skills/` is
   already in the seed; any other skill is copied into the temporary config. `--strict-mcp-config`
-  leaves out every MCP server the session would otherwise read; a plugin's own MCP servers are still
-  gated and shown like its other processes, since no run has yet confirmed that the flag stops them.
+  leaves out every MCP server the session would otherwise read, a plugin's own included: on Claude
+  Code 2.1.295, a `-p` session with the flag did not start the MCP server of a `--plugin-dir` plugin,
+  and the same session without it started that server within seconds. They are still gated and shown
+  like the plugin's other processes, so a later version that starts them finds nothing unread.
   Skills an organisation provisions for the account, and Claude Code's built-in
   skills, stay; a team on Claude Code meets them too, so a case lost to one is a real finding.
 - **Exact names.** A run counts as a trigger only when the first `tool_input.skill` its session
@@ -142,7 +144,11 @@ file exists, so the environment token is the route there.
   permission flag, and the seed carries none of the repository's own settings, so a tool call that
   would need approval is refused.
 - What still runs is every process the evaluated plugin registers, and those of the plugins it
-  depends on, loaded as an install loads them: hooks, monitors, LSP and MCP servers. They pass the
+  depends on, loaded as an install loads them: hooks, monitors and LSP servers, and MCP servers
+  should a version stop honouring `--strict-mcp-config` for them. On Claude Code 2.1.295 neither a
+  monitor nor an LSP server was seen to start in a `-p` session of a few seconds that read a file of
+  the LSP server's extension, which may be the length of the session rather than a rule, so both are
+  treated as running. They pass the
   static gate before any session starts, step 2 says what it reads, and the question in step 3 shows
   each command and every file of `codeFiles`. They run only under `--read` with the digest of that
   code, from a copy checked again before the first session: the seed's, which holds only what git
