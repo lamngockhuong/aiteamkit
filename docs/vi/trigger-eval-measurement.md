@@ -75,9 +75,10 @@ trong bản mồi, và bộ chạy dừng phiên ngay khi lượt gọi đầu t
 Bản mồi bỏ ra ngoài `.claude/settings*.json` của chính repository, và bộ chạy từ chối một skill mà
 phần kiểm tra tĩnh tìm ra credential hoặc lỗi cổng bảo mật. Skill trong plugin vẫn được nạp cùng
 các tiến trình mà plugin đăng ký, gồm hook, monitor, LSP server và MCP server. Cổng kiểm tra đọc
-chúng cùng mọi file chúng chạy, lời xin đồng ý trước khi chạy hiển thị đầy đủ mã của plugin, và các
-phiên nạp một bản sao được đối chiếu với đúng digest đã hiển thị, nên thứ chạy chính là thứ đã được
-đọc; bản thân cổng chỉ tìm các mẫu đã biết, còn việc đọc mã mới là thứ phán xét phần còn lại.
+mọi lệnh cùng các file lệnh đó nêu tên, và từ chối lệnh chạy một file nằm ngoài plugin; lời xin đồng
+ý trước khi chạy hiển thị đầy đủ mọi file văn bản còn lại của plugin, và các phiên nạp một bản sao
+được đối chiếu với đúng digest đã hiển thị, nên thứ chạy chính là thứ đã được hiển thị; bản thân
+cổng chỉ tìm các mẫu đã biết, còn việc đọc mã mới là thứ phán xét phần còn lại.
 
 Một trigger là một phiên mà payload `Skill` *đầu tiên* được ghi có `tool_input.skill` bằng đúng tên
 đầy đủ của skill đang đo, `atk:<tên>` với skill của kit này. So khớp chính xác. Nếu chỉ kiểm tên

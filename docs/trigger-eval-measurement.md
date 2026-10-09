@@ -74,10 +74,11 @@ seed, and the runner stops each session as soon as that first call is logged, si
 is counted. A session stopped there takes seconds rather than the minutes a skill's full run would.
 The seed leaves out the repository's own `.claude/settings*.json`, and the runner refuses a skill
 whose static check found a credential or a security gate failure. A plugin skill still loads with
-the processes its plugin registers, hooks, monitors, LSP and MCP servers. The gate reads them and
-every file they run, the consent before a run shows the plugin's code in full, and the sessions load
-a copy checked against the digest that was shown, so what runs is what was read; the gate itself
-finds known patterns, and reading the code is what judges the rest.
+the processes its plugin registers, hooks, monitors, LSP and MCP servers. The gate reads every
+command and the files it names, and refuses one that runs a file outside the plugin; the consent
+before a run shows every other text file of the plugin in full, and the sessions load a copy checked
+against the digest that was shown, so what runs is what was shown; the gate itself finds known
+patterns, and reading the code is what judges the rest.
 
 A trigger is a session whose *first* logged `Skill` payload has a `tool_input.skill` equal to the
 full name of the skill under test, `atk:<name>` for one of this kit's. Compare exactly. Testing

@@ -193,17 +193,25 @@ mode's `--strict-mcp-config` kept a plugin's MCP server from starting on Claude 
 `references/trigger-mode.md` says what was and was not seen to start; the gate reads all four kinds
 either way, since an install starts them.
 `evaluateHooks` in `scripts/static-check.mjs` runs the same credential and gate checks over them:
-every registration, every file under the plugin's `hooks/`, every file inside the plugin a command
-names, and each command line as a script. A command line holds the command, its arguments, a URL,
+every registration, every file under the plugin's `hooks/` by any path that reaches it, every file
+inside the plugin a command names, read as a script whatever its name, and each command line as a
+script. A command line holds the command, its arguments, a URL,
 a working directory and the values of its environment, where `NODE_OPTIONS` or `LD_PRELOAD` can load
 a file of their own; an `http` hook's URL is checked as a network call. A path in a command, `/x`,
-`./x`, `../x`, a `file:` URL, or a word with a slash that names something, is resolved against the
-directory a session runs in, the root of the repository, with `${CLAUDE_PLUGIN_ROOT}` and
-`${CLAUDE_PROJECT_DIR}` expanded; a word such as `application/json` that names nothing is a word.
-Each of these is `unreadable`:
+`//x`, `./x`, `../x`, a `file:` URL, a path glued to a one-letter option such as `-I/x`, or a word
+that names something, is resolved against the directory a session runs in, the root of the
+repository, and against the plugin's own directory, with `${CLAUDE_PLUGIN_ROOT}` and
+`${CLAUDE_PROJECT_DIR}` expanded; a word such as `application/json` that names nothing is a word. A
+line that moves into the plugin first, through `cd`, `--prefix`, `-C`, `--cwd` or `--dir`, or a
+server whose `cwd` is inside it, is resolved against the plugin alone. Each of these is `unreadable`:
 
-- a command naming a file outside the plugin, other than an interpreter or a device of the system
-  such as `/usr/bin/env` or `/dev/null`;
+- a command naming a file outside the plugin, by a path or by a bare name such as `build.mjs` that
+  exists in the session directory, other than an interpreter or a device of the system such as
+  `/usr/bin/env` or `/dev/null`;
+- a command running a script the working directory defines, `npm run`, `npm test`, `make`, `just`,
+  `rake`, `deno task` or `python -m` among them, unless the line moves into the plugin first;
+- a plugin manifest that is there and does not parse, a byte order mark included, since the gate
+  cannot tell what it registers;
 - a path that resolves to nothing, or one built from `~` or another variable, since the gate cannot
   tell what it names;
 - a named file the walk of the plugin does not reach, such as one under its own `.git`;
@@ -230,14 +238,15 @@ For a plugin that registers any process, each of these is `unreadable` as well:
 and a credential in any of its text files, or a file named for one, `.env` or `*.pem` among them, is
 a credential finding, so nothing the trigger mode shows in full holds a secret.
 
-A command that runs a package runner, `npx`, `pnpm dlx`, `yarn dlx`, `bunx`, `uvx`, `pipx run` or
-`npm exec`, by name or by path, fails as `network`, since the code it runs is fetched at run time and was never in the
+A command that runs a package runner, `npx`, `npm x`, `npm exec`, `pnpm dlx`, `yarn dlx`, `bunx`,
+`uvx`, `uv tool run`, `pipx run`, or `create` or `init` of `npm`, `yarn`, `pnpm` or `bun` with a
+package name, by name, by path or as an option's value, fails as `network`, since the code it runs is fetched at run time and was never in the
 plugin.
 
-For a plugin that registers any process, it also returns `codeFiles`, every registration file, every
-non-Markdown text file of the plugin, and every Markdown file one of those names by its path, each
-with its line count and sha256, and the links that reach it; and `codeDigest`, a sha256 over every file of the
-plugin, every path that reaches it, and every link and its target, shown or not. For a plugin inside the repository
+For a plugin that registers any process, it also returns `codeFiles`, every text file of the plugin
+but each skill's own `SKILL.md`, Markdown included, since a process can load any file by a path built
+at run time and consent covers only what was shown, each with its line count and sha256, and the links that reach it; and `codeDigest`, a sha256 over every file of the
+plugin, every path that reaches it, and every link and where it leads, shown or not. For a plugin inside the repository
 the plugin is what git carries into the seed, so an ignored `.env` or `node_modules` is neither read
 nor copied. A file Node can load as code needs no script extension, which is why the list is that wide. The
 static report of a skill does not include any of this; `trigger-run.mjs` calls it before any session
