@@ -7,11 +7,16 @@
 // as that first call is logged, since nothing after it is counted. references/trigger-mode.md is
 // the method this implements, and the reasons for each part of it.
 //
-// A plugin skill loads with its plugin, hooks included, because that is what an install runs. So
-// the runner refuses a skill whose static check, or the static check of the hooks of its plugin and
-// of the plugins it depends on, reports a credential or a gate failure; it leaves the repository's
-// own .claude settings out of the seed, gives each session only the environment variables a session
-// needs, and lists the hook commands that will run, which the agent shows before asking for the yes.
+// A plugin skill loads with its plugin, and every process the plugin registers starts with it: hooks,
+// monitors, LSP and MCP servers, because that is what an install runs. So the runner refuses a skill
+// whose static check, or the static check of the processes of its plugin and of the plugins it
+// depends on, reports a credential or a gate failure; it leaves the repository's own .claude settings
+// out of the seed, gives each session only the environment variables a session needs, and lists the
+// commands and the code files that will run, which the agent shows in full before asking for the yes.
+// A gate reads for patterns and cannot clear code, so a plugin that registers a process is started
+// only with --read naming the digest of the code that was shown. Every plugin a session loads is
+// checked again where it is loaded from, its place in the seed when git carries it there and a copy
+// in the run directory otherwise, so what runs is what was read.
 //
 // It starts sessions only under --yes, which the agent passes after the user has seen the count
 // from --dry-run and said yes; --dry-run copies nothing and starts nothing. Case text reaches a
@@ -21,8 +26,8 @@
 // --yes run, once its PID is dead, and that run's sessions are stopped. --dry-run removes nothing:
 // a count changes no state on the machine.
 //
-// Usage: node trigger-run.mjs <skill-dir> (--dry-run | --yes) [--runs <n>] [--model <id>]
-//        [--timeout <seconds>] [--parallel <n>]
+// Usage: node trigger-run.mjs <skill-dir> (--dry-run | --yes) [--read <digest>] [--runs <n>]
+//        [--model <id>] [--timeout <seconds>] [--parallel <n>]
 // Prints one JSON summary on standard output, and one progress line per session on standard error.
 
 import { spawn, spawnSync } from 'node:child_process';
@@ -33,7 +38,7 @@ import {
 import { homedir, tmpdir } from 'node:os';
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { describeSkill, evaluate, evaluateHooks, findRoot } from './static-check.mjs';
+import { describeSkill, evaluate, evaluateHooks, findRoot, sha256, within } from './static-check.mjs';
 
 const PREFIX = 'skill-eval-run-';
 const RUN_DIR_NAME = /^skill-eval-run-[A-Za-z0-9]{6}$/;
@@ -54,7 +59,7 @@ const SEED_EXCLUDE = new Set(['.claude/settings.json', '.claude/settings.local.j
 const LIMITS = { runs: Infinity, timeout: 3600, parallel: 16 };
 
 function parseArgs(argv) {
-  const opts = { runs: 3, model: 'sonnet', timeout: 180, parallel: 3, dryRun: false, yes: false, dir: null };
+  const opts = { runs: 3, model: 'sonnet', timeout: 180, parallel: 3, dryRun: false, yes: false, read: null, dir: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const num = (key) => {
@@ -69,14 +74,17 @@ function parseArgs(argv) {
     else if (a === '--runs') opts.runs = num('runs');
     else if (a === '--timeout') opts.timeout = num('timeout');
     else if (a === '--parallel') opts.parallel = num('parallel');
-    else if (a === '--model') {
+    else if (a === '--read') {
+      opts.read = argv[++i];
+      if (!opts.read || !/^[0-9a-f]{64}$/.test(opts.read)) fail('usage', '--read needs the codeDigest a dry run printed');
+    } else if (a === '--model') {
       opts.model = argv[++i];
       if (!opts.model || !/^[\w.:[\]][\w.:[\]-]*$/.test(opts.model)) fail('usage', '--model needs a model name');
     } else if (!opts.dir) opts.dir = a;
     else fail('usage', `unknown argument ${a}`);
   }
   if (!opts.dir || opts.dryRun === opts.yes) {
-    fail('usage', 'node trigger-run.mjs <skill-dir> (--dry-run | --yes) [--runs n] [--model id] [--timeout s] [--parallel n]');
+    fail('usage', 'node trigger-run.mjs <skill-dir> (--dry-run | --yes) [--read digest] [--runs n] [--model id] [--timeout s] [--parallel n]');
   }
   return opts;
 }
@@ -248,12 +256,37 @@ function pluginDirs(skill) {
     .filter((d) => existsSync(join(d, '.claude-plugin', 'plugin.json')))];
 }
 
-// A plugin skill loads through --plugin-dir, from the seed copy when the plugin is there, with
-// every plugin it declares as a dependency found beside it. A skill under the seed's
+// One digest over the code of every plugin a session loads that registers a process, each plugin
+// keyed by its directory name, which its copy in the run directory keeps.
+function codeOf(reports) {
+  const codeFiles = reports.flatMap((h) => h.codeFiles.map((c) => ({ plugin: h.plugin, ...c })));
+  const registers = reports.some((h) => h.registers);
+  // Keyed by position, the skill's plugin first and its dependencies in the order they are declared,
+  // which a copy keeps whatever directory it lands in.
+  const codeDigest = registers ? sha256(reports.map((h, i) => `${i}\0${h.codeDigest}\n`).join('')) : '';
+  return { registers, codeFiles, codeDigest };
+}
+
+// Where each plugin a session loads lies: its place in the seed when git carries its manifest there,
+// otherwise nowhere in the seed, and then the runner copies it whole. `files` is the seed's file list.
+function placesOf(dirs, repo, files) {
+  const listed = new Set(files.map((f) => f.split(sep).join('/')));
+  return dirs.map((d) => {
+    const rel = relative(repo, d).split(sep).join('/');
+    const inSeed = within(repo, d) && listed.has(`${rel ? rel + '/' : ''}.claude-plugin/plugin.json`);
+    const prefix = rel ? rel + '/' : '';
+    return { dir: d, rel, inSeed, include: inSeed ? (r) => listed.has(prefix + r) : null };
+  });
+}
+
+// A plugin skill loads through --plugin-dir, from the run directory's copy when the plugin registers a
+// process, otherwise from the seed copy when the plugin is there, with every plugin it declares as a
+// dependency found beside it. A skill under the seed's
 // .claude/skills/ is already there. Any other skill, or one the seed lacks because the repository
 // ignores it, is copied into the config.
-function loading(skill, repo, seed, config) {
+function loading(skill, repo, seed, config, copies = new Map()) {
   const inSeed = (p) => {
+    if (copies.has(resolve(p))) return copies.get(resolve(p));
     const rel = relative(repo, p);
     if (rel.split(sep)[0] === '..' || isAbsolute(rel)) return p;
     return seed && existsSync(join(seed, rel, '.claude-plugin', 'plugin.json')) ? join(seed, rel) : p;
@@ -266,7 +299,7 @@ function loading(skill, repo, seed, config) {
       if (existsSync(join(beside, '.claude-plugin', 'plugin.json'))) dirs.push(inSeed(beside));
       else missing.push(dep);
     }
-    return { args: dirs.flatMap((d) => ['--plugin-dir', d]), how: 'plugin, hooks included', missing };
+    return { args: dirs.flatMap((d) => ['--plugin-dir', d]), how: 'plugin, with the processes it registers', missing };
   }
   const rel = relative(repo, skill.path);
   const projectSkill = rel.split(sep).slice(0, 2).join('/') === '.claude/skills';
@@ -375,17 +408,29 @@ async function main() {
   if (verdict.credentials || verdict.gate) {
     fail('gate-failed', `the static check found ${verdict.credentials} credential and ${verdict.gate} security gate findings; fix them before measuring triggers`);
   }
-  // The hooks of every plugin a session loads run in it, so they pass the same gate.
+  const repo = skill.repoRoot || findRoot(process.cwd(), GIT_DIR);
+  if (!repo) fail('no-seed', 'neither the skill nor the working directory is in a git repository; with no seed every session would read zero');
+  if (!statSync(join(repo, GIT_DIR)).isDirectory()) {
+    fail('no-seed', `${repo} is a git worktree or submodule, whose repository directory is shared with another checkout; a seed copy would write into it, so measure from the main checkout`);
+  }
+
+  // The processes every plugin a session loads registers, hooks, monitors, LSP and MCP servers, run
+  // in it, so they pass the same gate. A relative path in a command resolves where a session runs,
+  // the seed, which holds the same files as the repository.
   let declared = '';
   try { declared = readFileSync(join(dir, 'SKILL.md'), 'utf8'); } catch { declared = ''; }
-  const hookReports = pluginDirs(skill).map((d) => evaluateHooks(d, declared));
+  const list = seedFiles(repo);
+  const places = placesOf(pluginDirs(skill), repo, list);
+  const hookReports = places.map((p) => evaluateHooks(p.dir, declared, repo, p.include));
   const hookFails = hookReports.filter((h) => h.summary.credentials || h.summary.gate);
   if (hookFails.length) {
-    fail('gate-failed', `the hooks of ${hookFails.map((h) => h.plugin).join(', ')} failed the static check; a session would run them, so triggers are not measured`, {
+    const kinds = [...new Set(hookFails.flatMap((h) => h.commands.map((c) => c.kind)))];
+    fail('gate-failed', `the ${kinds.length ? kinds.join(', ') + ' registrations' : 'registrations'} of ${hookFails.map((h) => h.plugin).join(', ')} failed the static check; a session would run them, so triggers are not measured`, {
       hookFindings: hookFails.flatMap((h) => h.checks.filter((c) => c.status === 'fail').map((c) => ({ plugin: h.plugin, ...c }))),
     });
   }
   const hookCommands = hookReports.flatMap((h) => h.commands.map((c) => ({ plugin: h.plugin, ...c })));
+  const code = codeOf(hookReports);
 
   const cases = readCases(join(dir, 'evals', 'trigger_evals.json'));
   const isSlash = (c) => c.query.trimStart().startsWith('/');
@@ -394,16 +439,17 @@ async function main() {
   const observable = cases.filter((c) => !isSlash(c));
   if (!observable.length) fail('no-observable-cases', 'every case is a slash command, which nothing can observe; add cases phrased as requests', { skipped });
 
-  const repo = skill.repoRoot || findRoot(process.cwd(), GIT_DIR);
-  if (!repo) fail('no-seed', 'neither the skill nor the working directory is in a git repository; with no seed every session would read zero');
-  if (!statSync(join(repo, GIT_DIR)).isDirectory()) {
-    fail('no-seed', `${repo} is a git worktree or submodule, whose repository directory is shared with another checkout; a seed copy would write into it, so measure from the main checkout`);
-  }
-
   const sessions = observable.length * opts.runs;
   const worstCaseSeconds = Math.ceil(sessions / opts.parallel) * opts.timeout;
   // Each session stops at its budget, so the sessions times the budget bounds what a run can spend.
   const worstCaseUsd = sessions * Number(SESSION_BUDGET_USD);
+  // A plugin that registers a process starts only on the digest of the code the person was shown.
+  // The refusal carries no digest: only a dry run hands one out, so a run cannot start on a digest
+  // nobody was shown the code for.
+  const unread = (detail) => fail('unread-code', `${detail}; run --dry-run, show every codeFiles entry in full, and pass its codeDigest with --read only on the person's yes`);
+  if (opts.yes && code.registers && opts.read !== code.codeDigest) {
+    unread(opts.read ? 'the plugin code changed since the dry run that printed this digest' : 'the loaded plugins register processes, and no --read was given');
+  }
   // Only a run that starts sessions sweeps, after every refusal, so a count or a refused run touches
   // no directory and no process of an earlier run.
   const removed = opts.yes ? sweepStale() : 0;
@@ -411,9 +457,8 @@ async function main() {
     fullName: skill.fullName, model: opts.model, runs: opts.runs, date: new Date().toISOString().slice(0, 10),
     cases: cases.length, observable: observable.length, skipped, sessions, worstCaseSeconds, worstCaseUsd,
     timeoutSeconds: opts.timeout, parallel: opts.parallel, removedStale: removed, hookCommands,
+    codeFiles: code.codeFiles, codeDigest: code.codeDigest,
   };
-  const list = seedFiles(repo);
-
   if (opts.dryRun) {
     const auth = credentials(worstCaseSeconds);
     const load = loading(skill, repo, null, null);
@@ -433,7 +478,33 @@ async function main() {
     fail('no-credentials', `the saved login expires in ${auth.minutesLeft} minutes, before this run could end (up to ${Math.ceil(worstCaseSeconds / 60)}); run any claude command to refresh it, or set CLAUDE_CODE_OAUTH_TOKEN, then start again`, base);
   }
   const seeded = seedCopy(repo, seed, list);
-  const load = loading(skill, repo, seed, config);
+  // Every plugin a session loads runs from a copy that is checked again where it lies: its place in
+  // the seed when git carries it there, which holds the files git lists and nothing it ignores; a
+  // whole copy in the run directory otherwise, taken from the real directory so a plugin that is a
+  // link is copied rather than linked. An edit after the check above, a process registered since,
+  // or a link that still names the original fails here.
+  const copies = new Map();
+  for (const [i, p] of places.entries()) {
+    if (p.inSeed) continue;
+    const to = join(runDir, 'plugins', `${i}-${basename(p.dir)}`);
+    // Without its own .git, which the gate does not read and which git would run commands from.
+    const from = realpathSync(p.dir);
+    const filter = (src) => relative(from, src).split(sep)[0] !== GIT_DIR;
+    try { cpSync(from, to, { recursive: true, verbatimSymlinks: true, filter }); } catch (e) {
+      fail('gate-failed', `the plugin ${p.dir} cannot be copied (${e.code || e.message}), so it cannot run from a checked copy`, base);
+    }
+    copies.set(resolve(p.dir), to);
+  }
+  const loadedDirs = places.map((p) => (p.inSeed ? join(seed, p.rel) : copies.get(resolve(p.dir))));
+  const again = loadedDirs.map((d) => evaluateHooks(d, declared, seed));
+  const failed = again.filter((h) => h.summary.credentials || h.summary.gate);
+  if (failed.length) {
+    fail('gate-failed', 'the copy of a plugin failed the static check that its original passed, so it changed during the run or links outside itself', {
+      ...base, hookFindings: failed.flatMap((h) => h.checks.filter((c) => c.status === 'fail').map((c) => ({ plugin: h.plugin, ...c }))),
+    });
+  }
+  if (codeOf(again).codeDigest !== (code.registers ? opts.read : '')) unread('the plugin code changed between the check and the copy');
+  const load = loading(skill, repo, seed, config, copies);
   const settings = join(runDir, 'settings.json');
   writeFileSync(settings, JSON.stringify({
     hooks: { PreToolUse: [{ matcher: 'Skill', hooks: [{ type: 'command', command: `node "${HOOK}"` }] }] },

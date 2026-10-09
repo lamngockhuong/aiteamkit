@@ -63,17 +63,21 @@ holds the steps, the consent before any session starts, the credentials rule and
 
 ```bash
 node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --dry-run
-node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --yes --runs 3 --model sonnet
+node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --yes --read <codeDigest> --runs 3 --model sonnet
 ```
 
-`--dry-run` counts the sessions, copies nothing and starts none; `--yes` runs them, three at a
-time. The hook denies the `Skill` call after logging it, so the selected skill never runs in the
+`--dry-run` counts the sessions, copies nothing and starts none, and prints `codeFiles` and
+`codeDigest` for a plugin that registers a process; `--yes` runs them, three at a time, and for such
+a plugin only with `--read` naming that digest, after a person has read those files. The hook denies
+the `Skill` call after logging it, so the selected skill never runs in the
 seed, and the runner stops each session as soon as that first call is logged, since nothing after it
 is counted. A session stopped there takes seconds rather than the minutes a skill's full run would.
 The seed leaves out the repository's own `.claude/settings*.json`, and the runner refuses a skill
 whose static check found a credential or a security gate failure. A plugin skill still loads with
-its plugin's own hooks, which the static check does not read, so the consent before a run names
-them; how to isolate the sessions from that code is an open design question.
+the processes its plugin registers, hooks, monitors, LSP and MCP servers. The gate reads them and
+every file they run, the consent before a run shows the plugin's code in full, and the sessions load
+a copy checked against the digest that was shown, so what runs is what was read; the gate itself
+finds known patterns, and reading the code is what judges the rest.
 
 A trigger is a session whose *first* logged `Skill` payload has a `tool_input.skill` equal to the
 full name of the skill under test, `atk:<name>` for one of this kit's. Compare exactly. Testing

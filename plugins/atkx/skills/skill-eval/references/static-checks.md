@@ -185,19 +185,58 @@ The patterns are in the script, written so that the script does not match itself
 more than one kind, a download piped into a shell from an undeclared host fails both `network` and
 `remote-exec`, and each is its own finding. Any gate failure makes the grade F.
 
-**A plugin's hooks.** The trigger mode loads a plugin skill with its plugin, and the hooks of that
-plugin and of its dependencies run in every session, so `evaluateHooks` in
-`scripts/static-check.mjs` runs the same credential and gate checks over them: every file under the
-plugin's `hooks/`, every file inside the plugin a registered command names, and each command line as
-a script. A command naming a file outside the plugin, other than an interpreter or a device of the
-system such as `/usr/bin/env` or `/dev/null`, is `unreadable`. The static report of a skill does
-not include it; `trigger-run.mjs` calls it before any session starts.
+**A plugin's processes.** The trigger mode loads a plugin skill with its plugin, and every process
+that plugin and its dependencies register starts in every session: hooks, from `hooks/hooks.json`
+and the manifest's `hooks` key; monitors, from `monitors/monitors.json` and `monitors`; LSP servers,
+from `.lsp.json` and `lspServers`; and MCP servers, from `.mcp.json` and `mcpServers`.
+`evaluateHooks` in `scripts/static-check.mjs` runs the same credential and gate checks over them:
+every registration, every file under the plugin's `hooks/`, every file inside the plugin a command
+names, and each command line as a script. A command line holds the command, its arguments, a URL,
+a working directory and the values of its environment, where `NODE_OPTIONS` or `LD_PRELOAD` can load
+a file of their own; an `http` hook's URL is checked as a network call. A path in a command, `/x`,
+`./x`, `../x`, a `file:` URL, or a word with a slash that names something, is resolved against the
+directory a session runs in, the root of the repository, with `${CLAUDE_PLUGIN_ROOT}` and
+`${CLAUDE_PROJECT_DIR}` expanded; a word such as `application/json` that names nothing is a word.
+Each of these is `unreadable`:
+
+- a command naming a file outside the plugin, other than an interpreter or a device of the system
+  such as `/usr/bin/env` or `/dev/null`;
+- a path that resolves to nothing, or one built from `~` or another variable, since the gate cannot
+  tell what it names;
+- a named file the walk of the plugin does not reach, such as one under its own `.git`.
+
+For a plugin that registers any process, each of these is `unreadable` as well:
+
+- a link whose target leaves the plugin, or one written as an absolute path, which a copy of the
+  plugin would still resolve to the original;
+- a file that is neither text nor an image or data file, an executable binary or a script holding a
+  NUL byte among them, since nobody can read it;
+- text holding bidirectional controls or marks, zero-width or tag characters, ESC, or a carriage
+  return that is not a line ending, all of which read differently from what runs; Markdown may keep
+  the zero-width joiners emoji need;
+
+and a credential in any of its text files, or a file named for one, `.env` or `*.pem` among them, is
+a credential finding, so nothing the trigger mode shows in full holds a secret.
+
+A command that runs a package runner, `npx`, `pnpm dlx`, `yarn dlx`, `bunx`, `uvx`, `pipx run` or
+`npm exec`, by name or by path, fails as `network`, since the code it runs is fetched at run time and was never in the
+plugin.
+
+For a plugin that registers any process, it also returns `codeFiles`, every registration file, every
+non-Markdown text file of the plugin, and every Markdown file one of those names by its path, each
+with its line count and sha256, and the links that reach it; and `codeDigest`, a sha256 over every
+file of the plugin and every path that reaches it, shown or not. For a plugin inside the repository
+the plugin is what git carries into the seed, so an ignored `.env` or `node_modules` is neither read
+nor copied. A file Node can load as code needs no script extension, which is why the list is that wide. The
+static report of a skill does not include any of this; `trigger-run.mjs` calls it before any session
+starts.
 
 **What a clean gate means.** The gate is a list of patterns, and a list catches the forms somebody
 wrote into it. A form nobody listed, a client this file does not name or a command assembled from
 pieces at run time, passes. So a gate with no failure says that none of the forms above was found,
 not that the skill is safe: report it in those words, and read a skill from a source you do not trust
-before installing it, whatever the gate says.
+before installing it, whatever the gate says. The trigger mode asks for that reading where the
+plugin starts processes: it shows `codeFiles` and runs only with `--read` naming their digest.
 
 By hand: read every `SKILL.md` and every script line by line against the table. Running a script to
 see what it does is never part of the check.

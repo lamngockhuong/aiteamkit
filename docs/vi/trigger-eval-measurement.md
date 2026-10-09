@@ -63,17 +63,21 @@ bước, lời xin đồng ý trước khi mở bất kỳ phiên nào, quy tắ
 
 ```bash
 node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --dry-run
-node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --yes --runs 3 --model sonnet
+node plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs plugins/atk/skills/review --yes --read <codeDigest> --runs 3 --model sonnet
 ```
 
-`--dry-run` đếm số phiên, không sao chép gì và không mở phiên nào; `--yes` chạy chúng, mỗi lúc ba
-phiên. Hook ghi lại lượt gọi `Skill` rồi từ chối lượt gọi đó, nên skill được chọn không bao giờ chạy
+`--dry-run` đếm số phiên, không sao chép gì và không mở phiên nào, đồng thời in `codeFiles` và
+`codeDigest` với plugin có đăng ký tiến trình; `--yes` chạy chúng, mỗi lúc ba phiên, và với plugin
+như vậy chỉ chạy khi có `--read` mang đúng digest đó, sau khi người dùng đã đọc các file ấy. Hook
+ghi lại lượt gọi `Skill` rồi từ chối lượt gọi đó, nên skill được chọn không bao giờ chạy
 trong bản mồi, và bộ chạy dừng phiên ngay khi lượt gọi đầu tiên được ghi, vì sau đó không còn gì
 được đếm. Dừng ở đó thì một phiên chỉ mất vài giây, thay vì vài phút cho trọn một lượt chạy skill.
 Bản mồi bỏ ra ngoài `.claude/settings*.json` của chính repository, và bộ chạy từ chối một skill mà
 phần kiểm tra tĩnh tìm ra credential hoặc lỗi cổng bảo mật. Skill trong plugin vẫn được nạp cùng
-hook của plugin đó, mà phần kiểm tra tĩnh không đọc, nên lời xin đồng ý trước khi chạy phải nêu tên
-các hook này; cách tách các phiên con khỏi đoạn mã đó vẫn là câu hỏi thiết kế chưa đóng.
+các tiến trình mà plugin đăng ký, gồm hook, monitor, LSP server và MCP server. Cổng kiểm tra đọc
+chúng cùng mọi file chúng chạy, lời xin đồng ý trước khi chạy hiển thị đầy đủ mã của plugin, và các
+phiên nạp một bản sao được đối chiếu với đúng digest đã hiển thị, nên thứ chạy chính là thứ đã được
+đọc; bản thân cổng chỉ tìm các mẫu đã biết, còn việc đọc mã mới là thứ phán xét phần còn lại.
 
 Một trigger là một phiên mà payload `Skill` *đầu tiên* được ghi có `tool_input.skill` bằng đúng tên
 đầy đủ của skill đang đo, `atk:<tên>` với skill của kit này. So khớp chính xác. Nếu chỉ kiểm tên

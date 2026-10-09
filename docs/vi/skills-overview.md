@@ -729,9 +729,11 @@ ra, mỗi quy tắc trích nguồn dạng `file:line`. Khi chưa đo trigger, đ
 trigger và không có xếp loại; chỉ cần một credential hay một lỗi ở cổng bảo mật là xếp loại F.
 `--trigger`, chỉ có trên Claude Code, chạy từng trigger case trong các phiên con và nêu tên skill mà
 mỗi case tìm tới, sau khi cho biết sẽ mở bao nhiêu phiên và được người dùng đồng ý. Nó từ chối skill
-không qua cổng bảo mật, và skill trong plugin được nạp cùng hook của chính plugin đó, các hook này
-chạy trong những phiên ấy như sau khi cài đặt. `--draft-cases` soạn nháp trigger case vào một file
-tạm và chỉ ghi vào skill khi người dùng đồng ý; `--review` dò lại một lần chạy skill trước đó trong
+không qua cổng bảo mật. Skill trong plugin được nạp cùng các tiến trình mà plugin đăng ký, gồm hook,
+monitor, LSP server và MCP server, các tiến trình này khởi động trong những phiên ấy như sau khi cài
+đặt, nên mã của plugin được hiển thị đầy đủ trước và lần chạy chỉ bắt đầu khi người dùng đã đọc và
+đồng ý. `--draft-cases` soạn nháp trigger case vào một file tạm và chỉ ghi vào skill khi người
+dùng đồng ý; `--review` dò lại một lần chạy skill trước đó trong
 cuộc hội thoại theo từng bước của nó, ghi lại chỗ nào agent tự làm theo cách khác và việc nào không
 phục vụ bước nào, xếp mỗi chỗ lệch theo mức nghiêm trọng, đặt ở mục riêng và không bao giờ tính vào
 điểm; `--out` lưu báo cáo ra file; không có cờ này thì sau khi in báo cáo, skill hỏi có lưu ra file
