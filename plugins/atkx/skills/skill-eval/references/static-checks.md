@@ -185,19 +185,79 @@ The patterns are in the script, written so that the script does not match itself
 more than one kind, a download piped into a shell from an undeclared host fails both `network` and
 `remote-exec`, and each is its own finding. Any gate failure makes the grade F.
 
-**A plugin's hooks.** The trigger mode loads a plugin skill with its plugin, and the hooks of that
-plugin and of its dependencies run in every session, so `evaluateHooks` in
-`scripts/static-check.mjs` runs the same credential and gate checks over them: every file under the
-plugin's `hooks/`, every file inside the plugin a registered command names, and each command line as
-a script. A command naming a file outside the plugin, other than an interpreter or a device of the
-system such as `/usr/bin/env` or `/dev/null`, is `unreadable`. The static report of a skill does
-not include it; `trigger-run.mjs` calls it before any session starts.
+**A plugin's processes.** The trigger mode loads a plugin skill with its plugin, and every process
+that plugin and its dependencies register starts in every session: hooks, from `hooks/hooks.json`
+and the manifest's `hooks` key; monitors, from `monitors/monitors.json` and `monitors`; LSP servers,
+from `.lsp.json` and `lspServers`; and MCP servers, from `.mcp.json` and `mcpServers`. The trigger
+mode's `--strict-mcp-config` kept a plugin's MCP server from starting on Claude Code 2.1.295, and
+`references/trigger-mode.md` says what was and was not seen to start; the gate reads all four kinds
+either way, since an install starts them.
+`evaluateHooks` in `scripts/static-check.mjs` runs the same credential and gate checks over them:
+every registration, every file under the plugin's `hooks/` by any path that reaches it, every file
+inside the plugin a command names, read as a script whatever its name, and each command line as a
+script. A command line holds the command, its arguments, a URL,
+a working directory and the values of its environment, where `NODE_OPTIONS` or `LD_PRELOAD` can load
+a file of their own; an `http` hook's URL is checked as a network call. A path in a command, `/x`,
+`//x`, `./x`, `../x`, a `file:` URL, a path glued to a one-letter option such as `-I/x`, or a word
+that names something, is resolved against the directory a session runs in, the root of the
+repository, and against the plugin's own directory, with `${CLAUDE_PLUGIN_ROOT}` and
+`${CLAUDE_PROJECT_DIR}` expanded; a word such as `application/json` that names nothing is a word. A
+line that moves into the plugin first, through `cd`, `--prefix`, `-C`, `--cwd` or `--dir`, or a
+server whose `cwd` is inside it, is resolved against the plugin alone. Each of these is `unreadable`:
+
+- a command naming a file outside the plugin, by a path or by a bare name such as `build.mjs` that
+  exists in the session directory, other than an interpreter or a device of the system such as
+  `/usr/bin/env` or `/dev/null`;
+- a command running a script the working directory defines, `npm run`, `npm test`, `make`, `just`,
+  `rake`, `deno task` or `python -m` among them, unless the line moves into the plugin first;
+- a plugin manifest that is there and does not parse, a byte order mark included, since the gate
+  cannot tell what it registers;
+- a path that resolves to nothing, or one built from `~` or another variable, since the gate cannot
+  tell what it names;
+- a named file the walk of the plugin does not reach, such as one under its own `.git`;
+- a registration whose shape the gate cannot read, such as a hook group whose `hooks` is not a list,
+  a hook or a monitor that is not an object, or servers that are not a map of names, since what a
+  harness makes of it is unknown.
+
+With no repository there is no session directory, so a relative path or `${CLAUDE_PROJECT_DIR}`
+cannot be resolved; the trigger runner reports that as `no-seed`, not as a failure of the plugin.
+
+For a plugin that registers any process, each of these is `unreadable` as well:
+
+- a link whose target leaves the plugin, or one written as an absolute path, which a copy of the
+  plugin would still resolve to the original, a link to a directory the walk already read included;
+- for a plugin inside the repository, a link whose target git does not carry into the seed, where it
+  would resolve to nothing;
+- any file that is not text, an image, a font or an executable binary among them, since nobody can
+  read it and a process can still run it whatever its name or first bytes, Node as a module and a
+  shell line by line; a logo is SVG, which is text, or lives outside a plugin that starts processes;
+- text holding bidirectional controls or marks, zero-width or tag characters, ESC, or a carriage
+  return that is not a line ending, all of which read differently from what runs; Markdown may keep
+  the zero-width joiners emoji need;
+
+and a credential in any of its text files, or a file named for one, `.env` or `*.pem` among them, is
+a credential finding, so nothing the trigger mode shows in full holds a secret.
+
+A command that runs a package runner, `npx`, `npm x`, `npm exec`, `pnpm dlx`, `yarn dlx`, `bunx`,
+`uvx`, `uv tool run`, `pipx run`, or `create` or `init` of `npm`, `yarn`, `pnpm` or `bun` with a
+package name, by name, by path or as an option's value, fails as `network`, since the code it runs is fetched at run time and was never in the
+plugin.
+
+For a plugin that registers any process, it also returns `codeFiles`, every text file of the plugin
+but each skill's own `SKILL.md`, Markdown included, since a process can load any file by a path built
+at run time and consent covers only what was shown, each with its line count and sha256, and the links that reach it; and `codeDigest`, a sha256 over every file of the
+plugin, every path that reaches it, and every link and where it leads, shown or not. For a plugin inside the repository
+the plugin is what git carries into the seed, so an ignored `.env` or `node_modules` is neither read
+nor copied. A file Node can load as code needs no script extension, which is why the list is that wide. The
+static report of a skill does not include any of this; `trigger-run.mjs` calls it before any session
+starts.
 
 **What a clean gate means.** The gate is a list of patterns, and a list catches the forms somebody
 wrote into it. A form nobody listed, a client this file does not name or a command assembled from
 pieces at run time, passes. So a gate with no failure says that none of the forms above was found,
 not that the skill is safe: report it in those words, and read a skill from a source you do not trust
-before installing it, whatever the gate says.
+before installing it, whatever the gate says. The trigger mode asks for that reading where the
+plugin starts processes: it shows `codeFiles` and runs only with `--read` naming their digest.
 
 By hand: read every `SKILL.md` and every script line by line against the table. Running a script to
 see what it does is never part of the check.

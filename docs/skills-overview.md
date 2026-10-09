@@ -717,8 +717,10 @@ The project conventions group checks the rules the skill's own repository wrote 
 each cited by `file:line`. Without trigger measurement the score is labelled as such and carries no
 grade, and any credential or gate failure makes the grade F. `--trigger`, on Claude Code only, runs
 each trigger case in child sessions and names the skill each one reached, after showing how many
-sessions it will start and getting a yes. It refuses a skill that fails the security gate, and a
-plugin skill loads with its plugin's own hooks, which run in those sessions as after an install.
+sessions it will start and getting a yes. It refuses a skill that fails the security gate. A plugin
+skill loads with the processes its plugin registers, hooks, monitors, LSP and MCP servers, which
+start in those sessions as after an install, so the plugin's code is shown in full first and the run
+starts only once the person has read it and said yes.
 `--draft-cases` drafts trigger cases into a temporary file and writes them into the skill only on a
 yes; `--review` walks a run of the skill earlier in the conversation against its steps, noting where
 it improvised and what work served no step, and ranks each deviation by severity, in a section of

