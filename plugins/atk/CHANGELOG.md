@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.7](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.6...atk-v0.1.7) (2026-10-10)
+
+
+### Features
+
+* keep secrets and wide reading out of the session, resume long runs, ship a read-only reviewer agent ([#113](https://github.com/lamngockhuong/aiteamkit/issues/113)) ([48f2f0b](https://github.com/lamngockhuong/aiteamkit/commit/48f2f0b3ae0bd3dfe277ced832601e341380ee66))
+
+
+### Bug Fixes
+
+* name the credential stores rule 9 keeps unread, report a renamed .env, and mask every diff an agent reads ([#116](https://github.com/lamngockhuong/aiteamkit/issues/116)) ([92e1a54](https://github.com/lamngockhuong/aiteamkit/commit/92e1a543b765207371e8c0f3cb6f7793ecbcdd7f))
+
 ## [0.1.6](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.5...atk-v0.1.6) (2026-10-08)
 
 
