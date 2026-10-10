@@ -60,8 +60,12 @@ writes it, since a changelog tool parses it.
 
 ## Read what is staged before committing
 
-`git diff --cached --stat`, then the diff itself. Not a formality: the tree is where the last run,
-the editor, and the user all left things, and the commit takes whatever is there.
+`git diff --cached --stat`, then the diff itself through the `mask --cached` scan of
+`shared/secret-scan.md`, never a plain `git diff --cached`. A clean `staged` scan does not make the
+plain diff safe to print: it reports only added lines, so a staged deletion of a tracked `.env` and a
+removed line that held a key both pass it, and a plain diff runs the project's text conversion, which
+can print a decrypted file the scan read as ciphertext. Not a formality: the tree is where the last run, the editor, and the
+user all left things, and the commit takes whatever is there.
 
 Three things that show up this way and are worth stopping for: a file staged by an earlier run that
 the user then reverted in the working tree, a lock file updated by an install nobody meant to commit,
@@ -79,7 +83,7 @@ Find out which kind the project has before the first commit, by reading its hook
 A hook that writes is ordinary and is not a reason to skip it or to pass `--no-verify`.
 
 Where one writes, re-run the secret scan of step 2 over what was committed, every time. It is the
-`commit` scan in `references/secret-scan.md`, one pass over what `git show` reports, so its cost does not grow with
+`commit` scan in `shared/secret-scan.md`, one pass over what `git show` reports, so its cost does not grow with
 the diff, and it is the one check whose answer cannot be deferred: step 2 is built on stopping before
 the commit exists, and a credential the hook wrote into the commit is already in the history. A hit
 here is reported to the user at once, with what it takes to get it out of the history, because the
@@ -87,8 +91,9 @@ run can no longer prevent it.
 
 For the reading of the diff itself, do one of two things after each commit and say which:
 
-- re-read what was committed, `git show --stat` then the diff, and confirm what step 2 read still
-  holds; or
+- re-read what was committed, `git show --stat` then the diff through the `mask HEAD~1..HEAD` scan,
+  and only once the `commit` scan above came back clean, and confirm what step 2 read still holds;
+  or
 - name the check that no longer covers what shipped, so the reviewer knows which one to repeat.
 
 The second is the honest answer where the diff is too large to re-read, and it is still better than

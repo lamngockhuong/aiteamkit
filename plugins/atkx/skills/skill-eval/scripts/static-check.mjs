@@ -742,9 +742,11 @@ const PROJECT_VARS = /\$\{CLAUDE_PROJECT_DIR\}|\$CLAUDE_PROJECT_DIR\b/g;
 // them. Markdown keeps the zero-width joiners, which emoji and some scripts need.
 const INVISIBLE = /[\u202A-\u202E\u2066-\u2069\u200E\u200F\u061C\u200B\u2060-\u2064\u00AD\u180E\u001B]|\r(?!\n)|(?<!^)\uFEFF|\uDB40[\uDC00-\uDC7F]/;
 const JOINERS = /[\u200C\u200D]/;
-// Files that hold credentials by their name: the path list of the secret scan atk's git skill runs,
-// except that any secrets.* counts here, since a plugin has no reason to ship a file of that name.
-const SECRET_FILE = /(?:^|\/)(?:\.env(?:\.(?!example$|sample$)[^/]*)?|id_rsa|id_dsa|id_ecdsa|id_ed25519|\.netrc|\.pgpass|credentials\.json|secrets\.[^/]+|serviceAccount[^/]*\.json|[^/]+\.(?:pem|key|p12|pfx|jks))$/;
+// Files that hold credentials by their name: the named files of atk's secret scan, from its table of
+// Paths that are a finding on their own, matched without regard to case as the scan matches them.
+// Any secrets.* counts here, since a plugin has no reason to ship a file of that name. The table's
+// two rows a name cannot decide, a file beside a .pub and a large .sql or .csv, are not in it.
+const SECRET_FILE = /(?:^|\/)(?:\.env(?:\.(?!(?:example|sample|template|dist)$|[^/]*\.(?:example|sample)$)[^/]*)?|id_rsa|id_dsa|id_ecdsa|id_ed25519|\.netrc|\.pgpass|credentials\.json|secrets\.[^/]+|serviceAccount[^/]*\.json|\.git-credentials|\.pypirc|\.aws\/credentials|\.docker\/config\.json|\.kube\/config|kubeconfig|[^/]+\.tfstate(?:\.backup)?|[^/]*\.(?:pem|key|p12|pfx|jks))$/i;
 
 // The command lines of one registration document, as { event, matcher, name, type, line }. A hook
 // carries an event; a monitor, an LSP server and an MCP server carry a name. A line holds every

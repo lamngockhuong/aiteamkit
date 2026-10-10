@@ -6,6 +6,10 @@ __pycache__/
 .env.*
 !.env.example
 !.env.sample
+!.env.template
+!.env.dist
+!.env.*.example
+!.env.*.sample
 node_modules/
 plans/
 docs/derived/

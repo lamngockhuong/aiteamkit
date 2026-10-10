@@ -55,6 +55,7 @@ body:
         - Project overrides (.atk/overrides/)
         - Shared references (plugins/atk/shared/)
         - Hooks (plugins/atk/hooks/)
+        - Agents (plugins/atk/agents/)
         - atkx (plugins/atkx/)
         - Skill - atkx:skill-eval
         - Plugin manifest / installation

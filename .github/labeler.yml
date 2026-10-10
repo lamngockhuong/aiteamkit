@@ -20,6 +20,10 @@
 - changed-files:
   - any-glob-to-any-file: 'plugins/atk/hooks/**'
 
+'area: agents':
+- changed-files:
+  - any-glob-to-any-file: 'plugins/atk/agents/**'
+
 'area: manifest':
 - changed-files:
   - any-glob-to-any-file: ['.claude-plugin/**', '.cursor-plugin/**', '.agents/plugins/**', 'plugins/*/.claude-plugin/**', 'plugins/*/.cursor-plugin/**', 'plugins/*/.codex-plugin/**', 'package.json']

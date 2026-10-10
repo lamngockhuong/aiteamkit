@@ -74,7 +74,9 @@ continues, and the record says which commands it had to infer.
 
 ### 1. Scope and assets
 
-Resolve the argument into the code it covers: the diff of a branch or range, the paths given, or,
+Resolve the argument into the code it covers: the diff of a branch or range, read through the `mask`
+scan of `shared/secret-scan.md` so a changed file rule 9 names is listed rather than printed, the
+paths given, or,
 under `--threat-model`, the entry points of the feature, found from the design, the reference
 documents under `docs/api/`, `docs/features/` and `docs/screens/`, and the code. Where the shape in
 `.atk/profile.md` names member repositories, a release scope is read once per member, per the same
@@ -103,7 +105,7 @@ order to look for each command in and the checks to run when the project has non
   command, when its lockfile is present, recorded as run by this skill rather than by the project's
   gate. Never install a scanner without asking. An audit command sends the dependency list to its
   registry; say so in the record, and skip it where the project's override forbids that.
-- **Secrets.** The `tree` scan and the path list of `skills/git/references/secret-scan.md`, over the
+- **Secrets.** The `tree` scan and the path list of `shared/secret-scan.md`, over the
   tracked files rather than the staged diff, plus whether an
   environment file is tracked at all. Its procedure on a hit belongs to `atk:git`: here a hit is a
   finding, redacted, and nothing is unstaged.

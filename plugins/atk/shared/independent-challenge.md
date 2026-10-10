@@ -28,8 +28,10 @@ is the requirement. Nothing of the conversation that produced the artifact, and 
 agent returned. Each agent is told that it changes no file and starts nothing, per the rule that a
 reviewer changes nothing in `shared/host-capabilities.md`, and on Claude Code is spawned as
 `atk:read-only-reviewer`, whose tool list holds that rule. Its prompt also carries rule 9 of
-`shared/team-roles.md`: the files it never opens or searches, and a secret it comes across cited by
-its path and key, its value `<redacted: kind>`. An agent that has read the author's reasoning agrees with it, which
+`shared/team-roles.md`: the files it never opens or searches, quoted from Paths that are a finding
+on their own in `shared/secret-scan.md` with the paragraph under that table on the two rows a search
+pattern cannot express, and a secret it comes across cited by its path and key, its value
+`<redacted: kind>`. An agent that has read the author's reasoning agrees with it, which
 is the one result this pass exists to avoid.
 
 The number of agents and the concurrency cap are stated before the first one is spawned, and the cap

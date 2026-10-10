@@ -53,9 +53,9 @@ Before step 1, read `.atk/overrides/onboard.md` when it exists, per rule 7 of `s
 
 ### 1. Derive the setup from the repository
 
-Read the package manifests, runtime version files, `Dockerfile` and compose files, `.env.example`,
-migration and seed commands, and the scripts the CI actually runs. The CI workflow is the most
-honest description of how the project builds.
+Read the package manifests, runtime version files, `Dockerfile` and compose files, an environment
+template rule 9 of `shared/team-roles.md` names, such as `.env.example`, migration and seed commands, and the scripts the CI actually runs.
+The CI workflow is the most honest description of how the project builds.
 
 ### 2. Verify every step
 

@@ -298,7 +298,7 @@ is recorded with that warning or replaced by the command that adds one entry.
 
 `Shared stores` comes from the local environment's definition, a `docker-compose.yml` or the
 application's connection configuration, never a file rule 9 of `shared/team-roles.md` names unless
-the person says so, `.env.example` standing in for it: every cache, bucket, mail catcher, or database that more
+the person says so, a template rule 9 names, such as `.env.example` or `.env.dist`, standing in for it: every cache, bucket, mail catcher, or database that more
 than one worktree or session points at. Detection says which stores exist and records each as
 shared; the user corrects that in step 2 with every other detected value, so it costs no turn. An
 application with no data store records `none` for both.
