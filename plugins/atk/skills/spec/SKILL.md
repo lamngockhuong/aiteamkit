@@ -151,8 +151,8 @@ not a source, even here; the design and its author are, because the approver rev
 ticket cited in place of an unreachable design stands in for the citation only: what the item says
 still comes from the design.
 
-For `--sync`, read the diff of the change on the current branch rather than the whole module, and
-touch only what the diff touched. A sync that rewrites sections the change never reached is an
+For `--sync`, read the diff of the change on the current branch rather than the whole module,
+through the `mask` scan of `shared/secret-scan.md`, and touch only what the diff touched. A sync that rewrites sections the change never reached is an
 unreviewable edit wearing a small ticket. On a contract-first document, the sync moves each item the
 diff implements from its design citation to `path:line` and takes off its not-implemented line, per
 `shared/spec-docs.md`; on a document at `no`, it first marks every item the diff does not reach, since

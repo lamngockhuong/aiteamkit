@@ -90,10 +90,16 @@ counts is what decides whether step 4 is a push, a rewrite, or neither, and with
 are as old as whenever this clone last heard from the remote. Keep the noted hash: it is what step 4
 leases against, for the reason `references/repair.md` gives.
 Read the diff before touching anything: a skill that stages what it has not read is how an unrelated
-change reaches a commit nobody meant to make. Read it as `git status` and `git diff --stat HEAD`,
-then the hunks through the `mask --worktree` scan of `shared/secret-scan.md`, printed to the session:
-a plain `git diff` prints a modified `.env.production` before the step 2 scan could stop it, and the
-mask names each file rule 9 of `shared/team-roles.md` keeps unread instead of showing it.
+change reaches a commit nobody meant to make. Read it as `git status` and `git diff --stat HEAD`, or
+`git status` alone in a repository with no commit yet, where there is no `HEAD`. Then read the hunks
+through the `mask --worktree` scan of `shared/secret-scan.md`, which runs before the first commit
+too: a plain `git diff` prints a modified `.env.production` before the step 2 scan could stop it, and
+the mask names each file rule 9 of `shared/team-roles.md` keeps unread instead of showing it. Its
+exit codes mean what Masking a diff in that file says; a failed scan stops the step rather than
+falling back to a plain `git diff`.
+The mask carries every untracked file whole, so when `git status` lists untracked files that are
+large or generated, write its output to a file as the masking section of that file shows and read
+the hunks of the files that belong to the change from there, rather than printing all of it.
 
 Both counts above zero is a diverged branch, and it does not reach step 4 as a plain push. Two
 different things produce that state and only one of them may ever be forced: an earlier session that

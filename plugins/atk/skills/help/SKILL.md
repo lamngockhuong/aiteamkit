@@ -100,10 +100,16 @@ and only read:
   the one to read. From each artifact read the front matter block only: `status`, `owner`,
   `approver`, `updated`, `ticket`. The body is not needed to know what comes next.
 - **The plans.** The index `plan.md` of each directory under `plans/`, front matter only.
+- **The progress logs.** The first and last line of each `progress.md` under
+  `<docs root>/derived/<skill>/`, for `fix`, `verify` and `implement`, per Progress log in
+  `shared/artifact-paths.md`. A log has no front matter; those two lines are what row 5 of
+  `references/state-signals.md` reads.
 - **The conventions.** Where the project keeps them, resolved per `shared/review-checklist.md`,
   and whether any are recorded there.
 - **The branch.** The current branch and the ticket its name or commits carry, uncommitted changes,
-  commits ahead of its base, and the diff against it. Whether a pull request is open for it comes
+  commits ahead of its base, and the files changed against it, by name and count
+  (`git diff --stat <base>...HEAD`), since no signal needs a hunk. A hunk read to settle a row goes
+  through the `mask` scan of `shared/secret-scan.md`, never a plain `git diff`. Whether a pull request is open for it comes
   from the code host, detected per `shared/host-file-locations.md` and read with the host's own
   command line, `gh pr list --state open --head <branch>` on GitHub; the tracker does not answer it.
 - **The history.** The newest version tag and the commits since it, and the date of the last merged

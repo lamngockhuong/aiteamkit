@@ -117,6 +117,12 @@ itself instead because the capability looks heavier than the change deserves: ho
 goes about its work inside itself is the harness's business rather than this kit's, and a step that
 may be reasoned away is a step that will be, on every diff, since no diff argues for its own size.
 
+One condition, not a judgement, sends the pass to be done by hand where the capability exists: the
+`mask --worktree` scan of `shared/secret-scan.md` over the change masks a line or names a file. The
+host's capability reads the change with its own `git diff`, which prints it unmasked, so a change
+that touches a file rule 9 of `shared/team-roles.md` keeps unread, or a line holding a value, is
+tidied by hand through `shared/tidy-pass.md`, and the record says why.
+
 Cited by `implement`, `fix`, and `verify`, under four rules that hold in all three:
 
 1. **Only after the verification for that change has passed.** Tidying code that does not work yet
@@ -125,8 +131,9 @@ Cited by `implement`, `fix`, and `verify`, under four rules that hold in all thr
    A file the change never opened is somebody else's work, and a tidy-up that reaches it turns a
    reviewable diff into an unreviewable one.
 3. **Re-verify afterwards, narrowest first.** A clean-up is a code change like any other, and it
-   arrives after the verification that covered the original change. Read the resulting diff for the
-   accident `shared/tidy-pass.md` describes, then re-run what covers what it touched, per
+   arrives after the verification that covered the original change. Read the resulting diff, through
+   the `mask --worktree` scan of `shared/secret-scan.md`, for the accident `shared/tidy-pass.md`
+   describes, then re-run what covers what it touched, per
    `shared/layer-verification.md`.
 4. **Revert rather than debug.** A clean-up that breaks a check is not worth the round it would take
    to fix: restore the files it changed, record that it was reverted and why, and carry on. The
@@ -190,9 +197,8 @@ What stays here is the policy the procedure may not overrule:
   calling agent, through the `mask` scan in `shared/secret-scan.md`, which masks it
   without the diff passing through the session, to `diff.patch` in the directory that
   `git rev-parse --path-format=absolute --git-path atk/<skill>/<run-id>` names, created first,
-  `<run-id>` as Progress log in `shared/artifact-paths.md` defines it. The range is `<base>...HEAD`
-  for a branch or a pull request, with the base the run resolved, and `--worktree` for a change not
-  yet committed. That file says what each exit code means; a failed scan, or an empty `diff.patch`
+  `<run-id>` as Progress log in `shared/artifact-paths.md` defines it. Its argument, a range or
+  `--worktree`, is the one Masking a diff in that file gives for what is under review. That file says what each exit code means; a failed scan, or an empty `diff.patch`
   for a change that is not empty, stops the run before any agent is spawned. That directory is
   inside the repository's git directory, so no commit can carry it, whatever the project does with
   `docs/derived/`. The calling agent passes the path, deletes that directory and no other when the
@@ -200,10 +206,14 @@ What stays here is the policy the procedure may not overrule:
   safe to delete. A hook of the user's may refuse Read under `.git/`, so the prompt says what the
   agent's own body says: read the file with Grep for `^` when Read refuses it, and say so rather
   than return nothing. An agent that has a shell, the general one on any harness, is told to read
-  the change in that file and never through `git diff`, `git show` or `gh pr diff`, which print it
-  before masking; only the reason the reviewer type needs the file, its lack of a shell, belongs to
-  Claude Code. Its exclusion of the files rule 9 names rests on its instructions alone, and its
-  prompt quotes their list from Paths that are a finding on their own in `shared/secret-scan.md`.
+  the change in that file and never through a command that prints a patch or a file's content
+  unmasked, the list under Masking a diff in `shared/secret-scan.md`, quoted. Only the reason the
+  reviewer type needs the file, its lack of a shell, belongs to Claude Code. Its exclusion of the
+  files rule 9 names rests on its instructions alone, and its prompt quotes their list from Paths
+  that are a finding on their own in `shared/secret-scan.md`, with the paragraph under that table on
+  the two rows a search pattern cannot express. A diff the session reads itself, of a change or of a
+  branch, goes through the same scan, printed rather than written to a file, per Masking a diff in
+  that file.
 - Synthesis, severity, and the report stay with the calling agent. A reviewer sees one pass and
   cannot judge whether a finding is consensus or noise.
 - A finding only one reviewer raised is checked against the code before it reaches the report.
@@ -227,8 +237,10 @@ reads a handful of files reads them itself, since an agent costs a round trip an
 - **What it never reads.** It follows rule 9 of `shared/team-roles.md`: the files that rule names are
   excluded from every search pattern it runs, and a secret value in what it returns is already
   masked. The prompt carries that rule's list of files, quoted from Paths that are a finding on their
-  own in `shared/secret-scan.md`, and its `<redacted: kind>` form, since the agent never sees the
-  skill that spawned it. A diff it needs is the masked `diff.patch` of the reviewer bullet above.
+  own in `shared/secret-scan.md` with the paragraph under that table, and its `<redacted: kind>`
+  form, since the agent never sees the skill that spawned it. A diff it needs is the masked
+  `diff.patch` of the reviewer bullet above, and an agent with a shell is told the same list of
+  commands it never runs, since a "since when" question is the one that reaches for history.
 - **Without agents.** The step reads inline, and the run says it did: where the artifact lists what
   it read, or, for a skill whose artifact has no such place, in the closing message of the run. That
   is the rule of When the capability is missing, above, applied to this one.

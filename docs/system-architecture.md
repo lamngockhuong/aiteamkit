@@ -117,7 +117,7 @@ Edit or Write tool to call, and a review and a plan challenge run there spawned 
 and lens. A tool-list pattern allowing only `git diff`, `git log` and `git blame` let every other
 command through in a session running `bypassPermissions`, and a path deny for `.env` in its
 frontmatter removed Read and Grep whole, so it has no shell and no deny: the calling agent writes
-the diff it needs, masked by the scan of `atk:git`, into the repository's git directory. Cursor and Codex
+the diff it needs, masked by the scan in `plugins/atk/shared/secret-scan.md`, into the repository's git directory. Cursor and Codex
 were not tested: Cursor auto-discovers `agents/` and the file sets `readonly: true` for it, Codex
 plugins bundle no agents, and both statements come from their documentation as read on 2026-10-10.
 On both, the prompts in `references/` remain the route.
@@ -236,7 +236,9 @@ Thirteen are contracts between a named handful of skills rather than kit-wide ru
 - `plugins/atk/shared/secret-scan.md`: the secret scan, one `sh` block in four modes, and its table of
   paths that are a finding on their own, which is also the list of files rule 9 keeps unread. Cited
   by `atk:git` to read a diff and to scan what it stages, by `atk:security` over every tracked file,
-  and by `host-capabilities.md` for the masked diff every spawned agent reads, on every harness. It
+  by `host-capabilities.md` for the masked diff every agent the kit spawns reads, on every harness,
+  by `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` and `atk:help` for a diff read in the session,
+  and by rule 9 in `team-roles.md` and the prompts that quote its table. It
   lived in `atk:git`'s references until those other readers made it a contract between several
   skills.
 

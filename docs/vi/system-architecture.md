@@ -117,7 +117,7 @@ công cụ Bash, Edit hay Write nào để gọi, và một lượt review cùng
 cho phép `git diff`, `git log` và `git blame` lại để lọt mọi lệnh khác, trong phiên chạy
 `bypassPermissions`, còn một luật chặn đường dẫn `.env` trong frontmatter thì gỡ hẳn Read và Grep,
 nên agent không có shell và không có luật chặn: agent gọi nó ghi diff cần đọc, đã che bằng phần quét
-của `atk:git`, vào thư mục git của repository. Cursor và Codex chưa được thử: Cursor tự tìm thư mục `agents/` và file đặt
+trong `plugins/atk/shared/secret-scan.md`, vào thư mục git của repository. Cursor và Codex chưa được thử: Cursor tự tìm thư mục `agents/` và file đặt
 `readonly: true` cho nó, plugin của Codex không mang agent, và cả hai điều này lấy từ tài liệu của
 họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` vẫn là đường đi.
 
@@ -235,8 +235,10 @@ Mười ba file tiếp theo là hợp đồng giữa một nhóm skill có tên 
 - `plugins/atk/shared/secret-scan.md`: phần quét giá trị bí mật, một khối `sh` với bốn chế độ, cùng
   bảng những đường dẫn tự nó đã là phát hiện, cũng chính là danh sách file mà nguyên tắc 9 giữ không
   đọc. `atk:git` trích dẫn file này để đọc diff và quét những gì nó stage, `atk:security` dùng nó trên
-  mọi file đã track, còn `host-capabilities.md` dùng nó cho bản diff đã che mà mọi agent được sinh ra
-  đều đọc, trên mọi harness. File từng nằm trong references của `atk:git`, cho tới khi những nơi đọc
+  mọi file đã track, `host-capabilities.md` dùng nó cho bản diff đã che mà mọi agent do kit sinh ra
+  đều đọc, trên mọi harness. `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` và `atk:help` dùng nó
+  cho diff đọc ngay trong phiên, còn nguyên tắc 9 trong `team-roles.md` và các prompt trích bảng của
+  nó lấy danh sách file từ đây. File từng nằm trong references của `atk:git`, cho tới khi những nơi đọc
   khác biến nó thành hợp đồng giữa nhiều skill.
 
 Hai file cuối mô tả những file không đi kèm kit:

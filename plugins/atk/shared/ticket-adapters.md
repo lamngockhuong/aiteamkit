@@ -157,17 +157,27 @@ A skill that has to read a pull request rather than write to one, which `atk:rev
 `atk:plan --review` both do, reads it this way:
 
 ```bash
-gh pr view <number> --json files,baseRefName,headRefName,headRepository   # which files, which refs
-gh pr checkout <number>                                       # the files themselves, at the head
+gh pr view <number> --json files,baseRefName,headRefName,headRepository,baseRepository   # which files, which refs
+gh pr checkout <number>                     # the head, which the mask reads as HEAD
+git remote -v                               # the remote whose URL is baseRepository
+git fetch <base remote> <baseRefName>
+sh -s -- mask <base remote>/<baseRefName>...HEAD   # the block of shared/secret-scan.md, as its masking section runs it
 ```
 
-The hunks then come from the `mask` scan of `shared/secret-scan.md` over
-`origin/<baseRefName>...HEAD`, after a `git fetch` of that base, never from `gh pr diff <number>`:
-that prints every file the pull request adds, a `.env` included, into the session before anything
-masked it, against rule 9 of `shared/team-roles.md`. The first command gives paths and counts, never
-whole files. A skill that has to open a file the change touches, rather than read what changed in it,
-needs the checkout too: on a pull request that edits an existing document, the hunks alone show a
-fraction of it, and everything outside them looks absent.
+The checkout comes first, every time, and not only to open whole files: the mask reads `HEAD`, and
+without the checkout it masks whatever branch the reviewer happened to be on. That diff is not
+empty, so no guard catches it, and the wrong change is reviewed without an error. The base remote is
+the one whose URL names `baseRepository`: `origin` in a clone of the repository itself, usually
+`upstream` in a clone of a fork, where `origin/<baseRefName>` is the fork's own copy of the base and
+may be months behind. Where no remote names it, fetch it by URL,
+`git fetch https://github.com/<owner>/<name> <baseRefName>`, and mask `FETCH_HEAD...HEAD`.
+
+The hunks come from that scan, never from `gh pr diff <number>`: that prints every file the pull
+request adds, a `.env` included, into the session before anything masked it, against rule 9 of
+`shared/team-roles.md`. The first command gives paths and counts, never whole files. A skill that
+has to open a file the change touches, rather than read what changed in it, reads it from the
+checkout: on a pull request that edits an existing document, the hunks alone show a fraction of it,
+and everything outside them looks absent.
 
 `atk:review` also reads what earlier reviews posted, to carry their identifiers forward. A summary
 posted as a review is a review body, which `--json comments` does not return, and an inline comment

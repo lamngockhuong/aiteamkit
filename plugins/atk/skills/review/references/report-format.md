@@ -270,11 +270,20 @@ is on attention, and a collapsed block costs none; what the list buys is that a 
 request reaches every finding and every question without the report, and a later review finds every
 identifier this one issued.
 
-A finding that rests on a line the mask took out, a credential in the change, is the exception to
-both: no inline comment, and in the summary its title says a credential was found without its
-`file:line` or the shape. The pull request is read by more people than can rotate the value, and a
-location posted before it is rotated tells every one of them where to look. The report keeps the
-location, and the person who owns the value hears it from the reviewer directly.
+A finding that is a credential in the change, whether the mask took the line out, the scan named
+the file without reading it, a staged `.env.production` or an `env.bak` renamed from `.env`, or a
+reviewer recognised a value the shapes missed, is the exception to both: no inline comment, and in
+the summary its title says a credential was found without its `file:line`, its path or the shape.
+The pull request is read by more people than can rotate the value, and a location posted before it
+is rotated tells every one of them where to look. The person who owns the value hears it from the
+reviewer directly.
+
+The report keeps the location only while nobody else can read it. Before writing a credential
+finding with its `file:line`, check whether the report's own path is ignored, with
+`git check-ignore -q <report path>`. Where it is not, because the project commits `docs/derived/`,
+the report gives the finding the same title without a location, and the run says in the session
+where the location was left out and why: a committed report puts it in the branch's history before
+the value is rotated.
 
 The summary never points at the report as the place the rest lives. The report sits in the
 reviewer's working tree under `docs/derived/`, which `shared/artifact-paths.md` lets a project leave

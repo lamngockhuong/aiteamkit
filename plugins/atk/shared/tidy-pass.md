@@ -80,7 +80,8 @@ uncertain clean-up applied silently is the one the reviewer has to reverse engin
 
 ## After the pass
 
-Read the resulting diff before running anything, and look for the accident: a condition inverted
+Read the resulting diff before running anything, through the `mask --worktree` scan of
+`shared/secret-scan.md`, and look for the accident: a condition inverted
 while being flattened, a default lost while being extracted, an early return that now skips a line it
 used to run.
 

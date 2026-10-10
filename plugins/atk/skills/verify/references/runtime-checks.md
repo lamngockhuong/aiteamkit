@@ -261,8 +261,8 @@ One that nobody wrote down is left behind for good.
 A run of this skill keeps a progress log as it goes, per Progress log in `shared/artifact-paths.md`,
 so a session that ends between rounds is resumed rather than started again.
 
-Before step 1, resume or start fresh as that section says, the subject being the ticket, the pull
-request as `#<n>`, or the plan being verified.
+Before step 1, resume or start fresh as that section says, the subject written as Progress log there
+writes it: a module or a set of paths is the slug of a description.
 
 Write an entry when the preflight passes, when the application is ready, after each case with its
 result, and after each round of fix and retry, with the cause it addressed and the result of the

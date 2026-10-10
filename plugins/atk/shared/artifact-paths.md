@@ -323,14 +323,21 @@ generalises, and it keeps its own shape.
 - **Path.** `docs/derived/<skill>/<run-id>/progress.md`, where `<run-id>` is `<YYMMDD-HHMM>-<slug>`,
   the time the run started and the slug of its subject, with the next free suffix when that
   directory already exists, so two runs never share one. Creating it, the run adds
-  `/<docs root>/derived/<skill>/*/progress.md` to the repository's local exclude file,
-  `git rev-parse --git-path info/exclude`, once, unless the line is already there, so a `git add .`
-  in a project that commits `docs/derived/` cannot stage a log, and a finished one is not counted as
-  untracked work by `atk:git`.
+  `/<docs root>/derived/<skill>/*/progress.md` to the local exclude file of the repository that
+  holds the docs root, `git rev-parse --git-path info/exclude` run there, creating its `info/`
+  directory where the clone has none, once, unless the line is already there, so a `git add .` in a
+  project that commits `docs/derived/` cannot stage a log, and a finished one is not counted as
+  untracked work by `atk:git`. Then `git check-ignore -q <log path>` confirms it: a negation in the
+  project's `.gitignore`, such as `!docs/derived/**`, takes precedence over the exclude file, and
+  where the check fails the run says so before its first step. The run's closing message names the
+  line it added, since it changed a file of the person's clone.
 - **First line.** The subject, the branch, and the commit the run started from:
-  `subject: <ticket key, pull request number as #<n>, plan path, or the slug of a description> | branch: <name> | start: <short sha>`.
-  A later run finds its log by that subject, written the same way. On a detached `HEAD` the branch
-  is `(detached)`, and in a repository with no commit yet the start is `(none)`.
+  `subject: <ticket key, pull request number, plan path, or the slug of a description> | branch: <name> | start: <short sha>`.
+  A pull request number is written in its host's form, `#<n>` on GitHub and `!<n>` on GitLab, where
+  merge requests are numbered apart from issues. A later run finds its log by that subject, written
+  the same way. The branch is what `git symbolic-ref --short HEAD` prints, which is the branch's name
+  even before its first commit; on a detached `HEAD`, where it prints nothing, the branch is
+  `(detached)`. In a repository with no commit yet the start is `(none)`.
 - **One entry per unit of work.** A hypothesis proved or ruled out, a round of fix and retry, a
   review round, a step of work done without a plan, each with its time and its result in a line or
   two. Written under rule 9 of `shared/team-roles.md`: a secret value is masked as in any artifact.
@@ -342,21 +349,26 @@ generalises, and it keeps its own shape.
 
 A log whose last line is neither is a run that stopped before it finished, or one another session
 is still writing. A later run of the same skill on the same subject reads the newest such log, by its
-`<run-id>`, before its first step and offers to resume it, naming the time of its last entry so the
-person can tell a run that stopped from one still going. It never resumes without that yes.
-The counts that bound a run, hypotheses in `atk:fix`, rounds in `atk:verify`, review rounds in
-`atk:implement`, carry over only on a resume, so a resumed run cannot reset its own ceiling.
+`<run-id>`, before its first step and offers it, naming the time of its last entry so the person can
+tell a run that stopped from one still going. Every offer has the same three answers:
 
-The run does not resume alone when the log looks stale: its branch is not the current branch, or its
-start commit is no longer an ancestor of `HEAD` (`git merge-base --is-ancestor <start> HEAD` fails).
-Only what both sides hold is compared: a `(detached)` branch is compared by its start commit alone,
-and a `(none)` start, or a repository that still has no commit, by its branch alone. It says which
-test failed, and asks the person whether to resume it, start fresh, or leave it because it is still
-running elsewhere. A fresh start writes a new log and counts from zero, and the old log's last line
-becomes `no artifact: superseded by <run-id>`, so it is not offered again. Leaving it also starts a
-new log from zero but writes nothing into the old one, which another session may still be writing;
-it is offered again on the next run, and stops being offered once that session writes its last
-line.
+- **Resume** it, which carries its counts over.
+- **Start fresh**: a new log counting from zero, and the old log's last line becomes
+  `no artifact: superseded by <run-id>`, so it is not offered again.
+- **Stop**, because the run is still going in another session. This run ends there and writes no
+  log. A log on disk belongs to a session in this working tree, as the paragraph below says, and two
+  live runs on one subject in one tree would edit the same files, and under `atk:verify` start the
+  same processes on the same ports.
+
+It never resumes without that answer. The counts that bound a run, hypotheses in `atk:fix`, rounds
+in `atk:verify`, review rounds in `atk:implement`, carry over only on a resume, so a resumed run
+cannot reset its own ceiling.
+
+The offer also names the test that failed when the log looks stale: its branch is not the current
+branch, or its start commit is no longer an ancestor of `HEAD`
+(`git merge-base --is-ancestor <start> HEAD` fails). Only what both sides hold is compared: when either side is `(detached)`, the two are compared by start
+commit alone, and when either start is `(none)`, or the repository still has no commit, by branch
+alone.
 
 The log lives in one working copy and is never staged, whatever the project does with
 `docs/derived/`: it is one person's working state, not a record. The exclude line above holds that

@@ -74,7 +74,9 @@ continues, and the record says which commands it had to infer.
 
 ### 1. Scope and assets
 
-Resolve the argument into the code it covers: the diff of a branch or range, the paths given, or,
+Resolve the argument into the code it covers: the diff of a branch or range, read through the `mask`
+scan of `shared/secret-scan.md` so a changed file rule 9 names is listed rather than printed, the
+paths given, or,
 under `--threat-model`, the entry points of the feature, found from the design, the reference
 documents under `docs/api/`, `docs/features/` and `docs/screens/`, and the code. Where the shape in
 `.atk/profile.md` names member repositories, a release scope is read once per member, per the same

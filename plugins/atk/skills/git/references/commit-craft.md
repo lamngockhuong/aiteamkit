@@ -60,9 +60,11 @@ writes it, since a changelog tool parses it.
 
 ## Read what is staged before committing
 
-`git diff --cached --stat`, then the diff itself, once the `staged` scan of step 2 has come back
-clean: that is what makes printing it safe, since a clean scan means no file rule 9 names is staged
-and no line matched a shape. Not a formality: the tree is where the last run, the editor, and the
+`git diff --cached --stat`, then the diff itself through the `mask --cached` scan of
+`shared/secret-scan.md`, never a plain `git diff --cached`. A clean `staged` scan does not make the
+plain diff safe to print: it reports only added lines, so a staged deletion of a tracked `.env` and a
+removed line that held a key both pass it, and a plain diff runs the project's text conversion, which
+can print a decrypted file the scan read as ciphertext. Not a formality: the tree is where the last run, the editor, and the
 user all left things, and the commit takes whatever is there.
 
 Three things that show up this way and are worth stopping for: a file staged by an earlier run that
@@ -89,8 +91,9 @@ run can no longer prevent it.
 
 For the reading of the diff itself, do one of two things after each commit and say which:
 
-- re-read what was committed, `git show --stat` then the diff, and confirm what step 2 read still
-  holds; or
+- re-read what was committed, `git show --stat` then the diff through the `mask HEAD~1..HEAD` scan,
+  and only once the `commit` scan above came back clean, and confirm what step 2 read still holds;
+  or
 - name the check that no longer covers what shipped, so the reviewer knows which one to repeat.
 
 The second is the honest answer where the diff is too large to re-read, and it is still better than

@@ -363,9 +363,11 @@ makes the step worth more than it was, not less:
 - The changed-file list and the diff feed all of them. The diff is the masked `diff.patch` the
   reviewer rule in `shared/host-capabilities.md` describes, on every harness and for every agent
   this file spawns, since rule 9 covers a file written for another agent wherever it runs. The list
-  of lines its masking took out goes to `rules` as a hoisted result. A pull request or a branch is masked as `<base>...HEAD`. A change not
-  yet committed, which is what `atk:implement` hands over and what a review of paths in the working
-  tree reads, is masked with `--worktree`, since a range would carry none of it.
+  of lines its masking took out goes to `rules` as a hoisted result. The argument is the one
+  Masking a diff in `shared/secret-scan.md` gives for what is under review: `/atk:review <commit>`
+  is its one-commit form, and a change not yet committed, which is what `atk:implement` hands over
+  and what a review of paths in the working tree reads, is `--worktree`, since a range would carry
+  none of it.
 
 ## What each agent in a round is given
 
@@ -398,11 +400,13 @@ the difference in scope is the point:
   keeps a large diff inside one context.
 - Rule 9 of `shared/team-roles.md` in the agent's own words: never open or search the files the
   table of Paths that are a finding on their own in `shared/secret-scan.md` lists, quoted into the
-  prompt as that table writes them, and write any secret value it cites as `<redacted: kind>`. The
-  prompt carries the list because an agent on a harness without the kit's agent sees nothing else.
+  prompt as that table writes them with the paragraph under it on the two rows a search pattern
+  cannot express, and write any secret value it cites as `<redacted: kind>`. The prompt carries the
+  list because an agent on a harness without the kit's agent sees nothing else.
 - Where the diff is: `diff.patch`, by its path, and the instruction to read the change there and
-  nowhere else, never through `git diff`, `git show` or `gh pr diff`, on every harness. An agent
-  with a shell could run them, and what they print is the diff before masking.
+  nowhere else, on every harness, never through a command that prints a patch or a file's content
+  unmasked, quoting the list under Masking a diff in `shared/secret-scan.md`. An agent with a shell
+  could run them, and what they print is the change, or its history, before masking.
 
 On Claude Code every agent this file spawns, rounds, copies and the sweep, is
 `atk:read-only-reviewer`, per the reviewer rule in `shared/host-capabilities.md`; only the band 1
