@@ -123,7 +123,7 @@ họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` v
 
 ## Lớp `shared/`
 
-Mười bảy file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
+Mười tám file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
 - `plugins/atk/shared/team-roles.md`: bảng vai trò và chín nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -133,7 +133,7 @@ Mười bảy file giữ những gì các skill sẽ phải lặp lại. Ba file
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
-Mười hai file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Mười ba file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `plugins/atk/shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -232,6 +232,12 @@ Mười hai file tiếp theo là hợp đồng giữa một nhóm skill có tên
   --challenge` cũng vậy với mỗi kiểu một kế hoạch có thể hỏng là một góc nhìn. Mỗi skill giữ các góc
   nhìn của mình trong một reference riêng; phần dùng chung là phần sẽ trôi dần, cho tới khi một lượt
   phản biện để agent đọc cả lập luận của tác giả.
+- `plugins/atk/shared/secret-scan.md`: phần quét giá trị bí mật, một khối `sh` với bốn chế độ, cùng
+  bảng những đường dẫn tự nó đã là phát hiện, cũng chính là danh sách file mà nguyên tắc 9 giữ không
+  đọc. `atk:git` trích dẫn file này để đọc diff và quét những gì nó stage, `atk:security` dùng nó trên
+  mọi file đã track, còn `host-capabilities.md` dùng nó cho bản diff đã che mà mọi agent được sinh ra
+  đều đọc, trên mọi harness. File từng nằm trong references của `atk:git`, cho tới khi những nơi đọc
+  khác biến nó thành hợp đồng giữa nhiều skill.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

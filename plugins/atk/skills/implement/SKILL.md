@@ -99,7 +99,7 @@ session and never written down leaves the reviewer nothing to read, and the revi
 
 The run writes that progress log as it goes: the level the gate chose and the plan path once one
 exists, an entry per review round in step 5, and, for work with no plan, per step of work done. With a plan, each phase's `status` stays the record of the phases, and the log
-adds only the review rounds.
+adds only the review rounds. A large-gate stop ends it with `no artifact: sent to design-doc`.
 
 ### 2. Write the code
 

@@ -124,7 +124,7 @@ On both, the prompts in `references/` remain the route.
 
 ## The `shared/` layer
 
-Seventeen files hold what skills would otherwise repeat. The first three are cited by all 24:
+Eighteen files hold what skills would otherwise repeat. The first three are cited by all 24:
 
 - `plugins/atk/shared/team-roles.md`: the role table and the nine rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -134,7 +134,7 @@ Seventeen files hold what skills would otherwise repeat. The first three are cit
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
 
-Twelve are contracts between a named handful of skills rather than kit-wide rules:
+Thirteen are contracts between a named handful of skills rather than kit-wide rules:
 
 - `plugins/atk/shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
@@ -233,6 +233,12 @@ Twelve are contracts between a named handful of skills rather than kit-wide rule
   sign a design, and by `atk:plan --challenge`, whose lenses are the ways a plan fails. Each keeps its
   lenses in a reference of its own; the shared half is the one that would drift into a challenge
   whose agents had read the author's reasoning.
+- `plugins/atk/shared/secret-scan.md`: the secret scan, one `sh` block in four modes, and its table of
+  paths that are a finding on their own, which is also the list of files rule 9 keeps unread. Cited
+  by `atk:git` to read a diff and to scan what it stages, by `atk:security` over every tracked file,
+  and by `host-capabilities.md` for the masked diff every spawned agent reads, on every harness. It
+  lived in `atk:git`'s references until those other readers made it a contract between several
+  skills.
 
 The last two describe files that do not ship with the kit at all:
 

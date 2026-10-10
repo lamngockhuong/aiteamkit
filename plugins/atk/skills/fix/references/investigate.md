@@ -47,7 +47,8 @@ fix applied at the appearance point hides the cause and leaves every other calle
 
 ## Step 4: why now
 
-Run `git log` on the files in the trace. Find the change that made this reachable, and name it. When
+Run `git log` on the files in the trace, in the session: an agent handed the wide trace has no shell
+and returns the question rather than the answer. Find the change that made this reachable, and name it. When
 there is none, "broken since it was written, never exercised on this path" is a complete answer, and
 a more useful one than silence.
 

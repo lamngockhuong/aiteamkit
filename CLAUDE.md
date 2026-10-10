@@ -151,7 +151,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (beside `skills/`, not under it)
 
-Seventeen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
+Eighteen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
 plugin root beside `skills/`, NOT under it, because a folder under `skills/` without a `SKILL.md` is
 ambiguous to the harnesses' skill discovery. The table names them as skills cite them, relative to
 `plugins/atk/`.
@@ -175,6 +175,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/feature-types.md` | The one classification of features: each type with the extra questions an understanding check adds and the QA risk an estimate reads, and the rule that a row is added with both filled | `catchup` (through `understanding-check.md`), `estimate` (through `complexity-drivers.md`) |
 | `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `qa --record`, and `run-cases` through that same record shape; `## Output` of `incident` |
 | `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
+| `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `host-capabilities.md`, `team-roles.md`, `review-rounds.md`, `independent-challenge.md`, `read-only-reviewer` (restated) |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -235,6 +236,12 @@ through a reference that keeps its own lenses, who settles an open objection, an
 sits in its artifact. What the two share is the half that makes a challenge worth running: an agent
 that never sees the author's reasoning, and an objection that names its failure or is dropped. Two
 copies of that half would drift until one challenge let its agents read the conversation.
+
+`secret-scan.md` began in `atk:git`'s references and moved here once `security`, the masked diff of
+`host-capabilities.md`, and rule 9 itself all read it. Its table of paths is the one list of files
+rule 9 keeps unread, so a prompt that names those files quotes the table rather than its own memory
+of it. The read-only agent is the one place it is restated, since an agent run in a target project
+cannot open a file of the kit.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
@@ -912,7 +919,9 @@ for f in sorted(glob.glob('plugins/*/agents/*.md')):
 # The secret scan, run as written in its reference: every shape is found, a masked value, ordinary
 # code, a read from the environment and a variable interpolated into a header or a URL are not, a
 # file rule 9 names is reported by name and never read, whatever directory it sits in, a staged
-# deletion of one is not, `.env.example` is scanned, the location is printed and the value never is,
+# deletion of one is not, a credential store is one of them, a rename of one is reported with its
+# content unread, `.env.example` and `.env.template` are scanned, a URL carrying a password is found
+# and one with an @ in its path is not, the location is printed and the value never is,
 # the scan covers the whole repository from a subdirectory, the user's diff and signature settings
 # change nothing, a git failure or an unknown mode fails the scan, and all four modes find what they
 # should. The mask mode leaves no value in the diff it writes, in a hunk header or in the body of a
@@ -921,7 +930,7 @@ for f in sorted(glob.glob('plugins/*/agents/*.md')):
 # built from pieces, so this file is not itself a hit
 python3 -c "
 import os, re, shutil, subprocess, tempfile
-block = re.search(r'sh -s -- staged <<.SCAN.\n(.*?)\nSCAN\n', open('plugins/atk/skills/git/references/secret-scan.md').read(), re.S).group(1)
+block = re.search(r'sh -s -- staged <<.SCAN.\n(.*?)\nSCAN\n', open('plugins/atk/shared/secret-scan.md').read(), re.S).group(1)
 q, e, a, d = chr(34), chr(61), chr(39), chr(36)
 hit = ['GITHUB_TO' + 'KEN' + e + 'abcdef123', 'DB_PA' + 'SS' + e + 'x', 'Authorization: Bea' + 'rer opaque123',
        'k sk_' + 'live_ZZFAKE1234', 'AK' + 'IA' + 'ZZFAKEZZFAKEZZFA', '-----BEGIN RSA PRIV' + 'ATE KEY----- -----END RSA PRIVATE KEY-----',
@@ -929,7 +938,8 @@ hit = ['GITHUB_TO' + 'KEN' + e + 'abcdef123', 'DB_PA' + 'SS' + e + 'x', 'Authori
        'const pass' + 'word ' + e + ' ' + q + 'hunter22x' + q, 'A' + e + '<redacted: password> STRIPE_KE' + 'Y' + e + 'sk_test_ZZ',
        'DB_PASS' + 'WORD' + e + 'admin@ZZ24', 'PASS' + 'WORD' + e + 'Summer-ZZ24!', 'PASS' + 'WORD' + e + 'Hunter',
        'spring.datasource.pass' + 'word' + e + 'P@ssZZrd!', 'db.pass' + 'word: S3cr#ZZ99', 'PASS' + 'WORD' + e + 'test1234',
-       'CACHE_KE' + 'Y_PREFIX' + e + 'app:v2', 'apiKe' + 'yHeader: ' + a + 'X-Api-Key' + a]
+       'CACHE_KE' + 'Y_PREFIX' + e + 'app:v2', 'apiKe' + 'yHeader: ' + a + 'X-Api-Key' + a,
+       '//registry.npmjs.org/:_authTo' + 'ken' + e + 'npm_ZZTOK123', 'url ' + e + ' https://u:ZZGITPW' + '@gitlab.com/x']
 ok = ['DB_PASSWORD' + e + '<redacted: password>', chr(96) + 'DB_PASSWORD' + e + '<redacted: password>' + chr(96),
       'DB_PASSWORD' + e + '<redacted: password> npm start', 'postgres://u:<redacted: password>@host', 'TOKEN' + e + '<REDACTED>',
       'postgres://localhost/dev', 'type A ' + e + ' { token: string }', '<li key' + e + '{item.id} />', 'if (token ' + e + e + ' null) {}',
@@ -937,7 +947,7 @@ ok = ['DB_PASSWORD' + e + '<redacted: password>', chr(96) + 'DB_PASSWORD' + e + 
       'const apiKey ' + e + ' process.env.API_KEY;', 'SECRET_KEY ' + e + ' os.environ[' + q + 'SECRET_KEY' + q + ']',
       'TOKEN_MODE' + e + 'strict', 'CACHE_KEY_ENABLED' + e + 'true', 'curl -H ' + q + 'Authorization: Bearer ' + d + 'TOKEN' + q,
       'postgres://u:' + d + '{DB_PASS}@db/x', 'token_limit: 10000000', 'PASSWORD' + e + 'none', 'token: Optional[str]',
-      'apiKey: this.config.apiKey']
+      'apiKey: this.config.apiKey', 'https://registry.npmjs.org/@scope/pkg', 'https://host:8080/a@b', 'ssh://git@github.com/o/r']
 tmp = []
 def repo():
     t = tempfile.mkdtemp(); tmp.append(t)
@@ -954,32 +964,35 @@ assert scan('bogus', t).returncode == 2 and scan('mask', t).returncode == 2, 'an
 g('commit', '-q', '--allow-empty', '-m', 'root'); os.makedirs(os.path.join(t, 'sub'))
 put(t, 'f.txt', chr(10).join(hit + ok) + chr(10))
 put(t, '.env', 'ZZENVVALUE' + chr(10))
-put(t, '.env.example', 'API_KE' + 'Y' + e + 'ZZLIVEKEY12345' + chr(10))
-for p in ('similarity-svc/secrets.json', 'renamer/.env', 'id_ecdsa'):
+templates = ['.env.example', '.env.template']
+for p in templates:
+    put(t, p, 'API_KE' + 'Y' + e + 'ZZLIVEKEY12345' + chr(10))
+stores = ['.git-credentials', 'infra/terraform.tfstate', '.aws/credentials', 'k/kubeconfig']
+for p in ['similarity-svc/secrets.json', 'renamer/.env', 'id_ecdsa'] + stores:
     put(t, p, 'ZZENVVALUE' + chr(10))
 put(t, 'keys/deploy', 'x' + chr(10)); put(t, 'dump.sql', chr(0) * 1100000)
 put(t, 'keys/deploy.pub', 'ssh-ed25519 AAAA' + chr(10)); put(t, 'small.sql', 'insert;' + chr(10)); put(t, 'src/secrets.ts', 'export const load = 1;' + chr(10))
 g('add', '-A', '-f'); g('config', 'diff.external', 'cat'); g('config', 'diff.noprefix', 'true'); g('config', 'log.showSignature', 'true')
-named = ['.env', 'similarity-svc/secrets.json', 'renamer/.env', 'keys/deploy', 'id_ecdsa', 'dump.sql']
-values = ['abcdef123', 'opaque123', 'ZZFAKE', 'ZZPW', 'hunter22x', 'c2lnbmF0', 'ZZENV', 'ZZLIVE', 'ZZ24', 'Hunter', 'ZZrd', 'ZZ99']
+named = ['.env', 'similarity-svc/secrets.json', 'renamer/.env', 'keys/deploy', 'id_ecdsa', 'dump.sql'] + stores
+values = ['abcdef123', 'opaque123', 'ZZFAKE', 'ZZPW', 'hunter22x', 'c2lnbmF0', 'ZZENV', 'ZZLIVE', 'ZZ24', 'Hunter', 'ZZrd', 'ZZ99', 'ZZTOK', 'ZZGITPW']
 for mode in ('staged', 'tree', 'commit'):
     if mode == 'commit': g('config', '--unset', 'diff.external'); g('commit', '-qm', 'x')
     r = scan(mode, os.path.join(t, 'sub'))
     got = {int(l.split(':')[1]) for l in r.stdout.splitlines() if l.startswith('f.txt:')}
     assert r.returncode == 1 and got == set(range(1, len(hit) + 1)), '%s found lines %s: %s' % (mode, sorted(got), r.stderr)
-    assert all(p + ': ' in r.stdout for p in named) and '.env.example:1:' in r.stdout, mode + ': ' + r.stdout
+    assert all(p + ': ' in r.stdout for p in named) and all(p + ':1:' in r.stdout for p in templates), mode + ': ' + r.stdout
     assert not any(p + ': ' in r.stdout for p in ('small.sql', 'keys/deploy.pub', 'src/secrets.ts')), mode + ': ' + r.stdout
     assert not any(v in r.stdout + r.stderr for v in values), mode + ': a value reached the output'
 m = scan('mask', t, 'HEAD~1..HEAD')
-assert m.stdout.count('<redacted: a line holding') == len(hit) + 1 and not any(v in m.stdout for v in values), 'mask left a value'
+assert m.stdout.count('<redacted: a line holding') == len(hit) + 2 and not any(v in m.stdout for v in values), 'mask left a value'
 g('rm', '-q', '--cached', '.env')
 assert '.env: ' not in scan('staged', t).stdout, 'a staged deletion of a rule 9 file was reported'
 t, g = repo()
 put(t, 'settings.py', 'SECRET_KEY ' + e + ' ' + q + 'ZZHEADER1234' + q + chr(10) + ''.join('    line%d ' % i + e + ' 1' + chr(10) for i in range(12)))
 put(t, 'fixture.js', '-----BEGIN RSA PRIV' + 'ATE KEY-----' + chr(10) + ('ZZKEYBODY' + 'A' * 55 + chr(10)) * 4 + '-----END RSA PRIVATE KEY-----' + chr(10) + 'const after ' + e + ' 1;' + chr(10))
 put(t, 'tail.js', '-----BEGIN RSA PRIV' + 'ATE KEY-----' + chr(10) + ('ZZKEYBODY' + 'B' * 55 + chr(10)) * 4 + '-----END RSA PRIVATE KEY-----' + chr(10) + 'const after ' + e + ' 1;' + chr(10))
-put(t, 'gone.txt', 'a' + chr(10) + hit[0] + chr(10))
-g('add', '-A'); g('commit', '-qm', 'a')
+put(t, 'gone.txt', 'a' + chr(10) + hit[0] + chr(10)); put(t, '.env', 'MODE' + e + 'ZZPLAINVAL' + chr(10))
+g('add', '-A'); g('commit', '-qm', 'a'); g('mv', '.env', 'env.bak')
 put(t, 'settings.py', open(os.path.join(t, 'settings.py')).read().replace('line9 ' + e + ' 1', 'line9 ' + e + ' 2'))
 put(t, 'fixture.js', 'const before ' + e + ' 0;' + chr(10) + open(os.path.join(t, 'fixture.js')).read())
 put(t, 'tail.js', open(os.path.join(t, 'tail.js')).read() + 'const later ' + e + ' 2;' + chr(10))
@@ -987,6 +1000,9 @@ os.remove(os.path.join(t, 'gone.txt')); g('commit', '-qam', 'b')
 m = scan('mask', t, 'HEAD~1...HEAD')
 assert m.returncode == 1 and 'ZZHEADER' not in m.stdout and 'ZZKEYBODY' not in m.stdout and 'const before' in m.stdout and 'const after' in m.stdout, 'mask left a value in a header or a key body'
 assert 'gone.txt:2: ' in m.stderr and 'fixture.js:2: ' in m.stderr, 'masked.txt misnamed a line: ' + m.stderr
+assert 'env.bak: renamed from .env' in m.stderr and 'ZZPLAIN' not in m.stdout, 'a renamed rule 9 file reached the masked diff'
+r = scan('commit', t)
+assert 'env.bak: renamed from .env' in r.stdout and 'ZZPLAIN' not in r.stdout + r.stderr, 'commit mode missed a renamed rule 9 file'
 put(t, 'settings.py', 'x' + chr(10)); put(t, 'new.js', 'const tok' + 'en ' + e + ' ' + q + 'ZZUNTRACKED99' + q + ';' + chr(10) + 'const fine ' + e + ' 3;' + chr(10))
 m = scan('mask', t, '--worktree')
 assert '+x' in m.stdout and 'const fine' in m.stdout and 'ZZUNTRACKED' not in m.stdout and 'new.js:1: ' in m.stderr, 'the working-tree mask missed a change'

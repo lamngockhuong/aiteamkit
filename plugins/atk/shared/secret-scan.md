@@ -1,14 +1,23 @@
 # Secret scan
 
-Loaded by `atk:git` in step 2, before anything is committed. `shared/finalize-steps.md` says never to
-stage a credential; this file is how that is checked rather than hoped for.
+How a diff or a tree is checked for a secret rather than hoped clean, and how a diff is masked before
+another agent reads it. Referenced from `skills/<name>/SKILL.md` as `shared/secret-scan.md`, which is
+`../../shared/secret-scan.md` relative to a skill file.
 
-`atk:security` loads it in its step 2 for The scan, in its `tree` mode over every tracked file, and
-Paths that are a finding on their own only. What happens on a hit is `atk:git`'s procedure, not its.
-The reviewer rule in `shared/host-capabilities.md` uses its `mask` mode for a diff handed to an agent.
+Its table of Paths that are a finding on their own is the list of files rule 9 of
+`shared/team-roles.md` keeps unread: the environment files, the private keys and the credential
+stores. Everything that cites that rule's files cites this table.
 
-For `atk:git` the scan runs on what is staged, not on the working tree, because staged is what is
-about to become permanent, and once more, in its `commit` mode, on a commit a hook wrote into.
+Cited by:
+
+- `atk:git` in its step 1, to read the diff with that table's files left out, and in its step 2, on
+  what is staged, since staged is what is about to become permanent, and once more, in its `commit`
+  mode, on a commit a hook wrote into. `shared/finalize-steps.md` says never to stage a credential;
+  this file is how that is checked.
+- `atk:security` in its step 2 for The scan, in its `tree` mode over every tracked file, and Paths
+  that are a finding on their own. What happens on a hit is `atk:git`'s procedure, not its.
+- The reviewer rule in `shared/host-capabilities.md`, which uses its `mask` mode for every diff handed
+  to an agent, by `atk:review` and by any run that hands an agent a change to read.
 
 ## The scan
 
@@ -34,9 +43,11 @@ top=$(git rev-parse --show-toplevel) && cd "$top" || { echo "scan failed: not in
 set -f
 F='**/.env **/.env.* **/*.pem **/*.key **/*.p12 **/*.pfx **/*.jks **/id_rsa **/id_dsa **/id_ecdsa **/id_ed25519
    **/.netrc **/.pgpass **/credentials.json **/serviceAccount*.json **/secrets.json **/secrets.yml
-   **/secrets.yaml **/secrets.toml **/secrets.ini **/secrets.env **/secrets.txt'
-X=; P=; for p in $F; do X="$X :(exclude,glob)$p"; P="$P :(glob)$p"; done
-K=':(glob)**/.env.example :(glob)**/.env.sample'
+   **/secrets.yaml **/secrets.toml **/secrets.ini **/secrets.env **/secrets.txt **/.git-credentials
+   **/.pypirc **/.aws/credentials **/.docker/config.json **/.kube/config **/kubeconfig **/*.tfstate
+   **/*.tfstate.backup'
+T='**/.env.example **/.env.sample **/.env.template **/.env.dist'
+X=; P=; K=; for p in $F; do X="$X :(exclude,glob)$p"; P="$P :(glob)$p"; done; for p in $T; do K="$K :(glob)$p"; P="$P :(exclude,glob)$p"; done
 g='git -c core.quotePath=false -c log.showSignature=false'
 o='--no-color --no-ext-diff --no-textconv --src-prefix=a/ --dst-prefix=b/'
 run() { "$@"; echo "#scan-git-status $?"; }
@@ -51,14 +62,19 @@ odd() { nl='
   else case $f in *.sql|*.csv) [ "$(size "$f")" -gt 1048576 ] 2>/dev/null && printf '%s\tdump\n' "$f" ;; esac; fi
 done; }
 names() { echo "#scan-names"; "$@" -- $P; s=$?; "$@" | odd; echo "#scan-git-status $s"; }
+tab=$(printf '\t')
+is() { v=$1; shift; for p in "$@"; do case "/$v" in */${p#'**/'}) return 0 ;; esac; done; return 1; }
+moved() { echo "#scan-names"; run $g "$@" -M --name-status --diff-filter=R | while IFS="$tab" read -r s a b; do
+  case $s in '#scan-git-status '*) echo "$s"; continue ;; esac
+  is "$a" $T || ! is "$a" $F || printf '%s\tmoved\t%s\n' "$b" "$a"; done; }
 case $mode in
-  staged) rev=:; pair diff --cached -U0 $o; names $g diff --cached --name-only --diff-filter=d ;;
-  commit) rev=HEAD:; pair show --first-parent --format= -U0 $o HEAD
+  staged) rev=:; moved diff --cached; pair diff --cached -U0 $o; names $g diff --cached --name-only --diff-filter=d ;;
+  commit) rev=HEAD:; moved show --first-parent --format= HEAD; pair show --first-parent --format= -U0 $o HEAD
           names $g show --first-parent --format= --name-only --diff-filter=d HEAD ;;
   tree)   rev=:; pair grep -I -n --no-color -e ''; names $g ls-files ;;
-  mask)   if [ "$2" = --worktree ]; then rev=; pair diff $o HEAD; new . $X; new $K
+  mask)   if [ "$2" = --worktree ]; then rev=; moved diff HEAD; pair diff $o HEAD; new . $X; new $K
             names $g diff --name-only --diff-filter=d HEAD; names $g ls-files --others --exclude-standard
-          else rev=${2##*..}:; pair diff $o "$2"; names $g diff --name-only --diff-filter=d "$2"; fi ;;
+          else rev=${2##*..}:; moved diff "$2"; pair diff $o "$2"; names $g diff --name-only --diff-filter=d "$2"; fi ;;
 esac | awk -v mode="$mode" '
 function rep(c, n,   s) { s = ""; while (n-- > 0) s = s c; return s }
 function ci(s,   i, c, r) { r = ""; for (i = 1; i <= length(s); i++) { c = substr(s, i, 1); r = r (c ~ /[a-z]/ ? "[" toupper(c) c "]" : c) } return r }
@@ -71,7 +87,7 @@ BEGIN {
   shape[++n] = "JWT";                 re[n] = "eyJ" rep("[A-Za-z0-9_-]", 5) "[A-Za-z0-9_-]*[.]" rep("[A-Za-z0-9_-]", 5) "[A-Za-z0-9_-]*[.][A-Za-z0-9_-]"; lc[n] = 0
   shape[++n] = "provider key prefix"; re[n] = "(sk_live_|rk_live_|ghp_|gho_|ghs_|github_pat_|xox[abprs]-)[A-Za-z0-9_-]"; lc[n] = 0
   shape[++n] = "bearer token";        re[n] = "authorization[\"\047]?[[:space:]]*[:=][[:space:]]*[\"\047]?bearer[[:space:]]+[^[:space:]\"\047`$<{]"; lc[n] = 1
-  shape[++n] = "connection string with a password"; re[n] = "(mongodb|postgres|postgresql|mysql|redis|amqp)://[^ ]*:[^ @$<{][^ @]*@"; lc[n] = 1
+  shape[++n] = "connection string with a password"; re[n] = "((mongodb|postgres|postgresql|mysql|redis|amqp)://[^ ]*:[^ @$<{][^ @]*|[a-z][a-z0-9+.-]*://[^][:space:]/:@\"\047`]+:[^][:space:]/@$<{\"\047`][^][:space:]/@\"\047`]*)@"; lc[n] = 1
   k = "(key|token|secret|pass|pwd|credential)"; w = "[a-z0-9_]*" k "[a-z0-9_]*"
   v = "[^][:space:]\"\047`.(){},;<>[]"; e = "([][:space:]\"\047`)},;<>]|$)"
   shape[++n] = "secret-named assignment"; re[n] = "(^|[^a-z0-9_-])(export[[:space:]]+)?" w "=([^[:space:]=\"\047{(`$<0-9]|[0-9]+[^0-9[:space:]`\"\047,;)])"; lc[n] = 1
@@ -90,9 +106,11 @@ function hits(s,   i, x, out) {
 /^#scan-git-status / { if ($2 != 0 && !(mode == "tree" && $2 == 1)) bad = 1; names = 0; st = 0; key = 0; next }
 /^#scan-names$/ { names = 1; next }
 names {
-  if ($0 == "" || $0 ~ /(^|\/)\.env\.(example|sample)$/) next
-  split($0, p, "\t"); if (p[1] in said) next; said[p[1]] = 1
-  if (p[2] == "pub") say(p[1] ": a file beside a .pub of the same name")
+  if ($0 == "") next
+  split($0, p, "\t"); if (p[2] == "moved") mv[p[1]] = 1
+  if (p[1] in said) next; said[p[1]] = 1
+  if (p[2] == "moved") say(p[1] ": renamed from " p[3] ", a file rule 9 names, not read")
+  else if (p[2] == "pub") say(p[1] ": a file beside a .pub of the same name")
   else if (p[2] == "dump") say(p[1] ": a .sql or .csv over a megabyte, ask whether it holds real data")
   else say(p[1] ": a file rule 9 names, not read")
   next
@@ -103,10 +121,11 @@ mode == "tree" {
   if (h != "") say(substr($0, 1, i + j - 1) ": " h)
   next
 }
-/^diff / { st = 2; key = 0; if (mode == "mask") print; next }
+/^diff / { st = 2; key = 0; skip = 0; if (mode == "mask") print; next }
 st == 2 && /^--- / { fo = substr($0, 7); st = 1; if (mode == "mask") print; next }
-st == 1 && /^\+\+\+ / { f = $0 == "+++ /dev/null" ? fo : substr($0, 7); st = 0; if (mode == "mask") print; next }
+st == 1 && /^\+\+\+ / { f = $0 == "+++ /dev/null" ? fo : substr($0, 7); st = 0; skip = f in mv; if (mode == "mask") print; next }
 st == 2 { if (mode == "mask") print; next }
+skip { next }
 /^@@ / {
   split($2, b, ","); ol = substr(b[1], 2) + 0; split($3, a, ","); ln = substr(a[1], 2) + 0
   if (mode == "mask") { match($0, /^@@ [^@]* @@/); print substr($0, 1, RLENGTH) }
@@ -143,9 +162,19 @@ form the parser reads, whatever the user has configured: no external diff tool, 
 the named files of the table below, are not read, since rule 9 of `shared/team-roles.md` forbids it:
 each one in scope is reported by name, `a file rule 9 names, not read`, and counts as a hit,
 whatever directory it sits in. Deleting one is not a hit, since the commit that untracks a leaked
-file is the one the team needs to make. `.env.example` and `.env.sample` are read and scanned like
-any file, since they are the environment files meant to be committed, and a live value in one is the
-leak they invite.
+file is the one the team needs to make. Renaming one is: a `.env` moved to `env.bak` carries the same
+values under a name the table does not hold, so the new path is reported as
+`renamed from <old path>, a file rule 9 names, not read`, and its content is neither scanned nor
+written into a masked diff. The block matches the old path against the table in `sh` rather than
+by pathspec, since git applies a pathspec before it detects a rename, so a pattern added to the
+table is one both matchers have to read the same way. A rename is the case it can see: a file rule
+9 names that was never tracked, saved under another name, arrives as a new file, and only the
+shapes stand between its content and the diff.
+
+The four templates the block lists in `T`, `.env.example`, `.env.sample`, `.env.template` and
+`.env.dist`, are read and scanned like any file, since they are the environment files meant to be
+committed, and a live value in one is the leak they invite. A template by any other name is a
+`.env.*` like the rest, and reading it needs the person's word, per rule 9.
 
 The shapes are the ones rule 9 names. Two of them decide by name, for a name containing `KEY`,
 `TOKEN`, `SECRET`, `PASS`, `PWD` or `CREDENTIAL`:
@@ -172,8 +201,11 @@ the older `<REDACTED>` are not findings, so a correctly masked record can be com
 value on the same line is still matched.
 
 A connection string only matters when it carries a password, which is why that branch looks for
-`user:pass@` with a non-empty password rather than for the scheme alone. `postgres://localhost/dev`
-in a test fixture is not a finding, and a scan that reports it teaches the team to skip the scan.
+`user:pass@` with a non-empty password rather than for the scheme alone. The same holds for any other
+URL, `https://<user>:<password>@gitlab.com` as a credential store writes it, where the user and the password
+hold no `/`, so a path such as `https://registry.npmjs.org/@scope/pkg` is not read as one.
+`postgres://localhost/dev` in a test fixture is not a finding, and a scan that reports it teaches the
+team to skip the scan.
 For the same reason a variable is not a value: `Authorization: Bearer $TOKEN` and
 `postgres://u:${DB_PASS}@db/x` are not findings.
 
@@ -207,25 +239,30 @@ So does every line of a private key, from its `BEGIN` line to its `END` line, an
 looks like one, since a hunk can start inside a key. A hunk header carries its line numbers and
 nothing after them, because git appends the nearest line above the hunk and that line can be the
 one holding the value. `masked.txt` lists each masked line by path, line and shape, a removed line
-by its number on the old side, and each file the scan named without reading it. A line in it of
+by its number on the old side, and each file the scan named without reading it, a renamed one with
+its old path. A file renamed from one of them appears in `diff.patch` with its headers and no hunks.
+A line in it of
 neither form is a message from git, and is not a finding. That list goes to the round that checks
 for secrets as a hoisted result: the agent reading the masked diff cannot tell a live credential
 from a value that arrived masked, so the masking itself is the finding.
 
 ## Paths that are a finding on their own
 
-Staged at all, regardless of content. The block checks every row:
+Staged at all, regardless of content. The block checks every row. These rows are also the files
+rule 9 of `shared/team-roles.md` keeps unread, the list its "credential stores" means: a session, an
+agent's search pattern and an agent's prompt take the list from here rather than from memory.
 
 | Pattern | Why |
 |---------|-----|
-| `.env`, `.env.*` except `.env.example` and `.env.sample` | The file exists to hold what must not ship |
+| `.env`, `.env.*` except the templates `.env.example`, `.env.sample`, `.env.template` and `.env.dist` | The file exists to hold what must not ship |
 | `*.pem`, `*.key`, `*.p12`, `*.pfx`, `*.jks` | Private key material |
 | `id_rsa`, `id_dsa`, `id_ecdsa`, `id_ed25519`, and any file beside a `.pub` of the same name | An SSH private key |
 | `credentials.json`, `serviceAccount*.json`, `secrets.` with `json`, `yml`, `yaml`, `toml`, `ini`, `env` or `txt` | Named for what they hold. A source file such as `secrets.ts` is code, and is scanned and reviewed like any other |
 | `.netrc`, `.pgpass` | A password stored with no `=` or `:` beside a keyword, which the name shapes cannot see |
+| `.git-credentials`, `.pypirc`, `.aws/credentials`, `.docker/config.json`, `.kube/config`, `kubeconfig`, `*.tfstate`, `*.tfstate.backup` | Credential stores: a tool writes a login, a key or the state of real infrastructure there. `.npmrc` is not one of them, since projects commit it for registry settings; its `_authToken=` line is a secret-named assignment, and the scan reads it as one |
 | `*.sql` or `*.csv` over a megabyte | A dump of real data, until someone says otherwise |
 
-The first five rows are reported as `a file rule 9 names, not read`, apart from a file beside a
+The first six rows are reported as `a file rule 9 names, not read`, apart from a file beside a
 `.pub`, which is reported as that. The last row is a question rather than a verdict, and is reported
 as one: large data files are sometimes fixtures, and the person staging it knows which.
 

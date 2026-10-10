@@ -103,7 +103,7 @@ order to look for each command in and the checks to run when the project has non
   command, when its lockfile is present, recorded as run by this skill rather than by the project's
   gate. Never install a scanner without asking. An audit command sends the dependency list to its
   registry; say so in the record, and skip it where the project's override forbids that.
-- **Secrets.** The `tree` scan and the path list of `skills/git/references/secret-scan.md`, over the
+- **Secrets.** The `tree` scan and the path list of `shared/secret-scan.md`, over the
   tracked files rather than the staged diff, plus whether an
   environment file is tracked at all. Its procedure on a hit belongs to `atk:git`: here a hit is a
   finding, redacted, and nothing is unstaged.

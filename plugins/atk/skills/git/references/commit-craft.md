@@ -60,8 +60,10 @@ writes it, since a changelog tool parses it.
 
 ## Read what is staged before committing
 
-`git diff --cached --stat`, then the diff itself. Not a formality: the tree is where the last run,
-the editor, and the user all left things, and the commit takes whatever is there.
+`git diff --cached --stat`, then the diff itself, once the `staged` scan of step 2 has come back
+clean: that is what makes printing it safe, since a clean scan means no file rule 9 names is staged
+and no line matched a shape. Not a formality: the tree is where the last run, the editor, and the
+user all left things, and the commit takes whatever is there.
 
 Three things that show up this way and are worth stopping for: a file staged by an earlier run that
 the user then reverted in the working tree, a lock file updated by an install nobody meant to commit,
@@ -79,7 +81,7 @@ Find out which kind the project has before the first commit, by reading its hook
 A hook that writes is ordinary and is not a reason to skip it or to pass `--no-verify`.
 
 Where one writes, re-run the secret scan of step 2 over what was committed, every time. It is the
-`commit` scan in `references/secret-scan.md`, one pass over what `git show` reports, so its cost does not grow with
+`commit` scan in `shared/secret-scan.md`, one pass over what `git show` reports, so its cost does not grow with
 the diff, and it is the one check whose answer cannot be deferred: step 2 is built on stopping before
 the commit exists, and a credential the hook wrote into the commit is already in the history. A hit
 here is reported to the user at once, with what it takes to get it out of the history, because the

@@ -185,8 +185,9 @@ What stays here is the policy the procedure may not overrule:
   general agent with the same prompt and says in its artifact that the limit rested on the prompt.
   On Cursor and Codex, where the type was not tested, that prompt is the route.
 
-  Having no shell, it cannot run `git log` or `git blame`. A diff it needs is written for it by the
-  calling agent, through the `mask` scan in `skills/git/references/secret-scan.md`, which masks it
+  Having no shell, it cannot run `git log` or `git blame`. A diff any spawned agent needs, of this
+  type or the general agent that stands in for it, on every harness, is written for it by the
+  calling agent, through the `mask` scan in `shared/secret-scan.md`, which masks it
   without the diff passing through the session, to `diff.patch` in the directory that
   `git rev-parse --path-format=absolute --git-path atk/<skill>/<run-id>` names, created first,
   `<run-id>` as Progress log in `shared/artifact-paths.md` defines it. The range is `<base>...HEAD`
@@ -198,7 +199,11 @@ What stays here is the policy the procedure may not overrule:
   run that wrote it ends, and never reads or removes another run's; one an interrupted run leaves is
   safe to delete. A hook of the user's may refuse Read under `.git/`, so the prompt says what the
   agent's own body says: read the file with Grep for `^` when Read refuses it, and say so rather
-  than return nothing. Its exclusion of `.env` and credential files rests on its instructions alone.
+  than return nothing. An agent that has a shell, the general one on any harness, is told to read
+  the change in that file and never through `git diff`, `git show` or `gh pr diff`, which print it
+  before masking; only the reason the reviewer type needs the file, its lack of a shell, belongs to
+  Claude Code. Its exclusion of the files rule 9 names rests on its instructions alone, and its
+  prompt quotes their list from Paths that are a finding on their own in `shared/secret-scan.md`.
 - Synthesis, severity, and the report stay with the calling agent. A reviewer sees one pass and
   cannot judge whether a finding is consensus or noise.
 - A finding only one reviewer raised is checked against the code before it reaches the report.
@@ -221,8 +226,9 @@ reads a handful of files reads them itself, since an agent costs a round trip an
   above, held on Claude Code by that agent's tool list.
 - **What it never reads.** It follows rule 9 of `shared/team-roles.md`: the files that rule names are
   excluded from every search pattern it runs, and a secret value in what it returns is already
-  masked. The prompt carries that rule's list of files and its `<redacted: kind>` form, since the
-  agent never sees the skill that spawned it.
+  masked. The prompt carries that rule's list of files, quoted from Paths that are a finding on their
+  own in `shared/secret-scan.md`, and its `<redacted: kind>` form, since the agent never sees the
+  skill that spawned it. A diff it needs is the masked `diff.patch` of the reviewer bullet above.
 - **Without agents.** The step reads inline, and the run says it did: where the artifact lists what
   it read, or, for a skill whose artifact has no such place, in the closing message of the run. That
   is the rule of When the capability is missing, above, applied to this one.

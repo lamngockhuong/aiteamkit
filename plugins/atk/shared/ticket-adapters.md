@@ -68,7 +68,7 @@ Treat it as the third outcome for that item alone and carry on with the rest.
 host unreachable, forbidden, not found, and keep the tool's own error text out of the session and out
 of the artifact. An MCP server or a REST client can put a key, a token, or a connection string into a
 failure message, and the artifact this run writes is committed and travels in a pull request.
-`skills/git/references/secret-scan.md` holds what a secret in a file costs; this is the same rule
+`shared/secret-scan.md` holds what a secret in a file costs; this is the same rule
 arriving from the other direction.
 
 Two things never happen on the third. Inventing the value the tracker would have given is the first:
@@ -157,14 +157,17 @@ A skill that has to read a pull request rather than write to one, which `atk:rev
 `atk:plan --review` both do, reads it this way:
 
 ```bash
-gh pr view <number> --json files,headRefName,headRepository   # which files, and which ref
-gh pr diff <number>                                           # the hunks
+gh pr view <number> --json files,baseRefName,headRefName,headRepository   # which files, which refs
 gh pr checkout <number>                                       # the files themselves, at the head
 ```
 
-The first two give paths, counts, and hunks, never whole files. A skill that has to open a file the
-change touches, rather than read what changed in it, needs the third: on a pull request that edits an
-existing document, the hunks alone show a fraction of it, and everything outside them looks absent.
+The hunks then come from the `mask` scan of `shared/secret-scan.md` over
+`origin/<baseRefName>...HEAD`, after a `git fetch` of that base, never from `gh pr diff <number>`:
+that prints every file the pull request adds, a `.env` included, into the session before anything
+masked it, against rule 9 of `shared/team-roles.md`. The first command gives paths and counts, never
+whole files. A skill that has to open a file the change touches, rather than read what changed in it,
+needs the checkout too: on a pull request that edits an existing document, the hunks alone show a
+fraction of it, and everything outside them looks absent.
 
 `atk:review` also reads what earlier reviews posted, to carry their identifiers forward. A summary
 posted as a review is a review body, which `--json comments` does not return, and an inline comment

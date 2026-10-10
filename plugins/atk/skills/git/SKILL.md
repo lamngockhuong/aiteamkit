@@ -90,7 +90,10 @@ counts is what decides whether step 4 is a push, a rewrite, or neither, and with
 are as old as whenever this clone last heard from the remote. Keep the noted hash: it is what step 4
 leases against, for the reason `references/repair.md` gives.
 Read the diff before touching anything: a skill that stages what it has not read is how an unrelated
-change reaches a commit nobody meant to make.
+change reaches a commit nobody meant to make. Read it as `git status` and `git diff --stat HEAD`,
+then the hunks through the `mask --worktree` scan of `shared/secret-scan.md`, printed to the session:
+a plain `git diff` prints a modified `.env.production` before the step 2 scan could stop it, and the
+mask names each file rule 9 of `shared/team-roles.md` keeps unread instead of showing it.
 
 Both counts above zero is a diverged branch, and it does not reach step 4 as a plain push. Two
 different things produce that state and only one of them may ever be forced: an earlier session that
@@ -129,7 +132,7 @@ Progress log in `shared/artifact-paths.md`, whatever the project does with `docs
 repository with unrelated edits already in the tree keeps them: `git add -A` is never the answer,
 because the person who left them there did not ask for them to ship.
 
-Scan what is staged before going further, with the `staged` scan in `references/secret-scan.md`. A
+Scan what is staged before going further, with the `staged` scan in `shared/secret-scan.md`. A
 hit stops the run. Name the file, the line number and the shape the scan reported, never the line,
 say what to do about it, and do not commit any
 part of the change until the user has dealt with it; a secret in one commit is in the history

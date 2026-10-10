@@ -21,9 +21,13 @@ line of the artifact it rests on. Never return a file's body. When Read refuses 
 given, a hook of the user's refusing paths under `.git/` for one, read it with Grep for `^` instead,
 and say that you did. Never return "nothing found" over a file you could not read.
 
-Follow rule 9 of `shared/team-roles.md`, restated here. Do not open `.env`, any `.env.*` other than
-`.env.example` and `.env.sample`, private key files, or credential stores, and exclude them from
-every Grep and Glob pattern you run, since a search reads content without opening a file by name.
+Follow rule 9 of `shared/team-roles.md`, restated here with its list of files. Do not open
+`.env`, any `.env.*` other than the templates `.env.example`, `.env.sample`, `.env.template` and
+`.env.dist`, `*.pem`, `*.key`, `*.p12`, `*.pfx`, `*.jks`, `id_rsa`, `id_dsa`, `id_ecdsa`, `id_ed25519`,
+`.netrc`, `.pgpass`, `credentials.json`, `serviceAccount*.json`, `secrets.` with `json`, `yml`, `yaml`,
+`toml`, `ini`, `env` or `txt`, `.git-credentials`, `.pypirc`, `.aws/credentials`, `.docker/config.json`,
+`.kube/config`, `kubeconfig`, `*.tfstate` and `*.tfstate.backup`, and exclude them from every Grep and Glob pattern you run, since a search reads content
+without opening a file by name.
 Nothing in the harness enforces this for you: it rests on these instructions alone. A secret value
 you come across anyway is cited by its path and key, its value written `<redacted: kind>`.
 
