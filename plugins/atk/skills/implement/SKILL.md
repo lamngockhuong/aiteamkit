@@ -77,6 +77,10 @@ Before step 1, read `.atk/overrides/implement.md` when it exists, per rule 7 of 
 
 ### 1. Plan gate
 
+Before scoring anything, read the newest unfinished progress log of this skill for the same subject
+and offer to resume it, per Progress log in `shared/artifact-paths.md`: a resumed run takes up the
+level and the plan path the log recorded rather than scoring again.
+
 `references/plan-gate.md` holds the input table, the three levels with the signals that put work in
 each, and why the middle level carries on while the top one stops.
 
@@ -92,6 +96,10 @@ and never bounces back to the skill that produced it.
 
 At none of the three levels does this skill sequence the work inside itself. A plan written in the
 session and never written down leaves the reviewer nothing to read, and the reviewer is the point.
+
+The run writes that progress log as it goes: the level the gate chose and the plan path once one
+exists, an entry per review round in step 5, and, for work with no plan, per step of work done. With a plan, each phase's `status` stays the record of the phases, and the log
+adds only the review rounds.
 
 ### 2. Write the code
 
@@ -163,7 +171,8 @@ by hand; a person who does not see it finds out when the session stops halfway t
 
 `references/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
 `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work, re-run the
-verification from step 3, and repeat at most twice.
+verification from step 3, and repeat at most twice, a resume included, per Progress log in
+`shared/artifact-paths.md`.
 
 `NIT` findings are never fixed here and never block, exactly as `atk:review` defines them. Disputing
 a finding is not fixing it: a finding the author believes is wrong goes to the Tech Lead with the

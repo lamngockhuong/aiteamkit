@@ -87,7 +87,8 @@ posts to the host is following that policy, not overruling this one.
 
 Read what is staged before committing. A fix that drags an unrelated formatting sweep into the same
 commit cannot be reverted without reverting the sweep, which is how a one line fix becomes
-unrevertable. Never stage a credential, a dotenv file, a token, a key, or a dump of real user data.
+unrevertable. Never stage a credential, a dotenv file, a token, a key, a dump of real user data, or a
+progress log, per Progress log in `shared/artifact-paths.md`.
 
 ## 4. Push and pull request
 

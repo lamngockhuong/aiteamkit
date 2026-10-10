@@ -84,11 +84,14 @@ only list of what the run may have left on the environment, so keep both until a
 them. Screenshots in its `evidence/` directory wait there for the person who started the run to confirm
 them, are the only copy until then, and are never committed while they wait. Any of those review runs, made
 without a `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
-only written copy: a reason to keep the directory, not a reason to fear deleting it. Five skills
-read one of the eight. `atk:run-cases` reads the run log of an earlier run of the same cases file, to
+only written copy: a reason to keep the directory, not a reason to fear deleting it. The progress
+log that `atk:fix`, `atk:verify` and `atk:implement` write as they go is the ninth kind: deleting one
+costs the ruled-out work, which the next run does again from zero. Eight skills read one of the
+nine. Those three each read their own newest unfinished log before starting, and offer to resume it,
+asking first when its branch or start commit no longer matches. `atk:run-cases` reads the run log of an earlier run of the same cases file, to
 offer the cases that run deferred and to name data it created with no record after it; where that
 run wrote a record, the record lists the same, so the person names them with `--only` instead. The other four
-all read the review report: a second `atk:review` over the same target
+read the review report: a second `atk:review` over the same target
 reads the newest one for that target, to carry its finding identifiers forward, together with the
 newest summary an earlier `--comment` run posted on the same pull request, and numbers from 1 and
 says so when there is neither; `atk:plan --review` reads the newest one for the same plan, for the same

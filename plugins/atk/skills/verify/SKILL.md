@@ -86,7 +86,8 @@ the names the report uses.
   -> [5. Clean up and report]
 ```
 
-Before step 1, read `.atk/overrides/verify.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Before step 1, read `.atk/overrides/verify.md` when it exists, per rule 7 of `shared/team-roles.md`,
+and the progress log, per The progress log in `references/runtime-checks.md`.
 
 ### 1. Preflight
 
@@ -149,8 +150,8 @@ capture while doing it. The same three-round ceiling covers the whole run, not o
 
 ### 4. Fix and retry, at most three rounds
 
-A failed assertion may be fixed and retried. Three rounds, counted across the whole run, and the
-count goes in the report whether or not it was reached.
+A failed assertion may be fixed and retried. Three rounds, counted across the whole run and every
+session that resumed it, and the count goes in the report whether or not it was reached.
 
 Each round: one change addressing one identified cause, re-run the narrowest thing that covers it
 per `shared/layer-verification.md`, then re-run the failed case in full. A round that changes several
@@ -209,8 +210,8 @@ machine worse than it found it. These rules are binding rather than advisory.
 **Work out the port before starting.** The profile does not carry one, on purpose: a port is a value
 copied out of the application's own configuration, and a copy drifts. Read it from where the
 application reads it, which is the `Start` command, the `Ready when` signal when that names a port,
-or the configuration those two load. Put it in the report, so the next run recognises what this one
-left behind.
+or the configuration those two load, a file rule 9 of `shared/team-roles.md` names only on the
+person's word. Put it in the report, so the next run recognises what this one left behind.
 
 **Take an inventory before starting.** Check whether something is already listening on that port,
 with `lsof -i :PORT` or `ss -ltnp` on macOS and Linux, `netstat -ano` on Windows. An occupied port is

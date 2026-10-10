@@ -72,26 +72,33 @@ gives it and say in the report which one was run.
 ```
 
 Before step 1, read `.atk/overrides/fix.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then read the newest unfinished progress log of this skill for the same defect and offer to resume
+it, asking first when it looks stale, per Progress log in `shared/artifact-paths.md`. Through the run,
+add an entry to the log each time a hypothesis is proved or ruled out.
 
 ### 1. Capture and prove
 
 `references/investigate.md` holds the steps and the shape of the result. In short: copy the failure
 verbatim before touching anything, restate the symptom as input, observed output, expected output,
 and environment, map the surface to code, trace back to the line that produces the wrong behaviour,
-answer why it broke now, prove it, and list everyone else who calls what is about to change.
+answer why it broke now, prove it, and list everyone else who calls what is about to change. Tracing
+a surface back through several modules, and listing every caller, go to an agent, per
+Reading wide, through an agent in `shared/host-capabilities.md`; without one, read inline and say so in the
+report.
 
 Proof is one of exactly three things: a red test that reproduces it, a direct reproduction with its
 output, or the responsible lines quoted together with a specific check that shows they do it. A
 cause with no evidence block is not a cause, it is the first hypothesis.
 
-The step has a ceiling of three hypotheses per defect, counted across the whole run. Past the third the
+The step has a ceiling of three hypotheses per defect, counted across the whole run, a resume
+included, per Progress log in `shared/artifact-paths.md`. Past the third the
 investigation stops and hands over the four things `references/investigate.md` lists under the
 ceiling, the last of which is the name of the person who has to look. "Needs further investigation"
 is not a handover: rule 1 in `shared/team-roles.md` applies here as everywhere, and an owner is a
 person.
 
-No file changes in this step, with one exception: the failing test may be written, because the test
-is the evidence. Under `--investigate-only` even that exception is off, and the test goes into the
+No file changes in this step other than the progress log, with one exception: the failing test may be
+written, because the test is the evidence. Under `--investigate-only` even that exception is off, and the test goes into the
 report as a code block instead.
 
 ### 2. Intent check
@@ -175,7 +182,9 @@ section.
 
 The working tree must be exactly as it was found, including no new test file: show `git status` to
 prove it. A red test still counts as evidence here, written into the report as a code block that a
-reader can paste. A flag that promises to change nothing must not leave a file behind.
+reader can paste. A flag that promises to change nothing must not leave a file behind. The report and
+the progress log are the run's own output rather than a change to the code, and are the only files
+`git status` may show.
 
 ## Output
 
@@ -219,4 +228,4 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
 - [ ] The report's path was checked with `git check-ignore` before the file was written, and
       one the project ignores was named to the team then rather than at the commit.
 - [ ] The report says what could not be verified.
-- [ ] Under `--investigate-only`, `git status` shows the working tree untouched.
+- [ ] Under `--investigate-only`, `git status` shows nothing changed but the report and the progress log.

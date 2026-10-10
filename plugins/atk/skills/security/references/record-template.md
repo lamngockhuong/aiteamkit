@@ -36,7 +36,7 @@ anyway is the go decision, which the PM owns; this record states the finding, no
 
 ## Redaction
 
-Print a secret as `<REDACTED>`, keeping only a public prefix that says what kind of credential it is
+Print a secret as `<redacted: kind>`, per rule 9 of `shared/team-roles.md`, keeping only a public prefix that says what kind of credential it is
 when that helps the reader triage, such as `AKIA` or `ghp_`. Never its length, never its last
 characters, never the password segment of a connection string. An environment variable is named,
 never its value. The same rule applies to the session, the record, and any ticket, because a secret

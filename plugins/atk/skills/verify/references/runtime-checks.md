@@ -144,8 +144,8 @@ host or a key named in them is exactly what that check exists to catch. The repo
 variable name as a difference between this run's environment and the project's own, never by a
 value that is a credential. The same holds for the start command the report records for the
 process, and for every other command it records, the backup and restore commands of a preparation
-included: a supplied value there is written `<KEY>=<redacted>`, and a password inside a connection
-URL `<redacted: password>`, because an inline assignment is the ordinary way to pass it and the
+included: a supplied value there is written `<KEY>=<redacted: kind>`, per rule 9 of
+`shared/team-roles.md`, and a password inside a connection URL `<redacted: password>`, because an inline assignment is the ordinary way to pass it and the
 report is committed, or posted on a pull request.
 
 ## Capturing logs
@@ -255,3 +255,31 @@ A resource the run itself created, a database, a container, a bucket, a file out
 tree, is recorded like a process as it is created: what it is, and the command that removes it. At
 cleanup it is either removed, or left in place as evidence with that command printed in the report.
 One that nobody wrote down is left behind for good.
+
+## The progress log
+
+A run of this skill keeps a progress log as it goes, per Progress log in `shared/artifact-paths.md`,
+so a session that ends between rounds is resumed rather than started again.
+
+Before step 1, resume or start fresh as that section says, the subject being the ticket, the pull
+request, or the plan being verified.
+
+Write an entry when the preflight passes, when the application is ready, after each case with its
+result, and after each round of fix and retry, with the cause it addressed and the result of the
+re-run. Each process and each resource the run starts goes into the log with its command, PID and
+port, or the command that removes it, at the moment it starts, not only into the report.
+
+On a resume:
+
+- A run resumed after its third round goes straight to the escalation of step 4.
+- The processes and resources the log records were started by this run, and only those whose command
+  and port the inventory still shows as the log recorded them. A PID or a port now held by another
+  program is not this run's: it is reported and left alone, under the rule to stop only what this run
+  started. One that still matches is reused only when `HEAD` is the commit the log started from and
+  `git status` shows nothing changed since, since otherwise it serves older code; it is stopped and
+  started again, and either way stopped at cleanup. One no longer running is noted as gone.
+- The data store check of step 1 runs again. What the earlier session saw may no longer be true.
+
+A fresh start chosen by the person counts from zero and treats nothing in the old log as its own:
+a process that log recorded and the inventory still finds is reported to the person as left by an
+earlier run, and is not stopped without their word.

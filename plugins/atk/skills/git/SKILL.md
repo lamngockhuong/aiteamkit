@@ -123,12 +123,15 @@ exit, not an error.
 
 ### 2. Stage and scan
 
-Stage only paths that belong to the work in hand. A repository with unrelated edits already in the
+Stage only paths that belong to the work in hand, and never a progress log or a run directory under
+`docs/derived/<skill>/`, which is one person's working state per Progress log in
+`shared/artifact-paths.md`, whatever the project does with that directory. A repository with unrelated edits already in the
 tree keeps them: `git add -A` is never the answer, because the person who left them there did not
 ask for them to ship.
 
-Scan what is staged before going further, using the patterns in `references/secret-scan.md`. A hit
-stops the run. Show the file and the matching line, say what to do about it, and do not commit any
+Scan what is staged before going further, with the `staged` scan in `references/secret-scan.md`. A
+hit stops the run. Name the file, the line number and the shape the scan reported, never the line,
+say what to do about it, and do not commit any
 part of the change until the user has dealt with it; a secret in one commit is in the history
 whether or not a later commit removes it.
 

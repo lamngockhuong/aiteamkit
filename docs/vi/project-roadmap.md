@@ -117,7 +117,7 @@ ra khỏi giai đoạn tiền 1.0 thì chuyển hai cờ `bump-*-pre-major` tron
 - Có đáng thêm một skill nữa cho báo cáo ngày và tuần không, hay `atk:retro --report` đã phủ
   nhu cầu đó ở tần suất thưa hơn?
 - Hook lúc mở phiên nay chạy trên Claude Code và trên Codex, hai file đăng ký cùng trỏ về một
-  script. Bộ nạp file ghi đè cũng đã đăng ký trên Codex, và chưa ai thấy nó khớp một lần gọi skill
+  script; trên Codex, từ codex-cli 0.162.0, chỉ sau khi người dùng tin cậy nó trong `/hooks`. Bộ nạp file ghi đè cũng đã đăng ký trên Codex, và chưa ai thấy nó khớp một lần gọi skill
   nào ở đó. Cursor cũng đóng gói hook được; nuôi thêm một file đăng ký nữa có đáng không, khi cổng
   thật vốn nằm trong skill?
 - `plugins/atk/shared/project-profile.md` xếp `review`, `qa`, `release` và `convention` vào nhóm Required-soft,

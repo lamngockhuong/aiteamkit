@@ -103,8 +103,8 @@ order to look for each command in and the checks to run when the project has non
   command, when its lockfile is present, recorded as run by this skill rather than by the project's
   gate. Never install a scanner without asking. An audit command sends the dependency list to its
   registry; say so in the record, and skip it where the project's override forbids that.
-- **Secrets.** The patterns and the paths of `skills/git/references/secret-scan.md`, its scan and
-  its path list only, run over the tracked files rather than the staged diff, plus whether an
+- **Secrets.** The `tree` scan and the path list of `skills/git/references/secret-scan.md`, over the
+  tracked files rather than the staged diff, plus whether an
   environment file is tracked at all. Its procedure on a hit belongs to `atk:git`: here a hit is a
   finding, redacted, and nothing is unstaged.
 - **Configuration.** Debug flags, permissive cross-origin rules, and default credentials in the
@@ -116,9 +116,11 @@ A command that failed or could not run is reported as not run, never as clean.
 
 Walk each trust boundary from step 1 through the six STRIDE questions, then map what surfaced to the
 OWASP Top 10 categories, per `references/threat-checklist.md`. Trace an input from where it enters
-to where it is used; a dangerous function name alone is a place to look, not a finding. Every
-boundary gets a result, including "checked, nothing found", because a boundary with no line in the
-record reads the same as one nobody walked.
+to where it is used; a dangerous function name alone is a place to look, not a finding. A trace that
+crosses modules goes to an agent, per Reading wide, through an agent in
+`shared/host-capabilities.md`; without one, read inline and say so in that boundary's line of the
+record. Every boundary gets a result, including "checked, nothing found", because a boundary with no
+line in the record reads the same as one nobody walked.
 
 ### 4. Verify
 

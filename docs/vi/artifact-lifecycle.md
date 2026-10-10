@@ -84,8 +84,11 @@ những gì lần chạy có thể đã để lại trên môi trường, nên g
 chụp trong thư mục `evidence/` của lần chạy ấy chờ người khởi động lần chạy xác nhận, là bản duy nhất
 cho tới lúc đó, và không bao giờ được commit khi còn chờ. Các lượt review ấy, khi chạy mà không kèm
 `--comment`, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
-bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Có năm skill đọc một
-trong tám loại. `atk:run-cases` đọc run log của lần chạy trước trên cùng file test case, để đề nghị
+bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà
+`atk:fix`, `atk:verify` và `atk:implement` ghi dần trong lúc chạy là loại thứ chín: xóa nó thì mất
+phần việc đã loại trừ, và lần chạy sau làm lại từ đầu. Có tám skill đọc một trong chín loại. Ba skill
+ấy, trước khi bắt đầu, mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp,
+nhưng hỏi người dùng trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần chạy trước trên cùng file test case, để đề nghị
 chạy tiếp những case lần đó đã hoãn và để nêu dữ liệu đã tạo mà không có record theo sau; nếu lần đó
 có viết record thì record ghi đúng những thứ ấy, nên người chạy tự nêu các case qua `--only`. Bốn skill
 còn lại đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng

@@ -121,10 +121,10 @@ thứ một người không cài kit vẫn kiểm được, nên nó là một d
 `atk:review` thi hành. "`atk:review` nên kiểm thêm phần i18n của đội mình" là luật về skill và thuộc
 về đây. Khi cả hai cách đọc đều hợp, luật về mã nguồn thắng.
 
-**Thói quen tạo ra khác biệt.** Nó biết từ chối. `plugins/atk/shared/project-overrides.md` liệt kê tám thứ phần
+**Thói quen tạo ra khác biệt.** Nó biết từ chối. `plugins/atk/shared/project-overrides.md` liệt kê chín thứ phần
 ghi đè không bao giờ được gỡ, trong đó có dòng người duyệt, luật một skill không quyết thứ mà một vai
 sở hữu, và ranh giới xin phép trước khi bất cứ gì rời khỏi repo cục bộ. Chỉ dẫn bị từ chối không bị
-bỏ trong im lặng: skill nói rõ nó phạm điều nào trong tám điều, rồi đề nghị thứ gần nhất mà không
+bỏ trong im lặng: skill nói rõ nó phạm điều nào trong chín điều, rồi đề nghị thứ gần nhất mà không
 phạm, thường là một chỉ dẫn đưa quyết định ra sớm hơn thay vì một chỉ dẫn tự quyết.
 
 ---
@@ -341,7 +341,9 @@ trong mọi file của kế hoạch, không chỉ trong file vừa sửa.
 
 **Sinh ra.** Mã nguồn, cộng một bản ghi triển khai sẽ trở thành phần mô tả pull request: đã đổi gì và
 vì sao, phủ những bước nào trong kế hoạch, lệnh đã chạy cho từng tầng kèm output của nó, bước dọn mã
-đã đổi những gì, và phần cố ý chưa làm.
+đã đổi những gì, và phần cố ý chưa làm. Trong lúc chạy, một progress log trong
+`docs/derived/implement/` ghi từng vòng review, và từng bước khi không có kế hoạch, để một lần chạy
+dừng giữa chừng có thể chạy tiếp.
 
 **Dùng khi.** Một ticket, một bản kế hoạch, hoặc một yêu cầu đã mô tả rõ đã sẵn sàng để làm, và câu
 hỏi còn lại là làm thế nào chứ không phải làm cái gì.
@@ -372,7 +374,8 @@ phát hiện.
 **Sinh ra.** Lỗi được ghi lại nguyên văn, nguyên nhân được chứng minh chứ không phải đoán, và một
 lượt kiểm xem hành vi hiện tại có phải là quyết định ai đó đưa ra có chủ ý. Sau đó là thay đổi nhỏ
 nhất gỡ được nguyên nhân, kiểm chứng theo tầng, và báo cáo nói rõ đã kiểm những gì và chưa kiểm những
-gì.
+gì. Trong lúc chạy, một progress log trong `docs/derived/fix/` ghi từng giả thuyết đã được chứng minh
+hay bị loại, để lần chạy tiếp theo không lặp lại chúng và không đếm lại giới hạn ba giả thuyết từ đầu.
 
 **Dùng khi.** Có một bug report, một test đang đỏ, một endpoint hay một màn hình hỏng, hoặc một cuộc
 điều tra phải kết thúc bằng lời giải thích chứ không phải phỏng đoán.
@@ -396,7 +399,8 @@ dọn dẹp cả file xung quanh thì không revert gọn được vào ngày c�
 **Sinh ra.** Ứng dụng được khởi động đúng cách dự án này khởi động nó, rồi được tác động bằng
 request thật. Tác động sinh ra được khẳng định trong dữ liệu chứ không phải trong mã trạng thái, màn
 hình được đối chiếu với bản thiết kế khi truyền `--ui`, và báo cáo nói rõ đã chứng minh được gì, chưa
-chứng minh được gì.
+chứng minh được gì. Trong lúc chạy, một progress log trong `docs/derived/verify/` ghi từng vòng, để
+lần chạy tiếp theo tính cả những vòng đã dùng vào giới hạn ba vòng.
 
 **Dùng khi.** Bộ test đã xanh mà chưa ai nhìn thấy tính năng chạy, trước khi chuyển ticket cho QA,
 hoặc trước khi một bản release đi ra.
