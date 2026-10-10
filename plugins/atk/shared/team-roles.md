@@ -96,9 +96,12 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    than `.env.example` and `.env.sample`, private key files, and credential stores are neither opened
    nor searched without the person saying so. A search over the tree reads a file's content as
    surely as opening it by name, so its pattern excludes them. A run that needs a variable's name
-   reads `.env.example` or the project's equivalent. The one standing read is a credential file the
-   person names for an agent-executed run, opened only when `git check-ignore` passes, per
-   `skills/run-cases/references/environment-safety.md`. Permission to read is not permission to quote.
+   reads `.env.example` or the project's equivalent. There are two standing reads. One is a
+   credential file the person names for an agent-executed run, opened only when `git check-ignore`
+   passes, per `skills/run-cases/references/environment-safety.md`. The other is the `Local only`
+   check of an approved `.atk/profile.md`, since approving the profile is the person saying so: it
+   may read an environment file to learn where the run points, and prints the host and nothing
+   else, so no value reaches the session. Permission to read is not permission to quote.
 
    Nothing a run writes or relays carries a secret value: an artifact, a log, a file it writes for
    another agent to read, and what an agent it spawned returns to it. A value is a secret by its

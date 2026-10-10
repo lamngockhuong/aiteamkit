@@ -177,6 +177,10 @@ Mười hai file tiếp theo là hợp đồng giữa một nhóm skill có tên
   `atk:onboard`. Agent trả về kết luận kèm `path:line` chứ không trả nội dung file, nên phiên làm
   việc giữ ngữ cảnh của mình cho artifact; harness không có agent thì đọc trực tiếp và ghi rõ đã
   làm vậy.
+  `atk:help` trích dẫn file này cho những gì nó được nêu tên khi một yêu cầu nằm ngoài kit, kể cả
+  các skill của kit đi kèm. `plugins/atk/shared/design-sources.md` trích dẫn nó để gọi kết nối Figma
+  theo việc kết nối đó làm, và `plugins/atk/shared/independent-challenge.md` trích dẫn nó cho các
+  agent chỉ đọc mà một lượt phản biện tạo ra.
 - `plugins/atk/shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
   phần không bao giờ đụng tới. Cùng ba skill sửa mã đó trích dẫn, thông qua `host-capabilities.md`.
   Nó tồn tại để bước dọn mã cho ra cùng một kết quả trên harness có sẵn khả năng dọn và trên harness

@@ -188,12 +188,17 @@ What stays here is the policy the procedure may not overrule:
   Having no shell, it cannot run `git log` or `git blame`. A diff it needs is written for it by the
   calling agent, through the `mask` scan in `skills/git/references/secret-scan.md`, which masks it
   without the diff passing through the session, to `diff.patch` in the directory that
-  `git rev-parse --git-path atk/<skill>/<run-id>` names, `<run-id>` as Progress log in
-  `shared/artifact-paths.md` defines it. That directory is inside the repository's git directory, so
-  no commit can carry it, whatever the project does with `docs/derived/`. The calling agent passes the
-  path, deletes that directory and no other when the review or challenge ends, and never reads or
-  removes another run's; one an interrupted run leaves is safe to delete. Its exclusion of `.env` and
-  credential files rests on its instructions alone.
+  `git rev-parse --path-format=absolute --git-path atk/<skill>/<run-id>` names, created first,
+  `<run-id>` as Progress log in `shared/artifact-paths.md` defines it. The range is `<base>...HEAD`
+  for a branch or a pull request, with the base the run resolved, and `--worktree` for a change not
+  yet committed. That file says what each exit code means; a failed scan, or an empty `diff.patch`
+  for a change that is not empty, stops the run before any agent is spawned. That directory is
+  inside the repository's git directory, so no commit can carry it, whatever the project does with
+  `docs/derived/`. The calling agent passes the path, deletes that directory and no other when the
+  run that wrote it ends, and never reads or removes another run's; one an interrupted run leaves is
+  safe to delete. A hook of the user's may refuse Read under `.git/`, so the prompt says what the
+  agent's own body says: read the file with Grep for `^` when Read refuses it, and say so rather
+  than return nothing. Its exclusion of `.env` and credential files rests on its instructions alone.
 - Synthesis, severity, and the report stay with the calling agent. A reviewer sees one pass and
   cannot judge whether a finding is consensus or noise.
 - A finding only one reviewer raised is checked against the code before it reaches the report.

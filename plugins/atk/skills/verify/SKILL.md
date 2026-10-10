@@ -97,13 +97,13 @@ criteria given in the prompt. Verification with no stated criteria degrades into
 reporting that nothing looked wrong. A pull request is read per `shared/ticket-adapters.md`, and a
 working tree not at its head is asked about, never checked out: the application runs from that tree.
 
-Then the local-only check, before anything is started. The profile says how to be sure the run is
-pointed at a local environment. Run that check and read the result. A host, connection string, or
-endpoint that points anywhere off this machine stops the run: this skill sends real requests and
-writes real side effects, and doing that to a shared environment is a real outage rather than a
-failed test. Say what was found, and hand it to the person the `Team` section names for the
-environment. A role with no name attached reaches nobody, and a team that has no SRE deletes that row
-from its profile, so "tell SRE" can resolve to no one at all.
+Then the local-only check, before anything is started: the profile's `Local only` command, which
+may read an environment file under rule 9 of `shared/team-roles.md` and prints the host alone. One
+that would print more is not run; ask for it narrowed. A host that is not this machine stops the
+run: this skill sends real requests and writes real side effects, and doing that to a shared
+environment is a real outage rather than a failed test. Say what was found, and hand it to the
+person the `Team` section names for the environment. A role with no name attached reaches nobody,
+and a team that has no SRE deletes that row from its profile, so "tell SRE" can resolve to no one.
 
 Then the data store, per The data store before anything starts in `references/runtime-checks.md`:
 the read-only check from the profile's `Prepare` line tells whether the store matches the branch.

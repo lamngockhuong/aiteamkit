@@ -363,7 +363,9 @@ makes the step worth more than it was, not less:
 - The changed-file list and the diff, written somewhere every agent can read, feed all of them. On
   Claude Code, where the agents have no shell, that place is the masked `diff.patch` the reviewer
   rule in `shared/host-capabilities.md` describes, and the list of lines its masking took out goes to
-  `rules` as a hoisted result.
+  `rules` as a hoisted result. A pull request or a branch is masked as `<base>...HEAD`. A change not
+  yet committed, which is what `atk:implement` hands over and what a review of paths in the working
+  tree reads, is masked with `--worktree`, since a range would carry none of it.
 
 ## What each agent in a round is given
 

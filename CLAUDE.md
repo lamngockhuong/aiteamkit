@@ -167,7 +167,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `plan`, `tailor`, `qa` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not, plus the gate rule: which CI job judges a layer, and what a local command weaker than it leaves unverified | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `security`, `incident` |
-| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, what counts as one turn of an interview, when a connection to an outside service may be named, browser automation, the one capability whose absence stops a skill, and reading wide through an agent that returns conclusions rather than file bodies | `fix`, `implement`, `verify`, `review`, `design-doc`, `plan`, `init`, `run-cases`, `help`, `catchup`, `spec`, `convention`, `security`, `onboard`, `design-sources.md`, `independent-challenge.md` |
+| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, spawned as `atk:read-only-reviewer` over a masked `diff.patch`, what counts as one turn of an interview, when a connection to an outside service may be named, browser automation, the one capability whose absence stops a skill, and reading wide through an agent that returns conclusions rather than file bodies | `fix`, `implement`, `verify`, `review`, `design-doc`, `plan`, `init`, `run-cases`, `help`, `catchup`, `spec`, `convention`, `security`, `onboard`, `design-sources.md`, `independent-challenge.md` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, what one is when the profile says `Contract: first` and the `implemented` field that says whether its code exists yet, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change including when the document lives in another repository, the `screen` kind with its always-present `implemented`, two-sided drift and split with `feature`, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `help` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
@@ -897,7 +897,8 @@ assert 'references/atkx-skills.md' in open('plugins/atk/skills/help/SKILL.md').r
 print('OK atk:help knows %d atkx skills' % len(rows))"
 
 # Every agent a plugin ships is named for its file and holds the three reading tools and no other,
-# which is the whole of what keeps it from editing or running anything on Claude Code
+# which is the whole of what keeps it from editing or running anything on Claude Code, and
+# says readonly, which is the line Cursor reads
 python3 -c "
 import glob, os
 for f in sorted(glob.glob('plugins/*/agents/*.md')):
@@ -905,48 +906,93 @@ for f in sorted(glob.glob('plugins/*/agents/*.md')):
     assert fm['name'].strip() == os.path.basename(f)[:-3], '%s: name %s' % (f, fm['name'])
     assert fm['tools'].strip() == 'Read, Grep, Glob', '%s: tools %s' % (f, fm['tools'])
     assert 'disallowedTools' not in fm, f + ': a path deny removes the whole tool'
+    assert fm.get('readonly', '').strip() == 'true', f + ': readonly is what Cursor reads'
     print('OK agent ' + f)"
 
 # The secret scan, run as written in its reference: every shape is found, a masked value, ordinary
-# code and a read from the environment are not, a file rule 9 names is reported by name and never
-# read, `.env.example` is scanned, the location is printed and the value never is, the scan covers
-# the whole repository from a subdirectory, the user's diff settings change nothing, a git failure
-# fails the scan, and the mask mode leaves no value in the diff it writes. Values are built from
-# pieces, so this file is not itself a hit
+# code, a read from the environment and a variable interpolated into a header or a URL are not, a
+# file rule 9 names is reported by name and never read, whatever directory it sits in, a staged
+# deletion of one is not, `.env.example` is scanned, the location is printed and the value never is,
+# the scan covers the whole repository from a subdirectory, the user's diff and signature settings
+# change nothing, a git failure or an unknown mode fails the scan, and all four modes find what they
+# should. The mask mode leaves no value in the diff it writes, in a hunk header or in the body of a
+# private key, its first line inside the hunk or not, carries an untracked file in its working-tree
+# form without touching the index, and names each masked line by the side it was on. Values are
+# built from pieces, so this file is not itself a hit
 python3 -c "
-import os, re, subprocess, tempfile
+import os, re, shutil, subprocess, tempfile
 block = re.search(r'sh -s -- staged <<.SCAN.\n(.*?)\nSCAN\n', open('plugins/atk/skills/git/references/secret-scan.md').read(), re.S).group(1)
-q, e, a = chr(34), chr(61), chr(39)
+q, e, a, d = chr(34), chr(61), chr(39), chr(36)
 hit = ['GITHUB_TO' + 'KEN' + e + 'abcdef123', 'DB_PA' + 'SS' + e + 'x', 'Authorization: Bea' + 'rer opaque123',
-       'k sk_' + 'live_ZZFAKE1234', 'AK' + 'IA' + 'ZZFAKEZZFAKEZZFA', '-----BEGIN RSA PRIV' + 'ATE KEY-----',
+       'k sk_' + 'live_ZZFAKE1234', 'AK' + 'IA' + 'ZZFAKEZZFAKEZZFA', '-----BEGIN RSA PRIV' + 'ATE KEY----- -----END RSA PRIVATE KEY-----',
        'ey' + 'JhbGciOiJIUzI1NiJ9.ey' + 'JzdWIiOiIxMjMifQ.c2lnbmF0dXJl', 'postgres://u:ZZPW' + '@host/db',
-       'const pass' + 'word ' + e + ' ' + q + 'hunter22x' + q, 'A' + e + '<redacted: password> STRIPE_KE' + 'Y' + e + 'sk_test_ZZ']
+       'const pass' + 'word ' + e + ' ' + q + 'hunter22x' + q, 'A' + e + '<redacted: password> STRIPE_KE' + 'Y' + e + 'sk_test_ZZ',
+       'DB_PASS' + 'WORD' + e + 'admin@ZZ24', 'PASS' + 'WORD' + e + 'Summer-ZZ24!', 'PASS' + 'WORD' + e + 'Hunter',
+       'spring.datasource.pass' + 'word' + e + 'P@ssZZrd!', 'db.pass' + 'word: S3cr#ZZ99', 'PASS' + 'WORD' + e + 'test1234',
+       'CACHE_KE' + 'Y_PREFIX' + e + 'app:v2', 'apiKe' + 'yHeader: ' + a + 'X-Api-Key' + a]
 ok = ['DB_PASSWORD' + e + '<redacted: password>', chr(96) + 'DB_PASSWORD' + e + '<redacted: password>' + chr(96),
       'DB_PASSWORD' + e + '<redacted: password> npm start', 'postgres://u:<redacted: password>@host', 'TOKEN' + e + '<REDACTED>',
       'postgres://localhost/dev', 'type A ' + e + ' { token: string }', '<li key' + e + '{item.id} />', 'if (token ' + e + e + ' null) {}',
       'const passwordInput ' + e + ' el', 'primaryK' + 'ey: ' + a + 'id' + a, 'MAX_TOK' + 'ENS' + e + '4096',
       'const apiKey ' + e + ' process.env.API_KEY;', 'SECRET_KEY ' + e + ' os.environ[' + q + 'SECRET_KEY' + q + ']',
-      'TOKEN_MODE' + e + 'strict', 'CACHE_KEY_ENABLED' + e + 'true']
-t = tempfile.mkdtemp(); g = lambda *x: subprocess.run(['git', '-C', t] + list(x), check=True, capture_output=True)
+      'TOKEN_MODE' + e + 'strict', 'CACHE_KEY_ENABLED' + e + 'true', 'curl -H ' + q + 'Authorization: Bearer ' + d + 'TOKEN' + q,
+      'postgres://u:' + d + '{DB_PASS}@db/x', 'token_limit: 10000000', 'PASSWORD' + e + 'none', 'token: Optional[str]',
+      'apiKey: this.config.apiKey']
+tmp = []
+def repo():
+    t = tempfile.mkdtemp(); tmp.append(t)
+    g = lambda *x: subprocess.run(['git', '-C', t] + list(x), check=True, capture_output=True)
+    g('init', '-q'); g('config', 'user.email', 'p@x'); g('config', 'user.name', 'p')
+    return t, g
+def put(t, p, s):
+    os.makedirs(os.path.dirname(os.path.join(t, p)), exist_ok=True); open(os.path.join(t, p), 'w').write(s)
 scan = lambda mode, cwd, *x: subprocess.run(['sh', '-s', '--', mode] + list(x), input=block, capture_output=True, text=True, cwd=cwd)
-g('init', '-q'); g('config', 'user.email', 'p@x'); g('config', 'user.name', 'p')
+t, g = repo()
 r = scan('commit', t)
 assert r.returncode == 2, 'a git failure did not fail the scan: %s' % r.stderr
+assert scan('bogus', t).returncode == 2 and scan('mask', t).returncode == 2, 'an unknown mode or a mask with no range passed'
 g('commit', '-q', '--allow-empty', '-m', 'root'); os.makedirs(os.path.join(t, 'sub'))
-open(os.path.join(t, 'f.txt'), 'w').write(chr(10).join(hit + ok) + chr(10))
-open(os.path.join(t, '.env'), 'w').write('ZZENVVALUE' + chr(10))
-open(os.path.join(t, '.env.example'), 'w').write('API_KE' + 'Y' + e + 'ZZLIVEKEY12345' + chr(10))
-g('add', '-A', '-f'); g('config', 'diff.external', 'cat'); g('config', 'diff.noprefix', 'true')
-r = scan('staged', os.path.join(t, 'sub'))
-got = {int(l.split(':')[1]) for l in r.stdout.splitlines() if l.startswith('f.txt:')}
-assert r.returncode == 1 and got == set(range(1, len(hit) + 1)), 'scan found lines %s: %s' % (sorted(got), r.stderr)
-assert '.env: a file rule 9 names, not read' in r.stdout and '.env.example:1:' in r.stdout, r.stdout
-values = ['abcdef123', 'opaque123', 'ZZFAKE', 'ZZPW', 'hunter22x', 'c2lnbmF0', 'ZZENV', 'ZZLIVE']
-assert not any(v in r.stdout + r.stderr for v in values), 'a value reached the output'
-g('config', '--unset', 'diff.external'); g('commit', '-qm', 'x')
+put(t, 'f.txt', chr(10).join(hit + ok) + chr(10))
+put(t, '.env', 'ZZENVVALUE' + chr(10))
+put(t, '.env.example', 'API_KE' + 'Y' + e + 'ZZLIVEKEY12345' + chr(10))
+for p in ('similarity-svc/secrets.json', 'renamer/.env', 'id_ecdsa'):
+    put(t, p, 'ZZENVVALUE' + chr(10))
+put(t, 'keys/deploy', 'x' + chr(10)); put(t, 'dump.sql', chr(0) * 1100000)
+put(t, 'keys/deploy.pub', 'ssh-ed25519 AAAA' + chr(10)); put(t, 'small.sql', 'insert;' + chr(10)); put(t, 'src/secrets.ts', 'export const load = 1;' + chr(10))
+g('add', '-A', '-f'); g('config', 'diff.external', 'cat'); g('config', 'diff.noprefix', 'true'); g('config', 'log.showSignature', 'true')
+named = ['.env', 'similarity-svc/secrets.json', 'renamer/.env', 'keys/deploy', 'id_ecdsa', 'dump.sql']
+values = ['abcdef123', 'opaque123', 'ZZFAKE', 'ZZPW', 'hunter22x', 'c2lnbmF0', 'ZZENV', 'ZZLIVE', 'ZZ24', 'Hunter', 'ZZrd', 'ZZ99']
+for mode in ('staged', 'tree', 'commit'):
+    if mode == 'commit': g('config', '--unset', 'diff.external'); g('commit', '-qm', 'x')
+    r = scan(mode, os.path.join(t, 'sub'))
+    got = {int(l.split(':')[1]) for l in r.stdout.splitlines() if l.startswith('f.txt:')}
+    assert r.returncode == 1 and got == set(range(1, len(hit) + 1)), '%s found lines %s: %s' % (mode, sorted(got), r.stderr)
+    assert all(p + ': ' in r.stdout for p in named) and '.env.example:1:' in r.stdout, mode + ': ' + r.stdout
+    assert not any(p + ': ' in r.stdout for p in ('small.sql', 'keys/deploy.pub', 'src/secrets.ts')), mode + ': ' + r.stdout
+    assert not any(v in r.stdout + r.stderr for v in values), mode + ': a value reached the output'
 m = scan('mask', t, 'HEAD~1..HEAD')
 assert m.stdout.count('<redacted: a line holding') == len(hit) + 1 and not any(v in m.stdout for v in values), 'mask left a value'
-print('OK secret scan, %d shapes found, %d clean lines passed' % (len(hit), len(ok)))"
+g('rm', '-q', '--cached', '.env')
+assert '.env: ' not in scan('staged', t).stdout, 'a staged deletion of a rule 9 file was reported'
+t, g = repo()
+put(t, 'settings.py', 'SECRET_KEY ' + e + ' ' + q + 'ZZHEADER1234' + q + chr(10) + ''.join('    line%d ' % i + e + ' 1' + chr(10) for i in range(12)))
+put(t, 'fixture.js', '-----BEGIN RSA PRIV' + 'ATE KEY-----' + chr(10) + ('ZZKEYBODY' + 'A' * 55 + chr(10)) * 4 + '-----END RSA PRIVATE KEY-----' + chr(10) + 'const after ' + e + ' 1;' + chr(10))
+put(t, 'tail.js', '-----BEGIN RSA PRIV' + 'ATE KEY-----' + chr(10) + ('ZZKEYBODY' + 'B' * 55 + chr(10)) * 4 + '-----END RSA PRIVATE KEY-----' + chr(10) + 'const after ' + e + ' 1;' + chr(10))
+put(t, 'gone.txt', 'a' + chr(10) + hit[0] + chr(10))
+g('add', '-A'); g('commit', '-qm', 'a')
+put(t, 'settings.py', open(os.path.join(t, 'settings.py')).read().replace('line9 ' + e + ' 1', 'line9 ' + e + ' 2'))
+put(t, 'fixture.js', 'const before ' + e + ' 0;' + chr(10) + open(os.path.join(t, 'fixture.js')).read())
+put(t, 'tail.js', open(os.path.join(t, 'tail.js')).read() + 'const later ' + e + ' 2;' + chr(10))
+os.remove(os.path.join(t, 'gone.txt')); g('commit', '-qam', 'b')
+m = scan('mask', t, 'HEAD~1...HEAD')
+assert m.returncode == 1 and 'ZZHEADER' not in m.stdout and 'ZZKEYBODY' not in m.stdout and 'const before' in m.stdout and 'const after' in m.stdout, 'mask left a value in a header or a key body'
+assert 'gone.txt:2: ' in m.stderr and 'fixture.js:2: ' in m.stderr, 'masked.txt misnamed a line: ' + m.stderr
+put(t, 'settings.py', 'x' + chr(10)); put(t, 'new.js', 'const tok' + 'en ' + e + ' ' + q + 'ZZUNTRACKED99' + q + ';' + chr(10) + 'const fine ' + e + ' 3;' + chr(10))
+m = scan('mask', t, '--worktree')
+assert '+x' in m.stdout and 'const fine' in m.stdout and 'ZZUNTRACKED' not in m.stdout and 'new.js:1: ' in m.stderr, 'the working-tree mask missed a change'
+assert subprocess.run(['git', '-C', t, 'diff', '--cached', '--name-only'], capture_output=True, text=True).stdout == '', 'the working-tree mask touched the index'
+for t in tmp: shutil.rmtree(t)
+print('OK secret scan, %d shapes found, %d clean lines passed, four modes' % (len(hit), len(ok)))"
 
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow

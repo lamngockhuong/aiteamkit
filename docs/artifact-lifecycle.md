@@ -34,7 +34,7 @@ flowchart TB
 |-------|---------------|--------|-----------------|-----------------|
 | Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead. A test run record takes its `status`, its `Ticket` cells, and a recorded redaction, and nothing else | Only as a decision somebody owns, never as a blanket rule |
-| Derived | everything under `docs/derived/` | Optional | Run the skill again | Yes, freely |
+| Derived | everything under `docs/derived/` | Optional, apart from the progress log, which is never staged | Run the skill again | Yes, freely, apart from an unfinished progress log, which costs the ruled-out work |
 
 ## The three files that are not in any group
 
@@ -71,35 +71,36 @@ client asks what shipped in version 1.4.2; an auditor asks for the postmortem an
 actions; the person who handed over left six months ago and their handover file was the only thing
 that survived them.
 
-**Derived.** Nothing. The implementation record and the shipping record are copies of what lives on
-the pull request, a feedback record is a copy of what was filed on the kit repository, a catchup
-brief is rebuilt by running `atk:catchup` again, a review report by running `atk:review` again, or
-`atk:plan --review` where what was reviewed was a plan, or `atk:qa --review` where it was a cases
-file, a setup-defect report by running
-`atk:onboard` again against the repository as it stands then, and the triage report and the run log of
-`atk:run-cases` are what the run record they stand behind already cites and summarises. That holds
-only where a record followed them: after a dry run, on a harness with no browser automation, or after
-a run that wrote no record, the triage report is the only copy of the agreed scope and the run log the
-only list of what the run may have left on the environment, so keep both until a person has acted on
-them. Screenshots in its `evidence/` directory wait there for the person who started the run to confirm
-them, are the only copy until then, and are never committed while they wait. Any of those review runs, made
-without a `--comment`, posts nothing to the pull request, so until it is rebuilt its report is the
-only written copy: a reason to keep the directory, not a reason to fear deleting it. The progress
-log that `atk:fix`, `atk:verify` and `atk:implement` write as they go is the ninth kind: deleting one
-costs the ruled-out work, which the next run does again from zero. Eight skills read one of the
-nine. Those three each read their own newest unfinished log before starting, and offer to resume it,
-asking first when its branch or start commit no longer matches. `atk:run-cases` reads the run log of an earlier run of the same cases file, to
-offer the cases that run deferred and to name data it created with no record after it; where that
-run wrote a record, the record lists the same, so the person names them with `--only` instead. The other four
-read the review report: a second `atk:review` over the same target
-reads the newest one for that target, to carry its finding identifiers forward, together with the
-newest summary an earlier `--comment` run posted on the same pull request, and numbers from 1 and
-says so when there is neither; `atk:plan --review` reads the newest one for the same plan, for the same
-identifiers and to tell a result the author has already declined from one a week of commits has just
-created; `atk:qa --review` reads the newest one for the same cases file, for the same identifiers;
-and `atk:convention` reads its `Convention gaps` section, which is how a rule the review
-wanted reaches the file that records it. Deleting that report costs the next review a set of
-identifiers, unless a `--comment` run posted them on the pull request, and the gaps it would have carried across, not a step in the chain.
+**Derived.** Nothing, apart from the progress log below. The implementation record and the shipping
+record are copies of what lives on the pull request, a feedback record is a copy of what was filed
+on the kit repository, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
+running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, or
+`atk:qa --review` where it was a cases file, a setup-defect report by running `atk:onboard` again
+against the repository as it stands then, and the triage report and the run log of `atk:run-cases`
+are what the run record they stand behind already cites and summarises. That holds only where a
+record followed them: after a dry run, on a harness with no browser automation, or after a run that
+wrote no record, the triage report is the only copy of the agreed scope and the run log the only
+list of what the run may have left on the environment, so keep both until a person has acted on
+them. Screenshots in its `evidence/` directory wait there for the person who started the run to
+confirm them, are the only copy until then, and are never committed while they wait. Any of those
+review runs, made without a `--comment`, posts nothing to the pull request, so until it is rebuilt
+its report is the only written copy: a reason to keep the directory, not a reason to fear deleting
+it. The progress log that `atk:fix`, `atk:verify` and `atk:implement` write as they go is the ninth
+kind: deleting one costs the ruled-out work, which the next run does again from zero. Eight skills
+read one of the nine. Those three each read their own newest unfinished log before starting, and
+offer to resume it, asking first when its branch or start commit no longer matches. `atk:run-cases`
+reads the run log of an earlier run of the same cases file, to offer the cases that run deferred and
+to name data it created with no record after it; where that run wrote a record, the record lists the
+same, so the person names them with `--only` instead. The other four read the review report: a
+second `atk:review` over the same target reads the newest one for that target, to carry its finding
+identifiers forward, together with the newest summary an earlier `--comment` run posted on the same
+pull request, and numbers from 1 and says so when there is neither; `atk:plan --review` reads the
+newest one for the same plan, for the same identifiers and to tell a result the author has already
+declined from one a week of commits has just created; `atk:qa --review` reads the newest one for the
+same cases file, for the same identifiers; and `atk:convention` reads its `Convention gaps` section,
+which is how a rule the review wanted reaches the file that records it. Deleting that report costs
+the next review a set of identifiers, unless a `--comment` run posted them on the pull request, and
+the gaps it would have carried across, not a step in the chain.
 
 ## Git history is not a fallback
 
@@ -115,7 +116,8 @@ decision that vanished without leaving a note saying what it had decided.
 
 `docs/derived/` is the only part of the tree the kit says a project may keep out of git. One line in
 `.gitignore` and the copies stop accumulating. Nothing in the skill chain breaks, because every
-original is still on the pull request or a single command away.
+original is still on the pull request or a single command away. A project that commits it still
+leaves the progress logs out, since each is one person's working state, not a copy.
 
 Do not extend the same line to `docs/records/`, for two reasons that have nothing to do with disk
 space:

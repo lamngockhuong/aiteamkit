@@ -178,6 +178,10 @@ Twelve are contracts between a named handful of skills rather than kit-wide rule
   tree, `atk:init`, `atk:catchup`, `atk:spec`, `atk:convention`, `atk:security`, `atk:fix` and
   `atk:onboard`: the agent returns conclusions with `path:line`, never file bodies, so the session
   keeps its context for the artifact, and a harness without agents reads inline and says so.
+  `atk:help` cites it for what it may name when a request falls outside the kit, the companion
+  kit's skills included.
+  `plugins/atk/shared/design-sources.md` cites it for naming the Figma connection by what it does,
+  and `plugins/atk/shared/independent-challenge.md` for the read-only agents a challenge spawns.
 - `plugins/atk/shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one

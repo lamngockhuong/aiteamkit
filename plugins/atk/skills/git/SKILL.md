@@ -123,11 +123,11 @@ exit, not an error.
 
 ### 2. Stage and scan
 
-Stage only paths that belong to the work in hand, and never a progress log or a run directory under
-`docs/derived/<skill>/`, which is one person's working state per Progress log in
-`shared/artifact-paths.md`, whatever the project does with that directory. A repository with unrelated edits already in the
-tree keeps them: `git add -A` is never the answer, because the person who left them there did not
-ask for them to ship.
+Stage only paths that belong to the work in hand, and never a progress log,
+`docs/derived/<fix|verify|implement>/<run-id>/progress.md`, which is one person's working state per
+Progress log in `shared/artifact-paths.md`, whatever the project does with `docs/derived/`. A
+repository with unrelated edits already in the tree keeps them: `git add -A` is never the answer,
+because the person who left them there did not ask for them to ship.
 
 Scan what is staged before going further, with the `staged` scan in `references/secret-scan.md`. A
 hit stops the run. Name the file, the line number and the shape the scan reported, never the line,

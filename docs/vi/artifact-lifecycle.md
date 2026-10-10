@@ -34,7 +34,7 @@ flowchart TB
 |------|--------------|--------|------------|------------|
 | Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` và `docs/conventions.md`, các tài liệu onboarding, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có, trừ hình dạng `workspace`, nơi gốc dự án không thuộc repository nào nên không gì theo dõi chúng | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì, hoặc, khi `Contract: first`, đã được thống nhất sẽ làm gì |
 | Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa. Record của một lần chạy test chỉ được đổi `status`, các ô `Ticket`, và phần che dữ liệu có ghi lại, không gì khác | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
-| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội | Chạy lại skill | Được, thoải mái |
+| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội, trừ progress log, thứ không bao giờ được stage | Chạy lại skill | Được, thoải mái, trừ progress log chưa xong: xóa nó là mất phần việc đã loại trừ |
 
 ## Ba file không thuộc nhóm nào
 
@@ -71,36 +71,37 @@ rất cụ thể: người mới đề xuất đúng cách làm mà một thiế
 tên được; khách hàng hỏi bản 1.4.2 có những gì; bên kiểm toán hỏi biên bản sự cố và các hành động
 khắc phục; người bàn giao đã đi sáu tháng trước và file bàn giao là thứ duy nhất còn lại.
 
-**Dẫn xuất.** Không mất gì. Bản ghi triển khai và bản ghi chuyển giao đều là bản sao của thứ nằm
-trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi lên repo của kit, bản tóm tắt của
-`atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại `atk:review`, hoặc
-`atk:plan --review` nếu thứ được soát là một bản kế hoạch, hoặc `atk:qa --review` nếu đó là một file
-test case; còn báo cáo lỗi thiết lập thì chạy lại
-`atk:onboard` trên kho mã ở trạng thái lúc đó; triage report và run log của `atk:run-cases` thì đã được
-run record đứng trước chúng trích dẫn và tóm tắt. Điều đó chỉ đúng khi đã có record theo sau: sau
-một lần chạy thử, trên harness không có khả năng tự động hoá trình duyệt, hoặc sau một lần chạy không
-viết record, triage report là bản duy nhất ghi phạm vi đã thống nhất và run log là danh sách duy nhất
-những gì lần chạy có thể đã để lại trên môi trường, nên giữ cả hai cho tới khi có người xử lý. Ảnh
-chụp trong thư mục `evidence/` của lần chạy ấy chờ người khởi động lần chạy xác nhận, là bản duy nhất
-cho tới lúc đó, và không bao giờ được commit khi còn chờ. Các lượt review ấy, khi chạy mà không kèm
-`--comment`, đều không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là
-bản viết duy nhất: đó là lý do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà
-`atk:fix`, `atk:verify` và `atk:implement` ghi dần trong lúc chạy là loại thứ chín: xóa nó thì mất
-phần việc đã loại trừ, và lần chạy sau làm lại từ đầu. Có tám skill đọc một trong chín loại. Ba skill
-ấy, trước khi bắt đầu, mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp,
-nhưng hỏi người dùng trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần chạy trước trên cùng file test case, để đề nghị
-chạy tiếp những case lần đó đã hoãn và để nêu dữ liệu đã tạo mà không có record theo sau; nếu lần đó
-có viết record thì record ghi đúng những thứ ấy, nên người chạy tự nêu các case qua `--only`. Bốn skill
-còn lại đều đọc báo cáo review: lượt `atk:review` thứ hai trên cùng một đối tượng
-đọc báo cáo mới nhất của đối tượng đó để giữ lại mã định danh của các phát hiện, cùng với bản tóm tắt
-mới nhất mà một lượt chạy `--comment` trước đã đăng trên cùng pull request, và khi không có cả hai
-thì đánh số lại từ 1 và nói rõ điều đó; `atk:plan --review` đọc báo cáo mới nhất của cùng bản kế
-hoạch, cũng để giữ mã định danh, và để phân biệt một kết quả tác giả đã thấy mà không sửa với một
-kết quả vừa mới sinh ra sau một tuần commit; `atk:qa --review` đọc báo cáo mới nhất của cùng file test
-case, cũng để giữ mã định danh; còn `atk:convention` đọc mục `Convention gaps` của báo
-cáo, đó là đường đi để một luật mà lượt review muốn có tới được tài liệu ghi luật. Xóa báo cáo ấy làm lượt
-review sau mất một bộ mã định danh, trừ khi một lượt chạy `--comment` đã đăng chúng lên pull request, và mất những khoảng trống quy ước đáng lẽ được mang sang, chứ
-không đứt mắt xích nào.
+**Dẫn xuất.** Không mất gì, trừ progress log nói ở dưới. Bản ghi triển khai và bản ghi chuyển giao
+đều là bản sao của thứ nằm trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi lên repo
+của kit, bản tóm tắt của `atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại
+`atk:review`, hoặc `atk:plan --review` nếu thứ được soát là một bản kế hoạch, hoặc `atk:qa --review`
+nếu đó là một file test case; còn báo cáo lỗi thiết lập thì chạy lại `atk:onboard` trên kho mã ở
+trạng thái lúc đó; triage report và run log của `atk:run-cases` thì đã được run record đứng trước
+chúng trích dẫn và tóm tắt. Điều đó chỉ đúng khi đã có record theo sau: sau một lần chạy thử, trên
+harness không có khả năng tự động hoá trình duyệt, hoặc sau một lần chạy không viết record, triage
+report là bản duy nhất ghi phạm vi đã thống nhất và run log là danh sách duy nhất những gì lần chạy
+có thể đã để lại trên môi trường, nên giữ cả hai cho tới khi có người xử lý. Ảnh chụp trong thư mục
+`evidence/` của lần chạy ấy chờ người khởi động lần chạy xác nhận, là bản duy nhất cho tới lúc đó,
+và không bao giờ được commit khi còn chờ. Các lượt review ấy, khi chạy mà không kèm `--comment`, đều
+không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là bản viết duy nhất: đó là lý
+do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà `atk:fix`, `atk:verify` và
+`atk:implement` ghi dần trong lúc chạy là loại thứ chín: xóa nó thì mất phần việc đã loại trừ, và
+lần chạy sau làm lại từ đầu. Có tám skill đọc một trong chín loại. Ba skill ấy, trước khi bắt đầu,
+mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
+trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
+chạy trước trên cùng file test case, để đề nghị chạy tiếp những case lần đó đã hoãn và để nêu dữ
+liệu đã tạo mà không có record theo sau; nếu lần đó có viết record thì record ghi đúng những thứ ấy,
+nên người chạy tự nêu các case qua `--only`. Bốn skill còn lại đều đọc báo cáo review: lượt
+`atk:review` thứ hai trên cùng một đối tượng đọc báo cáo mới nhất của đối tượng đó để giữ lại mã
+định danh của các phát hiện, cùng với bản tóm tắt mới nhất mà một lượt chạy `--comment` trước đã
+đăng trên cùng pull request, và khi không có cả hai thì đánh số lại từ 1 và nói rõ điều đó;
+`atk:plan --review` đọc báo cáo mới nhất của cùng bản kế hoạch, cũng để giữ mã định danh, và để phân
+biệt một kết quả tác giả đã thấy mà không sửa với một kết quả vừa mới sinh ra sau một tuần commit;
+`atk:qa --review` đọc báo cáo mới nhất của cùng file test case, cũng để giữ mã định danh; còn
+`atk:convention` đọc mục `Convention gaps` của báo cáo, đó là đường đi để một luật mà lượt review
+muốn có tới được tài liệu ghi luật. Xóa báo cáo ấy làm lượt review sau mất một bộ mã định danh, trừ
+khi một lượt chạy `--comment` đã đăng chúng lên pull request, và mất những khoảng trống quy ước đáng
+lẽ được mang sang, chứ không đứt mắt xích nào.
 
 ## Lịch sử git không phải đường lùi
 
@@ -115,7 +116,8 @@ quyết định đã biến mất mà không để lại dòng nào nói nó t�
 
 `docs/derived/` là phần duy nhất của cây thư mục mà kit nói dự án có thể không đưa vào git. Một dòng
 trong `.gitignore` là các bản sao thôi dồn lại. Không mắt xích nào trong chuỗi skill đứt, vì mọi bản
-gốc vẫn nằm trên pull request hoặc chỉ cách một câu lệnh.
+gốc vẫn nằm trên pull request hoặc chỉ cách một câu lệnh. Dự án có commit thư mục này thì vẫn để
+progress log ở ngoài, vì mỗi log là trạng thái làm việc của một người, không phải bản sao.
 
 Đừng nối dòng đó sang `docs/records/`, vì hai lý do không liên quan gì tới dung lượng đĩa:
 

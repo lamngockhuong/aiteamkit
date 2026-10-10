@@ -166,8 +166,9 @@ harness the hook does not reach and on Claude Code whenever the hook is turned o
 
 ## What an override cannot change
 
-Two groups. Both exist because a kit that lets a project switch them off is a kit that quietly stops
-being about a team.
+Nine things, in three groups: the roles and the consent line (1 to 4), the stops and boundaries of
+a run (5 to 8), and the handling of secrets (9). All three exist because a kit that lets a project
+switch them off is a kit that quietly stops being about a team.
 
 | # | Cannot be removed | Held by |
 |---|-------------------|---------|

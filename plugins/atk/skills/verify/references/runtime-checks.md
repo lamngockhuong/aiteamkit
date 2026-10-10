@@ -273,11 +273,15 @@ On a resume:
 
 - A run resumed after its third round goes straight to the escalation of step 4.
 - The processes and resources the log records were started by this run, and only those whose command
-  and port the inventory still shows as the log recorded them. A PID or a port now held by another
-  program is not this run's: it is reported and left alone, under the rule to stop only what this run
-  started. One that still matches is reused only when `HEAD` is the commit the log started from and
-  `git status` shows nothing changed since, since otherwise it serves older code; it is stopped and
-  started again, and either way stopped at cleanup. One no longer running is noted as gone.
+  and port the inventory still shows as the log recorded them. The log holds the command masked
+  under rule 9 of `shared/team-roles.md`, so the command the inventory shows is masked the same way
+  before the two are compared: a raw `--password=` argument never equals its masked form, and the
+  run's own process would otherwise be called somebody else's and left running. A PID or a port now
+  held by another program is not this run's: it is reported and left alone, under the rule to stop
+  only what this run started. One that still matches is reused only when `HEAD` is the commit the
+  log started from and `git status` shows nothing changed since apart from the progress log and this
+  run's report, since otherwise it serves older code; it is stopped and started again, and either
+  way stopped at cleanup. One no longer running is noted as gone.
 - The data store check of step 1 runs again. What the earlier session saw may no longer be true.
 
 A fresh start chosen by the person counts from zero and treats nothing in the old log as its own:
