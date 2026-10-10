@@ -95,7 +95,10 @@ repository as a whole. Sample the code and recent git history to find the real p
 layout, naming, error handling, logging, test file placement, import order, commit message shape,
 branch names, PR size and review turnaround. Record the dominant pattern and how dominant it is,
 for example "23 of 26 handlers", counted over the files of the technology the rule belongs to, and
-per layer where the profile names several, since one language often does two jobs.
+per layer where the profile names several, since one language often does two jobs. The code sampling
+goes to an agent, which returns each pattern with its count and `path:line` examples, per
+Reading wide, through an agent in `shared/host-capabilities.md`; the git history and pull requests
+stay with the session, since that agent has no shell.
 
 ### 3. Classify each rule
 

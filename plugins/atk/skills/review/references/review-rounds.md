@@ -360,7 +360,12 @@ makes the step worth more than it was, not less:
   `rules`. Resolving them once is also what stops several agents quoting several readings of one rule.
 - Any compile or type check over the changed tree feeds `callers`. It is a function of the tree,
   identical for everyone, and its pre-existing failures need separating from introduced ones once.
-- The changed-file list and the diff, written somewhere every agent can read, feed all of them.
+- The changed-file list and the diff, written somewhere every agent can read, feed all of them. On
+  Claude Code, where the agents have no shell, that place is the masked `diff.patch` the reviewer
+  rule in `shared/host-capabilities.md` describes, and the list of lines its masking took out goes to
+  `rules` as a hoisted result. A pull request or a branch is masked as `<base>...HEAD`. A change not
+  yet committed, which is what `atk:implement` hands over and what a review of paths in the working
+  tree reads, is masked with `--worktree`, since a range would carry none of it.
 
 ## What each agent in a round is given
 
@@ -391,6 +396,15 @@ the difference in scope is the point:
   found" states no claim and is not checked.
 - The instruction to read around the changed lines rather than whole unchanged files, which is what
   keeps a large diff inside one context.
+- Rule 9 of `shared/team-roles.md` in the agent's own words: never open or search `.env`, any
+  `.env.*` other than `.env.example` and `.env.sample`, private key files or credential stores, and
+  write any secret value it cites as `<redacted: kind>`. The prompt carries it because an agent on a
+  harness without the kit's agent sees nothing else.
+
+On Claude Code every agent this file spawns, rounds, copies and the sweep, is
+`atk:read-only-reviewer`, per the reviewer rule in `shared/host-capabilities.md`; only the band 1
+reviewer is not. A round that would settle a question from history returns the candidate with the
+`git log` or `git blame` it could not run named.
 
 An agent returns its own findings, each with file, line, severity, the failure it causes, and a
 concrete suggestion. It does not rank against anyone else, because it cannot see them.

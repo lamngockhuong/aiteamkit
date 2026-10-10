@@ -166,8 +166,9 @@ harness the hook does not reach and on Claude Code whenever the hook is turned o
 
 ## What an override cannot change
 
-Two groups. Both exist because a kit that lets a project switch them off is a kit that quietly stops
-being about a team.
+Nine things, in three groups: the roles and the consent line (1 to 4), the stops and boundaries of
+a run (5 to 8), and the handling of secrets (9). All three exist because a kit that lets a project
+switch them off is a kit that quietly stops being about a team.
 
 | # | Cannot be removed | Held by |
 |---|-------------------|---------|
@@ -179,6 +180,7 @@ being about a team.
 | 6 | The stop after three verification rounds | `skills/verify/SKILL.md` |
 | 7 | The read-only boundary of drift checking | `skills/spec/SKILL.md` |
 | 8 | The limits of an agent-executed run: never against production or the local stack, never automating a case that changes data the run did not create or that submits wrong credentials, never recording a result it did not observe, and the stop after three rounds | `skills/run-cases/references/environment-safety.md` |
+| 9 | The rule that a skill neither opens nor searches `.env` or a credential file without the person's permission, and masks a secret value in everything a run writes or relays | `shared/team-roles.md` rule 9 |
 
 An override that conflicts with one of these is skipped in the part that conflicts. The rest of the
 file still applies, because a single bad paragraph rarely means the whole file is wrong.
@@ -189,7 +191,7 @@ language per rule 6 of `shared/team-roles.md`, and the instruction it quotes sta
 file used.
 
 > Skipped one instruction from `.atk/overrides/<skill>.md`: `<what it asked for>`. It would have
-> `<which of the eight it breaks>`. Raise it with `<the approver named in that file>`.
+> `<which of the nine it breaks>`. Raise it with `<the approver named in that file>`.
 
 Never silently. The person who wrote the instruction is the only one who can fix it, and they will
 not learn it had no effect from a run that looks normal.

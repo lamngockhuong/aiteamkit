@@ -23,6 +23,7 @@ aiteamkit/
     skills/<name>/evals/*.json    trigger cases for the description
     shared/*.md                   DRY layer shared by the skills that cite it
     hooks/                        profile reminder and override loader, Claude Code and Codex
+    agents/read-only-reviewer.md  the read-only agent of review, challenges and wide reads, Claude Code
     assets/*.svg                  icon and logo for marketplace listings
     CHANGELOG.md                  written by release-please for this plugin
     LICENSE                       a copy of the root licence, since the install carries nothing else
@@ -106,11 +107,26 @@ This produces the size discipline in the kit:
 | `plugins/atk/shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
 | `.atk/profile.md` | Once per run, in the skills that need project facts | A page of pointers and commands, never prose |
 
+One agent ships beside the skills, `plugins/atk/agents/read-only-reviewer.md`. Claude Code loads its
+frontmatter with the plugin and namespaces it `atk:read-only-reviewer`; its body is read only when a
+skill spawns it: every agent of `atk:review` other than the band 1 reviewer, every lens of
+`atk:design-doc --challenge` and `atk:plan --challenge`, and the agent each of the seven read-heavy
+skills hands its wide reading to; where the type is missing, a general agent with the same prompt.
+Its tool list is Read, Grep and Glob. On Claude Code 2.1.296 an agent with that list had no Bash,
+Edit or Write tool to call, and a review and a plan challenge run there spawned it for every round
+and lens. A tool-list pattern allowing only `git diff`, `git log` and `git blame` let every other
+command through in a session running `bypassPermissions`, and a path deny for `.env` in its
+frontmatter removed Read and Grep whole, so it has no shell and no deny: the calling agent writes
+the diff it needs, masked by the scan of `atk:git`, into the repository's git directory. Cursor and Codex
+were not tested: Cursor auto-discovers `agents/` and the file sets `readonly: true` for it, Codex
+plugins bundle no agents, and both statements come from their documentation as read on 2026-10-10.
+On both, the prompts in `references/` remain the route.
+
 ## The `shared/` layer
 
 Seventeen files hold what skills would otherwise repeat. The first three are cited by all 24:
 
-- `plugins/atk/shared/team-roles.md`: the role table and the eight rules every skill follows.
+- `plugins/atk/shared/team-roles.md`: the role table and the nine rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
   root moves it, which repository an artifact lands in where the project spans several, naming
   rules, and front matter.
@@ -158,6 +174,14 @@ Twelve are contracts between a named handful of skills rather than kit-wide rule
   not. Cited by `atk:run-cases` for browser automation, which is neither: it is named by what it does
   and never by the plugin or server supplying it, and it is the one capability whose absence stops a
   skill, since for that skill the browser is the work and doing it by hand is `atk:qa --record`.
+  Its section on reading wide through an agent is cited by the seven skills that read most of a
+  tree, `atk:init`, `atk:catchup`, `atk:spec`, `atk:convention`, `atk:security`, `atk:fix` and
+  `atk:onboard`: the agent returns conclusions with `path:line`, never file bodies, so the session
+  keeps its context for the artifact, and a harness without agents reads inline and says so.
+  `atk:help` cites it for what it may name when a request falls outside the kit, the companion
+  kit's skills included.
+  `plugins/atk/shared/design-sources.md` cites it for naming the Figma connection by what it does,
+  and `plugins/atk/shared/independent-challenge.md` for the read-only agents a challenge spawns.
 - `plugins/atk/shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one
@@ -223,7 +247,7 @@ The last two describe files that do not ship with the kit at all:
 
 - `plugins/atk/shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
   where the directory sits when a project spans several repositories, the two sections it may carry,
-  and the eight things an override may never remove. The eight
+  and the nine things an override may never remove. The nine
   exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
   skill that skips part of an override says so in its artifact rather than silently. An override
   applies only once its approver has moved it to `APPROVED`; before that the skill runs as shipped
@@ -246,7 +270,8 @@ because it is not part of the kit.
 ## The session-start hook
 
 `plugins/atk/hooks/hooks.json` registers one `SessionStart` hook that runs `plugins/atk/hooks/check-profile.mjs`, and
-`plugins/atk/hooks/codex-hooks.json` registers the same script on Codex. It answers a single question, "does
+`plugins/atk/hooks/codex-hooks.json` registers the same script on Codex, where it runs once the user has
+trusted it in `/hooks`. It answers a single question, "does
 this project have a profile yet", reading the project the way `plugins/atk/shared/project-profile.md` does,
 which is the nearest profile at or above the directory the session opened in, and it reminds without
 blocking.
@@ -295,11 +320,25 @@ in the `command` string and substitutes nothing in `args`, so Node received the 
 `plugins/atk/hooks/codex-hooks.json` carries the same two hooks with the path inside `command`, and the `hooks`
 key in `plugins/atk/.codex-plugin/plugin.json` points Codex at it, which is also what stops Codex reading the
 Claude Code file. Nothing about the scripts changes: they are the same two Node files, they read the
-same environment, and neither registration file holds a rule. Measured against codex-cli 0.155.1: a
-repository with no profile gets the reminder and the hook completes, a repository with one stays
-silent, and the marker lands in the plugin data directory Codex provides as `CLAUDE_PLUGIN_DATA`.
-Codex sets no `CLAUDE_PROJECT_DIR`, which costs nothing, because both scripts already fall back to
-the working directory and Codex runs a hook from the workspace root.
+same environment, and neither registration file holds a rule.
+
+Measured first against codex-cli 0.155.1: a repository with no profile gets the reminder and the
+hook completes, a repository with one stays silent, and the marker lands in the plugin data
+directory Codex provides as `CLAUDE_PLUGIN_DATA`.
+
+Measured again on 2026-10-10 against codex-cli 0.162.0, which adds a precondition: Codex skips a
+plugin's hooks until the user trusts them. After a fresh install `/hooks` lists both, the
+`SessionStart` and the `PreToolUse` entry, as needing review, and the TUI opens on a "Hooks need
+review" prompt. Until they are trusted nothing runs, `codex exec` included: a repository with no
+profile gets no reminder and no marker is written. Trusting them, from that prompt or from `/hooks`,
+writes one `hooks.state` entry with a `trusted_hash` per hook into the user's `config.toml`, and a
+hook that changes needs review again. From then on a repository with no profile gets the reminder in
+the session's context on its first turn, with the marker in the plugin data directory, and a
+repository with one stays silent, as in the earlier measurement on 0.155.1. The `hooks` key in the
+manifest is the form Codex's documentation now calls legacy; 0.162.0 still reads it, since the hooks
+it lists are keyed `atk@atk:hooks/codex-hooks.json`, so the manifest keeps it. Codex sets no
+`CLAUDE_PROJECT_DIR`, which costs nothing, because both scripts already fall back to the working
+directory and Codex runs a hook from the workspace root.
 
 Two limits, accepted:
 

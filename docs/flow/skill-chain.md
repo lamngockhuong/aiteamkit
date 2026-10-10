@@ -88,9 +88,9 @@ lands, per `plugins/atk/shared/spec-docs.md`.
 | `breakdown` | A design or an epic | Owned tasks, lanes, dependency graph | `plan`, `implement` |
 | `convention` | The code and its history, and the convention gaps in the review reports already written | Conventions classified by how they are enforced | `implement`, `review` |
 | `plan` | A ticket, design, or description; under `--review`, `--challenge` or `--answer`, a plan already written | Phases and steps, findings about a plan, the objections of a challenge, or recorded answers | `implement`; under `--review`, the plan's author |
-| `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body | `verify`, `review`, `qa` |
-| `fix` | A defect report | A proven cause and the smallest change | `verify`, `review` |
-| `verify` | The running system | What was proven, and what was not | The reviewer of the change, on the pull request |
+| `implement` | A plan, ticket, or description | Code plus the record that becomes the PR body, and a progress log while it runs | `verify`, `review`, `qa` |
+| `fix` | A defect report | A proven cause and the smallest change, and a progress log while it runs | `verify`, `review` |
+| `verify` | The running system | What was proven, and what was not, and a progress log while it runs | The reviewer of the change, on the pull request |
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit, and the convention gaps behind them | `implement`, `fix`, `convention` |
 | `qa` | Acceptance criteria, the change, the reference documents for expected values, the screen specs for `GUI` text or the Figma design where a screen has none, and the design for migration, rollback and rollout | Test plan, cases, regression matrix; afterwards run records with their defects, the bugs raised from them, and retest records | `fix` from a raised bug; `release` from a run record |
 | `run-cases` | An approved cases file, its test plan's environments, the code for routes and expected strings, and a deployed DEV or staging environment | A run record of observed results with defects and evidence beside it, plus a triage report and a run log | `qa --bug` and `--retest` from the record; `release` from it once the QA lead approves |

@@ -120,10 +120,10 @@ needs a test" is checkable by a person with no kit installed, so it is a `CONV-N
 `atk:convention` writes and `atk:review` enforces. "`atk:review` should also check our i18n helper"
 is about the skill and belongs here. When both readings fit, the rule about the code wins.
 
-**The habit that matters.** It refuses. Eight things an override may never remove are listed in
+**The habit that matters.** It refuses. Nine things an override may never remove are listed in
 `plugins/atk/shared/project-overrides.md`, and the approver line, the rule that a skill does not decide what a
 role owns, and the consent line before anything leaves the local repository are three of them. A
-refused instruction is not dropped in silence: the skill says which of the eight it breaks and
+refused instruction is not dropped in silence: the skill says which of the nine it breaks and
 offers the nearest thing that does not, which is usually an instruction that surfaces the decision
 earlier rather than one that takes it.
 
@@ -336,7 +336,9 @@ one it was made in.
 
 **Produces.** The code, plus an implementation record that becomes the pull request body: what
 changed and why, which plan steps it covers, the command run for each layer with its output, what
-the clean-up step changed, and what was deliberately left undone.
+the clean-up step changed, and what was deliberately left undone. While it runs, a progress log under
+`docs/derived/implement/` records each review round, and each step when there is no plan, so a run
+that ends early can be resumed.
 
 **Use when.** A ticket, a plan, or a described requirement is ready to be built, and the question
 left is how to build it rather than what to build.
@@ -367,7 +369,9 @@ finding.
 
 **Produces.** The failure captured verbatim, the cause proven rather than guessed, a check that the
 current behavior is not a decision somebody made on purpose, the smallest change that removes the
-cause, verification by layer, and a report saying what was checked and what was not.
+cause, verification by layer, and a report saying what was checked and what was not. While it runs,
+a progress log under `docs/derived/fix/` records each hypothesis proved or ruled out, so a resumed
+run neither repeats them nor resets its count of three.
 
 **Use when.** A bug report, a failing test, a broken endpoint or screen, or an investigation that has
 to end in an explanation rather than a guess.
@@ -390,7 +394,9 @@ a tidy-up of the surrounding file cannot be reverted cleanly.
 
 **Produces.** The application started the way this project starts it, exercised with real requests,
 side effects asserted in the data rather than in a status code, screens compared against the design
-when `--ui` is passed, and a report naming what was proven and what was not.
+when `--ui` is passed, and a report naming what was proven and what was not. While it runs, a
+progress log under `docs/derived/verify/` records each round, so a resumed run counts the rounds
+already spent against its ceiling of three.
 
 **Use when.** The suite is green and nobody has yet seen the feature work, before handing a ticket to
 QA, or before a release goes out.

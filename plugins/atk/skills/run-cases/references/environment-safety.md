@@ -118,7 +118,9 @@ first preferred, since what is typed into a session stays in its transcript:
    a repository is opened only when `git check-ignore -q <path>` succeeds; a file the repository
    would commit is not read, and the session says why. A file outside every repository, where
    `git check-ignore` answers that it is not in one, is read. A credential in a committable file is
-   already a leak, and reading it would carry it into the run.
+   already a leak, and reading it would carry it into the run. This is the one standing read of a
+   credential file that rule 9 of `shared/team-roles.md` allows, and the rest of that rule still
+   holds: what is read is used, never quoted.
 2. **Asked in the session**, for the accounts that the `Pre-condition` cells of the cases recon covers
    need, and no others. Under `--only`, that is the accounts of the cases `--only` names.
 

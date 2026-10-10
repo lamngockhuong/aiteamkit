@@ -23,6 +23,7 @@ aiteamkit/
     skills/<name>/evals/*.json    bộ case kiểm trigger của description
     shared/*.md                   lớp DRY dùng chung cho các skill có trích dẫn
     hooks/                        lời nhắc profile và bộ nạp file ghi đè, Claude Code và Codex
+    agents/read-only-reviewer.md  agent chỉ đọc của review, phản biện và đọc rộng, Claude Code
     assets/*.svg                  icon và logo cho trang marketplace
     CHANGELOG.md                  do release-please viết cho plugin này
     LICENSE                       bản sao giấy phép ở gốc repo, vì bản cài không mang theo gì khác
@@ -105,11 +106,26 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 | `plugins/atk/shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
 | `.atk/profile.md` | Một lần mỗi lượt chạy, ở skill nào cần sự thật của dự án | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
 
+Bên cạnh các skill có một agent đi kèm, `plugins/atk/agents/read-only-reviewer.md`. Claude Code nạp
+frontmatter của nó cùng plugin và đặt tên `atk:read-only-reviewer`; phần thân chỉ được đọc khi một
+skill tạo agent đó: mọi agent của `atk:review` trừ reviewer band 1, mọi lăng kính của
+`atk:design-doc --challenge` và `atk:plan --challenge`, và agent mà mỗi skill trong bảy skill đọc
+nhiều giao phần đọc rộng; khi thiếu kiểu agent này thì dùng agent thường với cùng prompt. Danh sách
+công cụ của nó là Read, Grep và Glob. Trên Claude Code 2.1.296, agent có danh sách đó không có
+công cụ Bash, Edit hay Write nào để gọi, và một lượt review cùng một lượt phản biện kế hoạch chạy ở
+đó đều tạo đúng kiểu agent này cho mọi vòng và mọi lăng kính. Một mẫu trong danh sách công cụ chỉ
+cho phép `git diff`, `git log` và `git blame` lại để lọt mọi lệnh khác, trong phiên chạy
+`bypassPermissions`, còn một luật chặn đường dẫn `.env` trong frontmatter thì gỡ hẳn Read và Grep,
+nên agent không có shell và không có luật chặn: agent gọi nó ghi diff cần đọc, đã che bằng phần quét
+của `atk:git`, vào thư mục git của repository. Cursor và Codex chưa được thử: Cursor tự tìm thư mục `agents/` và file đặt
+`readonly: true` cho nó, plugin của Codex không mang agent, và cả hai điều này lấy từ tài liệu của
+họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` vẫn là đường đi.
+
 ## Lớp `shared/`
 
 Mười bảy file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
-- `plugins/atk/shared/team-roles.md`: bảng vai trò và tám nguyên tắc mà mọi skill tuân theo.
+- `plugins/atk/shared/team-roles.md`: bảng vai trò và chín nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
   ngôn ngữ dời đường dẫn ấy, artifact rơi vào repository nào khi dự án trải trên nhiều repository,
   quy tắc đặt tên, front matter.
@@ -156,6 +172,15 @@ Mười hai file tiếp theo là hợp đồng giữa một nhóm skill có tên
   trên: nó được gọi theo việc nó làm, không bao giờ theo tên plugin hay server cung cấp nó, và là khả
   năng duy nhất mà thiếu nó thì một skill phải dừng, vì với skill đó trình duyệt chính là công việc,
   còn làm tay thì đã là `atk:qa --record`.
+  Mục về giao phần đọc rộng cho một agent được bảy skill đọc nhiều nhất trong cây mã trích dẫn:
+  `atk:init`, `atk:catchup`, `atk:spec`, `atk:convention`, `atk:security`, `atk:fix` và
+  `atk:onboard`. Agent trả về kết luận kèm `path:line` chứ không trả nội dung file, nên phiên làm
+  việc giữ ngữ cảnh của mình cho artifact; harness không có agent thì đọc trực tiếp và ghi rõ đã
+  làm vậy.
+  `atk:help` trích dẫn file này cho những gì nó được nêu tên khi một yêu cầu nằm ngoài kit, kể cả
+  các skill của kit đi kèm. `plugins/atk/shared/design-sources.md` trích dẫn nó để gọi kết nối Figma
+  theo việc kết nối đó làm, và `plugins/atk/shared/independent-challenge.md` trích dẫn nó cho các
+  agent chỉ đọc mà một lượt phản biện tạo ra.
 - `plugins/atk/shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
   phần không bao giờ đụng tới. Cùng ba skill sửa mã đó trích dẫn, thông qua `host-capabilities.md`.
   Nó tồn tại để bước dọn mã cho ra cùng một kết quả trên harness có sẵn khả năng dọn và trên harness
@@ -221,7 +246,7 @@ Hai file cuối mô tả những file không đi kèm kit:
 
 - `plugins/atk/shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
   chỗ thư mục này nằm khi dự án trải trên nhiều repository, hai mục mà file đó được phép mang, và
-  tám thứ phần ghi đè không bao giờ được gỡ. Tám điều loại trừ
+  chín thứ phần ghi đè không bao giờ được gỡ. Chín điều loại trừ
   là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
   qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng. File ghi đè chỉ có hiệu
   lực khi người duyệt đã chuyển nó sang `APPROVED`; trước đó skill chạy như bản gốc và ghi rõ điều
@@ -243,7 +268,8 @@ có trong phần đầu của mỗi file shared. `.atk/profile.md` là ngoại l
 ## Hook lúc mở phiên
 
 `plugins/atk/hooks/hooks.json` đăng ký một hook `SessionStart` chạy `plugins/atk/hooks/check-profile.mjs`, còn
-`plugins/atk/hooks/codex-hooks.json` đăng ký đúng script đó trên Codex. Script trả lời đúng một câu hỏi,
+`plugins/atk/hooks/codex-hooks.json` đăng ký đúng script đó trên Codex, nơi nó chạy sau khi người dùng đã
+tin cậy nó trong `/hooks`. Script trả lời đúng một câu hỏi,
 "dự án này đã có profile chưa", hiểu chữ dự án theo đúng cách `plugins/atk/shared/project-profile.md` hiểu, tức
 là profile gần nhất ở chính thư mục phiên mở lên hoặc ở trên nó, và nó nhắc chứ không chặn.
 
@@ -289,9 +315,21 @@ việc, rồi thoát với `MODULE_NOT_FOUND`.
 `plugins/atk/hooks/codex-hooks.json` giữ đúng hai hook đó với đường dẫn nằm trong `command`, và khóa `hooks`
 trong `plugins/atk/.codex-plugin/plugin.json` trỏ Codex tới file này, cũng chính là thứ khiến Codex thôi đọc file
 của Claude Code. Phần script không đổi: vẫn hai file Node đó, vẫn đọc cùng một bộ biến môi trường, và
-không file đăng ký nào mang luật. Đo trên codex-cli 0.155.1: repo chưa có profile thì nhận được lời
-nhắc và hook chạy xong, repo đã có thì im lặng, và dấu "đã nhắc" ghi vào thư mục dữ liệu plugin mà
-Codex cấp qua `CLAUDE_PLUGIN_DATA`. Codex không đặt `CLAUDE_PROJECT_DIR`, và điều đó không mất gì, vì
+không file đăng ký nào mang luật. Lần đo đầu tiên trên codex-cli 0.155.1: repo chưa có profile thì
+nhận được lời nhắc và hook chạy xong, repo đã có thì im lặng, và dấu "đã nhắc" ghi vào thư mục dữ
+liệu plugin mà Codex cấp qua `CLAUDE_PLUGIN_DATA`.
+
+Đo lại ngày 2026-10-10 trên codex-cli 0.162.0, bản này thêm một điều kiện: Codex bỏ qua hook của
+plugin cho tới khi người dùng tin cậy chúng. Ngay sau khi cài, `/hooks` liệt kê cả hai, mục
+`SessionStart` và mục `PreToolUse`, là cần duyệt, và TUI mở ra bằng lời nhắc "Hooks need review".
+Chưa được tin cậy thì không hook nào chạy, kể cả với `codex exec`: repo chưa có profile không nhận
+được lời nhắc và không có dấu nào được ghi. Tin cậy chúng, từ lời nhắc đó hoặc từ `/hooks`, sẽ ghi
+vào `config.toml` của người dùng một mục `hooks.state` kèm `trusted_hash` cho mỗi hook, và hook nào
+thay đổi thì phải duyệt lại. Từ đó trở đi, repo chưa có profile nhận lời nhắc trong ngữ cảnh của
+phiên ngay lượt đầu, dấu "đã nhắc" nằm trong thư mục dữ liệu plugin, còn repo đã có profile thì im
+lặng, như lần đo trước trên 0.155.1. Khóa `hooks` trong manifest là dạng mà tài liệu của Codex nay gọi là legacy;
+0.162.0 vẫn đọc nó, vì các hook được liệt kê mang khóa `atk@atk:hooks/codex-hooks.json`, nên manifest
+giữ nguyên. Codex không đặt `CLAUDE_PROJECT_DIR`, và điều đó không mất gì, vì
 cả hai script vốn lùi về thư mục làm việc còn Codex chạy hook từ gốc workspace.
 
 Hai giới hạn, được chấp nhận:

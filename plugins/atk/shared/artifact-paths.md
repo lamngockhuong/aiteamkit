@@ -143,9 +143,9 @@ to `docs/adr/` as well.
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
 | `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology and a `<layer>/<tech>.md` where its rules differ by layer, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below); under `--review` no plan file at all, and a report at `docs/derived/reviews/plan-<slug>-<date>.md` |
-| `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<date>-<ticket>-<slug>.md` |
-| `fix` | `docs/records/fixes/<date>-<ticket>-<slug>.md` |
-| `verify` | `docs/records/verification/<date>-<ticket>-<slug>.md`, with any screenshots in `docs/records/verification/<date>-<ticket>-<slug>/` beside it |
+| `implement` | The code; the implementation record becomes the pull request body, and an optional copy goes to `docs/derived/implementation/<date>-<ticket>-<slug>.md`; while it runs, a progress log at `docs/derived/implement/<run-id>/progress.md` (see Progress log, below) |
+| `fix` | `docs/records/fixes/<date>-<ticket>-<slug>.md`; while it runs, a progress log at `docs/derived/fix/<run-id>/progress.md` (see Progress log, below) |
+| `verify` | `docs/records/verification/<date>-<ticket>-<slug>.md`, with any screenshots in `docs/records/verification/<date>-<ticket>-<slug>/` beside it; while it runs, a progress log at `docs/derived/verify/<run-id>/progress.md` (see Progress log, below) |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run; under `--comment` the findings also go to the pull request |
 | `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--record` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes once committed only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
 | `run-cases` | A run record at the path `qa` uses for one, `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids.md`, under the same rules, with its evidence in `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids/` beside it; the triage report and the run log at `docs/derived/run-cases/<run-id>/` |
@@ -236,7 +236,7 @@ merged and which directory it goes in.
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else or rebuilt by running the skill again |
+| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify` and `implement` | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, or the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -291,14 +291,17 @@ on them. Screenshots under its `evidence/` directory are the only copy until the
 the run confirms them, and they are never committed while they wait.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
-directory rather than a break in the chain. Five skills read one of the eight. `atk:run-cases` reads
+directory rather than a break in the chain. Eight skills read one of the nine. `atk:fix`, `atk:verify`
+and `atk:implement` each read their own unfinished progress log, per Progress log, below.
+`atk:run-cases` reads
 the run log of an earlier run of the same cases file, to offer the cases it deferred and to name data
-created with no record after it; where that run wrote a record, the record lists the same. The other four read the review report: a second `atk:review` over the same target reads the newest one for that target, and on a pull
+created with no record after it; where that run wrote a record, the record lists the same. Four more read the review report: a second `atk:review` over the same target reads the newest one for that target, and on a pull
 request the newest `atk:review` summary posted there beside it, to carry its finding identifiers
 forward, and starts numbering at 1 and says so only when there is neither;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
-Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the eight, and losing a
+Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the nine. Losing a
+progress log costs the ruled-out work, done again, and losing a
 report costs a set of identifiers, unless a `--comment` run posted them, and a list of gaps the next review raises again, rather than a step
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
@@ -309,6 +312,47 @@ documents rather than one. A design argues for a change and cites the code as it
 the day the change merges, that citation stops being true and the document becomes an account of a
 decision. The reference document begins where the design ends, and from then on it is the code that
 has to keep up with it, or it with the code.
+
+### Progress log
+
+`atk:fix`, `atk:verify` and `atk:implement` write a progress log as the run goes, so a session that
+is compacted or ends resumes from disk instead of repeating what it had already ruled out. The run
+log of `atk:run-cases`, in `skills/run-cases/references/execution.md`, is the instance this
+generalises, and it keeps its own shape.
+
+- **Path.** `docs/derived/<skill>/<run-id>/progress.md`, where `<run-id>` is `<YYMMDD-HHMM>-<slug>`,
+  the time the run started and the slug of its subject, with the next free suffix when that
+  directory already exists, so two runs never share one.
+- **First line.** The subject, the branch, and the commit the run started from:
+  `subject: <ticket key, plan path, or the slug of a description> | branch: <name> | start: <short sha>`.
+  A later run finds its log by that subject, written the same way.
+- **One entry per unit of work.** A hypothesis proved or ruled out, a round of fix and retry, a
+  review round, a step of work done without a plan, each with its time and its result in a line or
+  two. Written under rule 9 of `shared/team-roles.md`: a secret value is masked as in any artifact.
+  A real person's data and an internal host are masked too, as `<redacted: kind>`, by the list in
+  The data a record must not carry in `skills/qa/references/test-run.md`, since a log summarises a
+  running system. A response body or a command's output is summarised by its status and the lines
+  that matter, never pasted whole.
+- **Last line.** The path of the artifact the run wrote, or `no artifact:` and why.
+
+A log whose last line is neither is a run that stopped before it finished, or one another session
+is still writing. A later run of the same skill on the same subject reads the newest such log, by its
+`<run-id>`, before its first step and offers to resume it, naming the time of its last entry so the
+person can tell a run that stopped from one still going. It never resumes without that yes.
+The counts that bound a run, hypotheses in `atk:fix`, rounds in `atk:verify`, review rounds in
+`atk:implement`, carry over only on a resume, so a resumed run cannot reset its own ceiling.
+
+The run does not resume alone when the log looks stale: its branch is not the current branch, or its
+start commit is no longer an ancestor of `HEAD` (`git merge-base --is-ancestor <start> HEAD` fails).
+It says which, and asks the person whether to resume it or start fresh. A fresh start writes a new
+log and counts from zero, and the old log's last line becomes `no artifact: superseded by <run-id>`,
+so it is not offered again.
+
+The log lives in one working copy and is never staged, whatever the project does with
+`docs/derived/`: it is one person's working state, not a record. A run in another worktree or clone
+finds nothing and starts fresh, and the skill says that rather than promising more.
+
+It is derived: deleting one costs the ruled-out work, which the next run does again from zero.
 
 ## Naming
 

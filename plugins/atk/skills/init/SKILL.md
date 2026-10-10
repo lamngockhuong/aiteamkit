@@ -65,7 +65,9 @@ resolve to nothing.
 Then read the repository before asking anything. `references/detection.md` gives the command per
 ecosystem; the short version is package manifests and lock files for the package manager and the
 scripts, workspace files for the layer layout, the CI workflow for what the project actually runs,
-the git remote for the tracker, and the existing docs tree for the docs root.
+the git remote for the tracker, and the existing docs tree for the docs root. A repository too large
+to read whole in the session is scanned by an agent, per Reading wide, through an agent in
+`shared/host-capabilities.md`; without one, read inline and say so in the hand-off of step 5.
 
 The CI workflow outranks the script block. A `test` script that nobody runs in CI is a worse answer
 than the command CI runs on every pull request.

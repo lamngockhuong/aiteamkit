@@ -78,8 +78,8 @@ Find out which kind the project has before the first commit, by reading its hook
 `.husky/`, `.pre-commit-config.yaml`, `.git/hooks/`, or whatever the project's own tooling installs.
 A hook that writes is ordinary and is not a reason to skip it or to pass `--no-verify`.
 
-Where one writes, re-run the secret scan of step 2 over what was committed, every time. It is one
-pass of the patterns in `references/secret-scan.md` over `git show`, so its cost does not grow with
+Where one writes, re-run the secret scan of step 2 over what was committed, every time. It is the
+`commit` scan in `references/secret-scan.md`, one pass over what `git show` reports, so its cost does not grow with
 the diff, and it is the one check whose answer cannot be deferred: step 2 is built on stopping before
 the commit exists, and a credential the hook wrote into the commit is already in the history. A hit
 here is reported to the user at once, with what it takes to get it out of the history, because the

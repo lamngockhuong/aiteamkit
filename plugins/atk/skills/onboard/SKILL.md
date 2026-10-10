@@ -101,7 +101,8 @@ is listed for every role. See `references/roles.md`.
 
 The areas of the codebase, what each does, its owner, and one entry-point file per area. Add the
 parts that surprise newcomers: the non-obvious build step, the service that must run first, the
-naming that means something other than it appears to.
+naming that means something other than it appears to. Mapping the areas is a read of the whole
+tree, handed to an agent, per Reading wide, through an agent in `shared/host-capabilities.md`.
 
 ### 5. First week plan
 

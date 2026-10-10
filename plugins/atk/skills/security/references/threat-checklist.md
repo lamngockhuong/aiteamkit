@@ -28,7 +28,7 @@ left it, and the next person cannot tell why.
 | Check | How | A finding when |
 |-------|-----|----------------|
 | Dependency audit | The command found above | It reports a known vulnerability in a package the scope ships, not only in a development tool |
-| Secrets in tracked files | The patterns of `skills/git/references/secret-scan.md`, over `git ls-files` rather than `git diff --cached` | A line matches and is not a placeholder, an example file, or a read from the environment |
+| Secrets in tracked files | The `tree` scan of `skills/git/references/secret-scan.md`, over every tracked file rather than the staged diff. It prints path, line and shape and never the line, and the line is not opened in the session: the record cites the path, the line and the shape, and the person who owns the file opens it and says whether the value is live | A line matches, unless that person says it is a placeholder or a read from the environment. An example file counts like any other: a placeholder in it is not a finding, a live value is |
 | Tracked environment file | `git ls-files` for the paths that file lists as findings on their own | Any of them is tracked, whatever it holds today |
 | Secrets in history | Only with a history scanner the project already has | Never claimed as clean when no such scanner ran; the record says history was not scanned |
 | Shipped configuration | Read the configuration the scope deploys | Debug mode on, a wildcard origin with credentials, a default password, a verbose error page in a production profile |

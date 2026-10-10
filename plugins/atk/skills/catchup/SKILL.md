@@ -104,7 +104,9 @@ kinds section 4 of the brief has a row for. Cite file paths so the reader can op
 a unit sits in is that path rather than a unit of its own. What the work has still to build traces
 to where it will sit, the module it will join or the endpoint that will host it; a unit with no code
 yet is still a unit. In pull request mode this is the diff plus every caller of what the diff
-changed.
+changed. A trace that crosses more files than the brief will quote goes to an agent, per
+Reading wide, through an agent in `shared/host-capabilities.md`; without one, read inline and say so under
+section 4 of the brief.
 
 All of it lands in one place, section 4 of the brief, one row per unit. Spreading a traced path
 across whichever prose section it seemed to fit leaves the reader assembling the map that step 4 was

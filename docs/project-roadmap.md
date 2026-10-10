@@ -120,7 +120,8 @@ top alone would graduate both plugins at once.
 - Is a further skill for daily and weekly reporting worth it, or does `atk:retro --report` already
   cover the need at a lower cadence?
 - The session-start hook now runs on Claude Code and on Codex, which reach the same script through
-  two registration files. The override loader is registered on Codex too, and has never been observed
+  two registration files; on Codex, from codex-cli 0.162.0, only after the user trusts it in
+  `/hooks`. The override loader is registered on Codex too, and has never been observed
   matching a skill invocation there. Cursor can package hooks too; is a third registration worth
   maintaining, given that the reminder is a convenience and the override loader only saves a file
   read the skill would otherwise do itself?

@@ -86,9 +86,9 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |
 | `convention` | Code và lịch sử của nó, cùng những khoảng trống quy ước trong các báo cáo review đã viết | Quy ước, phân loại theo cách được ép tuân thủ | `implement`, `review` |
 | `plan` | Ticket, thiết kế, hoặc mô tả; với `--review`, `--challenge` hoặc `--answer` thì là một bản kế hoạch đã viết | Pha và bước, danh sách phát hiện về một bản kế hoạch, các phản biện của một lượt phản biện, hoặc câu trả lời đã ghi lại | `implement`; với `--review` là người viết bản kế hoạch đó |
-| `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR | `verify`, `review`, `qa` |
-| `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất | `verify`, `review` |
-| `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa | Người review thay đổi, trên pull request |
+| `implement` | Kế hoạch, ticket, hoặc mô tả | Code kèm bản ghi dùng làm nội dung PR, và một progress log trong lúc chạy | `verify`, `review`, `qa` |
+| `fix` | Báo cáo lỗi | Nguyên nhân đã chứng minh và thay đổi nhỏ nhất, và một progress log trong lúc chạy | `verify`, `review` |
+| `verify` | Hệ thống đang chạy | Điều gì đã chứng minh, điều gì chưa, và một progress log trong lúc chạy | Người review thay đổi, trên pull request |
 | `review` | Pull request hoặc nhánh | Phát hiện xếp theo chặn, nên sửa, vụn vặt, cùng những khoảng trống quy ước đứng sau chúng | `implement`, `fix`, `convention` |
 | `qa` | Tiêu chí nghiệm thu, thay đổi, tài liệu tham chiếu cho giá trị mong đợi, spec màn hình cho text của case `GUI` hoặc design Figma khi màn hình chưa có spec, và thiết kế cho migration, rollback và rollout | Kế hoạch test, test case, ma trận hồi quy; sau đó là record của lần chạy kèm các lỗi, bug được tạo từ đó, và record của lần retest | `fix` từ một bug đã tạo; `release` từ record của lần chạy |
 | `run-cases` | File test case đã duyệt, các môi trường trong test plan của nó, code để biết route và chuỗi mong đợi, và một môi trường DEV hoặc staging đã deploy | Một run record chứa kết quả đã quan sát, kèm các lỗi và evidence đặt cạnh, cộng một triage report và một run log | `qa --bug` và `--retest` từ record đó; `release` từ record khi QA Leader đã duyệt |

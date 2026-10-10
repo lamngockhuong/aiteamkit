@@ -8,8 +8,9 @@ Cited by `implement`, `fix`, and `verify` for the tidy step, by `review`, `desig
 for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answer` for what counts as
 one turn of an interview,
 by `independent-challenge.md` for the agents a challenge spawns, by `design-sources.md` for naming
-a connection to a design tool, and by `run-cases` for browser
-automation. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
+a connection to a design tool, by `run-cases` for browser automation, by `help` for what it may
+name, and by `init`, `catchup`, `spec`, `convention`, `security`, `fix`, and `onboard` for reading
+wide through an agent. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
 way the step runs.
 
 ## What may be named
@@ -174,8 +175,54 @@ What stays here is the policy the procedure may not overrule:
   the check that would settle it, and running the change is `atk:verify`'s work, where a person has
   stated what may be started. The machine's stores may serve other sessions, and an agent cannot see
   whose they are.
+
+  On Claude Code the kit backs this with an agent of its own, `atk:read-only-reviewer`, in the
+  plugin's `agents/` directory. Its only tools are Read, Grep and Glob, so it has no tool that edits,
+  runs or starts anything. Every agent a review spawns, rounds, copies and the sweep, under
+  `--parallel` too, every lens agent of a challenge, and every agent that reads wide per the section
+  below is spawned as that type. The band 1 reviewer is the one exception: it writes the report and
+  runs the whole skill. Where the type is not in the harness's live agent list, the run spawns a
+  general agent with the same prompt and says in its artifact that the limit rested on the prompt.
+  On Cursor and Codex, where the type was not tested, that prompt is the route.
+
+  Having no shell, it cannot run `git log` or `git blame`. A diff it needs is written for it by the
+  calling agent, through the `mask` scan in `skills/git/references/secret-scan.md`, which masks it
+  without the diff passing through the session, to `diff.patch` in the directory that
+  `git rev-parse --path-format=absolute --git-path atk/<skill>/<run-id>` names, created first,
+  `<run-id>` as Progress log in `shared/artifact-paths.md` defines it. The range is `<base>...HEAD`
+  for a branch or a pull request, with the base the run resolved, and `--worktree` for a change not
+  yet committed. That file says what each exit code means; a failed scan, or an empty `diff.patch`
+  for a change that is not empty, stops the run before any agent is spawned. That directory is
+  inside the repository's git directory, so no commit can carry it, whatever the project does with
+  `docs/derived/`. The calling agent passes the path, deletes that directory and no other when the
+  run that wrote it ends, and never reads or removes another run's; one an interrupted run leaves is
+  safe to delete. A hook of the user's may refuse Read under `.git/`, so the prompt says what the
+  agent's own body says: read the file with Grep for `^` when Read refuses it, and say so rather
+  than return nothing. Its exclusion of `.env` and credential files rests on its instructions alone.
 - Synthesis, severity, and the report stay with the calling agent. A reviewer sees one pass and
   cannot judge whether a finding is consensus or noise.
 - A finding only one reviewer raised is checked against the code before it reaches the report.
 - None of it is an approval. Several reviewers agreeing is several passes by the same model, not a
   colleague reading the change. `shared/team-roles.md` rule 2 is unaffected by how many passes ran.
+
+## Reading wide, through an agent
+
+A step that has to read more of the tree than the session needs to quote hands that reading to an
+agent: the host's subagent capability, the `Agent` tool in Claude Code, spawning
+`atk:read-only-reviewer` there per the reviewer bullet above. A repository scan, a code
+path traced across modules, every documented field compared with the code: the file bodies stay in
+the agent's context, and the session keeps its own for the decisions and the artifact. A step that
+reads a handful of files reads them itself, since an agent costs a round trip and its own reading.
+
+- **What it returns.** Conclusions, each with its `path:line`, never file bodies. The session reopens
+  only the lines it quotes as evidence, so a quoted line is one the session read, not one an agent
+  paraphrased.
+- **What it does.** It reads and changes nothing, under the same limits as a reviewer in the section
+  above, held on Claude Code by that agent's tool list.
+- **What it never reads.** It follows rule 9 of `shared/team-roles.md`: the files that rule names are
+  excluded from every search pattern it runs, and a secret value in what it returns is already
+  masked. The prompt carries that rule's list of files and its `<redacted: kind>` form, since the
+  agent never sees the skill that spawned it.
+- **Without agents.** The step reads inline, and the run says it did: where the artifact lists what
+  it read, or, for a skill whose artifact has no such place, in the closing message of the run. That
+  is the rule of When the capability is missing, above, applied to this one.

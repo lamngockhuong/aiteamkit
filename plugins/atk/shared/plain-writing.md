@@ -60,7 +60,8 @@ One idea to a paragraph, and short sentences over long ones where both say the s
 
 - **Evidence stays verbatim.** An error, a failing assertion, a command's output, a quoted line is
   copied as it was, never rewritten into plain words. The prose around it explains it; it does not
-  replace it.
+  replace it. A secret value inside it is masked per rule 9 of `shared/team-roles.md`, which is
+  not a rewrite of the evidence and not softening.
 - **What other skills match on stays as the template spells it**: severity names, identifiers,
   status values, and the headings a template marks as fixed.
 - **A citation is still owed** wherever the template asks for one. Plain writing moves it beside the

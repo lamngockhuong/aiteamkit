@@ -36,8 +36,11 @@ anyway is the go decision, which the PM owns; this record states the finding, no
 
 ## Redaction
 
-Print a secret as `<REDACTED>`, keeping only a public prefix that says what kind of credential it is
-when that helps the reader triage, such as `AKIA` or `ghp_`. Never its length, never its last
+Print a secret as `<redacted: kind>`, per rule 9 of `shared/team-roles.md`, with the kind of
+credential in the label when that helps the reader triage, such as `<redacted: aws access key>` or
+`<redacted: github token>`. Never a prefix of the value: `ghp_<redacted: token>` leaves `ghp_` where
+the commit scan reads a value, so a correctly redacted record could not be committed. Never its
+length, never its last
 characters, never the password segment of a connection string. An environment variable is named,
 never its value. The same rule applies to the session, the record, and any ticket, because a secret
 echoed into any of them is a secret in a second place.

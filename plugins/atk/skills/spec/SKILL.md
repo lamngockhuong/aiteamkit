@@ -215,8 +215,10 @@ Two rules keep an update honest:
 `--check` compares the documents against the code, and a `screen` document against its design as
 well, and changes no file, following
 `references/drift-check.md`. That file holds the coverage checklist that keeps items from being
-quietly skipped, the shape of a finding, and the read-only boundary. What counts as drift in the
-first place is in `shared/spec-docs.md`, because `atk:review` has to answer it the same way.
+quietly skipped, the shape of a finding, and the read-only boundary. Comparing every item with the
+code is the wide read of this skill: hand it to an agent, per Reading wide, through an agent in
+`shared/host-capabilities.md`, and without one, read inline and say so in the drift report. What
+counts as drift in the first place is in `shared/spec-docs.md`, because `atk:review` has to answer it the same way.
 
 Report in the session. Post to the ticket only when asked, and write a file only with `--out`: a
 drift report is a record of one moment, and the reference document it is about is the thing meant to
