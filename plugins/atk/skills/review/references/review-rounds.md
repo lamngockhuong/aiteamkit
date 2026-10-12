@@ -365,7 +365,7 @@ makes the step worth more than it was, not less:
   this file spawns, since rule 9 covers a file written for another agent wherever it runs. The list
   of lines its masking took out goes to `rules` as a hoisted result. The argument is the one
   Masking a diff in `shared/secret-scan.md` gives for what is under review: `/atk:review <commit>`
-  is its one-commit form, and a change not yet committed, which is what `atk:implement` hands over
+  is its one-commit form, and a change not yet committed, which is what `atk:implement` and `atk:fix` hand over
   and what a review of paths in the working tree reads, is `--worktree`, since a range would carry
   none of it.
 
@@ -512,8 +512,8 @@ this is what that person reads before they start.
 
 ## Called again after a fix
 
-A caller that fixed findings and calls the review again, `atk:implement` in its review and fix loop
-above all, gets a review of the fix. Not the one round that raised the finding, because a fix to a
+A caller that fixed findings and calls the review again, `atk:implement` and `atk:fix` in their review and fix
+loop above all, gets a review of the fix. Not the one round that raised the finding, because a fix to a
 document can break the test that asserts what it says, and a fix to a guard can move a contract. Not
 the whole change from the start either, because what did not change since the first review has
 already had its rounds.

@@ -4,13 +4,14 @@ description: >
   Fix a defect the way a team reviewer will accept: capture the failure verbatim, prove the cause
   before changing a line, check that the current behaviour is not a decision somebody made on
   purpose, make the smallest change that removes the cause, verify it by layer, stop after three
-  ruled-out hypotheses with a named person rather than guessing, and write the report that shows
-  what was checked and what was not.
+  ruled-out hypotheses with a named person rather than guessing, call the team review on its own
+  change and fix what it blocks on, and write the report that shows what was checked and what was
+  not.
   Use for a bug report, a failing test, a broken endpoint or screen, or an investigation that has to
   end in an explanation rather than a guess.
   Triggers on: "fix bug", "debug", "bug", "sửa bug", "điều tra lỗi", "tìm nguyên nhân", "lỗi này",
   "バグ修正", "不具合調査", "原因調査", "/atk:fix".
-argument-hint: "[issue-url|report-path|description] [--layer <name>] [--investigate-only] [--out <path>]"
+argument-hint: "[issue-url|report-path|description] [--layer <name>] [--investigate-only] [--no-review] [--out <path>]"
 ---
 
 # Fix a Defect (`atk:fix`)
@@ -29,7 +30,8 @@ on, because what is left at that point is usually somebody's knowledge rather th
 
 Handles: capturing the failure, tracing it to the line that produces it, proving the cause, checking
 the fix against recorded intent, making the minimal change, verifying by layer, tidying the lines the
-fix touched, and writing the report a reviewer can check against the evidence.
+fix touched, calling `atk:review` on its own change and fixing what it blocks on, and writing the
+report a reviewer can check against the evidence.
 
 Does NOT handle: a production incident in progress, which is `atk:incident` and owns the timeline,
 the severity, and the client communication while users are down; reviewing somebody else's change
@@ -39,8 +41,10 @@ should change, which belongs to whoever owns that decision.
 ## Roles
 
 Dev investigates and fixes. Tech Lead reviews, and is the one who answers when the intent check
-stops the work. QA confirms the symptom is gone against the reproduction in the report, not against
-the developer's word. See `shared/team-roles.md`.
+stops the work and when the review loop hits its ceiling. The reviewer is never the author, so this
+skill calling `atk:review` on its own change does not replace the Tech Lead reading it. QA confirms
+the symptom is gone against the reproduction in the report, not against the developer's word. See
+`shared/team-roles.md`.
 
 ## Invocation
 
@@ -50,13 +54,15 @@ the developer's word. See `shared/team-roles.md`.
 /atk:fix "<description>"       # Start from a description in the prompt
 /atk:fix --layer api           # Skip surface mapping when the layer is already known
 /atk:fix --investigate-only    # Stop after the cause is proven, change no file
+/atk:fix --no-review           # Skip the review call, and record that it was skipped
 /atk:fix --out <path>          # Override the default output path
 ```
 
 `.atk/profile.md` is required. This skill runs the project's own test, build, and lint commands and
 reads its layer layout, so the Commands and Layers sections are its inputs rather than a
-convenience. With no profile, stop and use the sentence in `shared/project-profile.md`. Never guess
-a test command: a guessed command that passes is worse evidence than no command at all.
+convenience, and the Team section names who the review loop escalates to. With no profile, stop and
+use the sentence in `shared/project-profile.md`. Never guess a test command: a guessed command that
+passes is worse evidence than no command at all.
 
 The same holds for an argument appended to a command that is correct. A package script whose own
 definition ends in `--` swallows the filter that follows it: the whole suite runs, exits zero, and
@@ -68,13 +74,14 @@ gives it and say in the report which one was run.
 
 ```
 [1. Capture and prove] -> [2. Intent check] -> [3. Minimal fix] -> [4. Verify by layer]
-  -> [5. Tidy the fix] -> [6. Report and finalize]
+  -> [5. Tidy the fix] -> [6. Review and fix] -> [7. Report and finalize]
 ```
 
 Before step 1, read `.atk/overrides/fix.md` when it exists, per rule 7 of `shared/team-roles.md`.
 Then read the newest unfinished progress log of this skill for the same defect and offer to resume
 it, asking first when it looks stale, per Progress log in `shared/artifact-paths.md`. Through the run,
-add an entry to the log each time a hypothesis is proved or ruled out.
+add an entry to the log each time a hypothesis is proved or ruled out, and for each review round in
+step 6.
 
 ### 1. Capture and prove
 
@@ -160,9 +167,43 @@ again. A clean-up that breaks either is reverted rather than debugged, and the r
 Nothing runs here under `--investigate-only` or when the intent check stopped the work, since no
 file changed.
 
-### 6. Report and finalize
+### 6. Review and fix
 
-Write the report from `references/report-template.md`, then hand off to `atk:git` for the branch, the
+Every verification so far asked whether the change works. None of it read the diff for what it newly
+claims or newly admits: a sentence written into a reference document that one branch of the code
+does not honour, or a gate widened with no test that it stays closed for the rest. That is what a
+review finds, and the pull request is the most expensive place for it to be found.
+
+So the review has to see the document with the code. When the fix changes a public contract, move
+its reference document now, rather than at step 7, per Calling the review in
+`shared/review-fix-loop.md`; a document it cannot move now goes into section 9 with what is stale
+and who will fix it, which is how a deliberate skip reaches the review. Moving it is not enough: read each sentence the fix wrote against every branch of the function it
+describes and against what section 9 of the report will leave for later, per The sync obligation in
+`shared/spec-docs.md`. A case the report leaves for later is a case the sentence must not deny.
+
+Write sections 1 to 4b and 9 of the report now: the reviewer is an agent given paths rather than
+this conversation, so the cause and what the fix leaves for later reach it only from a file. The
+draft is the report itself, at its path under `## Output` and after the `git check-ignore` that
+section asks for, and the path goes into the progress log so a resume finds it. Then say what the
+review will cost, per Calling the review in `shared/review-fix-loop.md`, and run the loop that file
+holds: call `atk:review` on the change, giving it the defect and the draft's path as intent; fix
+every `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work; re-run
+the narrowest check and the captured reproduction; at most twice, a resume included, then escalate
+by name. A fix made here is held to step 3 like the first one: the smallest change that removes the
+finding.
+
+A loop that comes out clean offers `atk:verify`, per the same file, to run the captured
+reproduction and the blast radius against the running system rather than the suite; the report says
+whether it ran.
+
+`--no-review` skips the call and its draft, not the document check above and not the fact: the
+report says the fix went out unreviewed and names who must review it before merge. Nothing runs here
+under `--investigate-only` or when the intent check stopped the work.
+
+### 7. Report and finalize
+
+Complete the report step 6 drafted, from `references/report-template.md`, in the same file; under
+`--no-review` or a stop before step 6, write it here. Then hand off to `atk:git` for the branch, the
 commit, and anything that leaves the local repository. `shared/finalize-steps.md` is the contract it
 carries out, and it opens with the reference documents the change owes. The report is the pull
 request body.
@@ -170,7 +211,11 @@ request body.
 A fix reaches that first step less often than an implementation does, and the case that matters is
 the one where the document was right all along and the code was wrong. Fixing the code closes the
 gap, so the document needs nothing; say that in the report rather than leaving a reader to wonder
-whether it was checked.
+whether it was checked. A document the fix did move went with the code into step 6, so this step
+finds it done.
+
+While a `BLOCKING` finding from step 6 is disputed or escalated, `atk:git` goes as far as the commit
+and stops, per `shared/review-fix-loop.md`.
 
 ### `--investigate-only`
 
@@ -196,7 +241,7 @@ Check whether the project ignores that directory before writing the file, with
 then where it does. Tracked is the wrong question: a project writing its first fix report has an
 untracked `docs/records/fixes/` that nothing ignores, and a project that excluded a path through its
 own clone rather than through `.gitignore` passes a check of that file and still loses the report.
-This report becomes the pull request body at step 6, so one written into an ignored directory is a
+This report becomes the pull request body at step 7, so one written into an ignored directory is a
 body that never reaches the pull request, and the team hears about it while it can still choose
 where the file goes.
 
@@ -221,10 +266,15 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
       and the report says what the host's capability changed, or that the harness ships none and
       the pass was run by hand per `shared/tidy-pass.md`.
 - [ ] Every caller in the blast radius was either exercised or named as unverified.
+- [ ] `atk:review` was called on the change after its cost was stated, or `--no-review` was passed
+      and the report names who must review.
+- [ ] Every `BLOCKING` finding is fixed or escalated by name, the loop ran at most twice, a resume
+      included, no `NIT` was fixed, and the report says whether `atk:verify` was offered and ran.
 - [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
       difference recorded as unverified.
 - [ ] The report says whether the fix changed a public contract, and if it did, which reference
-      document moved with it, per `shared/spec-docs.md`.
+      document moved with it, and that each sentence written there holds for every branch of the
+      code or says where it does not, per `shared/spec-docs.md`.
 - [ ] The report's path was checked with `git check-ignore` before the file was written, and
       one the project ignores was named to the team then rather than at the commit.
 - [ ] The report says what could not be verified.

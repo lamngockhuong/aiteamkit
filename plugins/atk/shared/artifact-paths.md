@@ -361,7 +361,7 @@ tell a run that stopped from one still going. Every offer has the same three ans
   same processes on the same ports.
 
 It never resumes without that answer. The counts that bound a run, hypotheses in `atk:fix`, rounds
-in `atk:verify`, review rounds in `atk:implement`, carry over only on a resume, so a resumed run
+in `atk:verify`, review rounds in `atk:implement` and `atk:fix`, carry over only on a resume, so a resumed run
 cannot reset its own ceiling.
 
 The offer also names the test that failed when the log looks stale: its branch is not the current

@@ -151,7 +151,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (beside `skills/`, not under it)
 
-Eighteen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
+Nineteen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
 plugin root beside `skills/`, NOT under it, because a folder under `skills/` without a `SKILL.md` is
 ambiguous to the harnesses' skill discovery. The table names them as skills cite them, relative to
 `plugins/atk/`.
@@ -176,6 +176,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `qa --record`, and `run-cases` through that same record shape; `## Output` of `incident` |
 | `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
 | `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `spec`, `help`, `host-capabilities.md`, `team-roles.md`, `ticket-adapters.md`, `tidy-pass.md`, `review-rounds.md`, `independent-challenge.md`, `read-only-reviewer` (restated) |
+| `shared/review-fix-loop.md` | The loop that runs `atk:review` on a skill's own change before it reaches a person: what the call is given, which severities are fixed, a disputed finding, re-verifying each round, the two-round ceiling and the five-part escalation, and the line `--no-review` leaves | `implement`, `fix` |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -242,6 +243,11 @@ copies of that half would drift until one challenge let its agents read the conv
 rule 9 keeps unread, so a prompt that names those files quotes the table rather than its own memory
 of it. The read-only agent is the one place it is restated, since an agent run in a target project
 cannot open a file of the kit.
+
+`review-fix-loop.md` began in `atk:implement`'s references and moved here once `atk:fix` called the
+review on its own change too. A fix that alters a public contract carries the risk an implementation
+does, and two copies of the loop would drift until one of them lowered a disputed finding to get
+past it.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or

@@ -123,7 +123,7 @@ họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` v
 
 ## Lớp `shared/`
 
-Mười tám file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
+Mười chín file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
 - `plugins/atk/shared/team-roles.md`: bảng vai trò và chín nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -133,7 +133,7 @@ Mười tám file giữ những gì các skill sẽ phải lặp lại. Ba file 
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
-Mười ba file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Mười bốn file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `plugins/atk/shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -187,6 +187,12 @@ Mười ba file tiếp theo là hợp đồng giữa một nhóm skill có tên 
   mà skill phải tự đi hết danh sách. Đây cũng là lý do kit không có skill `simplify` riêng: nội dung
   này thuộc về ba skill đang chạy nó, không thuộc về một slash command chẳng sinh artifact và chẳng
   có ai duyệt.
+
+- `plugins/atk/shared/review-fix-loop.md`: vòng chạy `atk:review` trên chính thay đổi của một skill trước khi
+  một người đọc nó, những mức độ được sửa, một phát hiện bị phản đối, trần hai vòng và chuyển lên
+  người có tên, cùng dòng mà `--no-review` để lại trong bản ghi. `atk:implement` và `atk:fix` trích
+  dẫn nó: phần kiểm chứng của cả hai chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
+  xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra.
 
 - `plugins/atk/shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
   là gì khi profile của dự án ghi `Contract: first` cùng field `implemented` cho biết code của nó đã

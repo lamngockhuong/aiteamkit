@@ -373,7 +373,8 @@ phát hiện.
 
 **Sinh ra.** Lỗi được ghi lại nguyên văn, nguyên nhân được chứng minh chứ không phải đoán, và một
 lượt kiểm xem hành vi hiện tại có phải là quyết định ai đó đưa ra có chủ ý. Sau đó là thay đổi nhỏ
-nhất gỡ được nguyên nhân, kiểm chứng theo tầng, và báo cáo nói rõ đã kiểm những gì và chưa kiểm những
+nhất gỡ được nguyên nhân, kiểm chứng theo tầng, gọi review team lên đúng thay đổi đó rồi sửa những
+gì nó chặn, và báo cáo nói rõ đã kiểm những gì và chưa kiểm những
 gì. Trong lúc chạy, một progress log trong `docs/derived/fix/` ghi từng giả thuyết đã được chứng minh
 hay bị loại, để lần chạy tiếp theo không lặp lại chúng và không đếm lại giới hạn ba giả thuyết từ đầu.
 
@@ -390,7 +391,11 @@ kiếm nữa. Cờ
 `--investigate-only` tồn tại vì lời giải thích thường đã là toàn bộ sản phẩm cần giao, và dừng ở đó
 là một kết quả hợp lệ chứ không phải một việc dang dở. Bước dọn mã sau lượt kiểm chứng ở đây hẹp hơn
 mọi chỗ khác trong kit: nó chỉ chạm đúng những dòng bản vá đã chạm, vì một bản vá mang kèm một lượt
-dọn dẹp cả file xung quanh thì không revert gọn được vào ngày cần revert.
+dọn dẹp cả file xung quanh thì không revert gọn được vào ngày cần revert. Sau đó `atk:review` đọc
+diff giống như cách `atk:implement` cho đọc: kiểm chứng chỉ hỏi bản vá có chạy đúng không, còn chỉ
+review mới hỏi bản vá vừa khẳng định thêm điều gì, chẳng hạn một câu trong tài liệu tham chiếu mà một
+nhánh của code chưa làm đúng. Cờ `--no-review` bỏ lượt gọi đó và để lại trong báo cáo một dòng ghi
+tên người phải review.
 
 ---
 

@@ -73,7 +73,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:convention` | The team's real conventions derived from the code, grouped by each language and technology it detects, each classified as enforced by tooling, checked in review, or merely aspirational. A project with nothing written gets one standards document per technology under `docs/standards/`. With `--suggest` it also proposes rules from published standards for that stack, each one waiting for the Tech Lead. Offers to draft the collaboration files the project has none of, and writes only the ones you pick. |
 | `atk:plan` | Phases that each end in something reviewable, steps inside a phase that leave the tree working, what every step touches and how it is checked, and what is out of scope. Reads the written plan back against the repository, reviews one somebody else wrote, challenges a written plan with `--challenge`, and records answers to its open questions with `--answer`. |
 | `atk:implement` | The code, written to the project's own conventions and reference modules, verified layer by layer with the project's own commands, and put through review before handover. |
-| `atk:fix` | The failure captured verbatim, the cause proven before a line changes, a stop after three ruled-out hypotheses rather than a guess, the smallest change that removes it, and a report of what was checked and what was not. |
+| `atk:fix` | The failure captured verbatim, the cause proven before a line changes, a stop after three ruled-out hypotheses rather than a guess, the smallest change that removes it, the team review on that change, and a report of what was checked and what was not. |
 | `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences, written to a report and summarised in the session. |
 | `atk:qa` | A test plan, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria; afterwards the record of a test run, its defects raised as bugs, and the retest of a fix. |
@@ -103,7 +103,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:convention                           # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
 /atk:plan <ticket|design|text|plan-path>  # --inline --challenge --answer --review --comment --layer --out
 /atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
-/atk:fix <issue|report|description>       # --layer --investigate-only --out
+/atk:fix <issue|report|description>       # --layer --investigate-only --no-review --out
 /atk:verify <module|paths|ticket|pr>      # --ui --report-only --out
 /atk:review <pr|branch|paths>             # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature|cases|run|issue> # --plan|--cases|--regression|--update|--record|--bug|--retest|--review --lang --out

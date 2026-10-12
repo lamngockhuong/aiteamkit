@@ -101,9 +101,8 @@ runs, the agents, and the concurrency the machine's memory allows. The cap is me
 and it outranks the dispatch rule of step 4 rather than the copy count, per
 `references/review-rounds.md`. Stating the cost is what leaves the choice to pay it with the person.
 
-Every agent in a round reads the same diff: independence is the point, so splitting the files
-between them would produce agreement that means nothing. Rounds divide the question, never the
-files.
+Every agent in a round reads the same diff: independence is the point, so splitting the files between
+them would produce agreement that means nothing. Rounds divide the question, never the files.
 
 Steps 1, 5, and 6 keep their judgement in the calling agent, which in band 1 is the reviewer agent,
 and it returns only the summary of `## Output` and the report path. Intent is what the rounds are
@@ -141,8 +140,9 @@ there. The other baseline items stay with the rounds that hold them, per
 The reference-document check is the `contract` round, and the sync obligation in
 `shared/spec-docs.md`, which lists the six kinds of change that trigger it and so decides whether
 the round runs at all. Raise a `BLOCKING` finding when a contract moved and neither the document nor
-a stated skip came with it; `Contract: first`, and any `screen` document, add a rule in `references/review-rounds.md`. Where the
-pull request says what is stale and who will fix it, the obligation was met and there is no finding.
+a stated skip came with it; `Contract: first`, and any `screen` document, add a rule in
+`references/review-rounds.md`. Where the pull request, or the intent given with a change not yet in
+one, says what is stale and who will fix it, the obligation was met and there is no finding.
 
 Do not fix the document as the reviewer. That moves the work to the wrong person and teaches the next
 author that the rule is optional. Something the document never settled is an open question, not
