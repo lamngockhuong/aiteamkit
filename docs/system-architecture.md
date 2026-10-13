@@ -124,7 +124,7 @@ On both, the prompts in `references/` remain the route.
 
 ## The `shared/` layer
 
-Eighteen files hold what skills would otherwise repeat. The first three are cited by all 24:
+Nineteen files hold what skills would otherwise repeat. The first three are cited by all 24:
 
 - `plugins/atk/shared/team-roles.md`: the role table and the nine rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -134,7 +134,7 @@ Eighteen files hold what skills would otherwise repeat. The first three are cite
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
 
-Thirteen are contracts between a named handful of skills rather than kit-wide rules:
+Fourteen are contracts between a named handful of skills rather than kit-wide rules:
 
 - `plugins/atk/shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
@@ -189,10 +189,16 @@ Thirteen are contracts between a named handful of skills rather than kit-wide ru
   its own: the content belongs to the skills that already run it, not to a slash command that would
   produce no artifact and answer to no approver.
 
+- `plugins/atk/shared/review-fix-loop.md`: the loop that runs `atk:review` on a skill's own change before a
+  person reads it, the severities it fixes, a disputed finding, the two-round ceiling and the
+  escalation by name, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
+  `atk:fix`: the verification of both asks whether the change works, and neither reads the diff for
+  what it newly claims, which is what a review finds.
+
 - `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is
   in a project whose profile says `Contract: first` and the `implemented` field that tracks whether
   its code exists yet, whose shape wins when a project already keeps documents of its own, the six
-  kinds of change that oblige a pull request to carry its reference document, what that obligation
+  kinds of change that oblige a pull request to carry its reference document and leave it true, what that obligation
   becomes when the document lives in a repository other than the code's, and the line between drift
   and a question nobody has answered. Cited by `atk:spec`, which writes those documents, by
   `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave

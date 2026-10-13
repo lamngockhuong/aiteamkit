@@ -211,6 +211,15 @@ things count, the last because a screen spec is what QA and the BrSE read a scre
 Nothing else triggers the obligation. A refactor behind an unchanged contract does not, and neither
 does a change to a comment, a test, or a name the document was never allowed to mention.
 
+Carrying the document means leaving it true, not only touched. Each sentence the change writes holds
+for every branch of the code it describes. Where one branch does not honour it yet, a case the author
+lists as left for later included, the sentence says so beside it and names who decides, by
+default the document's approver, or the gap is closed in the same change. Under
+`Contract: first` that line is the not-implemented mark of Whether the code exists yet above, so a
+document at `implemented: yes` goes back to `partial` with it. A sentence the code does not honour,
+with neither that line nor the mark beside it, is drift the change wrote itself, and under
+`Contract: first` it reads as an agreed contract the code already breaks.
+
 A document living in another repository, which is the ordinary case where a parent holds the
 specification for member repositories, is not an exception to this. It is a pair of pull requests
 opened together and cross-linked, per A change that spans more than one repository in
@@ -222,9 +231,10 @@ Where the document cannot be updated in the same pull request, the pull request 
 line: what is now stale, and who will fix it. The line is the whole point. A team learns to distrust
 its documents from skips nobody announced, not from ones they can see and schedule.
 
-The obligation is the author's. `atk:review` checks that it was met or that the skip was stated, and
-a reviewer who silently fixes the document instead has moved the work to the wrong person and left
-the next author believing the rule is optional.
+The obligation is the author's. `atk:review` checks that it was met, that what the document now says
+holds for the code beside it, or that the skip was stated, and a reviewer who silently fixes the
+document instead has moved the work to the wrong person and left the next author believing the rule
+is optional.
 
 ## Drift is not an unanswered question
 

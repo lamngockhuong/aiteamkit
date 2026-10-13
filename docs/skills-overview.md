@@ -369,7 +369,8 @@ finding.
 
 **Produces.** The failure captured verbatim, the cause proven rather than guessed, a check that the
 current behavior is not a decision somebody made on purpose, the smallest change that removes the
-cause, verification by layer, and a report saying what was checked and what was not. While it runs,
+cause, verification by layer, the team review called on that change with what it blocks on fixed,
+and a report saying what was checked and what was not. While it runs,
 a progress log under `docs/derived/fix/` records each hypothesis proved or ruled out, so a resumed
 run neither repeats them nor resets its count of three.
 
@@ -386,7 +387,10 @@ name, because what is left after three is usually somebody's knowledge rather th
 because the explanation is often the whole deliverable, and stopping there is a valid result rather
 than an unfinished one. The clean-up step that follows verification is narrower here than anywhere
 else in the kit: it covers the lines the fix touched and nothing beside them, because a fix carrying
-a tidy-up of the surrounding file cannot be reverted cleanly.
+a tidy-up of the surrounding file cannot be reverted cleanly. Then `atk:review` reads the diff the way
+`atk:implement` has it read, because verification asks whether the fix works and only a review asks
+what the fix newly claims, such as a sentence in a reference document one branch of the code does not
+honour yet. `--no-review` skips the call and leaves a line in the report naming who must review.
 
 ---
 

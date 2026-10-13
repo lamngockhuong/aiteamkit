@@ -1,6 +1,6 @@
 # Fix report template
 
-Loaded by `atk:fix` in step 6. The reader is a reviewer who was not part of the investigation and
+Loaded by `atk:fix` in step 7. The reader is a reviewer who was not part of the investigation and
 who has to decide whether to approve the change. Everything here exists so they can check a claim
 rather than trust one.
 
@@ -24,7 +24,9 @@ ticket: <bug URL or id; for a defect or finding with no issue, <record path>#<ID
 section of `.atk/profile.md` or asked for; when neither gives one, `TBD` naming who can assign a
 reviewer, per `shared/team-roles.md`. Under `--investigate-only` the status is `DRAFT`, because
 there is nothing to approve yet. A run the hypothesis ceiling stopped is `DRAFT` too: the work is
-not finished, and a reader who sees `IN REVIEW` will assume it is.
+not finished, and a reader who sees `IN REVIEW` will assume it is. So is the draft step 6 writes
+before its review: sections 5 to 8 are still missing, and step 7 sets `IN REVIEW` when it completes
+the file.
 
 The `<record path>#<ID>` form, several references, and a record that is not committed follow Front
 matter in `shared/artifact-paths.md`.
@@ -113,6 +115,10 @@ those lines, or that it changed nothing, or that it was reverted and why, or tha
 such capability. A reader comparing the diff against "the smallest change" needs to know which lines
 came from the fix and which from the clean-up after it.
 
+Then one line for the reference documents, per `shared/spec-docs.md`: which moved with the fix, or
+that the fix changed no public contract, or that the document was right and the code is what
+changed. A document the fix owed and did not move is not this line; it is in section 9.
+
 ## 6. Verified
 
 **Skipped in the same three cases as section 5**, for the same reason.
@@ -121,6 +127,18 @@ Per layer: the command run, taken from `.atk/profile.md`, and what its result pr
 re-run of the captured reproduction, showing it no longer reproduces.
 
 A pass is reported as what it covers, not as "tests pass".
+
+## 6b. Reviewed
+
+**Skipped in the same three cases as section 5.**
+
+The rounds of `atk:review` that ran, the path of each review report, and per finding its severity
+and what happened to it: fixed, carried forward with the reason, disputed with the person who answers,
+escalated with the five points of The ceiling in `shared/review-fix-loop.md` and the person named,
+or left as a `NIT`. A finding fixed after the last call is marked as Re-verify after each round in
+`shared/review-fix-loop.md` says, here and in section 7. Then whether `atk:verify` was offered after a clean loop, and whether it ran.
+Under `--no-review`, the one line `shared/review-fix-loop.md` asks for: the fix is
+unreviewed, and who must review it before merge.
 
 ## 7. Not verified
 
@@ -139,6 +157,10 @@ list section 7 draws from, and the first thing a reviewer will check against the
 
 Anything found during the investigation and deliberately not done: the second bug, the refactor the
 file needs, the missing test elsewhere. One line each, with enough detail to become a ticket.
+
+A reference document the fix owed and could not move goes here as the one line
+`shared/finalize-steps.md` asks for: what is stale, and who will fix it. Step 6 writes this section
+before the review, so the review reads the skip as stated rather than as a missing document.
 
 An empty section is fine and common. A section used as a place to put work that this fix actually
 needed is not.

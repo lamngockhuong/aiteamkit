@@ -45,7 +45,7 @@ items in `shared/review-checklist.md` it carries.
 | `boundary` | 3 | Inputs and states, not lines | Never | Error paths and edge cases are handled |
 | `exposure` | 4 | The surfaces in and out: logs, responses, URLs, storage, migrations | The diff touches no input, output, storage, log, or schema | Input crossing a trust boundary is validated; a migration is reversible or says it is not |
 | `tests` | 5 | The test tree | The diff changes no behavior | New or changed behavior has a test that fails without the change |
-| `contract` | 6 | The six triggers in `shared/spec-docs.md` | None of the six fired | Public behavior change is reflected in the docs that describe it; under `Contract: first`, see below |
+| `contract` | 6 | The six triggers in `shared/spec-docs.md` | None of the six fired | Public behavior change is reflected in the docs that describe it, and left true, per The sync obligation in `shared/spec-docs.md`; under `Contract: first`, see below |
 | `rules` | 7 | The resolved conventions document, its checklist section | Never. There is no structural stop: see below | No secret, token, key, or credential in the diff; no debug statement, no commented-out code, no `TODO` without a ticket |
 
 **Assigning a baseline item to a round.** An item goes to the round whose *method* is what finds it,
@@ -80,9 +80,9 @@ other way round: it checks the diff against the document as well as the document
 item differently from the document is `BLOCKING`, unless the same change carries the document back
 to `IN REVIEW` for its approver, which moves the disagreement to the person who owns it. An item the
 document still counts as not implemented is no finding while the diff leaves its code alone, and
-neither is its old behaviour still running. Once the diff implements the item, the mark no longer
-shields it: code that departs from the item is `BLOCKING` as above, whether or not the mark is still
-on, and a mark the change should have taken off, because the code now agrees, is `SHOULD FIX`.
+neither is its old behaviour still running. Once the diff implements the item, the mark shields only
+the branch its line names, per The sync obligation in `shared/spec-docs.md`: code that departs from
+the item anywhere else is `BLOCKING` as above, whether or not the mark is still on, and a mark the change should have taken off, because the code now agrees, is `SHOULD FIX`.
 
 **`rules` does not switch itself off.** A project that has recorded no conventions is exactly the
 case `shared/review-checklist.md` covers: `atk:review` checks the baseline anyway and reports that
@@ -365,9 +365,15 @@ makes the step worth more than it was, not less:
   this file spawns, since rule 9 covers a file written for another agent wherever it runs. The list
   of lines its masking took out goes to `rules` as a hoisted result. The argument is the one
   Masking a diff in `shared/secret-scan.md` gives for what is under review: `/atk:review <commit>`
-  is its one-commit form, and a change not yet committed, which is what `atk:implement` hands over
+  is its one-commit form, and a change not yet committed, which is what `atk:implement` and `atk:fix` hand over
   and what a review of paths in the working tree reads, is `--worktree`, since a range would carry
-  none of it.
+  none of it. A file the caller names as its intent, the draft report `atk:fix` writes before the
+  call above all, sits in that diff as an untracked file and is still intent: it counts toward
+  neither number, no round reviews it, and the report names it beside the files the count left out.
+  A reference document in another repository comes as a second masked diff, written by the caller
+  with `mask --worktree` run in that repository. The hunks of the document the caller names are
+  part of the change, counted toward the band, and read by `contract` and `callers` as the first
+  diff is; the rest of that diff is someone else's work, named in the report and read by no round.
 
 ## What each agent in a round is given
 
@@ -512,8 +518,8 @@ this is what that person reads before they start.
 
 ## Called again after a fix
 
-A caller that fixed findings and calls the review again, `atk:implement` in its review and fix loop
-above all, gets a review of the fix. Not the one round that raised the finding, because a fix to a
+A caller that fixed findings and calls the review again, `atk:implement` and `atk:fix` in their review and fix
+loop above all, gets a review of the fix. Not the one round that raised the finding, because a fix to a
 document can break the test that asserts what it says, and a fix to a guard can move a contract. Not
 the whole change from the start either, because what did not change since the first review has
 already had its rounds.

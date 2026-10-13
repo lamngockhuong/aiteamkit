@@ -70,16 +70,16 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another a hundred and seventy-four times across the twenty-four `SKILL.md` files,
-counting the `atk:` mentions, in a hundred and eight ordered pairs, which sounds like a dense graph. It is
+One skill names another a hundred and eighty-one times across the twenty-four `SKILL.md` files,
+counting the `atk:` mentions, in a hundred and nine ordered pairs, which sounds like a dense graph. It is
 not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at
 run time.
 
 | Kind | What happens to the work | Where it appears |
 |------|--------------------------|------------------|
-| Calls, and carries on | The other skill runs, returns, and this one continues | `implement` to `plan`, `implement` to `review`, `implement` to `spec`, and every finishing skill to `git` |
+| Calls, and carries on | The other skill runs, returns, and this one continues | `implement` to `plan`, `implement` and `fix` to `review`, `implement` to `spec`, and every finishing skill to `git` |
 | Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc`, `run-cases` to `qa --record` where the harness has no browser automation |
-| Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` to `verify` |
+| Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` and `fix` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
 | Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record, `run-cases` to `qa --bug` and `--retest` through the run record it writes |
 
@@ -98,18 +98,20 @@ flowchart TD
 
     IMP -->|"calls: work is medium sized"| PLN
     IMP -->|"calls: then fixes what blocks"| REV
+    FIX -->|"calls: then fixes what blocks"| REV
     IMP -->|"stops: schema, contract, architecture"| DSG
     IMP -->|"stops: the input was a defect"| FIX
     PLN -->|"stops: options need comparing"| DSG
     IMP -->|"calls: a contract moved"| SPC
     IMP -->|"calls: the work is finished"| GIT
     IMP -.->|"offers: needs a yes"| VER
+    FIX -.->|"offers: needs a yes"| VER
     REV -.->|"sends the convention gap back"| CNV
     VER -.->|"sends the untested case back"| QA
 ```
 
-The two solid loops are the ones a team feels daily. `implement` calling `review` on its own output
-runs at most twice before it escalates by name, because a finding that survives two rounds of fixing
+The two solid loops are the ones a team feels daily. `implement` and `fix` each call `review` on their
+own output, at most twice, before escalating by name, because a finding that survives two rounds of fixing
 is usually a design problem being patched. `implement` stopping at the large gate is the other:
 work that touches a schema, a public contract, a shared module, or more than one service changes no
 file until somebody has approved how.
@@ -117,7 +119,7 @@ file until somebody has approved how.
 The edge into `atk:spec` is drawn from `implement` alone to keep the picture readable, but `fix` and
 `verify` carry the same obligation through the same first step of `plugins/atk/shared/finalize-steps.md`. Any of
 the three that changes an endpoint, a response, an error code, a column, or an enum carries the
-reference document with it.
+reference document with it and leaves it true.
 
 ## What is not an edge
 

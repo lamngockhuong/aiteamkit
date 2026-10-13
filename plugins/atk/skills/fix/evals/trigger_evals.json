@@ -16,6 +16,8 @@
   { "query": "write the postmortem for last night's outage", "should_trigger": false },
   { "query": "review this pull request before I approve it", "should_trigger": false },
   { "query": "duyệt code của bạn kia giúp tôi", "should_trigger": false },
+  { "query": "review the bug fix my teammate pushed to this branch", "should_trigger": false },
+  { "query": "このバグ修正のプルリクをレビューして", "should_trigger": false },
   { "query": "implement the export to CSV feature", "should_trigger": false },
   { "query": "add a new column to the orders table for the discount", "should_trigger": false },
   { "query": "write test cases for the login screen", "should_trigger": false },

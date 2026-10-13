@@ -91,8 +91,8 @@ The handover carries four things and is not complete without the fourth:
 4. The name of the person who has to look, from the `Team` section of `.atk/profile.md`.
 
 The working tree is untouched, because no change was allowed before the cause was proven and it
-never was. `--investigate-only` does not alter any of this: that flag ends the run after step 6 in
-every case, and the ceiling decides only whether the report carries a cause or a list of what is not
+never was. `--investigate-only` does not alter any of this: that flag ends the run after the intent
+check, Step 6 of this file and step 2 of `SKILL.md`, in every case, and the ceiling decides only whether the report carries a cause or a list of what is not
 the cause.
 
 ## Step 5b: blast radius

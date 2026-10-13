@@ -98,7 +98,7 @@ At none of the three levels does this skill sequence the work inside itself. A p
 session and never written down leaves the reviewer nothing to read, and the reviewer is the point.
 
 The run writes that progress log as it goes: the level the gate chose and the plan path once one
-exists, an entry per review round in step 5, and, for work with no plan, per step of work done. With a plan, each phase's `status` stays the record of the phases, and the log
+exists, labelled per Progress log in `shared/artifact-paths.md`, an entry per review round in step 5, and, for work with no plan, per step of work done. With a plan, each phase's `status` stays the record of the phases, and the log
 adds only the review rounds. A large-gate stop ends it with `no artifact: sent to design-doc`.
 
 ### 2. Write the code
@@ -163,13 +163,11 @@ capability. A clean-up nobody can see in the record is indistinguishable from on
 
 ### 5. Review and fix
 
-Say what the review will cost before calling it: the band the change falls in, and the round runs
-and agents that band asks for, per `skills/review/references/review-rounds.md` and the stated-total
-rule in `shared/host-capabilities.md`. Add what step 4 already spent. A person who sees the number
-can take it, ask for a deeper review under `--parallel`, or say the change is small enough to read
-by hand; a person who does not see it finds out when the session stops halfway through.
+Say what the review will cost before calling it, and move the reference document a contract change
+owes before the call rather than at step 6, both per Calling the review in
+`shared/review-fix-loop.md`.
 
-`references/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
+`shared/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
 `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work, re-run the
 verification from step 3, and repeat at most twice, a resume included, per Progress log in
 `shared/artifact-paths.md`.
@@ -194,7 +192,7 @@ record is the same as a review that never happened and was never missed.
 ### 6. Finalize
 
 While a `BLOCKING` finding is disputed or escalated, only as far as the commit: tell the user the
-work stops there, and who answers, per `references/review-fix-loop.md`.
+work stops there, and who answers, per `shared/review-fix-loop.md`.
 
 Hand off to `atk:git` for the branch, the commit, and every action past it, with the implementation
 record as the pull request body. `shared/finalize-steps.md` is the contract that skill carries out,
@@ -202,9 +200,11 @@ and it opens with the reference documents the change owes. The consent line in t
 keeps a push, a pull request, or a ticket comment from happening on an assumed yes.
 
 Its first step is the one this skill reaches most often: a change that altered an endpoint, a
-response, an error code, a column, or an enum carries its reference document in the same commit, per
-`shared/spec-docs.md`. The record says which documents changed, or names what is now stale and who
-will fix it.
+response, an error code, a column, or an enum carries its reference document in the same commit,
+and leaves it true, per
+`shared/spec-docs.md`. Where step 5 moved it before the review, this step only checks that a review
+round did not move the contract again. The record says which documents changed, or names
+what is now stale and who will fix it.
 
 ## Output
 

@@ -5,7 +5,8 @@ Shared closing sequence for every `atk` skill that finishes a piece of work. Ref
 relative to a skill file.
 
 Reaching this file means the work is finished and verified by whatever the calling skill counts as
-verification. What is left is the document the work owes, then putting it where the team can see it,
+verification. `atk:implement` and `atk:fix` take step 1 before their review call, per
+`shared/review-fix-loop.md`, and find it done here. What is left is the document the work owes, then putting it where the team can see it,
 in the order that keeps it reviewable.
 
 `atk:git` is the skill that carries this sequence out, and it is where the commands, the repair
@@ -40,8 +41,8 @@ starts a review clock, and cannot be withdrawn quietly.
 
 ## 1. The reference documents the change owes
 
-A change that alters a public contract carries its reference document in the same pull request, per
-the sync obligation in `shared/spec-docs.md`, which also lists the six kinds of change that count.
+A change that alters a public contract carries its reference document in the same pull request, and
+leaves it true, per the sync obligation in `shared/spec-docs.md`, which also lists the six kinds of change that count.
 `atk:spec --sync` does the update; doing it by hand is equally fine, and the obligation is on the
 change either way.
 

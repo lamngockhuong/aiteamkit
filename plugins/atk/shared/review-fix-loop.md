@@ -1,8 +1,12 @@
 # Review and fix loop
 
-Loaded by `atk:implement` once the change is written, verified, and tidied. It holds the loop that
-runs the team review against the skill's own output, and the ceiling that stops the loop from hiding
-a design problem under patches.
+The loop that runs the team review against a skill's own change, and the ceiling that stops it from
+hiding a design problem under patches. Referenced from `skills/<name>/SKILL.md` as
+`shared/review-fix-loop.md`, which is `../../shared/review-fix-loop.md` relative to a skill file.
+
+Cited by `implement` and `fix`, each once its change is written, verified, and tidied. Each keeps its
+own verification step and its own record; where this file says "the record" and "the verification",
+it means the calling skill's.
 
 Nothing here defines what a review looks for or how severe a finding is. `atk:review` owns the
 checklist, the severity scale, and the breadth, and it reads the project's rules through
@@ -27,10 +31,42 @@ takes that list and what it reaches, per Called again after a fix in
 
 ## Calling the review
 
+Say what the review will cost before calling it: the band the change falls in, and the round runs
+and agents that band asks for, per `skills/review/references/review-rounds.md` and the stated-total
+rule in `shared/host-capabilities.md`. Add what the tidy step already spent. A person who sees the
+number can take it, ask for a deeper review under `--parallel`, or say the change is small enough to
+read by hand; a person who does not see it finds out when the session stops halfway through.
+
+A change that alters a public contract moves its reference document before the first call, per the
+first step of `shared/finalize-steps.md`, rather than at the finalize step. The review then reads
+the document beside the code, and can check that what it says holds, per The sync obligation in
+`shared/spec-docs.md`; a document moved after the review is one no review ever read. Where the
+document cannot move now, the one line that step asks for, what is stale and who will fix it, is
+written before the call too. There is no pull request yet for the review to find it in, so it goes
+to the review with the intent, and a deliberate skip is not reported as a missing document. A
+document in another repository, usually the parent of a member repository, is not in the change's
+diff, so the call names its path and a second `diff.patch` of that repository, written with
+`mask --worktree` of `shared/secret-scan.md` run there, and the record says which document moved
+and where. That scan takes the whole working tree, so the caller looks at it first and, where
+anything besides the document changed, names the document as the only part of the change. Otherwise the review never reads the sentences it
+exists to check.
+
 Call `atk:review` on the change, and give it what it needs to review against intent rather than
-style: the ticket or the plan, the design document when one exists, and the acceptance criteria the
-work was built to. Its first step is establishing intent, and a review with no stated intent is a
-style check.
+style: the ticket or the plan, the design document when one exists, the acceptance criteria the
+work was built to, and any stale-document line from above. For a fix, that is the defect, the proven
+cause, and what the report will leave for later, since the review checks the change against what it
+claims to do and what it admits it does not. Its first step is establishing intent, and a review
+with no stated intent is a style check.
+
+A record drafted before the call, as `atk:fix` drafts its report, is named as intent and never as a
+path to review; `atk:review` then keeps it out of the count and the rounds, per
+`skills/review/references/review-rounds.md`. Its captured output still reaches every reviewer agent
+through Read, outside the masked diff, so once it is written run `mask --worktree` of
+`shared/secret-scan.md`: a line of the draft that `masked.txt` names is masked in the draft itself,
+per rule 9 of `shared/team-roles.md`.
+
+A person who declines the review once its cost is stated, and a call that ends without writing a
+report, leave the record where `--no-review` leaves it, below. Neither counts as a round.
 
 Do not pass `--strict`. That flag widens the review to stylistic findings, and this loop deliberately
 does not act on those.
@@ -71,7 +107,7 @@ the finding contradicts a decision already recorded in the plan or a design docu
 labels that case with the decision and the person who made it, and the answer is theirs, not the
 author's.
 
-Waiting means what it means after an escalation: step 6 goes as far as the commit and stops, per
+Waiting means what it means after an escalation: the finalize step goes as far as the commit and stops, per
 `atk:git --commit`, so nothing is pushed, opened, or merged. Say so to the user in plain words, with
 the finding, the reason it is disputed, and who has to answer. A user who
 is told only that a dispute was recorded, and then asked whether to push, is being asked a question
@@ -79,9 +115,12 @@ the skill has already answered.
 
 ## Re-verify after each round
 
-Every round of fixes goes back through `references/verification.md` before the review is called
-again. Not the full order every time: the narrowest check covering what the fix touched, the layer,
+Every round of fixes goes back through the calling skill's verification step before the review is
+called again, and for `atk:fix` the captured reproduction is re-run with it. Not the full order every time: the narrowest check covering what the fix touched, the layer,
 and the blast radius if the fix widened it.
+
+Fixes made after the last call are reviewed only by the person. The record marks each as fixed and
+not reviewed again, and lists it among what was not verified.
 
 A fix that was never re-verified is a change nobody has run, arriving at the end of the process when
 attention is lowest.
@@ -103,7 +142,7 @@ The escalation says five things:
 The fifth is the one that decides whether the escalation works. "This needs another look" reaches
 nobody. Rule 1 in `shared/team-roles.md` applies here as anywhere: an owner is a person.
 
-Nothing is pushed, opened, or merged after an escalation. Step 6 commits the change on its branch
+Nothing is pushed, opened, or merged after an escalation. The finalize step commits the change on its branch
 through `atk:git --commit` and stops there, because the commit stays inside the local repository per
 the consent line in `shared/finalize-steps.md`. The named person is given the findings with their
 file and line and the path of the review report, since a branch nobody pushed is readable only on
@@ -116,8 +155,8 @@ Everything verified up to this point was verified by the suite, and the suite is
 somebody wrote earlier against what they expected.
 
 So the loop hands over to `atk:verify`, which starts the application and asserts the side effect in
-real data. Offer it, with what to verify and against which acceptance criteria, and record in the
-implementation record whether it ran. Work that goes to a reviewer having never been run is worth
+real data. Offer it, with what to verify and against which acceptance criteria, or for a fix the
+captured reproduction and the blast radius, and record whether it ran. Work that goes to a reviewer having never been run is worth
 flagging as exactly that, in the record, where the reviewer can see it.
 
 The handoff is an offer and not an automatic step, because `atk:verify` starts processes and writes
