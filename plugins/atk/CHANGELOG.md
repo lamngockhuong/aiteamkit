@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.7...atk-v0.1.8) (2026-10-13)
+
+
+### Bug Fixes
+
+* make atk:fix review its own change, and require a moved reference document to be true ([#117](https://github.com/lamngockhuong/aiteamkit/issues/117)) ([b108d9f](https://github.com/lamngockhuong/aiteamkit/commit/b108d9f8173e4b7bfd1810e30dcfb01809a82d1f))
+
 ## [0.1.7](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.6...atk-v0.1.7) (2026-10-10)
 
 
