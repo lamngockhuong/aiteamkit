@@ -198,7 +198,7 @@ Fourteen are contracts between a named handful of skills rather than kit-wide ru
 - `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is
   in a project whose profile says `Contract: first` and the `implemented` field that tracks whether
   its code exists yet, whose shape wins when a project already keeps documents of its own, the six
-  kinds of change that oblige a pull request to carry its reference document, what that obligation
+  kinds of change that oblige a pull request to carry its reference document and leave it true, what that obligation
   becomes when the document lives in a repository other than the code's, and the line between drift
   and a question nobody has answered. Cited by `atk:spec`, which writes those documents, by
   `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave

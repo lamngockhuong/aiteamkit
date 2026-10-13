@@ -115,8 +115,9 @@ means the first review comment is about the design. Check the `status` field in 
 before consuming an artifact, not the file's existence.
 
 **A reference document nobody carried.** A contract changed and its document did not, so the next
-person designing against it designs against something that stopped being true. `atk:review` raises
-this as a blocking finding, and `atk:spec --check` finds the ones that got through. The obligation
+person designing against it designs against something that stopped being true. So is a document
+that moved but says something one branch of the code does not do. `atk:review` raises
+either as a blocking finding, and `atk:spec --check` finds the ones that got through. The obligation
 and the six changes that trigger it are in `plugins/atk/shared/spec-docs.md`.
 
 **A superseded artifact still looking current.** Planning the same work twice makes a second

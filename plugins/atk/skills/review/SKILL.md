@@ -140,13 +140,13 @@ there. The other baseline items stay with the rounds that hold them, per
 The reference-document check is the `contract` round, and the sync obligation in
 `shared/spec-docs.md`, which lists the six kinds of change that trigger it and so decides whether
 the round runs at all. Raise a `BLOCKING` finding when a contract moved and neither the document nor
-a stated skip came with it; `Contract: first`, and any `screen` document, add a rule in
-`references/review-rounds.md`. Where the pull request, or the intent given with a change not yet in
-one, says what is stale and who will fix it, the obligation was met and there is no finding.
+a stated skip came with it, or when the change left the document untrue, per The sync obligation
+there; `Contract: first`, and any `screen` document, add a rule in
+`references/review-rounds.md`. Where the pull request, or the intent given with a change not yet in one,
+says what is stale and who will fix it, the obligation was met and there is no finding.
 
 Do not fix the document as the reviewer. That moves the work to the wrong person and teaches the next
-author that the rule is optional. Something the document never settled is an open question, not
-drift, per the same file.
+author that the rule is optional. Something the document never settled is an open question, not drift, per the same file.
 
 ### 5. Verify before reporting
 
@@ -292,8 +292,8 @@ consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
       raised was checked against the code before it was reported.
 - [ ] No spawned round was shown what an earlier round found, the closing sweep excepted. Where
       every round ran in the calling agent, only the deduplicated list was carried between them.
-- [ ] A change touching a public contract either carried its reference document or stated the skip,
-      and neither was silently fixed by the reviewer.
+- [ ] A change touching a public contract carried its reference document and left it true, or
+      stated the skip, and neither was silently fixed by the reviewer.
 - [ ] The report was written, to the default path or to `--out`, and the session carried the
       summary and that path rather than the whole list.
 - [ ] No comment addresses the author rather than the code.

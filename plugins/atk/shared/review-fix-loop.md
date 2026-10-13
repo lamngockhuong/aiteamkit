@@ -43,7 +43,13 @@ the document beside the code, and can check that what it says holds, per The syn
 `shared/spec-docs.md`; a document moved after the review is one no review ever read. Where the
 document cannot move now, the one line that step asks for, what is stale and who will fix it, is
 written before the call too. There is no pull request yet for the review to find it in, so it goes
-to the review with the intent, and a deliberate skip is not reported as a missing document.
+to the review with the intent, and a deliberate skip is not reported as a missing document. A
+document in another repository, usually the parent of a member repository, is not in the change's
+diff, so the call names its path and a second `diff.patch` of that repository, written with
+`mask --worktree` of `shared/secret-scan.md` run there, and the record says which document moved
+and where. That scan takes the whole working tree, so the caller looks at it first and, where
+anything besides the document changed, names the document as the only part of the change. Otherwise the review never reads the sentences it
+exists to check.
 
 Call `atk:review` on the change, and give it what it needs to review against intent rather than
 style: the ticket or the plan, the design document when one exists, the acceptance criteria the
@@ -51,6 +57,16 @@ work was built to, and any stale-document line from above. For a fix, that is th
 cause, and what the report will leave for later, since the review checks the change against what it
 claims to do and what it admits it does not. Its first step is establishing intent, and a review
 with no stated intent is a style check.
+
+A record drafted before the call, as `atk:fix` drafts its report, is named as intent and never as a
+path to review; `atk:review` then keeps it out of the count and the rounds, per
+`skills/review/references/review-rounds.md`. Its captured output still reaches every reviewer agent
+through Read, outside the masked diff, so once it is written run `mask --worktree` of
+`shared/secret-scan.md`: a line of the draft that `masked.txt` names is masked in the draft itself,
+per rule 9 of `shared/team-roles.md`.
+
+A person who declines the review once its cost is stated, and a call that ends without writing a
+report, leave the record where `--no-review` leaves it, below. Neither counts as a round.
 
 Do not pass `--strict`. That flag widens the review to stylistic findings, and this loop deliberately
 does not act on those.
@@ -102,6 +118,9 @@ the skill has already answered.
 Every round of fixes goes back through the calling skill's verification step before the review is
 called again, and for `atk:fix` the captured reproduction is re-run with it. Not the full order every time: the narrowest check covering what the fix touched, the layer,
 and the blast radius if the fix widened it.
+
+Fixes made after the last call are reviewed only by the person. The record marks each as fixed and
+not reviewed again, and lists it among what was not verified.
 
 A fix that was never re-verified is a change nobody has run, arriving at the end of the process when
 attention is lowest.

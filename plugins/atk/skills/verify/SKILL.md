@@ -291,7 +291,7 @@ is the reviewer's act, and the distance between those two is the whole reason th
       harness ships none and the pass was run by hand per `shared/tidy-pass.md`.
 - [ ] Code changed during a round went through `shared/finalize-steps.md`, and a run that changed
       nothing says so.
-- [ ] A round that changed a public contract carried its reference document, per
+- [ ] A round that changed a public contract carried its reference document and left it true, per
       `shared/spec-docs.md`.
 - [ ] Under `--report-only`, `git status` shows no source file touched.
 - [ ] Every process this run started is stopped, and the post-run inventory confirming it is in the

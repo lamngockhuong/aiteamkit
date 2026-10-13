@@ -110,8 +110,8 @@ flowchart TD
     VER -.->|"sends the untested case back"| QA
 ```
 
-The two solid loops are the ones a team feels daily. `implement` and `fix` calling `review` on their
-own output runs at most twice before it escalates by name, because a finding that survives two rounds of fixing
+The two solid loops are the ones a team feels daily. `implement` and `fix` each call `review` on their
+own output, at most twice, before escalating by name, because a finding that survives two rounds of fixing
 is usually a design problem being patched. `implement` stopping at the large gate is the other:
 work that touches a schema, a public contract, a shared module, or more than one service changes no
 file until somebody has approved how.
@@ -119,7 +119,7 @@ file until somebody has approved how.
 The edge into `atk:spec` is drawn from `implement` alone to keep the picture readable, but `fix` and
 `verify` carry the same obligation through the same first step of `plugins/atk/shared/finalize-steps.md`. Any of
 the three that changes an endpoint, a response, an error code, a column, or an enum carries the
-reference document with it.
+reference document with it and leaves it true.
 
 ## What is not an edge
 

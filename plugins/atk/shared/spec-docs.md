@@ -213,9 +213,11 @@ does a change to a comment, a test, or a name the document was never allowed to 
 
 Carrying the document means leaving it true, not only touched. Each sentence the change writes holds
 for every branch of the code it describes. Where one branch does not honour it yet, a case the author
-lists as left for later included, the sentence says so beside it, with the person who decides, or the
-gap is closed in the same change. A sentence the code does not honour, outside the not-implemented
-mark of Whether the code exists yet above, is drift the change wrote itself, and under
+lists as left for later included, the sentence says so beside it and names who decides, by
+default the document's approver, or the gap is closed in the same change. Under
+`Contract: first` that line is the not-implemented mark of Whether the code exists yet above, so a
+document at `implemented: yes` goes back to `partial` with it. A sentence the code does not honour,
+with neither that line nor the mark beside it, is drift the change wrote itself, and under
 `Contract: first` it reads as an agreed contract the code already breaks.
 
 A document living in another repository, which is the ordinary case where a parent holds the

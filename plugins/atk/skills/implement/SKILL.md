@@ -98,7 +98,7 @@ At none of the three levels does this skill sequence the work inside itself. A p
 session and never written down leaves the reviewer nothing to read, and the reviewer is the point.
 
 The run writes that progress log as it goes: the level the gate chose and the plan path once one
-exists, an entry per review round in step 5, and, for work with no plan, per step of work done. With a plan, each phase's `status` stays the record of the phases, and the log
+exists, labelled per Progress log in `shared/artifact-paths.md`, an entry per review round in step 5, and, for work with no plan, per step of work done. With a plan, each phase's `status` stays the record of the phases, and the log
 adds only the review rounds. A large-gate stop ends it with `no artifact: sent to design-doc`.
 
 ### 2. Write the code
@@ -200,7 +200,8 @@ and it opens with the reference documents the change owes. The consent line in t
 keeps a push, a pull request, or a ticket comment from happening on an assumed yes.
 
 Its first step is the one this skill reaches most often: a change that altered an endpoint, a
-response, an error code, a column, or an enum carries its reference document in the same commit, per
+response, an error code, a column, or an enum carries its reference document in the same commit,
+and leaves it true, per
 `shared/spec-docs.md`. Where step 5 moved it before the review, this step only checks that a review
 round did not move the contract again. The record says which documents changed, or names
 what is now stale and who will fix it.

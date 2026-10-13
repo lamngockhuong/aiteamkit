@@ -60,8 +60,9 @@ the symptom is gone against the reproduction in the report, not against the deve
 
 `.atk/profile.md` is required. This skill runs the project's own test, build, and lint commands and
 reads its layer layout, so the Commands and Layers sections are its inputs rather than a
-convenience, and the Team section names who the review loop escalates to. With no profile, stop and
-use the sentence in `shared/project-profile.md`. Never guess a test command: a guessed command that
+convenience, and the Team section names who the review loop escalates to. A Team section left at
+`TBD` counts as missing, since an escalation with nobody's name on it reaches nobody. With no
+profile, or no usable section, stop with the matching sentence in `shared/project-profile.md`. Never guess a test command: a guessed command that
 passes is worse evidence than no command at all.
 
 The same holds for an argument appended to a command that is correct. A package script whose own
@@ -177,19 +178,22 @@ review finds, and the pull request is the most expensive place for it to be foun
 So the review has to see the document with the code. When the fix changes a public contract, move
 its reference document now, rather than at step 7, per Calling the review in
 `shared/review-fix-loop.md`; a document it cannot move now goes into section 9 with what is stale
-and who will fix it, which is how a deliberate skip reaches the review. Moving it is not enough: read each sentence the fix wrote against every branch of the function it
-describes and against what section 9 of the report will leave for later, per The sync obligation in
+and who will fix it, which is how a deliberate skip reaches the review. Moving it is not enough:
+read each sentence the fix wrote against every branch of the code it describes and against the
+left-for-later list that goes into section 9 below, per The sync obligation in
 `shared/spec-docs.md`. A case the report leaves for later is a case the sentence must not deny.
 
 Write sections 1 to 4b and 9 of the report now: the reviewer is an agent given paths rather than
 this conversation, so the cause and what the fix leaves for later reach it only from a file. The
-draft is the report itself, at its path under `## Output` and after the `git check-ignore` that
-section asks for, and the path goes into the progress log so a resume finds it. Then say what the
-review will cost, per Calling the review in `shared/review-fix-loop.md`, and run the loop that file
-holds: call `atk:review` on the change, giving it the defect and the draft's path as intent; fix
-every `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work; re-run
-the narrowest check and the captured reproduction; at most twice, a resume included, then escalate
-by name. A fix made here is held to step 3 like the first one: the smallest change that removes the
+draft is the report itself at `DRAFT`, at its path under `## Output` and after the `git check-ignore`
+that section asks for, and its path goes into the progress log as a labelled entry, per Progress log
+in `shared/artifact-paths.md`, so a resume finds it. A draft moved later is re-checked and re-logged
+at its new path; a resume that finds it gone rewrites it from the log and says so. Then say what the review will cost, per Calling the review
+in `shared/review-fix-loop.md`, and run the loop that file holds: call `atk:review` on the change,
+giving it the defect and the draft's path as intent, never as a path to review; fix every
+`BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work; re-verify as
+Re-verify after each round in that file says; at most twice, a resume included, then escalate by
+name. A fix made here is held to step 3 like the first one: the smallest change that removes the
 finding.
 
 A loop that comes out clean offers `atk:verify`, per the same file, to run the captured
@@ -198,12 +202,12 @@ whether it ran.
 
 `--no-review` skips the call and its draft, not the document check above and not the fact: the
 report says the fix went out unreviewed and names who must review it before merge. Nothing runs here
-under `--investigate-only` or when the intent check stopped the work.
+under `--investigate-only`, when the intent check stopped the work, or when the hypothesis ceiling did.
 
 ### 7. Report and finalize
 
-Complete the report step 6 drafted, from `references/report-template.md`, in the same file; under
-`--no-review` or a stop before step 6, write it here. Then hand off to `atk:git` for the branch, the
+Complete the report step 6 drafted, from `references/report-template.md`, in the same file, and set
+it to `IN REVIEW`; under `--no-review` or a stop before step 6, write it here. Then hand off to `atk:git` for the branch, the
 commit, and anything that leaves the local repository. `shared/finalize-steps.md` is the contract it
 carries out, and it opens with the reference documents the change owes. The report is the pull
 request body.
@@ -266,9 +270,9 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
       and the report says what the host's capability changed, or that the harness ships none and
       the pass was run by hand per `shared/tidy-pass.md`.
 - [ ] Every caller in the blast radius was either exercised or named as unverified.
-- [ ] `atk:review` was called on the change after its cost was stated, or `--no-review` was passed
-      and the report names who must review.
-- [ ] Every `BLOCKING` finding is fixed or escalated by name, the loop ran at most twice, a resume
+- [ ] Where step 6 ran, `atk:review` was called on the change after its cost was stated, or
+      `--no-review` was passed and the report names who must review.
+- [ ] Where step 6 ran, every `BLOCKING` finding is fixed or escalated by name, the loop ran at most twice, a resume
       included, no `NIT` was fixed, and the report says whether `atk:verify` was offered and ran.
 - [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
       difference recorded as unverified.

@@ -24,7 +24,9 @@ ticket: <bug URL or id; for a defect or finding with no issue, <record path>#<ID
 section of `.atk/profile.md` or asked for; when neither gives one, `TBD` naming who can assign a
 reviewer, per `shared/team-roles.md`. Under `--investigate-only` the status is `DRAFT`, because
 there is nothing to approve yet. A run the hypothesis ceiling stopped is `DRAFT` too: the work is
-not finished, and a reader who sees `IN REVIEW` will assume it is.
+not finished, and a reader who sees `IN REVIEW` will assume it is. So is the draft step 6 writes
+before its review: sections 5 to 8 are still missing, and step 7 sets `IN REVIEW` when it completes
+the file.
 
 The `<record path>#<ID>` form, several references, and a record that is not committed follow Front
 matter in `shared/artifact-paths.md`.
@@ -132,7 +134,9 @@ A pass is reported as what it covers, not as "tests pass".
 
 The rounds of `atk:review` that ran, the path of each review report, and per finding its severity
 and what happened to it: fixed, carried forward with the reason, disputed with the person who answers,
-or left as a `NIT`. Then whether `atk:verify` was offered after a clean loop, and whether it ran.
+escalated with the five points of The ceiling in `shared/review-fix-loop.md` and the person named,
+or left as a `NIT`. A finding fixed after the last call is marked as Re-verify after each round in
+`shared/review-fix-loop.md` says, here and in section 7. Then whether `atk:verify` was offered after a clean loop, and whether it ran.
 Under `--no-review`, the one line `shared/review-fix-loop.md` asks for: the fix is
 unreviewed, and who must review it before merge.
 

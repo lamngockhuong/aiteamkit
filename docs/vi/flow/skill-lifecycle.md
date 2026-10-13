@@ -111,15 +111,15 @@ flowchart TD
     VER -.->|"gửi ngược ca chưa ai nghĩ tới"| QA
 ```
 
-Hai vòng nét liền là hai vòng một đội cảm nhận hằng ngày. `implement` và `fix` gọi `review` lên
-chính sản phẩm của mình, chạy nhiều nhất hai lượt rồi báo lên đích danh một người, vì một phát hiện sống sót
+Hai vòng nét liền là hai vòng một đội cảm nhận hằng ngày. `implement` và `fix` đều gọi `review` lên
+chính sản phẩm của mình, mỗi skill chạy nhiều nhất hai lượt rồi báo lên đích danh một người, vì một phát hiện sống sót
 qua hai lượt sửa thường là vấn đề thiết kế đang bị vá. Vòng còn lại là lúc `implement` dừng ở cổng
 lớn: phần việc chạm vào schema, một hợp đồng công khai, một module dùng chung, hoặc nhiều hơn một
 service thì không file nào được đổi cho tới khi có người duyệt cách làm.
 
 Cạnh đi vào `atk:spec` chỉ vẽ từ `implement` cho sơ đồ còn đọc được, nhưng `fix` và `verify` mang
 đúng nghĩa vụ đó qua cùng một bước đầu của `plugins/atk/shared/finalize-steps.md`. Cả ba, hễ đổi một endpoint,
-một response, một mã lỗi, một cột hay một giá trị enum, đều phải mang tài liệu tham chiếu đi cùng.
+một response, một mã lỗi, một cột hay một giá trị enum, đều phải mang tài liệu tham chiếu đi cùng và để nó đúng.
 
 ## Thứ không phải là cạnh
 

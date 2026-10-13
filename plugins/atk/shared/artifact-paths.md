@@ -340,12 +340,16 @@ generalises, and it keeps its own shape.
   `(detached)`. In a repository with no commit yet the start is `(none)`.
 - **One entry per unit of work.** A hypothesis proved or ruled out, a round of fix and retry, a
   review round, a step of work done without a plan, each with its time and its result in a line or
-  two. Written under rule 9 of `shared/team-roles.md`: a secret value is masked as in any artifact.
+  two. A review round's entry also names its report's path and the files its fixes touched, which
+  the next call has to name, per `shared/review-fix-loop.md`. Written under rule 9 of `shared/team-roles.md`: a secret value is masked as in any artifact.
   A real person's data and an internal host are masked too, as `<redacted: kind>`, by the list in
   The data a record must not carry in `skills/qa/references/test-run.md`, since a log summarises a
   running system. A response body or a command's output is summarised by its status and the lines
   that matter, never pasted whole.
-- **Last line.** The path of the artifact the run wrote, or `no artifact:` and why.
+- **Last line.** The path of the artifact the run wrote, or `no artifact:` and why. Only the closing
+  step writes a bare path. A path recorded before then, a draft report or a plan, is an entry with
+  its label, `<time> draft report: <path>`, so a log that stops right after it still reads as
+  unfinished.
 
 A log whose last line is neither is a run that stopped before it finished, or one another session
 is still writing. A later run of the same skill on the same subject reads the newest such log, by its
