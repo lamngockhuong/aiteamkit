@@ -4,7 +4,7 @@ Shared output convention for every `atk` skill. Referenced from `skills/<name>/S
 `shared/artifact-paths.md`, which is `../../shared/artifact-paths.md` relative to a skill file.
 
 Every skill that writes a file writes Markdown into the **target project**, never into the atk kit
-itself; `atk:help` writes none. The one exception is `atk:convention`, which may also write the
+itself; `atk:help` writes none, its run trace aside, which is not an artifact. The one exception is `atk:convention`, which may also write the
 project's own collaboration files, one of which is not Markdown; the paragraph after the table says
 what they are.
 
@@ -132,7 +132,7 @@ to `docs/adr/` as well.
 
 | Skill | Default output |
 |-------|----------------|
-| `help` | No file: the answer is given in the session, because everyone it is for is present |
+| `help` | No file but the run trace: the answer is given in the session, because everyone it is for is present |
 | `init` | `.atk/profile.md` (see the exception below) |
 | `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
 | `intake` | `docs/records/requirements/<date>-<ticket>-<slug>.md` |
@@ -236,7 +236,7 @@ merged and which directory it goes in.
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify` and `implement` | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, or the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out |
+| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify` and `implement`, the run trace of every skill | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, or the trace of a finished run, never staged either, whose deletion costs only the evidence it held |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -291,7 +291,8 @@ on them. Screenshots under its `evidence/` directory are the only copy until the
 the run confirms them, and they are never committed while they wait.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
-directory rather than a break in the chain. Eight skills read one of the nine. `atk:fix`, `atk:verify`
+directory rather than a break in the chain. A run trace is read only to improve a skill, so losing
+one costs that evidence and nothing downstream. Eight skills read one of the ten. `atk:fix`, `atk:verify`
 and `atk:implement` each read their own unfinished progress log, per Progress log, below.
 `atk:run-cases` reads
 the run log of an earlier run of the same cases file, to offer the cases it deferred and to name data
@@ -300,12 +301,14 @@ request the newest `atk:review` summary posted there beside it, to carry its fin
 forward, and starts numbering at 1 and says so only when there is neither;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
-Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the nine. Losing a
+Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the ten. Losing a
 progress log costs the ruled-out work, done again, and losing a
 report costs a set of identifiers, unless a `--comment` run posted them, and a list of gaps the next review raises again, rather than a step
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
-wants the copies keeps them. The kit writes no other artifact meant to stay untracked.
+wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Two derived
+kinds are never staged whatever the project does with the directory, the progress log and the run
+trace, each held out by a line in the local exclude file, per the two subsections below.
 
 The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
 documents rather than one. A design argues for a change and cites the code as it stood before it;
@@ -380,6 +383,18 @@ for a teammate's `git add .` as well as for `atk:git`. A run in another worktree
 finds nothing and starts fresh, and the skill says that rather than promising more.
 
 It is derived: deleting one costs the ruled-out work, which the next run does again from zero.
+
+### Run trace
+
+Every skill also leaves a run trace, `docs/derived/traces/<skill>/<run-id>.md`, by rule 10 of
+`shared/team-roles.md`, unless the profile says `Run trace: off`. `shared/run-trace.md` holds its
+path, its shape, the exclude line and the check that must pass before it is written, and the twenty
+kept per skill; nothing of that is restated here.
+
+A trace is not a progress log, and a skill that writes a progress log writes a trace as well. The progress log
+holds what a resume needs and is read by the next run of the same skill on the same subject; the
+trace holds what an analysis needs and is read by `atk:tailor --feedback`. Neither is an artifact of
+the run: a run that writes nothing still writes its trace.
 
 ## Naming
 

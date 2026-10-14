@@ -44,7 +44,8 @@ Not every skill has all five, and the ones it skips are as informative as the on
 
 **Precondition.** The skills that run project commands read `.atk/profile.md` first and stop when it
 is missing, because a guessed test command that exits zero is the worst evidence available. The
-skills that work from a chat message ignore it entirely. `plugins/atk/shared/project-profile.md` says which is
+skills that work from a chat message never require it, and read only its `Run trace` line, which
+decides whether the run leaves a trace. `plugins/atk/shared/project-profile.md` says which is
 which.
 
 **Gate.** Most skills check something before doing anything: `atk:implement` scores how much

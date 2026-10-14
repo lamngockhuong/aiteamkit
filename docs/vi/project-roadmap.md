@@ -32,7 +32,7 @@ duyệt, `implement` viết mã, `fix` chứng minh nguyên nhân của lỗi tr
 chạy thật hệ thống lên để đối chứng, và `spec` giữ những tài liệu nói API, schema và từng tính năng
 hôm nay làm gì.
 
-`help` đến sau cùng. Nó không ghi gì và trả lời nên chạy skill nào trong số còn lại, đọc từ trạng
+`help` đến sau cùng. Nó không ghi gì ngoài run trace và trả lời nên chạy skill nào trong số còn lại, đọc từ trạng
 thái của dự án chứ không từ một danh sách, nên một skill thêm về sau là skill nó đã biết sẵn.
 
 `security` đến sau nó, cho checklist mà khách hàng yêu cầu trước khi nghiệm thu: một bản ghi về những gì

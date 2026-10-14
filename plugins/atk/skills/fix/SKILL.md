@@ -53,7 +53,7 @@ the symptom is gone against the reproduction in the report, not against the deve
 /atk:fix <report-path>         # Start from an existing investigation write-up
 /atk:fix "<description>"       # Start from a description in the prompt
 /atk:fix --layer api           # Skip surface mapping when the layer is already known
-/atk:fix --investigate-only    # Stop after the cause is proven, change no file
+/atk:fix --investigate-only    # Stop after the cause is proven, change no file but the run trace
 /atk:fix --no-review           # Skip the review call, and record that it was skipped
 /atk:fix --out <path>          # Override the default output path
 ```

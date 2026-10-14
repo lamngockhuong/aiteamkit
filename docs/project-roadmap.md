@@ -32,7 +32,7 @@ phases, `implement` writes the code, `fix` proves a defect's cause before changi
 exercises the running system, and `spec` keeps the documents that say what the API, the schema and
 each feature do today.
 
-`help` came last. It writes nothing and answers which of the others to run, read from the state of
+`help` came last. It writes nothing but its run trace and answers which of the others to run, read from the state of
 the project rather than from a list, so a skill added later is one it already knows.
 
 `security` followed it, for the checklist a client asks for before acceptance: a record of what was

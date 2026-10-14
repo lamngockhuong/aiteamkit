@@ -120,10 +120,10 @@ needs a test" is checkable by a person with no kit installed, so it is a `CONV-N
 `atk:convention` writes and `atk:review` enforces. "`atk:review` should also check our i18n helper"
 is about the skill and belongs here. When both readings fit, the rule about the code wins.
 
-**The habit that matters.** It refuses. Nine things an override may never remove are listed in
+**The habit that matters.** It refuses. Ten things an override may never remove are listed in
 `plugins/atk/shared/project-overrides.md`, and the approver line, the rule that a skill does not decide what a
 role owns, and the consent line before anything leaves the local repository are three of them. A
-refused instruction is not dropped in silence: the skill says which of the nine it breaks and
+refused instruction is not dropped in silence: the skill says which of the ten it breaks and
 offers the nearest thing that does not, which is usually an instruction that surfaces the decision
 earlier rather than one that takes it.
 

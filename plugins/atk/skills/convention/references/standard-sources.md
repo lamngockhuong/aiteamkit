@@ -107,7 +107,7 @@ checked", and calling it that sends somebody to redo work that was done.
 **Unapproved.** Every proposal still in the proposals section, with its fetch date, so its age is
 visible.
 
-`--audit` reports these and writes nothing, and never fills a `checked` date: that date is evidence
+`--audit` reports these and writes nothing but the run trace, and never fills a `checked` date: that date is evidence
 that a person looked, so only that person writes it. For a line the team added in its override,
 `--sync` is where that happens: it shows the line, and the person who confirmed the four conditions
 enters the date. A line in the kit's own list is not the project's to edit; report it, and the fix

@@ -92,6 +92,8 @@ The team table is one question covering every role, never one question per role.
 A question the repository can answer is a defect in step 1, not a question. If an answer is not
 available now, or the budget runs out, write `TBD` plus the name of the person who owes it and move
 on; `--audit` picks those up later. Never leave a field blank, and never invent a plausible value.
+The `Run trace` line is the one exception: it is written only when the team turns traces off, since
+a missing line already means on, per `shared/project-profile.md`.
 
 ### 4. Write
 
@@ -150,7 +152,9 @@ comment leaves it alone.
 
 Re-run step 1 against an existing profile and report per section: matches, drifted, or missing. A
 drifted entry shows both values and their sources. The audit itself changes nothing and does not
-reorder the file. The output is a list the Tech Lead can act on, not a patch.
+reorder the file. The output is a list the Tech Lead can act on, not a patch. A profile with no
+`Run trace` line lists it as missing and says that missing means on, never as drift: nothing about
+the project has moved away from what the file says.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
 persistence line of the profile header names which of the four forms in
@@ -209,6 +213,6 @@ the repository and the tracker holds a pointer.
       moved only because what the profile promises changed.
 - [ ] Exactly one of the template's four persistence blocks survived the write, and it is the one
       matching how the file is actually stored.
-- [ ] Under `--audit`, no file was modified before the user asked for an update, a move into an
+- [ ] Under `--audit`, no file but the run trace was modified before the user asked for an update, a move into an
       update was said before it began, and how the profile is stored was reported ahead of the
       sections.

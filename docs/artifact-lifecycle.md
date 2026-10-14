@@ -1,7 +1,7 @@
 # Artifact Lifecycle
 
 Every skill in this kit that writes a file writes Markdown into your repository, with one exception
-named below; `atk:help` writes nothing, because it answers in the session. A team adopting `atk`
+named below; `atk:help` writes nothing but its run trace, because it answers in the session. A team adopting `atk`
 asks two questions in its first week: do we commit all of this, and may we delete any of it later. This
 document answers both and says what each answer costs, so the team decides rather than guesses.
 

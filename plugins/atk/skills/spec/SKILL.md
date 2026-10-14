@@ -233,7 +233,7 @@ Sections come from the neighbouring document when there is one, and otherwise fr
 the kind. Diagrams are inline Mermaid per `shared/diagram-conventions.md`, and only where a sequence
 or a state machine is genuinely hard to read as prose.
 
-`--check` writes nothing unless `--out` is given.
+`--check` writes nothing but the run trace unless `--out` is given.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs
@@ -271,7 +271,7 @@ one issue per finding, never one issue listing everything.
       and did not stop the run.
 - [ ] Nothing unverified was deleted; what looked wrong went into the drift report instead.
 - [ ] Every open question carries the name of the person who must answer it.
-- [ ] `--check` changed no file.
+- [ ] `--check` changed no file but the run trace.
 - [ ] `--sync` touched only what the change on the branch touched, apart from the front matter
       step 4 always writes, and a `ticket` line it removed is named in the summary.
 - [ ] A finding that the document never settled was reported as an open question, not as drift.

@@ -123,15 +123,24 @@ họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` v
 
 ## Lớp `shared/`
 
-Mười chín file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
+Hai mươi file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
-- `plugins/atk/shared/team-roles.md`: bảng vai trò và chín nguyên tắc mà mọi skill tuân theo.
+- `plugins/atk/shared/team-roles.md`: bảng vai trò và mười nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
   ngôn ngữ dời đường dẫn ấy, artifact rơi vào repository nào khi dự án trải trên nhiều repository,
   quy tắc đặt tên, front matter.
 - `plugins/atk/shared/ticket-adapters.md`: cách phát hiện tracker và ba kết cục của nó, gồm cả kết cục tracker
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
+
+Một file đến được mọi skill qua nguyên tắc 10 của `team-roles.md`, chứ không qua lời trích dẫn riêng:
+
+- `plugins/atk/shared/run-trace.md`: run trace mà mỗi lượt chạy để lại trong
+  `docs/derived/traces/<skill>/`, phần đầu và sáu loại sự kiện của nó, những gì nó không bao giờ chứa,
+  bước kiểm tra exclude bắt buộc trước khi ghi, hai mươi trace giữ lại cho mỗi skill, và dòng
+  `Run trace: off` tắt nó cho cả dự án. File này có để một lượt chạy không ai theo dõi, trong một
+  subagent hay trong CLI của agent khác, vẫn đọc lại được về sau, và chỉ `atk:tailor --feedback` mới
+  đánh giá một trace có ý nghĩa gì.
 
 Mười bốn file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
@@ -253,14 +262,15 @@ Hai file cuối mô tả những file không đi kèm kit:
   nằm ở đâu và skill đi ngược lên tìm nó ra sao, bốn hình dạng một dự án có thể mang cùng cái giá
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
-  tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không nhắc tới.
-  Một mục trong Docs, `Contract`, đổi việc skill làm chứ không đổi chỗ nó ghi, và ý nghĩa của mục
-  đó nằm ở `plugins/atk/shared/spec-docs.md`.
+  tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không bao giờ nhắc tới
+  nó, và chỉ đọc một dòng của nó khi có file, dòng `Run trace`. Hai mục trong Docs đổi việc skill làm
+  chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở `plugins/atk/shared/spec-docs.md`, và
+  `Run trace: off`, khiến mọi skill thôi để lại run trace, theo `plugins/atk/shared/run-trace.md`.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
 - `plugins/atk/shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
   chỗ thư mục này nằm khi dự án trải trên nhiều repository, hai mục mà file đó được phép mang, và
-  chín thứ phần ghi đè không bao giờ được gỡ. Chín điều loại trừ
+  mười thứ phần ghi đè không bao giờ được gỡ. Mười điều loại trừ
   là thứ giữ cho cơ chế này không biến một bộ công cụ cho team thành trợ lý cá nhân, và một skill bỏ
   qua phần nào của file ghi đè thì nói ra trong artifact chứ không im lặng. File ghi đè chỉ có hiệu
   lực khi người duyệt đã chuyển nó sang `APPROVED`; trước đó skill chạy như bản gốc và ghi rõ điều

@@ -61,7 +61,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 
 | Skill | What it produces |
 |-------|------------------|
-| `atk:help` | No file: the skill to run next with the line to type, the evidence in the project behind it, what that skill needs first, who approves what it produces, and what is still waiting on a named approver. Also routes a question to one skill, an `atkx` one with its install line where no `atk` skill handles it, or explains one skill. |
+| `atk:help` | No file but the run trace: the skill to run next with the line to type, the evidence in the project behind it, what that skill needs first, who approves what it produces, and what is still waiting on a named approver. Also routes a question to one skill, an `atkx` one with its install line where no `atk` skill handles it, or explains one skill. |
 | `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
 | `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
 | `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |

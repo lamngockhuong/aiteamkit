@@ -152,7 +152,7 @@ owner never comes from git history, what the step never does, and how a written 
 
 ### `--audit`
 
-Runs steps 1 to 4 and stops. It writes nothing into the project: the report comes back in the
+Runs steps 1 to 4 and stops. It writes nothing into the project but its run trace: the report comes back in the
 session, and goes to a file only under `--out`, because an audit records one moment while the
 conventions document is the thing meant to last.
 
@@ -170,7 +170,7 @@ It reports six things, in this order:
    `shared/review-checklist.md`.
 4. Which of the three collaboration files the project has, which are missing, and which carry a
    checklist or an owner list the enforcement table and the Team section no longer agree with. It
-   reports them and writes nothing, which is what separates this flag from `--sync`.
+   reports them and writes nothing but the run trace, which is what separates this flag from `--sync`.
 5. The sources behind the proposals: each one gone, each pushed since its `checked` date, each line
    whose `checked` is empty with the condition its note names, and each proposal nobody has approved,
    per `references/standard-sources.md`. A proposal is cited by repository, path, and fetch date.
@@ -225,7 +225,7 @@ picks. The picked ones go into the proposals section of the conventions
 document, with `source` as `<repo>/<path> fetched <date>` per `shared/review-checklist.md`, never
 into the review checklist. A source skipped for an empty `checked`, one that could not be fetched,
 and a technology with no source are each named in the report; the part derived from the code comes
-out the same either way. Beside `--audit` it writes nothing and lists the candidates in the report;
+out the same either way. Beside `--audit` it writes nothing but the run trace and lists the candidates in the report;
 `--scaffold` runs no step 2, so it ignores the flag and says so.
 
 ## Output
@@ -270,7 +270,7 @@ only when the user asks.
 - [ ] Every file listed in step 1 was checked, and the absent ones were reported as absent.
 - [ ] Convention gaps already reported by a review were read and carried in as candidates, each
       naming the review that raised it, or the run said no review report was there to read.
-- [ ] `--audit` changed no file, cited `path:line` or a proposal's repository, path, and fetch date
+- [ ] `--audit` changed no file but the run trace, cited `path:line` or a proposal's repository, path, and fetch date
       rather than assigning an ID, and named every source gone, changed, or unconfirmed.
 - [ ] `--sync` left the wording of every rule the code still matches untouched, showed a moved
       source as a change to pick, and turned a gone source into an open question.

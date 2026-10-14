@@ -121,10 +121,10 @@ thứ một người không cài kit vẫn kiểm được, nên nó là một d
 `atk:review` thi hành. "`atk:review` nên kiểm thêm phần i18n của đội mình" là luật về skill và thuộc
 về đây. Khi cả hai cách đọc đều hợp, luật về mã nguồn thắng.
 
-**Thói quen tạo ra khác biệt.** Nó biết từ chối. `plugins/atk/shared/project-overrides.md` liệt kê chín thứ phần
+**Thói quen tạo ra khác biệt.** Nó biết từ chối. `plugins/atk/shared/project-overrides.md` liệt kê mười thứ phần
 ghi đè không bao giờ được gỡ, trong đó có dòng người duyệt, luật một skill không quyết thứ mà một vai
 sở hữu, và ranh giới xin phép trước khi bất cứ gì rời khỏi repo cục bộ. Chỉ dẫn bị từ chối không bị
-bỏ trong im lặng: skill nói rõ nó phạm điều nào trong chín điều, rồi đề nghị thứ gần nhất mà không
+bỏ trong im lặng: skill nói rõ nó phạm điều nào trong mười điều, rồi đề nghị thứ gần nhất mà không
 phạm, thường là một chỉ dẫn đưa quyết định ra sớm hơn thay vì một chỉ dẫn tự quyết.
 
 ---

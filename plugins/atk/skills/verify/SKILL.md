@@ -56,7 +56,7 @@ turns out not to be pointed at a local one. See `shared/team-roles.md`.
 /atk:verify <ticket>         # Verify against the criteria on a ticket in the detected tracker
 /atk:verify <pr>             # Verify against the criteria in a pull request and the issue it links
 /atk:verify --ui             # Also compare the screens against the design
-/atk:verify --report-only    # Run and report, change no file, even when a fix is obvious
+/atk:verify --report-only    # Run and report, change no file but the run trace, even when a fix is obvious
 /atk:verify --out <path>     # Override the default output path
 ```
 
