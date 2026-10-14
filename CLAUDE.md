@@ -138,8 +138,10 @@ skills live in `tests/` at the repository root, which no install copies.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
-`## Invocation`, `## Workflow` (ASCII pipeline then numbered steps), `## Output`, `## Ticket`,
-`## Definition of done`.
+`## Invocation`, `## Workflow` (ASCII pipeline, then the override line and the two lines that start
+the run trace, then numbered steps), `## Output`, `## Ticket`, `## Definition of done`. The trace
+lines name the skill's own folder in the path and are worded alike in every skill, which the check
+under "Common verification commands" holds.
 
 One skill carries an extra section: `verify` adds `## Process management` between `## Workflow` and
 `## Output`. It is the only skill that starts long-running processes (`atk:run-cases` holds a browser
@@ -177,7 +179,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
 | `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `spec`, `help`, `host-capabilities.md`, `team-roles.md`, `ticket-adapters.md`, `tidy-pass.md`, `review-rounds.md`, `independent-challenge.md`, `review-fix-loop.md`, `read-only-reviewer` (restated) |
 | `shared/review-fix-loop.md` | The loop that runs `atk:review` on a skill's own change before it reaches a person: what the call is given, which severities are fixed, a disputed finding, re-verifying each round, the two-round ceiling and the five-part escalation, and the line `--no-review` leaves | `implement`, `fix`, `artifact-paths.md`, `finalize-steps.md` |
-| `shared/run-trace.md` | The run trace every run leaves under `docs/derived/traces/<skill>/`: its path and `<run-id>`, the mandatory exclude check before it is written, the header with the `way` a run was started, the six event kinds and no others, what it never holds, the twenty kept per skill, and that `Run trace: off` in the profile is the only switch | all, through rule 10 of `shared/team-roles.md`; `tailor` reads what it holds |
+| `shared/run-trace.md` | The run trace every run leaves under `docs/derived/traces/<skill>/`: its path and `<run-id>`, the ignore file inside its directory and the check that must pass before it is written, the header with the `way` a run was started, the six event kinds and no others, what it never holds, the twenty kept per skill, and that `Run trace: off` in the profile is the only switch | all, through the two lines at the top of every `## Workflow` that carry out rule 10 of `shared/team-roles.md`; `tailor` reads what it holds |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -250,9 +252,10 @@ review on its own change too. A fix that alters a public contract carries the ri
 does, and two copies of the loop would drift until one of them lowered a disputed finding to get
 past it.
 
-`run-trace.md` is cited by no skill of its own accord. Rule 10 of `team-roles.md` points at it, and
-every skill reads that file, so the trace reaches all twenty-four without a `SKILL.md` edit. It is a
-file of its own rather than a section of `artifact-paths.md` because a trace is an obligation of
+`run-trace.md` is reached from every skill's workflow. Rule 10 of `team-roles.md` is the obligation,
+but a rule a skill only cites with "See" is not read: two runs of `atk:help` never opened the file and
+wrote no trace. So every `SKILL.md` carries two lines under its override line that name the trace's
+path and send the run to `run-trace.md`, and with them the run followed it. It is a file of its own rather than a section of `artifact-paths.md` because a trace is an obligation of
 every run, a run that writes no artifact included, and `atk:help` in state mode may never open
 `artifact-paths.md`. `atk:tailor --feedback` is its one reader, and the only skill that says what a
 trace means.
@@ -679,7 +682,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
-| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
+| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, opens its workflow with the override line and the two lines that start the run trace, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the trace-line loop below for the workflow lines; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
@@ -714,6 +717,14 @@ for d in plugins/*/skills/*/; do
   n=$(basename "$d")
   grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"
 done
+
+# Every atk skill starts its run trace from its workflow, naming its own folder: a skill without the
+# line writes no trace, since rule 10 alone is not read. atkx skills do not follow rule 10
+for f in plugins/atk/skills/*/SKILL.md; do
+  n=$(basename "$(dirname "$f")")
+  grep -qF "create this run's trace, \`<docs root>/derived/traces/$n/<run-id>.md\`:" "$f" \
+    || echo "NO TRACE LINE $f"
+done; echo "OK trace lines"
 
 # No SKILL.md below skills/<name>/: Codex would list it as a skill of its own
 x=$(find plugins/*/skills -mindepth 3 -name SKILL.md)

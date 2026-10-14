@@ -4,7 +4,10 @@ What every run of every `atk` skill leaves behind, so that a run nobody watched 
 afterwards. Referenced from `skills/<name>/SKILL.md` as `shared/run-trace.md`, which is
 `../../shared/run-trace.md` relative to a skill file.
 
-Rule 10 of `shared/team-roles.md` is the obligation; this file is the shape. `atk:tailor --feedback`
+Rule 10 of `shared/team-roles.md` is the obligation, and two lines at the top of every skill's
+`## Workflow`, under the override line, are where a run takes it up: they name the trace's path and
+send the run here. This file is the shape. The rule alone was tried and was not enough: a run reads
+the skill it runs, and opens a shared file only when the skill sends it there. `atk:tailor --feedback`
 reads one trace or many, and is the only skill that judges what a trace means. A trace records facts
 another reader could check, never an opinion of the run.
 
@@ -39,22 +42,39 @@ An override cannot turn the trace off, per the list of what an override may neve
   `shared/artifact-paths.md` and a slug of the subject. The slug is made after the subject went
   through the mask below, so a request holding a token or an internal host never names a file. Two
   runs in one minute take the next free suffix, `-2`, `-3`, before `.md`.
-- **The exclude line, before the file.** Before its first step, the run adds
-  `/<docs root>/derived/traces/` to the local exclude file of the repository that holds the docs root,
-  `git rev-parse --git-path info/exclude` run there, creating its `info/` directory where the clone
-  has none, unless the line is already there. One line covers every skill.
+- **Inside the repository, before anything.** Before its first step, the run resolves the real path
+  of `<docs root>/derived/traces/`, symbolic links included, and confirms it sits inside the
+  directory `git rev-parse --show-toplevel` prints for the repository that holds the docs root.
+  Where it does not, a `docs/derived` that is a link out of the repository among the cases, the run
+  creates nothing and writes no trace.
+- **The ignore file.** Then the run makes sure `<docs root>/derived/traces/.gitignore` exists,
+  creating the directory and the file, holding the single line `*`, where the file is missing. Where
+  it is present, whatever it holds, the run never writes to it: a project that keeps its own there
+  keeps it, and the check below decides. Being inside the directory, `*` outranks a negation in the
+  project's own `.gitignore`, `!docs/derived/**` among them, and it ignores itself, so it is never
+  staged either. It is a file of the working tree, not of the git directory, which a headless run of
+  Claude Code is refused the right to edit.
 - **The check, mandatory.** Then `git check-ignore -q <trace path>` on the path of the trace about to
-  be written. Only when it passes is the file created. When it fails, because a negation in the
-  project's `.gitignore` takes precedence, the directory is in no repository, as under the
-  `workspace` shape, or the project is not a git repository at all, the run writes no trace and says
-  so before its first step, in one line: what failed, and that no trace will be written. A skill of
-  the `Not needed` group says it without naming the profile.
-- **The closing message.** When the run added the exclude line, its closing message names the line,
-  since it changed a file of the person's clone, exactly as a progress log's run does.
+  be written. Only when it passes is the trace created. When it fails, because the docs root is in no
+  git repository, as under the `workspace` shape, the project is not a git repository at all, an
+  ignore file the project keeps there does not cover the trace, or the harness refused the write, the
+  run writes no trace and says so before its first step, in one line: what failed, and that no trace
+  will be written. A skill of the `Not needed` group says it without naming the profile.
+- **The closing message.** When the run created the ignore file, its closing message names it, since
+  it is a new file in the person's working tree.
+- **What a run needs.** A file write for the trace and the ignore file, `git` through the shell for
+  the two checks, and a delete for retention. An interactive session may ask the person for each
+  once; a headless run is given them by the flags it was started with, or writes no trace and says
+  which one it lacked.
 
-A trace is never staged, whatever the project does with `docs/derived/`: the exclude line holds that
+A trace is never staged, whatever the project does with `docs/derived/`: the ignore file holds that
 for a teammate's `git add .` as well as for `atk:git`. It is written as the run goes, line by line,
 so a run that dies halfway still leaves what it did.
+
+Git is the only thing the ignore file keeps a trace from. A docs generator, an archive, or an image
+build that reads the docs root reads `derived/traces/` too, and publishes the names and corrections
+a trace holds unless the project leaves `derived/` out of it. Whether to do so is the project's call;
+`Run trace: off` is the other answer.
 
 ## The shape
 
@@ -74,8 +94,9 @@ end: no artifact: escalated, BLOCKING finding open
 ### The header
 
 - `skill`: the folder name.
-- `kit`: the `version` of the plugin manifest beside the skill, `../../.claude-plugin/plugin.json`
-  or the Cursor or Codex one beside it, or `unknown` when none is readable.
+- `kit`: the `version` of the plugin manifest beside the skill, read before anything is written:
+  `../../.claude-plugin/plugin.json` relative to the skill's `SKILL.md`, or the `.cursor-plugin` or
+  `.codex-plugin` one in the same directory. `unknown` only when none of them can be read.
 - `harness`: the harness and its version, where the harness says it. The version is left out when
   it does not.
 - `way`: how the run was started, one of four values.
@@ -87,6 +108,10 @@ end: no artifact: escalated, BLOCKING finding open
     headless command, and its task arrived from that coordinator rather than from a person typing.
   - `unknown`: none of the three can be told from what the run sees. A guess here would be counted
     later as a fact.
+
+  A run whose task arrived with no person in the conversation, a headless command such as
+  `claude -p` or `codex exec` among them, is never `session`: it is `pane` when another agent started
+  it, and `unknown` when the run cannot tell who did.
 - `flags`: the flags passed, each value through the mask below.
 - `subject`: written as a progress log writes it, per Progress log in `shared/artifact-paths.md`: a
   ticket key, a pull request number in its host's form, a plan path, or the slug of a description.
@@ -140,5 +165,26 @@ the oldest beyond twenty, by `<run-id>` order. The number is fixed, not set in t
 
 ## Cost
 
-Not yet measured. The figure, measured on three skills of different length, goes here before the
-release that carries rule 10.
+Measured on 2026-10-14 with Claude Code 2.1.296, model sonnet, each skill run headless in a scratch
+git repository with the file tools and `git` through the shell allowed, and once on Codex. Tokens are an estimate, the
+bytes divided by four, not a count any harness reported.
+
+| Skill | Run | Trace lines | Trace bytes | Tokens, estimated |
+|-------|-----|-------------|-------------|-------------------|
+| `atk:help` | state mode, no profile | 8 | 546 | about 140 |
+| `atk:plan` | a one-step plan from a description | 10 | 770 | about 190 |
+| `atk:implement` | the same change, small gate, `--no-review` | 10 | 960 | about 240 |
+| `atk:help` on Codex | state mode, codex-cli 0.162.1, `--sandbox workspace-write` | 8 | 346 | about 90 |
+
+What every traced run pays besides the file it writes:
+
+- Reading this file, 12,397 bytes, about 3,100 tokens by the same estimate. Most of a run's cost is
+  here, not in the trace.
+- A skill of the `Not needed` group reads the `Run trace` line of the profile when there is one,
+  which costs the profile's size once; a run that already reads the profile pays nothing more.
+- `git` through the shell: `rev-parse --show-toplevel` and one `check-ignore` before the trace, and
+  at retention one listing and a `check-ignore` per trace beyond twenty.
+- Permission. In Claude Code's default mode a headless run was refused the first two things a trace
+  needs, creating its directory through the shell and writing the ignore file, and wrote no trace,
+  saying so. A person in that mode is asked at least twice in a session before the first trace
+  exists; `git` reads were not asked about.

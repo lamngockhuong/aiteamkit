@@ -307,8 +307,9 @@ report costs a set of identifiers, unless a `--comment` run posted them, and a l
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Two derived
-kinds are never staged whatever the project does with the directory, the progress log and the run
-trace, each held out by a line in the local exclude file, per the two subsections below.
+kinds are never staged whatever the project does with the directory: the progress log, held out by
+a line in the local exclude file, and the run trace, held out by an ignore file in its own directory,
+per the two subsections below.
 
 The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
 documents rather than one. A design argues for a change and cites the code as it stood before it;
@@ -388,7 +389,7 @@ It is derived: deleting one costs the ruled-out work, which the next run does ag
 
 Every skill also leaves a run trace, `docs/derived/traces/<skill>/<run-id>.md`, by rule 10 of
 `shared/team-roles.md`, unless the profile says `Run trace: off`. `shared/run-trace.md` holds its
-path, its shape, the exclude line and the check that must pass before it is written, and the twenty
+path, its shape, the ignore file and the check that must pass before it is written, and the twenty
 kept per skill; nothing of that is restated here.
 
 A trace is not a progress log, and a skill that writes a progress log writes a trace as well. The progress log

@@ -50,6 +50,8 @@ the document. The new member owns reporting what the document got wrong. See `sh
 ```
 
 Before step 1, read `.atk/overrides/onboard.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/onboard/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Derive the setup from the repository
 

@@ -20,8 +20,7 @@ what the design says. This skill closes that distance, on the real application, 
 the project itself uses.
 
 It has one built-in limit. After three rounds of fix and retry it stops and hands the problem to a
-person by name, because a failure that survives three fixes is usually a design question wearing a
-bug's clothes.
+person by name: a failure that survives three fixes is usually a design question in a bug's clothes.
 
 ## Scope
 
@@ -88,6 +87,8 @@ the names the report uses.
 
 Before step 1, read `.atk/overrides/verify.md` when it exists, per rule 7 of `shared/team-roles.md`,
 and the progress log, per The progress log in `references/runtime-checks.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/verify/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Preflight
 
@@ -122,9 +123,8 @@ capture the logs from the first line rather than from the moment somebody thinks
 Never treat a start command that returned as a ready application. Wait for the readiness signal the
 profile names, with a stated timeout, and report a timeout as a failure of this run rather than
 retrying silently. A start that exits early for missing configuration stops the run with a question,
-per Knowing it is ready in `references/runtime-checks.md`; the run never fills in values itself.
-An assertion run against an application that had not finished starting produces a failure that
-costs an hour to understand.
+per Knowing it is ready in `references/runtime-checks.md`; the run never fills in values itself. An
+assertion against an application still starting fails in a way that costs an hour to understand.
 
 ### 3. Exercise and assert
 

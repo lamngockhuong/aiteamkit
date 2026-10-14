@@ -134,11 +134,12 @@ Twenty files hold what skills would otherwise repeat. The first three are cited 
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
 
-One reaches every skill through rule 10 of `team-roles.md` rather than by a citation of its own:
+One is reached from every skill's workflow, which opens with two lines that start the run trace
+rule 10 of `team-roles.md` asks for:
 
 - `plugins/atk/shared/run-trace.md`: the run trace every run leaves under
   `docs/derived/traces/<skill>/`, its header and its six event kinds, what it never holds, the
-  mandatory exclude check before it is written, the twenty kept per skill, and the `Run trace: off`
+  ignore file inside its directory and the check that must pass before it is written, the twenty kept per skill, and the `Run trace: off`
   line that turns it off for a project. It exists so a run nobody watched, in a subagent or another
   agent's CLI, can still be read afterwards, and `atk:tailor --feedback` is the only skill that
   judges what a trace means.

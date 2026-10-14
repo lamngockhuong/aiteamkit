@@ -120,7 +120,8 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    a reader sees that something was there and what it was. That is not an alteration of the evidence:
    the line, its key, and everything around the value stay verbatim.
 10. **Leave a run trace.** Every run of every skill writes one, per `shared/run-trace.md`, unless the
-   Docs section of `.atk/profile.md` says `Run trace: off`. A missing line and a missing profile
+   Docs section of `.atk/profile.md` says `Run trace: off`. The two lines under the override line at
+   the top of every skill's `## Workflow` are where a run starts it. A missing line and a missing profile
    both mean on, and no flag turns one run's trace off.
 
    A trace is not an artifact of the run. A skill or a mode that writes nothing, or changes no file,

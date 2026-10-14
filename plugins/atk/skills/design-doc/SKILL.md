@@ -66,6 +66,8 @@ See `shared/team-roles.md`.
 ```
 
 Before step 1, read `.atk/overrides/design-doc.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/design-doc/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 Under `--spike`, steps 1 to 3 run as below with the investigation of `references/spike.md` inside
 step 3, and steps 4 and 5 are replaced by the spike record that file describes. A spike answers a

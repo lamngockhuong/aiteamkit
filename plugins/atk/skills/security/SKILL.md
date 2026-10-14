@@ -68,6 +68,8 @@ the record at release sign-off.
 ```
 
 Before step 1, read `.atk/overrides/security.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/security/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 This skill is in the Required-soft group of `shared/project-profile.md`: without a profile it
 continues, and the record says which commands it had to infer.

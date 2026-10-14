@@ -83,6 +83,8 @@ Then read the newest unfinished progress log of this skill for the same defect a
 it, asking first when it looks stale, per Progress log in `shared/artifact-paths.md`. Through the run,
 add an entry to the log each time a hypothesis is proved or ruled out, and for each review round in
 step 6.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/fix/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Capture and prove
 

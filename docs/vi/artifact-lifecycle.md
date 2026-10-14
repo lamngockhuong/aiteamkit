@@ -34,7 +34,7 @@ flowchart TB
 |------|--------------|--------|------------|------------|
 | Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` và `docs/conventions.md`, các tài liệu onboarding, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có, trừ hình dạng `workspace`, nơi gốc dự án không thuộc repository nào nên không gì theo dõi chúng | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì, hoặc, khi `Contract: first`, đã được thống nhất sẽ làm gì |
 | Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa. Record của một lần chạy test chỉ được đổi `status`, các ô `Ticket`, và phần che dữ liệu có ghi lại, không gì khác | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
-| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội, trừ progress log, thứ không bao giờ được stage | Chạy lại skill | Được, thoải mái, trừ progress log chưa xong: xóa nó là mất phần việc đã loại trừ |
+| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội, trừ progress log và run trace, hai thứ không bao giờ được stage | Chạy lại skill | Được, thoải mái, trừ progress log chưa xong: xóa nó là mất phần việc đã loại trừ |
 
 ## Ba file không thuộc nhóm nào
 
@@ -71,7 +71,7 @@ rất cụ thể: người mới đề xuất đúng cách làm mà một thiế
 tên được; khách hàng hỏi bản 1.4.2 có những gì; bên kiểm toán hỏi biên bản sự cố và các hành động
 khắc phục; người bàn giao đã đi sáu tháng trước và file bàn giao là thứ duy nhất còn lại.
 
-**Dẫn xuất.** Không mất gì, trừ progress log nói ở dưới. Bản ghi triển khai và bản ghi chuyển giao
+**Dẫn xuất.** Không mất gì, trừ progress log và run trace nói ở dưới. Bản ghi triển khai và bản ghi chuyển giao
 đều là bản sao của thứ nằm trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi lên repo
 của kit, bản tóm tắt của `atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại
 `atk:review`, hoặc `atk:plan --review` nếu thứ được soát là một bản kế hoạch, hoặc `atk:qa --review`
@@ -86,7 +86,10 @@ và không bao giờ được commit khi còn chờ. Các lượt review ấy, k
 không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là bản viết duy nhất: đó là lý
 do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà `atk:fix`, `atk:verify` và
 `atk:implement` ghi dần trong lúc chạy là loại thứ chín: xóa nó thì mất phần việc đã loại trừ, và
-lần chạy sau làm lại từ đầu. Có tám skill đọc một trong chín loại. Ba skill ấy, trước khi bắt đầu,
+lần chạy sau làm lại từ đầu. Run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/`, trừ
+khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ được stage, mỗi skill giữ hai mươi
+trace, và chỉ được đọc để cải thiện skill, nên xóa một trace thì mất phần bằng chứng ấy và không ảnh
+hưởng gì phía sau. Có tám skill đọc một trong mười loại. Ba skill ấy, trước khi bắt đầu,
 mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
 trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
 chạy trước trên cùng file test case, để đề nghị chạy tiếp những case lần đó đã hoãn và để nêu dữ
@@ -117,7 +120,8 @@ quyết định đã biến mất mà không để lại dòng nào nói nó t�
 `docs/derived/` là phần duy nhất của cây thư mục mà kit nói dự án có thể không đưa vào git. Một dòng
 trong `.gitignore` là các bản sao thôi dồn lại. Không mắt xích nào trong chuỗi skill đứt, vì mọi bản
 gốc vẫn nằm trên pull request hoặc chỉ cách một câu lệnh. Dự án có commit thư mục này thì vẫn để
-progress log ở ngoài, vì mỗi log là trạng thái làm việc của một người, không phải bản sao.
+progress log và run trace ở ngoài, vì mỗi log là trạng thái làm việc của một người, mỗi trace là
+bản tường thuật một lượt chạy, không phải bản sao, và git không bao giờ nhận cả hai, dù dự án làm gì.
 
 Đừng nối dòng đó sang `docs/records/`, vì hai lý do không liên quan gì tới dung lượng đĩa:
 

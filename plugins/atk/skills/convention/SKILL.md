@@ -59,6 +59,8 @@ team agreeing is a proposal, marked as such. See `shared/team-roles.md`.
 ```
 
 Before step 1, read `.atk/overrides/convention.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/convention/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Read what exists
 

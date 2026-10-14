@@ -62,6 +62,8 @@ the front matter of the artifacts and from the Team section of `.atk/profile.md`
 ```
 
 Before step 1, read `.atk/overrides/help.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/help/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Pick the mode
 

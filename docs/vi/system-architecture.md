@@ -133,11 +133,12 @@ Hai mươi file giữ những gì các skill sẽ phải lặp lại. Ba file đ
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
   sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
 
-Một file đến được mọi skill qua nguyên tắc 10 của `team-roles.md`, chứ không qua lời trích dẫn riêng:
+Một file được gọi tới từ workflow của mọi skill, nơi mở đầu bằng hai dòng khởi động run trace mà
+nguyên tắc 10 của `team-roles.md` đòi hỏi:
 
 - `plugins/atk/shared/run-trace.md`: run trace mà mỗi lượt chạy để lại trong
   `docs/derived/traces/<skill>/`, phần đầu và sáu loại sự kiện của nó, những gì nó không bao giờ chứa,
-  bước kiểm tra exclude bắt buộc trước khi ghi, hai mươi trace giữ lại cho mỗi skill, và dòng
+  file ignore nằm trong chính thư mục của nó cùng bước kiểm tra phải qua trước khi ghi, hai mươi trace giữ lại cho mỗi skill, và dòng
   `Run trace: off` tắt nó cho cả dự án. File này có để một lượt chạy không ai theo dõi, trong một
   subagent hay trong CLI của agent khác, vẫn đọc lại được về sau, và chỉ `atk:tailor --feedback` mới
   đánh giá một trace có ý nghĩa gì.
