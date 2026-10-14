@@ -416,8 +416,9 @@ title + intro      what this produces and the one habit that makes it work
 ## Definition of done   a checklist the skill must satisfy before reporting success
 ```
 
-An `atk` skill is that file, its `references/` and its `evals/`, and nothing that runs.
-`atkx:skill-eval` is the one skill with a `scripts/` directory beside them, Node like the hooks and
+An `atk` skill is that file, its `references/` and its `evals/`, and it may carry `scripts/` as
+well, Node only, for the checks whose answer must repeat; the maintainer allowed it on 2026-10-14,
+and no `atk` skill carries one yet. `atkx:skill-eval` is the one skill with a `scripts/` directory beside them, Node like the hooks and
 for the same reason. Its sample skills must get the same verdict on every run, and a credential
 masked, a host matched against the `SKILL.md`, or a weighted score added up by an agent comes out
 slightly different each time. So the checks whose answer must repeat are scripts, and what needs

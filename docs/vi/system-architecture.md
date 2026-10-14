@@ -405,7 +405,9 @@ tiêu đề + mở đầu   skill này sinh ra gì và thói quen nào làm nó 
 ## Definition of done   checklist skill phải thỏa trước khi báo hoàn thành
 ```
 
-Một skill của `atk` gồm file đó, `references/` và `evals/`, không có gì để chạy. `atkx:skill-eval`
+Một skill của `atk` gồm file đó, `references/` và `evals/`, và cũng được mang thêm `scripts/`, chỉ
+viết bằng Node, cho những phép kiểm tra cần ra cùng một kết quả mỗi lần; người duy trì kit đã cho
+phép ngày 2026-10-14, và hiện chưa skill nào của `atk` có. `atkx:skill-eval`
 là skill duy nhất có thêm thư mục `scripts/`, viết bằng Node như hook và cùng lý do. Các skill mẫu
 của nó phải nhận cùng một kết luận ở mọi lần chạy, trong khi che một credential, so một host với
 `SKILL.md`, hay cộng một điểm có trọng số thì mỗi lần agent làm lại ra một chút khác. Vì vậy phép
