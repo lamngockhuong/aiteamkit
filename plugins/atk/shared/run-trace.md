@@ -43,12 +43,16 @@ An override cannot turn the trace off, per the list of what an override may neve
   through the mask below, so a request holding a token or an internal host never names a file. Two
   runs in one minute take the next free suffix, `-2`, `-3`, before `.md`.
 - **Inside the repository, before anything.** Before its first step, the run resolves the real path
-  of `<docs root>/derived/traces/`, symbolic links included, and confirms it sits inside the
+  of `<docs root>/derived/traces/`, or of the nearest part of it that already exists, symbolic links
+  included, and confirms it sits inside the
   directory `git rev-parse --show-toplevel` prints for the repository that holds the docs root.
   Where it does not, a `docs/derived` that is a link out of the repository among the cases, the run
   creates nothing and writes no trace.
 - **The ignore file.** Then the run makes sure `<docs root>/derived/traces/.gitignore` exists,
-  creating the directory and the file, holding the single line `*`, where the file is missing. Where
+  holding the single line `*`, where the file is missing. It is created with the harness's own file
+  write, which makes the directories it needs, never with a shell `mkdir`: in an interactive session
+  each kind of action is a permission the person grants, and a shell command and a file write are
+  two. Where
   it is present, whatever it holds, the run never writes to it: a project that keeps its own there
   keeps it, and the check below decides. Being inside the directory, `*` outranks a negation in the
   project's own `.gitignore`, `!docs/derived/**` among them, and it ignores itself, so it is never
@@ -112,13 +116,25 @@ end: no artifact: escalated, BLOCKING finding open
   A run whose task arrived with no person in the conversation, a headless command such as
   `claude -p` or `codex exec` among them, is never `session`: it is `pane` when another agent started
   it, and `unknown` when the run cannot tell who did.
-- `flags`: the flags passed, each value through the mask below.
+- `flags`: the flags passed, each value through the mask below, or `none`.
 - `subject`: written as a progress log writes it, per Progress log in `shared/artifact-paths.md`: a
   ticket key, a pull request number in its host's form, a plan path, or the slug of a description.
 - `branch` and `start`: as a progress log writes them, `(detached)` and `(none)` included.
-- `profile`: `present` or `absent`. A skill of the `Not needed` group writes no `profile` field.
+- `profile`: `present` or `absent`. The ten skills of the `Not needed` group write no `profile`
+  field: `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `breakdown`, `incident`, `retro`,
+  `onboard` and `handover`.
 - `override`: `none`, `applied`, or `not applied` with the status that kept it from applying, per
   `shared/project-overrides.md`.
+
+Every other field is always written, in that order, so the two lines are the same shape in every
+trace:
+
+```
+skill: <skill> | kit: <version or unknown> | harness: <name and version> | way: <way> | flags: <flags or none>
+subject: <subject> | branch: <branch> | start: <short sha> | profile: <present or absent> | override: <state>
+```
+
+with ` | profile: ...` left out for the ten skills above, and nothing added.
 
 ### The event kinds
 
@@ -132,6 +148,11 @@ Six kinds, and no others, so a pattern across runs can be counted:
 | `review` | the counts by severity, and the round of the ceiling | a review returns, its own or one it called |
 | `corrected by hand` | what a person changed afterwards, in that person's words, through the mask | that person says so in the session. Never inferred from a diff |
 | `end` | the artifact path, `no artifact:` and why, or `interrupted` | the run closes, or knows it is stopping before it closes |
+
+Nothing else is written, a note about the trace itself included: that its ignore file was created,
+that a check passed, that a log could not be written. What such a line would say goes in the run's
+closing message instead. The directory holds the ignore file and the traces, and the run writes no
+other file there.
 
 `end:` is always the last line. A correction reported after the run closed is written above it. A
 trace whose last line is not `end:` is a run that stopped without closing, and `atk:tailor` counts it
@@ -178,13 +199,16 @@ bytes divided by four, not a count any harness reported.
 
 What every traced run pays besides the file it writes:
 
-- Reading this file, 12,397 bytes, about 3,100 tokens by the same estimate. Most of a run's cost is
+- Reading this file, 13,871 bytes, about 3,500 tokens by the same estimate. Most of a run's cost is
   here, not in the trace.
 - A skill of the `Not needed` group reads the `Run trace` line of the profile when there is one,
   which costs the profile's size once; a run that already reads the profile pays nothing more.
 - `git` through the shell: `rev-parse --show-toplevel` and one `check-ignore` before the trace, and
   at retention one listing and a `check-ignore` per trace beyond twenty.
-- Permission. In Claude Code's default mode a headless run was refused the first two things a trace
-  needs, creating its directory through the shell and writing the ignore file, and wrote no trace,
-  saying so. A person in that mode is asked at least twice in a session before the first trace
-  exists; `git` reads were not asked about.
+- Permission. In Claude Code's default mode the first file write of the run, the ignore file in a
+  project that has none, is one question to the person, and a person who allows edits for the session
+  is asked nothing more; `git` reads are not asked about. Retention's delete is a second question,
+  only when a skill's directory passes twenty. Measured headless, where the refusal stops the trace:
+  one refusal for the trace, where the shell `mkdir` the file has since dropped cost two.
+- `way`. A headless `claude -p` run wrote `session` in every run measured: the run cannot tell a
+  headless prompt from a person typing, so `way` is the run's own account and is read as such.
