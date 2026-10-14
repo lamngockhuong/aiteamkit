@@ -23,8 +23,10 @@ are the same directory, and the next subsection changes nothing.
 Where the shape in `.atk/profile.md` names member repositories, the docs root hangs off the project
 root, and that is where an artifact about the project goes: the requirements, the design and its ADR,
 the breakdown, the estimate, the retro, the release record, the security record and the threat
-model, the incident record, the runbook, the onboarding documents, the conventions, and the
-reference document of any contract two members share.
+model, the incident record, the runbook, the onboarding documents, the conventions, the reference
+document of any contract two members share, and the run trace of every skill, whose `git` checks run
+in the repository that holds that root, `git -C <its directory>`, never in the member the session
+started in.
 One tree, read by every team.
 
 Under `parent + members` that tree is in the parent repository, which is what the parent repository
@@ -302,7 +304,8 @@ forward, and starts numbering at 1 and says so only when there is neither;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
 Keeping them in step in `shared/review-checklist.md`. And `atk:tailor --feedback --runs` reads the
-run traces of one skill, to count what repeats across its runs, and deletes none of them. Nothing
+run traces of one skill, to count what repeats across its runs, and removes old ones only as
+Retention in `shared/run-trace.md` says. Nothing
 else reads any of the ten. Losing a
 progress log costs the ruled-out work, done again, and losing a
 report costs a set of identifiers, unless a `--comment` run posted them, and a list of gaps the next review raises again, rather than a step

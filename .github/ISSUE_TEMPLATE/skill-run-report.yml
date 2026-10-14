@@ -6,7 +6,12 @@ body:
     attributes:
       value: |
         This form takes the record `/atk:tailor --feedback <skill>` writes, of one run or, with `--runs`,
-        of many runs read from their traces. Paste each section into the matching field.
+        of many runs read from their traces. Paste each section into the matching field, from the
+        neutralized text the skill shows before sending, never from the project's own copy of the file.
+
+        This repository is public. Take out everything the "Sending it" section of
+        https://github.com/lamngockhuong/aiteamkit/blob/main/plugins/atk/skills/tailor/references/feedback.md
+        lists, client and people's names and paths on your machine among them, before you paste.
 
         Report what happened rather than proposing replacement wording for the skill: the shared rules
         behind a skill are not visible from its own file, so a proposed line often restates or

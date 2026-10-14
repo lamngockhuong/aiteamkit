@@ -85,10 +85,10 @@ the names the report uses.
   -> [5. Clean up and report]
 ```
 
-Before step 1, read `.atk/overrides/verify.md` when it exists, per rule 7 of `shared/team-roles.md`,
-and the progress log, per The progress log in `references/runtime-checks.md`.
+Before step 1, read `.atk/overrides/verify.md` when it exists, per rule 7 of `shared/team-roles.md`.
 Then, before anything else, create this run's trace, `<docs root>/derived/traces/verify/<run-id>.md`:
 read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
+Then read the progress log, per The progress log in `references/runtime-checks.md`.
 
 ### 1. Preflight
 

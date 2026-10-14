@@ -119,7 +119,8 @@ nhiều skill của kit đã chạy, và hỏi thẳng khi không có skill nào
 đếm những gì lặp lại giữa các lần chạy, như một bước bị bỏ qua, một lần chờ lâu, một lần chạm trần,
 một chỗ bị sửa tay nhiều lần, dưới dạng "9 trên 12 lần chạy" kèm các lần chạy làm chứng, rồi xếp từng
 mẫu lặp theo đúng cách trên; `--since <YYYY-MM-DD>` chỉ giữ các trace từ ngày đó trở đi. Nó không xóa
-trace nào đã đọc.
+gì trong lúc đọc; khi record đã ghi xong, nó đề nghị xóa những trace cũ nhất của skill ấy vượt quá hai
+mươi, và chỉ xóa khi được đồng ý. Không lượt chạy nào khác xóa trace.
 
 **Không dùng khi.** Luật nói về mã nguồn chứ không nói về skill. "Mọi pull request phải có test" là
 thứ một người không cài kit vẫn kiểm được, nên nó là một dòng `CONV-NNN` do `atk:convention` viết và

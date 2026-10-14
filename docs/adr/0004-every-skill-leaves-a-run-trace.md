@@ -55,8 +55,9 @@ needs. `atk:run-cases` already uses the name "run log" for a log of its own.
 - **"The nine rules" becomes "the ten rules"** in `CLAUDE.md`, `docs/system-architecture.md`,
   `docs/codebase-summary.md`, and their mirrors.
 - **`.atk/profile.md` gains a second line that changes behaviour**, beside `Contract`.
-- **A trace stays in the project.** Anything `tailor` sends to the kit is neutralized per `CONV-010`,
-  and only on request.
+- **Git never carries a trace, but the docs root does.** A docs generator, an archive or an image
+  build that reads the docs root reads the traces too, unless the project leaves `derived/` out of
+  it. Anything `tailor` sends to the kit is neutralized per `CONV-010`, and only on request.
 
 ## Alternatives rejected
 

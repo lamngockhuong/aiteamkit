@@ -117,7 +117,9 @@ kit's skills has run, and asks outright when none has. `--feedback <skill> --run
 the run traces every skill leaves under `docs/derived/traces/<skill>/` instead of the session, counts
 what repeats across them, a step skipped, a long wait, a ceiling reached, a correction made again,
 as "in 9 of 12 runs" with the runs behind it, and sorts each pattern the same way; `--since
-<YYYY-MM-DD>` keeps the later traces only. It deletes none of what it read.
+<YYYY-MM-DD>` keeps the later traces only. It deletes nothing while it reads; once the record is
+written, it offers to remove the oldest traces of that skill beyond twenty, and removes them only on
+a yes. No other run removes a trace.
 
 **Do not use when.** The rule is about the code rather than about the skill. "Every pull request
 needs a test" is checkable by a person with no kit installed, so it is a `CONV-NNN` row that

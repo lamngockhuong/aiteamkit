@@ -129,6 +129,14 @@ Which is which, what each deletion costs, and the three policies a team can choo
 [docs/artifact-lifecycle.md](docs/artifact-lifecycle.md)
 ([Tiếng Việt](docs/vi/artifact-lifecycle.md)).
 
+Every run of every skill also leaves a short run trace, on by default, under
+`docs/derived/traces/<skill>/`: which steps ran or were skipped, who was asked and how long they
+waited, and where a ceiling stopped the run. The first traced run creates an ignore file in that
+directory, so git never sees a trace, but a docs generator or an archive that reads `docs/` does.
+`Run trace: off` in `.atk/profile.md` turns traces off for the project, and
+`/atk:tailor --feedback <skill> --runs` reads them:
+[plugins/atk/shared/run-trace.md](plugins/atk/shared/run-trace.md).
+
 `atk` is tool-agnostic: the Markdown artifact is the source of truth and a tracker holds a pointer
 to it. [plugins/atk/shared/ticket-adapters.md](plugins/atk/shared/ticket-adapters.md) maps the vocabulary to GitHub Issues,
 Jira, Backlog, and Redmine, and no skill creates tickets without showing the list and getting a yes.

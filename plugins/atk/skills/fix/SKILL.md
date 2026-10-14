@@ -79,12 +79,12 @@ gives it and say in the report which one was run.
 ```
 
 Before step 1, read `.atk/overrides/fix.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/fix/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 Then read the newest unfinished progress log of this skill for the same defect and offer to resume
 it, asking first when it looks stale, per Progress log in `shared/artifact-paths.md`. Through the run,
 add an entry to the log each time a hypothesis is proved or ruled out, and for each review round in
 step 6.
-Then, before anything else, create this run's trace, `<docs root>/derived/traces/fix/<run-id>.md`:
-read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Capture and prove
 

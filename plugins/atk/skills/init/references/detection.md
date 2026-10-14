@@ -352,8 +352,8 @@ own. No answer is `TBD` with the Tech Lead's name, which every skill reads as `c
 
 The same turn carries one line more, the `Run trace` line in Docs: every run of every skill leaves a
 short trace of the steps it ran, who it waited for and where it stopped, under the docs root's
-`derived/traces/`, never staged and never sent, per `shared/run-trace.md`; does the team want that
-off? It costs no turn either. Only an answer of off is written. No answer, or on, leaves the line
+`derived/traces/`, naming who answered each question it asked, kept out of git but read by anything
+that builds or packs the docs root, per `shared/run-trace.md`; does the team want that off? It costs no turn either. Only an answer of off is written. No answer, or on, leaves the line
 out, which every skill reads as on, so this is the one question whose missing answer is not `TBD`.
 
 That leaves four turns for the ambiguities the section above can raise: which directory is the

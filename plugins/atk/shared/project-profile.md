@@ -213,7 +213,9 @@ long because it is a list of short labelled fields, as Verify is, is fine.
 An answer nobody has yet is recorded as `TBD` plus the name of the person who owes it. Never blank,
 and never guessed. The exception is `Run trace`, a line whose absence already has a meaning: with no
 answer it is left out rather than written `TBD`, since a missing line is read as on, and a `TBD`
-there would read the same while looking like a question somebody still owes.
+there would read the same while looking like a question somebody still owes. For the same reason a
+re-run of `atk:init` never asks for the line again, and `--audit` never reports it as missing or
+drifted: its absence is an answer.
 
 ## The precondition rule
 

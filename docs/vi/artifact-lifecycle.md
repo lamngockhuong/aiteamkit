@@ -87,8 +87,8 @@ không đăng gì lên pull request, nên tới khi chạy lại, báo cáo củ
 do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà `atk:fix`, `atk:verify` và
 `atk:implement` ghi dần trong lúc chạy là loại thứ chín: xóa nó thì mất phần việc đã loại trừ, và
 lần chạy sau làm lại từ đầu. Run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/`, trừ
-khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ được stage, mỗi skill giữ hai mươi
-trace, và chỉ được đọc để cải thiện skill, nên xóa một trace thì mất phần bằng chứng ấy và không ảnh
+khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ được stage, mỗi skill chỉ bị cắt về hai mươi trace khi
+`atk:tailor --feedback --runs` đề nghị và có người đồng ý, và chỉ được đọc để cải thiện skill, nên xóa một trace thì mất phần bằng chứng ấy và không ảnh
 hưởng gì phía sau. Có chín skill đọc một trong mười loại. Ba skill ấy, trước khi bắt đầu,
 mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
 trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
@@ -103,7 +103,8 @@ biệt một kết quả tác giả đã thấy mà không sửa với một k�
 `atk:qa --review` đọc báo cáo mới nhất của cùng file test case, cũng để giữ mã định danh; còn
 `atk:convention` đọc mục `Convention gaps` của báo cáo, đó là đường đi để một luật mà lượt review
 muốn có tới được tài liệu ghi luật. Còn `atk:tailor --feedback --runs` đọc các run trace của một
-skill để đếm những gì lặp lại giữa các lần chạy, và không xóa trace nào. Xóa báo cáo ấy làm lượt review sau mất một bộ mã định danh, trừ
+skill để đếm những gì lặp lại giữa các lần chạy; nó không xóa trace nào trong lúc đọc, và chỉ sau đó
+mới đề nghị xóa những trace cũ nhất vượt quá hai mươi. Xóa báo cáo ấy làm lượt review sau mất một bộ mã định danh, trừ
 khi một lượt chạy `--comment` đã đăng chúng lên pull request, và mất những khoảng trống quy ước đáng
 lẽ được mang sang, chứ không đứt mắt xích nào.
 

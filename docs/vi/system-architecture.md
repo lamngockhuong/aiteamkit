@@ -104,7 +104,8 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
 | `plugins/atk/shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
-| `.atk/profile.md` | Một lần mỗi lượt chạy, ở skill nào cần sự thật của dự án | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
+| `plugins/atk/shared/run-trace.md` | Ở mọi lượt chạy, do hai dòng trace trong workflow của mọi skill dẫn tới, trừ khi profile ghi `Run trace: off` | Chi phí ghi ở mục Cost ngay trong file |
+| `.atk/profile.md` | Một lần mỗi lượt chạy: đọc trọn bởi skill nào cần sự thật của dự án, và chỉ dòng `Run trace` bởi các skill còn lại | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
 
 Bên cạnh các skill có một agent đi kèm, `plugins/atk/agents/read-only-reviewer.md`. Claude Code nạp
 frontmatter của nó cùng plugin và đặt tên `atk:read-only-reviewer`; phần thân chỉ được đọc khi một
@@ -138,7 +139,7 @@ nguyên tắc 10 của `team-roles.md` đòi hỏi:
 
 - `plugins/atk/shared/run-trace.md`: run trace mà mỗi lượt chạy để lại trong
   `docs/derived/traces/<skill>/`, phần đầu và sáu loại sự kiện của nó, những gì nó không bao giờ chứa,
-  file ignore nằm trong chính thư mục của nó cùng bước kiểm tra phải qua trước khi ghi, hai mươi trace giữ lại cho mỗi skill, và dòng
+  file ignore nằm trong chính thư mục của nó cùng bước kiểm tra phải qua trước khi ghi, hai mươi trace giữ lại cho mỗi skill, chỉ được `atk:tailor --runs` cắt bớt khi có người đồng ý, và dòng
   `Run trace: off` tắt nó cho cả dự án. File này có để một lượt chạy không ai theo dõi, trong một
   subagent hay trong CLI của agent khác, vẫn đọc lại được về sau, và chỉ `atk:tailor --feedback` mới
   đánh giá một trace có ý nghĩa gì.

@@ -141,7 +141,9 @@ records, and present the two groups separately: what still matches, and what has
 entry shows both values and both sources, the same shape `--audit` reports.
 
 A value that matches what the profile already records is confirmed by that agreement. Ask only about
-drift, about fields still marked `TBD`, and about a fixed-turn field the profile lacks entirely. That
+drift, about fields still marked `TBD`, and about a fixed-turn field the profile lacks entirely. The
+`Run trace` line is not such a field, per `shared/project-profile.md`; a team that wants traces back
+on after turning them off says so, and the update removes the line. That
 is what shrinks the interview: of the four fixed turns in `references/detection.md`, only the ones the
 existing file leaves unanswered are still owed.
 
@@ -154,9 +156,8 @@ comment leaves it alone.
 
 Re-run step 1 against an existing profile and report per section: matches, drifted, or missing. A
 drifted entry shows both values and their sources. The audit itself changes nothing and does not
-reorder the file. The output is a list the Tech Lead can act on, not a patch. A profile with no
-`Run trace` line lists it as missing and says that missing means on, never as drift: nothing about
-the project has moved away from what the file says.
+reorder the file. The output is a list the Tech Lead can act on, not a patch. A missing `Run trace`
+line is never reported missing, per `shared/project-profile.md`.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
 persistence line of the profile header names which of the four forms in

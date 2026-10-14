@@ -88,7 +88,8 @@ its report is the only written copy: a reason to keep the directory, not a reaso
 it. The progress log that `atk:fix`, `atk:verify` and `atk:implement` write as they go is the ninth
 kind: deleting one costs the ruled-out work, which the next run does again from zero. The run trace
 every skill leaves under `docs/derived/traces/<skill>/`, unless the profile says `Run trace: off`,
-is the tenth: never staged, kept to twenty per skill, and read only to improve a skill, so deleting
+is the tenth: never staged, trimmed to twenty per skill only when `atk:tailor --feedback --runs`
+offers it and a person says yes, and read only to improve a skill, so deleting
 one costs that evidence and nothing downstream. Nine skills read one of the ten. Those three each read their own newest unfinished log before starting, and
 offer to resume it, asking first when its branch or start commit no longer matches. `atk:run-cases`
 reads the run log of an earlier run of the same cases file, to offer the cases that run deferred and
@@ -102,7 +103,8 @@ declined from one a week of commits has just created; `atk:qa --review` reads th
 same cases file, for the same identifiers; and `atk:convention` reads its `Convention gaps` section,
 which is how a rule the review wanted reaches the file that records it. And
 `atk:tailor --feedback --runs` reads the run traces of one skill, to count what repeats across its
-runs, and deletes none of them. Deleting that report costs
+runs; it deletes none of them while it reads, and only afterwards offers to remove the oldest
+beyond twenty. Deleting that report costs
 the next review a set of identifiers, unless a `--comment` run posted them on the pull request, and
 the gaps it would have carried across, not a step in the chain.
 

@@ -57,8 +57,10 @@ phân tích. `atk:run-cases` cũng đã dùng tên "run log" cho nhật ký riê
 - **"Chín quy tắc" thành "mười quy tắc"** trong `CLAUDE.md`, `docs/system-architecture.md`,
   `docs/codebase-summary.md`, và các bản tiếng Việt của chúng.
 - **`.atk/profile.md` có dòng thứ hai làm thay đổi hành vi**, bên cạnh `Contract`.
-- **Trace nằm lại trong dự án.** Những gì `tailor` gửi về kit đều được viết trung tính theo
-  `CONV-010`, và chỉ khi người dùng yêu cầu.
+- **Git không bao giờ mang theo trace, nhưng thư mục docs gốc thì có.** Một trình sinh tài liệu,
+  một bản lưu trữ hay một bước build image đọc thư mục docs gốc cũng đọc luôn các trace, trừ khi dự án
+  loại `derived/` ra. Những gì `tailor` gửi về kit đều được viết trung tính theo `CONV-010`, và chỉ
+  khi người dùng yêu cầu.
 
 ## Các phương án bị loại
 
