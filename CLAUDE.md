@@ -126,10 +126,13 @@ beside `references/checklists.md`. The rules stay in Markdown; only the records 
 because a free-text field routinely holds a comma and a quote forgotten by hand shifts every field
 after it.
 
-An `atkx` skill may also carry `scripts/`, Node only, for the checks whose answer must be the same on
-every run, and only those; judgment stays in `references/`. `skill-eval` is the one that does, for
-the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records: its sample skills
-in `tests/skill-eval-fixtures/` must get the same verdict every time. An `atk` skill carries no `scripts/`.
+A skill of either plugin may also carry `scripts/`, Node only, for the checks whose answer must be
+the same on every run, and only those; judgment stays in `references/`. `atkx:skill-eval` is the one
+that does, for the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records: its
+sample skills in `tests/skill-eval-fixtures/` must get the same verdict every time. No `atk` skill
+carries one yet. That was a description of the kit when ADR 0002 was written, never a decision, and
+the maintainer said on 2026-10-14 that an `atk` skill may carry `scripts/` on the same terms. The
+first one comes with a design and an ADR of its own, as `skill-eval`'s did.
 
 No file named `SKILL.md` sits deeper than `skills/<name>/SKILL.md` in either plugin. Codex lists a
 `SKILL.md` found at any depth under `skills/` as a skill of its own, so a sample skill kept inside a
