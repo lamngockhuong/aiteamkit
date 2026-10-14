@@ -14,7 +14,7 @@ cố, biên bản retro, tài liệu onboarding và tài liệu bàn giao.
 Một skill không viết chữ nào: `atk:init` ghi lại dự án này là gì, để phần còn lại của kit đọc đúng
 lệnh test và bố cục tầng của dự án thay vì đoán chúng.
 
-Một skill không ghi gì cả: `atk:help` đọc profile đó, các artifact cùng trạng thái phê duyệt của
+Một skill không ghi gì ngoài run trace của nó: `atk:help` đọc profile đó, các artifact cùng trạng thái phê duyệt của
 chúng, và branch, rồi nói skill nào nên chạy tiếp và việc gì đang chờ ai.
 
 Số còn lại sửa thẳng vào code. Làm một ticket, sửa một bug, kiểm chứng kết quả đều nằm trong vòng

@@ -61,7 +61,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 
 | Skill | What it produces |
 |-------|------------------|
-| `atk:help` | No file: the skill to run next with the line to type, the evidence in the project behind it, what that skill needs first, who approves what it produces, and what is still waiting on a named approver. Also routes a question to one skill, an `atkx` one with its install line where no `atk` skill handles it, or explains one skill. |
+| `atk:help` | No file but the run trace: the skill to run next with the line to type, the evidence in the project behind it, what that skill needs first, who approves what it produces, and what is still waiting on a named approver. Also routes a question to one skill, an `atkx` one with its install line where no `atk` skill handles it, or explains one skill. |
 | `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
 | `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
 | `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
@@ -93,7 +93,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 ```bash
 /atk:help [question|skill]                # --lang
 /atk:init                                 # --audit --lang --out
-/atk:tailor [<skill>]                     # --audit --feedback --out
+/atk:tailor [<skill>]                     # --audit --feedback --runs --since --out
 /atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out
 /atk:catchup <epic-url|pr-url>            # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
@@ -128,6 +128,14 @@ never edited and rarely deleted, and one directory is safe to delete or leave ou
 Which is which, what each deletion costs, and the three policies a team can choose between:
 [docs/artifact-lifecycle.md](docs/artifact-lifecycle.md)
 ([Tiếng Việt](docs/vi/artifact-lifecycle.md)).
+
+Every run of every skill also leaves a short run trace, on by default, under
+`docs/derived/traces/<skill>/`: which steps ran or were skipped, who was asked and how long they
+waited, and where a ceiling stopped the run. The first traced run creates an ignore file in that
+directory, so git never sees a trace, but a docs generator or an archive that reads `docs/` does.
+`Run trace: off` in `.atk/profile.md` turns traces off for the project, and
+`/atk:tailor --feedback <skill> --runs` reads them:
+[plugins/atk/shared/run-trace.md](plugins/atk/shared/run-trace.md).
 
 `atk` is tool-agnostic: the Markdown artifact is the source of truth and a tracker holds a pointer
 to it. [plugins/atk/shared/ticket-adapters.md](plugins/atk/shared/ticket-adapters.md) maps the vocabulary to GitHub Issues,

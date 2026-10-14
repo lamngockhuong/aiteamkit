@@ -105,7 +105,8 @@ This produces the size discipline in the kit:
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
 | `plugins/atk/shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
-| `.atk/profile.md` | Once per run, in the skills that need project facts | A page of pointers and commands, never prose |
+| `plugins/atk/shared/run-trace.md` | On every run, sent there by the two trace lines of every workflow, unless the profile says `Run trace: off` | The cost stated under Cost in the file itself |
+| `.atk/profile.md` | Once per run: in full by the skills that need project facts, and for its `Run trace` line by the rest | A page of pointers and commands, never prose |
 
 One agent ships beside the skills, `plugins/atk/agents/read-only-reviewer.md`. Claude Code loads its
 frontmatter with the plugin and namespaces it `atk:read-only-reviewer`; its body is read only when a
@@ -124,15 +125,25 @@ On both, the prompts in `references/` remain the route.
 
 ## The `shared/` layer
 
-Nineteen files hold what skills would otherwise repeat. The first three are cited by all 24:
+Twenty files hold what skills would otherwise repeat. The first three are cited by all 24:
 
-- `plugins/atk/shared/team-roles.md`: the role table and the nine rules every skill follows.
+- `plugins/atk/shared/team-roles.md`: the role table and the ten rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
   root moves it, which repository an artifact lands in where the project spans several, naming
   rules, and front matter.
 - `plugins/atk/shared/ticket-adapters.md`: tracker detection and its three outcomes, including the one where a
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
   dates, and what to report where field history is missing.
+
+One is reached from every skill's workflow, which opens with two lines that start the run trace
+rule 10 of `team-roles.md` asks for:
+
+- `plugins/atk/shared/run-trace.md`: the run trace every run leaves under
+  `docs/derived/traces/<skill>/`, its header and its six event kinds, what it never holds, the
+  ignore file inside its directory and the check that must pass before it is written, the twenty kept per skill, trimmed only by `atk:tailor --runs` on a yes, and the `Run trace: off`
+  line that turns it off for a project. It exists so a run nobody watched, in a subagent or another
+  agent's CLI, can still be read afterwards, and `atk:tailor --feedback` is the only skill that
+  judges what a trace means.
 
 Fourteen are contracts between a named handful of skills rather than kit-wide rules:
 
@@ -254,14 +265,16 @@ The last two describe files that do not ship with the kit at all:
   project root is and how a skill walks up to it, the four shapes a project can have with what a
   parent holding member repositories and a workspace holding none of its own each cost, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
-  continue and say the profile was absent; skills that work from a chat message ignore it entirely.
-  One Docs entry, `Contract`, changes what a skill does rather than where it writes, and its meaning
-  lives in `plugins/atk/shared/spec-docs.md`.
+  continue and say the profile was absent; skills that work from a chat message never mention it, and
+  read one line of it when it is there, `Run trace`. Two Docs entries change what a skill does rather
+  than where it writes: `Contract`, whose meaning lives in `plugins/atk/shared/spec-docs.md`, and
+  `Run trace: off`, which stops every skill leaving a run trace, per
+  `plugins/atk/shared/run-trace.md`.
   `atk:init` writes the profile, so it belongs to no group.
 
 - `plugins/atk/shared/project-overrides.md`: what `.atk/overrides/<skill>.md` holds in the **target project**,
   where the directory sits when a project spans several repositories, the two sections it may carry,
-  and the nine things an override may never remove. The nine
+  and the ten things an override may never remove. The ten
   exclusions are what keeps the mechanism from turning a team kit into a personal assistant, and a
   skill that skips part of an override says so in its artifact rather than silently. An override
   applies only once its approver has moved it to `APPROVED`; before that the skill runs as shipped
@@ -404,8 +417,9 @@ title + intro      what this produces and the one habit that makes it work
 ## Definition of done   a checklist the skill must satisfy before reporting success
 ```
 
-An `atk` skill is that file, its `references/` and its `evals/`, and nothing that runs.
-`atkx:skill-eval` is the one skill with a `scripts/` directory beside them, Node like the hooks and
+An `atk` skill is that file, its `references/` and its `evals/`, and it may carry `scripts/` as
+well, Node only, for the checks whose answer must repeat; the maintainer allowed it on 2026-10-14,
+and no `atk` skill carries one yet. `atkx:skill-eval` is the one skill with a `scripts/` directory beside them, Node like the hooks and
 for the same reason. Its sample skills must get the same verdict on every run, and a credential
 masked, a host matched against the `SKILL.md`, or a weighted score added up by an agent comes out
 slightly different each time. So the checks whose answer must repeat are scripts, and what needs

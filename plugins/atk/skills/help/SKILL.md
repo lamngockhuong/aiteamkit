@@ -21,7 +21,8 @@ README and in the `/` menu; what neither of them knows is that this project's re
 `IN REVIEW`, that the branch has three commits and no pull request, or that there is no profile yet.
 This skill reads that state, then points at one skill and says why.
 
-It answers in the session and writes nothing. The answer is true at the moment it is given, for the
+It answers in the session and writes nothing but its run trace, per rule 10 of
+`shared/team-roles.md`. The answer is true at the moment it is given, for the
 person who asked, and the next person asks again and gets the answer true for them.
 
 ## Scope
@@ -61,6 +62,8 @@ the front matter of the artifacts and from the Team section of `.atk/profile.md`
 ```
 
 Before step 1, read `.atk/overrides/help.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/help/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Pick the mode
 
@@ -184,7 +187,7 @@ A `Waiting on people` line is a fact about an artifact, never advice to approve 
 separate act by the person named, per rule 2 of `shared/team-roles.md`, and this skill does not
 enter a state or suggest that anyone skip one.
 
-The answer writes no file because every reader it has is present. A record of which skill somebody
+The answer writes no file, the run trace aside, because every reader it has is present. A record of which skill somebody
 was told to run describes nothing the team needs later, and the artifact the recommended skill
 writes is the one that carries the work.
 
@@ -199,7 +202,8 @@ Nothing is posted, the answer included.
 - [ ] The skill list came from the kit's `skills/*/SKILL.md`, not from memory or a copy.
 - [ ] An `atkx` skill, from `references/atkx-skills.md` or the live skill list, was named only where
       it wins by that file's Which one wins, with `Install` when it is not installed.
-- [ ] Nothing in the project was changed: no file written, no state entered, no ticket posted.
+- [ ] Nothing in the project was changed: no file written but the run trace, no state entered, no
+      ticket posted.
 - [ ] The answer names one skill to run, names the approver the work is waiting on, or says the
       request is outside this kit.
 - [ ] Every item under `Because` carries the path or the command it was read from.

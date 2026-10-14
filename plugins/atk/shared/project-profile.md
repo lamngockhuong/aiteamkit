@@ -197,17 +197,25 @@ from, which is a fact about the directory layout and stays true when a Vietnames
 English document. A tree that is not partitioned records that and nothing else;
 `shared/artifact-paths.md` owns what each skill then does with it.
 
-`Contract: first` or `Contract: code` in Docs is the one entry there that changes what a skill does
-rather than where it writes: whether a reference document of any kind but `screen` may exist before
-the code it describes.
-`shared/spec-docs.md` owns what each value means, and why a missing line reads as `code`.
+Two entries in Docs change what a skill does rather than where it writes.
+
+- `Contract: first` or `Contract: code`: whether a reference document of any kind but `screen` may
+  exist before the code it describes. `shared/spec-docs.md` owns what each value means, and why a
+  missing line reads as `code`.
+- `Run trace: off`: no skill leaves a run trace in this project. A missing line, and a missing
+  profile, mean on. `shared/run-trace.md` owns what a trace holds, and rule 10 of
+  `shared/team-roles.md` is the obligation the line switches off.
 
 Every entry is a pointer or a command, never prose copied from elsewhere. A section that runs long
 because it has started explaining instead of linking is duplicating a document; a section that runs
 long because it is a list of short labelled fields, as Verify is, is fine.
 
 An answer nobody has yet is recorded as `TBD` plus the name of the person who owes it. Never blank,
-and never guessed.
+and never guessed. The exception is `Run trace`, a line whose absence already has a meaning: with no
+answer it is left out rather than written `TBD`, since a missing line is read as on, and a `TBD`
+there would read the same while looking like a question somebody still owes. For the same reason a
+re-run of `atk:init` never asks for the line again, and `--audit` never reports it as missing or
+drifted: its absence is an answer.
 
 ## The precondition rule
 
@@ -236,6 +244,11 @@ Tracker row and says nothing.
 The practical test: delete the profile, run the skill again, and compare. A `Not needed` skill
 produces the same artifact with the same confidence, only having worked a little harder to find what
 the profile would have told it.
+
+One line is read by every `Not needed` skill whenever the profile is there: `Run trace` in Docs,
+which decides whether the run leaves a trace, per `shared/run-trace.md`. Reading it changes nothing
+the user sees. The skill still never mentions the profile, and a trace it does not write is never
+explained by naming the file.
 
 `atk:spec` is Required-soft rather than Required because it has two other ways to find its
 footing: the documents already in the directory, whose shape it copies, and the four default kinds.

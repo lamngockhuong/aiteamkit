@@ -67,6 +67,8 @@ reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 ```
 
 Before step 1, read `.atk/overrides/qa.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/qa/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 Where the cases file for the slug already exists, the five steps never write it from nothing: the run
 is `--update`, and the session says so. Written again from step 2, every ID would be numbered afresh,

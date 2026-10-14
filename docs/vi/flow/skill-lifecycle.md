@@ -44,7 +44,8 @@ Không phải skill nào cũng có đủ năm chặng, và chặng bị bỏ qua
 
 **Điều kiện cần.** Skill nào chạy lệnh của dự án thì đọc `.atk/profile.md` trước và dừng lại khi
 thiếu nó, vì một lệnh test đoán bừa mà thoát 0 là thứ bằng chứng tệ nhất có thể có. Skill nào làm
-việc từ một tin nhắn chat thì không đụng tới profile. `plugins/atk/shared/project-profile.md` nói rõ skill nào
+việc từ một tin nhắn chat thì không bao giờ đòi profile, và chỉ đọc dòng `Run trace` của nó, dòng
+quyết định lượt chạy có để lại trace hay không. `plugins/atk/shared/project-profile.md` nói rõ skill nào
 thuộc nhóm nào.
 
 **Cổng.** Phần lớn skill kiểm một điều gì đó trước khi động tay: `atk:implement` chấm xem phần việc
@@ -82,7 +83,7 @@ chạy.
 | Dừng và giao lại | Skill này không đổi thêm gì nữa; công việc chuyển đi | `implement` sang `design-doc`, `implement` sang `fix`, `plan` sang `design-doc`, `run-cases` sang `qa --record` khi harness không có khả năng tự động hoá trình duyệt |
 | Đề nghị và chờ một tiếng đồng ý | Có thể không xảy ra, và bản ghi nói rõ là đã xảy ra hay chưa | `implement` và `fix` sang `verify` |
 | Gửi ngược một phát hiện | Skill này chạy tiếp; skill kia mới là nơi ghi lại phát hiện đó | `review` sang `convention`, `verify` sang `qa` |
-| Viết một file skill khác đọc | Không có lời gọi nào; hợp đồng đi qua một file | `init` tới mọi skill sửa mã, `tailor` tới mọi skill, `convention` tới `implement` và `review`, `spec` tới `design-doc` và `qa`, `qa` tới `fix` và `release` qua record của lần chạy, `run-cases` tới `qa --bug` và `--retest` qua run record nó viết |
+| Viết một file skill khác đọc | Không có lời gọi nào; hợp đồng đi qua một file | `init` tới mọi skill sửa mã, `tailor` tới mọi skill, mọi skill tới `tailor` qua run trace của nó, `convention` tới `implement` và `review`, `spec` tới `design-doc` và `qa`, `qa` tới `fix` và `release` qua record của lần chạy, `run-cases` tới `qa --bug` và `--retest` qua run record nó viết |
 
 ```mermaid
 flowchart TD

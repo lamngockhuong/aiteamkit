@@ -53,6 +53,8 @@ be set against what this one turned into; where the tracker records no actual ti
 ```
 
 Before step 1, read `.atk/overrides/estimate.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/estimate/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Load items
 

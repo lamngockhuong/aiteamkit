@@ -47,6 +47,8 @@ off the test result. Tech Lead signs off the technical risk. See `shared/team-ro
 ```
 
 Before step 1, read `.atk/overrides/release.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/release/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Collect the changes
 

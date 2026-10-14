@@ -44,7 +44,8 @@ Not every skill has all five, and the ones it skips are as informative as the on
 
 **Precondition.** The skills that run project commands read `.atk/profile.md` first and stop when it
 is missing, because a guessed test command that exits zero is the worst evidence available. The
-skills that work from a chat message ignore it entirely. `plugins/atk/shared/project-profile.md` says which is
+skills that work from a chat message never require it, and read only its `Run trace` line, which
+decides whether the run leaves a trace. `plugins/atk/shared/project-profile.md` says which is
 which.
 
 **Gate.** Most skills check something before doing anything: `atk:implement` scores how much
@@ -81,7 +82,7 @@ run time.
 | Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc`, `run-cases` to `qa --record` where the harness has no browser automation |
 | Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` and `fix` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
-| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record, `run-cases` to `qa --bug` and `--retest` through the run record it writes |
+| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, every skill to `tailor` through its run trace, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record, `run-cases` to `qa --bug` and `--retest` through the run record it writes |
 
 ```mermaid
 flowchart TD

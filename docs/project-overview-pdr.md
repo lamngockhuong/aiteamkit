@@ -15,7 +15,7 @@ handover.
 One writes no prose at all. `atk:init` records what this project is, so the rest of the kit reads
 the project's own test command and layer layout instead of guessing at them.
 
-One writes nothing. `atk:help` reads that profile, the artifacts and their approval state, and the
+One writes nothing but its run trace. `atk:help` reads that profile, the artifacts and their approval state, and the
 branch, then says which skill to run next and what is waiting on whom.
 
 The rest change the code. Implementing a ticket, fixing a bug, and verifying the result are part of

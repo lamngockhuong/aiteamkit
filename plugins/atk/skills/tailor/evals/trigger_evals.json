@@ -14,6 +14,9 @@
   { "query": "スキルをうちのチーム向けにカスタマイズして", "should_trigger": true },
   { "query": "レビューのスキルに独自のチェック項目を追加したい", "should_trigger": true },
   { "query": "キットを触らずにスキルの動きを変えたい", "should_trigger": true },
+  { "query": "look at the last runs of atk:plan and tell me what keeps going wrong", "should_trigger": true },
+  { "query": "xem lại các lần chạy của skill implement, bước nào hay bị bỏ qua", "should_trigger": true },
+  { "query": "atk:review の実行履歴を分析して、繰り返し起きている問題を教えて", "should_trigger": true },
 
   { "query": "every pull request must include a test for the changed behaviour", "should_trigger": false },
   { "query": "write down our branch naming and commit message rules", "should_trigger": false },

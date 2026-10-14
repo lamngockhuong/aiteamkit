@@ -114,17 +114,23 @@ team này, bản ghi gửi người viết ra skill đó, hoặc không chỗ n�
 được hỏi. Skill đó không nhất thiết phải thuộc kit: một lần chạy skill của chính dự án hay của kit
 khác cũng được ghi y như vậy, trừ phần ghi đè, vì chỉ skill `atk` mới đọc file ghi đè. Gọi
 `--feedback` mà không kèm tên skill thì nó lấy skill từ phiên làm việc, hỏi lại khi trong phiên có
-nhiều skill của kit đã chạy, và hỏi thẳng khi không có skill nào.
+nhiều skill của kit đã chạy, và hỏi thẳng khi không có skill nào. `--feedback <skill> --runs [<dir>]`
+đọc các run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/` thay cho phiên làm việc,
+đếm những gì lặp lại giữa các lần chạy, như một bước bị bỏ qua, một lần chờ lâu, một lần chạm trần,
+một chỗ bị sửa tay nhiều lần, dưới dạng "9 trên 12 lần chạy" kèm các lần chạy làm chứng, rồi xếp từng
+mẫu lặp theo đúng cách trên; `--since <YYYY-MM-DD>` chỉ giữ các trace từ ngày đó trở đi. Nó không xóa
+gì trong lúc đọc; khi record đã ghi xong, nó đề nghị xóa những trace cũ nhất của skill ấy vượt quá hai
+mươi, và chỉ xóa khi được đồng ý. Không lượt chạy nào khác xóa trace.
 
 **Không dùng khi.** Luật nói về mã nguồn chứ không nói về skill. "Mọi pull request phải có test" là
 thứ một người không cài kit vẫn kiểm được, nên nó là một dòng `CONV-NNN` do `atk:convention` viết và
 `atk:review` thi hành. "`atk:review` nên kiểm thêm phần i18n của đội mình" là luật về skill và thuộc
 về đây. Khi cả hai cách đọc đều hợp, luật về mã nguồn thắng.
 
-**Thói quen tạo ra khác biệt.** Nó biết từ chối. `plugins/atk/shared/project-overrides.md` liệt kê chín thứ phần
+**Thói quen tạo ra khác biệt.** Nó biết từ chối. `plugins/atk/shared/project-overrides.md` liệt kê mười thứ phần
 ghi đè không bao giờ được gỡ, trong đó có dòng người duyệt, luật một skill không quyết thứ mà một vai
 sở hữu, và ranh giới xin phép trước khi bất cứ gì rời khỏi repo cục bộ. Chỉ dẫn bị từ chối không bị
-bỏ trong im lặng: skill nói rõ nó phạm điều nào trong chín điều, rồi đề nghị thứ gần nhất mà không
+bỏ trong im lặng: skill nói rõ nó phạm điều nào trong mười điều, rồi đề nghị thứ gần nhất mà không
 phạm, thường là một chỉ dẫn đưa quyết định ra sớm hơn thay vì một chỉ dẫn tự quyết.
 
 ---

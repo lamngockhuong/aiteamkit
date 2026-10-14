@@ -69,6 +69,8 @@ person who asks for it, and closing the issue stays with whoever reported it. Se
 ```
 
 Before step 1, read `.atk/overrides/git.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/git/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 `--rebase`, `--resolve` and `--stack` leave this line for `references/repair.md` and
 `references/stacked.md`, and rejoin it at the step their work lands in.

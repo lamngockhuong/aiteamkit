@@ -50,6 +50,8 @@ the document. The new member owns reporting what the document got wrong. See `sh
 ```
 
 Before step 1, read `.atk/overrides/onboard.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/onboard/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Derive the setup from the repository
 
@@ -75,8 +77,8 @@ into the onboarding document. The two have different readers: the defect is fixe
 the script or the document that is wrong, and the onboarding document is read on a first morning by
 the one person on the team who can do nothing about it. One file, carrying no date, rewritten whole
 on every run: a defect somebody has fixed is then gone from it, instead of going stale in a document
-that is updated in place. A run that finds nothing writes nothing. Under `--audit` nothing is
-written either, because that flag promises to change nothing; the defects are named in the session
+that is updated in place. A run that finds nothing writes nothing but its run trace. Under `--audit`
+nothing else is written either, because that flag promises to change nothing; the defects are named in the session
 instead. Either way the session is told where the file is, or that none was written, and whether
 the project tracks that path at all.
 
@@ -158,4 +160,4 @@ to go, because the report holding it may sit in an untracked directory.
       it, no task was invented, and the session said the document is unfinished until it lands.
 - [ ] Every defect found in step 2 is in the report, and none of them is in the onboarding document.
 - [ ] The session was told where the defect report is and whether the project tracks that path.
-- [ ] Under `--audit`, no file was modified.
+- [ ] Under `--audit`, no file was modified but the run trace.

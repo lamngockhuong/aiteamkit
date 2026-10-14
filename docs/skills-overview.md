@@ -113,17 +113,23 @@ team, a record for whoever wrote the skill, or neither, and the record leaves th
 asked. The skill need not be one of the kit's: a run of the project's own skill or of another kit's
 is recorded the same way, minus the override, which only an `atk` skill would read. Run without a
 skill name, `--feedback` takes the skill from the session, asks which one when more than one of the
-kit's skills has run, and asks outright when none has.
+kit's skills has run, and asks outright when none has. `--feedback <skill> --runs [<dir>]` reads
+the run traces every skill leaves under `docs/derived/traces/<skill>/` instead of the session, counts
+what repeats across them, a step skipped, a long wait, a ceiling reached, a correction made again,
+as "in 9 of 12 runs" with the runs behind it, and sorts each pattern the same way; `--since
+<YYYY-MM-DD>` keeps the later traces only. It deletes nothing while it reads; once the record is
+written, it offers to remove the oldest traces of that skill beyond twenty, and removes them only on
+a yes. No other run removes a trace.
 
 **Do not use when.** The rule is about the code rather than about the skill. "Every pull request
 needs a test" is checkable by a person with no kit installed, so it is a `CONV-NNN` row that
 `atk:convention` writes and `atk:review` enforces. "`atk:review` should also check our i18n helper"
 is about the skill and belongs here. When both readings fit, the rule about the code wins.
 
-**The habit that matters.** It refuses. Nine things an override may never remove are listed in
+**The habit that matters.** It refuses. Ten things an override may never remove are listed in
 `plugins/atk/shared/project-overrides.md`, and the approver line, the rule that a skill does not decide what a
 role owns, and the consent line before anything leaves the local repository are three of them. A
-refused instruction is not dropped in silence: the skill says which of the nine it breaks and
+refused instruction is not dropped in silence: the skill says which of the ten it breaks and
 offers the nearest thing that does not, which is usually an instruction that surfaces the decision
 earlier rather than one that takes it.
 

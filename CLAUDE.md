@@ -126,10 +126,13 @@ beside `references/checklists.md`. The rules stay in Markdown; only the records 
 because a free-text field routinely holds a comma and a quote forgotten by hand shifts every field
 after it.
 
-An `atkx` skill may also carry `scripts/`, Node only, for the checks whose answer must be the same on
-every run, and only those; judgment stays in `references/`. `skill-eval` is the one that does, for
-the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records: its sample skills
-in `tests/skill-eval-fixtures/` must get the same verdict every time. An `atk` skill carries no `scripts/`.
+A skill of either plugin may also carry `scripts/`, Node only, for the checks whose answer must be
+the same on every run, and only those; judgment stays in `references/`. `atkx:skill-eval` is the one
+that does, for the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records: its
+sample skills in `tests/skill-eval-fixtures/` must get the same verdict every time. No `atk` skill
+carries one yet. That was a description of the kit when ADR 0002 was written, never a decision, and
+the maintainer said on 2026-10-14 that an `atk` skill may carry `scripts/` on the same terms. The
+first one comes with a design and an ADR of its own, as `skill-eval`'s did.
 
 No file named `SKILL.md` sits deeper than `skills/<name>/SKILL.md` in either plugin. Codex lists a
 `SKILL.md` found at any depth under `skills/` as a skill of its own, so a sample skill kept inside a
@@ -138,8 +141,10 @@ skills live in `tests/` at the repository root, which no install copies.
 
 Every `SKILL.md` follows the same section order, and a new skill must match it:
 frontmatter, title, intro paragraph, `## Scope` (handles / does NOT handle), `## Roles`,
-`## Invocation`, `## Workflow` (ASCII pipeline then numbered steps), `## Output`, `## Ticket`,
-`## Definition of done`.
+`## Invocation`, `## Workflow` (ASCII pipeline, then the override line and the two lines that start
+the run trace, then numbered steps), `## Output`, `## Ticket`, `## Definition of done`. The trace
+lines name the skill's own folder in the path and are worded alike in every skill, which the check
+under "Common verification commands" holds.
 
 One skill carries an extra section: `verify` adds `## Process management` between `## Workflow` and
 `## Output`. It is the only skill that starts long-running processes (`atk:run-cases` holds a browser
@@ -151,19 +156,19 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (beside `skills/`, not under it)
 
-Nineteen files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
+Twenty files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
 plugin root beside `skills/`, NOT under it, because a folder under `skills/` without a `SKILL.md` is
 ambiguous to the harnesses' skill discovery. The table names them as skills cite them, relative to
 `plugins/atk/`.
 
 | File | Owns | Cited by |
 |------|------|----------|
-| `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the nine rules every skill follows | all |
-| `shared/artifact-paths.md` | Default output path per skill, how a docs root partitioned by language moves that path, which repository an artifact lands in when the project spans several, `YYMMDD-HHMM` naming, the shared YAML front matter block with the `<record path>#<ID>` ticket form, the window in which a record may still be corrected, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete, and the progress log `fix`, `verify` and `implement` write as they go and resume from | all |
+| `shared/team-roles.md` | The role table (PM, BrSE/BA, TL, Dev, QA, SRE, Stakeholder) and the ten rules every skill follows | all |
+| `shared/artifact-paths.md` | Default output path per skill, how a docs root partitioned by language moves that path, which repository an artifact lands in when the project spans several, `YYMMDD-HHMM` naming, the shared YAML front matter block with the `<record path>#<ID>` ticket form, the window in which a record may still be corrected, and the three persistence groups that decide whether an artifact is updated in place, left alone, or safe to delete, the progress log `fix`, `verify` and `implement` write as they go and resume from, and the run trace beside it, which is not a progress log | all |
 | `shared/ticket-adapters.md` | Tracker detection order, the three outcomes it can reach including a tracker that is configured and answers nothing, the GitHub / Jira / Backlog / Redmine vocabulary map, which of those trackers stores a sprint's start and end, and the sprint metrics no tracker without field history can produce, each with the substitute to use instead | all |
 | `shared/review-checklist.md` | Where a project keeps its conventions and the order that resolves it, the rule record format shared by `convention` (writes) and `review` (enforces), the route that carries a convention gap from the review report back to `convention`, the rule that a project's own shape wins, plus the baseline items that hold in any project | `convention`, `review`, `implement`, `git`, `plan` |
-| `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, where the project root is and how a skill finds it, the four shapes a project can have and what each costs, which skills stop, degrade, or ignore the file when it is missing, and that the `Contract` line in Docs changes behaviour rather than a path | the skills that need project facts |
-| `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, where it sits relative to the project root and why the hook can miss it in a member repository, the two sections it may hold, that only an approved override applies and the line a skill prints when it does not, and the nine things an override may never remove | all, through rule 7 of `shared/team-roles.md` |
+| `shared/project-profile.md` | What `.atk/profile.md` in the target project contains, where the project root is and how a skill finds it, the four shapes a project can have and what each costs, which skills stop, degrade, or ignore the file when it is missing, and that two lines in Docs, `Contract` and `Run trace`, change behaviour rather than a path, the second read even by the skills that ignore a missing profile | the skills that need project facts; every skill, for the `Run trace` line |
+| `shared/project-overrides.md` | What `.atk/overrides/<skill>.md` in the target project contains, where it sits relative to the project root and why the hook can miss it in a member repository, the two sections it may hold, that only an approved override applies and the line a skill prints when it does not, and the ten things an override may never remove, the run trace among them | all, through rule 7 of `shared/team-roles.md` |
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `plan`, `tailor`, `qa` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not, plus the gate rule: which CI job judges a layer, and what a local command weaker than it leaves unverified | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `security`, `incident` |
@@ -177,6 +182,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
 | `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `spec`, `help`, `host-capabilities.md`, `team-roles.md`, `ticket-adapters.md`, `tidy-pass.md`, `review-rounds.md`, `independent-challenge.md`, `review-fix-loop.md`, `read-only-reviewer` (restated) |
 | `shared/review-fix-loop.md` | The loop that runs `atk:review` on a skill's own change before it reaches a person: what the call is given, which severities are fixed, a disputed finding, re-verifying each round, the two-round ceiling and the five-part escalation, and the line `--no-review` leaves | `implement`, `fix`, `artifact-paths.md`, `finalize-steps.md` |
+| `shared/run-trace.md` | The run trace every run leaves under `docs/derived/traces/<skill>/`: its path and `<run-id>`, the ignore file inside its directory and the check that must pass before it is written, the header with the `way` a run was started, the six event kinds and no others, what it never holds, the twenty kept per skill, which only `tailor --runs` removes and only on a yes, and that `Run trace: off` in the profile is the only switch | all, through the two lines at the top of every `## Workflow` that carry out rule 10 of `shared/team-roles.md`; `tailor` reads what it holds |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
 Both spellings appear in each shared file's header so an agent can resolve the path either way.
@@ -248,6 +254,14 @@ cannot open a file of the kit.
 review on its own change too. A fix that alters a public contract carries the risk an implementation
 does, and two copies of the loop would drift until one of them lowered a disputed finding to get
 past it.
+
+`run-trace.md` is reached from every skill's workflow. Rule 10 of `team-roles.md` is the obligation,
+but a rule a skill only cites with "See" is not read: two runs of `atk:help` never opened the file and
+wrote no trace. So every `SKILL.md` carries two lines under its override line that name the trace's
+path and send the run to `run-trace.md`, and with them the run followed it. It is a file of its own rather than a section of `artifact-paths.md` because a trace is an obligation of
+every run, a run that writes no artifact included, reached from all 24 workflows and owned by rule
+10, while `artifact-paths.md` says where a run's artifacts go, and a trace is not one. `atk:tailor --feedback` is its one reader, and the only skill that says what a
+trace means.
 
 `project-profile.md` is the odd one: it describes `.atk/profile.md`, a file that lives in the target
 project rather than in the kit. Cite it from any skill that needs build commands, layer layout, or
@@ -579,7 +593,7 @@ its Layers table, and the mirror check below excludes both paths.
 | `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval` |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0004` to `0006` the run trace |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
 | `flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
@@ -671,7 +685,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` below | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the `for` loop below | `BLOCKING` | "SKILL.md `name` field convention" |
-| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
+| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, opens its workflow with the override line and the two lines that start the run trace, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the trace-line check below for the workflow lines; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` below | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the loops below | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check below | `BLOCKING` | "`hooks/` never holds a rule" |
@@ -706,6 +720,24 @@ for d in plugins/*/skills/*/; do
   n=$(basename "$d")
   grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"
 done
+
+# Every atk skill starts its run trace from its workflow, naming its own folder, in both lines and
+# directly under the override sentence, so nothing the run asks or does comes before its trace: a
+# skill without the lines writes no trace, since rule 10 alone is not read. atkx skills do not follow
+# rule 10. Line breaks are folded first, so a rewrap passes and a moved or broken line does not
+python3 -c "
+import glob, re
+files, bad = sorted(glob.glob('plugins/atk/skills/*/SKILL.md')), []
+for f in files:
+    n = f.split('/')[3]
+    body = open(f).read()
+    w = re.sub(r'\s+', ' ', body[body.find('## Workflow'):])
+    want = ('Before step 1, read \x60.atk/overrides/%s.md\x60 when it exists, per rule 7 of \x60shared/team-roles.md\x60. '
+            'Then, before anything else, create this run\x27s trace, \x60<docs root>/derived/traces/%s/<run-id>.md\x60: '
+            'read the kit\x27s \x60shared/run-trace.md\x60 and do what it says before the file, at each step, and at the close.') % (n, n)
+    if want not in w: bad.append(f)
+assert not bad, 'trace lines missing, broken, or not directly under the override sentence: %s' % bad
+print('OK trace lines, %d skills' % len(files))"
 
 # No SKILL.md below skills/<name>/: Codex would list it as a skill of its own
 x=$(find plugins/*/skills -mindepth 3 -name SKILL.md)

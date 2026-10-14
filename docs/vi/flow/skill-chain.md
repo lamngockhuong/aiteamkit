@@ -77,7 +77,7 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 |-------|-----|---------|-----------------|
 | `help` | Các skill của chính kit, cùng profile, front matter của artifact, kế hoạch và branch của dự án | Một câu trả lời trong phiên, không có file | Skill nó gọi tên, do người hỏi chạy |
 | `init` | Repo | Profile của dự án | Mọi skill có chạy lệnh |
-| `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi | File ghi đè cho skill đó | Chính skill mang tên file đó |
+| `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi; với `--feedback --runs`, các run trace của skill đó | File ghi đè cho skill đó | Chính skill mang tên file đó |
 | `intake` | Một yêu cầu thô, hoặc một design Figma | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa`; từ design thì `spec --kind screen`, bỏ qua `design-doc` trừ khi thay đổi của màn hình chạm tới schema, public contract, shared module, hoặc hơn một service |
 | `catchup` | Một epic hoặc một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài | Con người, không phải skill |
 | `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |

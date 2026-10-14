@@ -7,11 +7,13 @@ description: >
   approved it named in it.
   Use when a team keeps repeating the same correction to a skill's output, when a client or an
   internal standard adds a step the kit does not know about, or when an override written earlier no
-  longer matches the skill it belongs to.
+  longer matches the skill it belongs to. Also reads the run traces a skill left behind and counts
+  what repeats across its runs.
   Triggers on: "tailor", "customise a skill", "customize skill", "override a skill", "tùy biến
   skill", "sửa skill theo đội", "thêm bước cho skill", "ghi đè skill", "スキルをカスタマイズ",
-  "チーム独自のルール", "our team does this differently", "make the skill always", "/atk:tailor".
-argument-hint: "[<skill>] [--audit|--feedback] [--out <path>]"
+  "チーム独自のルール", "our team does this differently", "make the skill always", "look at the
+  last runs of", "xem lại các lần chạy của skill", "スキルの実行履歴を分析", "/atk:tailor".
+argument-hint: "[<skill>] [--audit|--feedback [--runs [<dir>]] [--since <YYYY-MM-DD>]] [--out <path>]"
 ---
 
 # Skill Tailoring (`atk:tailor`)
@@ -57,17 +59,21 @@ who must decide, and never guess. See `shared/team-roles.md`.
 /atk:tailor --audit <skill>    # Check one override file
 /atk:tailor --feedback <skill> # Turn a run that went wrong into an override or a record
 /atk:tailor --feedback         # Same, with the skill taken from this session
+/atk:tailor --feedback <skill> --runs [<dir>]   # Read many runs from their traces instead of the session
+/atk:tailor --feedback <skill> --runs --since <YYYY-MM-DD>   # Only traces from that day on
 /atk:tailor <skill> --out <path>   # Override the default output path
 ```
 
 ## Workflow
 
 ```
-[1. Read the skill] -> [2. Ask what differs] -> [3. Check against the nine] -> [4. Write]
+[1. Read the skill] -> [2. Ask what differs] -> [3. Check against the ten] -> [4. Write]
   -> [5. Read back]
 ```
 
 Before step 1, read `.atk/overrides/tailor.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/tailor/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 ### 1. Read the skill
 
@@ -118,12 +124,12 @@ not, but the answer belongs in the file so the next team copying it knows what t
 An answer that is really a project fact goes to `atk:init` instead, and an answer that is really a
 coding rule goes to `atk:convention`. Say which and why; do not write it here and also there.
 
-### 3. Check against the nine
+### 3. Check against the ten
 
-`shared/project-overrides.md` lists the nine things an override may never remove. Walk each
+`shared/project-overrides.md` lists the ten things an override may never remove. Walk each
 proposed instruction against that list before writing anything.
 
-A conflict is not a reason to end the session. Say which of the nine it breaks and what the
+A conflict is not a reason to end the session. Say which of the ten it breaks and what the
 instruction was trying to achieve, then offer the nearest thing that does not break it: an
 instruction that makes the skill surface a decision earlier is almost always available where an
 instruction that makes the skill take the decision is not.
@@ -159,7 +165,7 @@ that the earlier approved version stops applying as well, since the file has one
 ### `--audit`
 
 `references/audit.md` holds the two checks and why they report differently. In short: an instruction
-that breaks one of the nine is stated as a fact, because the list is fixed; an instruction that
+that breaks one of the ten is stated as a fact, because the list is fixed; an instruction that
 names a step or a section the skill no longer has is raised as a question, because the step may have
 been renamed rather than removed.
 
@@ -214,6 +220,13 @@ cannot open a skill file without a name, and the run returns to that step once t
    asking blind. What no rule here permits is picking one from the surrounding conversation and
    carrying on.
 
+`--runs` reads the skill's run traces instead of the session, per `shared/run-trace.md`, from
+`<docs root>/derived/traces/<skill>/` or the directory given, and each pattern across them is a
+finding counted as "in <n> of <m> runs" and sorted by the fork; `references/feedback.md`, Reading
+many runs, holds what is read, what is left out, how runs are cited, and the one question that may
+remove old traces. With no skill named, the three rules above give way to one: ask which skill,
+listing those with a trace directory, since the runs are in the traces and not in the session.
+
 A finding whose cause is that the run ignored something the skill states plainly changes nothing in
 either place. Say so, and say which line of the skill already covers it, so the team can tell a
 definition that is wrong apart from a run that was.
@@ -227,7 +240,7 @@ who knows where their own skills are reported and this skill does not.
 ## Output
 
 Written to `.atk/overrides/<skill>.md` in the target project, not under `docs/`, and never into the
-kit. See `shared/project-overrides.md` for the format and the nine exclusions, and
+kit. See `shared/project-overrides.md` for the format and the ten exclusions, and
 `shared/artifact-paths.md` for why this skill is one of the three exceptions to the docs-root rule.
 
 A `--feedback` record goes to `docs/derived/feedback/<skill>-<date>.md` instead. It is derived under
@@ -258,14 +271,14 @@ there. One record is one issue: a form listing four unrelated findings gets tria
 - [ ] Any existing override file was read and updated in place rather than replaced.
 - [ ] No more than eight questions were asked in the step 2 interview. The one-per-finding sort
       under `--feedback` is a different count and is not measured against it.
-- [ ] Every proposed instruction was checked against the nine exclusions before writing.
-- [ ] A refused instruction was reported with which of the nine it breaks and what was offered instead.
+- [ ] Every proposed instruction was checked against the ten exclusions before writing.
+- [ ] A refused instruction was reported with which of the ten it breaks and what was offered instead.
 - [ ] An answer that belongs to `atk:init` or `atk:convention` was sent there instead of written here.
 - [ ] Front matter names an owner and an approver, and the approver is the role that owns what the
       skill produces.
 - [ ] The two heading names are in English and the instructions are in the team's language.
 - [ ] The user was told the file is committed.
-- [ ] Under `--audit`, no file was modified.
+- [ ] Under `--audit`, no file was modified but the run trace.
 - [ ] Under `--feedback`, every finding was sorted one at a time into an override, a record, or neither.
 - [ ] Under `--feedback` with no skill named, the skill came from the session or from the user, and
       where the session held more than one skill of this kit or none, the user chose rather than
@@ -281,4 +294,6 @@ there. One record is one issue: a form listing four unrelated findings gets tria
       steps of the skill ran out of how many it has.
 - [ ] A feedback record names the person reporting, and proposes no wording for a definition its
       reader does not own.
+- [ ] Under `--runs`, every pattern carries its count and its runs, by date and ordinal, went through
+      the fork, and no trace was removed but on a yes after the record, per `shared/run-trace.md`.
 - [ ] Nothing left the project without being asked.

@@ -1,7 +1,7 @@
 # Artifact Lifecycle
 
 Every skill in this kit that writes a file writes Markdown into your repository, with one exception
-named below; `atk:help` writes nothing, because it answers in the session. A team adopting `atk`
+named below; `atk:help` writes nothing but its run trace, because it answers in the session. A team adopting `atk`
 asks two questions in its first week: do we commit all of this, and may we delete any of it later. This
 document answers both and says what each answer costs, so the team decides rather than guesses.
 
@@ -34,7 +34,7 @@ flowchart TB
 |-------|---------------|--------|-----------------|-----------------|
 | Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead. A test run record takes its `status`, its `Ticket` cells, and a recorded redaction, and nothing else | Only as a decision somebody owns, never as a blanket rule |
-| Derived | everything under `docs/derived/` | Optional, apart from the progress log, which is never staged | Run the skill again | Yes, freely, apart from an unfinished progress log, which costs the ruled-out work |
+| Derived | everything under `docs/derived/` | Optional, apart from the progress log and the run trace, which are never staged | Run the skill again | Yes, freely, apart from an unfinished progress log, which costs the ruled-out work |
 
 ## The three files that are not in any group
 
@@ -71,7 +71,7 @@ client asks what shipped in version 1.4.2; an auditor asks for the postmortem an
 actions; the person who handed over left six months ago and their handover file was the only thing
 that survived them.
 
-**Derived.** Nothing, apart from the progress log below. The implementation record and the shipping
+**Derived.** Nothing, apart from the progress log and the run traces below. The implementation record and the shipping
 record are copies of what lives on the pull request, a feedback record is a copy of what was filed
 on the kit repository, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
 running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, or
@@ -86,8 +86,11 @@ confirm them, are the only copy until then, and are never committed while they w
 review runs, made without a `--comment`, posts nothing to the pull request, so until it is rebuilt
 its report is the only written copy: a reason to keep the directory, not a reason to fear deleting
 it. The progress log that `atk:fix`, `atk:verify` and `atk:implement` write as they go is the ninth
-kind: deleting one costs the ruled-out work, which the next run does again from zero. Eight skills
-read one of the nine. Those three each read their own newest unfinished log before starting, and
+kind: deleting one costs the ruled-out work, which the next run does again from zero. The run trace
+every skill leaves under `docs/derived/traces/<skill>/`, unless the profile says `Run trace: off`,
+is the tenth: never staged, trimmed to twenty per skill only when `atk:tailor --feedback --runs`
+offers it and a person says yes, and read only to improve a skill, so deleting
+one costs that evidence and nothing downstream. Nine skills read one of the ten. Those three each read their own newest unfinished log before starting, and
 offer to resume it, asking first when its branch or start commit no longer matches. `atk:run-cases`
 reads the run log of an earlier run of the same cases file, to offer the cases that run deferred and
 to name data it created with no record after it; where that run wrote a record, the record lists the
@@ -98,7 +101,10 @@ pull request, and numbers from 1 and says so when there is neither; `atk:plan --
 newest one for the same plan, for the same identifiers and to tell a result the author has already
 declined from one a week of commits has just created; `atk:qa --review` reads the newest one for the
 same cases file, for the same identifiers; and `atk:convention` reads its `Convention gaps` section,
-which is how a rule the review wanted reaches the file that records it. Deleting that report costs
+which is how a rule the review wanted reaches the file that records it. And
+`atk:tailor --feedback --runs` reads the run traces of one skill, to count what repeats across its
+runs; it deletes none of them while it reads, and only afterwards offers to remove the oldest
+beyond twenty. Deleting that report costs
 the next review a set of identifiers, unless a `--comment` run posted them on the pull request, and
 the gaps it would have carried across, not a step in the chain.
 
@@ -117,7 +123,8 @@ decision that vanished without leaving a note saying what it had decided.
 `docs/derived/` is the only part of the tree the kit says a project may keep out of git. One line in
 `.gitignore` and the copies stop accumulating. Nothing in the skill chain breaks, because every
 original is still on the pull request or a single command away. A project that commits it still
-leaves the progress logs out, since each is one person's working state, not a copy.
+leaves the progress logs and the run traces out, since each is one person's working state or one
+run's account, not a copy, and both are held out of git whatever the project does.
 
 Do not extend the same line to `docs/records/`, for two reasons that have nothing to do with disk
 space:

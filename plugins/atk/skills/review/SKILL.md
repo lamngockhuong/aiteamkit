@@ -54,9 +54,12 @@ session is the calling agent says so in the report.
   -> [5. Verify] -> [6. Rank and write]
 ```
 
-Before step 1, read `.atk/overrides/review.md` when it exists, per rule 7 of `shared/team-roles.md`,
-and count the changed lines per step 3. In band 1 without `--parallel`, spawn the reviewer agent at
-once with the target and the paths: it runs steps 1 to 6 and spawns no reviewer of its own.
+Before step 1, read `.atk/overrides/review.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/review/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
+Then count the changed lines per step 3. In band 1 without `--parallel`, spawn the reviewer agent at
+once with the target and the paths: it runs steps 1 to 6 and spawns no reviewer, and this session
+writes the trace for it, per `shared/run-trace.md`.
 
 ### 1. Establish intent
 
@@ -130,12 +133,11 @@ synthesizing, and never all nine at once, per the same file.
 
 Convention checking is the `rules` round, and it runs off `shared/review-checklist.md`: resolve the
 project's conventions document per Where the rules live in that file, read its review checklist
-section, check each `REVIEWED` rule, and cite the rule ID with its text quoted verbatim so the
-author can dispute the rule rather than the reviewer. When the project has no recorded conventions,
-say so in the review and check this round's own baseline items anyway: the round never falls silent
-there. The other baseline items stay with the rounds that hold them, per
-`references/review-rounds.md`. Do not invent project-specific rules mid-review; report the gap so
-`atk:convention` can record it.
+section, check each `REVIEWED` rule, and cite the rule ID with its text quoted verbatim so the author
+can dispute the rule rather than the reviewer. With no recorded conventions, say so in the review and
+check this round's own baseline items anyway: the round never falls silent there. The other baseline
+items stay with the rounds that hold them, per `references/review-rounds.md`. Do not invent
+project-specific rules mid-review; report the gap so `atk:convention` can record it.
 
 The reference-document check is the `contract` round, and the sync obligation in
 `shared/spec-docs.md`, which lists the six kinds of change that trigger it and so decides whether
@@ -216,9 +218,8 @@ inline comments and visible part of a posted summary carry at most ten findings,
 `BLOCKING` is never cut; where it alone exceeds the cap, carry it all and say so: what to do with a
 change in that state is the Tech Lead's call, not a trimming decision the reviewer makes quietly.
 
-Each comment: the file and line, what goes wrong, and a concrete suggestion. Address the code, never
-the author. State what the change does well in one line; a review with only negatives teaches
-nothing about what to repeat.
+Each comment: the file and line, what goes wrong, and a concrete suggestion, addressed to the code
+and never the author. State what the change does well in one line: only negatives teach nothing.
 
 Every finding carries an identifier prefixed by its severity, `B1`, `S1`, `N1`, numbered within that
 severity rather than across the three. It is the only part of a review that survives being spoken in
@@ -244,11 +245,10 @@ rebuilt from nothing once per run.
 
 Read the newest earlier report on the same target first, and on a pull request its newest
 `atk:review` summary. A second review reuses the first's identifiers, so `B1` stays `B1`;
-`references/report-format.md` holds what happens when a finding changes severity, and what to do
-when no earlier report exists. This report is the one derived artifact the kit reads rather than
-only writes, here, in `atk:plan --review` and `atk:qa --review` for their own reports, and in step 1
-of `atk:convention`, which takes its `Convention gaps` section; `shared/artifact-paths.md` records
-them.
+`references/report-format.md` holds what happens when a finding changes severity, and what to do when
+no earlier report exists. The kit reads this report again, here, in `atk:plan --review` and
+`atk:qa --review` for their own, and in step 1 of `atk:convention`, which takes its `Convention gaps`
+section; `shared/artifact-paths.md` lists every derived kind the kit reads, and who reads it.
 
 `--out <path>` moves the file. It no longer decides whether one is written.
 

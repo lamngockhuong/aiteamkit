@@ -110,6 +110,8 @@ in `shared/project-profile.md`: continue, and open the artifact with the sentenc
 ```
 
 Before step 1, read `.atk/overrides/plan.md` when it exists, per rule 7 of `shared/team-roles.md`.
+Then, before anything else, create this run's trace, `<docs root>/derived/traces/plan/<run-id>.md`:
+read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
 
 Under `--review` the seven steps do not run and `references/plan-review-mode.md` takes their place.
 Under `--answer`, `references/answer-mode.md` does, and ends in step 6 and the step 7 recommendation.

@@ -93,6 +93,7 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 - Conventions: `<path>` or `TBD (ask <person>)`
 - Designs: `<path>` or `TBD (ask <person>)`
 - Contract: `first`, `code`, or `TBD (ask <person>)`  <!-- first: API, schema and feature docs are approved before the code; absent or TBD reads as code, per shared/spec-docs.md -->
+<!-- add the line "- Run trace: off" here only when the team turns traces off. Every run leaves a short trace of its steps, waits and stops under <docs root>/derived/traces/, never staged; absent reads as on, per shared/run-trace.md. Never TBD -->
 - Agent instructions: `<CLAUDE.md, AGENTS.md, or none>`
 
 ## Tracker

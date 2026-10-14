@@ -350,6 +350,12 @@ before the code is written, which is the `Contract` line in Docs. It rides on th
 because both are about where the agreed description of the work comes from, and costs no turn of its
 own. No answer is `TBD` with the Tech Lead's name, which every skill reads as `code`.
 
+The same turn carries one line more, the `Run trace` line in Docs: every run of every skill leaves a
+short trace of the steps it ran, who it waited for and where it stopped, under the docs root's
+`derived/traces/`, naming who answered each question it asked, kept out of git but read by anything
+that builds or packs the docs root, per `shared/run-trace.md`; does the team want that off? It costs no turn either. Only an answer of off is written. No answer, or on, leaves the line
+out, which every skill reads as on, so this is the one question whose missing answer is not `TBD`.
+
 That leaves four turns for the ambiguities the section above can raise: which directory is the
 project root, two lock files, a watch-mode test script, a command that needs another command first,
 a member list that does not group cleanly, a tracker that may not match the git host, and more than
