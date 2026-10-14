@@ -82,7 +82,7 @@ run time.
 | Stops and hands over | This skill changes nothing further; the work moves | `implement` to `design-doc`, `implement` to `fix`, `plan` to `design-doc`, `run-cases` to `qa --record` where the harness has no browser automation |
 | Offers, and waits for a yes | It may not happen at all, and the record says which | `implement` and `fix` to `verify` |
 | Sends a finding back | This skill carries on; another one owns recording it | `review` to `convention`, `verify` to `qa` |
-| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record, `run-cases` to `qa --bug` and `--retest` through the run record it writes |
+| Writes a file another reads | No call at any point; a contract through a file | `init` to every code skill, `tailor` to every skill, every skill to `tailor` through its run trace, `convention` to `implement` and `review`, `spec` to `design-doc` and `qa`, `qa` to `fix` and `release` through a run record, `run-cases` to `qa --bug` and `--retest` through the run record it writes |
 
 ```mermaid
 flowchart TD

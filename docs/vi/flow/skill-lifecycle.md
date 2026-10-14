@@ -83,7 +83,7 @@ chạy.
 | Dừng và giao lại | Skill này không đổi thêm gì nữa; công việc chuyển đi | `implement` sang `design-doc`, `implement` sang `fix`, `plan` sang `design-doc`, `run-cases` sang `qa --record` khi harness không có khả năng tự động hoá trình duyệt |
 | Đề nghị và chờ một tiếng đồng ý | Có thể không xảy ra, và bản ghi nói rõ là đã xảy ra hay chưa | `implement` và `fix` sang `verify` |
 | Gửi ngược một phát hiện | Skill này chạy tiếp; skill kia mới là nơi ghi lại phát hiện đó | `review` sang `convention`, `verify` sang `qa` |
-| Viết một file skill khác đọc | Không có lời gọi nào; hợp đồng đi qua một file | `init` tới mọi skill sửa mã, `tailor` tới mọi skill, `convention` tới `implement` và `review`, `spec` tới `design-doc` và `qa`, `qa` tới `fix` và `release` qua record của lần chạy, `run-cases` tới `qa --bug` và `--retest` qua run record nó viết |
+| Viết một file skill khác đọc | Không có lời gọi nào; hợp đồng đi qua một file | `init` tới mọi skill sửa mã, `tailor` tới mọi skill, mọi skill tới `tailor` qua run trace của nó, `convention` tới `implement` và `review`, `spec` tới `design-doc` và `qa`, `qa` tới `fix` và `release` qua record của lần chạy, `run-cases` tới `qa --bug` và `--retest` qua run record nó viết |
 
 ```mermaid
 flowchart TD

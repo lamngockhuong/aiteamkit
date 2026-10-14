@@ -11,7 +11,7 @@ description: >
   Triggers on: "tailor", "customise a skill", "customize skill", "override a skill", "tùy biến
   skill", "sửa skill theo đội", "thêm bước cho skill", "ghi đè skill", "スキルをカスタマイズ",
   "チーム独自のルール", "our team does this differently", "make the skill always", "/atk:tailor".
-argument-hint: "[<skill>] [--audit|--feedback] [--out <path>]"
+argument-hint: "[<skill>] [--audit|--feedback [--runs [<dir>]] [--since <YYYY-MM-DD>]] [--out <path>]"
 ---
 
 # Skill Tailoring (`atk:tailor`)
@@ -57,6 +57,8 @@ who must decide, and never guess. See `shared/team-roles.md`.
 /atk:tailor --audit <skill>    # Check one override file
 /atk:tailor --feedback <skill> # Turn a run that went wrong into an override or a record
 /atk:tailor --feedback         # Same, with the skill taken from this session
+/atk:tailor --feedback <skill> --runs [<dir>]   # Read many runs from their traces instead of the session
+/atk:tailor --feedback <skill> --runs --since <YYYY-MM-DD>   # Only traces from that day on
 /atk:tailor <skill> --out <path>   # Override the default output path
 ```
 
@@ -216,6 +218,14 @@ cannot open a skill file without a name, and the run returns to that step once t
    asking blind. What no rule here permits is picking one from the surrounding conversation and
    carrying on.
 
+`--runs` reads the run traces of the skill instead of the session, per `shared/run-trace.md`, from
+`<docs root>/derived/traces/<skill>/` or the directory given. Each pattern across them, a step
+skipped, a long wait, a ceiling, a kind of `BLOCKING` finding, a repeated correction, is a finding
+counted as "in <n> of <m> runs" with the runs behind it, and goes through the fork like any other.
+`references/feedback.md`, Reading many runs, holds what is read, what is left out, and how runs are
+cited. With no skill named, the three rules below are unchanged: "all of them" means one record per
+skill directory. Nothing read is deleted.
+
 A finding whose cause is that the run ignored something the skill states plainly changes nothing in
 either place. Say so, and say which line of the skill already covers it, so the team can tell a
 definition that is wrong apart from a run that was.
@@ -283,4 +293,6 @@ there. One record is one issue: a form listing four unrelated findings gets tria
       steps of the skill ran out of how many it has.
 - [ ] A feedback record names the person reporting, and proposes no wording for a definition its
       reader does not own.
+- [ ] Under `--runs`, every pattern carries its count and its runs, by date and ordinal, went through
+      the fork, and every trace read is still on disk.
 - [ ] Nothing left the project without being asked.

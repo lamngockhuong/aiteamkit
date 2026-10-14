@@ -292,7 +292,7 @@ the run confirms them, and they are never committed while they wait.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. A run trace is read only to improve a skill, so losing
-one costs that evidence and nothing downstream. Eight skills read one of the ten. `atk:fix`, `atk:verify`
+one costs that evidence and nothing downstream. Nine skills read one of the ten. `atk:fix`, `atk:verify`
 and `atk:implement` each read their own unfinished progress log, per Progress log, below.
 `atk:run-cases` reads
 the run log of an earlier run of the same cases file, to offer the cases it deferred and to name data
@@ -301,7 +301,9 @@ request the newest `atk:review` summary posted there beside it, to carry its fin
 forward, and starts numbering at 1 and says so only when there is neither;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
-Keeping them in step in `shared/review-checklist.md`. Nothing else reads any of the ten. Losing a
+Keeping them in step in `shared/review-checklist.md`. And `atk:tailor --feedback --runs` reads the
+run traces of one skill, to count what repeats across its runs, and deletes none of them. Nothing
+else reads any of the ten. Losing a
 progress log costs the ruled-out work, done again, and losing a
 report costs a set of identifiers, unless a `--comment` run posted them, and a list of gaps the next review raises again, rather than a step
 in the chain. A team that

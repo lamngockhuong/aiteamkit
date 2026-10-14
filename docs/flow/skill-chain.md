@@ -79,7 +79,7 @@ lands, per `plugins/atk/shared/spec-docs.md`.
 |-------|-------|----------|-------------------------|
 | `help` | The kit's own skills, and the project's profile, artifact front matter, plans, and branch | An answer in the session, no file | The skill it names, run by the asker |
 | `init` | The repository | Project profile | Every skill that runs a command |
-| `tailor` | A shipped `SKILL.md`, and what the team says it wants different | Project override for that skill | The skill it is named after |
+| `tailor` | A shipped `SKILL.md`, and what the team says it wants different; under `--feedback --runs`, the run traces of that skill | Project override for that skill | The skill it is named after |
 | `intake` | A raw request, or a Figma design | Requirements with open questions | `estimate`, `design-doc`, `qa`; from a design, `spec --kind screen`, with `design-doc` skipped unless the screen's change touches a schema, a public contract, a shared module, or more than one service |
 | `catchup` | An epic or a pull request | A brief plus an understanding check | The person, not a skill |
 | `estimate` | Requirements or an epic | Sizes, capacity, sprint commitment | `breakdown` |

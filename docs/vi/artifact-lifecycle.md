@@ -89,7 +89,7 @@ do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà
 lần chạy sau làm lại từ đầu. Run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/`, trừ
 khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ được stage, mỗi skill giữ hai mươi
 trace, và chỉ được đọc để cải thiện skill, nên xóa một trace thì mất phần bằng chứng ấy và không ảnh
-hưởng gì phía sau. Có tám skill đọc một trong mười loại. Ba skill ấy, trước khi bắt đầu,
+hưởng gì phía sau. Có chín skill đọc một trong mười loại. Ba skill ấy, trước khi bắt đầu,
 mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
 trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
 chạy trước trên cùng file test case, để đề nghị chạy tiếp những case lần đó đã hoãn và để nêu dữ
@@ -102,7 +102,8 @@ nên người chạy tự nêu các case qua `--only`. Bốn skill còn lại đ
 biệt một kết quả tác giả đã thấy mà không sửa với một kết quả vừa mới sinh ra sau một tuần commit;
 `atk:qa --review` đọc báo cáo mới nhất của cùng file test case, cũng để giữ mã định danh; còn
 `atk:convention` đọc mục `Convention gaps` của báo cáo, đó là đường đi để một luật mà lượt review
-muốn có tới được tài liệu ghi luật. Xóa báo cáo ấy làm lượt review sau mất một bộ mã định danh, trừ
+muốn có tới được tài liệu ghi luật. Còn `atk:tailor --feedback --runs` đọc các run trace của một
+skill để đếm những gì lặp lại giữa các lần chạy, và không xóa trace nào. Xóa báo cáo ấy làm lượt review sau mất một bộ mã định danh, trừ
 khi một lượt chạy `--comment` đã đăng chúng lên pull request, và mất những khoảng trống quy ước đáng
 lẽ được mang sang, chứ không đứt mắt xích nào.
 

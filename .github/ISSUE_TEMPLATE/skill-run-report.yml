@@ -5,8 +5,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        This form takes the record `/atk:tailor --feedback <skill>` writes. Paste each section into the
-        matching field.
+        This form takes the record `/atk:tailor --feedback <skill>` writes, of one run or, with `--runs`,
+        of many runs read from their traces. Paste each section into the matching field.
 
         Report what happened rather than proposing replacement wording for the skill: the shared rules
         behind a skill are not visible from its own file, so a proposed line often restates or
@@ -25,6 +25,8 @@ body:
     id: harness
     attributes:
       label: Harness
+      description: Every harness the record's runs name; a record of many runs may name several.
+      multiple: true
       options:
         - Claude Code
         - Cursor
@@ -38,7 +40,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: The version of the plugin concerned, atk or atkx, from its .claude-plugin/plugin.json (plugins/atk/ or plugins/atkx/ in a clone), plus your harness version.
+      description: The version of the plugin concerned, atk or atkx, from its .claude-plugin/plugin.json (plugins/atk/ or plugins/atkx/ in a clone), plus your harness version. For many runs, the versions their traces name.
     validations:
       required: true
 
@@ -46,7 +48,7 @@ body:
     id: asked
     attributes:
       label: What was asked of it
-      description: The invocation, the flags, and what the run was meant to produce.
+      description: 'The invocation, the flags, and what the run was meant to produce. For many runs, paste "The runs" table, with how many, the date range, and the ways they were started.'
     validations:
       required: true
 
@@ -54,7 +56,7 @@ body:
     id: steps
     attributes:
       label: Which steps ran
-      description: The steps of SKILL.md that ran, the ones that did not, and the order they came in.
+      description: The steps of SKILL.md that ran, the ones that did not, and the order they came in. For many runs, the count per step, "ran in 9 of 12 runs".
       placeholder: |
         1. Read what exists - ran, partly: skipped CODEOWNERS
         2. Detect the stack, then derive from the code - ran

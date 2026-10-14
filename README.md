@@ -93,7 +93,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 ```bash
 /atk:help [question|skill]                # --lang
 /atk:init                                 # --audit --lang --out
-/atk:tailor [<skill>]                     # --audit --feedback --out
+/atk:tailor [<skill>]                     # --audit --feedback --runs --since --out
 /atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out
 /atk:catchup <epic-url|pr-url>            # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out

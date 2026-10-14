@@ -114,7 +114,12 @@ team này, bản ghi gửi người viết ra skill đó, hoặc không chỗ n�
 được hỏi. Skill đó không nhất thiết phải thuộc kit: một lần chạy skill của chính dự án hay của kit
 khác cũng được ghi y như vậy, trừ phần ghi đè, vì chỉ skill `atk` mới đọc file ghi đè. Gọi
 `--feedback` mà không kèm tên skill thì nó lấy skill từ phiên làm việc, hỏi lại khi trong phiên có
-nhiều skill của kit đã chạy, và hỏi thẳng khi không có skill nào.
+nhiều skill của kit đã chạy, và hỏi thẳng khi không có skill nào. `--feedback <skill> --runs [<dir>]`
+đọc các run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/` thay cho phiên làm việc,
+đếm những gì lặp lại giữa các lần chạy, như một bước bị bỏ qua, một lần chờ lâu, một lần chạm trần,
+một chỗ bị sửa tay nhiều lần, dưới dạng "9 trên 12 lần chạy" kèm các lần chạy làm chứng, rồi xếp từng
+mẫu lặp theo đúng cách trên; `--since <YYYY-MM-DD>` chỉ giữ các trace từ ngày đó trở đi. Nó không xóa
+trace nào đã đọc.
 
 **Không dùng khi.** Luật nói về mã nguồn chứ không nói về skill. "Mọi pull request phải có test" là
 thứ một người không cài kit vẫn kiểm được, nên nó là một dòng `CONV-NNN` do `atk:convention` viết và
