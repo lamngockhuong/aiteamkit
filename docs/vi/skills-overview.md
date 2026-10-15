@@ -84,11 +84,13 @@ không bao giờ stage.
 **Dùng khi.** Nhiều phần việc cần đi cùng lúc, chẳng hạn một yêu cầu của khách, một thiết kế đã
 duyệt và một kế hoạch đã sẵn sàng, và cần một bên điều phối thay vì một người tự chạy từng skill.
 Một breakdown đã được xác nhận người phụ trách cũng biến các task của nó thành phần việc theo cách
-này.
+này. `--concurrency <n>` giới hạn số phần việc chạy cùng lúc, `--sequential` chạy lần lượt từng job,
+còn `--resume` đề nghị chạy tiếp lượt gần nhất đã dừng giữa chừng.
 
 **Không dùng khi.** Chỉ có một phần việc và bạn muốn biết bước tiếp theo cho nó, đó là `atk:help`;
 bạn muốn chia một epic thành các task có người phụ trách, đó là `atk:breakdown`; hoặc công việc không
-có artifact của team và không có người duyệt, thứ nằm ngoài bộ kit này.
+có artifact của team và không có người duyệt, thứ nằm ngoài bộ kit này; hoặc dự án gồm nhiều
+repository, trường hợp skill tạm thời từ chối.
 
 **Thói quen tạo ra khác biệt.** Nó đề xuất trước khi chạy bất cứ gì, và nó chuyển lời chứ không trả
 lời thay. Mọi câu hỏi phỏng vấn, lời nhắc duyệt và xác nhận kế hoạch mà một job gặp đều tới đúng

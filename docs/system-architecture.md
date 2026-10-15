@@ -65,7 +65,7 @@ flowchart TD
     MK["marketplace files at the root<br/><small>one per harness, each pointing at plugins/atk and plugins/atkx</small>"] --> CP
     MK --> UP
     MK --> XP
-    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>24 folders, one SKILL.md each</small>"]
+    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>25 folders, one SKILL.md each</small>"]
     UP["plugins/atk/.cursor-plugin/plugin.json"] --> SK
     XP["plugins/atk/.codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
     SK --> SH["plugins/atk/shared/<br/><small>cited by the skills that need it</small>"]
@@ -162,7 +162,7 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   repositories is carried in. `atk:git` is what carries it out; this file
   stays the contract, which is what lets the code-changing skills and the artifact-writing ones
   close the same way. Cited by `atk:fix`, `atk:implement` and `atk:verify`, which hand off to
-  `atk:git`, by `atk:plan`, `atk:tailor` and `atk:qa` for the consent line alone, and by every skill that
+  `atk:git`, by `atk:plan`, `atk:tailor`, `atk:qa` and `atk:orchestrate` for the consent line alone, and by every skill that
   writes an artifact for the section about a change that produced only a document. Nothing leaves
   the local repository without being asked for.
 - `plugins/atk/shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
@@ -196,7 +196,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   Its section on agents that write is cited by `atk:orchestrate`, the one skill that runs other
   skills as jobs: the job's worktree as the boundary that is never widened, a terminal multiplexer
   named by what it does like browser automation, a gate relayed to its person and never answered,
-  and the commit check, so the kit's first agent that edits is bound by a rule written once.
+  and every commit left to the calling skill, so the kit's first agent that edits is bound by a rule
+  written once.
 - `plugins/atk/shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one
@@ -207,7 +208,7 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
 - `plugins/atk/shared/review-fix-loop.md`: the loop that runs `atk:review` on a skill's own change before a
   person reads it, the severities it fixes, a disputed finding, the two-round ceiling and the
   escalation by name, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
-  `atk:fix`: the verification of both asks whether the change works, and neither reads the diff for
+  `atk:fix`, and by `atk:orchestrate`, which runs it on the code jobs it commits: the verification of both asks whether the change works, and neither reads the diff for
   what it newly claims, which is what a review finds.
 
 - `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is
@@ -257,7 +258,7 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
 - `plugins/atk/shared/secret-scan.md`: the secret scan, one `sh` block in four modes, and its table of
   paths that are a finding on their own, which is also the list of files rule 9 keeps unread. Cited
   by `atk:git` to read a diff and to scan what it stages, by `atk:security` over every tracked file,
-  by `host-capabilities.md` for the masked diff every agent the kit spawns reads, on every harness,
+  by `host-capabilities.md` for the masked diff every read-only agent the kit spawns reads, on every harness,
   by `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` and `atk:help` for a diff read in the session,
   and by rule 9 in `team-roles.md` and the prompts that quote its table. It
   lived in `atk:git`'s references until those other readers made it a contract between several

@@ -4,7 +4,8 @@ The loop that runs the team review against a skill's own change, and the ceiling
 hiding a design problem under patches. Referenced from `skills/<name>/SKILL.md` as
 `shared/review-fix-loop.md`, which is `../../shared/review-fix-loop.md` relative to a skill file.
 
-Cited by `implement` and `fix`, each once its change is written, verified, and tidied. Each keeps its
+Cited by `implement` and `fix`, each once its change is written, verified, and tidied, and by
+`orchestrate`, which runs the loop on each code job it has committed, the jobs run with `--no-review`. Each keeps its
 own verification step and its own record; where this file says "the record" and "the verification",
 it means the calling skill's.
 

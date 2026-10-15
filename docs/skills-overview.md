@@ -83,10 +83,13 @@ never stages.
 **Use when.** Several pieces of work have to move at once, a client request, an approved design and
 a ready plan side by side, and one coordinator should carry them rather than a person running each
 skill by hand. A breakdown whose owners are confirmed turns its tasks into pieces the same way.
+`--concurrency <n>` caps how many pieces run at once, `--sequential` runs one job at a time, and
+`--resume` offers the newest run that stopped before its end.
 
 **Do not use when.** There is one piece of work and you want the next step for it, which is
 `atk:help`; you want an epic split into owned tasks, which is `atk:breakdown`; or the work has no
-team artifact and no approver, which is outside this kit.
+team artifact and no approver, which is outside this kit; or the project spans several
+repositories, which the skill refuses for now.
 
 **The habit that matters.** It proposes before anything runs, and it relays rather than answers.
 Every interview question, approval prompt and plan confirmation a job meets reaches the person it

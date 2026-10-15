@@ -95,7 +95,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 
 ```bash
 /atk:help [question|skill]                # --lang
-/atk:orchestrate <requests|tickets|paths> # --concurrency --sequential --resume
+/atk:orchestrate [requests|tickets|paths] # --concurrency --sequential --resume
 /atk:init                                 # --audit --lang --out
 /atk:tailor [<skill>]                     # --audit --feedback --runs --since --out
 /atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out

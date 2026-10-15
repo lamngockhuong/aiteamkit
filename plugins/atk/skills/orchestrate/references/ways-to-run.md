@@ -14,8 +14,9 @@ Run before the proposal, and its result goes in the proposal record.
   the instructions it ships, read now. Then the agent CLI each job would start: present on the
   machine, and the flags for its permission mode read from its own `--help`.
 - **Subagents.** The harness's own agent capability is in its live tool list, the `Agent` tool in
-  Claude Code. The agent spawned is a general one, never `atk:read-only-reviewer`, which cannot
-  write.
+  Claude Code, and an agent it spawns can invoke a skill: one short spawned agent, told to list the
+  skills it can invoke and run nothing, says whether `atk:` skills are among them. The agent spawned
+  is a general one, never `atk:read-only-reviewer`, which cannot write.
 - **The session.** Always present.
 
 `--sequential` keeps the way and sets the concurrency to one.
@@ -31,19 +32,27 @@ Tried with Claude Code as the coordinator only, which the proposal says. For eac
    `idle` before the agent has started.
 3. **Wait.** One wait across every running pane, not one per job: each pass reads the state of all
    of them, so a pane already `blocked` never waits behind another's timeout. The timeout stated in
-   the proposal is counted per job, and a timeout fails that job.
+   the proposal is counted per job; a job that reaches it is recorded `failed`, then its agent is
+   stopped, so nothing keeps writing in a worktree whose chain has stopped.
 4. **Blocked.** Read each blocked pane for its question or prompt, and relay all of them in one turn
-   per step 4 of `SKILL.md`, each answer sent to its pane verbatim. Then wait again from step 3.
-5. **Done.** Read the result file, never the screen: a pane folds and draws its output, and what it
-   shows is not what the job wrote.
+   per step 4 of `SKILL.md`. A prompt whose options the pane folds or cuts short is not relayed as a
+   choice: the person's answer has to name an option the coordinator read in full. Before sending an
+   answer, read the pane's state again: the answer goes in verbatim only while the same prompt is
+   still open, and nothing is typed into a pane that is not at a prompt. Then wait again from step 3.
+5. **Done.** Read the result file for what the job did: a pane folds and draws its output, and what
+   it shows is not what the job wrote. The screen is read for a blocked pane's prompt, and for
+   nothing else.
 
 ## Host subagents
 
 Spawn one general agent per job with the prompt of `references/job-prompt.md`, working in the
 piece's worktree. A subagent cannot ask the person, so a stop comes back as its result file at
 `needs-person`. Relay it, then continue that same agent with the answer verbatim where the harness
-can continue one, `SendMessage` in Claude Code; where it cannot, spawn a new one with the answer and
-the child skill's progress log, which that skill offers to resume.
+can continue one, `SendMessage` in Claude Code. Where it cannot, a job whose skill keeps a progress
+log, `atk:implement` or `atk:fix`, is spawned again with the answer and that log, which the skill
+offers to resume; a job whose skill interviews and keeps none runs in the session instead, because a
+new agent given one answer starts the interview over. A subagent's permission prompts reach the
+person in the harness itself, not through the coordinator, which the proposal says beforehand.
 
 ## In the session
 
@@ -57,5 +66,5 @@ parallel.
 | | Panes | Subagents | Session |
 |-|-------|-----------|---------|
 | Concurrency | the stated cap | the stated cap | one |
-| A question reaches the person | from the pane, through the coordinator or typed in the pane | as a returned stop | directly |
+| A question reaches the person | from the pane, through the coordinator | as a returned stop | directly |
 | Written into the run state | pane name | agent ID where the harness gives one | nothing extra |

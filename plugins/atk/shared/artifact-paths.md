@@ -314,7 +314,8 @@ report costs a set of identifiers, unless a `--comment` run posted them, and a l
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Two derived
-kinds are never staged whatever the project does with the directory: the progress log, held out by
+kinds are never staged whatever the project does with the directory: the progress log, with what
+sits in its run directory, held out by
 a line in the local exclude file, or for `atk:orchestrate`'s whole run directory by its own ignore file, and the run trace, held out by an ignore file in its own directory,
 per the two subsections below.
 
@@ -328,8 +329,9 @@ has to keep up with it, or it with the code.
 
 `atk:fix`, `atk:verify`, `atk:implement` and `atk:orchestrate` write a progress log as the run goes,
 so a session that is compacted or ends resumes from disk instead of repeating what it had already
-ruled out. `atk:orchestrate` keeps the job result files of its run in the same directory, and holds
-the whole directory out of git with an ignore file holding `*` in `docs/derived/orchestrate/`,
+ruled out. `atk:orchestrate` keeps the job result files of its run in a directory of the same path
+inside each job's worktree, copied into its own before a worktree is removed, and holds that
+directory out of git with an ignore file holding `*` in `docs/derived/orchestrate/`,
 checked with `git check-ignore -q` as `shared/run-trace.md` does for traces, in its own tree and in
 every worktree a job writes in, rather than with the exclude line below, which names
 `progress.md` alone. The run

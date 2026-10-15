@@ -47,8 +47,8 @@ each piece still needs and, once a person approves, runs them side by side in wo
 every question and approval rather than answering it, and stopping code at a local commit.
 
 The `plugins/atk/shared/` layer holds what would otherwise be repeated twenty-five times: the role vocabulary,
-the artifact path convention, and the tracker adapters, cited by every skill. Fourteen more files are
-contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
+the artifact path convention, and the tracker adapters, cited by every skill. The other eighteen
+are contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
 `diagram-conventions.md` between the six whose artifacts carry a diagram, `host-capabilities.md`
 and `tidy-pass.md` around what the harness itself provides, `spec-docs.md` between `spec` and the
@@ -59,7 +59,10 @@ which says how `spec`, `intake` and `qa` read a Figma design, `feature-types.md`
 classification of features that `catchup` asks from and `estimate` sizes QA from, `plain-writing.md`,
 how the prose of a run's report is written for a reader who opened none of its files,
 `independent-challenge.md` between `design-doc` and `plan`, for a draft put before agents that read
-it cold, `project-profile.md`,
+it cold, `state-signals.md`, the rows `help` and `orchestrate` read to say what a piece of work needs
+next, `secret-scan.md`, the one scan for secrets and the list of files rule 9 keeps unread,
+`review-fix-loop.md`, the review `implement`, `fix` and `orchestrate` run on their own change,
+`run-trace.md`, what every run leaves for `tailor` to read, `project-profile.md`,
 which describes `.atk/profile.md`, a file that lives in the target project rather than in the kit,
 and `project-overrides.md`, which describes `.atk/overrides/<skill>.md` and reaches every skill
 through rule 7 of `team-roles.md` rather than by being cited directly.

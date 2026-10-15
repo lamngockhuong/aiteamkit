@@ -24,8 +24,8 @@ Cited by:
   places a skill reads a diff in the session through it: `atk:spec --sync`, the branch state of
   `atk:help`, and the reading after a tidy pass in `shared/tidy-pass.md`.
 - `shared/team-roles.md`, whose rule 9 takes its list of files from the table below, and the
-  prompts that quote that table: `skills/review/references/review-rounds.md` and
-  `shared/independent-challenge.md`.
+  prompts that quote that table: `skills/review/references/review-rounds.md`,
+  `shared/independent-challenge.md`, and `skills/orchestrate/references/job-prompt.md`.
 
 ## The scan
 
@@ -259,7 +259,9 @@ reviewer's `diff.patch` per the reviewer rule in `shared/host-capabilities.md`, 
 through this scan, never through a command that prints a patch or a file's content unmasked:
 `git diff`, `git show`, `gh pr diff`, `git log -p`, `git stash show -p`, `git format-patch`,
 `git cat-file -p`, or `git blame` on a file rule 9 names. A prompt that forbids them quotes this
-list.
+list. Reading an artifact's front matter alone from a branch, `git show` piped through a filter that
+stops at the closing `---` and prints no body, as `atk:orchestrate` does, reads no content this
+section protects, and is never used on a file rule 9 names.
 Printed in the session, the block's standard output is the diff and its standard error the list of
 what it masked. Written for an agent, run the same block with `mask`, its output to the file and the
 list beside it, the block as the here-document:

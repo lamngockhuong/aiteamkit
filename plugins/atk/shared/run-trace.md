@@ -18,8 +18,8 @@ skill or a shared file says a run writes nothing, changes nothing, or changes no
 trace, those two files are the exception it means, and nothing else is: neither is staged, offered
 for a commit, or named as the run's output.
 
-A trace is not a progress log either. `atk:fix`, `atk:verify` and `atk:implement` keep writing
-theirs, per Progress log in `shared/artifact-paths.md`, because a progress log holds what a resume
+A trace is not a progress log either. `atk:fix`, `atk:verify`, `atk:implement` and
+`atk:orchestrate` keep writing theirs, per Progress log in `shared/artifact-paths.md`, because a progress log holds what a resume
 needs. The trace sits beside it and holds what an analysis needs: which steps ran, who waited for
 whom, where a ceiling stopped the run.
 

@@ -135,7 +135,7 @@ exit, not an error.
 ### 2. Stage and scan
 
 Stage only paths that belong to the work in hand, and never anything in the run directory of a
-progress log, `docs/derived/<skill>/<run-id>/`, which is one person's working state per
+progress log of a skill that Progress log names, `docs/derived/<skill>/<run-id>/`, in any worktree, which is one person's working state per
 Progress log in `shared/artifact-paths.md`, whatever the project does with `docs/derived/`. A
 repository with unrelated edits already in the tree keeps them: `git add -A` is never the answer,
 because the person who left them there did not ask for them to ship.

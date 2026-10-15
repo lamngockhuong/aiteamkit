@@ -41,8 +41,10 @@ Check the rows top to bottom and stop at the first one that holds. The order is 
 work already written but not carried comes before new work, because new work started on top of it
 is how a branch collects three unrelated changes.
 
-"The work in hand" is the ticket the current branch names, in its name or its commits. On a branch
-that names none, it is the gating artifact updated most recently.
+"The work in hand" is the ticket the branch being read names, in its name or its commits. On a
+branch that names none, it is the gating artifact updated most recently. Where a row says the
+current branch or the working tree, it means the branch and the tree being read: for `help` the
+current ones, for `orchestrate` the piece's own, per its step 1.
 
 | # | Holds when | Run | Rather than |
 |---|------------|-----|-------------|
@@ -50,7 +52,7 @@ that names none, it is the gating artifact updated most recently.
 | 2 | The cases file for the work in hand is `IN REVIEW`, and no report named `docs/derived/reviews/qa-cases-<slug>-` plus exactly `YYMMDD-HHMM` or `YYMMDD` and `.md`, for that exact slug, whose title line names this cases file and whose reviewer is not the file's owner, is newer than its last commit | `atk:qa --review <cases path>`, by the BrSE/BA or the QA lead, never the file's owner | Waiting on the approver alone: the second person's read is owed before approval, and row 3 would only name the file |
 | 3 | A gating artifact for the work in hand is `DRAFT` or `IN REVIEW` | No skill. Name the artifact and its approver under `Waiting on people` | The next skill, which would build on something nobody accepted |
 | 4 | The current branch changes an API, a table, a feature's behaviour, or a component of a screen that has a screen spec, and the reference document for it is not in the diff | `atk:spec --sync` | `atk:git`, which would carry the change without the document it owes, per `shared/spec-docs.md` |
-| 5 | A progress log of a skill that Progress log in `shared/artifact-paths.md` names, under `docs/derived/<skill>/`, has a last line that is neither an artifact path nor `no artifact:`, per that section | The same skill on the subject of its first line, or in the resume form its `## Invocation` names, which offers to resume it. Name the time of its last entry: the log may belong to a session still running | `atk:git`, which would carry a fix, a verification or an implementation that stopped halfway |
+| 5 | A progress log of a skill that Progress log in `shared/artifact-paths.md` names, under `docs/derived/<skill>/`, has a last line that is neither an artifact path nor `no artifact:`, per that section | The same skill on the subject of its first line, or in the resume form its `## Invocation` names, which offers to resume it. Name the time of its last entry: the log may belong to a session still running | `atk:git`, which would carry a run of that skill that stopped halfway |
 | 6 | The working tree has uncommitted changes, or the branch is ahead of its base with no pull request open | `atk:git` | `atk:review`, which reads a pull request that does not exist yet |
 | 7 | A pull request is open for the branch, with no review on it and no review report for it | `atk:review <pr>` | `atk:qa`, which tests code a reviewer may still send back |
 | 8 | The newest review report for the open pull request has `BLOCKING` findings and no commit on the branch is newer than the report | `atk:implement "address the BLOCKING findings in <report path>"` | A second `atk:review`, which would report the same findings |
