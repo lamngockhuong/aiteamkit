@@ -280,10 +280,12 @@ it.
 - **No mode that both writes and asks nothing is proposed.** A job that writes keeps a mode in which
   its agent asks before what it may not do alone. Where that leaves the only working mode a read-only
   one, the job is proposed read-only with what that costs in approvals stated, or not at all.
-- **The commit check.** Before the first job of a worktree starts, the calling skill compares
-  `git rev-parse --git-dir` with `git rev-parse --git-common-dir` in that worktree, and checks
-  whether the way chosen may write the common one: a sandbox that may write only the worktree cannot
-  take the index lock under the main repository's git directory. Where it may, the job commits
+- **The commit check.** Before the first job of a worktree starts, the calling skill runs
+  `git rev-parse --git-dir` and `git rev-parse --git-common-dir` in that worktree. In a linked
+  worktree the two always differ, so the difference alone decides nothing: what it shows is where
+  a commit writes, and the check is whether the way chosen may write the common one. A sandbox that
+  may write only the worktree cannot take the index lock under the main repository's git directory;
+  a subagent of the session writes wherever the session may. Where it may, the job commits
   through `atk:git --commit`. Where it may not, the job stops with its change staged, and the calling
   skill runs `atk:git --commit` in that worktree itself, where the staged secret scan and the
   branch-name check of `shared/finalize-steps.md` run.
