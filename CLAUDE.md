@@ -5,8 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this repo is
 
 `atk` (AI Team Kit) is a multi-harness AI plugin distributable across Claude Code, Cursor, and
-OpenAI Codex CLI. It packages 24 skills covering the delivery lifecycle of a company project team
-(`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`,
+OpenAI Codex CLI. It packages 25 skills covering the delivery lifecycle of a company project team
+(`help`, `orchestrate`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `breakdown`,
 `convention`, `plan`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `security`, `git`,
 `release`, `incident`, `retro`, `onboard`, `handover`), each invocable as a slash command by its own name
 (`/atk:intake`, `/atk:estimate`, and so on). That is the lifecycle order; use it for every list of skills in the repository.
@@ -110,8 +110,8 @@ plugins/atk/skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: nineteen of them carry
-one (`help`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `convention`,
+neighbours it must not steal. `references/` is where they still differ: twenty of them carry
+one (`help`, `orchestrate`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `convention`,
 `plan`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `security`, `git`, `onboard`), and the other five are
 still `SKILL.md` alone. `qa` holds the most, eight: its modes for updating cases, recording a run,
 and reviewing cases each keep their procedure in a file of their own, and its checklist is a list
@@ -146,11 +146,12 @@ the run trace, then numbered steps), `## Output`, `## Ticket`, `## Definition of
 lines name the skill's own folder in the path and are worded alike in every skill, which the check
 under "Common verification commands" holds.
 
-One skill carries an extra section: `verify` adds `## Process management` between `## Workflow` and
-`## Output`. It is the only skill that starts long-running processes (`atk:run-cases` holds a browser
+Two skills carry an extra section: `verify` and `orchestrate` add `## Process management` between
+`## Workflow` and `## Output`. They are the only skills that start things that outlive a step,
+`verify` long-running processes and `orchestrate` agents, panes and worktrees (`atk:run-cases` holds a browser
 session, but through the harness's browser automation rather than a process it starts and must stop), and the rules for not leaving
-them behind are binding policy that two separate workflow steps defer to, so burying them inside one
-step would hide a rule the other step also has to obey. That is the bar for an extra section: a rule
+them behind are binding policy that several workflow steps defer to, so burying them inside one
+step would hide a rule the other steps also have to obey. That is the bar for an extra section: a rule
 the workflow points at from more than one place, in a skill that does something no other skill does.
 Anything narrower goes inside the step it belongs to.
 
@@ -172,7 +173,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/finalize-steps.md` | The closing sequence for a code change: the reference documents it owes, branch, commit, the project's own pull request template as the shape of the body, the consent line every action past the commit has to cross, and the order a change spanning several repositories is carried in | `fix`, `implement`, `verify`, `plan`, `tailor`, `qa` |
 | `shared/layer-verification.md` | The five-layer table: what to run for a layer, what a pass proves, and what it does not, plus the gate rule: which CI job judges a layer, and what a local command weaker than it leaves unverified | `fix`, `implement`, `verify` |
 | `shared/diagram-conventions.md` | When a diagram earns its place, the four shapes the kit draws, and the rules that keep them readable | `catchup`, `design-doc`, `plan`, `breakdown`, `security`, `incident` |
-| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, spawned as `atk:read-only-reviewer` over a masked `diff.patch`, what counts as one turn of an interview, when a connection to an outside service may be named, browser automation, the one capability whose absence stops a skill, reading wide through an agent that returns conclusions rather than file bodies, and agents that write: the job's worktree as their boundary, the multiplexer named by what it does, the three ways a job runs, a gate relayed and never answered, a CLI's own permission prompt never widened, the commit check, what such an agent is told, and its output read as evidence | `fix`, `implement`, `verify`, `review`, `design-doc`, `plan`, `init`, `run-cases`, `help`, `catchup`, `spec`, `convention`, `security`, `onboard`, `design-sources.md`, `independent-challenge.md`, `review-fix-loop.md` |
+| `shared/host-capabilities.md` | Which capabilities of the host agent a skill may use, how to name one, what to do when the harness lacks it, and the rules for the tidy step and for parallel reviewers, spawned as `atk:read-only-reviewer` over a masked `diff.patch`, what counts as one turn of an interview, when a connection to an outside service may be named, browser automation, the one capability whose absence stops a skill, reading wide through an agent that returns conclusions rather than file bodies, and agents that write: the job's worktree as their boundary, the multiplexer named by what it does, the three ways a job runs, a gate relayed and never answered, a CLI's own permission prompt never widened, the commit check, what such an agent is told, and its output read as evidence | `fix`, `implement`, `verify`, `review`, `design-doc`, `plan`, `init`, `run-cases`, `help`, `catchup`, `spec`, `convention`, `security`, `onboard`, `orchestrate`, `design-sources.md`, `independent-challenge.md`, `review-fix-loop.md` |
 | `shared/spec-docs.md` | What separates a reference document from a design document, what one is when the profile says `Contract: first` and the `implemented` field that says whether its code exists yet, the rule that a project's own shape wins, the obligation to carry a reference document with a contract change and leave it true, including when the document lives in another repository, the `screen` kind with its always-present `implemented`, two-sided drift and split with `feature`, and the line between drift and an unanswered question | `spec`, `design-doc`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `help` |
 | `shared/tidy-pass.md` | What tidying a change looks for: the three lenses, what may be changed, and what is never touched, so the step lands the same way on a harness that ships a clean-up capability and one that does not | `fix`, `implement`, `verify`, through `host-capabilities.md` |
 | `shared/host-file-locations.md` | How the code host is detected, every location each host reads `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` from, and when one counts as present | `convention` (is it missing), `git` (where is the template), `init` (where is `CODEOWNERS`) |
@@ -182,7 +183,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
 | `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `spec`, `help`, `host-capabilities.md`, `team-roles.md`, `ticket-adapters.md`, `tidy-pass.md`, `review-rounds.md`, `independent-challenge.md`, `review-fix-loop.md`, `read-only-reviewer` (restated) |
 | `shared/review-fix-loop.md` | The loop that runs `atk:review` on a skill's own change before it reaches a person: what the call is given, which severities are fixed, a disputed finding, re-verifying each round, the two-round ceiling and the five-part escalation, and the line `--no-review` leaves | `implement`, `fix`, `artifact-paths.md`, `finalize-steps.md` |
-| `shared/state-signals.md` | Which artifacts gate the next skill while they wait for approval, the evidence on disk that names that skill, in the order to check it, and how the artifacts waiting on a person are collected | `help` |
+| `shared/state-signals.md` | Which artifacts gate the next skill while they wait for approval, the evidence on disk that names that skill, in the order to check it, and how the artifacts waiting on a person are collected | `help`, `orchestrate` |
 | `shared/run-trace.md` | The run trace every run leaves under `docs/derived/traces/<skill>/`: its path and `<run-id>`, the ignore file inside its directory and the check that must pass before it is written, the header with the `way` a run was started, the six event kinds and no others, what it never holds, the twenty kept per skill, which only `tailor --runs` removes and only on a yes, and that `Run trace: off` in the profile is the only switch | all, through the two lines at the top of every `## Workflow` that carry out rule 10 of `shared/team-roles.md`; `tailor` reads what it holds |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
@@ -260,7 +261,7 @@ past it.
 but a rule a skill only cites with "See" is not read: two runs of `atk:help` never opened the file and
 wrote no trace. So every `SKILL.md` carries two lines under its override line that name the trace's
 path and send the run to `run-trace.md`, and with them the run followed it. It is a file of its own rather than a section of `artifact-paths.md` because a trace is an obligation of
-every run, a run that writes no artifact included, reached from all 24 workflows and owned by rule
+every run, a run that writes no artifact included, reached from all 25 workflows and owned by rule
 10, while `artifact-paths.md` says where a run's artifacts go, and a trace is not one. `atk:tailor --feedback` is its one reader, and the only skill that says what a
 trace means.
 
@@ -463,15 +464,15 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
    artifact the tree did not hold before. The per-group paragraphs name the kinds and count them, so
    a new one leaves two files disagreeing about what is safe to delete
 7. `.github/ISSUE_TEMPLATE/bug-report.yml` (the component dropdown)
-8. All three manifest descriptions plus `.claude-plugin/marketplace.json` and `package.json`, if the count of 24
+8. All three manifest descriptions plus `.claude-plugin/marketplace.json` and `package.json`, if the count of 25
    changes. The Codex manifest carries a second copy inside `interface.longDescription`
 9. `docs/system-architecture.md` and `docs/vi/system-architecture.md`, if the skill changes what the
    `plugins/atk/shared/` layer or the profile is for
-10. The tables that name all 24 skills: the phase table in `docs/flow/project-flow.md`, the
+10. The tables that name all 25 skills: the phase table in `docs/flow/project-flow.md`, the
     consumes/produces table in `docs/flow/skill-chain.md`, and the role table in
     `plugins/atk/skills/init/references/role-defaults.md`, the last read by `atk:init` and shipped
     inside the kit for that reason. Both `docs/flow/` files have `docs/vi/flow/` mirrors; the role
-    table has none. `docs/flow/skill-lifecycle.md` and its mirror carry no table of all 24: they name
+    table has none. `docs/flow/skill-lifecycle.md` and its mirror carry no table of all 25: they name
     skills as examples of each kind of edge, and count the `SKILL.md` files and the mentions between
     them, so a new skill changes those counts and, if it adds a kind of edge, the examples
 11. `plugins/atk/shared/state-signals.md`, if something on disk says the skill is the next one
@@ -507,7 +508,7 @@ writes no team artifact and sits in no delivery phase. Eight of the twelve group
    knows the skill exists; the check under "Common verification commands" fails on a folder missing
    from it or a row for a skill that is gone
 
-The other groups do not apply. The count of 24 is `atk`'s, and `package.json` carries it.
+The other groups do not apply. The count of 25 is `atk`'s, and `package.json` carries it.
 `plugins/atk/shared/artifact-paths.md` and `docs/artifact-lifecycle.md` list team artifacts, which an
 `atkx` skill does not write. `plugins/atk/skills/init/references/role-defaults.md`, the tables in
 `docs/flow/`, and `plugins/atk/shared/state-signals.md` place skills in delivery
@@ -601,9 +602,9 @@ its Layers table, and the mirror check below excludes both paths.
 | `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0004` to `0006` the run trace |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
-| `flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and approver of each artifact |
+| `flow/project-flow.md` | The 25 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 
