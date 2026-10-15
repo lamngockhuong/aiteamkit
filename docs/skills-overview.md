@@ -80,9 +80,9 @@ piece in its own worktree and branch, its artifacts at the state their skills gi
 a local commit with an `atk:review` report. A run state under `docs/derived/orchestrate/` that git
 never stages.
 
-**Use when.** Several pieces of work have to move at once, a client request, an approved design and
-a ready plan side by side, and one coordinator should carry them rather than a person running each
-skill by hand. A breakdown whose owners are confirmed turns its tasks into pieces the same way.
+**Use when.** One or several pieces of work have to move through the kit, a client request, an
+approved design and a ready plan side by side, and one coordinator should carry them rather than a
+person running each skill by hand. A breakdown whose owners are confirmed turns its tasks into pieces the same way.
 `--concurrency <n>` caps how many pieces run at once, `--sequential` runs one job at a time, and
 `--resume` offers the newest run that stopped before its end.
 

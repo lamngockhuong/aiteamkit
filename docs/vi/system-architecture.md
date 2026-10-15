@@ -159,7 +159,8 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   trên nhiều repository. `atk:git` là thứ thi hành nó; file này
   vẫn là hợp đồng, và chính điều đó khiến nhóm skill sửa mã với nhóm skill viết tài liệu khép lại
   theo cùng một đường. Được `atk:fix`, `atk:implement` và `atk:verify` trích dẫn, ba skill giao việc
-  cho `atk:git`; được `atk:plan`, `atk:tailor`, `atk:qa` và `atk:orchestrate` trích riêng phần ranh giới xin phép; và được mọi
+  cho `atk:git`; được `atk:plan`, `atk:tailor` và `atk:qa` trích riêng phần ranh giới xin phép; được `atk:orchestrate`
+  trích phần ranh giới xin phép và quy tắc đặt tên nhánh; và được mọi
   skill sinh artifact trích phần nói về thay đổi chỉ tạo ra một tài liệu. Không gì rời khỏi repo cục
   bộ mà chưa được hỏi.
 - `plugins/atk/shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
@@ -208,7 +209,7 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
 - `plugins/atk/shared/review-fix-loop.md`: vòng chạy `atk:review` trên chính thay đổi của một skill trước khi
   một người đọc nó, những mức độ được sửa, một phát hiện bị phản đối, trần hai vòng và chuyển lên
   người có tên, cùng dòng mà `--no-review` để lại trong bản ghi. `atk:implement` và `atk:fix` trích
-  dẫn nó, `atk:orchestrate` cũng vậy cho các job viết mã mà nó commit: phần kiểm chứng của cả hai chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
+  dẫn nó, `atk:orchestrate` cũng vậy cho các job viết mã mà nó commit: phần kiểm chứng của mỗi skill chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
   xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra.
 
 - `plugins/atk/shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy

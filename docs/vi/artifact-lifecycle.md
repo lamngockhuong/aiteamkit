@@ -88,7 +88,7 @@ và không bao giờ được commit khi còn chờ. Các lượt review ấy, k
 không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là bản viết duy nhất: đó là lý
 do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà `atk:fix`, `atk:verify`,
 `atk:implement` và `atk:orchestrate` ghi dần trong lúc chạy là loại thứ chín, cùng các file kết quả
-job mà `atk:orchestrate` giữ bên cạnh log của nó: xóa nó thì mất phần việc đã loại trừ, và lần chạy
+job mà `atk:orchestrate` giữ ở cùng đường dẫn trong worktree của từng job rồi chép về cạnh log của nó: xóa nó thì mất phần việc đã loại trừ, và lần chạy
 sau làm lại từ đầu, còn với `atk:orchestrate` thì mất luôn ghi chép job nào của phần việc nào đã đi
 tới đâu. Run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/`, trừ
 khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ được stage, mỗi skill chỉ bị cắt về hai mươi trace khi

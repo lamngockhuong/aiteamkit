@@ -1,25 +1,25 @@
 ---
 name: orchestrate
 description: >
-  Carry one or several pieces of team work through the atk lifecycle at once: read how far each has come,
+  Carry one or several pieces of team work through the atk lifecycle: read how far each has come,
   from a client's raw request to a ready plan, propose the atk skills each still needs as jobs with
   the agent, the way it runs, and the person who answers it, and after the team approves the
   proposal, run the jobs side by side, each piece in its own git worktree, relaying every question
   and approval to the named person and ending code at a local commit with an `atk:review` report.
-  Use when a team has several requests, tickets, designs or plans to move at the same time and wants
-  one coordinator for them. Not for generic multi-agent work with no team artifact or approval.
+  Use when a team has requests, tickets, designs or plans to carry through atk, one or several at a
+  time, and wants one coordinator for them. Not for generic multi-agent work with no team artifact or approval.
   Triggers on: "orchestrate these tickets", "run the atk pipeline for these requests",
   "carry these pieces of work through atk", "điều phối nhiều việc qua atk",
-  "chạy song song các ticket theo quy trình atk", "đẩy các yêu cầu này qua atk", "複数のチケットをatkで進めて",
+  "chạy song song các ticket theo quy trình atk", "điều phối các ticket này qua atk", "複数のチケットをatkで進めて",
   "atkのワークフローを並行して回す", "/atk:orchestrate".
 argument-hint: "[requests|tickets|paths...] [--concurrency <n>] [--sequential] [--resume]"
 ---
 
-# Carry Several Pieces of Work at Once (`atk:orchestrate`)
+# Carry Pieces of Work Through the Kit (`atk:orchestrate`)
 
 Today a person carries every piece of work through the kit by hand, one skill and one piece at a
 time: a raw request through `atk:intake`, an approved requirement through `atk:design-doc` or
-`atk:plan`, a plan through `atk:implement`. This skill is the coordinator for several of them. It
+`atk:plan`, a plan through `atk:implement`. This skill is the coordinator for one or several of them. It
 reads where each piece stands, proposes the jobs each still needs, and once a person approves, runs
 them side by side.
 
@@ -62,13 +62,15 @@ may hold all of these; the approval is still their act. See `shared/team-roles.m
 ```
 
 `--concurrency` takes a whole number of 1 or more, and is reduced to what the machine allows, saying
-so. `--sequential` wins over it. `--resume` takes no inputs: given some, the run asks which was meant;
-with no unfinished run, it says so and stops.
+so. `--sequential` wins over it. `--resume` takes no inputs, and is this skill's resume form, the one
+`atk:help` names for an unfinished run of it: given inputs, the run asks which was meant; with no
+unfinished run, it says so and stops.
 
 The project is one repository: one whose profile names member repositories, or a workspace, is refused
 at the proposal, per One repository in `references/worktrees.md`. `.atk/profile.md` is wanted, not
 required: this skill is in the Required-soft group of `shared/project-profile.md`, and without one it
-proposes `atk:init` ahead of the jobs that need it, per `references/proposal.md`.
+runs `atk:init` in the session before any worktree is made, per When the profile is not ready in
+`references/proposal.md`.
 
 ## Workflow
 
@@ -95,23 +97,30 @@ its own branch and worktree as the branch and tree the rows read. The rows about
 rather than one piece, records, tags, conventions, overrides and threat models, are read once per
 run, not once per piece.
 
-- **Where it is read.** In the piece's worktree when a previous run left one, or on its branch before
-  it has one, the paths listed once with `git ls-tree -r --name-only <branch>`, and each artifact's
-  front matter alone printed, `git show <branch>:<path> | sed -n '1{/^---$/!q};p;2,${/^---$/q}'`,
-  which prints nothing for a file without it, never its body and never a file rule 9 names. Row 6 reads the piece's own worktree,
-  and a piece with none has no uncommitted work.
+- **Where it is read.** In the piece's worktree when a previous run left one, matched by ticket key or
+  path against the run state and `git worktree list`; else on the piece's branch where one exists;
+  else on the base the proposal will name for it. Paths are listed once with
+  `git ls-tree -r --name-only <ref>`, and each artifact's front matter alone printed, per Masking a
+  diff in `shared/secret-scan.md`: `git show <ref>:<path> | awk '{sub(/\r$/,"")} NR==1{if($0!="---")exit;next} $0=="---"{for(i=1;i<=n;i++)print b[i];exit} {b[++n]=$0} n>=40{exit}'`,
+  which prints nothing for a file without a closed front matter, never its body and never a file
+  rule 9 names.
+- **Row 6 is read for uncommitted work only.** Between jobs a piece's branch is ahead of its base
+  with no pull request by design, since every push waits for a person, so that half of row 6 never
+  holds for a piece and reading goes on to the rows below it. Uncommitted work in a worktree a
+  previous run left is shown to the person as a row of the proposal, never committed unasked, and one
+  whose last job ended `failed` goes to the person under `needs-person`.
 - **Its own records are left out.** This skill's proposal records under `docs/records/orchestration/`
   are not a piece's artifacts and never gate it: a `DRAFT` proposal is the coordinator's own gate,
   and reading it as a piece's would make every chain wait on the record about to start it.
-- **Nothing of its own.** A raw request, a ticket holding only a request, or a piece with no artifact
-  on its branch starts at `atk:intake`, ahead of every row; a Figma link starts at
+- **Nothing of its own.** A raw request, a ticket holding only a request, or a piece for which none
+  of those places holds an artifact naming its ticket or path starts at `atk:intake`, ahead of every
+  row; a Figma link starts at
   `atk:intake --design <link>`, and a defect report at `atk:fix`.
 - **Reading stops at the first gate.** A gating artifact at `DRAFT` or `IN REVIEW` means the piece
   waits for the approver its front matter names, under `needs-approval`, before anything else is
   proposed for it.
-- **A row that names no job.** Row 6 means the coordinator commits the piece's worktree, per
-  `references/worktrees.md`; rows 7, 18 and 22, a pull request, a release and a question, mean the
-  piece waits on a person, named in the proposal.
+- **A row whose skill this run does not propose.** Rows 7, 18 and 22, a pull request, a release and
+  a question, mean the piece waits on a person, named in the proposal.
 
 ### 2. Propose
 
@@ -122,15 +131,19 @@ concurrency, the timeout and the total number of jobs and review runs before any
 the parallel-agents policy of `shared/host-capabilities.md`.
 
 The record is written at `DRAFT`, and nothing runs until it is `APPROVED`: edited by its approver, or
-moved on their explicit word, per rule 2. A record the approver edits is checked again, and one they
-reject ends the run, per How far an approval reaches in `references/proposal.md`. Approval reaches
+moved on their explicit word, per rule 2. A record the approver edits is checked again; a first record
+they reject ends the run, a later one stops its own chain, per How far an approval reaches in
+`references/proposal.md`. Approval reaches
 each chain's first job that produces a gating artifact; the jobs after it are marked `re-confirm`.
 
 ### 3. Prepare worktrees
 
-Take the inventory of `## Process management` first. Then do what `references/worktrees.md` says once
-per run, and per approved piece: the worktree beside the repository, its base, its branch by the
-project's rule, the profile it needs, and its run state's ignore file.
+Take the inventory of `## Process management` first. Where the profile is not ready, run `atk:init`
+in the session now and commit what it writes, before any worktree exists. Then do what
+`references/worktrees.md` says once per run, and per approved piece: the worktree beside the
+repository, its base, its branch by the project's rule, the profile it needs, and its run state's
+ignore file. A piece serialised after another gets its worktree only once its predecessor's code is
+committed and reviewed, from the branch the run state recorded for it.
 
 ### 4. Run the jobs
 
@@ -140,11 +153,14 @@ its change in its worktree, and writes a result file; the coordinator reads that
 rather than state, per Agents that write in `shared/host-capabilities.md`. A job ends `done`,
 `needs-person`, or `failed`:
 
-- **`done`.** Commit what it left, per After a job ends in `references/worktrees.md`, and record the
-  branch the commit is on. An offer it declined, a ticket comment or a push, goes to the close.
+- **`done`.** Check and commit what it left, per After a job ends in `references/worktrees.md`, and
+  record the branch the commit is on. A commit that fails or is refused puts the chain under
+  `needs-person` with the reason, and no review runs on it. An offer the job declined, a ticket
+  comment or a push, goes to the close.
 - **`needs-person`.** A gate of its skill, or a permission prompt of its CLI. Relay it as Agents that
-  write says, its recipient checked first. Independent questions from several jobs go to the person
-  in one turn.
+  write says, its recipient checked first against the people the job's skill asks: the requester, the
+  artifact's approver from the profile or the front matter, and the person running the skill.
+  Independent questions from several jobs go to the person in one turn.
 - **`failed`.** It timed out, its agent ended without a final state, it wrote outside its worktree, or
   its agent refused a flag, which is probed again, never guessed. Its chain stops; a stopped chain
   blocks only its own later jobs.
@@ -156,18 +172,23 @@ or to say so to a job's skill there. A rejection is relayed and recorded, per A 
 `references/proposal.md`.
 
 An `atk:implement` job is given its plan path, so its gate runs straight through, `--no-review` and
-`--out` to a path in its worktree; an `atk:fix` job is given `--no-review`. The coordinator owns the
+`--out <docs root>/derived/orchestrate/<run-id>/<job-id>-record.md` in its worktree, which the run
+state's ignore file holds; an `atk:fix` job is given `--no-review`. The coordinator owns the
 review.
 
 ### 5. Review code jobs
 
-Once a code job's change is committed, run `atk:review` on the piece's branch in its worktree, as
-`shared/review-fix-loop.md` says, all of it: Calling the review, with the plan and the requirement as
-intent and the cost stated first; What gets fixed; Disputing a finding, which goes to the Tech Lead
-and stops the chain; and The ceiling, two rounds, counted in the run state so a resume cannot reset
-it. A finding to fix becomes a new `atk:implement "address the BLOCKING findings in <report path>"`
-job with `--no-review` and `--out`, and the next review names the report before it and the commits
-since. Past the ceiling, mark the chain `escalated`. Agreement between reviewers is not an approval.
+Once a code job's change is committed, run `atk:review` on the piece's branch in its worktree, with
+`--out <docs root>/derived/orchestrate/<run-id>/<job-id>-review.md`, as `shared/review-fix-loop.md`
+says, all of it: Calling the review, with the plan and the requirement as intent and the cost stated
+first; What gets fixed; Disputing a finding, which goes to the Tech Lead and stops the chain; and The
+ceiling, two rounds, counted in the run state so a resume cannot reset it. The findings What gets
+fixed selects become a new `atk:implement "address the findings in <report path> that What gets
+fixed selects"` job with `--no-review` and `--out`, whose own verification is the re-verify step; a
+`SHOULD FIX` finding carried forward is written in the run state with its reason. The next review
+names the report before it and the commits since. Past the ceiling, mark the chain `escalated`. The
+loop's record lines go to the run state and into the job's implementation record, which names the
+coordinator's review reports. Agreement between reviewers is not an approval.
 
 ### 6. Re-confirm after a gate
 
@@ -178,14 +199,17 @@ tasks into new pieces, per A breakdown's tasks in that file.
 
 ### 7. Clean up and close
 
-Clean up per `## Process management`. Then propose `atk:verify` per branch that changed code, one
-branch at a time, never two at once: two worktrees of one application contend for one port.
+Propose `atk:verify` per branch that changed code, one branch at a time, in that branch's worktree,
+never two at once: two worktrees of one application contend for one port. Then clean up per
+`## Process management`.
 
 Close with the branches that wait for a push, each with its artifacts, its implementation record,
 its review report, and who must say yes to the push, per the consent line in
 `shared/finalize-steps.md`; the offers jobs declined; the chains still waiting, with the person each
-waits on; and the proposal records, offered for a commit through `atk:git --commit` in the
-coordinator's tree, any left unapproved moved to `SUPERSEDED` first.
+waits on; the exclude lines the run added to the clone, per `references/worktrees.md`; and the
+proposal records, offered for a commit through `atk:git --commit` in the coordinator's tree. A record
+left unapproved is moved to `SUPERSEDED` on its approver's yes, asked once at the close, and
+otherwise listed as still waiting.
 
 ### State and resuming
 
@@ -197,7 +221,8 @@ is invisible from the main tree. While any chain waits, the close writes one `<t
 per chain, naming the piece and the person, and leaves the log open so that `atk:help` sends people
 back; once none waits, the last line is the newest proposal record's path.
 
-A later run offers Resume, Start fresh, or Stop, as Progress log says. On Resume it checks every
+A later run offers Resume, Start fresh, or Stop, as Progress log says, and `--resume` is how a person
+asks for that offer. On Resume it checks every
 recorded worktree, branch and agent, asks the person about one that is gone rather than guessing,
 reads each piece again, and re-dispatches only interrupted jobs. Start fresh first stops and removes
 what the old run started, per `## Process management`, so nothing is left to a superseded log.
@@ -227,8 +252,10 @@ ran" and "nothing is left" are different claims.
 ## Output
 
 The proposal record at `docs/records/orchestration/<date>-<ticket>-<slug>.md`, one per approval, per
-`shared/artifact-paths.md`, opening with the shared front matter block. The run state and the job
-result files under `docs/derived/orchestrate/<run-id>/`, never staged. Each job's own artifacts,
+`shared/artifact-paths.md`, opening with the shared front matter block. The run state under
+`docs/derived/orchestrate/<run-id>/`, and the job result files, implementation records and review
+reports under the same path in each job's worktree, copied there before the worktree is removed,
+never staged. Each job's own artifacts,
 commits, implementation records and review reports, in its piece's worktree and branch.
 
 The closing message lists, per piece: its branch, the artifacts and their states, the commits, the

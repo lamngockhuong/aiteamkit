@@ -162,7 +162,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   repositories is carried in. `atk:git` is what carries it out; this file
   stays the contract, which is what lets the code-changing skills and the artifact-writing ones
   close the same way. Cited by `atk:fix`, `atk:implement` and `atk:verify`, which hand off to
-  `atk:git`, by `atk:plan`, `atk:tailor`, `atk:qa` and `atk:orchestrate` for the consent line alone, and by every skill that
+  `atk:git`, by `atk:plan`, `atk:tailor` and `atk:qa` for the consent line alone, by `atk:orchestrate` for the consent line
+  and the branch rule, and by every skill that
   writes an artifact for the section about a change that produced only a document. Nothing leaves
   the local repository without being asked for.
 - `plugins/atk/shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
@@ -208,7 +209,7 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
 - `plugins/atk/shared/review-fix-loop.md`: the loop that runs `atk:review` on a skill's own change before a
   person reads it, the severities it fixes, a disputed finding, the two-round ceiling and the
   escalation by name, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
-  `atk:fix`, and by `atk:orchestrate`, which runs it on the code jobs it commits: the verification of both asks whether the change works, and neither reads the diff for
+  `atk:fix`, and by `atk:orchestrate`, which runs it on the code jobs it commits: the verification of each asks whether the change works, and neither reads the diff for
   what it newly claims, which is what a review finds.
 
 - `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is

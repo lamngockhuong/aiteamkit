@@ -52,7 +52,7 @@ let it resume. They also showed four limits:
   rest of the chain is proposed again once that artifact is approved.
 - **Jobs never answer for a person.** A job runs one atk skill and no skill of another kit, and writes
   its result to a file. Every question a skill asks goes to the named person. Every gating artifact
-  waits for its approver, and the coordinator never answers either.
+  waits for its approver, and the coordinator never answers or approves either.
 - **Code ends at a local commit with an independent `atk:review`.** Push, pull request, and merge stay
   outside the skill.
 - **Jobs run in the first way the machine offers, in a fixed order:**
@@ -63,8 +63,8 @@ let it resume. They also showed four limits:
 
   No step stops because a multiplexer is missing.
 
-`plugins/atk/shared/host-capabilities.md` gains a section for agents that write. Until now every
-agent the kit spawned read and changed nothing.
+`plugins/atk/shared/host-capabilities.md` gains a section for agents that write. Until now no agent the kit
+spawned edited the tree, apart from the band 1 reviewer writing what a review run writes.
 
 ## Consequences
 

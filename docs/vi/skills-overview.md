@@ -81,8 +81,8 @@ nhánh riêng, artifact dừng ở trạng thái mà skill của nó đặt, cò
 kèm báo cáo của `atk:review`. Trạng thái của lượt chạy nằm dưới `docs/derived/orchestrate/`, nơi git
 không bao giờ stage.
 
-**Dùng khi.** Nhiều phần việc cần đi cùng lúc, chẳng hạn một yêu cầu của khách, một thiết kế đã
-duyệt và một kế hoạch đã sẵn sàng, và cần một bên điều phối thay vì một người tự chạy từng skill.
+**Dùng khi.** Một hoặc nhiều phần việc cần đi qua bộ kit, chẳng hạn một yêu cầu của khách, một thiết
+kế đã duyệt và một kế hoạch đã sẵn sàng, và cần một bên điều phối thay vì một người tự chạy từng skill.
 Một breakdown đã được xác nhận người phụ trách cũng biến các task của nó thành phần việc theo cách
 này. `--concurrency <n>` giới hạn số phần việc chạy cùng lúc, `--sequential` chạy lần lượt từng job,
 còn `--resume` đề nghị chạy tiếp lượt gần nhất đã dừng giữa chừng.

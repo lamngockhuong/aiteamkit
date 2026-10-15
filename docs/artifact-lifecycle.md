@@ -87,7 +87,7 @@ confirm them, are the only copy until then, and are never committed while they w
 review runs, made without a `--comment`, posts nothing to the pull request, so until it is rebuilt
 its report is the only written copy: a reason to keep the directory, not a reason to fear deleting
 it. The progress log that `atk:fix`, `atk:verify`, `atk:implement` and `atk:orchestrate` write as
-they go is the ninth kind, with the job result files `atk:orchestrate` keeps beside its own: deleting
+they go is the ninth kind, with the job result files `atk:orchestrate` keeps under the same path in each job's worktree and copies beside its own: deleting
 one costs the ruled-out work, which the next run does again from zero, and for `atk:orchestrate` the
 record of which job of which piece had reached where. The run trace
 every skill leaves under `docs/derived/traces/<skill>/`, unless the profile says `Run trace: off`,

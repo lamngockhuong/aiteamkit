@@ -38,25 +38,29 @@ of `shared/team-roles.md`.
    | Column | Holds |
    |--------|-------|
    | Job | `<piece ID>-<n>`, the job ID, which names its result file and its pane |
-   | Skill | the `atk` skill and its arguments, nothing a skill's `argument-hint` does not list |
+   | Skill | the `atk` skill and its arguments, nothing a skill's `argument-hint` does not list; request text is never an argument, the job reads it masked from its prompt's evidence |
    | Agent | the agent kind and its permission mode, chosen per job |
    | Way | pane, subagent, or session |
-   | Answers | the person who answers its questions, from the Team section, or `TBD (ask <person>)` |
+   | Answers | who answers its questions, by kind where the skill asks several people: the requester, the artifact's approver, the person running the skill; from the Team section, or `TBD (ask <person>)` |
    | Waits for | nothing, a job ID, or an artifact `APPROVED` by the approver its front matter names |
    | Approval | `this record`, or `re-confirm` |
 
 4. **The cost.** The concurrency, the number of jobs and of the review runs that follow code jobs,
-   the timeout per job, and for a job proposed in a read-only mode the approvals it will ask for: a
-   read-only agent asks for every write, so the person answering becomes the pace of the job. Where
+   the timeout per job, and the approvals the person will be asked for: every write of a job proposed
+   in a read-only mode, and on a harness that asks before writing outside the session's directory,
+   every write in a worktree beside the repository, unless the person adds that directory for the
+   run. The person answering becomes the pace of such a job. Where
    `--concurrency` asked for more than the machine allows, the number the run will use, and why.
 5. **Decisions.** Who approved, when, and what they changed, written by that person or on their word.
 
-## When there is no profile
+## When the profile is not ready
 
-Where `.atk/profile.md` is missing, a chain whose next job needs one, `atk:implement` or `atk:fix`,
-does not get that job. It gets one `atk:init` job instead, run once in the coordinator's tree ahead of
-every such chain, as After a row matches in `shared/state-signals.md` says, and the record opens with
-the Required-soft sentence of `shared/project-profile.md`.
+Where `.atk/profile.md` is missing, or lacks a section a proposed job needs, or holds it as `TBD`, as
+After a row matches in `shared/state-signals.md` puts it, the record opens with the Required-soft
+sentence of `shared/project-profile.md` and proposes `atk:init` first. It is not a job: the
+coordinator runs it in the session, in its own tree, before step 3 makes any worktree, and commits
+what it writes through `atk:git --commit` on the person's yes, so every worktree starts from a commit
+that holds the profile. A job that needs the profile is proposed only once that commit exists.
 
 ## Choosing the agent per job
 
@@ -78,7 +82,7 @@ whose change touches a schema:
 | r1-1 | `atk:intake` | nothing | this record |
 | r1-2 | `atk:design-doc <requirement>` | the requirement `APPROVED` by its approver | re-confirm |
 | r1-3 | `atk:plan <design>` | the design `APPROVED` by its approver | re-confirm |
-| r1-4 | `atk:implement <plan> --no-review --out <path in the worktree>` | r1-3 | re-confirm |
+| r1-4 | `atk:implement <plan> --no-review --out <run directory>/r1-4-record.md` | r1-3 | re-confirm |
 
 For a ready plan, the chain is the `atk:implement` job alone. A defect report is an
 `atk:fix <report> --no-review` job. The review that follows a code job is the coordinator's, in
@@ -99,16 +103,20 @@ record is `APPROVED`.
 
 A record the approver edited is checked again before anything runs: every row against the
 `argument-hint` of its skill, against the rule that no mode both writes and asks nothing, and against
-the machine's cap. A record the approver rejects ends the run before any job, and the closing message
-says so. A record that ends unapproved, the run stopped or started fresh, is moved to `SUPERSEDED` by
-the run that ends it, so it does not wait on its approver forever.
+the machine's cap. A first record the approver rejects ends the run before any job, and the closing
+message says so; a later record rejected stops only the chain it was for, and the others go on. A
+record that ends unapproved, the run stopped or started fresh, is moved to `SUPERSEDED` only on its
+approver's yes, asked once, and is otherwise listed in the close as still waiting on them.
 
 ## Pieces that share files
 
 The plans of the pieces are compared before the record is written. Pieces whose plans name a common
-file run one after another, never side by side, and the later one starts from the branch of the
-earlier, so its base already holds what it would otherwise conflict with. A piece without a plan yet
-is compared again when it gets one, at its re-confirmation.
+file run one after another, never side by side: the later one gets its worktree only once the
+earlier one's code is committed and reviewed, from the branch the run state recorded for it, so its
+base already holds what it would otherwise conflict with. A piece without a plan yet is compared again
+when it gets one, at its re-confirmation; where its worktree already exists by then, its remaining
+jobs wait for the earlier piece, and the record says the two branches will conflict until one is
+merged, which is a person's call.
 
 ## A breakdown's tasks
 
@@ -120,8 +128,9 @@ as above. A breakdown with an owner still `PROPOSED` is not split: the chain wai
 ## A rejected artifact
 
 No artifact state says rejected, so a rejection is a statement by the artifact's named approver,
-relayed and recorded in the run state. The chain stops, and the closing message offers a revision job
-of the skill that wrote the artifact as a row of a new record.
+relayed and recorded in the run state and in the Decisions of the next proposal record, so it outlives
+the run. The chain stops, its worktree is kept and listed, and the closing message offers a revision
+job of the skill that wrote the artifact as a row of a new record.
 
 ## States
 

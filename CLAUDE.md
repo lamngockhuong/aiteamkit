@@ -198,11 +198,12 @@ having recorded no conventions. `implement` reads the file for that and for the 
 which it falls back to when the project really has recorded none. `finalize-steps.md` is cited by the three skills
 that change code, and holds the rule that nothing leaves the local repository without being asked
 for. `verify` is one of them because the fixes it makes between retry rounds are code like any other.
-`plan`, `tailor`, `qa` and `orchestrate` are the citers that change no code themselves, and cite the
-consent line alone: `plan` because it offers its index as a ticket comment, `tailor` because a
-`--feedback` record is sent to a repository the team does not own, `qa` because `--bug` creates
-issues and `--retest` and `--review` comment on them, `orchestrate` because the branches its jobs
-leave wait for a person's yes to the push.
+`plan`, `tailor` and `qa` are the citers that change no code, and cite the consent line alone: `plan`
+because it offers its index as a ticket comment, `tailor` because a `--feedback` record is sent to a
+repository the team does not own, `qa` because `--bug` creates issues and `--retest` and `--review`
+comment on them. `orchestrate` cites three parts of it: the consent line, since the branches its jobs
+leave wait for a person's yes to the push; the branch rule, which names its worktrees' branches; and
+the artifact section, for its proposal records.
 
 `layer-verification.md` is a contract between the same three: each runs a check and then has to say
 what the result means, and the answer to that second half has to be the same in all three. Each keeps

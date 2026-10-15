@@ -81,7 +81,7 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | Skill | Đọc | Sinh ra | Skill dùng tiếp |
 |-------|-----|---------|-----------------|
 | `help` | Các skill của chính kit, cùng profile, front matter của artifact, kế hoạch và branch của dự án | Một câu trả lời trong phiên, không có file | Skill nó gọi tên, do người hỏi chạy |
-| `orchestrate` | Yêu cầu, ticket, một epic, hoặc đường dẫn tới requirement, thiết kế, breakdown hay kế hoạch; với mỗi phần việc, cùng trạng thái mà `help` đọc, đọc trong worktree mà phần việc ấy có riêng | Mỗi lần duyệt một bản đề xuất; sau đó là artifact hoặc commit cục bộ của từng job, và một báo cáo `atk:review` cho mỗi job viết mã | Người dùng, là người push; `verify`, được đề xuất lần lượt từng nhánh |
+| `orchestrate` | Yêu cầu, ticket, một epic, hoặc đường dẫn tới requirement, thiết kế, breakdown hay kế hoạch; với mỗi phần việc, cùng trạng thái mà `help` đọc, đọc trong worktree mà phần việc ấy có riêng | Mỗi lần duyệt một bản đề xuất; sau đó là artifact hoặc mã của từng job, do bên điều phối commit, và một báo cáo `atk:review` cho mỗi job viết mã | Người dùng, là người push; `verify`, được đề xuất lần lượt từng nhánh |
 | `init` | Repo | Profile của dự án | Mọi skill có chạy lệnh |
 | `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi; với `--feedback --runs`, các run trace của skill đó | File ghi đè cho skill đó | Chính skill mang tên file đó |
 | `intake` | Một yêu cầu thô, hoặc một design Figma | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa`; từ design thì `spec --kind screen`, bỏ qua `design-doc` trừ khi thay đổi của màn hình chạm tới schema, public contract, shared module, hoặc hơn một service |

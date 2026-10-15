@@ -127,7 +127,7 @@ flowchart TD
 
 | Phase | Skill | Author | Accepted by | Artifact state at the gate |
 |-------|-------|--------|-------------|-----------------------------|
-| Any phase, several pieces at once | `atk:orchestrate` | Dev or TL, whoever runs it | TL, on each proposal record; every artifact a job writes keeps its own approver | `DRAFT` to `APPROVED`, one record per approval |
+| Any phase, one or several pieces | `atk:orchestrate` | Dev or TL, whoever runs it | TL, on each proposal record; every artifact a job writes keeps its own approver | `DRAFT` to `APPROVED`, one record per approval |
 | 0. Setup | `atk:init` | Dev or TL, with PM on the tracker and team sections | TL, before the profile stops being a draft; the skills it unblocks run meanwhile | `DRAFT` to `APPROVED`, committed at `DRAFT` unless a `workspace` shape leaves no repository to commit it to |
 | 0. Setup | `atk:tailor` | TL, or whoever owns the skill's output | The role that owns what the tailored skill produces | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:intake` | BrSE/BA | Stakeholder, on scope and criteria | `IN REVIEW` to `APPROVED` |
@@ -169,7 +169,7 @@ flowchart LR
     X5["Someone leaves,<br/>or a phase ends"] --> X6["atk:handover<br/><small>receiver validates before signing</small>"]
     X7["Not sure what<br/>comes next"] --> X8["atk:help<br/><small>reads the project, names one skill</small>"]
     X9["Scheduled security review"] --> X10["atk:security<br/><small>scans the codebase as it stands</small>"]
-    X11["Several pieces of work<br/>to move at once"] --> X12["atk:orchestrate<br/><small>proposes the jobs, relays every gate</small>"]
+    X11["Pieces of work to carry<br/>through the kit"] --> X12["atk:orchestrate<br/><small>proposes the jobs, relays every gate</small>"]
 ```
 
 `atk:help` has no gate and no approver, because it writes no artifact. It reads the gates above

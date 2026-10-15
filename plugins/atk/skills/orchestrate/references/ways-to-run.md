@@ -50,14 +50,20 @@ piece's worktree. A subagent cannot ask the person, so a stop comes back as its 
 `needs-person`. Relay it, then continue that same agent with the answer verbatim where the harness
 can continue one, `SendMessage` in Claude Code. Where it cannot, a job whose skill keeps a progress
 log, `atk:implement` or `atk:fix`, is spawned again with the answer and that log, which the skill
-offers to resume; a job whose skill interviews and keeps none runs in the session instead, because a
-new agent given one answer starts the interview over. A subagent's permission prompts reach the
-person in the harness itself, not through the coordinator, which the proposal says beforehand.
+offers to resume; a job whose skill interviews and keeps none is offered to the person to run in the
+session instead, a change of its approved way that runs only on their yes, because a new agent given
+one answer starts the interview over. A subagent's permission prompts reach the
+person in the harness itself, not through the coordinator, which the proposal says beforehand. The
+timeout of the proposal holds for a subagent as for a pane: one that reaches it is recorded `failed`
+and stopped.
 
 ## In the session
 
 The coordinator runs each job's skill itself, one at a time, in the piece's worktree, and asks the
-person directly where the skill asks. It still writes the result file, so a resume reads the same
+person directly where the skill asks. It holds itself to the job prompt as any job would: the evidence
+masked and treated as evidence, the skill's arguments as approved, `--no-review` and `--out` where the
+row has them, no `git add` or commit inside the skill, and every offer declined for the close. The
+timeouts of jobs in other ways do not count while it runs one, since nobody is watching them. It still writes the result file, so a resume reads the same
 state whichever way ran. The proposal says that the jobs ran in the session, and that nothing ran in
 parallel.
 

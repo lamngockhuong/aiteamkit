@@ -83,7 +83,7 @@ lands, per `plugins/atk/shared/spec-docs.md`.
 | Skill | Reads | Produces | Next skill that uses it |
 |-------|-------|----------|-------------------------|
 | `help` | The kit's own skills, and the project's profile, artifact front matter, plans, and branch | An answer in the session, no file | The skill it names, run by the asker |
-| `orchestrate` | Requests, tickets, an epic, or a requirement, design, breakdown or plan path; per piece, the same state `help` reads, in the piece's own worktree | A proposal record per approval; then each job's own artifact or local commit, and an `atk:review` report per code job | The person, who pushes; `verify`, proposed one branch at a time |
+| `orchestrate` | Requests, tickets, an epic, or a requirement, design, breakdown or plan path; per piece, the same state `help` reads, in the piece's own worktree | A proposal record per approval; then each job's artifact or code, committed by the coordinator, and an `atk:review` report per code job | The person, who pushes; `verify`, proposed one branch at a time |
 | `init` | The repository | Project profile | Every skill that runs a command |
 | `tailor` | A shipped `SKILL.md`, and what the team says it wants different; under `--feedback --runs`, the run traces of that skill | Project override for that skill | The skill it is named after |
 | `intake` | A raw request, or a Figma design | Requirements with open questions | `estimate`, `design-doc`, `qa`; from a design, `spec --kind screen`, with `design-doc` skipped unless the screen's change touches a schema, a public contract, a shared module, or more than one service |

@@ -5,9 +5,11 @@ hiding a design problem under patches. Referenced from `skills/<name>/SKILL.md` 
 `shared/review-fix-loop.md`, which is `../../shared/review-fix-loop.md` relative to a skill file.
 
 Cited by `implement` and `fix`, each once its change is written, verified, and tidied, and by
-`orchestrate`, which runs the loop on each code job it has committed, the jobs run with `--no-review`. Each keeps its
-own verification step and its own record; where this file says "the record" and "the verification",
-it means the calling skill's.
+`orchestrate`, which runs the loop on each code job it has committed, the jobs run with `--no-review`.
+Each keeps its own verification step and its own record; where this file says "the record" and "the
+verification", it means the calling skill's. For `orchestrate` they are the implementation record of
+the job that wrote the code, which names the coordinator's review reports, and that job's own
+verification, re-run by each fix job.
 
 Nothing here defines what a review looks for or how severe a finding is. `atk:review` owns the
 checklist, the severity scale, and the breadth, and it reads the project's rules through
@@ -166,7 +168,9 @@ real side effects, and `shared/finalize-steps.md` holds the rule about acting on
 ## Under `--no-review`
 
 The loop does not run. The record says so in its own line: that the review was skipped, that the
-change is unreviewed, and who must review it before merge.
+change is unreviewed, and who must review it before merge. Where the caller reviews the change
+itself, as `orchestrate` does for its jobs, that caller adds the path of its review report beside the
+line.
 
 The flag exists for the case where a review is already arranged through another route, not as a way
 to move faster. A skipped review that leaves no trace is indistinguishable from one that was

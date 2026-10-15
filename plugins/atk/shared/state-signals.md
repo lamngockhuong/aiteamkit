@@ -44,7 +44,9 @@ is how a branch collects three unrelated changes.
 "The work in hand" is the ticket the branch being read names, in its name or its commits. On a
 branch that names none, it is the gating artifact updated most recently. Where a row says the
 current branch or the working tree, it means the branch and the tree being read: for `help` the
-current ones, for `orchestrate` the piece's own, per its step 1.
+current ones, for `orchestrate` the piece's own, per its step 1. `orchestrate` reads row 6 for
+uncommitted work alone: between its jobs a piece's branch is ahead with no pull request by design,
+since each push waits for a person.
 
 | # | Holds when | Run | Rather than |
 |---|------------|-----|-------------|

@@ -233,7 +233,7 @@ sequenceDiagram
     O->>A: artifact waits for its approver
     A->>O: approved
     O->>J: next job of the chain
-    J-->>O: local commit and result file
+    J-->>O: change left in the worktree and result file
     O->>P: branches waiting for a push, each with its review
 ```
 
@@ -310,7 +310,7 @@ the only account of which branch came from which request, and why the jobs ran i
 - **Artifact jobs**, `intake`, `design-doc`, `plan`, and the others, run as they do today, interviews
   included. Their artifact ends at the state the skill gives it, never further.
 - **Every job writes a result file** at `docs/derived/orchestrate/<run-id>/<job-id>.md` in its
-  worktree. It names the artifact or commit, the child skill's progress log, and every stop it met.
+  worktree. It names the artifact or the change it left, the child skill's progress log, and every stop it met.
   The coordinator reads that file, never the screen (P2).
 
 ### When a job or a chain stops for a person
@@ -336,7 +336,7 @@ The job's write boundary is never widened to get around this.
 
 ### Review
 
-- **Once a code job commits**, the coordinator runs `atk:review` on its branch against the base.
+- **Once the coordinator has committed a code job's change**, it runs `atk:review` on its branch against the base.
 - **A `BLOCKING` finding goes back to the same piece of work** as a new `atk:implement` job. The
   ceiling of two rounds then escalation by name applies unchanged, counted in the run state.
 - **Agreement between reviewers is not an approval** (`host-capabilities.md:220`).
@@ -418,9 +418,9 @@ The maintainer chose `orchestrate` on 2026-10-11.
 | Section | Answer |
 |---------|--------|
 | Data model and migration | N/A. No data store. New files only: the proposal record and the derived run state |
-| API contracts | N/A. The interface is the slash command: `/atk:orchestrate <requests, tickets, or paths...> [--concurrency <n>] [--sequential] [--resume]` |
+| API contracts | N/A. The interface is the slash command: `/atk:orchestrate [requests, tickets, or paths...] [--concurrency <n>] [--sequential] [--resume]` |
 | Errors and edge cases | A missing multiplexer or subagents means the next way down. A timed-out job fails and blocks its chain. A refused flag fails the job and is probed again, never guessed. A breakdown with `PROPOSED` owners is not split into pieces. A rejected artifact stops its chain and the record says so |
-| Backward compatibility | `atk:help` reads the same rules from `shared/`, and answers differently only where an orchestration run stopped before its end: a project that never ran `atk:orchestrate` sees the same answers. `atk:git` never stages the orchestration run state, as it already never stages a progress log. No other skill changes behaviour. `implement --no-review`, `git --commit`, and plan paths already exist |
+| Backward compatibility | `atk:help` reads the same rules from `shared/`, and answers differently only where an orchestration run stopped before its end: a project that never ran `atk:orchestrate` sees the same answers. `atk:git` never stages the orchestration run state, as it already never stages a progress log, now in any worktree. Row 5 of `state-signals.md` names any skill that writes a progress log, and the work in hand is read on the branch being read. No other skill changes behaviour. `implement --no-review`, `git --commit`, and plan paths already exist |
 | Rollout | A `feat:` patch release. The pane way is offered to users already inside a multiplexer; everyone else gets the other two |
 | Rollback | Revert the commit: one skill folder, the moved `state-signals.md` and `help`'s citation of it, the new section of `host-capabilities.md`, the rows of `artifact-paths.md`, the orchestration row of `state-signals.md` and the directory `help` reads for it, `orchestrate` in `project-profile.md`, `team-roles.md` and `atk:git`'s never-staged paths |
 | Observability | The proposal record, the derived run state, one result file per job, and each job's own artifacts, records, and review reports |
@@ -431,7 +431,8 @@ The maintainer chose `orchestrate` on 2026-10-11.
 
 - **New skill files:** `plugins/atk/skills/orchestrate/`, with `SKILL.md`, `references/job-prompt.md`,
   `references/proposal.md` for the record and the chain rules, `references/ways-to-run.md` for the
-  three ways and their probes, and `evals/trigger_evals.json`.
+  three ways and their probes, `references/worktrees.md` for worktrees, branches and the
+  coordinator's commits, and `evals/trigger_evals.json`.
 - **A moved file:** `plugins/atk/skills/help/references/state-signals.md` moves to
   `plugins/atk/shared/state-signals.md`. `atk:help` cites the new path, and group 11 of the skill list
   in `CLAUDE.md` points there.
@@ -473,8 +474,9 @@ Corrected on 2026-10-15, before the first commit, on Lam Ngoc Khuong's yes to ob
 `plugins/atk/shared/artifact-paths.md` names it by the skill's folder; the Backward compatibility
 row now says what `atk:help` and `atk:git` change; the Rollback row lists everything the plan adds.
 No decision changed. Corrected again on 2026-10-15, before the first commit: AC2 and Option B no
-longer name the kit studied while designing, and "Committing in a worktree" follows the two
-decisions of that date below.
+longer name the kit studied while designing, and "Committing in a worktree", the sequence diagram,
+the result file and Review in "What a job runs", the API, Backward compatibility and What changes
+follow the two decisions of that date below, and the files the change added.
 
 - The skill is named `orchestrate`, with the risk above accepted. Lam Ngoc Khuong, 2026-10-11.
 - It sits right after `help` in the lifecycle order. Lam Ngoc Khuong, 2026-10-11.

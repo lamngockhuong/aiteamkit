@@ -314,9 +314,9 @@ report costs a set of identifiers, unless a `--comment` run posted them, and a l
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Two derived
-kinds are never staged whatever the project does with the directory: the progress log, with what
-sits in its run directory, held out by
-a line in the local exclude file, or for `atk:orchestrate`'s whole run directory by its own ignore file, and the run trace, held out by an ignore file in its own directory,
+kinds are never staged whatever the project does with the directory: the progress log, held out by
+a line in the local exclude file, the rest of its run directory by the staging rule of
+`shared/finalize-steps.md`, or for `atk:orchestrate`'s whole run directory by its own ignore file, and the run trace, held out by an ignore file in its own directory,
 per the two subsections below.
 
 The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two

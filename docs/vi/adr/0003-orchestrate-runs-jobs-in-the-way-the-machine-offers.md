@@ -64,8 +64,8 @@ chạy tiếp sau khi người trả lời. Hai lần thử cũng cho thấy b�
 
   Không bước nào dừng chỉ vì thiếu trình quản lý terminal.
 
-`plugins/atk/shared/host-capabilities.md` có thêm một mục cho agent có ghi. Trước nay mọi agent mà
-kit mở ra đều chỉ đọc và không thay đổi gì.
+`plugins/atk/shared/host-capabilities.md` có thêm một mục cho agent có ghi. Trước nay chưa agent nào mà
+kit mở ra sửa cây mã, trừ agent review band 1 ghi những gì một lượt review ghi.
 
 ## Hệ quả
 
