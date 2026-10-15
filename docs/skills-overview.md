@@ -84,7 +84,7 @@ never stages.
 approved design and a ready plan side by side, and one coordinator should carry them rather than a
 person running each skill by hand. A breakdown whose owners are confirmed turns its tasks into pieces the same way.
 `--concurrency <n>` caps how many pieces run at once, `--sequential` runs one job at a time, and
-`--resume` offers the newest run that stopped before its end.
+`--resume` offers the runs that stopped before their end, for you to pick one.
 
 **Do not use when.** There is one piece of work and you want the next step for it, which is
 `atk:help`; you want an epic split into owned tasks, which is `atk:breakdown`; or the work has no

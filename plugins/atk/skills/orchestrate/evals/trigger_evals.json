@@ -26,5 +26,13 @@
   { "query": "fix this reported bug", "should_trigger": false },
   { "query": "verify these three branches work on the running app", "should_trigger": false },
   { "query": "bước tiếp theo với atk trên nhánh này là gì", "should_trigger": false },
-  { "query": "この計画を実装して", "should_trigger": false }
+  { "query": "この計画を実装して", "should_trigger": false },
+  { "query": "plan this ticket in phases before anyone starts on it", "should_trigger": false },
+  { "query": "lập kế hoạch thực thi cho ticket này, chia giai đoạn", "should_trigger": false },
+  { "query": "このチケットの実装計画を段階に分けて作って", "should_trigger": false },
+  { "query": "このブランチで次に実行するatkのスキルは何？", "should_trigger": false },
+  { "query": "エージェントを5つ同時に動かしてテストを全部書き直して、承認はいらない", "should_trigger": false },
+  { "query": "chia epic này thành các task có người phụ trách", "should_trigger": false },
+  { "query": "triển khai plan này giúp tôi", "should_trigger": false },
+  { "query": "resume the implementation that stopped yesterday", "should_trigger": false }
 ]

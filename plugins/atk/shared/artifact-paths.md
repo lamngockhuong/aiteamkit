@@ -336,7 +336,9 @@ checked with `git check-ignore -q` as `shared/run-trace.md` does for traces, in 
 every worktree a job writes in, rather than with the exclude line below, which names
 `progress.md` alone. The run
 log of `atk:run-cases`, in `skills/run-cases/references/execution.md`, is the instance this
-generalises, and it keeps its own shape.
+generalises, and it keeps its own shape. Where another file says a skill that Progress log names, it
+means those four, whose logs sit at `docs/derived/<skill>/<run-id>/progress.md`, and never
+`atk:run-cases`, whose run log keeps its own rules.
 
 - **Path.** `docs/derived/<skill>/<run-id>/progress.md`, where `<run-id>` is `<YYMMDD-HHMM>-<slug>`,
   the time the run started and the slug of its subject, with the next free suffix when that
@@ -381,6 +383,12 @@ tell a run that stopped from one still going. Every offer has the same three ans
   log. A log on disk belongs to a session in this working tree, as the paragraph below says, and two
   live runs on one subject in one tree would edit the same files, and under `atk:verify` start the
   same processes on the same ports.
+
+`atk:orchestrate` is the one exception to the same subject: a run of it carries several pieces, and
+its log stays open while chains wait on people. So it offers its unfinished logs whatever the inputs:
+the newest alone, or where there are several, each with its pieces and the people its chains wait
+on, for the person to pick one. A fourth answer, **Run separately**, leaves them as they are,
+waiting chains included, and starts this run with a `<run-id>` of its own.
 
 It never resumes without that answer. The counts that bound a run, hypotheses in `atk:fix`, rounds
 in `atk:verify`, review rounds in `atk:implement`, `atk:fix` and `atk:orchestrate`, carry over only on a resume, so a resumed run

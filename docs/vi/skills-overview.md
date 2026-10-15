@@ -85,7 +85,7 @@ không bao giờ stage.
 kế đã duyệt và một kế hoạch đã sẵn sàng, và cần một bên điều phối thay vì một người tự chạy từng skill.
 Một breakdown đã được xác nhận người phụ trách cũng biến các task của nó thành phần việc theo cách
 này. `--concurrency <n>` giới hạn số phần việc chạy cùng lúc, `--sequential` chạy lần lượt từng job,
-còn `--resume` đề nghị chạy tiếp lượt gần nhất đã dừng giữa chừng.
+còn `--resume` liệt kê các lượt đã dừng giữa chừng để bạn chọn một lượt chạy tiếp.
 
 **Không dùng khi.** Chỉ có một phần việc và bạn muốn biết bước tiếp theo cho nó, đó là `atk:help`;
 bạn muốn chia một epic thành các task có người phụ trách, đó là `atk:breakdown`; hoặc công việc không

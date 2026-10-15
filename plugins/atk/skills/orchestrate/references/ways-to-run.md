@@ -16,7 +16,11 @@ Run before the proposal, and its result goes in the proposal record.
 - **Subagents.** The harness's own agent capability is in its live tool list, the `Agent` tool in
   Claude Code, and an agent it spawns can invoke a skill: one short spawned agent, told to list the
   skills it can invoke and run nothing, says whether `atk:` skills are among them. The agent spawned
-  is a general one, never `atk:read-only-reviewer`, which cannot write.
+  is a general one, never `atk:read-only-reviewer`, which cannot write. The probe also records the
+  session's permission mode, where the harness says it: a mode that writes without asking, edits
+  accepted automatically or approvals bypassed, rules this way out, since every agent spawned would
+  inherit it, per No mode that both writes and asks nothing. Where the mode cannot be told, the
+  proposal says so.
 - **The session.** Always present.
 
 `--sequential` keeps the way and sets the concurrency to one.
@@ -27,7 +31,11 @@ Tried with Claude Code as the coordinator only, which the proposal says. For eac
 
 1. **Start.** Open a pane in the piece's worktree, named `atk-<run-id>-<job-id>`, and start the agent
    CLI there with the approved mode. Record the pane name in the run state before anything else.
-2. **Send.** Read the agent's state first. Send the prompt of `references/job-prompt.md`. Then wait
+2. **Send.** Read the agent's state first. Write the prompt of `references/job-prompt.md` to
+   `<docs root>/derived/orchestrate/<run-id>/<job-id>-prompt.md` in the worktree, and send the agent a
+   line that names that path, or the prompt through a heredoc whose delimiter is quoted. Prompt text
+   never goes inside a shell argument, where a `$(...)` or a backtick in a ticket would run with the
+   coordinator's rights. Then wait
    for the state to leave idle before waiting for anything else: a wait called at once can return
    `idle` before the agent has started.
 3. **Wait.** One wait across every running pane, not one per job: each pass reads the state of all

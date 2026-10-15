@@ -17,7 +17,7 @@ no row: nothing on disk announces the event, and the question routes to it throu
 ## Which artifacts gate
 
 Only some artifacts hold up the next skill while they wait for approval. An artifact **gates** when
-it sits in the Reference or Record group of `shared/artifact-paths.md` and is not one of three kinds:
+it sits in the Reference or Record group of `shared/artifact-paths.md` and is not one of four kinds:
 
 - The evidence for one change, the fix report and the verification record among them, which
   `shared/artifact-paths.md` sends into the pull request carrying that change. Its approval is the
@@ -26,6 +26,9 @@ it sits in the Reference or Record group of `shared/artifact-paths.md` and is no
   by moving it to `IN REVIEW`.
 - A test run record. Its defects need logging and fixing while the QA lead reviews it, so a run
   record at `IN REVIEW` does not hold back `atk:qa --bug`, `atk:fix`, or a retest.
+- A proposal record of `atk:orchestrate`. A `DRAFT` one holds back that run's own jobs and nothing
+  else: the work it carries is read from that work's artifacts, and row 5 already sends a person
+  back to the run that waits on it.
 
 Nothing in the Derived group gates. A catchup brief or a review report may sit at `DRAFT` for good,
 and that is not approval anybody owes.
@@ -96,8 +99,8 @@ changes nothing, and the skill would stop again.
 ## Waiting on people
 
 Collected in state mode whatever row matched: every gating artifact whose `status` is `DRAFT` or
-`IN REVIEW`, every plan at `IN REVIEW`, and every test run record at `IN REVIEW`, with its path, its
-status, and its `approver`.
+`IN REVIEW`, every plan at `IN REVIEW`, every test run record at `IN REVIEW`, and every
+`atk:orchestrate` proposal record at `DRAFT`, with its path, its status, and its `approver`.
 
 At most ten lines, newest `updated` first. A list longer than that is a finding in itself: say how
 many more there are rather than printing them.
