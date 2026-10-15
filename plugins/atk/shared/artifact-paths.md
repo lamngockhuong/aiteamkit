@@ -135,6 +135,7 @@ to `docs/adr/` as well.
 | Skill | Default output |
 |-------|----------------|
 | `help` | No file but the run trace: the answer is given in the session, because everyone it is for is present |
+| `orchestrate` | A proposal record at `docs/records/orchestration/<date>-<ticket>-<slug>.md`, one per approval, never edited once committed: a later approval is a new record linking the one before; while it runs, a run state at `docs/derived/orchestrate/<run-id>/`, holding its progress log in the coordinator's tree and one result file per job in that job's worktree, held out of git by an ignore file in `docs/derived/orchestrate/` (see Progress log, below) |
 | `init` | `.atk/profile.md` (see the exception below) |
 | `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
 | `intake` | `docs/records/requirements/<date>-<ticket>-<slug>.md` |
@@ -237,8 +238,8 @@ merged and which directory it goes in.
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
-| Record | requirements, planning, design, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify` and `implement`, the run trace of every skill | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, or the trace of a finished run, never staged either, whose deletion costs only the evidence it held |
+| Record | requirements, planning, design, orchestration proposals, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
+| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify`, `implement` and `orchestrate`, with the job result files beside the last, the run trace of every skill | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, or the trace of a finished run, never staged either, whose deletion costs only the evidence it held |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -294,8 +295,9 @@ the run confirms them, and they are never committed while they wait.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. A run trace is read only to improve a skill, so losing
-one costs that evidence and nothing downstream. Nine skills read one of the ten. `atk:fix`, `atk:verify`
-and `atk:implement` each read their own unfinished progress log, per Progress log, below.
+one costs that evidence and nothing downstream. Ten skills read one of the ten. `atk:fix`, `atk:verify`,
+`atk:implement` and `atk:orchestrate` each read their own unfinished progress log, per Progress log, below,
+and `atk:orchestrate` its job result files with it.
 `atk:run-cases` reads
 the run log of an earlier run of the same cases file, to offer the cases it deferred and to name data
 created with no record after it; where that run wrote a record, the record lists the same. Four more read the review report: a second `atk:review` over the same target reads the newest one for that target, and on a pull
@@ -324,8 +326,13 @@ has to keep up with it, or it with the code.
 
 ### Progress log
 
-`atk:fix`, `atk:verify` and `atk:implement` write a progress log as the run goes, so a session that
-is compacted or ends resumes from disk instead of repeating what it had already ruled out. The run
+`atk:fix`, `atk:verify`, `atk:implement` and `atk:orchestrate` write a progress log as the run goes,
+so a session that is compacted or ends resumes from disk instead of repeating what it had already
+ruled out. `atk:orchestrate` keeps the job result files of its run in the same directory, and holds
+the whole directory out of git with an ignore file holding `*` in `docs/derived/orchestrate/`,
+checked with `git check-ignore -q` as `shared/run-trace.md` does for traces, in its own tree and in
+every worktree a job writes in, rather than with the exclude line below, which names
+`progress.md` alone. The run
 log of `atk:run-cases`, in `skills/run-cases/references/execution.md`, is the instance this
 generalises, and it keeps its own shape.
 
@@ -374,7 +381,7 @@ tell a run that stopped from one still going. Every offer has the same three ans
   same processes on the same ports.
 
 It never resumes without that answer. The counts that bound a run, hypotheses in `atk:fix`, rounds
-in `atk:verify`, review rounds in `atk:implement` and `atk:fix`, carry over only on a resume, so a resumed run
+in `atk:verify`, review rounds in `atk:implement`, `atk:fix` and `atk:orchestrate`, carry over only on a resume, so a resumed run
 cannot reset its own ceiling.
 
 The offer also names the test that failed when the log looks stale: its branch is not the current

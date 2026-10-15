@@ -10,8 +10,9 @@ one turn of an interview,
 by `independent-challenge.md` for the agents a challenge spawns, by `review-fix-loop.md` for the
 stated total of a review, by `design-sources.md` for naming
 a connection to a design tool, by `run-cases` for browser automation, by `help` for what it may
-name, and by `init`, `catchup`, `spec`, `convention`, `security`, `fix`, and `onboard` for reading
-wide through an agent. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
+name, by `init`, `catchup`, `spec`, `convention`, `security`, `fix`, and `onboard` for reading
+wide through an agent, and by `orchestrate` for agents that write and for the parallel-agents policy
+its concurrency follows. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
 way the step runs.
 
 ## What may be named

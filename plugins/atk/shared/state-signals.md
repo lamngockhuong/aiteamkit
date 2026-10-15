@@ -4,7 +4,10 @@ What on disk says which skill comes next, in the order to check it. Referenced f
 `skills/<name>/SKILL.md` as `shared/state-signals.md`, which is `../../shared/state-signals.md`
 relative to a skill file.
 
-Cited by `help`, which loads it in step 4 of its workflow.
+Cited by `help`, which loads it in step 4 of its workflow, and by `orchestrate`, which reads it once
+per piece of work with that piece's ticket as the work in hand. A piece's artifacts sit in its own
+worktree and on its branch, not in the coordinator's tree, so `orchestrate` reads them there, in
+the worktree or through `git show <branch>:<path>`, front matter only.
 
 This file holds the one list `atk:help` keeps. What each skill does is read from the skills
 themselves, so a skill added to the kit needs a row here only when something on disk says it is the
