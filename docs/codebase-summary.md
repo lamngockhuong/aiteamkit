@@ -7,7 +7,7 @@ removed, or renamed; update it in the same commit.
 
 | File | Purpose |
 |------|---------|
-| `README.md` | Public entry point: lifecycle diagram, the 24-skill table, invocation block, output convention, install instructions |
+| `README.md` | Public entry point: lifecycle diagram, the 25-skill table, invocation block, output convention, install instructions |
 | `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `plugins/atk/shared/` DRY rule, cross-file sync list, em-dash policy, the `CONV-NNN` review checklist this repository is held to, release flow, verification commands |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, no scripts; exists to carry the version and repository metadata |
@@ -87,12 +87,13 @@ that it belongs to this repository, and no skill reads either for another projec
 
 ## Skills
 
-Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Nineteen also carry
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Twenty also carry
 `references/`; the other five do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
 | `plugins/atk/skills/help/SKILL.md` | Any point | No file but the run trace: the skill to run next from the project's state, the evidence behind it, and what waits on whom |
+| `plugins/atk/skills/orchestrate/SKILL.md` | Any point | A proposal record of the `atk` jobs each piece of work still needs; once approved, the jobs run side by side in worktrees, questions and approvals relayed, code ending at a local commit with a review |
 | `plugins/atk/skills/init/SKILL.md` | Setup | `.atk/profile.md`: commands, layers, docs roots, tracker, team, and how to verify at runtime |
 | `plugins/atk/skills/tailor/SKILL.md` | Setup | `.atk/overrides/<skill>.md`: what this team wants one skill to do differently, with the owning role as approver |
 | `plugins/atk/skills/intake/SKILL.md` | Requirement | User stories, acceptance criteria, non-goals, open questions with owners |
@@ -124,9 +125,12 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | File | Purpose |
 |------|---------|
 | `plugins/atk/skills/help/references/atkx-skills.md` | The one file under `plugins/atk/` that lists `atkx` skills: what each is used for, its invocation and harnesses, the install commands per harness, which of an `atk` and an `atkx` skill wins a question, and what `Needs first` and `Approved by` say for one |
+| `plugins/atk/skills/orchestrate/references/proposal.md` | The proposal record: where it goes, the pieces, the ways, one row per job with the agent and who answers it, how far an approval reaches, a later approval as a new record linking the one before, a breakdown's tasks as pieces, the job and chain states, and the coordinator's own records left out of a piece's state |
+| `plugins/atk/skills/orchestrate/references/job-prompt.md` | What a job agent is told, in order: its worktree, the one `atk` skill and no other kit's, the request as quoted evidence, the files rule 9 keeps unread and the commands it never runs, quoted when built, how it stops for a person, where it ends; and the shape of the result file the coordinator checks against the artifact and `git` |
+| `plugins/atk/skills/orchestrate/references/ways-to-run.md` | The probe for each of the three ways, flags read from the CLI's own help at the time of use, and how a job is started, waited on and read back in panes, in host subagents, and in the session; the result file read rather than the screen |
 | `plugins/atk/skills/init/references/detection.md` | How the project root and the repository shape are resolved before anything else, where to look for each profile field, and what to do when the repository gives several answers or none |
 | `plugins/atk/skills/init/references/profile-template.md` | The shape of `.atk/profile.md` that `init` fills in, the Repositories table a multi-repository project carries, and the rule that every path is written from the project root |
-| `plugins/atk/skills/init/references/role-defaults.md` | What each role authors, accepts, and reviews across the 24 skills; `init` proposes the Accepts column as each role's default approvals, and `plugins/atk/shared/team-roles.md` cites it |
+| `plugins/atk/skills/init/references/role-defaults.md` | What each role authors, accepts, and reviews across the 25 skills; `init` proposes the Accepts column as each role's default approvals, and `plugins/atk/shared/team-roles.md` cites it |
 | `plugins/atk/skills/tailor/references/interview.md` | The five groups of question, the filter that sends an answer to `init` or `convention` instead, and a worked example per group |
 | `plugins/atk/skills/tailor/references/audit.md` | The three `--audit` checks, why a conflict is a fact and a stale anchor is a question, and the rule that it changes nothing |
 | `plugins/atk/skills/tailor/references/feedback.md` | The three-way fork a bad run splits into, what the `--feedback` record holds, the two things it may never hold, how the mode changes for a skill that is not one of the kit's, how `--runs` reads many run traces and counts what repeats across them, and how a record is neutralized before it leaves the project |
@@ -191,6 +195,7 @@ all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` 
 | File | Purpose |
 |------|---------|
 | `plugins/atk/skills/help/evals/trigger_evals.json` | Asking which skill fits, against `onboard`, `init`, `catchup`, `tailor`, and requests for work that merely say help |
+| `plugins/atk/skills/orchestrate/evals/trigger_evals.json` | Carrying several pieces of work through the `atk` lifecycle, against generic multi-agent orchestration with no team artifact, `breakdown`, `help`, `implement`, and `git` |
 | `plugins/atk/skills/init/evals/trigger_evals.json` | Setup phrasing against project configuration requests that are not `init` |
 | `plugins/atk/skills/tailor/evals/trigger_evals.json` | Tailoring a skill, against the `convention` and `init` pairs it must not steal |
 | `plugins/atk/skills/intake/evals/trigger_evals.json` | A raw request becoming stories, against `design-doc`, `estimate`, and `breakdown` |
@@ -256,15 +261,16 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/codebase-summary.md` | This file |
 | `docs/project-roadmap.md` | Phase plan and status |
 | `docs/trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`: why a generic harness reports a vacuous score, the `PreToolUse` hook that does measure selection, the three conditions a run needs, the cases nothing can observe, and where the runner that implements it lives |
-| `docs/flow/project-flow.md` | The 24 skills placed in delivery phases, with the author and the approver of each artifact, the loop back when one is rejected, and a pointer to the role table that `init` now carries |
+| `docs/flow/project-flow.md` | The 25 skills placed in delivery phases, with the author and the approver of each artifact, the loop back when one is rejected, and a pointer to the role table that `init` now carries |
 | `docs/flow/skill-chain.md` | The artifact chain: what each skill reads, what it leaves behind, which skill picks that up, and the three ways a chain breaks |
 | `docs/flow/skill-lifecycle.md` | Inside one skill: the nine sections every `SKILL.md` carries, the five stages of a run, and the five kinds of edge between skills, of which only four happen at run time |
 | `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | The first architecture decision record: `atk` moves to `plugins/atk/` and `atkx`, a kit of utility skills that may call `atk` and is never called by it, is created at `plugins/atkx/`, the two sharing no file, and `atk` gains `CONV-011` to keep the dependency one-way, amended on 2026-10-02 so that `atk:help` alone may name `atkx` |
 | `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` | The second: `atkx:skill-eval` keeps the checks that must repeat in Node scripts and leaves judgment to the agent |
+| `docs/adr/0003-orchestrate-runs-jobs-in-the-way-the-machine-offers.md` | The third: `atk:orchestrate` proposes the jobs each piece of work needs, runs them in panes, host subagents, or the session, whichever the machine offers, and never answers a gate |
 | `docs/adr/0004-every-skill-leaves-a-run-trace.md` | Every `atk` skill leaves a run trace by default, turned off per project in the profile, and `atk:tailor --feedback --runs` reads many of them; superseded in part by `0005` |
 | `docs/adr/0005-run-trace-started-from-the-workflow.md` | The trace is started by two lines in every skill's workflow, since rule 10 alone was not read, and kept out of git by an ignore file inside its own directory rather than the local exclude file |
 | `docs/adr/0006-run-trace-written-by-the-agent-until-measured.md` | The agent writes the trace until a Node script is measured to ask an interactive session no more permission questions |
-| `docs/vi/**/*.md` | Vietnamese mirror of the fifteen files above, at the same relative paths |
+| `docs/vi/**/*.md` | Vietnamese mirror of the sixteen files above, at the same relative paths |
 
 ## GitHub
 
@@ -272,10 +278,10 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 |------|---------|
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
 | `.github/workflows/labeler.yml` | Labels each pull request from the paths it changes, using `.github/labeler.yml` |
-| `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill of either plugin: the 24 of `atk` and each `atkx` skill |
+| `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill of either plugin: the 25 of `atk` and each `atkx` skill |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
 | `.github/ISSUE_TEMPLATE/*.yml` forms | Each adds its type label plus `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables blank issues, links to Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 24 `atk` skills, plus the profile, the overrides, the shared layer, the hooks, the agents, `atkx`, and one `Skill - atkx:<name>` entry per `atkx` skill |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Bug form with harness and component dropdowns. The component list must include all 25 `atk` skills, plus the profile, the overrides, the shared layer, the hooks, the agents, `atkx`, and one `Skill - atkx:<name>` entry per `atkx` skill |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Feature form asking for the team situation before the proposed capability |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Skill run form taking a `--feedback` record, of one run or, with `--runs`, of many read from their traces: what was asked, which steps ran, where the skill was silent, and what the team expected, with a warning that the repository is public and what to leave out |

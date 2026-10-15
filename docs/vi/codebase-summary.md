@@ -7,7 +7,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 
 | File | Mục đích |
 |------|----------|
-| `README.md` | Điểm vào công khai: sơ đồ vòng đời, bảng 24 skill, khối invocation, quy ước output, hướng dẫn cài đặt |
+| `README.md` | Điểm vào công khai: sơ đồ vòng đời, bảng 25 skill, khối invocation, quy ước output, hướng dẫn cài đặt |
 | `CLAUDE.md` | Hướng dẫn cho người bảo trì: tiền đề về team, bố cục ba manifest, giải phẫu skill, nguyên tắc DRY của `plugins/atk/shared/`, danh sách file phải đồng bộ chéo, chính sách em-dash, mục review checklist `CONV-NNN` mà repo này bị soi theo, quy trình release, lệnh kiểm tra |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, không có scripts; tồn tại để mang version và metadata repo |
@@ -87,12 +87,13 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Mười chín skill có thêm `references/`;
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Hai mươi skill có thêm `references/`;
 năm skill còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
 | `plugins/atk/skills/help/SKILL.md` | Bất kỳ lúc nào | Không có file nào ngoài run trace: skill nên chạy tiếp theo suy ra từ trạng thái dự án, bằng chứng đứng sau nó, và việc gì đang chờ ai |
+| `plugins/atk/skills/orchestrate/SKILL.md` | Bất kỳ lúc nào | Bản đề xuất các job `atk` mà mỗi phần việc còn cần; khi được duyệt, các job chạy song song trong các worktree, câu hỏi và yêu cầu duyệt được chuyển tới đúng người, mã nguồn dừng ở một commit cục bộ kèm review |
 | `plugins/atk/skills/init/SKILL.md` | Khởi tạo | `.atk/profile.md`: lệnh, tầng, thư mục docs, tracker, team, và cách kiểm chứng lúc chạy |
 | `plugins/atk/skills/tailor/SKILL.md` | Khởi tạo | `.atk/overrides/<skill>.md`: điều team này muốn một skill làm khác đi, người duyệt là vai sở hữu kết quả |
 | `plugins/atk/skills/intake/SKILL.md` | Yêu cầu | User story, tiêu chí nghiệm thu, ngoài phạm vi, câu hỏi treo có người phụ trách |
@@ -124,9 +125,12 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | File | Mục đích |
 |------|----------|
 | `plugins/atk/skills/help/references/atkx-skills.md` | File duy nhất dưới `plugins/atk/` liệt kê skill của `atkx`: mỗi skill dùng khi nào, gọi thế nào, chạy trên harness nào, lệnh cài cho từng harness, giữa một skill `atk` và một skill `atkx` thì skill nào được chọn, và `Needs first` cùng `Approved by` ghi gì cho skill `atkx` |
+| `plugins/atk/skills/orchestrate/references/proposal.md` | Bản đề xuất: nó nằm ở đâu, các phần việc, các cách chạy, mỗi job một dòng kèm agent và người trả lời, một lần duyệt có hiệu lực tới đâu, lần duyệt sau là một bản ghi mới trỏ về bản trước, các task của một breakdown trở thành phần việc, các trạng thái của job và của chuỗi, và việc bên điều phối không tính bản ghi của chính nó vào trạng thái của một phần việc |
+| `plugins/atk/skills/orchestrate/references/job-prompt.md` | Những gì agent của một job được dặn, theo thứ tự: worktree của nó, đúng một skill `atk` và không skill nào của kit khác, yêu cầu được đưa vào như bằng chứng trích dẫn, các file mà nguyên tắc 9 giữ không đọc cùng các lệnh nó không bao giờ chạy, trích nguyên văn lúc dựng prompt, cách nó dừng lại chờ một người, nơi nó kết thúc; và hình dạng của file kết quả mà bên điều phối đối chiếu với artifact và với `git` |
+| `plugins/atk/skills/orchestrate/references/ways-to-run.md` | Bước dò cho từng cách trong ba cách chạy, cờ đọc từ chính phần trợ giúp của CLI ngay lúc dùng, và cách khởi động, chờ và đọc lại một job trong pane, trong subagent của host và ngay trong phiên; đọc file kết quả chứ không đọc màn hình |
 | `plugins/atk/skills/init/references/detection.md` | Cách xác định gốc dự án và hình dạng repository trước mọi thứ khác, tìm từng trường của profile ở đâu, và làm gì khi repo cho nhiều đáp án hoặc không cho đáp án nào |
 | `plugins/atk/skills/init/references/profile-template.md` | Bố cục của `.atk/profile.md` mà `init` điền vào, bảng Repositories của một dự án nhiều repository, và luật mọi đường dẫn đều viết từ gốc dự án |
-| `plugins/atk/skills/init/references/role-defaults.md` | Mỗi vai viết gì, chấp nhận gì và đọc lại ở đâu trong 24 skill; `init` lấy cột Accepts làm quyền duyệt mặc định đề xuất cho từng vai, và `plugins/atk/shared/team-roles.md` dẫn tới nó |
+| `plugins/atk/skills/init/references/role-defaults.md` | Mỗi vai viết gì, chấp nhận gì và đọc lại ở đâu trong 25 skill; `init` lấy cột Accepts làm quyền duyệt mặc định đề xuất cho từng vai, và `plugins/atk/shared/team-roles.md` dẫn tới nó |
 | `plugins/atk/skills/tailor/references/interview.md` | Năm nhóm câu hỏi, bộ lọc đẩy câu trả lời sang `init` hoặc `convention`, và một ví dụ cho mỗi nhóm |
 | `plugins/atk/skills/tailor/references/audit.md` | Ba phép kiểm của `--audit`, vì sao mâu thuẫn là khẳng định còn neo lỗi thời là nghi vấn, và luật nó không sửa gì |
 | `plugins/atk/skills/tailor/references/feedback.md` | Ba nhánh một lần chạy hỏng rẽ vào, bản ghi `--feedback` chứa gì, hai thứ nó không bao giờ được chứa, chế độ này khác đi thế nào với skill không thuộc kit, cách `--runs` đọc nhiều run trace và đếm những gì lặp lại giữa chúng, và cách một bản ghi được làm trung tính trước khi rời khỏi dự án |
@@ -191,6 +195,7 @@ bằng cả ba ngôn ngữ trigger. `atk` không kèm bộ chạy; `atkx:skill-e
 | File | Mục đích |
 |------|----------|
 | `plugins/atk/skills/help/evals/trigger_evals.json` | Hỏi skill nào phù hợp, đối lại `onboard`, `init`, `catchup`, `tailor`, và những yêu cầu làm việc chỉ tình cờ có chữ help |
+| `plugins/atk/skills/orchestrate/evals/trigger_evals.json` | Đưa nhiều phần việc đi qua vòng đời `atk`, đối lại việc điều phối nhiều agent chung chung không có artifact của team, `breakdown`, `help`, `implement` và `git` |
 | `plugins/atk/skills/init/evals/trigger_evals.json` | Cách nói về khởi tạo, đối lại những yêu cầu cấu hình dự án không thuộc `init` |
 | `plugins/atk/skills/tailor/evals/trigger_evals.json` | Việc chỉnh một skill cho hợp team, đối lại cặp `convention` và `init` mà nó không được giành |
 | `plugins/atk/skills/intake/evals/trigger_evals.json` | Một yêu cầu thô thành user story, đối lại `design-doc`, `estimate` và `breakdown` |
@@ -257,15 +262,16 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/codebase-summary.md` | Chính là file này |
 | `docs/project-roadmap.md` | Kế hoạch theo phase và trạng thái |
 | `docs/trigger-eval-measurement.md` | Cách lấy một số đo đúng từ `evals/trigger_evals.json`: vì sao một bộ chạy thông thường báo ra điểm số rỗng, hook `PreToolUse` đo được việc chọn skill, ba điều kiện một lượt chạy cần có, những case không gì quan sát được, và bộ chạy hiện thực cách đo đó nằm ở đâu |
-| `docs/flow/project-flow.md` | 24 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, vòng quay lại khi artifact bị trả về, và lối dẫn tới bảng vai trò mà `init` giờ mang theo |
+| `docs/flow/project-flow.md` | 25 skill đặt vào các pha bàn giao, kèm người viết và người duyệt từng artifact, vòng quay lại khi artifact bị trả về, và lối dẫn tới bảng vai trò mà `init` giờ mang theo |
 | `docs/flow/skill-chain.md` | Chuỗi artifact: mỗi skill đọc gì, để lại gì, skill nào nhặt tiếp, và ba chỗ chuỗi hay đứt |
 | `docs/flow/skill-lifecycle.md` | Bên trong một skill: chín mục mà `SKILL.md` nào cũng có, năm chặng của một lượt chạy, và năm loại quan hệ giữa các skill, trong đó chỉ bốn loại xảy ra lúc chạy |
 | `docs/adr/0001-atk-and-atkx-as-sibling-plugins.md` | Bản ghi quyết định kiến trúc đầu tiên: `atk` chuyển vào `plugins/atk/`, còn `atkx`, bộ kit skill tiện ích được gọi `atk` nhưng không bao giờ bị `atk` gọi, được tạo ở `plugins/atkx/`, hai plugin không dùng chung file nào, và `atk` thêm `CONV-011` để giữ phụ thuộc chỉ theo một chiều, được sửa ngày 2026-10-02 để riêng `atk:help` được nhắc tới `atkx` |
 | `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` | Bản ghi thứ hai: `atkx:skill-eval` để những phép kiểm tra cần lặp lại y hệt trong script Node, còn phần cần phán đoán để agent làm |
+| `docs/adr/0003-orchestrate-runs-jobs-in-the-way-the-machine-offers.md` | Bản ghi thứ ba: `atk:orchestrate` đề xuất các job mà mỗi phần việc cần, chạy chúng trong pane, trong subagent của host hoặc ngay trong phiên, tùy máy có gì, và không bao giờ trả lời thay một cổng duyệt |
 | `docs/adr/0004-every-skill-leaves-a-run-trace.md` | Mọi skill `atk` mặc định để lại một run trace, tắt theo từng dự án trong profile, và `atk:tailor --feedback --runs` đọc được nhiều trace; bị `0005` thay thế một phần |
 | `docs/adr/0005-run-trace-started-from-the-workflow.md` | Trace được khởi động bằng hai dòng trong workflow của mọi skill, vì riêng nguyên tắc 10 thì không được đọc, và được giữ ngoài git bằng một file ignore trong chính thư mục của nó thay vì file exclude cục bộ |
 | `docs/adr/0006-run-trace-written-by-the-agent-until-measured.md` | Agent tự ghi trace cho tới khi đo được rằng một script Node không hỏi phiên tương tác thêm câu hỏi quyền nào |
-| `docs/vi/**/*.md` | Bản tiếng Việt của mười lăm file trên, đặt ở cùng đường dẫn tương đối |
+| `docs/vi/**/*.md` | Bản tiếng Việt của mười sáu file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub
 
@@ -273,10 +279,10 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 |------|----------|
 | `.github/workflows/release-please.yml` | Chạy release-please khi push lên `main` |
 | `.github/workflows/labeler.yml` | Gắn label cho từng pull request theo đường dẫn file nó thay đổi, dựa trên `.github/labeler.yml` |
-| `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill của cả hai plugin một label `skill:`, gồm 24 skill của `atk` và từng skill của `atkx` |
+| `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill của cả hai plugin một label `skill:`, gồm 25 skill của `atk` và từng skill của `atkx` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Hướng dẫn Conventional Commit, harness bị ảnh hưởng, và checklist kiểm tra gồm cả các mục đồng bộ chéo |
 | Các form `.github/ISSUE_TEMPLATE/*.yml` | Mỗi form gắn label loại của nó cùng `status: triage` |
 | `.github/ISSUE_TEMPLATE/config.yml` | Tắt issue trống, dẫn sang Discussions |
-| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 24 skill của `atk`, cộng profile, phần ghi đè, lớp dùng chung, các hook, các agent, `atkx`, và mỗi skill của `atkx` một mục `Skill - atkx:<name>` |
+| `.github/ISSUE_TEMPLATE/bug-report.yml` | Form bug với dropdown harness và component. Danh sách component phải có đủ 25 skill của `atk`, cộng profile, phần ghi đè, lớp dùng chung, các hook, các agent, `atkx`, và mỗi skill của `atkx` một mục `Skill - atkx:<name>` |
 | `.github/ISSUE_TEMPLATE/feature-request.yml` | Form tính năng, hỏi tình huống của team trước khi hỏi năng lực đề xuất |
 | `.github/ISSUE_TEMPLATE/skill-run-report.yml` | Form báo lần chạy skill, nhận bản ghi `--feedback` của một lần chạy hoặc, với `--runs`, của nhiều lần chạy đọc từ trace: đã yêu cầu gì, bước nào chạy, chỗ nào skill không nói, và team mong đợi gì, kèm lời nhắc rằng repository là công khai và những gì phải bỏ ra |

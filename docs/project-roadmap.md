@@ -5,9 +5,9 @@
 | Phase | State | Summary |
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
-| 2. Skill coverage | DONE | 24 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for nineteen, pending for the other five |
-| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 24 skills. `atk` ships no runner; `atkx:skill-eval --trigger` carries one, and `docs/trigger-eval-measurement.md` says how it measures |
+| 2. Skill coverage | DONE | 25 `SKILL.md` files covering the lifecycle, sharing one section contract |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for twenty, pending for the other five |
+| 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 25 skills. `atk` ships no runner; `atkx:skill-eval --trigger` carries one, and `docs/trigger-eval-measurement.md` says how it measures |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
 
@@ -20,7 +20,7 @@ with one marketplace file per harness at the root.
 
 ## Phase 2: Skill coverage (done)
 
-Twenty-four skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
+Twenty-five skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
 with multilingual triggers, scope, roles, invocation, workflow, output, ticket, and a definition of
 done.
 
@@ -42,7 +42,11 @@ checked and found, with every unfixed finding left for a named person to accept.
 the agent executes the cases it can observe honestly and writes a run record the QA lead approves,
 while `qa` still never executes a case and `verify` stays the developer's check on the local stack.
 
-The `plugins/atk/shared/` layer holds what would otherwise be repeated twenty-four times: the role vocabulary,
+`orchestrate` came after it, for a team carrying several pieces of work at once: it proposes the jobs
+each piece still needs and, once a person approves, runs them side by side in worktrees, relaying
+every question and approval rather than answering it, and stopping code at a local commit.
+
+The `plugins/atk/shared/` layer holds what would otherwise be repeated twenty-five times: the role vocabulary,
 the artifact path convention, and the tracker adapters, cited by every skill. Fourteen more files are
 contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
@@ -62,7 +66,7 @@ through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Nineteen skills ship with `references/` already. The other five do not. Where the output is a
+Twenty skills ship with `references/` already. The other five do not. Where the output is a
 document with a fixed shape and no reference holds that shape, the template is re-derived on every
 run:
 
