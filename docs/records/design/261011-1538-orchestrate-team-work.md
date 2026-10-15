@@ -337,8 +337,9 @@ The job's write boundary is never widened to get around this.
 ### Review
 
 - **Once the coordinator has committed a code job's change**, it runs `atk:review` on its branch against the base.
-- **A `BLOCKING` finding goes back to the same piece of work** as a new `atk:implement` job. The
-  ceiling of two rounds then escalation by name applies unchanged, counted in the run state.
+- **The findings What gets fixed in `review-fix-loop.md` selects go back to the same piece of work**,
+  `BLOCKING` and `SHOULD FIX` alike, as a new fix job. The ceiling of two rounds then escalation by
+  name applies unchanged, counted in the run state.
 - **Agreement between reviewers is not an approval** (`host-capabilities.md:220`).
 
 ### What the skill never does
@@ -420,7 +421,7 @@ The maintainer chose `orchestrate` on 2026-10-11.
 | Data model and migration | N/A. No data store. New files only: the proposal record and the derived run state |
 | API contracts | N/A. The interface is the slash command: `/atk:orchestrate [requests, tickets, or paths...] [--concurrency <n>] [--sequential] [--resume]` |
 | Errors and edge cases | A missing multiplexer or subagents means the next way down. A timed-out job fails and blocks its chain. A refused flag fails the job and is probed again, never guessed. A breakdown with `PROPOSED` owners is not split into pieces. A rejected artifact stops its chain and the record says so |
-| Backward compatibility | `atk:help` reads the same rules from `shared/`, and answers differently only where an orchestration run stopped before its end: a project that never ran `atk:orchestrate` sees the same answers. `atk:git` never stages the orchestration run state, as it already never stages a progress log, now in any worktree. Row 5 of `state-signals.md` names any skill that writes a progress log, and the work in hand is read on the branch being read. No other skill changes behaviour. `implement --no-review`, `git --commit`, and plan paths already exist |
+| Backward compatibility | `atk:help` reads the same rules from `shared/`, and answers differently only where an orchestration run stopped before its end: a project that never ran `atk:orchestrate` sees the same answers. `atk:git` never stages the orchestration run state, as it already never stages a progress log, now in any worktree. Row 5 of `state-signals.md` names any skill that writes a progress log, and the work in hand is read on the branch being read. `finalize-steps.md`, `secret-scan.md`, `review-fix-loop.md` and `atk:verify`'s process-management sentence change their wording to name `orchestrate` as well. `implement --no-review`, `git --commit`, and plan paths already exist |
 | Rollout | A `feat:` patch release. The pane way is offered to users already inside a multiplexer; everyone else gets the other two |
 | Rollback | Revert the commit: one skill folder, the moved `state-signals.md` and `help`'s citation of it, the new section of `host-capabilities.md`, the rows of `artifact-paths.md`, the orchestration row of `state-signals.md` and the directory `help` reads for it, `orchestrate` in `project-profile.md`, `team-roles.md` and `atk:git`'s never-staged paths |
 | Observability | The proposal record, the derived run state, one result file per job, and each job's own artifacts, records, and review reports |
@@ -476,7 +477,12 @@ row now says what `atk:help` and `atk:git` change; the Rollback row lists everyt
 No decision changed. Corrected again on 2026-10-15, before the first commit: AC2 and Option B no
 longer name the kit studied while designing, and "Committing in a worktree", the sequence diagram,
 the result file and Review in "What a job runs", the API, Backward compatibility and What changes
-follow the two decisions of that date below, and the files the change added.
+follow the two decisions of that date below, and the files the change added. Corrected a third
+time on 2026-10-15, after the commit, on Lam Ngoc Khuong's word that a record on a branch not yet
+merged may still be corrected, answering finding S42 of the review of pull request #122: Review now
+says the findings What gets fixed selects go back, not only a `BLOCKING` one; Backward compatibility
+no longer says that no other skill changes; and the three decisions below dated 2026-10-15 that the
+record lacked are added. No earlier decision changed.
 
 - The skill is named `orchestrate`, with the risk above accepted. Lam Ngoc Khuong, 2026-10-11.
 - It sits right after `help` in the lifecycle order. Lam Ngoc Khuong, 2026-10-11.
@@ -487,6 +493,12 @@ follow the two decisions of that date below, and the files the change added.
   may write only the worktree.
 - The skill carries work in a project of one repository only, for now, and refuses the other
   shapes at the proposal. Lam Ngoc Khuong, 2026-10-15, on finding B3 of the same review.
+- `orchestrate` reads row 6 of `state-signals.md` for uncommitted work only: between its jobs a
+  piece's branch is ahead with no pull request by design. Lam Ngoc Khuong, 2026-10-15.
+- A job's change to anything git or a hook manager runs is committed only after the person has seen
+  its masked diff and said yes. Lam Ngoc Khuong, 2026-10-15.
+- `atk:init`, where the profile is not ready, runs in the session before any worktree is made. Lam
+  Ngoc Khuong, 2026-10-15.
 
 ## Open questions
 
