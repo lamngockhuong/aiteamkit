@@ -7,7 +7,7 @@ description: >
   approving a PR, when reviewing a colleague's branch, or when a review needs a second opinion.
   Triggers on: "review PR", "code review", "review this branch", "review giúp", "duyệt code",
   "check PR", "レビュー", "approve this", "is this ready to merge", "/atk:review".
-argument-hint: "[pr-number|branch|commit|paths] [--against <design-path>] [--comment] [--strict] [--parallel <N>] [--out <path>]"
+argument-hint: "[pr-number|branch|commit|range|paths] [--against <design-path>] [--comment] [--strict] [--parallel <N>] [--out <path>]"
 ---
 
 # Team Code Review (`atk:review`)
@@ -38,7 +38,7 @@ session is the calling agent says so in the report.
 
 ```bash
 /atk:review <pr-number>                   # Review a pull request from the detected tracker
-/atk:review <branch|commit>               # Review a branch diff or a single commit
+/atk:review <branch|commit|range>         # A branch diff, one commit, or <base>...<branch> with its base
 /atk:review <paths>                       # Review given paths in the working tree
 /atk:review --against <design-path>       # Review against a specific design document
 /atk:review --comment                     # Post findings as inline PR comments
@@ -231,7 +231,7 @@ Every run writes a report to `docs/derived/reviews/<pr>-<date>.md` per `shared/a
 asked for or not. A review costs more to produce than to keep, and the run that is only spoken into
 a session is gone the moment the terminal scrolls. It is derived: safe to delete, and rebuilt by
 running the review again. Where the target is not a pull request the name carries what was reviewed
-instead of the number, the branch, the short commit, or a slug of the paths.
+instead of the number: the branch, the short commit, a slug of the range or of the paths.
 
 The session gets the summary, not the report: how many findings at each severity, the `BLOCKING`
 ones in one line each, how many the cap left to the report alone, and the path to the file. Whoever

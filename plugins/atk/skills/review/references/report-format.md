@@ -144,7 +144,7 @@ updated: YYYY-MM-DD
 ticket: <id or URL>
 ---
 
-# Review: <PR, branch, commit or paths>
+# Review: <PR, branch, commit, range or paths>
 
 <the change in one line> · base `<ref>` @ `<sha>` · head `<sha>` · author <handle>
 

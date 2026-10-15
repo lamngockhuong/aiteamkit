@@ -54,6 +54,10 @@ of `shared/team-roles.md`.
    every write in a worktree beside the repository, unless the person adds that directory for the
    run. The person answering becomes the pace of such a job. Where
    `--concurrency` asked for more than the machine allows, the number the run will use, and why.
+   Where the repository has a pre-commit hook, that it runs files a job changed with the
+   coordinator's rights, so each commit of a job's change is asked about, per step 3 of After a job
+   ends in `references/worktrees.md`. And what the check for writes outside a worktree cannot see, per After a job ends in
+   `references/worktrees.md`.
 5. **Decisions.** Who approved, when, and what they changed, written by that person or on their word.
 
 ## When the profile is not ready
@@ -134,12 +138,19 @@ The plans of the pieces are compared before the record is written. Pieces whose 
 file run one after another, never side by side: the later one gets its worktree only once the
 earlier one's code is committed and reviewed, from the branch the run state recorded for it, so its
 base already holds what it would otherwise conflict with. Its branch is then stacked on the earlier
-one: its review runs over `<earlier branch>...<its branch>` so the earlier piece's commits are not
-reviewed twice, and the record and the close name each branch's base and that the earlier one is
-pushed first. A piece without a plan yet is compared again
-when it gets one, at its re-confirmation; where its worktree already exists by then, its remaining
-jobs wait for the earlier piece, and the record says the two branches will conflict until one is
-merged, which is a person's call.
+one: its review is given `<earlier branch>...<its branch>` as its target, so the earlier piece's
+commits are not reviewed twice, and the record and the close name each branch's base and that the
+earlier one is pushed first. A plan that names no file is not taken as sharing none: unless the
+approver orders it otherwise in the record, its piece gets its worktree from the run's base once
+every piece whose plan names files is committed and reviewed, or stopped, parked or escalated, is
+not stacked on any of them, and the record says its branch may conflict with each of
+theirs, which is a person's call at merge. Pieces of that kind run one after another, in record
+order. A plan that names no file arriving at a re-confirmation, for a piece whose worktree exists,
+makes that piece's remaining jobs wait the same way. A piece without a plan yet
+is compared again when it gets one, at its re-confirmation; where its worktree already exists by
+then, or where After a job ends in `references/worktrees.md` finds two pieces running side by side
+have changed a common path, the later piece's remaining jobs wait for the earlier one, and the record
+or the person is told the two branches will conflict until one is merged, which is a person's call.
 
 ## A breakdown's tasks
 
@@ -160,7 +171,13 @@ job of the skill that wrote the artifact as a row of a new record.
 A job is `proposed`, `waiting`, `running`, `needs-person`, `done`, or `failed`. A chain is `running`,
 `needs-approval`, `escalated`, `done`, or `stopped`.
 
-- `needs-person` carries the question word for word and the name of the person it is for.
+- `needs-person` carries the question word for word and the name of the person it is for. Where
+  that person is not the one in the session, the chain is parked: its question stays in the run
+  state and is listed at the close with their name, and the other chains go on. An answer the person
+  in the session passes on later is relayed as A gate is relayed in `shared/host-capabilities.md`
+  says, with who passed it on recorded beside who gave it. At the close a parked job's agent is
+  stopped like any other, and the close says how its question returns: a job whose skill keeps a
+  progress log resumes from it, and one that interviews asks again from the start.
 - `needs-approval` names the artifact, its absolute path in the worktree, its state, and the approver
   its front matter names.
 - `escalated` holds the escalation The ceiling in `shared/review-fix-loop.md` requires, naming the

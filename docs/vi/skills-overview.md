@@ -486,7 +486,10 @@ cùng pull request đọc lại báo cáo đầu, hoặc bản tóm tắt lượ
 chứ không phải mỗi lần chạy dựng lại một kiểu, và không mang điểm số nào, vì người review không phải
 người duyệt. Cờ `--out` đổi chỗ file, cờ `--comment` đăng phát hiện thành comment inline trên PR,
 kèm một comment tóm tắt liệt kê, ở dạng thu gọn, mọi phát hiện mà lượt review giữ lại và mọi câu hỏi
-mở, nên người đọc pull request đọc được mọi phát hiện mà không cần tới báo cáo.
+mở, nên người đọc pull request đọc được mọi phát hiện mà không cần tới báo cáo. Một target viết dạng
+`<base>...<branch>` được review so với chính base ấy thay vì base do lượt review tự xác định, nhờ
+đó một nhánh xếp chồng lên một nhánh khác chưa push được review mà không lặp lại các commit của nhánh
+trước nó.
 
 **Dùng khi.** Trước khi approve một pull request, hoặc khi cần một ý kiến thứ hai.
 

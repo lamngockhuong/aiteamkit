@@ -276,6 +276,8 @@ The argument is what is under review:
 - **A branch or a pull request**: `<base>...HEAD`, where `<base>` is the base the review resolved,
   `origin/main` or whatever the pull request targets, never a name assumed to exist locally. A branch
   that is not checked out is `<base>...<branch>`.
+- **A range given as the target**, `<base>...<branch>`, as `atk:orchestrate` gives a branch stacked
+  on another: that range as given, with no base resolved in its place.
 - **One commit**: `<sha>~1..<sha>`. A bare sha is not a range and fails the scan.
 - **What is staged**, which `atk:git` reads before it writes a commit message: `--cached`. A staged
   deletion of a file rule 9 names never appears in it, and a removed line that held a value is masked

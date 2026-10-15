@@ -42,10 +42,13 @@ Step 1 of `SKILL.md` reads a piece's artifacts this way and no other.
   the default branch, per `shared/finalize-steps.md`, so the profile a run reads may sit on another
   branch, from this run or an earlier one. So the base of every worktree of the run is the commit
   whose profile the coordinator read and judged ready: `HEAD` of its own tree, after `atk:init`
-  committed or as it found it. The run state records that commit and its branch; where the branch is
-  not the default one, the proposal or the follow-up record and the close say that the pieces'
-  branches sit on it, with whatever else it carries, and that it is pushed first. A profile that is
-  untracked there is copied per The profile below.
+  committed or as it found it. The run state records that commit and its branch, `(detached)` where
+  `HEAD` names none; where the branch is not the default one, or there is none, the proposal or the
+  follow-up record and the close say that the pieces' branches sit on it, with whatever else it
+  carries, and that it is pushed first. The default branch is the one `origin/HEAD` names; where it
+  names none, the person is asked once, never a name guessed. Where `HEAD` names no commit at this
+  point, after `atk:init` or without it, the run is refused before any worktree, since a worktree has
+  nothing to start from. A profile that is untracked there is copied per The profile below.
 - **The exclude line the child skills need.** `atk:implement`, `atk:fix` and `atk:verify` add a line
   to the exclude file that `git rev-parse --git-path info/exclude` names, per Progress log in
   `shared/artifact-paths.md`. In a worktree that file sits in the common git directory, outside the
@@ -53,9 +56,24 @@ Step 1 of `SKILL.md` reads a piece's artifacts this way and no other.
   checks them with `git check-ignore -q`. A check that fails, a negation in the project's
   `.gitignore` among the causes, is said in the proposal, and the close names every line added.
 - **The inputs that are paths.** A requirement, design, breakdown or plan path given as input has to
-  be committed on the base the worktrees start from. One that is untracked or changed in the
-  coordinator's tree is named in the proposal and the piece waits: a worktree made from a commit
-  would not hold it, and the job would find nothing.
+  be committed on the ref its piece's worktree starts from, its base or the branch it reuses, checked
+  there with `git cat-file -e "<ref>:<path>"` rather than in the coordinator's tree; for a piece the
+  proposal serialises after another, on the run's base, which its predecessor's branch is made from,
+  since that branch does not exist yet. One missing there
+  is named in the proposal and the piece waits: a worktree made from that ref would not hold it, and
+  the job would find nothing. One changed but not committed in the coordinator's tree is named too,
+  since the job would read the committed text.
+- **What the checks after a job compare against.** Once the exclude lines are in, the run state
+  records a baseline, and records it again after each write of the coordinator's own in a tree,
+  including a worktree's creation, each commit, and a change left uncommitted there:
+  - for the coordinator's tree and each worktree, the listing After a job ends step 1 reads, with
+    the hashes of the regular files it lists, ignored ones included and files rule 9 names left out,
+    and in the coordinator's tree the hashes of the files under this run's own
+    `<docs root>/derived/orchestrate/<run-id>/`, which sit in an ignored directory;
+  - for the common git directory, the hashes of `config` and `info/exclude`, and the files and hashes
+    of the hooks directory `git rev-parse --git-path hooks` resolves, the default one included;
+  - for each worktree, the `gitdir:` line of its `.git` file and the hash of the `config.worktree`
+    that `git -C <worktree> rev-parse --git-path config.worktree` names, where one exists.
 
 ## Per piece
 
@@ -73,7 +91,9 @@ Step 1 of `SKILL.md` reads a piece's artifacts this way and no other.
   never by the piece ID, which names jobs and panes only. A piece without a ticket takes the rule's
   form for work with none, and where the rule has none, the slug of its masked request. A piece whose
   branch already exists reuses it with `git worktree add <path> <branch>`. A branch checked out in
-  another tree is not taken: the piece waits, and the proposal says where it is checked out.
+  another tree is not taken: the piece waits, and the proposal says where it is checked out. Two
+  pieces of one run whose rule gives the same name are never given it twice: the later one takes the
+  next free suffix, `-2`, `-3`, and the proposal says so.
 - **The profile.** Where `.atk/profile.md` or `.atk/overrides/` is untracked, the coordinator copies
   them into the worktree before its first job and checks there with `git check-ignore -q` that the
   copies stay out of git. Where the check fails, because nothing excludes `.atk/`, the piece runs no
@@ -85,22 +105,53 @@ Step 1 of `SKILL.md` reads a piece's artifacts this way and no other.
 
 ## After a job ends
 
-In this order, every step before the commit:
+In this order, every step before the commit. The run state marks the job `done` before step 1 and
+records the commit once step 5 makes it, so a job found `done` with no commit recorded, after a
+crash or on a resume, goes through these steps again from step 1. Where
+`git -C <worktree> rev-parse HEAD` has moved past the commit last recorded for the piece, steps 1 to
+4 read the paths of `<recorded>..HEAD` in place of the working tree, and only then is the commit
+shown to the person and, on their word, recorded as the job's, from step 6. An `index.lock` in the
+worktree's git directory, `git -C <worktree> rev-parse --git-path index.lock`, with no git command running there,
+is named to the person and removed only on their yes.
 
-1. **Check the coordinator's own tree.** `git status --porcelain` there, against what it was after
-   the coordinator's own last write: a change that appeared since is a job that wrote outside its
-   worktree. It is reported to the person, not committed, and every job that ended since the last
-   check is held, since at concurrency above one the change cannot be tied to one of them.
-2. **Read what changed in the worktree**, with `git -C <worktree> status --porcelain -z`, never a
-   command that prints content, and compare it with the job's `changed:` line. Every name the job
-   created is quoted in any command given it, and a branch it created is held to the character rule
-   of Reading a piece.
+1. **Check what lies outside the worktree**, once for every job that ended since the last check,
+   against the baseline of Before the first worktree: in the coordinator's tree,
+   `git status --porcelain -z --untracked-files=all --ignored=matching`, with one
+   `git hash-object --stdin-paths` over the regular files it lists, so a second write to a file
+   already changed counts too, and a deletion by its status entry alone; the same in the worktree of
+   every piece whose job is not running, each against its own baseline, which holds a change left
+   uncommitted there, by a job at `needs-person` or one that `failed`, from when it was left; the
+   worktrees of the jobs that ended since the last check listed for step 2 and left out of the
+   comparison; and the common git directory and each worktree's `gitdir:` line and
+   `config.worktree`. A listed name holding a newline, which `--stdin-paths` would split, is named to
+   the person as found and not hashed. A difference, or a check that fails, is reported to the person,
+   not committed, and every job that ended since the last check is held, since at concurrency above
+   one the change cannot be tied to one of them; a job is `failed` for it only once the person says
+   the change was not theirs. A changed `gitdir:` line or `config.worktree` is shown as the line or
+   hash recorded and the one found, since git tracks neither and no diff of them exists. Two changes
+   are asked about rather than reported, since a person makes them there: an edit to a proposal
+   record of this run still waiting for approval, and an edit to the gating artifact a chain at
+   `needs-approval` waits on, at the path that state names. Their approver's yes makes it theirs; a
+   no makes it a write outside a worktree. None of this sees a write outside the repository and its
+   worktrees, inside an ignored directory, in a file rule 9 names, or in a worktree whose job is
+   running; the proposal says so.
+2. **Read what changed in the worktree**, from step 1's listing of it without its ignored entries,
+   never a command that prints content. Compare it with the job's `changed:` line: a path one of them
+   names and the other does not is shown to the person, and the commit waits for their word; what is
+   committed is what `git status` shows. Compare it too with the paths the
+   pieces running beside it have changed, and handle an overlap as Pieces that share files in
+   `references/proposal.md` says. Every name the job created is quoted in any command given it, and
+   a branch it created is held to the character rule of Reading a piece.
 3. **Check what would run with the coordinator's rights.** A change to a file git or a hook manager
-   runs, the hooks directory the repository's configuration names, a hook manager's configuration,
-   or the worktree's own `.git` file, is not committed as it stands. The person is shown the masked
-   diff of those files, per Masking a diff in `shared/secret-scan.md`, and the commit goes ahead only
-   on their word; without it the job is `failed`. A sandboxed job's write must not become the
-   coordinator's execution.
+   runs, the hooks directory the repository's configuration names, or a hook manager's
+   configuration, is not committed as it stands; the worktree's own `.git` file and its
+   `config.worktree`, which git does not track, are step 1's. The person is shown the masked diff of those files, per Masking a diff in
+   `shared/secret-scan.md`, and the commit goes ahead only on their word; without it the job is
+   `failed`. A sandboxed job's write must not become the coordinator's execution. Where the
+   repository has a pre-commit hook, every commit of a job's change is also asked about first, per
+   Agents that write in `shared/host-capabilities.md`, naming the job and that the hook will run
+   files it changed with the coordinator's rights; without a yes the change stays uncommitted and
+   the chain is `needs-person` with that reason.
 4. **Check the artifact's state.** The status in its front matter is one the job's skill gives, never
    past it: a requirement a job wrote at `APPROVED` is reported to the person as found, not committed,
    and the job is `failed`. A change to a gating artifact of a kind the job's skill does not write,

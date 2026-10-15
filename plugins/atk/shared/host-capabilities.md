@@ -270,7 +270,9 @@ mechanics, in its own references, which cite this section rather than restate it
   manager's configuration, the worktree's own `.git` file, is not committed until the person has seen
   its masked diff and said yes: committing it would run the job's write with the calling skill's
   rights, outside the job's boundary. The same holds for an artifact whose state the job moved past
-  what its skill gives it, which is reported and never committed.
+  what its skill gives it, which is reported and never committed. A pre-commit hook also runs files
+  that list does not name, whatever it loads, so where the repository has one, each commit of a
+  job's change is asked about first, and the proposal states that risk.
 - **The ways a job runs, in a fixed order.** Agents in terminal panes started by a multiplexer, then
   the host's own subagents, then one job at a time in the session. The first that is present and
   passes its probe is offered; the person may choose a lower way, never one the machine lacks. No

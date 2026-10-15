@@ -480,7 +480,9 @@ summary the first posted on the pull request, to keep those identifiers pointing
 score of any kind, because the reviewer is not the approver. `--out` moves the file, `--comment`
 posts the findings as inline PR comments, with one summary comment that lists every finding the
 review kept and every open question, collapsed, so a reader of the pull request reaches every
-finding without the report.
+finding without the report. A target written `<base>...<branch>` is reviewed against that base
+rather than one the review resolves, which is how a branch stacked on another unpushed branch is
+reviewed without its predecessor's commits.
 
 **Use when.** Before approving a pull request, or when a review needs a second opinion.
 
