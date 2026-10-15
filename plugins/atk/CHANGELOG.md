@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.9](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.8...atk-v0.1.9) (2026-10-15)
+
+
+### Features
+
+* add atk:orchestrate, which proposes and runs the atk jobs each piece of work still needs ([#122](https://github.com/lamngockhuong/aiteamkit/issues/122)) ([10f30b1](https://github.com/lamngockhuong/aiteamkit/commit/10f30b12fe6016a29bc9780994823864fe41f3d9))
+* every atk skill leaves a run trace, and atk:tailor --feedback --runs reads them ([#119](https://github.com/lamngockhuong/aiteamkit/issues/119)) ([03c655e](https://github.com/lamngockhuong/aiteamkit/commit/03c655e779205d292ad71c82e78436fb39e7eecd))
+
 ## [0.1.8](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.7...atk-v0.1.8) (2026-10-13)
 
 
