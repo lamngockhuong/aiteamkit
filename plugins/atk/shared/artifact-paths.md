@@ -315,7 +315,7 @@ in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Two derived
 kinds are never staged whatever the project does with the directory: the progress log, held out by
-a line in the local exclude file, and the run trace, held out by an ignore file in its own directory,
+a line in the local exclude file, or for `atk:orchestrate`'s whole run directory by its own ignore file, and the run trace, held out by an ignore file in its own directory,
 per the two subsections below.
 
 The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
@@ -391,7 +391,7 @@ commit alone, and when either start is `(none)`, or the repository still has no 
 alone.
 
 The log lives in one working copy and is never staged, whatever the project does with
-`docs/derived/`: it is one person's working state, not a record. The exclude line above holds that
+`docs/derived/`: it is one person's working state, not a record. The exclude line above, or the ignore file, holds that
 for a teammate's `git add .` as well as for `atk:git`. A run in another worktree or clone
 finds nothing and starts fresh, and the skill says that rather than promising more.
 

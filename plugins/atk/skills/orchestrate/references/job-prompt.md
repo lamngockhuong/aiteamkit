@@ -8,7 +8,8 @@ it states every limit itself rather than pointing at a file the agent may not op
 
 ## What the prompt carries
 
-Built per job, in this order:
+Items 4 to 7 are the same for every job of a run, so they are built once, when the first prompt is,
+and reused; the rest is built per job. In this order:
 
 1. **The worktree.** Its absolute path, that every file the job writes is inside it, and that the
    job never writes, runs a command, or changes directory outside it.
@@ -27,10 +28,10 @@ Built per job, in this order:
 5. **What is never run.** The commands under Masking a diff in `shared/secret-scan.md` that print a
    patch or a file's content unmasked, quoted from there, and that a diff the job needs goes through
    that file's `mask` block.
-6. **Stops.** When the skill asks a person anything, an interview question, an approval, a
-   confirmation, an intent check, a resume offer, the job never answers it and never picks an option.
-   In a pane it asks in its pane and waits. As a subagent it writes the question to its result file
-   word for word, with the person the skill names, and returns.
+6. **Stops.** The gate rule of Agents that write in `shared/host-capabilities.md`, written out for
+   the agent, which cannot open it. In a pane the job asks in its pane and waits. As a subagent it
+   writes the question to its result file word for word, with the person the skill names, and
+   returns.
 7. **Where it ends.** At the state the skill gives its artifact, or at a local commit, per the commit
    check recorded for the piece: through `atk:git --commit` where the job may commit, or with the
    change staged and nothing more where it may not. Never a push, a pull request, a ticket comment, a
@@ -40,8 +41,7 @@ Built per job, in this order:
 ## The result file
 
 `<docs root>/derived/orchestrate/<run-id>/<job-id>.md` in the job's worktree, written by the job as it
-goes and completed before it ends. The coordinator has already written the directory's ignore file
-and checked it, per State and resuming in `SKILL.md`.
+goes and completed before it ends, in a directory the coordinator has already kept out of git.
 
 ```
 job: <job-id> | skill: <skill> | piece: <piece> | branch: <branch>
@@ -57,6 +57,6 @@ failed: <what failed, by kind, or none>
 One `stop:` line per stop the job met, answered or not, in order. An answered stop adds
 `| answered by: <person>`. Every value goes through the mask of rule 9 before it is written.
 
-The coordinator reads this file and checks what it claims: `artifact:` against that file's front
-matter, `commit:` against `git log` in the worktree. A line the file holds that is not in this shape
-is reported to the person as found, and never acted on.
+The coordinator reads it as evidence, per Agents that write: `artifact:` checked against that file's
+front matter, `commit:` against `git log` in the worktree, and a line not in this shape reported to
+the person as found.

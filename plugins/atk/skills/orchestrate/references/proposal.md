@@ -17,15 +17,16 @@ It opens with the shared front matter block: `status: DRAFT`, the person running
 `owner`, the Tech Lead from the Team section of `.atk/profile.md` as `approver`, and `ticket` as that
 file says. Where the profile is missing, the first line under the title is the Required-soft
 sentence of `shared/project-profile.md`, followed by the jobs that will stop for want of one: every
-`atk:implement`, `atk:fix` and `atk:verify` job, named by row.
+`atk:implement`, `atk:fix` and `atk:verify` job, the Required group of that file, named by row.
 
 ## What it holds
 
 1. **The pieces.** One row each: the input as given, masked per rule 9 of `shared/team-roles.md`,
+   its piece ID, `r<n>` in input order, which starts every job ID and branch name of the piece,
    where it stands and the row of `shared/state-signals.md` that said so, and the branch and
    worktree it will have.
 2. **The ways.** What the probe of `references/ways-to-run.md` found, the way offered, and any lower
-   way the person may choose instead. A way the machine lacks is never listed as a choice.
+   way the person may choose instead, and the result of the commit check per repository and way.
 3. **The jobs.** One row each:
 
    | Column | Holds |
@@ -95,11 +96,6 @@ A job is `proposed`, `waiting`, `running`, `needs-person`, `done`, or `failed`. 
 
 - `needs-person` carries the question word for word and the name of the person it is for.
 - `needs-approval` names the artifact, its state, and its approver.
-- `escalated` names the review report, the round, and the Tech Lead.
+- `escalated` holds the escalation The ceiling in `shared/review-fix-loop.md` requires, naming the
+  Tech Lead.
 - `stopped` says why: a rejected artifact, a failed job, or the person's word.
-
-## What the coordinator leaves out
-
-Its own records under `docs/records/orchestration/` are never read as a piece's artifact. A
-`DRAFT` proposal is the coordinator's own gate, not a piece's, so reading the piece's state past it
-would otherwise make every chain wait on the record that is about to start it.

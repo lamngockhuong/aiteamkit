@@ -12,15 +12,13 @@ Run before the proposal, and its result goes in the proposal record.
 - **Panes.** The session runs inside a terminal multiplexer that starts coding agents in panes and
   reports their state, and that tool answers its own help. Its commands come from that help or from
   the instructions it ships, read now. Then the agent CLI each job would start: present on the
-  machine, and the flags for its permission mode read from its own `--help`. A flag is never carried
-  from this file, another run, or memory: CLIs change their accepted values between versions.
+  machine, and the flags for its permission mode read from its own `--help`.
 - **Subagents.** The harness's own agent capability is in its live tool list, the `Agent` tool in
   Claude Code. The agent spawned is a general one, never `atk:read-only-reviewer`, which cannot
   write.
 - **The session.** Always present.
 
-The first way present is offered; the person may pick a lower one. `--sequential` keeps the way and
-sets the concurrency to one.
+`--sequential` keeps the way and sets the concurrency to one.
 
 ## Agents in panes
 
@@ -31,10 +29,11 @@ Tried with Claude Code as the coordinator only, which the proposal says. For eac
 2. **Send.** Read the agent's state first. Send the prompt of `references/job-prompt.md`. Then wait
    for the state to leave idle before waiting for anything else: a wait called at once can return
    `idle` before the agent has started.
-3. **Wait.** For `done` or `blocked`, with a timeout stated in the proposal. A timeout fails the job.
-4. **Blocked.** Read the pane for the question or prompt. A skill's gate is relayed per step 4 of
-   `SKILL.md`, the answer sent to the pane verbatim. A permission prompt of the CLI is classified per
-   Agents that write before it is relayed. Then wait again from step 3.
+3. **Wait.** One wait across every running pane, not one per job: each pass reads the state of all
+   of them, so a pane already `blocked` never waits behind another's timeout. The timeout stated in
+   the proposal is counted per job, and a timeout fails that job.
+4. **Blocked.** Read each blocked pane for its question or prompt, and relay all of them in one turn
+   per step 4 of `SKILL.md`, each answer sent to its pane verbatim. Then wait again from step 3.
 5. **Done.** Read the result file, never the screen: a pane folds and draws its output, and what it
    shows is not what the job wrote.
 

@@ -4,12 +4,12 @@ What on disk says which skill comes next, in the order to check it. Referenced f
 `skills/<name>/SKILL.md` as `shared/state-signals.md`, which is `../../shared/state-signals.md`
 relative to a skill file.
 
-Cited by `help`, which loads it in step 4 of its workflow, and by `orchestrate`, which reads it once
-per piece of work with that piece's ticket as the work in hand. A piece's artifacts sit in its own
-worktree and on its branch, not in the coordinator's tree, so `orchestrate` reads them there, in
-the worktree or through `git show <branch>:<path>`, front matter only.
+Cited by `help`, which loads it in step 4 of its workflow, and by `orchestrate`, once per piece of
+work. The rows are read against one piece of work: its ticket, its branch, and the tree that holds
+its artifacts. Each citer says which that is: for `help` the current branch, for `orchestrate` the
+piece's own worktree or branch.
 
-This file holds the one list `atk:help` keeps. What each skill does is read from the skills
+This file holds the one list both citers read. What each skill does is read from the skills
 themselves, so a skill added to the kit needs a row here only when something on disk says it is the
 next one to run. A skill that answers an event a person reports, a defect, a joiner, an outage, has
 no row: nothing on disk announces the event, and the question routes to it through the description.
@@ -50,7 +50,7 @@ that names none, it is the gating artifact updated most recently.
 | 2 | The cases file for the work in hand is `IN REVIEW`, and no report named `docs/derived/reviews/qa-cases-<slug>-` plus exactly `YYMMDD-HHMM` or `YYMMDD` and `.md`, for that exact slug, whose title line names this cases file and whose reviewer is not the file's owner, is newer than its last commit | `atk:qa --review <cases path>`, by the BrSE/BA or the QA lead, never the file's owner | Waiting on the approver alone: the second person's read is owed before approval, and row 3 would only name the file |
 | 3 | A gating artifact for the work in hand is `DRAFT` or `IN REVIEW` | No skill. Name the artifact and its approver under `Waiting on people` | The next skill, which would build on something nobody accepted |
 | 4 | The current branch changes an API, a table, a feature's behaviour, or a component of a screen that has a screen spec, and the reference document for it is not in the diff | `atk:spec --sync` | `atk:git`, which would carry the change without the document it owes, per `shared/spec-docs.md` |
-| 5 | A progress log of `atk:fix`, `atk:verify`, `atk:implement` or `atk:orchestrate` under `docs/derived/<skill>/` has a last line that is neither an artifact path nor `no artifact:`, per Progress log in `shared/artifact-paths.md` | The same skill on the subject of its first line, which offers to resume it; for `atk:orchestrate`, `atk:orchestrate --resume`. Name the time of its last entry: the log may belong to a session still running | `atk:git`, which would carry a fix, a verification or an implementation that stopped halfway |
+| 5 | A progress log of a skill that Progress log in `shared/artifact-paths.md` names, under `docs/derived/<skill>/`, has a last line that is neither an artifact path nor `no artifact:`, per that section | The same skill on the subject of its first line, or in the resume form its `## Invocation` names, which offers to resume it. Name the time of its last entry: the log may belong to a session still running | `atk:git`, which would carry a fix, a verification or an implementation that stopped halfway |
 | 6 | The working tree has uncommitted changes, or the branch is ahead of its base with no pull request open | `atk:git` | `atk:review`, which reads a pull request that does not exist yet |
 | 7 | A pull request is open for the branch, with no review on it and no review report for it | `atk:review <pr>` | `atk:qa`, which tests code a reviewer may still send back |
 | 8 | The newest review report for the open pull request has `BLOCKING` findings and no commit on the branch is newer than the report | `atk:implement "address the BLOCKING findings in <report path>"` | A second `atk:review`, which would report the same findings |
