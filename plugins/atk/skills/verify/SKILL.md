@@ -204,8 +204,8 @@ committed per Persistence in `shared/artifact-paths.md`, so the commit carries t
 
 ## Process management
 
-This skill starts long-running processes, which makes it the one skill in the kit that can leave a
-machine worse than it found it. These rules are binding rather than advisory.
+This skill starts long-running processes, which makes it one of the two skills in the kit, with
+`atk:orchestrate`, that can leave a machine worse than it found it. These rules are binding rather than advisory.
 
 **Work out the port before starting.** The profile does not carry one, on purpose: a port is a value
 copied out of the application's own configuration, and a copy drifts. Read it from where the

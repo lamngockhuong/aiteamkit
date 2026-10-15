@@ -42,6 +42,10 @@
 - changed-files:
   - any-glob-to-any-file: 'plugins/atk/skills/help/**'
 
+'skill: orchestrate':
+- changed-files:
+  - any-glob-to-any-file: 'plugins/atk/skills/orchestrate/**'
+
 'skill: init':
 - changed-files:
   - any-glob-to-any-file: 'plugins/atk/skills/init/**'

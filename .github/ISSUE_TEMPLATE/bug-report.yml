@@ -28,6 +28,7 @@ body:
       description: Which part of atk is affected?
       options:
         - Skill - atk:help
+        - Skill - atk:orchestrate
         - Skill - atk:init
         - Skill - atk:tailor
         - Skill - atk:intake

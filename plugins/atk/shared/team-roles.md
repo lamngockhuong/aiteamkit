@@ -12,10 +12,10 @@ fill them.
 
 | Role | Short | Owns | Named in |
 |------|-------|------|----------|
-| Project Manager | PM | Scope, schedule, budget, client communication | init, tailor, intake, catchup, estimate, breakdown, qa, security, release, incident, retro, onboard, handover |
-| Bridge SE / Business Analyst | BrSE / BA | Requirement meaning, client language, spec correctness | tailor, intake, catchup, design-doc, spec, qa |
-| Tech Lead / Architect | TL | Technical design, conventions, final review call | init, tailor, intake, estimate, design-doc, spec, breakdown, convention, plan, implement, fix, verify, review, qa, run-cases, security, release, incident, onboard, handover |
-| Developer | Dev | Implementation, self-check, peer review | init, catchup, estimate, design-doc, spec, breakdown, convention, plan, implement, fix, verify, review, qa, security, git |
+| Project Manager | PM | Scope, schedule, budget, client communication | orchestrate, init, tailor, intake, catchup, estimate, breakdown, qa, security, release, incident, retro, onboard, handover |
+| Bridge SE / Business Analyst | BrSE / BA | Requirement meaning, client language, spec correctness | orchestrate, tailor, intake, catchup, design-doc, spec, qa |
+| Tech Lead / Architect | TL | Technical design, conventions, final review call | orchestrate, init, tailor, intake, estimate, design-doc, spec, breakdown, convention, plan, implement, fix, verify, review, qa, run-cases, security, release, incident, onboard, handover |
+| Developer | Dev | Implementation, self-check, peer review | orchestrate, init, catchup, estimate, design-doc, spec, breakdown, convention, plan, implement, fix, verify, review, qa, security, git |
 | QA / QC Engineer | QA | Test plan, test cases, regression, release sign-off | tailor, intake, catchup, estimate, breakdown, fix, review, qa, run-cases, security, release |
 | DevOps / SRE | SRE | Environments, pipeline, deployment, on-call | design-doc, verify, run-cases, security, release, incident |
 | Stakeholder / Client | - | Acceptance, priority, business trade-offs | intake, estimate, security, release |

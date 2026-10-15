@@ -1,6 +1,6 @@
 # Skills Overview
 
-Twenty-four skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
+Twenty-five skills covering a team's delivery lifecycle. Each entry says what the skill produces, when
 to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
@@ -40,7 +40,8 @@ flowchart TD
 Four skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
 `security` on a schedule, or before or after a release; `onboard` when someone joins; `handover`
 when someone leaves or a phase ends. `help` answers a
-question instead: which of the others to run, read from the state of the project.
+question instead: which of the others to run, read from the state of the project. `orchestrate`
+carries several pieces of work through the phases at once, running the others as jobs.
 
 `atk:init` runs once per project. It writes `.atk/profile.md`, which tells the skills that touch
 code how this project is tested, built, and laid out. `atk:implement`, `atk:fix` and `atk:verify`
@@ -67,6 +68,35 @@ member getting started on the project is `atk:onboard`, which writes the documen
 `IN REVIEW` is not one to design against, so the answer names the person it waits on rather than the
 next skill. It reads the kit's own skills at run time, so it never recommends from a stale copy, and
 it never runs what it recommends: which skill runs is the asker's call.
+
+---
+
+## `atk:orchestrate`
+
+**Produces.** A proposal record at `docs/records/orchestration/<date>-<ticket>-<slug>.md`: for each
+piece of work, where it stands and the chain of `atk` jobs it still needs, each with the agent, the
+way it runs, and the person who answers its questions. Once approved, the jobs themselves: each
+piece in its own worktree and branch, its artifacts at the state their skills give them, and code at
+a local commit with an `atk:review` report. A run state under `docs/derived/orchestrate/` that git
+never stages.
+
+**Use when.** One or several pieces of work have to move through the kit, a client request, an
+approved design and a ready plan side by side, and one coordinator should carry them rather than a
+person running each skill by hand. A breakdown whose owners are confirmed turns its tasks into pieces the same way.
+`--concurrency <n>` caps how many pieces run at once, `--sequential` runs one job at a time, and
+`--resume` offers the runs that stopped before their end, for you to pick one.
+
+**Do not use when.** There is one piece of work and you want the next step for it, which is
+`atk:help`; you want an epic split into owned tasks, which is `atk:breakdown`; or the work has no
+team artifact and no approver, which is outside this kit; or the project spans several
+repositories, which the skill refuses for now.
+
+**The habit that matters.** It proposes before anything runs, and it relays rather than answers.
+Every interview question, approval prompt and plan confirmation a job meets reaches the person it
+names word for word; every artifact waits for its own approver before the next job builds on it; and
+nothing leaves the local repository. It runs jobs in agents in terminal panes where the machine has
+a multiplexer, in the host's subagents where it does not, and one at a time in the session
+otherwise, so no team is blocked for lacking a tool.
 
 ---
 

@@ -5,9 +5,9 @@
 | Phase | Trạng thái | Tóm tắt |
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
-| 2. Độ phủ skill | XONG | 24 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Mười chín skill đã có, năm skill còn lại chưa |
-| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 24 skill. `atk` không kèm bộ chạy; `atkx:skill-eval --trigger` có một bộ, và cách nó đo nằm ở `docs/trigger-eval-measurement.md` |
+| 2. Độ phủ skill | XONG | 25 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Hai mươi skill đã có, năm skill còn lại chưa |
+| 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 25 skill. `atk` không kèm bộ chạy; `atkx:skill-eval --trigger` có một bộ, và cách nó đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
 
@@ -20,7 +20,7 @@ kit đã chuyển vào `plugins/atk/`, với một file marketplace cho mỗi ha
 
 ## Phase 2: Độ phủ skill (xong)
 
-Hai mươi bốn skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục:
+Hai mươi lăm skill, mỗi skill một `SKILL.md` dưới 300 dòng theo cùng một hợp đồng bố cục:
 frontmatter với trigger đa ngôn ngữ, scope, roles, invocation, workflow, output, ticket và
 definition of done.
 
@@ -42,9 +42,13 @@ thái của dự án chứ không từ một danh sách, nên một skill thêm 
 chạy những case nó quan sát được kết quả và viết một run record chờ QA Leader duyệt, còn `qa` vẫn không
 bao giờ tự chạy case và `verify` vẫn là bước lập trình viên tự kiểm trên stack local.
 
-Lớp `plugins/atk/shared/` giữ những gì lẽ ra phải lặp lại hai mươi bốn lần: từ vựng vai trò, quy ước đường dẫn
-artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười bốn file còn lại là hợp đồng giữa
-những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
+`orchestrate` đến sau nó, cho một team cần đưa nhiều phần việc đi cùng lúc: nó đề xuất các job mà mỗi
+phần việc còn cần và, khi có người duyệt, chạy chúng song song trong các worktree, chuyển mọi câu hỏi
+và yêu cầu duyệt tới đúng người chứ không trả lời thay, và dừng mã nguồn ở một commit cục bộ.
+
+Lớp `plugins/atk/shared/` giữ những gì lẽ ra phải lặp lại hai mươi lăm lần: từ vựng vai trò, quy ước đường dẫn
+artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười tám file còn lại là hợp đồng
+giữa những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa sáu skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
 cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng,
@@ -53,7 +57,11 @@ cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để t�
 `CODEOWNERS`, `design-sources.md` nói `spec`, `intake` và `qa` đọc design Figma ra sao, `feature-types.md` là
 cách phân loại tính năng duy nhất, `catchup` lấy câu hỏi từ đó còn `estimate` lấy mức rủi ro QA, `plain-writing.md` nói phần văn xuôi của một báo cáo được viết
 thế nào cho người chưa mở file nào nó trích dẫn, `independent-challenge.md` giữa `design-doc` và
-`plan`, về cách đưa một bản nháp cho các agent đọc nó từ đầu, `project-profile.md` mô tả
+`plan`, về cách đưa một bản nháp cho các agent đọc nó từ đầu, `state-signals.md` là các dòng mà
+`help` và `orchestrate` đọc để biết một phần việc cần gì tiếp theo, `secret-scan.md` là phép quét
+giá trị bí mật duy nhất cùng danh sách file mà nguyên tắc 9 giữ không đọc, `review-fix-loop.md` là
+lượt review mà `implement`, `fix` và `orchestrate` chạy trên chính thay đổi của mình, `run-trace.md`
+là những gì mỗi lượt chạy để lại cho `tailor` đọc, `project-profile.md` mô tả
 `.atk/profile.md`, một file nằm trong dự án đích chứ không
 nằm trong kit, và `project-overrides.md` mô tả
 `.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ
@@ -61,7 +69,7 @@ nằm trong kit, và `project-overrides.md` mô tả
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Mười chín skill đã có sẵn `references/`. Năm skill còn lại thì chưa. Chỗ nào output là tài liệu bố
+Hai mươi skill đã có sẵn `references/`. Năm skill còn lại thì chưa. Chỗ nào output là tài liệu bố
 cục cố định mà chưa reference nào giữ bố cục ấy, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |

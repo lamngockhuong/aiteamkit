@@ -1,6 +1,6 @@
 # Tổng quan các skill
 
-Hai mươi bốn skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
+Hai mươi lăm skill phủ vòng đời delivery của một team. Mỗi mục nói rõ skill sinh ra gì, khi nào nên
 dùng, và khi nào không nên.
 
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
@@ -41,6 +41,7 @@ flowchart TD
 Bốn skill đáp lại một sự kiện chứ không nằm trong phase nào: `fix` khi có lỗi được báo, ở bất kỳ
 điểm nào; `security` theo lịch định kỳ, hoặc trước hay sau một lần phát hành; `onboard` khi có người vào; `handover` khi có người rời đi, hoặc một phase kết thúc.
 `help` thì đáp lại một câu hỏi: nên chạy skill nào trong số còn lại, đọc từ trạng thái của dự án.
+`orchestrate` đưa nhiều phần việc đi qua các phase cùng lúc, chạy các skill còn lại thành từng job.
 
 `atk:init` chạy một lần cho mỗi dự án. Nó viết ra `.atk/profile.md`, file cho các skill có động tới
 mã nguồn biết dự án này test thế nào, build ra sao và chia tầng thế nào. `atk:implement`, `atk:fix`
@@ -68,6 +69,36 @@ viên mới bắt đầu vào dự án là `atk:onboard`, skill viết ra tài l
 chứ không gọi tên skill tiếp theo. Nó đọc các skill của chính kit lúc chạy, nên không bao giờ gợi ý
 từ một bản sao đã cũ, và nó không bao giờ tự chạy thứ nó gợi ý: chạy skill nào là quyết định của
 người hỏi.
+
+---
+
+## `atk:orchestrate`
+
+**Sinh ra.** Một bản đề xuất ở `docs/records/orchestration/<date>-<ticket>-<slug>.md`: với mỗi phần
+việc, nó đang ở đâu và chuỗi job `atk` nó còn cần, mỗi job kèm agent, cách chạy, và người trả lời câu
+hỏi của job đó. Khi đề xuất được duyệt thì có thêm chính các job: mỗi phần việc một worktree và một
+nhánh riêng, artifact dừng ở trạng thái mà skill của nó đặt, còn mã nguồn dừng ở một commit cục bộ
+kèm báo cáo của `atk:review`. Trạng thái của lượt chạy nằm dưới `docs/derived/orchestrate/`, nơi git
+không bao giờ stage.
+
+**Dùng khi.** Một hoặc nhiều phần việc cần đi qua bộ kit, chẳng hạn một yêu cầu của khách, một thiết
+kế đã duyệt và một kế hoạch đã sẵn sàng, và cần một bên điều phối thay vì một người tự chạy từng skill.
+Một breakdown đã được xác nhận người phụ trách cũng biến các task của nó thành phần việc theo cách
+này. `--concurrency <n>` giới hạn số phần việc chạy cùng lúc, `--sequential` chạy lần lượt từng job,
+còn `--resume` liệt kê các lượt đã dừng giữa chừng để bạn chọn một lượt chạy tiếp.
+
+**Không dùng khi.** Chỉ có một phần việc và bạn muốn biết bước tiếp theo cho nó, đó là `atk:help`;
+bạn muốn chia một epic thành các task có người phụ trách, đó là `atk:breakdown`; hoặc công việc không
+có artifact của team và không có người duyệt, thứ nằm ngoài bộ kit này; hoặc dự án gồm nhiều
+repository, trường hợp skill tạm thời từ chối.
+
+**Thói quen tạo ra khác biệt.** Nó đề xuất trước khi chạy bất cứ gì, và nó chuyển lời chứ không trả
+lời thay. Mọi câu hỏi phỏng vấn, lời nhắc duyệt và xác nhận kế hoạch mà một job gặp đều tới đúng
+người được nêu tên, giữ nguyên văn; mọi artifact chờ người duyệt của chính nó trước khi job tiếp theo
+dựa vào; và không gì rời khỏi repository cục bộ. Job chạy bằng agent trong các pane mà một công cụ
+chia màn hình dòng lệnh mở ra, khi máy có công cụ đó; trong subagent của host khi không có; và lần
+lượt từng job ngay trong phiên trong các trường hợp còn lại, nên không team nào bị chặn vì thiếu một
+công cụ.
 
 ---
 

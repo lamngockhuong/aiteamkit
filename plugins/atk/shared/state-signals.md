@@ -4,9 +4,12 @@ What on disk says which skill comes next, in the order to check it. Referenced f
 `skills/<name>/SKILL.md` as `shared/state-signals.md`, which is `../../shared/state-signals.md`
 relative to a skill file.
 
-Cited by `help`, which loads it in step 4 of its workflow.
+Cited by `help`, which loads it in step 4 of its workflow, and by `orchestrate`, once per piece of
+work. The rows are read against one piece of work: its ticket, its branch, and the tree that holds
+its artifacts. Each citer says which that is: for `help` the current branch, for `orchestrate` the
+piece's own worktree or branch.
 
-This file holds the one list `atk:help` keeps. What each skill does is read from the skills
+This file holds the one list both citers read. What each skill does is read from the skills
 themselves, so a skill added to the kit needs a row here only when something on disk says it is the
 next one to run. A skill that answers an event a person reports, a defect, a joiner, an outage, has
 no row: nothing on disk announces the event, and the question routes to it through the description.
@@ -14,7 +17,7 @@ no row: nothing on disk announces the event, and the question routes to it throu
 ## Which artifacts gate
 
 Only some artifacts hold up the next skill while they wait for approval. An artifact **gates** when
-it sits in the Reference or Record group of `shared/artifact-paths.md` and is not one of three kinds:
+it sits in the Reference or Record group of `shared/artifact-paths.md` and is not one of four kinds:
 
 - The evidence for one change, the fix report and the verification record among them, which
   `shared/artifact-paths.md` sends into the pull request carrying that change. Its approval is the
@@ -23,6 +26,9 @@ it sits in the Reference or Record group of `shared/artifact-paths.md` and is no
   by moving it to `IN REVIEW`.
 - A test run record. Its defects need logging and fixing while the QA lead reviews it, so a run
   record at `IN REVIEW` does not hold back `atk:qa --bug`, `atk:fix`, or a retest.
+- A proposal record of `atk:orchestrate`. A `DRAFT` one holds back that run's own jobs and nothing
+  else: the work it carries is read from that work's artifacts, and row 5 already sends a person
+  back to the run that waits on it.
 
 Nothing in the Derived group gates. A catchup brief or a review report may sit at `DRAFT` for good,
 and that is not approval anybody owes.
@@ -38,8 +44,12 @@ Check the rows top to bottom and stop at the first one that holds. The order is 
 work already written but not carried comes before new work, because new work started on top of it
 is how a branch collects three unrelated changes.
 
-"The work in hand" is the ticket the current branch names, in its name or its commits. On a branch
-that names none, it is the gating artifact updated most recently.
+"The work in hand" is the ticket the branch being read names, in its name or its commits. On a
+branch that names none, it is the gating artifact updated most recently. Where a row says the
+current branch or the working tree, it means the branch and the tree being read: for `help` the
+current ones, for `orchestrate` the piece's own, per its step 1. `orchestrate` reads row 6 for
+uncommitted work alone: between its jobs a piece's branch is ahead with no pull request by design,
+since each push waits for a person.
 
 | # | Holds when | Run | Rather than |
 |---|------------|-----|-------------|
@@ -47,7 +57,7 @@ that names none, it is the gating artifact updated most recently.
 | 2 | The cases file for the work in hand is `IN REVIEW`, and no report named `docs/derived/reviews/qa-cases-<slug>-` plus exactly `YYMMDD-HHMM` or `YYMMDD` and `.md`, for that exact slug, whose title line names this cases file and whose reviewer is not the file's owner, is newer than its last commit | `atk:qa --review <cases path>`, by the BrSE/BA or the QA lead, never the file's owner | Waiting on the approver alone: the second person's read is owed before approval, and row 3 would only name the file |
 | 3 | A gating artifact for the work in hand is `DRAFT` or `IN REVIEW` | No skill. Name the artifact and its approver under `Waiting on people` | The next skill, which would build on something nobody accepted |
 | 4 | The current branch changes an API, a table, a feature's behaviour, or a component of a screen that has a screen spec, and the reference document for it is not in the diff | `atk:spec --sync` | `atk:git`, which would carry the change without the document it owes, per `shared/spec-docs.md` |
-| 5 | A progress log of `atk:fix`, `atk:verify` or `atk:implement` under `docs/derived/<skill>/` has a last line that is neither an artifact path nor `no artifact:`, per Progress log in `shared/artifact-paths.md` | The same skill on the subject of its first line, which offers to resume it. Name the time of its last entry: the log may belong to a session still running | `atk:git`, which would carry a fix, a verification or an implementation that stopped halfway |
+| 5 | A progress log of a skill that Progress log in `shared/artifact-paths.md` names, under `docs/derived/<skill>/`, has a last line that is neither an artifact path nor `no artifact:`, per that section | The same skill on the subject of its first line, or in the resume form its `## Invocation` names, which offers to resume it. Name the time of its last entry: the log may belong to a session still running | `atk:git`, which would carry a run of that skill that stopped halfway |
 | 6 | The working tree has uncommitted changes, or the branch is ahead of its base with no pull request open | `atk:git` | `atk:review`, which reads a pull request that does not exist yet |
 | 7 | A pull request is open for the branch, with no review on it and no review report for it | `atk:review <pr>` | `atk:qa`, which tests code a reviewer may still send back |
 | 8 | The newest review report for the open pull request has `BLOCKING` findings and no commit on the branch is newer than the report | `atk:implement "address the BLOCKING findings in <report path>"` | A second `atk:review`, which would report the same findings |
@@ -89,8 +99,8 @@ changes nothing, and the skill would stop again.
 ## Waiting on people
 
 Collected in state mode whatever row matched: every gating artifact whose `status` is `DRAFT` or
-`IN REVIEW`, every plan at `IN REVIEW`, and every test run record at `IN REVIEW`, with its path, its
-status, and its `approver`.
+`IN REVIEW`, every plan at `IN REVIEW`, every test run record at `IN REVIEW`, and every
+`atk:orchestrate` proposal record at `DRAFT`, with its path, its status, and its `approver`.
 
 At most ten lines, newest `updated` first. A list longer than that is a finding in itself: say how
 many more there are rather than printing them.

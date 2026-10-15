@@ -69,7 +69,8 @@ reference document has no room for the option that lost. The question comes back
 a newcomer proposes the approach a design already rejected for a reason nobody can now name; a
 client asks what shipped in version 1.4.2; an auditor asks for the postmortem and the follow-up
 actions; the person who handed over left six months ago and their handover file was the only thing
-that survived them.
+that survived them; a branch nobody remembers opening came from a client request, and only the
+orchestration proposal that ran it says which.
 
 **Derived.** Nothing, apart from the progress log and the run traces below. The implementation record and the shipping
 record are copies of what lives on the pull request, a feedback record is a copy of what was filed
@@ -85,12 +86,14 @@ them. Screenshots in its `evidence/` directory wait there for the person who sta
 confirm them, are the only copy until then, and are never committed while they wait. Any of those
 review runs, made without a `--comment`, posts nothing to the pull request, so until it is rebuilt
 its report is the only written copy: a reason to keep the directory, not a reason to fear deleting
-it. The progress log that `atk:fix`, `atk:verify` and `atk:implement` write as they go is the ninth
-kind: deleting one costs the ruled-out work, which the next run does again from zero. The run trace
+it. The progress log that `atk:fix`, `atk:verify`, `atk:implement` and `atk:orchestrate` write as
+they go is the ninth kind, with the job result files `atk:orchestrate` keeps under the same path in each job's worktree and copies beside its own: deleting
+one costs the ruled-out work, which the next run does again from zero, and for `atk:orchestrate` the
+record of which job of which piece had reached where. The run trace
 every skill leaves under `docs/derived/traces/<skill>/`, unless the profile says `Run trace: off`,
 is the tenth: never staged, trimmed to twenty per skill only when `atk:tailor --feedback --runs`
 offers it and a person says yes, and read only to improve a skill, so deleting
-one costs that evidence and nothing downstream. Nine skills read one of the ten. Those three each read their own newest unfinished log before starting, and
+one costs that evidence and nothing downstream. Ten skills read one of the ten. Those four each read their own newest unfinished log before starting, and
 offer to resume it, asking first when its branch or start commit no longer matches. `atk:run-cases`
 reads the run log of an earlier run of the same cases file, to offer the cases that run deferred and
 to name data it created with no record after it; where that run wrote a record, the record lists the

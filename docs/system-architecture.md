@@ -17,7 +17,7 @@ aiteamkit/
     .claude-plugin/     plugin.json                        Claude Code
     .cursor-plugin/     plugin.json                        Cursor
     .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-    skills/<name>/SKILL.md        24 skills, one folder each
+    skills/<name>/SKILL.md        25 skills, one folder each
     skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
     skills/<name>/references/*.tsv a list one reference file governs, one record per line
     skills/<name>/evals/*.json    trigger cases for the description
@@ -65,7 +65,7 @@ flowchart TD
     MK["marketplace files at the root<br/><small>one per harness, each pointing at plugins/atk and plugins/atkx</small>"] --> CP
     MK --> UP
     MK --> XP
-    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>24 folders, one SKILL.md each</small>"]
+    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>25 folders, one SKILL.md each</small>"]
     UP["plugins/atk/.cursor-plugin/plugin.json"] --> SK
     XP["plugins/atk/.codex-plugin/plugin.json<br/><small>+ interface block</small>"] --> SK
     SK --> SH["plugins/atk/shared/<br/><small>cited by the skills that need it</small>"]
@@ -100,7 +100,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for every installed skill: the 24 of `atk`, and `atkx`'s when it is installed | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for every installed skill: the 25 of `atk`, and `atkx`'s when it is installed | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
@@ -125,7 +125,7 @@ On both, the prompts in `references/` remain the route.
 
 ## The `shared/` layer
 
-Twenty-one files hold what skills would otherwise repeat. The first three are cited by all 24:
+Twenty-one files hold what skills would otherwise repeat. The first three are cited by all 25:
 
 - `plugins/atk/shared/team-roles.md`: the role table and the ten rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -162,7 +162,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   repositories is carried in. `atk:git` is what carries it out; this file
   stays the contract, which is what lets the code-changing skills and the artifact-writing ones
   close the same way. Cited by `atk:fix`, `atk:implement` and `atk:verify`, which hand off to
-  `atk:git`, by `atk:plan`, `atk:tailor` and `atk:qa` for the consent line alone, and by every skill that
+  `atk:git`, by `atk:plan`, `atk:tailor` and `atk:qa` for the consent line alone, by `atk:orchestrate` for the consent line
+  and the branch rule, and by every skill that
   writes an artifact for the section about a change that produced only a document. Nothing leaves
   the local repository without being asked for.
 - `plugins/atk/shared/layer-verification.md`: the five-layer table saying what to run for a layer, what a pass
@@ -193,6 +194,11 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   kit's skills included.
   `plugins/atk/shared/design-sources.md` cites it for naming the Figma connection by what it does,
   and `plugins/atk/shared/independent-challenge.md` for the read-only agents a challenge spawns.
+  Its section on agents that write is cited by `atk:orchestrate`, the one skill that runs other
+  skills as jobs: the job's worktree as the boundary that is never widened, a terminal multiplexer
+  named by what it does like browser automation, a gate relayed to its person and never answered,
+  and every commit left to the calling skill, so the kit's first agent that edits is bound by a rule
+  written once.
 - `plugins/atk/shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one
@@ -203,7 +209,7 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
 - `plugins/atk/shared/review-fix-loop.md`: the loop that runs `atk:review` on a skill's own change before a
   person reads it, the severities it fixes, a disputed finding, the two-round ceiling and the
   escalation by name, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
-  `atk:fix`: the verification of both asks whether the change works, and neither reads the diff for
+  `atk:fix`, and by `atk:orchestrate`, which runs it on the code jobs it commits: the verification of each asks whether the change works, and neither reads the diff for
   what it newly claims, which is what a review finds.
 
 - `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is
@@ -253,16 +259,16 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
 - `plugins/atk/shared/secret-scan.md`: the secret scan, one `sh` block in four modes, and its table of
   paths that are a finding on their own, which is also the list of files rule 9 keeps unread. Cited
   by `atk:git` to read a diff and to scan what it stages, by `atk:security` over every tracked file,
-  by `host-capabilities.md` for the masked diff every agent the kit spawns reads, on every harness,
+  by `host-capabilities.md` for the masked diff every read-only agent the kit spawns reads, on every harness,
   by `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` and `atk:help` for a diff read in the session,
   and by rule 9 in `team-roles.md` and the prompts that quote its table. It
   lived in `atk:git`'s references until those other readers made it a contract between several
   skills.
 - `plugins/atk/shared/state-signals.md`: which artifacts gate the next skill while they wait for
   approval, the evidence on disk that names that skill, in the order to check it, and how the
-  artifacts waiting on a person are collected. Its only citer is `atk:help` until
-  `atk:orchestrate` arrives, which reads the same rows to judge how far each piece of work has
-  come; it moved out of `atk:help`'s references so the two read one list rather than two.
+  artifacts waiting on a person are collected. Cited by `atk:help` for the project in hand and by
+  `atk:orchestrate` once per piece of work, read in that piece's own worktree; it moved out of
+  `atk:help`'s references so the two read one list rather than two.
 
 The last two describe files that do not ship with the kit at all:
 

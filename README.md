@@ -1,6 +1,6 @@
 # AI Team Kit (`atk`)
 
-Twenty-four skills covering the software delivery lifecycle of a **company project team**. Every skill
+Twenty-five skills covering the software delivery lifecycle of a **company project team**. Every skill
 assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read
 by someone who was not in the conversation that produced them. Those are roles rather than a
 headcount: a solo developer holding all of them gets the same gates, and still gives each approval
@@ -44,7 +44,9 @@ flowchart TD
 Four skills answer an event rather than a phase: `fix` when a defect is reported, at any point;
 `security` on a schedule, or before or after a release; `onboard` when someone joins; `handover`
 when someone leaves or a phase ends. `help` answers a
-question instead: which of the others to run, read from the state of the project.
+question instead: which of the others to run, read from the state of the project. `orchestrate`
+carries several pieces of work through the phases at once, running the others as jobs once a person
+approves its proposal.
 
 How the phases map to roles and approval gates: [docs/flow/project-flow.md](docs/flow/project-flow.md)
 ([Tiếng Việt](docs/vi/flow/project-flow.md)). What each skill consumes and produces:
@@ -62,6 +64,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | Skill | What it produces |
 |-------|------------------|
 | `atk:help` | No file but the run trace: the skill to run next with the line to type, the evidence in the project behind it, what that skill needs first, who approves what it produces, and what is still waiting on a named approver. Also routes a question to one skill, an `atkx` one with its install line where no `atk` skill handles it, or explains one skill. |
+| `atk:orchestrate` | A proposal record at `docs/records/orchestration/`: for each piece of work, from a raw request to a ready plan, the `atk` jobs it still needs, with the agent, the way it runs, and who answers it. Once a person approves, the jobs run side by side, each piece in its own worktree, every question and approval relayed to the person it is for, and code ending at a local commit with an `atk:review` report. |
 | `atk:init` | The project profile at `.atk/profile.md`: commands, layer layout, docs roots, tracker, and who approves what, detected from the repository first and asked about only where no file answers. |
 | `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
 | `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
@@ -92,6 +95,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 
 ```bash
 /atk:help [question|skill]                # --lang
+/atk:orchestrate [requests|tickets|paths] # --concurrency --sequential --resume
 /atk:init                                 # --audit --lang --out
 /atk:tailor [<skill>]                     # --audit --feedback --runs --since --out
 /atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out

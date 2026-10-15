@@ -17,7 +17,7 @@ aiteamkit/
     .claude-plugin/     plugin.json                        Claude Code
     .cursor-plugin/     plugin.json                        Cursor
     .codex-plugin/      plugin.json (+ khối interface)     OpenAI Codex CLI
-    skills/<name>/SKILL.md        24 skill, mỗi skill một thư mục
+    skills/<name>/SKILL.md        25 skill, mỗi skill một thư mục
     skills/<name>/references/*.md chi tiết nạp trễ: template, checklist, playbook
     skills/<name>/references/*.tsv danh sách do một file tham chiếu quản, mỗi dòng một bản ghi
     skills/<name>/evals/*.json    bộ case kiểm trigger của description
@@ -64,7 +64,7 @@ flowchart TD
     MK["các file marketplace ở gốc<br/><small>mỗi harness một file, đều trỏ tới plugins/atk và plugins/atkx</small>"] --> CP
     MK --> UP
     MK --> XP
-    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>24 thư mục, mỗi thư mục một SKILL.md</small>"]
+    CP["plugins/atk/.claude-plugin/plugin.json"] --> SK["plugins/atk/skills/<br/><small>25 thư mục, mỗi thư mục một SKILL.md</small>"]
     UP["plugins/atk/.cursor-plugin/plugin.json"] --> SK
     XP["plugins/atk/.codex-plugin/plugin.json<br/><small>+ khối interface</small>"] --> SK
     SK --> SH["plugins/atk/shared/<br/><small>chỉ skill nào cần thì trích dẫn</small>"]
@@ -99,7 +99,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 
 | Lớp | Nạp khi nào | Ngân sách |
 |-----|-------------|-----------|
-| frontmatter `description` | Luôn luôn, cho mọi skill đã cài: 24 skill của `atk`, và skill của `atkx` khi đã cài plugin này | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
+| frontmatter `description` | Luôn luôn, cho mọi skill đã cài: 25 skill của `atk`, và skill của `atkx` khi đã cài plugin này | Vài dòng; trigger chỉ đặt ở đây, không đặt chỗ khác |
 | thân `SKILL.md` | Khi skill được gọi | Dưới 300 dòng |
 | `references/*.md` | Chỉ khi một bước trong workflow mở nó | Không giới hạn, nằm ngoài đường đi mặc định |
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
@@ -124,7 +124,7 @@ họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` v
 
 ## Lớp `shared/`
 
-Hai mươi mốt file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
+Hai mươi mốt file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 25 skill trích dẫn:
 
 - `plugins/atk/shared/team-roles.md`: bảng vai trò và mười nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -159,7 +159,8 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   trên nhiều repository. `atk:git` là thứ thi hành nó; file này
   vẫn là hợp đồng, và chính điều đó khiến nhóm skill sửa mã với nhóm skill viết tài liệu khép lại
   theo cùng một đường. Được `atk:fix`, `atk:implement` và `atk:verify` trích dẫn, ba skill giao việc
-  cho `atk:git`; được `atk:plan`, `atk:tailor` và `atk:qa` trích riêng phần ranh giới xin phép; và được mọi
+  cho `atk:git`; được `atk:plan`, `atk:tailor` và `atk:qa` trích riêng phần ranh giới xin phép; được `atk:orchestrate`
+  trích phần ranh giới xin phép và quy tắc đặt tên nhánh; và được mọi
   skill sinh artifact trích phần nói về thay đổi chỉ tạo ra một tài liệu. Không gì rời khỏi repo cục
   bộ mà chưa được hỏi.
 - `plugins/atk/shared/layer-verification.md`: bảng năm tầng, nói chạy gì cho một tầng, một lượt chạy đạt chứng
@@ -192,6 +193,12 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   các skill của kit đi kèm. `plugins/atk/shared/design-sources.md` trích dẫn nó để gọi kết nối Figma
   theo việc kết nối đó làm, và `plugins/atk/shared/independent-challenge.md` trích dẫn nó cho các
   agent chỉ đọc mà một lượt phản biện tạo ra.
+  Mục về agent có quyền ghi được `atk:orchestrate` trích dẫn, skill duy nhất chạy các skill khác
+  thành từng job. Mục này giữ bốn điều: worktree của job là ranh giới không bao giờ được nới rộng;
+  công cụ chia màn hình dòng lệnh được gọi theo việc nó làm, giống tự động hoá trình duyệt; một cổng
+  duyệt được chuyển tới đúng người và không bao giờ được trả lời thay; và mọi commit đều do skill gọi
+  job thực hiện. Nhờ
+  vậy agent đầu tiên của kit có quyền sửa file bị ràng buộc bởi một quy tắc chỉ viết một lần.
 - `plugins/atk/shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
   phần không bao giờ đụng tới. Cùng ba skill sửa mã đó trích dẫn, thông qua `host-capabilities.md`.
   Nó tồn tại để bước dọn mã cho ra cùng một kết quả trên harness có sẵn khả năng dọn và trên harness
@@ -202,7 +209,7 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
 - `plugins/atk/shared/review-fix-loop.md`: vòng chạy `atk:review` trên chính thay đổi của một skill trước khi
   một người đọc nó, những mức độ được sửa, một phát hiện bị phản đối, trần hai vòng và chuyển lên
   người có tên, cùng dòng mà `--no-review` để lại trong bản ghi. `atk:implement` và `atk:fix` trích
-  dẫn nó: phần kiểm chứng của cả hai chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
+  dẫn nó, `atk:orchestrate` cũng vậy cho các job viết mã mà nó commit: phần kiểm chứng của mỗi skill chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
   xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra.
 
 - `plugins/atk/shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
@@ -252,16 +259,16 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
 - `plugins/atk/shared/secret-scan.md`: phần quét giá trị bí mật, một khối `sh` với bốn chế độ, cùng
   bảng những đường dẫn tự nó đã là phát hiện, cũng chính là danh sách file mà nguyên tắc 9 giữ không
   đọc. `atk:git` trích dẫn file này để đọc diff và quét những gì nó stage, `atk:security` dùng nó trên
-  mọi file đã track, `host-capabilities.md` dùng nó cho bản diff đã che mà mọi agent do kit sinh ra
-  đều đọc, trên mọi harness. `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` và `atk:help` dùng nó
+  mọi file đã track, `host-capabilities.md` dùng nó cho bản diff đã che mà mọi agent chỉ đọc do kit
+  sinh ra đều đọc, trên mọi harness. `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` và `atk:help` dùng nó
   cho diff đọc ngay trong phiên, còn nguyên tắc 9 trong `team-roles.md` và các prompt trích bảng của
   nó lấy danh sách file từ đây. File từng nằm trong references của `atk:git`, cho tới khi những nơi đọc
   khác biến nó thành hợp đồng giữa nhiều skill.
 - `plugins/atk/shared/state-signals.md`: những artifact nào chặn skill tiếp theo khi còn chờ duyệt,
   những bằng chứng trên đĩa gọi tên skill đó, theo thứ tự cần kiểm, và cách gom các artifact đang
-  chờ một người. Cho tới khi có `atk:orchestrate`, chỉ `atk:help` trích dẫn file này; skill mới sẽ
-  đọc cùng các dòng đó để biết mỗi phần việc đã đi tới đâu. File được chuyển ra khỏi references
-  của `atk:help` để hai skill đọc chung một danh sách thay vì hai.
+  chờ một người. `atk:help` trích dẫn file này cho dự án đang làm, còn `atk:orchestrate` đọc nó một
+  lần cho mỗi phần việc, ngay trong worktree mà phần việc ấy có riêng. File được chuyển ra khỏi
+  references của `atk:help` để hai skill đọc chung một danh sách thay vì hai.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

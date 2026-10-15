@@ -4,9 +4,13 @@ The loop that runs the team review against a skill's own change, and the ceiling
 hiding a design problem under patches. Referenced from `skills/<name>/SKILL.md` as
 `shared/review-fix-loop.md`, which is `../../shared/review-fix-loop.md` relative to a skill file.
 
-Cited by `implement` and `fix`, each once its change is written, verified, and tidied. Each keeps its
-own verification step and its own record; where this file says "the record" and "the verification",
-it means the calling skill's.
+Cited by `implement` and `fix`, each once its change is written, verified, and tidied, and by
+`orchestrate`, which runs the loop on each code job it has committed, the jobs run with `--no-review`.
+Each keeps its own verification step and its own record; where this file says "the record" and "the
+verification", it means the calling skill's. For `orchestrate` they are the implementation record
+the code job wrote into the run directory, or, for an `atk:fix` job whose fix report is already
+committed, the run state, never a committed file; either names the coordinator's review reports.
+The verification is that job's own, re-run by each fix job.
 
 Nothing here defines what a review looks for or how severe a finding is. `atk:review` owns the
 checklist, the severity scale, and the breadth, and it reads the project's rules through
@@ -116,7 +120,9 @@ the skill has already answered.
 ## Re-verify after each round
 
 Every round of fixes goes back through the calling skill's verification step before the review is
-called again, and for `atk:fix` the captured reproduction is re-run with it. Not the full order every time: the narrowest check covering what the fix touched, the layer,
+called again, and for `atk:fix` the captured reproduction is re-run with it, by `orchestrate`'s fix
+job too, whose prompt names the fix report that holds it. Not the full order every time: the
+narrowest check covering what the fix touched, the layer,
 and the blast radius if the fix widened it.
 
 Fixes made after the last call are reviewed only by the person. The record marks each as fixed and
@@ -165,7 +171,9 @@ real side effects, and `shared/finalize-steps.md` holds the rule about acting on
 ## Under `--no-review`
 
 The loop does not run. The record says so in its own line: that the review was skipped, that the
-change is unreviewed, and who must review it before merge.
+change is unreviewed, and who must review it before merge. Where the caller reviews the change
+itself, as `orchestrate` does for its jobs, that caller adds the path of its review report beside the
+line.
 
 The flag exists for the case where a review is already arranged through another route, not as a way
 to move faster. A skipped review that leaves no trace is indistinguishable from one that was
