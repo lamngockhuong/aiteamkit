@@ -104,7 +104,7 @@ and only read:
   `approver`, `updated`, `ticket`. The body is not needed to know what comes next.
 - **The plans.** The index `plan.md` of each directory under `plans/`, front matter only.
 - **The progress logs.** The first and last line of each `progress.md` under
-  `<docs root>/derived/<skill>/`, for `fix`, `verify` and `implement`, per Progress log in
+  `<docs root>/derived/<skill>/`, for `fix`, `verify`, `implement` and `orchestrate`, per Progress log in
   `shared/artifact-paths.md`. A log has no front matter; those two lines are what row 5 of
   `shared/state-signals.md` reads.
 - **The conventions.** Where the project keeps them, resolved per `shared/review-checklist.md`,
