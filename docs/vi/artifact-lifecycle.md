@@ -69,7 +69,9 @@ thời.
 tài liệu tham chiếu thì không có chỗ cho phương án đã thua. Câu hỏi quay lại dưới những hình thức
 rất cụ thể: người mới đề xuất đúng cách làm mà một thiết kế cũ đã loại vì một lý do giờ không ai gọi
 tên được; khách hàng hỏi bản 1.4.2 có những gì; bên kiểm toán hỏi biên bản sự cố và các hành động
-khắc phục; người bàn giao đã đi sáu tháng trước và file bàn giao là thứ duy nhất còn lại.
+khắc phục; người bàn giao đã đi sáu tháng trước và file bàn giao là thứ duy nhất còn lại; một nhánh
+không ai nhớ đã mở đến từ một yêu cầu của khách, và chỉ bản đề xuất điều phối đã chạy nó mới cho
+biết là yêu cầu nào.
 
 **Dẫn xuất.** Không mất gì, trừ progress log và run trace nói ở dưới. Bản ghi triển khai và bản ghi chuyển giao
 đều là bản sao của thứ nằm trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi lên repo
@@ -84,12 +86,14 @@ có thể đã để lại trên môi trường, nên giữ cả hai cho tới k
 `evidence/` của lần chạy ấy chờ người khởi động lần chạy xác nhận, là bản duy nhất cho tới lúc đó,
 và không bao giờ được commit khi còn chờ. Các lượt review ấy, khi chạy mà không kèm `--comment`, đều
 không đăng gì lên pull request, nên tới khi chạy lại, báo cáo của nó là bản viết duy nhất: đó là lý
-do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà `atk:fix`, `atk:verify` và
-`atk:implement` ghi dần trong lúc chạy là loại thứ chín: xóa nó thì mất phần việc đã loại trừ, và
-lần chạy sau làm lại từ đầu. Run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/`, trừ
+do nên giữ thư mục, không phải lý do để sợ xóa. Progress log mà `atk:fix`, `atk:verify`,
+`atk:implement` và `atk:orchestrate` ghi dần trong lúc chạy là loại thứ chín, cùng các file kết quả
+job mà `atk:orchestrate` giữ bên cạnh log của nó: xóa nó thì mất phần việc đã loại trừ, và lần chạy
+sau làm lại từ đầu, còn với `atk:orchestrate` thì mất luôn ghi chép job nào của phần việc nào đã đi
+tới đâu. Run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/`, trừ
 khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ được stage, mỗi skill chỉ bị cắt về hai mươi trace khi
 `atk:tailor --feedback --runs` đề nghị và có người đồng ý, và chỉ được đọc để cải thiện skill, nên xóa một trace thì mất phần bằng chứng ấy và không ảnh
-hưởng gì phía sau. Có chín skill đọc một trong mười loại. Ba skill ấy, trước khi bắt đầu,
+hưởng gì phía sau. Có mười skill đọc một trong mười loại. Bốn skill ấy, trước khi bắt đầu,
 mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
 trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
 chạy trước trên cùng file test case, để đề nghị chạy tiếp những case lần đó đã hoãn và để nêu dữ

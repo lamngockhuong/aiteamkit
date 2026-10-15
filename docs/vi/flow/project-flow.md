@@ -1,6 +1,6 @@
 # Luồng dự án
 
-24 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
+25 skill rơi vào chu trình bàn giao của một đội như thế nào: skill nào thuộc pha nào, ai viết ra
 artifact của nó, và ai phải chấp nhận artifact đó trước khi pha sau bắt đầu.
 
 Tài liệu đi kèm: [skill-chain.md](./skill-chain.md) cho biết mỗi skill ăn vào gì và đẻ ra gì,
@@ -128,6 +128,7 @@ flowchart TD
 
 | Pha | Skill | Người viết | Người chấp nhận | Trạng thái artifact tại cửa duyệt |
 |-----|-------|------------|-----------------|------------------------------------|
+| Pha bất kỳ, nhiều phần việc cùng lúc | `atk:orchestrate` | Dev hoặc TL, người chạy nó | TL, trên từng bản đề xuất; mọi artifact do một job viết ra vẫn giữ người duyệt của chính nó | `DRAFT` sang `APPROVED`, mỗi lần duyệt một bản ghi |
 | 0. Thiết lập | `atk:init` | Dev hoặc TL, PM lo phần tracker và đội | TL, trước khi profile thôi là bản nháp; trong lúc chờ, các skill nó mở khóa vẫn chạy | `DRAFT` sang `APPROVED`, được commit ở `DRAFT` trừ khi hình dạng `workspace` không có repository nào để commit vào |
 | 0. Thiết lập | `atk:tailor` | TL, hoặc ai sở hữu thứ skill đó sinh ra | Vai sở hữu kết quả của skill được tùy biến | `IN REVIEW` sang `APPROVED` |
 | 1. Yêu cầu | `atk:intake` | BrSE/BA | Stakeholder, về phạm vi và tiêu chí | `IN REVIEW` sang `APPROVED` |
@@ -159,8 +160,8 @@ và viết bằng tiếng Anh. Các cột của bảng được gom từ mục `
 
 ## Nằm ngoài chu trình
 
-Bốn skill đáp lại một sự kiện chứ không thuộc pha nào, và một skill đáp lại một câu hỏi. Cả năm đều có
-thể chạy ở bất kỳ điểm nào bên trên.
+Bốn skill đáp lại một sự kiện chứ không thuộc pha nào, một skill đáp lại một câu hỏi, và một skill đưa
+nhiều phần việc đi qua các pha cùng lúc. Cả sáu đều có thể chạy ở bất kỳ điểm nào bên trên.
 
 ```mermaid
 flowchart LR
@@ -169,11 +170,16 @@ flowchart LR
     X5["Có người rời đi,<br/>hoặc một pha khép lại"] --> X6["atk:handover<br/><small>người nhận kiểm lại rồi mới ký</small>"]
     X7["Không chắc bước<br/>tiếp theo là gì"] --> X8["atk:help<br/><small>đọc dự án, gọi tên một skill</small>"]
     X9["Đến kỳ rà soát bảo mật"] --> X10["atk:security<br/><small>quét codebase hiện tại</small>"]
+    X11["Nhiều phần việc<br/>cần đi cùng lúc"] --> X12["atk:orchestrate<br/><small>đề xuất các job, chuyển mọi cổng duyệt tới đúng người</small>"]
 ```
 
 `atk:help` không có cửa kiểm soát và không có người duyệt, vì nó không viết artifact nào. Thay vào
 đó nó đọc các cửa kiểm soát bên trên: một artifact còn ở `IN REVIEW` được báo là đang chờ người duyệt
 của nó, không bao giờ được báo là đã sẵn sàng cho pha kế tiếp.
+
+`atk:orchestrate` có đúng một cửa duyệt của riêng nó, là bản đề xuất mà TL duyệt trước khi bất kỳ job
+nào chạy, và không thêm cửa nào vào chu trình: mỗi job là một skill ở trên, và mỗi artifact job đó
+viết ra chờ ở cửa duyệt đã vẽ cho skill ấy, đúng người duyệt được nêu ở đó.
 
 `atk:fix` là skill duy nhất thò tay ngược vào chu trình: lỗi bắt ở pha 6 thì sửa xong quay lại pha 6,
 còn lỗi lộ ra sau khi phát hành thì mở thẳng pha 8.

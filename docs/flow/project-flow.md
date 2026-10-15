@@ -1,6 +1,6 @@
 # Project Flow
 
-How the 24 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
+How the 25 skills fall into a team's delivery cycle: which phase each one belongs to, who authors
 its artifact, and who has to accept it before the next phase starts.
 
 Companion documents: [skill-chain.md](./skill-chain.md) for what each skill consumes and produces,
@@ -127,6 +127,7 @@ flowchart TD
 
 | Phase | Skill | Author | Accepted by | Artifact state at the gate |
 |-------|-------|--------|-------------|-----------------------------|
+| Any phase, several pieces at once | `atk:orchestrate` | Dev or TL, whoever runs it | TL, on each proposal record; every artifact a job writes keeps its own approver | `DRAFT` to `APPROVED`, one record per approval |
 | 0. Setup | `atk:init` | Dev or TL, with PM on the tracker and team sections | TL, before the profile stops being a draft; the skills it unblocks run meanwhile | `DRAFT` to `APPROVED`, committed at `DRAFT` unless a `workspace` shape leaves no repository to commit it to |
 | 0. Setup | `atk:tailor` | TL, or whoever owns the skill's output | The role that owns what the tailored skill produces | `IN REVIEW` to `APPROVED` |
 | 1. Requirement | `atk:intake` | BrSE/BA | Stakeholder, on scope and criteria | `IN REVIEW` to `APPROVED` |
@@ -158,8 +159,8 @@ and is written in English. Its columns are collected from each skill's own `## R
 
 ## Outside the cycle
 
-Four skills answer an event rather than a phase, and one answers a question. All five can fire at
-any point above.
+Four skills answer an event rather than a phase, one answers a question, and one carries several
+pieces of work through the phases at once. All six can fire at any point above.
 
 ```mermaid
 flowchart LR
@@ -168,11 +169,16 @@ flowchart LR
     X5["Someone leaves,<br/>or a phase ends"] --> X6["atk:handover<br/><small>receiver validates before signing</small>"]
     X7["Not sure what<br/>comes next"] --> X8["atk:help<br/><small>reads the project, names one skill</small>"]
     X9["Scheduled security review"] --> X10["atk:security<br/><small>scans the codebase as it stands</small>"]
+    X11["Several pieces of work<br/>to move at once"] --> X12["atk:orchestrate<br/><small>proposes the jobs, relays every gate</small>"]
 ```
 
 `atk:help` has no gate and no approver, because it writes no artifact. It reads the gates above
 instead: an artifact still `IN REVIEW` is reported as waiting on its approver, never as ready for the
 next phase.
+
+`atk:orchestrate` has one gate of its own, the proposal record the TL approves before any job
+runs, and adds none to the cycle: each job is a skill above, and each artifact it writes waits at
+the gate drawn for that skill, for the approver named there.
 
 `atk:fix` is the one that reaches back into the cycle: a defect found in phase 6 returns to phase 6
 after the fix, and one found after release opens phase 8 instead.

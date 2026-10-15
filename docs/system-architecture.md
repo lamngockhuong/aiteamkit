@@ -17,7 +17,7 @@ aiteamkit/
     .claude-plugin/     plugin.json                        Claude Code
     .cursor-plugin/     plugin.json                        Cursor
     .codex-plugin/      plugin.json (+ interface block)    OpenAI Codex CLI
-    skills/<name>/SKILL.md        24 skills, one folder each
+    skills/<name>/SKILL.md        25 skills, one folder each
     skills/<name>/references/*.md lazily loaded detail: templates, checklists, playbooks
     skills/<name>/references/*.tsv a list one reference file governs, one record per line
     skills/<name>/evals/*.json    trigger cases for the description
@@ -100,7 +100,7 @@ This produces the size discipline in the kit:
 
 | Layer | When it loads | Budget |
 |-------|---------------|--------|
-| `description` frontmatter | Always, for every installed skill: the 24 of `atk`, and `atkx`'s when it is installed | A few lines; triggers belong here and nowhere else |
+| `description` frontmatter | Always, for every installed skill: the 25 of `atk`, and `atkx`'s when it is installed | A few lines; triggers belong here and nowhere else |
 | `SKILL.md` body | On invocation | Under 300 lines |
 | `references/*.md` | Only when a workflow step opens it | Unbounded, kept out of the default path |
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
@@ -125,7 +125,7 @@ On both, the prompts in `references/` remain the route.
 
 ## The `shared/` layer
 
-Twenty-one files hold what skills would otherwise repeat. The first three are cited by all 24:
+Twenty-one files hold what skills would otherwise repeat. The first three are cited by all 25:
 
 - `plugins/atk/shared/team-roles.md`: the role table and the ten rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -193,6 +193,10 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   kit's skills included.
   `plugins/atk/shared/design-sources.md` cites it for naming the Figma connection by what it does,
   and `plugins/atk/shared/independent-challenge.md` for the read-only agents a challenge spawns.
+  Its section on agents that write is cited by `atk:orchestrate`, the one skill that runs other
+  skills as jobs: the job's worktree as the boundary that is never widened, a terminal multiplexer
+  named by what it does like browser automation, a gate relayed to its person and never answered,
+  and the commit check, so the kit's first agent that edits is bound by a rule written once.
 - `plugins/atk/shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
   and what is never touched. Cited by the same three code skills through `host-capabilities.md`. It
   exists so the step lands the same way on a harness that ships a clean-up capability and on one
@@ -260,9 +264,9 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   skills.
 - `plugins/atk/shared/state-signals.md`: which artifacts gate the next skill while they wait for
   approval, the evidence on disk that names that skill, in the order to check it, and how the
-  artifacts waiting on a person are collected. Its only citer is `atk:help` until
-  `atk:orchestrate` arrives, which reads the same rows to judge how far each piece of work has
-  come; it moved out of `atk:help`'s references so the two read one list rather than two.
+  artifacts waiting on a person are collected. Cited by `atk:help` for the project in hand and by
+  `atk:orchestrate` once per piece of work, read in that piece's own worktree; it moved out of
+  `atk:help`'s references so the two read one list rather than two.
 
 The last two describe files that do not ship with the kit at all:
 
