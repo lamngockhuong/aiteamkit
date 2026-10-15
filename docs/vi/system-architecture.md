@@ -124,7 +124,7 @@ họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` v
 
 ## Lớp `shared/`
 
-Hai mươi file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
+Hai mươi mốt file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 24 skill trích dẫn:
 
 - `plugins/atk/shared/team-roles.md`: bảng vai trò và mười nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -144,7 +144,7 @@ nguyên tắc 10 của `team-roles.md` đòi hỏi:
   subagent hay trong CLI của agent khác, vẫn đọc lại được về sau, và chỉ `atk:tailor --feedback` mới
   đánh giá một trace có ý nghĩa gì.
 
-Mười bốn file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `plugins/atk/shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -257,6 +257,11 @@ Mười bốn file tiếp theo là hợp đồng giữa một nhóm skill có t�
   cho diff đọc ngay trong phiên, còn nguyên tắc 9 trong `team-roles.md` và các prompt trích bảng của
   nó lấy danh sách file từ đây. File từng nằm trong references của `atk:git`, cho tới khi những nơi đọc
   khác biến nó thành hợp đồng giữa nhiều skill.
+- `plugins/atk/shared/state-signals.md`: những artifact nào chặn skill tiếp theo khi còn chờ duyệt,
+  những bằng chứng trên đĩa gọi tên skill đó, theo thứ tự cần kiểm, và cách gom các artifact đang
+  chờ một người. Cho tới khi có `atk:orchestrate`, chỉ `atk:help` trích dẫn file này; skill mới sẽ
+  đọc cùng các dòng đó để biết mỗi phần việc đã đi tới đâu. File được chuyển ra khỏi references
+  của `atk:help` để hai skill đọc chung một danh sách thay vì hai.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

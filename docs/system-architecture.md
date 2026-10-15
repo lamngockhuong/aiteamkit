@@ -125,7 +125,7 @@ On both, the prompts in `references/` remain the route.
 
 ## The `shared/` layer
 
-Twenty files hold what skills would otherwise repeat. The first three are cited by all 24:
+Twenty-one files hold what skills would otherwise repeat. The first three are cited by all 24:
 
 - `plugins/atk/shared/team-roles.md`: the role table and the ten rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -145,7 +145,7 @@ rule 10 of `team-roles.md` asks for:
   agent's CLI, can still be read afterwards, and `atk:tailor --feedback` is the only skill that
   judges what a trace means.
 
-Fourteen are contracts between a named handful of skills rather than kit-wide rules:
+Fifteen are contracts between a named handful of skills rather than kit-wide rules:
 
 - `plugins/atk/shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
@@ -258,6 +258,11 @@ Fourteen are contracts between a named handful of skills rather than kit-wide ru
   and by rule 9 in `team-roles.md` and the prompts that quote its table. It
   lived in `atk:git`'s references until those other readers made it a contract between several
   skills.
+- `plugins/atk/shared/state-signals.md`: which artifacts gate the next skill while they wait for
+  approval, the evidence on disk that names that skill, in the order to check it, and how the
+  artifacts waiting on a person are collected. Its only citer is `atk:help` until
+  `atk:orchestrate` arrives, which reads the same rows to judge how far each piece of work has
+  come; it moved out of `atk:help`'s references so the two read one list rather than two.
 
 The last two describe files that do not ship with the kit at all:
 

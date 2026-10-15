@@ -1,6 +1,10 @@
 # State signals
 
-Loaded by `atk:help` in step 4. What on disk says which skill comes next, in the order to check it.
+What on disk says which skill comes next, in the order to check it. Referenced from
+`skills/<name>/SKILL.md` as `shared/state-signals.md`, which is `../../shared/state-signals.md`
+relative to a skill file.
+
+Cited by `help`, which loads it in step 4 of its workflow.
 
 This file holds the one list `atk:help` keeps. What each skill does is read from the skills
 themselves, so a skill added to the kit needs a row here only when something on disk says it is the

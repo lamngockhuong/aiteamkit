@@ -106,7 +106,7 @@ and only read:
 - **The progress logs.** The first and last line of each `progress.md` under
   `<docs root>/derived/<skill>/`, for `fix`, `verify` and `implement`, per Progress log in
   `shared/artifact-paths.md`. A log has no front matter; those two lines are what row 5 of
-  `references/state-signals.md` reads.
+  `shared/state-signals.md` reads.
 - **The conventions.** Where the project keeps them, resolved per `shared/review-checklist.md`,
   and whether any are recorded there.
 - **The branch.** The current branch and the ticket its name or commits carry, uncommitted changes,
@@ -130,7 +130,7 @@ because `atk:fix` stops without one, and nothing else.
 
 ### 4. Match
 
-Load `references/state-signals.md`.
+Load `shared/state-signals.md`.
 
 - **State mode.** Walk the signal table in order and stop at the first signal that holds. That is
   the recommendation. Keep reading only to collect every artifact waiting on a person, for the

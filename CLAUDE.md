@@ -156,7 +156,7 @@ Anything narrower goes inside the step it belongs to.
 
 ## `shared/` is the DRY layer (beside `skills/`, not under it)
 
-Twenty files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
+Twenty-one files in `plugins/atk/shared/` hold what skills would otherwise repeat. They sit at the
 plugin root beside `skills/`, NOT under it, because a folder under `skills/` without a `SKILL.md` is
 ambiguous to the harnesses' skill discovery. The table names them as skills cite them, relative to
 `plugins/atk/`.
@@ -182,6 +182,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`) |
 | `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `spec`, `help`, `host-capabilities.md`, `team-roles.md`, `ticket-adapters.md`, `tidy-pass.md`, `review-rounds.md`, `independent-challenge.md`, `review-fix-loop.md`, `read-only-reviewer` (restated) |
 | `shared/review-fix-loop.md` | The loop that runs `atk:review` on a skill's own change before it reaches a person: what the call is given, which severities are fixed, a disputed finding, re-verifying each round, the two-round ceiling and the five-part escalation, and the line `--no-review` leaves | `implement`, `fix`, `artifact-paths.md`, `finalize-steps.md` |
+| `shared/state-signals.md` | Which artifacts gate the next skill while they wait for approval, the evidence on disk that names that skill, in the order to check it, and how the artifacts waiting on a person are collected | `help` |
 | `shared/run-trace.md` | The run trace every run leaves under `docs/derived/traces/<skill>/`: its path and `<run-id>`, the ignore file inside its directory and the check that must pass before it is written, the header with the `way` a run was started, the six event kinds and no others, what it never holds, the twenty kept per skill, which only `tailor --runs` removes and only on a yes, and that `Run trace: off` in the profile is the only switch | all, through the two lines at the top of every `## Workflow` that carry out rule 10 of `shared/team-roles.md`; `tailor` reads what it holds |
 
 Skills cite them as `shared/<file>.md`, which is `../../shared/<file>.md` relative to a `SKILL.md`.
@@ -466,7 +467,7 @@ Nothing generates these, so they drift silently. When adding, renaming, or remov
     table has none. `docs/flow/skill-lifecycle.md` and its mirror carry no table of all 24: they name
     skills as examples of each kind of edge, and count the `SKILL.md` files and the mentions between
     them, so a new skill changes those counts and, if it adds a kind of edge, the examples
-11. `plugins/atk/skills/help/references/state-signals.md`, if something on disk says the skill is the next one
+11. `plugins/atk/shared/state-signals.md`, if something on disk says the skill is the next one
     to run. A skill that answers an event a person reports has no row there, because nothing on
     disk announces the event
 12. The `skill: <name>` label on the GitHub repository and its entry in `.github/labeler.yml`,
@@ -502,7 +503,7 @@ writes no team artifact and sits in no delivery phase. Eight of the twelve group
 The other groups do not apply. The count of 24 is `atk`'s, and `package.json` carries it.
 `plugins/atk/shared/artifact-paths.md` and `docs/artifact-lifecycle.md` list team artifacts, which an
 `atkx` skill does not write. `plugins/atk/skills/init/references/role-defaults.md`, the tables in
-`docs/flow/`, and `plugins/atk/skills/help/references/state-signals.md` place skills in delivery
+`docs/flow/`, and `plugins/atk/shared/state-signals.md` place skills in delivery
 phases. And no file under `plugins/atk/` other than those of `atk:help` may name `atkx`, per
 `CONV-011`.
 
