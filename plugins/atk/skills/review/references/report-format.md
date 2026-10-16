@@ -27,7 +27,9 @@ the same target, per `## Output` of `SKILL.md`: the newest named after that targ
 the minute means a re-review never lands on the earlier path. A second review of the same pull
 request is what the identifier was built for, and an author who was asked to fix `B1` has to find
 `B1` in the new report too. A finding still present keeps its number. A new one takes the next
-number above the highest that report used, never one left free by a finding since fixed.
+number above the highest that report used, never one left free by a finding since fixed. A range, a
+branch, a commit and a pull request are each a target of its own, as the report's name spells it:
+a review of one carries no identifier from a report on another.
 
 **On a pull request, the thread is an earlier report too.** The earlier review may have run on
 another machine, so its file is not here while its identifiers are on the thread. Read the reviews,
@@ -144,7 +146,7 @@ updated: YYYY-MM-DD
 ticket: <id or URL>
 ---
 
-# Review: <PR, branch, commit or paths>
+# Review: <PR, branch, commit, range or paths>
 
 <the change in one line> · base `<ref>` @ `<sha>` · head `<sha>` · author <handle>
 

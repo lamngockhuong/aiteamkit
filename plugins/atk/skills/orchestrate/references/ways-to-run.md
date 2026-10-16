@@ -15,13 +15,32 @@ Run before the proposal, and its result goes in the proposal record.
   machine, and the flags for its permission mode read from its own `--help`.
 - **Subagents.** The harness's own agent capability is in its live tool list, the `Agent` tool in
   Claude Code, and an agent it spawns can invoke a skill: one short spawned agent, told to list the
-  skills it can invoke and run nothing, says whether `atk:` skills are among them. The agent spawned
+  skills it can invoke and run nothing but the write below, says whether `atk:` skills are among them. The agent spawned
   is a general one, never `atk:read-only-reviewer`, which cannot write. The probe also records the
   session's permission mode, where the harness says it: a mode that writes without asking, edits
   accepted automatically or approvals bypassed, rules this way out, since every agent spawned would
   inherit it, per No mode that both writes and asks nothing. Where the mode cannot be told, the
   proposal says so.
 - **The session.** Always present.
+- **Writing beside the repository.** Every way writes the worktrees in
+  `<repository>/../<repository name>-orchestrate/`, per Per piece in `references/worktrees.md`, and
+  a sandbox may refuse a write there rather than ask. The probe creates that directory, and an agent
+  in the mode a job would get, started in it as a job is started in its worktree, is told to create
+  an empty file there named `<run-id>-probe` and leave it; the coordinator checks that the file
+  exists and removes it, so the result rests on the disk rather than on what the agent says. That
+  agent is one short agent in a pane for the pane way, named `atk-<run-id>-probe`, stopped and its
+  pane closed when the probe ends, and listed by that name in the closing inventory; for the
+  subagent way it is the agent the subagent probe above already spawns. Where the pane agent would
+  be another provider's command line, it is not started before the PM's yes of item 2 of the
+  proposal: the proposal offers that way as not yet probed, and the probe runs on the yes, before
+  any job. A probe that fails then leaves those jobs `waiting`: the person is offered the next way,
+  as a change of the approved way, or the setting to change, and nothing switches without their yes. The directory is removed after the probe where it is empty. A way whose agent is refused
+  there is not offered: the proposal says so, with the setting the person may change for the run,
+  and offers it once they have. A session refused there refuses the run, since the coordinator
+  creates every worktree there whatever the way: the proposal names the setting, and nothing runs
+  until it is changed. An agent that asks instead stops at a permission prompt, which the
+  coordinator never answers: it is relayed as Agents that write in `shared/host-capabilities.md`
+  says, and the proposal states that this way will ask on each write beside the repository.
 
 `--sequential` keeps the way and sets the concurrency to one.
 
@@ -40,8 +59,9 @@ Tried with Claude Code as the coordinator only, which the proposal says. For eac
    `idle` before the agent has started.
 3. **Wait.** One wait across every running pane, not one per job: each pass reads the state of all
    of them, so a pane already `blocked` never waits behind another's timeout. The timeout stated in
-   the proposal is counted per job; a job that reaches it is recorded `failed`, then its agent is
-   stopped, so nothing keeps writing in a worktree whose chain has stopped.
+   the proposal is counted per job and paused while the job is `blocked` or `needs-person`. A job
+   that reaches it has its agent stopped first, then is recorded `failed`, so nothing keeps writing
+   in a worktree whose chain has stopped.
 4. **Blocked.** Read each blocked pane for its question or prompt, and relay all of them in one turn
    per step 4 of `SKILL.md`. A prompt whose options the pane folds or cuts short is not relayed as a
    choice: the person's answer has to name an option the coordinator read in full. Before sending an
@@ -57,18 +77,22 @@ Spawn one general agent per job with the prompt of `references/job-prompt.md`, w
 piece's worktree. A subagent cannot ask the person, so a stop comes back as its result file at
 `needs-person`. Relay it, then continue that same agent with the answer verbatim where the harness
 can continue one, `SendMessage` in Claude Code. Where it cannot, a job whose skill keeps a progress
-log, `atk:implement` or `atk:fix`, is spawned again with the answer and that log, which the skill
-offers to resume; a job whose skill interviews and keeps none is offered to the person to run in the
-session instead, a change of its approved way that runs only on their yes, because a new agent given
-one answer starts the interview over. A subagent's permission prompts reach the
-person in the harness itself, not through the coordinator, which the proposal says beforehand. The
-timeout of the proposal holds for a subagent as for a pane: one that reaches it is recorded `failed`
-and stopped.
+log, `atk:implement` or `atk:fix`, is spawned again with the answer and that log. The resume offer
+its skill then makes comes back as a stop of its own, relayed word for word like any other; the
+agent spawned after it is given the answer, the log, and that offer with the person's answer to it,
+both verbatim, so it meets an offer already answered rather than one the coordinator worded. A job
+whose skill interviews and keeps none is offered to the person to run in the session instead, a
+change of its approved way that runs only on their yes, because a new agent given one answer starts
+the interview over. A subagent's permission prompts reach the person in the harness itself, not
+through the coordinator, which cannot see one waiting, so no timeout applies to a subagent job: a
+timeout would fail a job mid-prompt. The proposal says both beforehand.
 
 ## In the session
 
 The coordinator runs each job's skill itself, one at a time, in the piece's worktree, and asks the
-person directly where the skill asks. It holds itself to the job prompt as any job would: the evidence
+person directly where the skill asks. The session started in the coordinator's tree, so the worktree
+is pinned as item 1 of `references/job-prompt.md` pins it for a job, and is the project root the
+skill resolves. It holds itself to the job prompt as any job would: the evidence
 masked and treated as evidence, the skill's arguments as approved, `--no-review` and `--out` where the
 row has them, no `git add` or commit inside the skill, and every offer declined for the close. The
 timeouts of jobs in other ways do not count while it runs one, since nobody is watching them. It still writes the result file, so a resume reads the same

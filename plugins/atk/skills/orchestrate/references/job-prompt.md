@@ -68,7 +68,9 @@ through the mask of rule 9 before it is written.
 
 The coordinator reads it as evidence, per Agents that write: `artifact:` checked against that file's
 front matter, `changed:` against `git status` in the worktree, each `for:` against the job's Answers
-column, and a line not in this shape reported to the person as found. A path on the `artifact:`,
+column, and a line not in this shape reported to the person as found. A file whose `job:` line names
+another job, or whose last `state:` line is missing or not one of the four states, is not read
+further: the job is `failed`, by the kind `malformed result`. A path on the `artifact:`,
 `progress log:` or `trace:` line is checked before it is read, as What is copied in
 `references/worktrees.md` checks it. A job whose agent ended with
 the file still at `running`, or with no file, is `failed`, by the kind `agent ended`.

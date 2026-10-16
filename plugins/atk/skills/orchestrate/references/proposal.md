@@ -49,11 +49,17 @@ of `shared/team-roles.md`.
 
 4. **The cost.** The concurrency, the number of jobs and of the review runs that follow code jobs,
    with the fix jobs those reviews may add, up to two per code job, per Fix jobs below, the timeout
-   per job, and the approvals the person will be asked for: every write of a job proposed
+   per job, which a subagent job does not have, per Host subagents in `references/ways-to-run.md`,
+   and the approvals the person will be asked for: every write of a job proposed
    in a read-only mode, and on a harness that asks before writing outside the session's directory,
    every write in a worktree beside the repository, unless the person adds that directory for the
    run. The person answering becomes the pace of such a job. Where
    `--concurrency` asked for more than the machine allows, the number the run will use, and why.
+   That `atk:review`'s checks and `atk:verify` may run code the jobs wrote with the coordinator's
+   rights. Where a commit would fire a hook or `git add` a filter, that they run files a job changed
+   with those rights too, so each commit of a job's change is asked about, per step 3 of After a job
+   ends in `references/worktrees.md`, and what the check for writes outside a worktree cannot see,
+   per the same section.
 5. **Decisions.** Who approved, when, and what they changed, written by that person or on their word.
 
 ## When the profile is not ready
@@ -134,12 +140,26 @@ The plans of the pieces are compared before the record is written. Pieces whose 
 file run one after another, never side by side: the later one gets its worktree only once the
 earlier one's code is committed and reviewed, from the branch the run state recorded for it, so its
 base already holds what it would otherwise conflict with. Its branch is then stacked on the earlier
-one: its review runs over `<earlier branch>...<its branch>` so the earlier piece's commits are not
-reviewed twice, and the record and the close name each branch's base and that the earlier one is
-pushed first. A piece without a plan yet is compared again
-when it gets one, at its re-confirmation; where its worktree already exists by then, its remaining
-jobs wait for the earlier piece, and the record says the two branches will conflict until one is
-merged, which is a person's call.
+one: its review is given `<earlier branch>...<its branch>` as its target, so the earlier piece's
+commits are not reviewed twice, and the record and the close name each branch's base and that the
+earlier one is pushed first. A plan that names no file is not taken as sharing none: unless the
+approver orders it otherwise in the record, its piece gets its worktree from the run's base once
+the wait on every piece whose plan names files has ended, as the last paragraph of this section
+says; it is not stacked on any of them, and the record says its branch may conflict with each of
+theirs, which is a person's call at merge. Pieces of that kind run one after another, in record
+order. A plan that names no file arriving at a re-confirmation, for a piece whose worktree exists,
+makes that piece's remaining jobs wait the same way. A piece without a plan yet
+is compared again when it gets one, at its re-confirmation; where its worktree already exists by
+then, or where After a job ends in `references/worktrees.md` finds two pieces running side by side
+have changed a common path, the later piece's remaining jobs wait for the earlier one, and the record
+or the person is told the two branches will conflict until one is merged, which is a person's call.
+
+Every wait of this section ends the same way: when the piece waited on is committed and reviewed, or
+its chain is at `needs-approval` with no code job run yet, `parked`, `escalated` or `stopped`. A
+piece whose wait ended any way but the first is not started from that piece's branch silently: the
+person is asked whether it starts from that branch as it stands, from the run's base, or keeps
+waiting. A wait that would close a cycle, two pieces each waiting on the other, goes to the person,
+who orders them; the coordinator never breaks one.
 
 ## A breakdown's tasks
 
@@ -158,9 +178,20 @@ job of the skill that wrote the artifact as a row of a new record.
 ## States
 
 A job is `proposed`, `waiting`, `running`, `needs-person`, `done`, or `failed`. A chain is `running`,
-`needs-approval`, `escalated`, `done`, or `stopped`.
+`needs-person`, `parked`, `needs-approval`, `escalated`, `done`, or `stopped`.
 
-- `needs-person` carries the question word for word and the name of the person it is for.
+- `needs-person`, of a job or of its chain, carries the question and the name of the person it is
+  for, or the reason a commit waits. The question is relayed word for word in the session, as the
+  way it ran reports it, per `references/ways-to-run.md`, and written to the run state masked per Progress log in
+  `shared/artifact-paths.md`, the name left unmasked. Who is in the session is asked once, at
+  the first stop that names a person, and recorded in the run state, never assumed.
+- `parked` is a chain whose question is for a person not in the session: the question stays in the
+  run state and is listed at the close with their name, and the other chains go on. Its
+  job's agent is stopped once the question is recorded, so it holds no slot of the concurrency, and
+  the close says how the question returns: a job whose skill keeps a progress log resumes from it,
+  and one that interviews asks again from the start. An answer the person in the session passes on
+  later is relayed as A gate is relayed in `shared/host-capabilities.md` says, with who passed it on
+  recorded beside who gave it.
 - `needs-approval` names the artifact, its absolute path in the worktree, its state, and the approver
   its front matter names.
 - `escalated` holds the escalation The ceiling in `shared/review-fix-loop.md` requires, naming the

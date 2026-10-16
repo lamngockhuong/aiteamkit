@@ -267,10 +267,17 @@ mechanics, in its own references, which cite this section rather than restate it
   leaves its change in the working tree, and the calling skill runs `atk:git --commit` in that
   worktree, where the staged secret scan and the branch-name check of `shared/finalize-steps.md` run.
   A change to anything git or a hook manager runs, the hooks the repository configures, a hook
-  manager's configuration, the worktree's own `.git` file, is not committed until the person has seen
-  its masked diff and said yes: committing it would run the job's write with the calling skill's
-  rights, outside the job's boundary. The same holds for an artifact whose state the job moved past
-  what its skill gives it, which is reported and never committed.
+  manager's configuration, is not committed until the person has seen its masked diff and said yes:
+  committing it would run the job's write with the calling skill's rights, outside the job's
+  boundary. The same holds for an artifact whose state the job moved past what its skill gives it,
+  which is reported and never committed. The worktree's own `.git` file and `config.worktree`,
+  neither tracked by git, and the configuration and hooks git loads, are read before any `git`
+  command runs there: a changed `.git` file is never accepted on a person's word, and a changed
+  configuration or hook only once they have seen what it runs. A hook `git add` or
+  `git commit` fires, and a filter `git add` applies, a `clean` or `process` driver from any
+  configuration scope, also run files that list does not name, whatever they load, so where the
+  repository has one, each commit of a job's change is asked about first, and the proposal states
+  that risk.
 - **The ways a job runs, in a fixed order.** Agents in terminal panes started by a multiplexer, then
   the host's own subagents, then one job at a time in the session. The first that is present and
   passes its probe is offered; the person may choose a lower way, never one the machine lacks. No
