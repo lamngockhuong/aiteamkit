@@ -87,8 +87,8 @@ that it belongs to this repository, and no skill reads either for another projec
 
 ## Skills
 
-Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Twenty also carry
-`references/`; the other five do not yet.
+Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Twenty-one also carry
+`references/`; the other four do not yet.
 
 | File | Stage | Produces |
 |------|-------|----------|
@@ -112,7 +112,7 @@ Each skill is one `SKILL.md` with an `evals/trigger_evals.json` beside it. Twent
 | `plugins/atk/skills/run-cases/SKILL.md` | Verification | Approved cases executed by the agent on a deployed non-production environment: triage, an agreed scope, at most three rounds, and a run record of observed results only |
 | `plugins/atk/skills/security/SKILL.md` | Any point | A security record: scope and trust boundaries, scanners run, threats per boundary, verified findings, a checklist answered item by item, residual risk left for a person to accept; and the threat model of a feature |
 | `plugins/atk/skills/git/SKILL.md` | Version control | The diff read before staging, a scan that stops on a credential, commits that revert alone, and push, pull request and merge each behind their own yes |
-| `plugins/atk/skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, rollback, sign-offs |
+| `plugins/atk/skills/release/SKILL.md` | Delivery | Notes per audience, checklist with owners, migrations, the license audit, rollback, sign-offs |
 | `plugins/atk/skills/incident/SKILL.md` | Operation | Timeline, proven root cause, blameless postmortem, actions, runbook |
 | `plugins/atk/skills/retro/SKILL.md` | Improvement | Previous actions verified, sprint evidence, three actions, status report |
 | `plugins/atk/skills/onboard/SKILL.md` | Team | Verified setup, access list, code map, first week ending in the contribution the role makes |
@@ -179,13 +179,14 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `plugins/atk/skills/run-cases/references/environment-safety.md` | Where the target comes from, the test plan row and its `Kind`, why production and the local stack are refused, the row with no named owner, a plan written before `Kind`, the cases never automated, the lock threshold and what happens without one, and where credentials may come from and where they never go |
 | `plugins/atk/skills/run-cases/references/triage.md` | Grounding the cases in the code from the profile's layers, recon of accounts and data, the eight criteria, the six verdicts and the order they are applied in, who clears each `SEMI` obstacle, scoring a large file by group, the triage report, and the scope question with its budget and proposed cut |
 | `plugins/atk/skills/run-cases/references/execution.md` | The browser session and what the run never closes, the order of cases, one case from pre-condition to assertion, a step a person does, a refused tool call, the five outcomes, the three rounds, the run log, how each field of the run record is filled, evidence beside the record, and clean-up by recorded identifier |
-| `plugins/atk/skills/security/references/threat-checklist.md` | The order to find the project's audit commands in, the automated checks, the six STRIDE questions per trust boundary, the map to the OWASP Top 10, and the baseline checklist answered when nobody supplied one |
-| `plugins/atk/skills/security/references/record-template.md` | The three verdicts and why a refuted candidate is kept, the four severities, the redaction rule, and the shapes of the security record and the threat model |
+| `plugins/atk/skills/security/references/threat-checklist.md` | The order to find the project's audit commands in, the global controls to find by role with the trust assumptions and what is not reported without a concrete path, the reading order per boundary, the automated checks with whether a dependency ships decided from the production tree, the six STRIDE questions per trust boundary, the map to the 2025 edition of the OWASP Top 10, and the baseline checklist, SEC-01 to SEC-16, answered when nobody supplied one |
+| `plugins/atk/skills/security/references/record-template.md` | The three verdicts and why a refuted candidate is kept, the control each verdict was checked against, the three kinds of evidence, `tool`, `spec` and `judgment`, the four severities, the redaction rule, and the shapes of the security record and the threat model |
 | `plugins/atk/skills/git/references/commit-craft.md` | Where one commit ends and the next begins, the formatting sweep trap, and what evidence the body carries |
 | `plugins/atk/skills/git/references/repair.md` | Rebase, conflict resolution and fixup, with the three checks that come before any rewrite of remote history |
 | `plugins/atk/skills/git/references/stacked.md` | The stacked pull request lifecycle, and where to stop: one consent and one readiness gate per layer |
 | `plugins/atk/skills/git/references/pr-body.md` | Where a project's pull request template is found, how the artifact fills it, and why a ticked checkbox is a claim rather than decoration |
 | `plugins/atk/skills/git/references/multi-repo.md` | Reading the state of every repository a project holds, the order a change across them is carried in, the submodule pointer rule, one branch name and one cross-linked pull request per repository, and consent asked per repository |
+| `plugins/atk/skills/release/references/license-audit.md` | The dependency license audit of step 3: the project's CI allowlist as the policy and a missing one stopping the check, production dependencies only, a closed list where `UNKNOWN` never passes, SPDX expressions evaluated as expressions, the severity by kind of license, and why the result is evidence rather than legal advice |
 | `plugins/atk/skills/onboard/references/roles.md` | What `--role` changes, which is the blocking column of the access list and what the first week ends in, and the three steps it leaves alone so two runs stay comparable |
 
 ### Trigger evals
@@ -215,7 +216,7 @@ all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` 
 | `plugins/atk/skills/run-cases/evals/trigger_evals.json` | Executing cases on DEV or staging, a triage-only run, and resuming deferred cases, against `verify` on the local stack, `qa --record` for a run a tester did, writing cases, raising bugs, a retest, and unit or end-to-end test code |
 | `plugins/atk/skills/security/evals/trigger_evals.json` | Security review, a client checklist and a threat model, against `review`, `git`, `qa`, `fix`, `incident`, and `release` |
 | `plugins/atk/skills/git/evals/trigger_evals.json` | Commits, pull requests and rebases, against `review`, `release` and `implement` |
-| `plugins/atk/skills/release/evals/trigger_evals.json` | Notes and the deploy checklist, against `incident` and `qa` |
+| `plugins/atk/skills/release/evals/trigger_evals.json` | Notes, the deploy checklist and the license audit, against `incident`, `qa`, and a vulnerability audit, which is `security` |
 | `plugins/atk/skills/incident/evals/trigger_evals.json` | An outage and its postmortem, against `fix` and `release` |
 | `plugins/atk/skills/retro/evals/trigger_evals.json` | Sprint evidence and the status report, against `estimate` and `handover` |
 | `plugins/atk/skills/onboard/evals/trigger_evals.json` | A person joining, against `handover`, `init`, and `catchup` |

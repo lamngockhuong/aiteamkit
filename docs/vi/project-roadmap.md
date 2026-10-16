@@ -6,7 +6,7 @@
 |-------|------------|---------|
 | 1. Dựng khung kit | XONG | Repo, ba manifest, tự động hóa release, tài liệu song ngữ |
 | 2. Độ phủ skill | XONG | 25 file `SKILL.md` phủ vòng đời, dùng chung một hợp đồng về bố cục mục |
-| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Hai mươi skill đã có, năm skill còn lại chưa |
+| 3. Bổ sung reference | ĐANG LÀM | `references/` cho từng skill. Hai mươi mốt skill đã có, bốn skill còn lại chưa |
 | 4. Eval trigger | XONG | `evals/trigger_evals.json` cho đủ 25 skill. `atk` không kèm bộ chạy; `atkx:skill-eval --trigger` có một bộ, và cách nó đo nằm ở `docs/trigger-eval-measurement.md` |
 | 5. Kiểm chứng thực địa | CHƯA BẮT ĐẦU | Chạy bộ kit trên một team dự án thật và sửa những chỗ vỡ |
 | 6. Phát hành | CHƯA BẮT ĐẦU | Đưa lên marketplace của cả ba harness |
@@ -69,7 +69,7 @@ nằm trong kit, và `project-overrides.md` mô tả
 
 ## Phase 3: Bổ sung reference (đang làm)
 
-Hai mươi skill đã có sẵn `references/`. Năm skill còn lại thì chưa. Chỗ nào output là tài liệu bố
+Hai mươi mốt skill đã có sẵn `references/`. Bốn skill còn lại thì chưa. Chỗ nào output là tài liệu bố
 cục cố định mà chưa reference nào giữ bố cục ấy, template phải suy ra lại mỗi lần chạy:
 
 | Skill | Reference cần thêm |
@@ -79,7 +79,7 @@ cục cố định mà chưa reference nào giữ bố cục ấy, template ph�
 | `design-doc` | Template tài liệu thiết kế, template ADR, bộ tiêu chí so sánh phương án. Chế độ spike và lượt phản biện theo vai trò đã xong: `plugins/atk/skills/design-doc/references/spike.md`, `plugins/atk/skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Schema bảng task và luật sở hữu file cho các làn song song |
 | `qa` | Schema bảng test case. Các chiều cho case âm và biên đã xong: `plugins/atk/skills/qa/references/case-dimensions.md` |
-| `release` | Template checklist theo môi trường, quy tắc hành văn cho ghi chú gửi khách |
+| `release` | Template checklist theo môi trường, quy tắc hành văn cho ghi chú gửi khách. Phần kiểm tra license đã xong: `plugins/atk/skills/release/references/license-audit.md` |
 | `incident` | Thang mức nghiêm trọng, định dạng timeline, template postmortem |
 | `retro` | Bộ lệnh thu thập bằng chứng từ git, CI và từng tracker |
 | `convention` | Heuristic suy ra quy ước theo từng ngôn ngữ và framework |

@@ -3,11 +3,13 @@ name: release
 description: >
   Run a team release: assemble the change list from the diff, write release notes for the audience
   that reads them, produce the pre-flight and post-deploy checklist with an owner per step, state
-  the rollback path, and record who approved the go decision.
-  Use before deploying to staging or production, when cutting a version, or when writing notes for a
-  client.
-  Triggers on: "release", "deploy checklist", "release note", "phát hành", "ghi chú phát hành",
-  "cut a version", "go live", "リリース", "リリースノート", "ship this", "/atk:release".
+  the rollback path, audit the licenses of the dependencies it ships against the project's own
+  policy, and record who approved the go decision.
+  Use before deploying to staging or production, when cutting a version, when writing notes for a
+  client, or when the licenses of what a release ships need checking.
+  Triggers on: "release", "deploy checklist", "release note", "license audit", "phát hành",
+  "ghi chú phát hành", "kiểm tra license thư viện", "cut a version", "go live", "リリース",
+  "リリースノート", "ライセンスチェック", "ship this", "/atk:release".
 argument-hint: "[version|tag-range] [--notes|--checklist] [--audience internal|client] [--env <name>] [--out <path>]"
 ---
 
@@ -19,8 +21,9 @@ back. The rollback path is written before the deploy, not improvised during it.
 ## Scope
 
 Handles: collecting the change list from git and the tracker, writing release notes per audience,
-building the checklist with owners and timings, listing migrations and config changes, stating the
-rollback path, and recording the go or no-go decision.
+building the checklist with owners and timings, listing migrations and config changes, the license
+audit of the dependencies it ships, stating the rollback path, and recording the go or no-go
+decision.
 
 Does NOT handle: executing the deployment, which the pipeline and SRE own; testing (`atk:qa`); or
 handling a failed release, which is `atk:incident`.
@@ -76,6 +79,10 @@ link it, and carry each open Critical or High finding into the checklist as a bl
 ID, its severity, and its `Accepted by` cell as the record has it, never by its description. A
 release record reaches the client, and an unfixed vulnerability described there is disclosed to
 everyone who reads it. An empty `Accepted by` cell is an unchecked item, not an accepted risk.
+
+Run the license audit per `references/license-audit.md`, record the command and whose it was, and
+carry its items into the checklist as that file's severity table says, the two most severe levels as
+blocking with an empty sign-off.
 
 Read the run records under `docs/records/test-runs/` that are not `SUPERSEDED` across this range, the
 way the security records above are read, because a fix usually ships in a later build than the run
@@ -136,7 +143,8 @@ rather than presenting a release as ready.
 ## Output
 
 Written to `docs/records/releases/<version>.md` per `shared/artifact-paths.md`. Sections: front matter,
-scope and change list, internal notes, client notes, migrations and config, checklist with owners,
+scope and change list, internal notes, client notes, migrations and config, the license audit,
+checklist with owners,
 rollback plan, sign-offs, and known issues shipping with the release.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
@@ -156,3 +164,5 @@ milestone, and link each included ticket.
 - [ ] Every migration states whether it is reversible and whether it needs downtime.
 - [ ] Every checklist step has an owner.
 - [ ] The rollback trigger, steps, and caller are written before the deploy.
+- [ ] The license audit names its policy and command, or says it was not run and why, and every
+      item at the two most severe levels is a blocking item with an empty sign-off.

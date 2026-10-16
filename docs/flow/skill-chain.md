@@ -49,6 +49,7 @@ flowchart TD
     A6 -->|qa| A8
     A6 -->|verify| A9
     A6 -->|security| A9b
+    A3b -->|security| A9b
     A9b -->|release| A10
     A8 -->|release| A10
     A8 -->|run-cases| A8b
@@ -100,9 +101,9 @@ lands, per `plugins/atk/shared/spec-docs.md`.
 | `review` | A pull request or branch | Findings ranked blocking, should fix, nit, and the convention gaps behind them | `implement`, `fix`, `convention` |
 | `qa` | Acceptance criteria, the change, the reference documents for expected values, the screen specs for `GUI` text or the Figma design where a screen has none, and the design for migration, rollback and rollout | Test plan, cases, regression matrix; afterwards run records with their defects, the bugs raised from them, and retest records | `fix` from a raised bug; `release` from a run record |
 | `run-cases` | An approved cases file, its test plan's environments, the code for routes and expected strings, and a deployed DEV or staging environment | A run record of observed results with defects and evidence beside it, plus a triage report and a run log | `qa --bug` and `--retest` from the record; `release` from it once the QA lead approves |
-| `security` | The code in scope, the project's scanners, the design and the threat model; under `--checklist`, the checklist a client or the company supplied | A security record with verified findings, an answered checklist and residual risk; under `--threat-model`, the threat model of a feature | `release`, `fix`, `implement`, and the approver who accepts each risk |
+| `security` | The code in scope, the project's global controls, the project's scanners, the design, the threat model, and the reference documents of the area, an authorisation matrix among them; under `--checklist`, the checklist a client or the company supplied | A security record with verified findings, an answered checklist and residual risk; under `--threat-model`, the threat model of a feature | `release`, `fix`, `implement`, and the approver who accepts each risk |
 | `git` | A finished change or artifact, and the record the calling skill wrote | Commits, a branch, and the pull request that carries the record | `review`, then the approver |
-| `release` | The diff since the last version | Notes, checklist, rollback path | `incident`, `retro` |
+| `release` | The diff since the last version, the lockfile, the CI license policy | Notes, checklist, rollback path | `incident`, `retro` |
 | `incident` | Logs, metrics, the timeline | Postmortem plus runbook | `retro`, `fix` |
 | `retro` | Git, the tracker, the team | Verified actions, evidence, status report | The next cycle |
 | `onboard` | The repository and the access list | Setup, code map, first week, and a report of any setup defect found | The new member, and whoever owns a reported defect |

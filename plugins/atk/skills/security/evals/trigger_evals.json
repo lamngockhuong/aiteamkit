@@ -24,5 +24,6 @@
   { "query": "production is down and we think we were breached, run the incident", "should_trigger": false },
   { "query": "本番で障害が発生、インシデント対応を始めて", "should_trigger": false },
   { "query": "write the release checklist and rollback plan for v2.4.0", "should_trigger": false },
-  { "query": "technical design for moving sessions to Redis", "should_trigger": false }
+  { "query": "technical design for moving sessions to Redis", "should_trigger": false },
+  { "query": "check that the licenses of our dependencies are allowed before we release", "should_trigger": false }
 ]

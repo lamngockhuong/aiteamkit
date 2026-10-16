@@ -9,6 +9,9 @@
   { "query": "what changed since the last tag", "should_trigger": true },
   { "query": "state the rollback path for this deploy", "should_trigger": true },
   { "query": "/atk:release --checklist --env staging", "should_trigger": true },
+  { "query": "audit the licenses of the dependencies this release ships", "should_trigger": true },
+  { "query": "kiểm tra license thư viện trước khi phát hành bản 2.3", "should_trigger": true },
+  { "query": "リリース前に依存ライブラリのライセンスチェックをして", "should_trigger": true },
 
   { "query": "production is down after the deploy", "should_trigger": false },
   { "query": "sự cố production, viết postmortem", "should_trigger": false },
@@ -20,5 +23,6 @@
   { "query": "estimate the next sprint", "should_trigger": false },
   { "query": "kiểm chứng tính năng này trên app chạy thật", "should_trigger": false },
   { "query": "viết test case cho luồng thanh toán", "should_trigger": false },
-  { "query": "お客様向けにセキュリティチェックリストを埋めて", "should_trigger": false }
+  { "query": "お客様向けにセキュリティチェックリストを埋めて", "should_trigger": false },
+  { "query": "audit the dependencies for known vulnerabilities", "should_trigger": false }
 ]

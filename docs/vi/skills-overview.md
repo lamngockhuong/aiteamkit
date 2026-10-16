@@ -631,10 +631,16 @@ duyệt, lần chạy dừng sau câu hỏi phạm vi và chuyển phạm vi đ�
 
 **Sinh ra.** Một bản ghi bảo mật: tài sản, tác nhân, lối vào và ranh giới tin cậy trong phạm vi, lệnh
 audit phụ thuộc của chính dự án và một lượt quét secret trên các file được theo dõi, sáu câu hỏi
-STRIDE đặt ra ở mọi ranh giới và ánh xạ sang OWASP Top 10, mỗi phát hiện được lần từ lối vào tới tác
+STRIDE đặt ra ở mọi ranh giới và ánh xạ sang phiên bản hiện hành của OWASP Top 10, mỗi phát hiện được lần từ lối vào tới tác
 động, các ứng viên bị loại kèm dòng mã loại chúng, một checklist trả lời từng mục, và một bảng rủi ro
 còn lại. Với `--threat-model`, là mô hình mối đe dọa của một tính năng, được giữ cập nhật trong
 `docs/security/`.
+
+Trước khi tìm phát hiện, skill nêu tên các cơ chế kiểm soát mà dự án đã áp lên mọi request, mỗi cơ
+chế kèm `path:line` và khe hở hẹp nó còn để lại, và mọi kết luận đều nói đã đối chiếu với cơ chế nào
+và vì sao cơ chế đó không phủ được trường hợp này. Một phụ thuộc có lỗ hổng được tính là được phát
+hành khi cây phụ thuộc production của một thành phần triển khai chứa nó, chứ không phải khi cờ
+development của công cụ audit nói vậy.
 
 **Dùng khi.** Một bản release đụng tới xác thực, dữ liệu cá nhân, thanh toán, hoặc một tích hợp bên
 ngoài; khách hàng hoặc công ty giao một checklist bảo mật cần điền; hoặc một bản thiết kế cần ghi ra
@@ -685,7 +691,9 @@ phần thân mà người review đã đọc, bằng chứng của lượt chạ
 
 **Sinh ra.** Danh sách thay đổi lấy từ khoảng commit, ghi chú nội bộ và ghi chú cho khách tách bạch,
 danh sách migration kèm khả năng quay lui và yêu cầu downtime, checklist ba giai đoạn mỗi bước có
-người phụ trách, kế hoạch rollback, và các chữ ký phê duyệt.
+người phụ trách, kế hoạch rollback, và các chữ ký phê duyệt. License của các phụ thuộc mà bản
+release mang theo được đối chiếu với allowlist mà CI của dự án đã áp dụng: không tìm thấy chính sách
+thì dừng kiểm tra chứ không cho qua, và một license không ai gọi được tên thì không bao giờ qua.
 
 **Dùng khi.** Cắt một phiên bản, deploy lên staging hay production, hoặc viết ghi chú gửi khách.
 
