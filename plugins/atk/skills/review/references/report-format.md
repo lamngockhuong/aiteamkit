@@ -56,6 +56,18 @@ seen, and the finding from the file takes the next free number and names the old
 starts at 1 and
 `## What this was reviewed against` says so, so nobody reads a fresh `B1` as the old one.
 
+**What the author answered is read with it.** The same read takes the author's replies: those inside
+each inline comment's thread, which come back with the inline comments, and any comment or review
+body of the author's that names a finding by its ID. Each answer is one of four: fixed, deferred to
+a place it names, declined with a reason, or disputed. A reply the run cannot tie to one finding
+becomes an open question to its author rather than a guess. The answer goes into the finding's
+`Author` line, and what the posted review does with it is under *Under `--comment`*. A ruling on a
+disputed finding by the person who holds the call per `## Roles` of `SKILL.md` is read the same
+way, goes into the same line, and closes or keeps the finding as that person said. It counts only
+when its writer is matched to that person in the Team section of `.atk/profile.md`, as rule 2 of
+`shared/team-roles.md` matches an approver; a writer the run cannot match is an open question to
+that person, not a ruling.
+
 **Severity wins over continuity when the two collide.** A finding that was `S3` and comes back
 `BLOCKING` takes a `B` number and names the old one in its title: `### B2. ... (was S3)`. The
 prefix has to match the section the finding sits in, and the old number is retired rather than
@@ -71,6 +83,7 @@ reissued. Decide the severity, then number.
 - **Issue:** What goes wrong, and the input or state that triggers it.
 - **Fix:** The concrete change, naming the function, file or pattern to use.
 - **Decision:** Only where the fix reverses a recorded decision: `path:line`, and who made it.
+- **Author:** Only where the author answered it on the thread: the answer, and why the finding is kept.
 - **Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`
 ```
 
@@ -98,6 +111,14 @@ exists to prevent.
   `shared/team-roles.md`, so the reviewer neither drops the finding nor lowers it because a decision
   exists, and a skill that called the review does not lower it either: it takes the finding to that
   person as it stands.
+- **Author.** Only on a later review of a pull request, where the author answered this finding on
+  the thread, per *What the author answered is read with it*. The answer in a phrase, `deferred to
+  <where>`, `declined: <reason>` or `disputed: <reason>`, then the review's response in one
+  sentence: why the finding is kept, and the one action that would close it. A finding the answer
+  closed goes to `## Closed since the first review` instead. The answer changes no severity: a
+  `SHOULD FIX` may wait for a follow-up the author agreed to, per the severity table in step 6 of
+  `SKILL.md`, and a `BLOCKING` still blocks until the person who holds the call per `## Roles`
+  decides.
 - **Raised by.** The tags from `references/review-rounds.md`: `[k/N]` for a replicated round, the
   round name alone where it ran once, `sweep` for the closing pass. A `PLAUSIBLE` verdict is stated
   here with the one check that would settle it. `CONFIRMED` is the default and is not written out,
@@ -122,8 +143,8 @@ In this order. The order is fixed; the list is not closed. A run adds a section 
 something to declare that none of these holds, and three cases recur: that the reviewer was also
 the author, which `## Roles` of `SKILL.md` makes a thing to say out loud; a section a project's
 `.atk/overrides/review.md` asks for; and, on a second pass, `## Closed since the first review` right
-after `## What this was reviewed against`, one line per finding the fix closed, with its identifier
-and what closed it, since a closed finding belongs in no severity section.
+after `## What this was reviewed against`, one line per finding the fix or the author's answer
+closed, with its identifier and what closed it, since a closed finding belongs in no severity section.
 
 `## In short` opens the report, after the metadata table, per The opening summary in
 `shared/plain-writing.md`: what the change does, the verdict the findings add up to with the
@@ -270,7 +291,18 @@ a `BLOCKING` finding blocks whatever the rest of the list says.
 ## Under `--comment`
 
 The inline comment on a line opens with the finding's ID, so the thread on GitHub and the report say
-the same name for the same thing. Inline comments go only to the findings within the cap of step 6.
+the same name for the same thing. Inline comments go only to the findings within the cap of step 6,
+and never to a finding the author already answered.
+
+**A finding the author answered.** A comment that repeats it reads as a reviewer that never read the
+answer. So the summary answers it visibly, above the `<details>` block, one line per answered
+finding: its ID and its `Author` line, or for one the answer closed, what closed it. The cap of
+step 6 never cuts these lines. Where the review has something new against the answer, evidence the
+answer did not meet or a claim in it the code does not bear out, it says so as a reply in the
+finding's existing thread, the inline comment that opens with its ID, with the reply command in
+`shared/ticket-adapters.md`, and never as a new comment on another line. Where the author answered
+in a general comment rather than in that thread, the new evidence goes in the finding's visible line
+instead.
 
 The summary comment opens with `atk:review` and the target, so a later run can tell it from any other
 comment, then carries the counts per severity and the blocking titles with their IDs. Below them, in a

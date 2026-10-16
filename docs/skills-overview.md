@@ -479,7 +479,10 @@ verification; the session summary and the inline comments carry at most ten, or 
 `--strict`, with the blocking ones never cut. Each one carries an identifier prefixed by its
 severity, `B1`, `S1`, `N1`, which is what lets a team name a single finding in a stand-up or a pull
 request thread, and a second review of the same pull request reads the first report, or the summary
-the first posted on the pull request, to keep those identifiers pointing at the same findings. The
+the first posted on the pull request, to keep those identifiers pointing at the same findings. It
+reads the author's replies on the thread too: a finding the author deferred, declined or disputed
+gets no new inline comment, the summary answers it visibly with why it is closed or kept, and new
+evidence against the answer goes into that finding's existing thread. The
 report has a fixed shape rather than one rebuilt per run, and it carries no score of any kind,
 because the reviewer is not the approver. `--out` moves the file, `--comment` posts the findings as
 inline PR comments, with one summary comment that lists every finding the review kept and every open

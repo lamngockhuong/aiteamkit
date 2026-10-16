@@ -185,7 +185,15 @@ is in neither field, so the read takes both lines:
 
 ```bash
 gh pr view <number> --json comments,reviews            # summaries, posted as a comment or a review
-gh api repos/{owner}/{repo}/pulls/<number>/comments    # inline comments, which open with their IDs
+gh api --paginate repos/{owner}/{repo}/pulls/<number>/comments   # inline comments and their replies, every page
+```
+
+The inline comments come back with the replies in their threads, each reply carrying
+`in_reply_to_id`, the comment it answers, which is how the author's answer to a finding is found. A
+reply goes into a finding's thread with:
+
+```bash
+gh api -X POST repos/{owner}/{repo}/pulls/<number>/comments/<comment-id>/replies -F body=@<file>
 ```
 
 `atk:verify` reads a pull request for its acceptance criteria rather than its files, so it needs a
