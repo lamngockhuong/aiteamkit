@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.11](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.10...atk-v0.1.11) (2026-10-16)
+
+
+### Features
+
+* make atk:security read the project's own controls and the 2025 OWASP edition, and give atk:release a dependency license audit ([#130](https://github.com/lamngockhuong/aiteamkit/issues/130)) ([18521b0](https://github.com/lamngockhuong/aiteamkit/commit/18521b0cdde3f330e2b03a281b954eff1a94104b))
+
+
+### Bug Fixes
+
+* answer the author's replies on a later atk:review pass instead of re-posting answered findings ([#128](https://github.com/lamngockhuong/aiteamkit/issues/128)) ([b82b5e3](https://github.com/lamngockhuong/aiteamkit/commit/b82b5e32b1d4e964a01e72dd1785099949816a9d))
+
 ## [0.1.10](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.9...atk-v0.1.10) (2026-10-16)
 
 
