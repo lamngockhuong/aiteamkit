@@ -1,7 +1,7 @@
 # Screen spec template
 
 Loaded by `atk:spec` for the `screen` kind: in step 2 for the shape, only when `docs/screens/` holds
-nothing to copy it from, and in step 4 for the section on updating, on every run against a document
+nothing to copy it from and the profile names no template for the kind, and in step 4 for the section on updating, on every run against a document
 that already exists. One file per screen. How the design is read, what the four `design_*` fields
 hold, and what to do with a value the design does not show, is in `shared/design-sources.md`; what the kind is, and how it splits with `feature`,
 is in `shared/spec-docs.md`.
@@ -42,11 +42,31 @@ One paragraph: what the screen is for, who reaches it, and from where. No implem
 
 ## Components
 
-| No | Node | itemName | nameJP | nameTrans | itemType | dataType | required | format | minLength | maxLength | defaultValue | validationNote | description | userAction | transitionNote | database | qa |
-|----|------|----------|--------|-----------|----------|----------|----------|--------|-----------|-----------|--------------|----------------|-------------|------------|----------------|----------|----|
-| 1 | `28256:70680` | Search area | 検索エリア | Search area | area | | | | | | | | | | | | |
-| 1.1 | `I28090:91294;26137:51339` | Start date | 開始日 | Start date | input / date | date | yes | `YYYY/MM/DD` | | | | Proposed: not after today, as `docs/features/membership.md`, Start date | | Pick a date | | | |
-| 1.2 | `28256:70702` | Search | 検索 | Search | button / primary | | | | | | | | | Click | Reloads the result list below | | Q1 |
+| No | Node | itemName | nameJP | nameTrans | itemType | dataType | required | format | minLength | maxLength | defaultValue | validationNote | description | userAction | transitionNote | database | api | qa |
+|----|------|----------|--------|-----------|----------|----------|----------|--------|-----------|-----------|--------------|----------------|-------------|------------|----------------|----------|-----|----|
+| 1 | `28256:70680` | Search area | 検索エリア | Search area | area | | | | | | | | | | | | | |
+| 1.1 | `I28090:91294;26137:51339` | Start date | 開始日 | Start date | input / date | date | yes | `YYYY/MM/DD` | | | | Proposed: not after today, as `docs/features/membership.md`, Start date | | Pick a date | | | | |
+| 1.2 | `28256:70702` | Search | 検索 | Search | button / primary | | | | | | | | | Click | Reloads the result list below | | [`GET /members`](../api/members.md#get-members) | Q1 |
+
+## Events
+
+### On opening
+
+| ID | Component | Given | When | Then | qa |
+|----|-----------|-------|------|------|----|
+| E1 | - | The user is signed in | The screen opens | Proposed: the search area is empty and the list shows no row until Search is clicked; source `docs/features/membership.md`, Search | |
+
+### On an action
+
+| ID | Component | Given | When | Then | qa |
+|----|-----------|-------|------|------|----|
+| E2 | 1.2 | A start date is picked | The user clicks Search | The list reloads with members from that date, as the prototype transition on `28256:70702` shows | |
+
+### On an error
+
+| ID | Component | Given | When | Then | qa |
+|----|-----------|-------|------|------|----|
+| E3 | 1.2 | The search request fails | The response arrives | Proposed: a toast with the error, the list unchanged, as `docs/features/membership.md`, Errors | |
 
 ## States
 
@@ -62,14 +82,37 @@ One paragraph: what the screen is for, who reaches it, and from where. No implem
 | Q2 | The design now labels 1.2 `Find`. Keep `Search`, or take `Find`? | <approver> | 1.2 | Keep the document, <approver>, YYYY-MM-DD |
 ````
 
-The `States` section is left out when the design has no frame that differs only by a toast, a
-dialog, or the state of a control, per One link, several screens in `shared/design-sources.md`.
+The `States` section says `N/A` and the reason when the design has no frame that differs only by a
+toast, a dialog, or the state of a control, per One link, several screens in
+`shared/design-sources.md` and Rules that hold under any shape in `shared/spec-docs.md`.
+
+## The Events table
+
+What the screen does, as against what it shows. Three groups, in this order, each under its own
+heading: on opening the screen, on an ordinary action, and on an error. A group with no event keeps
+its heading and says `N/A` and the reason, per Rules that hold under any shape in
+`shared/spec-docs.md`.
+
+- **One row per event.** `ID` is `E1`, `E2`, numbered across the groups and never renumbered or
+  reissued, under the same rule as component numbers below. `Component` is the `No` of the component
+  the event starts from, or `-` for one no component starts, such as opening the screen. `Given`,
+  `When`, `Then` state it as a test would, and `qa` holds the number of its open question.
+- **Cited, proposed, or asked.** An event the design shows, a prototype transition or a state frame,
+  cites that node in `Then`. One the design does not show is written `Proposed:` with its source, or
+  left for an open question, per Nothing invented below. A screen's error handling is the part a
+  design shows least, which is why the group exists rather than why it may be guessed.
+- **A rule beyond this screen points.** An event whose rule holds on more than one screen, or that
+  the server enforces, points to its `feature` document rather than restating it, as a
+  `validationNote` cell does.
+- **Not a unit of the mark.** An event carries no not-implemented mark and no code citation of its
+  own: it is implemented when the component it names is, or the screen for `-`, so the component
+  row is still the one unit `implemented` counts, per `shared/spec-docs.md`.
 
 ## The columns
 
 The component table takes its columns from a spreadsheet shape that Japanese projects already hand
-to clients, so a team that used one recognises the other. One of that shape's columns is renamed and
-five are folded into others, and each has its reason:
+to clients, so a team that used one recognises the other. One of that shape's columns is renamed,
+five are folded into others, and `api` is the kit's own, and each has its reason:
 
 | Column | Holds | Folded in from |
 |--------|-------|----------------|
@@ -83,6 +126,7 @@ five are folded into others, and each has its reason:
 | `description` | Anything the row needs that no other column holds, and the not-implemented mark | |
 | `userAction`, `transitionNote` | What the user does to it, and where that leads | |
 | `database` | The table and column, linked to `docs/database/`, only where the source names them | `databaseTable`, `databaseColumn`, `databaseNote`, because all three stay blank unless the source is explicit, which it almost never is |
+| `api` | The method and path the component reads from or writes to, linked to its section in the `api` directory, only where the source names it, as `database` is | |
 | `qa` | The number of the open question about this row | |
 
 ## Rules
@@ -121,6 +165,10 @@ A run against a document that exists reads the design from the document itself, 
 link it was given: the file in `design_source` and exactly the nodes, or the images, in
 `design_node`. A link given with `--design` is used only to add a frame the document does not yet
 record, and one that names a different file is asked about before anything is written.
+
+Under a project shape the key is read where Where the kit's own items go in `shared/spec-docs.md`
+puts node IDs, and what this section says of `Node` and `No` holds for that key and the shape's item
+ID.
 
 Rows are compared with the design by `Node`, never by `No`. From images the keys are not stable,
 since one component added near the top shifts every `#n` after it, so rows read from images are
@@ -194,6 +242,14 @@ and naming the approver. The approver answers it in one of the two forms above, 
 table, after which the row matches the design and nothing is asked. What the run still keeps true
 on every row is what the code says: the not-implemented mark and the code citation follow
 `implemented`, below, whatever the document's approval state.
+
+### The Events table
+
+An event that cites a node is compared like the row of that node, under the same two branches: in a
+document never approved it follows the node, unless the BrSE has worked on it; in an approved one a
+difference becomes an open question. Every other event, proposed or written by hand, is left as it
+was written, since no read of the design can say it changed. An event whose node is gone is struck
+through like a row, and its ID stays taken.
 
 ### The States table
 

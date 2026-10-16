@@ -32,9 +32,9 @@ Where to look comes from the `Layers` section of `.atk/profile.md`: each layer's
 reference module. Without a profile, infer the layout from the repository and say in the triage
 report that it was inferred, per the Required-soft group of `shared/project-profile.md`. The reference
 documents under `docs/api/`, `docs/features/` and `docs/screens/`, resolved per
-`shared/artifact-paths.md`, are read too, and where one disagrees with the code the disagreement goes
-into the triage report rather than being settled by the run, told apart as drift or an open question
-per `shared/spec-docs.md`.
+`shared/artifact-paths.md`, are read too, `conventions.md` in the `api` directory among them where it exists.
+Where one disagrees with the code the disagreement goes into the triage report rather than being settled by the run, told
+apart as drift or an open question per `shared/spec-docs.md`.
 
 The code read is the working tree's, which may not be what is deployed. The triage report records the
 commit grounding read, and whether the tree had uncommitted changes. Where the environment shows its

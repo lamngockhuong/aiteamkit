@@ -108,12 +108,13 @@ tree on the branch it started on.
 repositories where it spans several; the test, build, and lint command per app, the layer
 layout with a standards document and a reference module for each, the docs roots, the tracker and
 where the spec lives, who approves what, and how to start the application and confirm a side effect
-in its data.
+in its data. Where the project keeps its own spec templates, the kinds table names each one in a
+`Template` column, proposed from the files it finds and confirmed by a person.
 
 **Use when.** A team first installs `atk` in a project, and again when the project has moved on from
 what the profile says. `--audit` compares an existing profile against the repository and changes
-nothing; when the user answers the drift in the same session, the run says so and continues as an
-update.
+nothing, and reports a `Template` path that no longer exists; when the user answers the drift in the
+same session, the run says so and continues as an update.
 
 **Do not use when.** You want the kit configured once for every project. A profile is true of one
 project and is committed with it; the kit itself holds no project facts.
@@ -269,6 +270,22 @@ does in `docs/features/`, and the components of a screen in `docs/screens/`, one
 read from its Figma design. One file per subject, named after the subject, updated in place.
 `--check` reports where a document and the code disagree, and for a screen whether its design has
 moved, and changes nothing.
+
+Beside them, where the kit's template is the shape or the project already keeps one, two documents
+that are not a subject: `docs/api/conventions.md`, the status codes, the error body and the error
+codes every resource document cites rather than restates, and `docs/database/index.md`, every table
+with its document and an `erDiagram` whose names match the table documents exactly. A screen spec
+carries an Events table, what the screen does on opening, on an action and on an error, and each
+component can name the endpoint it calls. A few rules hold whatever shape a document copied, and
+`--check` reports a breach of each: a part that does not apply says `N/A` and why, an endpoint behind
+authentication lists its `401` and `403` where the document lists outcomes, an example body parses
+and holds only made-up values, and a `*_id` column with no foreign key says why.
+
+Where the project keeps spec templates of its own and names them in the profile, an empty directory
+takes its shape from that template rather than the kit's: the template's own front matter is kept
+with the kit's fields added beside it, a change-history table gains a row and a version moves by the
+template's rule, and what the kit still needs, open questions, the not-implemented mark, a screen's
+node IDs, goes where the shape keeps notes. The skill never fills a field that records approval.
 
 **Use when.** A project has no written contract, a merged change left one behind, or nobody trusts
 the documents any more. `--sync` folds the change on the current branch into the documents it

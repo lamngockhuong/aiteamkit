@@ -142,7 +142,7 @@ to `docs/adr/` as well.
 | `catchup` | `docs/derived/catchup/<date>-<ticket>-<slug>.md`; in document mode, a temporary page at `docs/derived/catchup/documents/<date>-<slug>.md`, held out of git by an ignore file holding `*` in that directory and never offered to be committed, per `skills/catchup/references/document-explainer.md` |
 | `estimate` | `docs/records/planning/estimate-<sprint-or-date>-<ticket>.md`, where `-<ticket>` is the epic when the run was given one, the ticket when it was given exactly one, and left out otherwise: several tickets, a backlog document, or none. Two epics estimated for one sprint get two names; two runs that still collide take the next free suffix |
 | `design-doc` | `docs/records/design/<date>-<ticket>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`; under `--spike`, `docs/records/design/<date>-<ticket>-spike-<slug>.md` and no ADR |
-| `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below) |
+| `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below); `docs/api/conventions.md` and `docs/database/index.md`, the API conventions document and the schema index, where the kit's template is the shape or the project already keeps one |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
 | `convention` | `docs/standards/`, an `index.md` plus one `<tech>.md` per technology and a `<layer>/<tech>.md` where its rules differ by layer, for a project with nothing written; `docs/conventions.md` where the kit wrote one before; on request, the collaboration files the project lacks (see below) |
 | `plan` | `plans/<YYMMDD-HHMM>-<slug>/` holding `plan.md` and one file per phase (see below); under `--review` no plan file at all, and a report at `docs/derived/reviews/plan-<slug>-<date>.md` |
@@ -212,16 +212,36 @@ are dated like any record or report, and so is the threat model `atk:security` w
 table, per feature, per screen, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
 
-| Kind | Directory | One file per |
-|------|-----------|--------------|
-| `api` | `docs/api/` | resource |
-| `db` | `docs/database/` | table |
-| `feature` | `docs/features/` | feature |
-| `screen` | `docs/screens/` | screen |
+| Kind | Directory | One file per | Template |
+|------|-----------|--------------|----------|
+| `api` | `docs/api/` | resource | |
+| `db` | `docs/database/` | table | |
+| `feature` | `docs/features/` | feature | |
+| `screen` | `docs/screens/` | screen | |
 
 A project overrides a row, or adds a row of its own, in the `Docs` section of `.atk/profile.md`. The
+`Template` column is empty in the kit and is filled only there, for a kind the project keeps a
+template of its own for: a path from the project root, which `atk:spec` takes the shape from when the
+directory holds no document yet, per The project's own shape wins in `shared/spec-docs.md`. The
 kind name is also the value of `--kind`, so a kind the project declared is invocable without touching
 the kit.
+
+Two names in those directories are not a subject: `conventions.md` in the `api` directory is the API
+conventions document, and `index.md` in the `db` directory is the schema index. Neither is a resource
+or a table named after the file, neither is copied as the shape of a resource or a table, and a skill
+that lists the documents of the kind reads each as what it is, and reads `conventions.md` beside an
+`api` document, since the error body and the meaning of each code live there. When each is written,
+and what happens to a file already at either path, is in `skills/spec/references/api-spec-template.md`
+and `skills/spec/references/db-spec-template.md`.
+
+A template is not a document of its kind either, and only a file at a path the `Template` column
+names is one. No write copies it as a neighbour, `--check` does not list it, and no skill that reads
+the directory reads it as a contract, since its endpoints and columns are placeholders. A file in a
+kind directory whose name holds `template` and that no profile names is still a document, since a
+subject can carry the word, a `notification_templates` table among them: a write does not copy its
+shape until the Tech Lead has said it is not a template, and `--check` and every skill that reads the
+directory list it as possibly a template, naming the Tech Lead to confirm, rather than drop it or
+read it without saying so.
 
 A `Docs` row names where a kind of document lives, and that is all it does. It cannot move an
 artifact out of the persistence group Persistence below puts it in, and it cannot send one into a
@@ -477,12 +497,19 @@ When the contract comes before the code in `shared/spec-docs.md`. A `screen` doc
 `implemented` under either `Contract` line, per The `screen` kind in that file, and the four
 `design_*` fields of What a read records in `shared/design-sources.md`.
 
+A reference document written in a project's own shape keeps that shape's front matter beside this
+block, and the fields of this block it may never yield or map are listed under Front matter under a
+project shape in `shared/spec-docs.md`.
+
 One kind drops a field. A reference document, of any kind `shared/spec-docs.md` covers, carries no
 `ticket`, whoever writes it: `atk:spec`, or a person updating it by hand per
 `shared/finalize-steps.md`. It is updated in place by every change to its subject over the life of the project, so one
 ticket in its front matter reads as though the whole document belonged to that ticket, and a list of
 them is a history the document does not keep. The ticket links to the document instead, and
-`git log` says which change touched which line.
+`git log` says which change touched which line. A `ticket` in a document whose front matter is this
+block alone, with the `implemented` and `design_*` fields its kind adds, as an earlier run left it, is this block's and goes; one in front matter that carries
+fields of the project's own, written by hand or from its template, is the project's field and is
+kept.
 
 A finding or a defect with no issue of its own is referenced by the record that holds it and its ID,
 `<record path>#<ID>`: `#D2` of an `atk:qa` run record, `#SF1` of an `atk:security` record. Several

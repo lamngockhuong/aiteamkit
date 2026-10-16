@@ -50,7 +50,7 @@ The `plugins/atk/shared/` layer holds what would otherwise be repeated twenty-fi
 the artifact path convention, and the tracker adapters, cited by every skill. The other eighteen
 are contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
 `finalize-steps.md` and `layer-verification.md` between the three skills that change code,
-`diagram-conventions.md` between the six whose artifacts carry a diagram, `host-capabilities.md`
+`diagram-conventions.md` between the seven whose artifacts carry a diagram, `host-capabilities.md`
 and `tidy-pass.md` around what the harness itself provides, `spec-docs.md` between `spec` and the
 five skills that have to leave its documents true, `host-file-locations.md` between `convention`,
 which asks whether a collaboration file is missing, `git`, which has to find the pull request

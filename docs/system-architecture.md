@@ -173,8 +173,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   in all three.
 - `plugins/atk/shared/diagram-conventions.md`: when a diagram earns its place in an artifact, the four shapes
   the kit draws, and the rules that keep them readable in a pull request on either theme. Cited by
-  `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:security`, and `atk:incident`,
-  the six skills whose artifacts carry a diagram. Diagrams are Mermaid, so they render where the
+  `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:spec`, `atk:security`, and
+  `atk:incident`, the seven skills whose artifacts carry a diagram. Diagrams are Mermaid, so they render where the
   artifact is read and nothing has to be committed as an image.
 - `plugins/atk/shared/host-capabilities.md`: which capabilities of the host agent a skill may use, and what it
   does on a harness that has none. Cited by `atk:fix`, `atk:implement`, and `atk:verify` for the
@@ -218,12 +218,15 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
 
 - `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is
   in a project whose profile says `Contract: first` and the `implemented` field that tracks whether
-  its code exists yet, whose shape wins when a project already keeps documents of its own, the six
+  its code exists yet, whose shape wins when a project already keeps documents of its own or names a
+  template of its own, what such a template may instruct and how its front matter and change history
+  are kept, the rules every document holds whatever its shape, the six
   kinds of change that oblige a pull request to carry its reference document and leave it true, what that obligation
   becomes when the document lives in a repository other than the code's, and the line between drift
   and a question nobody has answered. Cited by `atk:spec`, which writes those documents, by
   `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` and `atk:verify`, which have to leave
-  them true, and by `atk:qa`, `atk:run-cases` and `atk:help`, which read them. It is the widest of these contracts,
+  them true, and by `atk:qa`, `atk:run-cases` and `atk:help`, which read them, and by `atk:init` for the
+  template it records. It is the widest of these contracts,
   because `plugins/atk/shared/finalize-steps.md` now opens with its obligation, which makes every code-changing
   skill a party to it.
 - `plugins/atk/shared/host-file-locations.md`: how the code host is detected, every location each host reads
@@ -284,9 +287,10 @@ The last two describe files that do not ship with the kit at all:
   parent holding member repositories and a workspace holding none of its own each cost, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message never mention it, and
-  read one line of it when it is there, `Run trace`. Two Docs entries change what a skill does rather
-  than where it writes: `Contract`, whose meaning lives in `plugins/atk/shared/spec-docs.md`, and
-  `Run trace: off`, which stops every skill leaving a run trace, per
+  read one line of it when it is there, `Run trace`. Three Docs entries change what a skill does rather
+  than where it writes: `Contract`, whose meaning lives in `plugins/atk/shared/spec-docs.md`, the
+  `Template` column of the kinds table, which gives `atk:spec` a project's own template as the shape
+  of an empty directory, per the same file, and `Run trace: off`, which stops every skill leaving a run trace, per
   `plugins/atk/shared/run-trace.md`.
   `atk:init` writes the profile, so it belongs to no group.
 

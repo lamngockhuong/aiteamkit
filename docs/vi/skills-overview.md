@@ -110,11 +110,13 @@ của bạn quay về nhánh lúc bắt đầu.
 viên khi dự án trải trên nhiều repository; lệnh test, build và lint của từng app, bố
 cục các tầng kèm tài liệu chuẩn và module mẫu cho mỗi tầng, các thư mục docs, tracker và nơi đặt tài
 liệu đặc tả, cùng ai duyệt cái gì. Mục cuối nói cách khởi động ứng dụng và cách xác nhận một tác động
-đã thật sự xảy ra trong dữ liệu.
+đã thật sự xảy ra trong dữ liệu. Nếu dự án có template spec riêng, bảng các loại tài liệu ghi từng
+template ở cột `Template`, do skill đề xuất từ các file nó tìm thấy và một người xác nhận.
 
 **Dùng khi.** Một team cài `atk` vào dự án lần đầu, và dùng lại khi dự án đã đi xa hơn những gì
-profile đang ghi. Cờ `--audit` đối chiếu profile hiện có với repo và không sửa gì; nếu người dùng
-trả lời các điểm lệch ngay trong phiên, lần chạy báo ra rồi tiếp tục thành một lần cập nhật.
+profile đang ghi. Cờ `--audit` đối chiếu profile hiện có với repo và không sửa gì, và báo đường dẫn
+`Template` nào không còn tồn tại; nếu người dùng trả lời các điểm lệch ngay trong phiên, lần chạy báo
+ra rồi tiếp tục thành một lần cập nhật.
 
 **Không dùng khi.** Bạn muốn cấu hình kit một lần cho mọi dự án. Một profile chỉ đúng với một dự án
 và được commit cùng dự án đó; bản thân kit không giữ sự thật nào của dự án.
@@ -273,6 +275,23 @@ vi của từng tính năng trong `docs/features/`, và các thành phần của
 `docs/screens/`, mỗi thành phần một dòng, đọc từ design Figma của màn hình đó. Mỗi chủ thể một file,
 đặt tên theo chủ thể, ghi đè tại chỗ. Cờ `--check` báo chỗ tài liệu và code không khớp nhau, với
 màn hình thì báo cả khi design đã đổi, và không sửa gì.
+
+Bên cạnh đó, ở nơi hình dạng lấy từ template của kit hoặc dự án đã có sẵn, còn hai tài liệu không
+phải là một chủ thể: `docs/api/conventions.md`, chứa các mã trạng thái, cấu trúc body lỗi và các mã
+lỗi mà mọi tài liệu resource dẫn tới thay vì chép lại, và `docs/database/index.md`, liệt kê mọi bảng
+kèm tài liệu của nó và một `erDiagram` có tên khớp từng ký tự với tài liệu của các bảng. Spec màn hình
+có thêm bảng Events, ghi màn hình làm gì khi mở, khi người dùng thao tác và khi có lỗi, và mỗi thành
+phần có thể ghi endpoint mà nó gọi. Có vài quy tắc áp dụng dù tài liệu chép hình dạng từ đâu, và
+`--check` báo mọi chỗ vi phạm: phần nào không áp dụng thì ghi `N/A` kèm lý do, endpoint cần xác thực
+thì liệt kê `401` và `403` ở nơi tài liệu có liệt kê các kết quả trả về, body ví dụ phải parse được và chỉ chứa giá trị bịa ra, và cột `*_id` không
+có khóa ngoại thì ghi lý do.
+
+Nếu dự án có template spec riêng và ghi tên chúng trong profile, một thư mục còn trống sẽ lấy hình
+dạng từ template đó thay vì từ template của kit. Khối thông tin đầu file của template được giữ
+nguyên, và các trường của kit được thêm vào bên cạnh. Bảng lịch sử thay đổi có thêm một dòng, số
+phiên bản tăng theo quy tắc của template. Những gì kit vẫn cần, như câu hỏi mở, dấu chưa triển khai,
+mã định danh của từng thành phần trong design màn hình, được đặt vào chỗ hình dạng đó dành cho ghi
+chú. Skill không bao giờ điền một trường ghi nhận việc phê duyệt.
 
 **Dùng khi.** Dự án chưa có contract nào được viết ra, một thay đổi đã merge bỏ quên tài liệu, hoặc
 không ai còn tin vào tài liệu nữa. Cờ `--sync` gấp thay đổi trên nhánh hiện tại vào đúng những tài

@@ -96,6 +96,18 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 <!-- add the line "- Run trace: off" here only when the team turns traces off. Every run leaves a short trace of its steps, waits and stops under <docs root>/derived/traces/, never staged; absent reads as on, per shared/run-trace.md. Never TBD -->
 - Agent instructions: `<CLAUDE.md, AGENTS.md, or none>`
 
+<!-- add the kinds table here only when the project changes a row of shared/artifact-paths.md, adds one, or keeps its own spec template for a kind: -->
+<!--
+| Kind | Directory | One file per | Template |
+|------|-----------|--------------|----------|
+| api | docs/api/ | resource | docs/templates/api-template.md |
+-->
+<!-- and, only when a person gives it, one line per kit field the project's template carries under its own name, never a field shared/spec-docs.md keeps by name: -->
+<!-- - Front-matter map: `owner: updated_by` -->
+<!-- atk:spec adds, when the Tech Lead answers about a conventions.md or index.md the kit did not write: -->
+<!-- - API conventions document: `docs/api/conventions.md` is, <name>, YYYY-MM-DD -->
+<!-- - Schema index: `docs/database/index.md` is not, <name>, YYYY-MM-DD -->
+
 ## Tracker
 
 - Tracker: <GitHub Issues | Jira | Backlog | Redmine | other>
