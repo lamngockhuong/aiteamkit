@@ -113,7 +113,8 @@ in its data. Where the project keeps its own spec templates, the kinds table nam
 
 **Use when.** A team first installs `atk` in a project, and again when the project has moved on from
 what the profile says. `--audit` compares an existing profile against the repository and changes
-nothing, and reports a `Template` path that no longer exists; when the user answers the drift in the
+nothing, and reports a `Template` path that no longer exists or that git does not track; when the
+user answers the drift in the
 same session, the run says so and continues as an update.
 
 **Do not use when.** You want the kit configured once for every project. A profile is true of one
@@ -290,7 +291,10 @@ template's rule, and what the kit still needs, open questions, the not-implement
 node IDs, goes where the shape keeps notes. The skill never fills a field that records approval.
 When the Tech Lead answers whether a file already in a spec directory is the conventions document,
 the schema index, or a template, the skill records that answer as one line in the profile, an
-approved one included, so the question is not asked again. Run again on code that has not changed
+approved one included, so the question is not asked again; so is the rule for moving a version
+where the project names no template. Where the documents already in a directory are in more than
+one shape, the skill follows the shape most of them share, a tie going to the most recently
+committed, and says so in its summary. Run again on code that has not changed
 since the document was last written, it changes no line and lists what it newly noticed in its
 summary instead, so a document's version moves only when its code does.
 

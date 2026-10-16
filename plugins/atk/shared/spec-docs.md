@@ -188,7 +188,10 @@ The shape of a document is its heading order, depth of detail, table columns, la
 the shape keeps them, its own front matter and change history. It comes from the first of three
 sources that has one:
 
-1. **The documents already in the directory.** Read one and follow it.
+1. **The documents already in the directory.** Read one and follow it. Where they are not all in one
+   shape, follow the shape most of them share; where two shapes are shared by as many, the one of
+   the document committed most recently among them, by `git log -1 --format=%cI`. The run summary
+   names the shape followed and how many documents carry each, so the approver sees the split.
 2. **The template the project names for the kind**, in the `Template` column of the kinds table in
    the Docs section of `.atk/profile.md`, per `shared/project-profile.md`, which also holds the check
    a path passes before it is opened.
@@ -261,7 +264,10 @@ A project shape that carries a change-history table, or a version field, is kept
   columns and vocabulary, and moves a version field by the rule the template states. Where the
   template states none, the person running the skill is asked before the write, in any mode, and
   the rule they give is named in the summary for the approver to add to the template; never
-  guessed.
+  guessed. Where the profile names no template for the kind, a shape copied from neighbours that
+  carry a version among them, the rule is read first from a `Version rule` line in the Docs
+  section of `.atk/profile.md`, and the answer, once given, is recorded there as one, per
+  `shared/project-profile.md`, so the next write does not ask again.
 - A correction of wording follows the template's rule for one, and adds nothing where it has none.
 - A place the template says must agree with the last row, a version in the front matter or under the
   title, is set in the same write, except a value that records approval or finality, which is left
@@ -281,7 +287,10 @@ names each addition.
   code exists yet above.
 - **A screen's node IDs.** A shape with a column or a cell already holding node IDs keeps them
   there. Only a shape with none gets an appended `Design nodes` table, one row per item, keyed by the
-  item ID the shape uses. A document that already holds node IDs anywhere, a `Node` column, or beside
+  item ID the shape uses. A shape with no item ID, a bullet list with no `No` column, keys it by the
+  component's visible label as the design shows it, with `#2`, `#3` added in reading order where
+  two components share one, and the run summary says the label is the key. A document that already
+  holds node IDs anywhere, a `Node` column, or beside
   `path:line` in a note, is read from there on its first write after this rule, so no row loses its
   key.
 
