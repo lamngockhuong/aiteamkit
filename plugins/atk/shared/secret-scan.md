@@ -26,6 +26,8 @@ Cited by:
 - `shared/team-roles.md`, whose rule 9 takes its list of files from the table below, and the
   prompts that quote that table: `skills/review/references/review-rounds.md`,
   `shared/independent-challenge.md`, and `skills/orchestrate/references/job-prompt.md`.
+- `atk:catchup` in its document mode, through `skills/catchup/references/document-explainer.md`,
+  which refuses or asks about a document by the table below before reading it.
 
 ## The scan
 

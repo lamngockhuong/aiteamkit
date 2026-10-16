@@ -99,7 +99,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:init                                 # --audit --lang --out
 /atk:tailor [<skill>]                     # --audit --feedback --runs --since --out
 /atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out
-/atk:catchup <epic-url|pr-url>            # --no-check --lang --out
+/atk:catchup <epic|pr|file|doc-url|text>  # --no-check --lang --out
 /atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
 /atk:design-doc <requirement|topic>       # --adr|--no-adr --options --spike --challenge --lang --out
 /atk:spec [subject]                       # --kind --from --design --sync --check --lang --out

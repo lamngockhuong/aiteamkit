@@ -34,7 +34,7 @@ flowchart TB
 |-------|---------------|--------|-----------------|-----------------|
 | Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead. A test run record takes its `status`, its `Ticket` cells, and a recorded redaction, and nothing else | Only as a decision somebody owns, never as a blanket rule |
-| Derived | everything under `docs/derived/` | Optional, apart from the progress log and the run trace, which are never staged | Run the skill again | Yes, freely, apart from an unfinished progress log, which costs the ruled-out work |
+| Derived | everything under `docs/derived/` | Optional, apart from the progress log, the run trace, and the document-mode page of `atk:catchup` in `docs/derived/catchup/documents/`, which are never staged | Run the skill again | Yes, freely, apart from an unfinished progress log, which costs the ruled-out work |
 
 ## The three files that are not in any group
 
@@ -93,7 +93,10 @@ record of which job of which piece had reached where. The run trace
 every skill leaves under `docs/derived/traces/<skill>/`, unless the profile says `Run trace: off`,
 is the tenth: never staged, trimmed to twenty per skill only when `atk:tailor --feedback --runs`
 offers it and a person says yes, and read only to improve a skill, so deleting
-one costs that evidence and nothing downstream. Ten skills read one of the ten. Those four each read their own newest unfinished log before starting, and
+one costs that evidence and nothing downstream. The page `atk:catchup` writes in document mode, under
+`docs/derived/catchup/documents/`, is the eleventh: a temporary page held out of git by an ignore
+file in its own directory, never offered to be committed, and read by no skill, so deleting one
+costs only running the skill again. Ten skills read one of the first ten. Those four each read their own newest unfinished log before starting, and
 offer to resume it, asking first when its branch or start commit no longer matches. `atk:run-cases`
 reads the run log of an earlier run of the same cases file, to offer the cases that run deferred and
 to name data it created with no record after it; where that run wrote a record, the record lists the
@@ -126,8 +129,9 @@ decision that vanished without leaving a note saying what it had decided.
 `docs/derived/` is the only part of the tree the kit says a project may keep out of git. One line in
 `.gitignore` and the copies stop accumulating. Nothing in the skill chain breaks, because every
 original is still on the pull request or a single command away. A project that commits it still
-leaves the progress logs and the run traces out, since each is one person's working state or one
-run's account, not a copy, and both are held out of git whatever the project does.
+leaves the progress logs, the run traces and the document-mode pages of `atk:catchup` out, since
+each is one person's working state, one run's account, or a temporary explanation, not a copy, and
+all three are held out of git whatever the project does.
 
 Do not extend the same line to `docs/records/`, for two reasons that have nothing to do with disk
 space:

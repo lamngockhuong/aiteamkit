@@ -9,6 +9,12 @@
   { "query": "I picked up ticket ABC-88 and I do not understand the feature", "should_trigger": true },
   { "query": "give me the questions I should be able to answer before implementing this epic", "should_trigger": true },
   { "query": "I have to review a PR in a module I have never seen, brief me first", "should_trigger": true },
+  { "query": "explain the findings in docs/records/security/261002-0604-repo-head-review.md simply, one by one", "should_trigger": true },
+  { "query": "the vendor sent this pentest report PDF, explain each finding so the PM can follow it", "should_trigger": true },
+  { "query": "giải thích tài liệu này dễ hiểu giúp mình: docs/records/fixes/261016-0613-review-author-replies.md", "should_trigger": true },
+  { "query": "khách hàng gửi bản đặc tả này, mình chỉ cần hiểu nó nói gì, giải thích từng mục dễ hiểu", "should_trigger": true },
+  { "query": "このセキュリティ記録の指摘を一つずつわかりやすく説明して", "should_trigger": true },
+  { "query": "この監査報告書をわかりやすく説明して", "should_trigger": true },
 
   { "query": "the client sent this chat message, turn it into user stories", "should_trigger": false },
   { "query": "khách hàng vừa gửi yêu cầu này, làm rõ thành acceptance criteria", "should_trigger": false },
@@ -24,5 +30,12 @@
   { "query": "summarize what changed in the last sprint", "should_trigger": false },
   { "query": "document what the merged work now does so the API doc stays true", "should_trigger": false },
   { "query": "viết tài liệu mô tả tính năng đã merge để về sau còn tra", "should_trigger": false },
-  { "query": "which atk skill should I run next on this project", "should_trigger": false }
+  { "query": "which atk skill should I run next on this project", "should_trigger": false },
+  { "query": "turn this client document into requirements with acceptance criteria", "should_trigger": false },
+  { "query": "biến tài liệu khách hàng gửi thành requirement", "should_trigger": false },
+  { "query": "review this branch against our conventions before I approve it", "should_trigger": false },
+  { "query": "run a security review of this release and write the threat model", "should_trigger": false },
+  { "query": "write the retrospective for last sprint", "should_trigger": false },
+  { "query": "explain what atk:review does and when to use it", "should_trigger": false },
+  { "query": "atk:security dùng để làm gì, giải thích giúp mình", "should_trigger": false }
 ]

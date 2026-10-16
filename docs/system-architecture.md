@@ -196,6 +196,7 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   read: by what it can do, never through the harness's generic URL fetch, in three states because a
   connector can be listed and still not signed in, with the signed-in account never written down.
   `plugins/atk/shared/design-sources.md` cites it for naming the Figma connection and for that rule,
+  `atk:catchup` for reading a linked document in its document mode,
   and `plugins/atk/shared/independent-challenge.md` for the read-only agents a challenge spawns.
   Its section on agents that write is cited by `atk:orchestrate`, the one skill that runs other
   skills as jobs: the job's worktree as the boundary that is never widened, a terminal multiplexer
@@ -251,8 +252,10 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   of `atk:fix`, `atk:verify`, `atk:review`, `atk:security` and `atk:qa --record`, the last also
   reached by `atk:run-cases` through the run record shape it reuses, and by `## Output` of
   `atk:incident`, the
-  reports that record one run and ask a person to act on it. A report correct in every line is still
-  unreadable when each claim is a citation, and a rule written into six templates would drift into six.
+  reports that record one run and ask a person to act on it, and by document mode of `atk:catchup`,
+  whose page records no run but explains a document for the same absent reader. A report correct in
+  every line is still unreadable when each claim is a citation, and a rule written into six templates
+  would drift into six.
 - `plugins/atk/shared/independent-challenge.md`: how a draft is put before agents that read it cold, what
   each is given and never given, what an objection must name, and how the calling agent answers each
   one `Changed` or `Open`. Cited by `atk:design-doc --challenge`, whose lenses are the roles that
@@ -264,7 +267,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   by `atk:git` to read a diff and to scan what it stages, by `atk:security` over every tracked file,
   by `host-capabilities.md` for the masked diff every read-only agent the kit spawns reads, on every harness,
   by `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` and `atk:help` for a diff read in the session,
-  and by rule 9 in `team-roles.md` and the prompts that quote its table. It
+  by rule 9 in `team-roles.md` and the prompts that quote its table, and by the document mode of
+  `atk:catchup` for what it refuses to read. It
   lived in `atk:git`'s references until those other readers made it a contract between several
   skills.
 - `plugins/atk/shared/state-signals.md`: which artifacts gate the next skill while they wait for

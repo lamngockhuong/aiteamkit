@@ -9,7 +9,8 @@ for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answe
 one turn of an interview,
 by `independent-challenge.md` for the agents a challenge spawns, by `review-fix-loop.md` for the
 stated total of a review, by `design-sources.md` for naming
-a connection to a design tool and for how one is read, by `run-cases` for browser automation, by `help` for what it may
+a connection to a design tool and for how one is read, by `catchup` for how a linked document is
+read in its document mode, by `run-cases` for browser automation, by `help` for what it may
 name, by `init`, `catchup`, `spec`, `convention`, `security`, `fix`, and `onboard` for reading
 wide through an agent, and by `orchestrate` for agents that write and for the parallel-agents policy
 its concurrency follows. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
@@ -58,8 +59,10 @@ from another session is a guess.
 
 The harness's own generic URL fetch is not a connection. It reads what anyone on the network would
 see, which for a signed or internal link is a login page or nothing, and it sends the link somewhere
-the person never signed in. A link is never fetched any other way than through a ready connection to
-its service.
+the person never signed in. A link a run was handed to a document or a design held by a service that
+needs signing in is never fetched any other way than through a ready connection to its service. A
+public source a skill's own reference names, as `atk:convention` names its standard sources, is
+fetched the way that reference says.
 
 A tool list is not an answer either. A connection can be listed and still unable to read anything,
 which is the ordinary state of a connector nobody has signed in to yet. So the skill asks the
@@ -70,20 +73,22 @@ the run was given instead.
 | State | How it shows | What the skill does |
 |-------|--------------|---------------------|
 | Not installed | No tool in the session can do what the run needs from the service | Print the install line, then the skill's fallback |
-| Installed, not signed in | The tools are listed, and the identity call or the test read fails with a not-signed-in error | Print the sign-in line, then the skill's fallback |
+| Installed, not signed in | The tools are listed, and the identity call or the test read fails with a not-signed-in error, or the test read returns a login page or a page asking for access | Print the sign-in line, then the skill's fallback |
 | Ready | The identity call returns an account, or the test read returns what was asked for | Read through it |
 
-A test read that returns anything other than what was asked for, a login page, a page asking for
-access, or an empty body, is not the ready state, and the skill treats it as installed but not
-signed in.
+A read through a ready connection that returns a login page, a page asking for access, or a
+forbidden error is a failed read of that item, never its content: the account can see the service
+but not this item, and the skill prints one line saying so, then its fallback. An empty answer through
+a connection already shown ready is read as empty. An empty test read on a connection with no
+identity call shows no state: it is not ready, and the skill asks the person or takes its fallback.
 
 The account the identity call returns decides the state and nothing else. It is never written into
 a document, a record, a trace, or a ticket.
 
 Each of the two lines names the service and the step the person takes, the capability first and the
 local step second, per the next section. Neither line stops the run: each is followed by the skill's
-own fallback, an export or exported images, and a run that ends for want of a source ends for the
-missing source, never for the missing connection.
+own fallback, and a run that ends for want of a source ends for the missing source, never for the
+missing connection.
 
 ## Name the capability, then the command
 

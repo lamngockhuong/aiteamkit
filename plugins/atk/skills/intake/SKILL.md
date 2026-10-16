@@ -28,6 +28,8 @@ Does NOT handle: estimating effort (`atk:estimate`), technical design (`atk:desi
 assignment (`atk:breakdown`), writing a screen's component table (`atk:spec --kind screen`), or
 deciding priority and scope. Those belong to the PM and the
 stakeholder; this skill records their decision, it does not make it.
+Nor explaining a document a person was handed so they can understand it, a vendor's report or a
+client's specification read rather than turned into requirements, which is `atk:catchup`.
 
 ## Roles
 
