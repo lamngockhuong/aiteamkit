@@ -10,20 +10,17 @@ the source of no other kind, is in `shared/spec-docs.md`; this file only says ho
 
 ## Find the connection by what it can do
 
-A skill looks for a connection that can read a Figma file's structure, its text, and a screenshot of
-a node. It never looks for a fixed tool name, because the name differs by harness and by how the
-connection was installed: a claude.ai connector, a plugin's MCP server, and a Codex app each prefix
-the same tools differently. A tool name carried over from another session is a guess.
+The connection is found and read per Read through a connection in `shared/host-capabilities.md`:
+by what it can do, through its identity call or one test read, in one of three states, and never
+through the harness's generic URL fetch. What is Figma's own is below.
 
-A tool list is not an answer either. A connection can be listed and still unable to read anything,
-which is the ordinary state of a connector nobody has signed in to yet. So the skill asks the
-connection who is signed in, through whichever of its tools reports the signed-in account (it was
-`whoami` on every harness checked so far), and reads the result as one of three states. A connection
-that has no such tool, as a server running beside a desktop app may not, is tested by one read of
-the node the run was given instead: an answer is ready, a not-signed-in error is the second state.
+A Figma connection is one that can read a Figma file's structure, its text, and a screenshot of a
+node. The tool that reports the signed-in account was `whoami` on every harness checked so far. A
+connection that has no such tool, as a server running beside a desktop app may not, is tested by one
+read of the node the run was given.
 
-| State | How it shows | What the skill does |
-|-------|--------------|---------------------|
+| State | How it shows for Figma | What the skill does |
+|-------|------------------------|---------------------|
 | Not installed | No tool in the session reads Figma | Print the install line below, then fall back to images |
 | Installed, not signed in | The tools are listed, and the identity call or the test read fails with a not-signed-in error such as `USER_NOT_LOGGED_IN` | Print the sign-in line below, then fall back to images |
 | Ready | The identity call returns an account, or the test read returns the node | Read the design through it |

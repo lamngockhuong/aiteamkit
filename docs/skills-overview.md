@@ -193,13 +193,20 @@ accepted quietly. They become a number, a state, a visible result, or an open qu
 every unit the work touches with the path it lives at and the roles that reach it, who decides
 what, the terms a newcomer will not know, the places it is easy to go wrong, and an understanding
 check the developer answers before writing any code. For a pull request: the same brief scoped to
-the diff, without the check.
+the diff, without the check. For a document, a local file, pasted text, or a link read through a
+connection the harness has: a temporary page, held out of git, that explains it in plain words,
+finding by finding or section by section, with the document's IDs, severities and evidence kept as
+they are, a summary table, a suggested order of work that names who decides it, and the questions
+it leaves open.
 
 **Use when.** Someone picks up an epic they did not help write, joins work already in flight, or has
-to review a pull request in an area they do not know.
+to review a pull request in an area they do not know. Or someone is handed a document they have to
+act on without being a specialist: a security record of the kit, a vendor's penetration test report,
+a client's specification.
 
 **Do not use when.** The person is new to the project rather than to this piece of work
-(`atk:onboard`), the requirement itself is unclear rather than unfamiliar (`atk:intake`), or what is
+(`atk:onboard`), the requirement itself is unclear rather than unfamiliar (`atk:intake`), a client's
+document is to be turned into requirements rather than understood (`atk:intake` again), or what is
 wanted is a document of what the merged work now does, which is `atk:spec` and has to stay true long
 after a brief is thrown away.
 

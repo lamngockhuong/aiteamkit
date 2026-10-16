@@ -190,8 +190,12 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   việc giữ ngữ cảnh của mình cho artifact; harness không có agent thì đọc trực tiếp và ghi rõ đã
   làm vậy.
   `atk:help` trích dẫn file này cho những gì nó được nêu tên khi một yêu cầu nằm ngoài kit, kể cả
-  các skill của kit đi kèm. `plugins/atk/shared/design-sources.md` trích dẫn nó để gọi kết nối Figma
-  theo việc kết nối đó làm, và `plugins/atk/shared/independent-challenge.md` trích dẫn nó cho các
+  các skill của kit đi kèm. Mục Read through a connection của nó giữ cách tìm và đọc bất kỳ
+  kết nối nào tới dịch vụ bên ngoài: theo việc kết nối làm được, không bao giờ qua lệnh tải URL
+  chung của harness, theo ba trạng thái vì một connector có thể nằm trong danh sách mà vẫn chưa đăng
+  nhập, và không bao giờ ghi lại tài khoản đang đăng nhập. `plugins/atk/shared/design-sources.md`
+  trích dẫn nó để gọi tên kết nối Figma và cho quy tắc đó, `atk:catchup` trích dẫn nó để đọc một tài
+  liệu qua link trong document mode, và `plugins/atk/shared/independent-challenge.md` trích dẫn nó cho các
   agent chỉ đọc mà một lượt phản biện tạo ra.
   Mục về agent có quyền ghi được `atk:orchestrate` trích dẫn, skill duy nhất chạy các skill khác
   thành từng job. Mục này giữ bốn điều: worktree của job là ranh giới không bao giờ được nới rộng;
@@ -228,9 +232,9 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   `CODEOWNERS` thay vì tiêu một lượt hỏi. Hai skill đầu hỏi cùng một câu từ hai đầu, và chỉ cần một
   bên trả lời hẹp hơn là repo có thêm một template thứ hai đè lên template của chính đội.
 - `plugins/atk/shared/design-sources.md`: cách một skill đọc design Figma qua bất kỳ kết nối Figma nào harness
-  có. Kết nối được tìm theo việc nó làm được chứ không theo tên tool, và được chia thành ba trạng
-  thái, vì một kết nối có thể nằm trong danh sách mà vẫn chưa đăng nhập. Khi không kết nối nào
-  sẵn sàng, ảnh export thay chỗ, nên không skill nào dừng vì thiếu nó. File này cũng giữ node ID làm
+  có. Kết nối được tìm và phân trạng thái theo mục Read through a connection trong
+  `plugins/atk/shared/host-capabilities.md`, với dấu hiệu riêng của Figma cho từng trạng thái. Khi
+  không kết nối nào sẵn sàng, ảnh export thay chỗ, nên không skill nào dừng vì thiếu nó. File này cũng giữ node ID làm
   khóa ổn định của mỗi thành phần và mã băm mà một lần đọc ghi lại; nhờ hai thứ đó, lần chạy thứ hai
   chỉ đụng tới những dòng đã đổi. `atk:spec` trích dẫn nó cho kind `screen`, kind duy nhất lấy design
   làm nguồn, `atk:intake` trích dẫn nó khi yêu cầu là một design, còn `atk:qa` chỉ đọc design cho case `GUI` khi
@@ -246,7 +250,7 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   quanh bằng chứng, và những thứ không bao giờ đổi, trước hết là chính bằng chứng. Template report
   của `atk:fix`, `atk:verify`, `atk:review`, `atk:security` và `atk:qa --record` trích dẫn file này,
   `atk:run-cases` cũng tới đây qua hình dạng run record nó dùng lại,
-  cùng mục `## Output` của `atk:incident`, vì đó là những report ghi lại một lần chạy và cần một người hành động theo. Một
+  cùng mục `## Output` của `atk:incident`, vì đó là những report ghi lại một lần chạy và cần một người hành động theo, và document mode của `atk:catchup`, nơi trang được viết ra không ghi lại lần chạy nào nhưng giải thích một tài liệu cho cùng kiểu người đọc vắng mặt đó. Một
   report đúng từng dòng vẫn không đọc được khi mỗi nhận định chỉ là một trích dẫn, và một quy tắc
   chép vào sáu template sẽ trôi thành sáu bản khác nhau.
 - `plugins/atk/shared/independent-challenge.md`: cách đưa một bản nháp cho các agent đọc nó từ đầu
@@ -262,7 +266,8 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   mọi file đã track, `host-capabilities.md` dùng nó cho bản diff đã che mà mọi agent chỉ đọc do kit
   sinh ra đều đọc, trên mọi harness. `ticket-adapters.md`, `tidy-pass.md`, `atk:spec` và `atk:help` dùng nó
   cho diff đọc ngay trong phiên, còn nguyên tắc 9 trong `team-roles.md` và các prompt trích bảng của
-  nó lấy danh sách file từ đây. File từng nằm trong references của `atk:git`, cho tới khi những nơi đọc
+  nó lấy danh sách file từ đây, và document mode của `atk:catchup` dùng nó để biết những gì không được
+  đọc. File từng nằm trong references của `atk:git`, cho tới khi những nơi đọc
   khác biến nó thành hợp đồng giữa nhiều skill.
 - `plugins/atk/shared/state-signals.md`: những artifact nào chặn skill tiếp theo khi còn chờ duyệt,
   những bằng chứng trên đĩa gọi tên skill đó, theo thứ tự cần kiểm, và cách gom các artifact đang

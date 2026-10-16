@@ -7,7 +7,9 @@ the files it cites can read it once and know what happened and what they have to
 
 Cited by the report templates of `fix`, `verify`, `review`, `security`, and `qa --record`, the last
 also reached by `run-cases` through the run record shape it reuses, and by
-`## Output` of `incident`, which has no template file: the reports that record one run and ask a person to act on it. It is what rule 4 of
+`## Output` of `incident`, which has no template file: the reports that record one run and ask a person to act on it. Document mode of
+`catchup` cites it too, through `skills/catchup/references/document-explainer.md`: its page records no run,
+and explains a document finding by finding, under the same rules. It is what rule 4 of
 `shared/team-roles.md`, write for the absent reader, means for their prose.
 
 A report can be correct in every line and still be unreadable, when each claim is a citation the

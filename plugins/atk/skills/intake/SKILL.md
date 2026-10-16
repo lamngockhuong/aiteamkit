@@ -28,6 +28,8 @@ Does NOT handle: estimating effort (`atk:estimate`), technical design (`atk:desi
 assignment (`atk:breakdown`), writing a screen's component table (`atk:spec --kind screen`), or
 deciding priority and scope. Those belong to the PM and the
 stakeholder; this skill records their decision, it does not make it.
+Nor explaining a document a person was handed so they can understand it, a vendor's report or a
+client's specification read rather than turned into requirements, which is `atk:catchup`.
 
 ## Roles
 
@@ -62,8 +64,8 @@ read the kit's `shared/run-trace.md` and do what it says before the file, at eac
 Quote the request verbatim into the artifact before interpreting it. Interpretation drifts; the
 quote does not.
 
-A design given with `--design` is read per `shared/design-sources.md`, which holds the three states
-of the Figma connection and the fallback to exported images. A picture cannot be quoted the way text
+A design given with `--design` is read per `shared/design-sources.md`, which applies the connection
+states of `shared/host-capabilities.md` to Figma and holds the fallback to exported images. A picture cannot be quoted the way text
 can, so in place of the quote the artifact records what was read: the source, in the form What a read records in
 `shared/design-sources.md` gives it, each frame with its
 `screen_id`, node ID and fingerprint, and the date. The line saying that Ready for dev could not be

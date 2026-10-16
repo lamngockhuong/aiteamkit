@@ -34,7 +34,7 @@ flowchart TB
 |------|--------------|--------|------------|------------|
 | Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` và `docs/conventions.md`, các tài liệu onboarding, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có, trừ hình dạng `workspace`, nơi gốc dự án không thuộc repository nào nên không gì theo dõi chúng | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì, hoặc, khi `Contract: first`, đã được thống nhất sẽ làm gì |
 | Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa. Record của một lần chạy test chỉ được đổi `status`, các ô `Ticket`, và phần che dữ liệu có ghi lại, không gì khác | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
-| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội, trừ progress log và run trace, hai thứ không bao giờ được stage | Chạy lại skill | Được, thoải mái, trừ progress log chưa xong: xóa nó là mất phần việc đã loại trừ |
+| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội, trừ progress log, run trace, và trang document mode của `atk:catchup` trong `docs/derived/catchup/documents/`, ba thứ không bao giờ được stage | Chạy lại skill | Được, thoải mái, trừ progress log chưa xong: xóa nó là mất phần việc đã loại trừ |
 
 ## Ba file không thuộc nhóm nào
 
@@ -93,7 +93,10 @@ sau làm lại từ đầu, còn với `atk:orchestrate` thì mất luôn ghi ch
 tới đâu. Run trace mà mọi skill để lại trong `docs/derived/traces/<skill>/`, trừ
 khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ được stage, mỗi skill chỉ bị cắt về hai mươi trace khi
 `atk:tailor --feedback --runs` đề nghị và có người đồng ý, và chỉ được đọc để cải thiện skill, nên xóa một trace thì mất phần bằng chứng ấy và không ảnh
-hưởng gì phía sau. Có mười skill đọc một trong mười loại. Bốn skill ấy, trước khi bắt đầu,
+hưởng gì phía sau. Trang mà `atk:catchup` viết ở document mode, trong
+`docs/derived/catchup/documents/`, là loại thứ mười một: một trang tạm được giữ ngoài git bằng file
+ignore trong chính thư mục của nó, không bao giờ được đề nghị commit, và không skill nào đọc, nên xóa
+một trang chỉ tốn công chạy lại skill. Có mười skill đọc một trong mười loại đầu. Bốn skill ấy, trước khi bắt đầu,
 mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
 trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
 chạy trước trên cùng file test case, để đề nghị chạy tiếp những case lần đó đã hoãn và để nêu dữ
@@ -126,8 +129,9 @@ quyết định đã biến mất mà không để lại dòng nào nói nó t�
 `docs/derived/` là phần duy nhất của cây thư mục mà kit nói dự án có thể không đưa vào git. Một dòng
 trong `.gitignore` là các bản sao thôi dồn lại. Không mắt xích nào trong chuỗi skill đứt, vì mọi bản
 gốc vẫn nằm trên pull request hoặc chỉ cách một câu lệnh. Dự án có commit thư mục này thì vẫn để
-progress log và run trace ở ngoài, vì mỗi log là trạng thái làm việc của một người, mỗi trace là
-bản tường thuật một lượt chạy, không phải bản sao, và git không bao giờ nhận cả hai, dù dự án làm gì.
+progress log, run trace và các trang document mode của `atk:catchup` ở ngoài, vì mỗi log là trạng
+thái làm việc của một người, mỗi trace là bản tường thuật một lượt chạy, mỗi trang là một bản giải
+thích tạm, không phải bản sao, và git không bao giờ nhận cả ba, dù dự án làm gì.
 
 Đừng nối dòng đó sang `docs/records/`, vì hai lý do không liên quan gì tới dung lượng đĩa:
 

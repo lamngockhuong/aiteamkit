@@ -9,7 +9,8 @@ for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answe
 one turn of an interview,
 by `independent-challenge.md` for the agents a challenge spawns, by `review-fix-loop.md` for the
 stated total of a review, by `design-sources.md` for naming
-a connection to a design tool, by `run-cases` for browser automation, by `help` for what it may
+a connection to a design tool and for how one is read, by `catchup` for how a linked document is
+read in its document mode, by `run-cases` for browser automation, by `help` for what it may
 name, by `init`, `catchup`, `spec`, `convention`, `security`, `fix`, and `onboard` for reading
 wide through an agent, and by `orchestrate` for agents that write and for the parallel-agents policy
 its concurrency follows. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
@@ -32,7 +33,7 @@ harness, because it arrived with the harness rather than with a kit.
 The connection row is how `shared/design-sources.md` can say "the Figma connection": the service is
 what the team already works in, and the skill reads it as a source. The row names the service, never
 a skill or command that the plugin carrying the connection also ships, and every use of it says what
-happens without it.
+happens without it. How a connection is found and read is Read through a connection, below.
 
 The companion row is one skill's exception, recorded in the kit repository's review checklist:
 `atk:help` answers which skill to run, and the same marketplace ships skills `atk` does not. Every
@@ -42,6 +43,52 @@ The last row is the rule the kit repository's `CLAUDE.md` states as "the kit sta
 that installed only atk still has its harness; it does not have somebody else's kit. A pointer at a
 host capability degrades into doing the work by hand, and a pointer at a foreign kit degrades into a
 dead end the team only finds by following it.
+
+## Read through a connection
+
+How a skill finds and reads a connection to an outside service, a design tool and a document store
+alike. A skill that reads one cites this section and adds only what is that service's own: what the
+connection must be able to read, the signs of each state the service gives, its install and sign-in
+lines, and its fallback. `shared/design-sources.md` does this for Figma.
+
+The skill looks for a connection that can do what the run needs from the service, such as reading a
+Figma node's structure or reading a document by its link. It never looks for a fixed tool name,
+because the name differs by harness and by how the connection was installed: a claude.ai connector, a
+plugin's MCP server, and a Codex app each prefix the same tools differently. A tool name carried over
+from another session is a guess.
+
+The harness's own generic URL fetch is not a connection. It reads what anyone on the network would
+see, which for a signed or internal link is a login page or nothing, and it sends the link somewhere
+the person never signed in. A link a run was handed to a document or a design held by a service that
+needs signing in is never fetched any other way than through a ready connection to its service. A
+public source a skill's own reference names, as `atk:convention` names its standard sources, is
+fetched the way that reference says.
+
+A tool list is not an answer either. A connection can be listed and still unable to read anything,
+which is the ordinary state of a connector nobody has signed in to yet. So the skill asks the
+connection who is signed in, through whichever of its tools reports the signed-in account, and reads
+the result as one of three states. A connection that has no such tool is tested by one read of what
+the run was given instead.
+
+| State | How it shows | What the skill does |
+|-------|--------------|---------------------|
+| Not installed | No tool in the session can do what the run needs from the service | Print the install line, then the skill's fallback |
+| Installed, not signed in | The tools are listed, and the identity call or the test read fails with a not-signed-in error, or the test read returns a login page or a page asking for access | Print the sign-in line, then the skill's fallback |
+| Ready | The identity call returns an account, or the test read returns what was asked for | Read through it |
+
+A read through a ready connection that returns a login page, a page asking for access, or a
+forbidden error is a failed read of that item, never its content: the account can see the service
+but not this item, and the skill prints one line saying so, then its fallback. An empty answer through
+a connection already shown ready is read as empty. An empty test read on a connection with no
+identity call shows no state: it is not ready, and the skill asks the person or takes its fallback.
+
+The account the identity call returns decides the state and nothing else. It is never written into
+a document, a record, a trace, or a ticket.
+
+Each of the two lines names the service and the step the person takes, the capability first and the
+local step second, per the next section. Neither line stops the run: each is followed by the skill's
+own fallback, and a run that ends for want of a source ends for the missing source, never for the
+missing connection.
 
 ## Name the capability, then the command
 

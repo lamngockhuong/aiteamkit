@@ -86,7 +86,7 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `init` | Repo | Profile của dự án | Mọi skill có chạy lệnh |
 | `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi; với `--feedback --runs`, các run trace của skill đó | File ghi đè cho skill đó | Chính skill mang tên file đó |
 | `intake` | Một yêu cầu thô, hoặc một design Figma | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa`; từ design thì `spec --kind screen`, bỏ qua `design-doc` trừ khi thay đổi của màn hình chạm tới schema, public contract, shared module, hoặc hơn một service |
-| `catchup` | Một epic hoặc một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài | Con người, không phải skill |
+| `catchup` | Một epic hoặc một pull request; ở document mode, một file local, đoạn văn bản dán vào, hoặc một tài liệu qua link, là record của kit hay bất kỳ tài liệu nào khác | Bản tóm tắt kèm phần kiểm tra hiểu bài; ở document mode, một trang tạm giải thích tài liệu, nằm ngoài git | Con người, không phải skill |
 | `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |
 | `design-doc` | Yêu cầu, và tài liệu tham chiếu của vùng sắp đổi | Thiết kế kèm ADR; khi `Contract: first` thì contract ở dạng tóm tắt, kèm tên các tài liệu tham chiếu | `breakdown`, `plan`, `implement`, và `spec` khi `Contract: first` |
 | `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`; khi `Contract: first` thì cả thiết kế; với màn hình thì design Figma của nó hoặc ảnh export từ đó | Tài liệu tham chiếu được giữ đúng, hoặc một báo cáo lệch | `design-doc`, `qa`, `plan`, `implement`, `review` |

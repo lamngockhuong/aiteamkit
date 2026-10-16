@@ -139,7 +139,7 @@ to `docs/adr/` as well.
 | `init` | `.atk/profile.md` (see the exception below) |
 | `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
 | `intake` | `docs/records/requirements/<date>-<ticket>-<slug>.md` |
-| `catchup` | `docs/derived/catchup/<date>-<ticket>-<slug>.md` |
+| `catchup` | `docs/derived/catchup/<date>-<ticket>-<slug>.md`; in document mode, a temporary page at `docs/derived/catchup/documents/<date>-<slug>.md`, held out of git by an ignore file holding `*` in that directory and never offered to be committed, per `skills/catchup/references/document-explainer.md` |
 | `estimate` | `docs/records/planning/estimate-<sprint-or-date>-<ticket>.md`, where `-<ticket>` is the epic when the run was given one, the ticket when it was given exactly one, and left out otherwise: several tickets, a backlog document, or none. Two epics estimated for one sprint get two names; two runs that still collide take the next free suffix |
 | `design-doc` | `docs/records/design/<date>-<ticket>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`; under `--spike`, `docs/records/design/<date>-<ticket>-spike-<slug>.md` and no ADR |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below) |
@@ -239,7 +239,7 @@ merged and which directory it goes in.
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, orchestration proposals, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then |
-| Derived | the implementation record, the review report, the catchup brief, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify`, `implement` and `orchestrate`, with the job result files beside the last, the run trace of every skill | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, or the trace of a finished run, never staged either, whose deletion costs only the evidence it held |
+| Derived | the implementation record, the review report, the catchup brief and its document-mode page, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify`, `implement` and `orchestrate`, with the job result files beside the last, the run trace of every skill | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, or the trace of a finished run, never staged either, whose deletion costs only the evidence it held |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -295,7 +295,9 @@ the run confirms them, and they are never committed while they wait.
 A record nobody has filed yet is the only copy there is, and a review run without `--comment` posts
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. A run trace is read only to improve a skill, so losing
-one costs that evidence and nothing downstream. Ten skills read one of the ten. `atk:fix`, `atk:verify`,
+one costs that evidence and nothing downstream. The document-mode page of `atk:catchup` is an
+explanation rebuilt by running the skill again, and no skill reads it. Ten skills read one of the ten
+kinds before it. `atk:fix`, `atk:verify`,
 `atk:implement` and `atk:orchestrate` each read their own unfinished progress log, per Progress log, below,
 and `atk:orchestrate` its job result files with it.
 `atk:run-cases` reads
@@ -313,11 +315,12 @@ progress log costs the ruled-out work, done again, and losing a
 report costs a set of identifiers, unless a `--comment` run posted them, and a list of gaps the next review raises again, rather than a step
 in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
-wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Two derived
+wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Three derived
 kinds are never staged whatever the project does with the directory: the progress log, held out by
 a line in the local exclude file, the rest of its run directory by the staging rule of
 `shared/finalize-steps.md`, or for `atk:orchestrate`'s whole run directory by its own ignore file, and the run trace, held out by an ignore file in its own directory,
-per the two subsections below.
+per the two subsections below, and the document-mode page of `atk:catchup`, held out as its row
+above says.
 
 The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
 documents rather than one. A design argues for a change and cites the code as it stood before it;

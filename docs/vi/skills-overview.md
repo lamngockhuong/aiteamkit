@@ -195,13 +195,20 @@ hoặc một câu hỏi còn treo.
 phạm vi, một bảng liệt kê từng thứ công việc chạm tới kèm đường dẫn nó nằm và những vai chạm được
 tới nó, ai quyết cái gì, những thuật ngữ người mới sẽ không hiểu, những chỗ dễ làm sai, và phần tự
 kiểm hiểu bài mà dev phải trả lời trước khi viết dòng mã nào. Với một pull request: cùng bản
-tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm.
+tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm. Với một tài liệu, là file local,
+đoạn văn bản dán vào, hoặc link được đọc qua một kết nối mà harness có: một trang tạm, nằm ngoài git,
+giải thích tài liệu bằng lời dễ hiểu theo từng finding hoặc từng mục, giữ nguyên ID, mức độ và bằng
+chứng của tài liệu, kèm bảng tổng hợp, thứ tự xử lý đề xuất có ghi tên người quyết định, và các câu
+hỏi tài liệu còn để ngỏ.
 
 **Dùng khi.** Một người nhận epic mà họ không tham gia soạn, vào một việc đang chạy giữa chừng, hoặc
-phải review một pull request ở mảng họ không nắm.
+phải review một pull request ở mảng họ không nắm. Hoặc một người được giao một tài liệu phải hành
+động theo mà không có chuyên môn: một security record của kit, báo cáo kiểm thử xâm nhập của bên thứ
+ba, đặc tả của khách hàng.
 
 **Không dùng khi.** Người đó mới với cả dự án chứ không riêng phần việc đang làm (`atk:onboard`),
-bản thân yêu cầu còn mập mờ chứ không chỉ là lạ lẫm (`atk:intake`), hoặc thứ cần là một tài liệu ghi
+bản thân yêu cầu còn mập mờ chứ không chỉ là lạ lẫm (`atk:intake`), tài liệu của khách hàng cần được
+biến thành requirement chứ không chỉ để hiểu (cũng là `atk:intake`), hoặc thứ cần là một tài liệu ghi
 lại phần việc đã merge nay làm những gì: đó là `atk:spec`, và nó phải còn đúng rất lâu sau khi bản
 tóm tắt bị vứt đi.
 
