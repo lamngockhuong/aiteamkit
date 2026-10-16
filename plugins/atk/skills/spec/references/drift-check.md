@@ -61,9 +61,13 @@ own, the schema index. Per document:
   `major`: the document says nothing wrong, it says too
   little, and a caller handles only what it lists.
 - **Examples.** Each example body is an item. One that does not parse as the format it claims is
-  `minor`. A value shaped like a credential, a real person's data, or an internal host is reported
-  by document, endpoint and field, and never quoted, so the report prints nothing that would need
-  masking; it is `major`, and the report says the value is to be replaced, not judged. A value that
+  `minor`.
+- **Real values.** Every item the document holds is scanned, its example bodies, table cells, sample
+  requests, change-history rows and notes alike, with the team's own names in the document's own
+  fields left out, per `shared/spec-docs.md`. A value shaped like a credential, a real person's
+  data, or an internal host is reported by document and field, and endpoint where there is one, and
+  never quoted, so the report prints nothing that would need masking; it is `major`, and the report
+  says the value is to be replaced, not judged. A value that
   may be a live credential is already in the repository's history and wherever it was pushed, so the
   report also says so, and leaves rotating it, the step What happens on a hit in
   `shared/secret-scan.md` asks of a value that reached a remote, as an open question for the
@@ -135,7 +139,7 @@ dressed as a conclusion is worse than the question.
 
 A `rule breach` is the exception to the shape: it has no code side, so it carries the document's
 line, the rule it breaks, and the cost. A value shaped like a credential is never quoted, per
-Examples above, only placed by document, endpoint and field.
+Real values above, only placed by document and field, and endpoint where there is one.
 
 ## What is not drift
 

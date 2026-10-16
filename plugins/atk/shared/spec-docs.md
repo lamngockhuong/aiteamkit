@@ -303,11 +303,20 @@ every `--check`:
 - **Authentication has an outcome.** An endpoint that needs authentication lists a `401` outcome, and
   one that checks a permission lists a `403`, where the shape lists outcomes at all. A caller handles
   the outcomes the document lists, and an unlisted one is handled by nobody.
-- **An example is synthetic and parses.** Where the shape carries an example body, it parses as the
-  format it claims, and every value in it is a placeholder made up for the document: no real token,
-  key or password, an expired one included, and no real person's data or internal host, by the list
-  in The data a record must not carry in `skills/qa/references/test-run.md`. An example is copied
-  into tickets, tests and chat, and a real value travels with it.
+- **An example parses.** Where the shape carries an example body, it parses as the format it claims.
+- **No value in the document is real.** Every value a reference document carries, an example body, a
+  table cell, a sample request, a row of its change history, a note, is a placeholder made up for the
+  document: no real token, key or password, an expired one included, and no real person's data or
+  internal host, by the list in The data a record must not carry in
+  `skills/qa/references/test-run.md`. A cell a template asks to fill from the code, its
+  configuration or a log, a `Base URL`, a sample request with an `Authorization` header, a contact
+  address, is where a real value is most often copied. A write fills such a cell with a placeholder,
+  `https://api.example.com`, `Bearer <token>`, `contact@example.com`, or, where no placeholder can
+  say what the reader needs, opens a question naming the kind's approver, per `## Roles` of
+  `atk:spec`, and never copies the real value. The names of the team's own people in the
+  document's own fields, `owner`, `approver`, the author of a history row, are not a real person's
+  data here, as that list says of a run record's `Run by`. A document is copied into tickets, tests
+  and chat, and a real value travels with it.
 - **A reference without a key says why.** A column named `*_id` with no foreign key carries the reason
   in its row: another service owns the row, a key would block an archive, the value is a reference
   kept after its row is gone. Without the reason, the next person adds the key or removes the
