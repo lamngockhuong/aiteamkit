@@ -49,7 +49,7 @@ và yêu cầu duyệt tới đúng người chứ không trả lời thay, và 
 Lớp `plugins/atk/shared/` giữ những gì lẽ ra phải lặp lại hai mươi lăm lần: từ vựng vai trò, quy ước đường dẫn
 artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười tám file còn lại là hợp đồng
 giữa những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
-`layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa sáu skill có
+`layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa bảy skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
 cung cấp, `spec-docs.md` giữa `spec` và năm skill có nghĩa vụ để tài liệu của nó đúng,
 `host-file-locations.md` giữa `convention`, skill hỏi xem một file cộng tác có thiếu hay không,

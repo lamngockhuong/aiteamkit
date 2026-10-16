@@ -185,7 +185,7 @@ a section to delete.
 | Project | Name, repository, the shape from the four above, package manager, and, where the shape names them, the member repositories with their paths, remotes, owning teams, and how each is linked | all |
 | Layers | Per layer: directory, standards document, reference module | plan, implement, fix, verify, run-cases |
 | Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
-| Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, whether the project writes its reference documents before the code or after it, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row or adds one | every skill that writes an artifact |
+| Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, whether the project writes its reference documents before the code or after it, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row, adds one, or names a template of its own for a kind, with the front-matter map beside it | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release; and every skill detecting a tracker, per `shared/ticket-adapters.md` |
 | Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, and the language the team writes artifacts in | all |
 | Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to bring the data store to the branch's state, which stores other sessions also read, how to clean up, how to be sure the target is local | verify |
@@ -197,11 +197,39 @@ from, which is a fact about the directory layout and stays true when a Vietnames
 English document. A tree that is not partitioned records that and nothing else;
 `shared/artifact-paths.md` owns what each skill then does with it.
 
-Two entries in Docs change what a skill does rather than where it writes.
+Three entries in Docs change what a skill does rather than where it writes. Beside the kinds table,
+the front-matter map changes what one field is called, and two answer lines record what a file
+already in a spec directory is.
 
 - `Contract: first` or `Contract: code`: whether a reference document of any kind but `screen` may
   exist before the code it describes. `shared/spec-docs.md` owns what each value means, and why a
   missing line reads as `code`.
+- The `Template` column of the kinds table: the project's own template for a kind, a path from the
+  project root, written only for the kinds the project has one for. `atk:spec` takes a document's
+  shape from it when the directory holds no document yet, per The project's own shape wins in
+  `shared/spec-docs.md`. Before a template is read, it must exist as a Markdown or other text file,
+  its real path, symbolic links resolved, must sit inside the project root, and it must be none of
+  the files rule 9 of `shared/team-roles.md` keeps unread, the rows of Paths that are a finding on
+  their own in `shared/secret-scan.md` among them. Otherwise it is refused in one line, naming what
+  failed and not the file's content, and the run falls back to the next source of the shape.
+- The front-matter map, optional, beside the kinds table: one line per kit field the project
+  carries under a name of its own, `owner: updated_by`. A line is refused in one line, and the run
+  writes the kit's own field instead, when it is not one to one, when its kit field is one Front
+  matter under a project shape in `shared/spec-docs.md` keeps by name, or when its project field
+  records approval or finality, which that section leaves to the approver. `atk:init` never
+  guesses a map line, writes one only when a person gives it, and `--audit` reports a line that
+  would be refused.
+- Also beside the kinds table, the Tech Lead's answers about a file in a spec directory, one line
+  each: about a `conventions.md` or an `index.md` the kit did not write,
+  `API conventions document: <path> is | is not, <name>, <date>` and
+  `Schema index: <path> is | is not, <name>, <date>`, and about a file named like a template,
+  `Not a template: <path>, <name>, <date>`. A run reads them before asking, so each question is
+  asked once.
+- Those answer lines are the profile's one entry a skill other than `atk:init` writes. `atk:spec`
+  adds a line when the answer comes, even to a profile at `APPROVED`: the line records a decision
+  the Tech Lead has just made, so the write moves `updated`, leaves `status` as it is, changes no
+  other line, and is named in the run summary. With no profile there is nowhere to write it: the
+  summary names the line for whoever writes the profile, and the next run asks again.
 - `Run trace: off`: no skill leaves a run trace in this project. A missing line, and a missing
   profile, mean on. `shared/run-trace.md` owns what a trace holds, and rule 10 of
   `shared/team-roles.md` is the obligation the line switches off.

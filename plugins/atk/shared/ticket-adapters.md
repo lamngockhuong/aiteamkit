@@ -230,4 +230,5 @@ An artifact with no ticket sets `ticket: none`. Do not invent an ID.
 
 A reference document, of any kind `shared/spec-docs.md` covers and whoever writes it, is linked one
 way only: the ticket links to it, and the
-document carries no `ticket` field, per Front matter in `shared/artifact-paths.md`.
+document carries no `ticket` field of the kit's, per Front matter in `shared/artifact-paths.md`,
+which also keeps one the project's own front matter carries.

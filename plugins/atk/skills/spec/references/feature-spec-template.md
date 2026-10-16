@@ -1,6 +1,7 @@
 # Feature spec template
 
-Loaded by `atk:spec` in step 2, and only when `docs/features/` holds nothing to copy the shape from.
+Loaded by `atk:spec` in step 2, and only when `docs/features/` holds nothing to copy the shape from
+and the profile names no template for the kind.
 One file per feature, named after the feature.
 
 The reader is a QA engineer writing test cases, a BrSE answering a client, or a developer joining the

@@ -14,8 +14,8 @@ asks for one.
 ## Coverage checklist
 
 Before comparing anything, list every checkable claim in the document: each endpoint, each field with
-a rule, each error code, each column, each behaviour rule. Every item on that list appears in the
-output with exactly one status:
+a rule, each error code, each column, each behaviour rule, and the items of Rules that hold under any
+shape, below. Every item on that list appears in the output with exactly one status:
 
 | Status | Meaning |
 |--------|---------|
@@ -24,6 +24,7 @@ output with exactly one status:
 | `no implementation` | Nothing in the code corresponds to it, and the document claims something does |
 | `not implemented yet` | A contract-first document, or a `screen` document under either `Contract` line, counts it as not implemented: the document is at `implemented: no`, or the item carries the mark |
 | `unanswered` | The document never settled it; see below |
+| `rule breach` | The document breaks one of the Rules that hold under any shape, below. Judged against the document alone, so it names the document's line and the rule rather than a code `path:line` |
 
 `not implemented yet` is the one status that is never a finding: it is the state a contract-first
 team planned for, per `shared/spec-docs.md`. It is listed so the reader sees how much of the contract
@@ -32,9 +33,57 @@ changes still runs its old behaviour until the change lands. The one finding suc
 is a stale mark, `minor`: its code exists and already agrees with the contract, so the mark should
 have come off. Under `Contract: code` the status occurs only in a `screen` document.
 
+A document in a project's own shape is listed in that shape's own items and columns, its endpoint
+blocks, its table rows, its numbered rules, with the kit's own items read where Where the kit's own
+items go in `shared/spec-docs.md` puts them. A file at
+a `Template` path in the profile is a template, not a document, and is never listed. A file only
+named like a template, per the paragraphs under the kinds table in `shared/artifact-paths.md`, is
+listed and checked like any document, and marked as possibly a template for the Tech Lead to
+confirm, unless a `Not a template` line in the profile already records that answer.
+
+Two files in the kind directories are not a subject, per those same paragraphs: `conventions.md` in the
+`api` directory is listed as the conventions document, its items the code rows, and `index.md` in the
+`db` directory as the schema index, its items the table rows and the diagram. Neither is
+ever listed as a resource or a table named after the file.
+
 The list exists because the failure mode of this mode is silence. A check that reports four findings
 and says nothing about the other sixty items has not told the reader whether those sixty passed or
 were never looked at, and the two are not the same.
+
+## Rules that hold under any shape
+
+The rules of that name in `shared/spec-docs.md` are checked on every document, whatever shape it
+copied, since they say what a document must hold rather than where, with one check of this file's
+own, the schema index. Per document:
+
+- **Required outcomes.** Where the shape lists outcomes at all, each endpoint that needs
+  authentication has a `401` outcome, and each that checks a permission a `403`. One missing is
+  `major`: the document says nothing wrong, it says too
+  little, and a caller handles only what it lists.
+- **Examples.** Each example body is an item. One that does not parse as the format it claims is
+  `minor`. A value shaped like a credential, a real person's data, or an internal host is reported
+  by document, endpoint and field, and never quoted, so the report prints nothing that would need
+  masking; it is `major`, and the report says the value is to be replaced, not judged. A value that
+  may be a live credential is already in the repository's history and wherever it was pushed, so the
+  report also says so, and leaves rotating it, the step What happens on a hit in
+  `shared/secret-scan.md` asks of a value that reached a remote, as an open question for the
+  credential's owner. The check itself does not stop: it changes nothing and unstages nothing, and
+  reports every other item.
+- **Error codes.** Where the conventions document exists, each code a resource document cites is
+  compared with it, and one it lacks is `major`. Where the project keeps no conventions document,
+  nothing is compared, and the report says so in one line rather than calling the codes checked.
+- **References without a key.** A `*_id` column with no foreign key and no reason in its row is
+  `minor`.
+- **The schema index.** Where the schema index exists, every table document has a row and
+  every row a document, and every table and column name its `erDiagram` draws matches the table
+  documents character for character. A mismatch is `major`, since the index is what someone reads
+  before writing a join.
+- **A part left out.** A section or table the shape carries that is deleted or left empty, with no
+  `N/A` and reason, is `minor`. A part the shape marks optional is not one.
+
+These levels hold for these rules over the general table under Severity below: a missing `401` is a
+`major` breach of a rule here, even though a status code the document gets wrong is `blocking`
+there.
 
 ## A screen has two sides
 
@@ -58,6 +107,11 @@ A `screen` document is checked against its design as well as its code, per The `
   transition. A marked row is `not implemented yet`, and so is a row struck through as removed from
   the design whose component the code still shows: the removal is the same planned state as an
   addition, per `shared/spec-docs.md`. It becomes `checked` once the code drops the component.
+  Each row of the Events table is an item too, compared with what the screen's code does for its
+  `Then`, and it takes the status of the component it names, or of the screen for `-`, while that
+  is not implemented. Each `api` cell is an item: its link resolves to a section of an `api`
+  document, and the method and path match the call the code makes. A link that resolves nowhere is
+  `minor`; a call to another endpoint is drift.
 
 ## Drift is not the same as an unanswered question
 
@@ -78,6 +132,10 @@ A finding carries four things:
 
 It does not say which side should change. Where the direction is genuinely unclear, say so; a guess
 dressed as a conclusion is worse than the question.
+
+A `rule breach` is the exception to the shape: it has no code side, so it carries the document's
+line, the rule it breaks, and the cost. A value shaped like a credential is never quoted, per
+Examples above, only placed by document, endpoint and field.
 
 ## What is not drift
 

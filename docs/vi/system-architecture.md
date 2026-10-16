@@ -170,8 +170,8 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   giống hệt nhau ở cả ba.
 - `plugins/atk/shared/diagram-conventions.md`: khi nào một sơ đồ xứng đáng có mặt trong artifact, bốn dạng hình
   mà kit vẽ, và các quy tắc giữ cho chúng dễ đọc trong một pull request ở cả nền sáng lẫn nền tối.
-  Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:security` và `atk:incident`
-  trích dẫn, tức sáu skill có sơ đồ trong artifact. Sơ đồ viết bằng Mermaid nên hiện ra ngay tại nơi người ta đọc
+  Được `atk:catchup`, `atk:design-doc`, `atk:plan`, `atk:breakdown`, `atk:spec`, `atk:security` và
+  `atk:incident` trích dẫn, tức bảy skill có sơ đồ trong artifact. Sơ đồ viết bằng Mermaid nên hiện ra ngay tại nơi người ta đọc
   artifact, và không phải commit thêm file ảnh nào.
 - `plugins/atk/shared/host-capabilities.md`: những khả năng sẵn có của chính agent chủ mà một skill được phép
   dùng, và cách xử lý trên harness không có chúng. Được `atk:fix`, `atk:implement` và `atk:verify`
@@ -218,11 +218,14 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
 
 - `plugins/atk/shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
   là gì khi profile của dự án ghi `Contract: first` cùng field `implemented` cho biết code của nó đã
-  có hay chưa, hình dạng của ai thắng khi dự án đã giữ sẵn tài liệu của mình, sáu loại thay
+  có hay chưa, hình dạng của ai thắng khi dự án đã giữ sẵn tài liệu của mình hoặc chỉ định một
+  template riêng, template đó được phép chỉ dẫn những gì và khối thông tin đầu file cùng lịch sử thay
+  đổi của nó được giữ ra sao, các quy tắc mọi tài liệu phải theo dù hình dạng thế nào, sáu loại thay
   đổi buộc pull request phải mang theo tài liệu tham chiếu và để nó đúng, nghĩa vụ ấy trở thành gì khi tài liệu nằm ở repository khác với
   code, và ranh giới giữa chỗ lệch với câu hỏi chưa ai trả lời. `atk:spec`
   viết ra những tài liệu đó, `atk:design-doc`, `atk:fix`, `atk:implement`, `atk:review` và
-  `atk:verify` có nghĩa vụ để chúng đúng, còn `atk:qa`, `atk:run-cases` và `atk:help` đọc chúng. Đây là hợp đồng
+  `atk:verify` có nghĩa vụ để chúng đúng, còn `atk:qa`, `atk:run-cases` và `atk:help` đọc chúng, và `atk:init` dẫn tới nó khi ghi
+  template của dự án. Đây là hợp đồng
   rộng nhất trong nhóm, vì `plugins/atk/shared/finalize-steps.md` giờ mở đầu bằng chính nghĩa vụ ấy, nên mọi
   skill đổi mã nguồn đều là một bên của nó.
 - `plugins/atk/shared/host-file-locations.md`: cách nhận ra code host, mọi vị trí mà từng host đọc
@@ -282,9 +285,10 @@ Hai file cuối mô tả những file không đi kèm kit:
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không bao giờ nhắc tới
-  nó, và chỉ đọc một dòng của nó khi có file, dòng `Run trace`. Hai mục trong Docs đổi việc skill làm
-  chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở `plugins/atk/shared/spec-docs.md`, và
-  `Run trace: off`, khiến mọi skill thôi để lại run trace, theo `plugins/atk/shared/run-trace.md`.
+  nó, và chỉ đọc một dòng của nó khi có file, dòng `Run trace`. Ba mục trong Docs đổi việc skill làm
+  chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở `plugins/atk/shared/spec-docs.md`, cột
+  `Template` trong bảng các loại tài liệu, cho `atk:spec` lấy template riêng của dự án làm hình dạng
+  của một thư mục còn trống, theo cùng file đó, và `Run trace: off`, khiến mọi skill thôi để lại run trace, theo `plugins/atk/shared/run-trace.md`.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
 - `plugins/atk/shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,

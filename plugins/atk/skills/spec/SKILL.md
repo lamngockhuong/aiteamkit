@@ -19,10 +19,10 @@ argument-hint: "[subject] [--kind api|db|feature|screen] [--from <design-path>] 
 # Reference Specs (`atk:spec`)
 
 Owns the document somebody opens to answer "what does this endpoint do today", or, in a project whose
-profile says `Contract: first`, "what is this endpoint agreed to do". It carries no options and no
-history: it describes the system as it currently is or is agreed to be, which is why a stale line in
-it is wrong rather than merely old, and why it is updated in place forever instead of being
-superseded. `shared/spec-docs.md` holds what separates it from a design document, what changes under
+profile says `Contract: first`, "what is this endpoint agreed to do". It carries no options, and in
+the kit's own shape no history: it describes the system as it currently is or is agreed to be, which
+is why a stale line in it is wrong rather than merely old, and why it is updated in place forever
+instead of being superseded. `shared/spec-docs.md` holds what separates it from a design document, what changes under
 `Contract: first`, and the obligation that keeps it true.
 
 ## Scope
@@ -115,15 +115,17 @@ with `retired`, so a rerun needs no `--design`,
 and `--check` and `--sync` take none: given one, say it is ignored and why. Under `--out`, a link
 holding several screens is refused, since one path cannot hold several documents.
 
-### 2. Take the shape from the neighbours
+### 2. Take the shape
 
-When the directory already holds documents of this kind, read one and follow it, per the shape rule
-in `shared/spec-docs.md`. Use `references/api-spec-template.md`, `references/db-spec-template.md`, or
-`references/feature-spec-template.md`, or `references/screen-spec-template.md`, only when there is
-nothing to copy from. Say in the run summary
-which of the two happened, so a reviewer knows whether the shape was inherited or invented. The
-front matter is not part of the shape: it carries the approval state, so step 4 writes it even where
-the neighbours have none, and the summary says it was added.
+The shape comes from the documents already in the directory, then the template the project names
+for the kind in its profile, then the kit's `references/api-spec-template.md`,
+`references/db-spec-template.md`, `references/feature-spec-template.md`, or
+`references/screen-spec-template.md`, per The project's own shape wins in `shared/spec-docs.md`,
+which also holds what a project template may instruct and which files are never copied as a
+neighbour. Say in the run summary which source it was, and, where a named template lost to the
+documents already there, that it was not applied. The front matter is written whatever the shape,
+since it carries the approval state; under a project shape it sits beside the project's own, per the
+same file, and the summary says what was added.
 
 ### 3. Read the source
 
@@ -175,10 +177,14 @@ why the two differ.
 ### 4. Write
 
 Front matter per `shared/artifact-paths.md`, with `approver` set per kind from the Roles section
-above, and no `ticket`. A `ticket` line an existing document already carries is removed on any
-write, `--sync` included: it is front matter, not a section the sync scope protects, and the summary
-names each document it was removed from. A `screen` document adds the four `design_*` fields from the read. An update that changes what the document promises sets `status` back to `IN REVIEW`; a
-correction of wording does not.
+above, and no `ticket`; under a project shape, beside the project's own fields, with its change
+history and version kept true and the kit's own items placed, per `shared/spec-docs.md`. A `ticket`
+line an existing document carries is removed where the rest of its front matter is the kit's block
+alone, as an earlier run left it, and kept as the project's field otherwise. The removal happens on
+any write, `--sync` included: it is front matter, not a section the sync scope protects, and the
+summary names each document it was removed from. A `screen` document adds the four `design_*`
+fields from the read. An update that changes what the document promises sets `status` back to
+`IN REVIEW`; a correction of wording does not.
 
 Where the docs root is partitioned by language and the document has copies in other language branches, an
 update that changes what it says carries them in the same run, or names each one left behind and
@@ -204,8 +210,16 @@ the directory is empty: rows keyed by node ID and only changed rows touched whil
 never been approved, and every difference turned into an open question for the approver once it
 has.
 
-Two rules keep an update honest:
+A write of an `api` document keeps `conventions.md` in the `api` directory level with the codes it
+cites, and a write of a `db` table keeps that table's row and edges in `index.md` in the `db`
+directory, both directories resolved per `shared/artifact-paths.md`, each only where the document
+exists or the kit's template is the shape, per `references/api-spec-template.md` and
+`references/db-spec-template.md`, and the summary names which was written. The Tech Lead's answer
+about such a file, or about a file named like a template, is added to the profile, an `APPROVED`
+one included, per `shared/project-profile.md`.
 
+Two rules keep an update honest, and a run on code that has not moved writes nothing, per A run on
+unchanged code in `shared/spec-docs.md`:
 - Never delete a statement you did not verify. A section about behaviour outside this change stays
   exactly as it is, even when it looks wrong, and goes into the drift report instead.
 - Everything the document cannot answer becomes an open question carrying the name of whoever can
@@ -229,10 +243,12 @@ last.
 ## Output
 
 `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, or
-`docs/screens/<screen>.md` per `shared/artifact-paths.md`, one file per subject, updated in place.
+`docs/screens/<screen>.md` per `shared/artifact-paths.md`, one file per subject, updated in place;
+and `conventions.md` and `index.md` in those directories where step 4 keeps them.
 
-Sections come from the neighbouring document when there is one, and otherwise from the template for
-the kind. Diagrams are inline Mermaid per `shared/diagram-conventions.md`, and only where a sequence
+Sections come from the neighbouring document when there is one, then from the template the profile
+names for the kind, and otherwise from the kit's template. Diagrams are inline Mermaid per
+`shared/diagram-conventions.md`: the schema index's `erDiagram`, and otherwise only where a sequence
 or a state machine is genuinely hard to read as prose.
 
 `--check` writes nothing but the run trace unless `--out` is given.
@@ -245,9 +261,10 @@ it falls into, per `shared/artifact-paths.md`.
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Link the document from the ticket that changed it. The document
-carries no `ticket:` field, since many tickets change it over its life, per Front matter in
-`shared/artifact-paths.md`. A drift report becomes a comment or an issue only when the user asks,
-one issue per finding, never one issue listing everything.
+carries no `ticket:` field of the kit's, since many tickets change it over its life, per Front
+matter in `shared/artifact-paths.md`, which keeps one the project's own front matter carries. A
+drift report becomes a comment or an issue only when the user asks, one issue per finding, never
+one issue listing everything.
 
 ## Definition of done
 
@@ -260,9 +277,10 @@ one issue per finding, never one issue listing everything.
       standing in for an unreachable design, or its author, and none carries a mark; at `partial` every item without the mark is cited to the code; at `yes` no
       mark is left.
 - [ ] The document's shape matches its neighbours when the directory was not empty, and the summary
-      says whether the shape was inherited or came from a template.
+      says whether the shape was inherited or came from the project's template or the kit's; under a
+      project shape, no project field was renamed or removed and no approval was written into one.
 - [ ] The file is named after its subject, with no ticket and no date in the name, and its front
-      matter carries no `ticket`.
+      matter carries no `ticket` unless the project's own front matter does.
 - [ ] No citation points at a path the project ignores, and every copy of the document in another
       language branch was updated or named to the person running the skill.
 - [ ] `approver` matches the kind: Tech Lead for `api` and `db`, BrSE/BA for `feature` and `screen`.
@@ -273,6 +291,8 @@ one issue per finding, never one issue listing everything.
       and did not stop the run.
 - [ ] Nothing unverified was deleted; what looked wrong went into the drift report instead.
 - [ ] Every open question carries the name of the person who must answer it.
+- [ ] What was written holds Rules that hold under any shape in `shared/spec-docs.md`, and the
+      conventions document and schema index were kept level, or the summary says why not.
 - [ ] `--check` changed no file but the run trace.
 - [ ] `--sync` touched only what the change on the branch touched, apart from the front matter
       step 4 always writes, and a `ticket` line it removed is named in the summary.

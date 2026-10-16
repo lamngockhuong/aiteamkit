@@ -97,6 +97,7 @@ flowchart LR
 | `breakdown` | Dependency graph, with the task ids from the table | After the task table |
 | `security` | Sequence, only where a request crosses more than two trust boundaries | In the threat model, under Data flow |
 | `incident` | Causal chain | Under the root cause section, beside the timeline table and never instead of it |
+| `spec` | A state diagram for a row or a feature lifecycle past three transitions, a sequence only where it is hard to read as prose, and an `erDiagram` in the schema index, whose names match the table documents character for character | Beside the lifecycle or the flow it draws, and in `index.md` of the `db` directory |
 
 A skill not in this table does not add a diagram to its artifact. Prose and tables are the default;
 this file lists the exceptions.

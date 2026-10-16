@@ -94,8 +94,10 @@ The team table is one question covering every role, never one question per role.
 A question the repository can answer is a defect in step 1, not a question. If an answer is not
 available now, or the budget runs out, write `TBD` plus the name of the person who owes it and move
 on; `--audit` picks those up later. Never leave a field blank, and never invent a plausible value.
-The `Run trace` line is the one exception: it is written only when the team turns traces off, since
-a missing line already means on, per `shared/project-profile.md`.
+Two exceptions, each a field whose absence already has a meaning, per `shared/project-profile.md`:
+the `Run trace` line, written only when the team turns traces off, since a missing line means on;
+and a `Template` cell, written only for a kind the project has a template for, since an empty cell
+means the kit's template.
 
 ### 4. Write
 
@@ -157,7 +159,10 @@ comment leaves it alone.
 Re-run step 1 against an existing profile and report per section: matches, drifted, or missing. A
 drifted entry shows both values and their sources. The audit itself changes nothing and does not
 reorder the file. The output is a list the Tech Lead can act on, not a patch. A missing `Run trace`
-line is never reported missing, per `shared/project-profile.md`.
+line is never reported missing, per `shared/project-profile.md`. A `Template` path in the kinds table
+that no longer exists, or no longer passes the check in that file, is reported as drifted, with the
+path and what failed in place of a second value; so is a front-matter map line that file would
+refuse.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
 persistence line of the profile header names which of the four forms in

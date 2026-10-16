@@ -87,9 +87,10 @@ file against its sources and reports findings without editing it. The override i
 
 Load the requirement and design, and the reference documents for the area: the ones the design
 names, and those under `docs/api/`, `docs/database/`, `docs/features/` and `docs/screens/` for what
-the change touches, resolved per `shared/artifact-paths.md`. List every acceptance criterion with an
-ID. A criterion that cannot be turned into a test is reported back as a requirement defect, not
-quietly skipped.
+the change touches, resolved per `shared/artifact-paths.md`, `conventions.md` in the `api` directory among them
+where it exists. List every
+acceptance criterion with an ID. A criterion that cannot be turned into a test is reported back as a
+requirement defect, not quietly skipped.
 
 Each source answers a different question, per `shared/spec-docs.md`. The design gives what a
 reference document never carries: migration, rollback, backward compatibility, rollout, and the

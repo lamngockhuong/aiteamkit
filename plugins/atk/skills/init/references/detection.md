@@ -257,6 +257,26 @@ record which of them carries the review checklist, or that none does yet. That i
 `shared/review-checklist.md` looks for first, and the profile is the only place it can be recorded
 once.
 
+### Spec templates
+
+A file whose name holds `template`, beside a spec directory of the kinds table in
+`shared/artifact-paths.md`, inside one, or in a templates directory under the docs root, may be the
+project's own template for a kind. Propose it as the `Template` cell of that kind's row, a path from
+the project root, when its name or its headings say which kind it is: `api-template.md` beside
+`docs/api/`, a file under `docs/templates/` whose headings are a table's columns and keys. Where the
+kind is unclear, ask on the spec turn below rather than pick one. A file that is not Markdown or
+other text, a spreadsheet or a document file, is not proposed, since a skill cannot read it as a
+shape; say in the run that it was found. A file not recognisable as a spec
+template, a pull request template, an issue template, a design document template, is not proposed,
+and neither is a reference document whose subject carries the word, a `notification_templates.md`
+named after a table or a resource the code defines.
+
+A path is proposed only where it passes the check in `shared/project-profile.md`; a file that fails
+it is not opened.
+
+Never propose a front-matter map. A project field that looks like a kit field under another name,
+`updated_by` beside `owner`, is a guess until a person says so; write a map line only when they do.
+
 ### Tracker and repository owner
 
 `git remote get-url origin` gives the host and the `owner/repo` pair. Map the host to a tracker with
@@ -348,7 +368,9 @@ fill takes no default.
 The spec turn carries a second half: whether the team approves its API, schema and feature documents
 before the code is written, which is the `Contract` line in Docs. It rides on the spec question
 because both are about where the agreed description of the work comes from, and costs no turn of its
-own. No answer is `TBD` with the Tech Lead's name, which every skill reads as `code`.
+own. No answer is `TBD` with the Tech Lead's name, which every skill reads as `code`. Where Spec
+templates above found a file whose kind is unclear, the same turn asks which kind it is for, and no
+answer leaves the `Template` cell empty.
 
 The same turn carries one line more, the `Run trace` line in Docs: every run of every skill leaves a
 short trace of the steps it ran, who it waited for and where it stopped, under the docs root's
