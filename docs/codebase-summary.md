@@ -8,7 +8,7 @@ removed, or renamed; update it in the same commit.
 | File | Purpose |
 |------|---------|
 | `README.md` | Public entry point: lifecycle diagram, the 25-skill table, invocation block, output convention, install instructions |
-| `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `plugins/atk/shared/` DRY rule, cross-file sync list, em-dash policy, the `CONV-NNN` review checklist this repository is held to, release flow, verification commands |
+| `CLAUDE.md` | Maintainer guidance: the team premise, multi-manifest layout, skill anatomy, the `plugins/atk/shared/` DRY rule, cross-file sync list, em-dash policy, the `CONV-NNN` review checklist this repository is held to, release flow, and what `tests/verify.sh` checks |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, no scripts; exists to carry the version and repository metadata |
 | `release-please-config.json` | Release automation: `simple` release type, pre-1.0 bump flags, and one package per plugin, `plugins/atk` tagged `atk-v*` and `plugins/atkx` tagged `atkx-v*`, each with its own release pull request; `atk`'s version `extra-files` include the root `/package.json` |
@@ -82,7 +82,7 @@ that it belongs to this repository, and no skill reads either for another projec
 
 | File | Purpose |
 |------|---------|
-| `.atk/profile.md` | This repository's own profile: no build and no test command, so the Commands section points at the "Common verification commands" section of `CLAUDE.md` instead, and at the four checks kept beside their rules, plus three layers, content, docs and hooks, `docs/` as the docs root, `CLAUDE.md` as both the conventions and the review checklist, and GitHub Issues as the tracker |
+| `.atk/profile.md` | This repository's own profile: no build and no test command, so the Commands section points at `tests/verify.sh` instead, and at the four checks kept beside their rules, plus three layers, content, docs and hooks, `docs/` as the docs root, `CLAUDE.md` as both the conventions and the review checklist, and GitHub Issues as the tracker |
 | `.atk/overrides/review.md` | The override `atk:tailor` wrote for `atk:review` here: a diff touching a verification command block in `CLAUDE.md` has to be checked by running the block, not by reading it, at `BLOCKING`. The repository's content rules stay out of it; those are the `CONV-NNN` rows in `CLAUDE.md` |
 
 ## Skills
@@ -145,7 +145,7 @@ Loaded only when a workflow step opens them, so they stay out of the default con
 | `plugins/atk/skills/convention/references/collaboration-files.md` | What `CONTRIBUTING.md`, a pull request template and `CODEOWNERS` each carry, where each host keeps them, and why an owner never comes from git history |
 | `plugins/atk/skills/convention/references/stack-standards.md` | How a language or technology is detected from what is on disk and in which order of trust, the threshold below which it is not the stack, how derived rules are grouped by technology and, where one technology spans several of the profile's layers, by layer, and the shape of the `docs/standards/` set |
 | `plugins/atk/skills/convention/references/standard-sources.md` | What each of the seven fields of `standard-sources.tsv` means, what a `checked` date proves, what a run may draw from a line and what it may never copy, where a team adds its own sources, and the sparse fetch with its cache location and failure rule |
-| `plugins/atk/skills/convention/references/standard-sources.tsv` | The sixteen published standards themselves, one per line in the seven fields `standard-sources.md` defines, under a header line; the field count and the `checked` dates are checked in `CLAUDE.md` |
+| `plugins/atk/skills/convention/references/standard-sources.tsv` | The sixteen published standards themselves, one per line in the seven fields `standard-sources.md` defines, under a header line; the field count and the `checked` dates are checked by `tests/verify.sh` |
 | `plugins/atk/skills/plan/references/step-ordering.md` | The two cuts, phase and step, and the rule for each |
 | `plugins/atk/skills/plan/references/plan-template.md` | The plan index and the phase file |
 | `plugins/atk/skills/plan/references/plan-self-review.md` | The eight claims a plan makes, how to reopen each against the repository, what to do with each result, and the sweep that searches every plan file for the old form of a correction |
@@ -240,7 +240,8 @@ all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` 
 | `plugins/atkx/skills/skill-eval/references/review-mode.md` | Walking a run in the conversation against the skill's steps, and classifying each deviation |
 | `plugins/atkx/skills/skill-eval/references/report-format.md` | The scoring rules and the report's shape, score line first |
 | `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Evaluating a skill, against `tailor`, `review`, `convention`, `security`, `help` and `qa` |
-| `tests/skill-eval-fixtures/` | A good, a weak and a malicious sample skill for `atkx:skill-eval`, and `expected.json` with the verdict each must get; the check is in `CLAUDE.md`. Outside the plugin, because Codex lists a `SKILL.md` found at any depth under `skills/` as a skill of its own |
+| `tests/skill-eval-fixtures/` | A good, a weak and a malicious sample skill for `atkx:skill-eval`, and `expected.json` with the verdict each must get; the check is in `tests/verify.sh`. Outside the plugin, because Codex lists a `SKILL.md` found at any depth under `skills/` as a skill of its own |
+| `tests/verify.sh` | The repository's verification checks, which stand in for a test suite: manifests, names, run-trace lines, the docs mirror, hooks, plugin boundaries, labeler, agents, the secret scan, `atk:orchestrate`'s git premises, `.tsv` lists, versions and `atkx:skill-eval`. Every passing check prints a line starting with `OK`; `CLAUDE.md` lists them under "Common verification commands" |
 
 ## Assets
 
