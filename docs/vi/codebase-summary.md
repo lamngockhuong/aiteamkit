@@ -274,6 +274,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/adr/0004-every-skill-leaves-a-run-trace.md` | Mọi skill `atk` mặc định để lại một run trace, tắt theo từng dự án trong profile, và `atk:tailor --feedback --runs` đọc được nhiều trace; bị `0005` thay thế một phần |
 | `docs/adr/0005-run-trace-started-from-the-workflow.md` | Trace được khởi động bằng hai dòng trong workflow của mọi skill, vì riêng nguyên tắc 10 thì không được đọc, và được giữ ngoài git bằng một file ignore trong chính thư mục của nó thay vì file exclude cục bộ |
 | `docs/adr/0006-run-trace-written-by-the-agent-until-measured.md` | Agent tự ghi trace cho tới khi đo được rằng một script Node không hỏi phiên tương tác thêm câu hỏi quyền nào |
+| `docs/adr/0007-plain-explanation-of-a-document-is-a-catchup-mode.md` | Giải thích dễ hiểu một tài liệu, record của kit hay bất kỳ tài liệu nào khác, là một mode của `atk:catchup`, không phải skill mới hay cờ trên từng skill viết record |
 | `docs/vi/**/*.md` | Bản tiếng Việt của mười sáu file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub

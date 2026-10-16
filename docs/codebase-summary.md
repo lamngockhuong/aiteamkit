@@ -273,6 +273,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/adr/0004-every-skill-leaves-a-run-trace.md` | Every `atk` skill leaves a run trace by default, turned off per project in the profile, and `atk:tailor --feedback --runs` reads many of them; superseded in part by `0005` |
 | `docs/adr/0005-run-trace-started-from-the-workflow.md` | The trace is started by two lines in every skill's workflow, since rule 10 alone was not read, and kept out of git by an ignore file inside its own directory rather than the local exclude file |
 | `docs/adr/0006-run-trace-written-by-the-agent-until-measured.md` | The agent writes the trace until a Node script is measured to ask an interactive session no more permission questions |
+| `docs/adr/0007-plain-explanation-of-a-document-is-a-catchup-mode.md` | A plain explanation of a document, a kit record or any other, is a mode of `atk:catchup`, not a new skill or a flag on each record-writing skill |
 | `docs/vi/**/*.md` | Vietnamese mirror of the sixteen files above, at the same relative paths |
 
 ## GitHub
