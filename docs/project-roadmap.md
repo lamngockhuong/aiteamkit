@@ -6,7 +6,7 @@
 |-------|-------|---------|
 | 1. Kit scaffold | DONE | Repository, three manifests, release automation, bilingual docs |
 | 2. Skill coverage | DONE | 25 `SKILL.md` files covering the lifecycle, sharing one section contract |
-| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for twenty, pending for the other five |
+| 3. Reference depth | IN PROGRESS | `references/` per skill. Done for twenty-one, pending for the other four |
 | 4. Trigger evals | DONE | `evals/trigger_evals.json` for all 25 skills. `atk` ships no runner; `atkx:skill-eval --trigger` carries one, and `docs/trigger-eval-measurement.md` says how it measures |
 | 5. Field validation | NOT STARTED | Run the kit on a real project team and fix what breaks |
 | 6. Publication | NOT STARTED | Marketplace listing on all three harnesses |
@@ -69,7 +69,7 @@ through rule 7 of `team-roles.md` rather than by being cited directly.
 
 ## Phase 3: Reference depth (in progress)
 
-Twenty skills ship with `references/` already. The other five do not. Where the output is a
+Twenty-one skills ship with `references/` already. The other four do not. Where the output is a
 document with a fixed shape and no reference holds that shape, the template is re-derived on every
 run:
 
@@ -80,7 +80,7 @@ run:
 | `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode and the role challenge are done: `plugins/atk/skills/design-doc/references/spike.md`, `plugins/atk/skills/design-doc/references/role-challenge.md` |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
 | `qa` | Test case table schema. The negative and boundary dimensions are done: `plugins/atk/skills/qa/references/case-dimensions.md` |
-| `release` | Checklist template per environment, the client-notes style rules |
+| `release` | Checklist template per environment, the client-notes style rules. The license audit is done: `plugins/atk/skills/release/references/license-audit.md` |
 | `incident` | Severity rubric, timeline format, postmortem template |
 | `retro` | The evidence-gathering command set for git, CI, and each tracker |
 | `convention` | The derivation heuristics per language and framework |

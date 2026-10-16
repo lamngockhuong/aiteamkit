@@ -17,6 +17,20 @@ external action, or a service behaves cites that behaviour's source, its code or
 with the version read; without one the candidate is `PLAUSIBLE`, and reading that source is the check
 that settles it.
 
+Every verdict says what it was checked against: the control from the global controls of step 1, or
+the control at that line, that was looked at. For `CONFIRMED` and `PLAUSIBLE`, why that control does
+not cover the case, which is the narrow gap step 1 named or a route the control never sees. For
+`REFUTED`, the control that does cover it. A verdict with nothing checked against it is a guess at
+where the project's defences are.
+
+Every finding also says what kind of evidence carries it:
+
+| Evidence | The finding rests on |
+|----------|----------------------|
+| `tool` | A scanner the record names reproduces it |
+| `spec` | It contradicts a reference document or a design of this project, an authorisation matrix among them, read from the locations step 1 reads; the clause is quoted with its path |
+| `judgment` | A control flow traced by reading the code, with the `path:line` of each step |
+
 Keeping the non-issues is the difference from a code review, where a refuted candidate is dropped: a
 client asking whether a threat was considered wants to see that it was, and why it does not apply.
 
@@ -55,7 +69,8 @@ what. Then these sections in order, their prose following the same file:
 1. **Scope.** What was reviewed: the branch, the range, the version, or the paths, and the commit it
    was read at. What was left out and why.
 2. **Assets and boundaries.** The assets, actors, entry points, and trust boundaries of step 1, each
-   cited.
+   cited, and the global controls step 1 found, each with its `path:line` and the narrow gap it
+   leaves.
 3. **Checks run.** One row per automated check: the command, whose it was (the project's gate, a
    project script, or this skill's choice), the result, and any check not run with the reason.
 4. **Findings.** One block per finding, ranked Critical first, with an ID `SF1`, `SF2` in that order:
@@ -63,7 +78,9 @@ what. Then these sections in order, their prose following the same file:
    | Field | Content |
    |-------|---------|
    | Severity and verdict | `High`, `CONFIRMED` |
-   | Category | The STRIDE question and the OWASP ID |
+   | Category | The STRIDE question and the OWASP ID with its edition, such as `A01:2025` |
+   | Evidence | `tool`, `spec`, or `judgment`, per Verdicts |
+   | Checked against | The control checked, with `path:line`, per Verdicts |
    | Where | `path:line` of the entry point and of the sink |
    | What an actor does | The input or the request, in one or two sentences |
    | What they gain | The impact, against a named asset |

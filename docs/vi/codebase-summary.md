@@ -87,8 +87,8 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 ## Các skill
 
-Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Hai mươi skill có thêm `references/`;
-năm skill còn lại thì chưa.
+Mỗi skill là một `SKILL.md` kèm một `evals/trigger_evals.json`. Hai mươi mốt skill có thêm `references/`;
+bốn skill còn lại thì chưa.
 
 | File | Chặng | Sinh ra |
 |------|-------|---------|
@@ -112,7 +112,7 @@ năm skill còn lại thì chưa.
 | `plugins/atk/skills/run-cases/SKILL.md` | Kiểm thử | Agent chạy các test case đã duyệt trên môi trường đã deploy không phải production: phân loại, phạm vi đã thống nhất, tối đa ba vòng, và một run record chỉ chứa kết quả đã quan sát |
 | `plugins/atk/skills/security/SKILL.md` | Bất kỳ lúc nào | Một bản ghi bảo mật: phạm vi và ranh giới tin cậy, các scanner đã chạy, mối đe dọa theo từng ranh giới, phát hiện đã kiểm chứng, một checklist trả lời từng mục, rủi ro còn lại để một người chấp nhận; và mô hình mối đe dọa của một tính năng |
 | `plugins/atk/skills/git/SKILL.md` | Quản lý phiên bản | Đọc diff trước khi stage, quét dừng lại khi gặp thông tin đăng nhập, commit revert được một mình, và push, pull request, merge đều chờ lời đồng ý riêng |
-| `plugins/atk/skills/release/SKILL.md` | Bàn giao | Ghi chú theo đối tượng, checklist có người phụ trách, migration, rollback, phê duyệt |
+| `plugins/atk/skills/release/SKILL.md` | Bàn giao | Ghi chú theo đối tượng, checklist có người phụ trách, migration, kiểm tra license, rollback, phê duyệt |
 | `plugins/atk/skills/incident/SKILL.md` | Vận hành | Timeline, nguyên nhân gốc có bằng chứng, postmortem, hành động, runbook |
 | `plugins/atk/skills/retro/SKILL.md` | Cải tiến | Kiểm chứng hành động cũ, bằng chứng sprint, ba hành động mới, báo cáo |
 | `plugins/atk/skills/onboard/SKILL.md` | Con người | Cài đặt đã kiểm chứng, danh sách quyền, bản đồ code, tuần đầu kết thúc bằng phần đóng góp của vai trò |
@@ -179,13 +179,14 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `plugins/atk/skills/run-cases/references/environment-safety.md` | Môi trường đích lấy từ đâu, dòng của test plan và cột `Kind`, vì sao từ chối production và stack local, dòng không ghi tên người phụ trách, test plan viết trước khi có `Kind`, những case không bao giờ tự động hoá, ngưỡng khoá tài khoản và cách xử lý khi không có ngưỡng, và credential được lấy từ đâu, không bao giờ được ghi vào đâu |
 | `plugins/atk/skills/run-cases/references/triage.md` | Đối chiếu test case với code theo các layer trong profile, dò trước tài khoản và dữ liệu trên môi trường, tám tiêu chí, sáu kết luận phân loại và thứ tự áp dụng, ai gỡ từng vướng mắc của case `SEMI`, chấm điểm theo nhóm cho file lớn, triage report, và câu hỏi phạm vi cùng ngân sách và đề xuất cắt bớt |
 | `plugins/atk/skills/run-cases/references/execution.md` | Phiên trình duyệt và những gì lần chạy không bao giờ đóng, thứ tự các case, một case từ điều kiện tiên quyết tới assertion, bước do người làm, lệnh gọi công cụ bị harness từ chối, năm kết cục, ba vòng, run log, cách điền từng trường của run record, evidence đặt cạnh record, và dọn dẹp theo định danh đã ghi lại |
-| `plugins/atk/skills/security/references/threat-checklist.md` | Thứ tự tìm các lệnh audit của dự án, các kiểm tra tự động, sáu câu hỏi STRIDE cho mỗi ranh giới tin cậy, bảng ánh xạ sang OWASP Top 10, và checklist nền được trả lời khi không ai cung cấp checklist |
-| `plugins/atk/skills/security/references/record-template.md` | Ba kết luận và vì sao một ứng viên bị bác bỏ vẫn được giữ lại, bốn mức nghiêm trọng, quy tắc che thông tin nhạy cảm, và hình dạng của bản ghi bảo mật và mô hình mối đe dọa |
+| `plugins/atk/skills/security/references/threat-checklist.md` | Thứ tự tìm các lệnh audit của dự án, các cơ chế kiểm soát chung cần tìm theo vai trò cùng các giả định tin cậy và những gì không được báo cáo khi chưa có đường đi cụ thể, thứ tự đọc cho mỗi ranh giới, các kiểm tra tự động với việc một phụ thuộc có được phát hành hay không được quyết định từ cây production, sáu câu hỏi STRIDE cho mỗi ranh giới tin cậy, bảng ánh xạ sang phiên bản 2025 của OWASP Top 10, và checklist nền, SEC-01 tới SEC-16, được trả lời khi không ai cung cấp checklist |
+| `plugins/atk/skills/security/references/record-template.md` | Ba kết luận và vì sao một ứng viên bị bác bỏ vẫn được giữ lại, cơ chế kiểm soát mà mỗi kết luận đã đối chiếu, ba loại bằng chứng `tool`, `spec` và `judgment`, bốn mức nghiêm trọng, quy tắc che thông tin nhạy cảm, và hình dạng của bản ghi bảo mật và mô hình mối đe dọa |
 | `plugins/atk/skills/git/references/commit-craft.md` | Chỗ một commit kết thúc và commit sau bắt đầu, cái bẫy format toàn file, và phần thân commit mang bằng chứng gì |
 | `plugins/atk/skills/git/references/repair.md` | Rebase, gỡ conflict và fixup, cùng ba lần kiểm tra phải làm trước khi viết lại lịch sử đã có trên remote |
 | `plugins/atk/skills/git/references/stacked.md` | Vòng đời chồng pull request, và chỗ phải dừng: mỗi tầng một lời đồng ý và một cửa kiểm tra riêng |
 | `plugins/atk/skills/git/references/pr-body.md` | Tìm template pull request của dự án ở đâu, artifact điền vào nó thế nào, và vì sao một ô tick là một lời khẳng định chứ không phải để trang trí |
 | `plugins/atk/skills/git/references/multi-repo.md` | Đọc trạng thái mọi repository của dự án, thứ tự tiến hành một thay đổi trải trên chúng, luật con trỏ submodule, một tên nhánh và một pull request liên kết chéo cho mỗi repository, và lời đồng ý hỏi riêng cho từng repository |
+| `plugins/atk/skills/release/references/license-audit.md` | Bước kiểm tra license của phụ thuộc trong bước 3: allowlist trong CI của dự án là chính sách và thiếu nó thì dừng kiểm tra, chỉ đọc phụ thuộc production, danh sách đóng trong đó `UNKNOWN` không bao giờ qua, biểu thức SPDX được đánh giá như biểu thức, mức nghiêm trọng theo loại license, và vì sao kết quả là bằng chứng kỹ thuật chứ không phải tư vấn pháp lý |
 | `plugins/atk/skills/onboard/references/roles.md` | `--role` đổi những gì, tức là cột chặn ngày đầu của danh sách quyền và thứ mà tuần đầu kết thúc bằng, cùng ba bước nó không đụng tới để hai lượt chạy còn so được với nhau |
 
 ### Thư mục `evals/`
@@ -215,7 +216,7 @@ bằng cả ba ngôn ngữ trigger. `atk` không kèm bộ chạy; `atkx:skill-e
 | `plugins/atk/skills/run-cases/evals/trigger_evals.json` | Chạy test case trên DEV hoặc staging, lần chạy chỉ phân loại, và chạy tiếp các case bị hoãn, đối lại `verify` trên stack local, `qa --record` cho lần chạy do tester làm, viết test case, tạo bug, retest, và viết mã unit test hoặc end-to-end |
 | `plugins/atk/skills/security/evals/trigger_evals.json` | Review bảo mật, một checklist của khách hàng và một mô hình mối đe dọa, đối lại `review`, `git`, `qa`, `fix`, `incident` và `release` |
 | `plugins/atk/skills/git/evals/trigger_evals.json` | Commit, pull request và rebase, đối lại `review`, `release` và `implement` |
-| `plugins/atk/skills/release/evals/trigger_evals.json` | Ghi chú và checklist deploy, đối lại `incident` và `qa` |
+| `plugins/atk/skills/release/evals/trigger_evals.json` | Ghi chú, checklist deploy và kiểm tra license, đối lại `incident`, `qa`, và việc audit lỗ hổng, thuộc về `security` |
 | `plugins/atk/skills/incident/evals/trigger_evals.json` | Một sự cố và postmortem của nó, đối lại `fix` và `release` |
 | `plugins/atk/skills/retro/evals/trigger_evals.json` | Bằng chứng sprint và báo cáo tình hình, đối lại `estimate` và `handover` |
 | `plugins/atk/skills/onboard/evals/trigger_evals.json` | Một người vào dự án, đối lại `handover`, `init` và `catchup` |

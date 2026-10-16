@@ -626,10 +626,16 @@ question and hands the agreed scope to `atk:qa --record`.
 
 **Produces.** A security record: the assets, actors, entry points and trust boundaries in scope, the
 project's own dependency audit and a secret scan over tracked files, the six STRIDE questions asked
-at every boundary and mapped to the OWASP Top 10, each finding traced from entry point to impact,
+at every boundary and mapped to the current edition of the OWASP Top 10, each finding traced from entry point to impact,
 the candidates ruled out with the line that rules them out, a checklist answered item by item, and a
 residual risk table. With `--threat-model`, the threat model of a feature, kept current in
 `docs/security/`.
+
+Before it looks for a finding, the skill names the controls the project already applies to every
+request, each with its `path:line` and the narrow gap it leaves, and every verdict says which of them
+it checked and why it does not cover the case. A vulnerable dependency counts as shipped when the
+production dependency tree of a deployable holds it, not when the audit tool's development flag
+says so.
 
 **Use when.** A release touches authentication, personal data, payments, or an external integration;
 a client or the company hands over a security checklist to fill; or a design needs its threats
@@ -678,7 +684,9 @@ already open keeps the body its reviewer last read, with this run's evidence arr
 
 **Produces.** A change list from the commit range, internal and client-facing notes kept separate,
 migrations with reversibility and downtime stated, a three-phase checklist with an owner per step,
-a rollback plan, and recorded sign-offs.
+a rollback plan, and recorded sign-offs. The licenses of the dependencies the release ships are
+checked against the allowlist the project's CI already enforces: a policy that cannot be found stops
+the check rather than passing it, and a license nobody can name never passes.
 
 **Use when.** Cutting a version, deploying to staging or production, or writing notes for a client.
 

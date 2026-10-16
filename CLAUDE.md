@@ -110,10 +110,10 @@ plugins/atk/skills/<name>/
 ```
 
 Every skill carries `evals/trigger_evals.json`, so a description edit can be tested against the
-neighbours it must not steal. `references/` is where they still differ: twenty of them carry
+neighbours it must not steal. `references/` is where they still differ: twenty-one of them carry
 one (`help`, `orchestrate`, `init`, `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `spec`, `convention`,
-`plan`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `security`, `git`, `onboard`), and the other five are
-still `SKILL.md` alone. `qa` holds the most, eight: its modes for updating cases, recording a run,
+`plan`, `implement`, `fix`, `verify`, `review`, `qa`, `run-cases`, `security`, `git`, `release`, `onboard`), and the other
+four are still `SKILL.md` alone. `qa` holds the most, eight: its modes for updating cases, recording a run,
 and reviewing cases each keep their procedure in a file of their own, and its checklist is a list
 beside the file that governs it. Deepening a skill means adding `references/` files and pointing at
 them from the relevant workflow step, not growing `SKILL.md` past 300 lines.
