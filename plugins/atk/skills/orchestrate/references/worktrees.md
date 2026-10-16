@@ -233,6 +233,14 @@ steps 3 to 6 do not run, no review follows, and the chain goes on.
    every commit of a job's change is also asked about first, per that section, naming the job and
    that the hook or filter will run files it changed with the coordinator's rights; without a yes
    the change stays uncommitted and the chain is `needs-person` with that reason.
+   The same hold covers, by kind rather than by one path, every file an agent CLI reads as its
+   settings, hooks, MCP servers, instructions, agents or commands: on Claude Code `.claude/`,
+   `.mcp.json` and `CLAUDE.md`, on Cursor and Codex what their documentation names; and a change to
+   `.atk/profile.md` or `.atk/overrides/` unless the job's skill is the one that writes that file,
+   as `atk:init` and `atk:tailor` do. Such a change is shown masked and never committed without the
+   person's yes, since the next agent started there runs with what it says; one that grants a
+   permission, an allow rule written by a "don't ask again" answer or by the job itself, is reported
+   as a widening and listed at the close.
 4. **Check the artifact's state.** The status in its front matter is one the job's skill gives, never
    past it: a requirement a job wrote at `APPROVED` is reported to the person as found, not committed,
    and the job is `failed`. A change to a gating artifact of a kind the job's skill does not write,
@@ -267,10 +275,16 @@ log keeps pointing at what it recorded, and the copies are what it now points at
 - **Review reports.** Each is also copied to `<docs root>/derived/reviews/`, under the name
   `atk:review` gives a report for that range target, so a later review of the same target carries
   its finding identifiers forward, per `skills/review/references/report-format.md`, and
-  `atk:convention` finds it, only where `git check-ignore -q` passes there, since a report can name
-  a credential finding's location. The close says beside each review report it lists that a review
-  of the branch or its pull request is another target. Where it fails, the report stays
-  in the coordinator's run directory, named at the close, and the worktree is not kept for it.
+  `atk:convention` finds it. Where `git check-ignore -q` passes on the copy's path, the report is
+  copied as it is. Where it fails, because the project tracks that directory, the report is copied
+  only when it holds no credential finding, as `skills/review/references/report-format.md` defines
+  one, since a tracked copy would put the finding's location in the branch's history before the
+  value is rotated. Where the name is already
+  taken, no suffix is added, since a suffixed name is not one a later review reads. A report not
+  copied stays in the coordinator's run directory, named at the close with the reason, and the
+  worktree is not kept for it. The close names each copy, and says beside each review report it
+  lists that a review of the branch or its pull request is another target. The records commit at
+  the close never stages a copy.
 - **A copy that fails** keeps the worktree, listed at the close with what was not copied.
 - **The removal.** `git worktree remove "<path>"`, with `--force` only on the person's yes, then
   `git worktree prune`. A removal git refuses, an untracked file left behind among the causes, keeps

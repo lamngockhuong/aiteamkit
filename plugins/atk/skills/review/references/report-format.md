@@ -31,6 +31,16 @@ number above the highest that report used, never one left free by a finding sinc
 branch, a commit and a pull request are each a target of its own, as the report's name spells it:
 a review of one carries no identifier from a report on another.
 
+**How a target becomes a name.** A pull request is named by its number, and a commit by its short
+hash, however it was given. A branch, each end of a range, and the paths are made a slug first: every character other than a letter, a digit, `.`,
+`_` and `-` becomes `-`, and a range joins its two ends with `--`. The branch
+`fix/orchestrate-trial-gaps` is named `fix-orchestrate-trial-gaps-<YYMMDD-HHMM>.md`, and the range
+`main...feat/15-export` is `main--feat-15-export-<YYMMDD-HHMM>.md`, so no target writes outside
+`docs/derived/reviews/`. Two targets that make the same slug are told apart by the title line, which
+the read above already checks. A report written before this rule, under the target's literal path,
+`docs/derived/reviews/fix/orchestrate-trial-gaps-<YYMMDD-HHMM>.md` for that branch, is read as an
+earlier report too, where its title line names the same target.
+
 **On a pull request, the thread is an earlier report too.** The earlier review may have run on
 another machine, so its file is not here while its identifiers are on the thread. Read the reviews,
 the comments and the inline comments of the pull request together, with the commands in

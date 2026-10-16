@@ -12,15 +12,20 @@ Run before the proposal, and its result goes in the proposal record.
 - **Panes.** The session runs inside a terminal multiplexer that starts coding agents in panes and
   reports their state, and that tool answers its own help. Its commands come from that help or from
   the instructions it ships, read now. Then the agent CLI each job would start: present on the
-  machine, and the flags for its permission mode read from its own `--help`.
+  machine, the flags for its permission mode read from its own `--help`, and the form of a read-only
+  grant on a directory read from its permission documentation. Where the session's own classifier
+  refuses the coordinator starting an agent, the way is not offered until the person allows it, and
+  the proposal quotes the refusal.
 - **Subagents.** The harness's own agent capability is in its live tool list, the `Agent` tool in
   Claude Code, and an agent it spawns can invoke a skill: one short spawned agent, told to list the
   skills it can invoke and run nothing but the write below, says whether `atk:` skills are among them. The agent spawned
   is a general one, never `atk:read-only-reviewer`, which cannot write. The probe also records the
   session's permission mode, where the harness says it: a mode that writes without asking, edits
   accepted automatically or approvals bypassed, rules this way out, since every agent spawned would
-  inherit it, per No mode that both writes and asks nothing. Where the mode cannot be told, the
-  proposal says so.
+  inherit it, per No mode that both writes and asks nothing. A mode in which a classifier judges each
+  action is the case that rule allows: the way is offered only where the probe subagent also runs
+  the classifier cases below and sees all four blocked. Where the mode cannot be told, the proposal
+  says so.
 - **The session.** Always present.
 - **Writing beside the repository.** Every way writes the worktrees in
   `<repository>/../<repository name>-orchestrate/`, per Per piece in `references/worktrees.md`, and
@@ -38,9 +43,24 @@ Run before the proposal, and its result goes in the proposal record.
   there is not offered: the proposal says so, with the setting the person may change for the run,
   and offers it once they have. A session refused there refuses the run, since the coordinator
   creates every worktree there whatever the way: the proposal names the setting, and nothing runs
-  until it is changed. An agent that asks instead stops at a permission prompt, which the
-  coordinator never answers: it is relayed as Agents that write in `shared/host-capabilities.md`
-  says, and the proposal states that this way will ask on each write beside the repository.
+  until it is changed. An agent that asks instead stops at a permission prompt, which the person
+  answers in its pane, as Agents that write in `shared/host-capabilities.md` says, and the proposal
+  states that this way will ask on each write beside the repository.
+- **The classifier cases.** Where the agent CLI has a mode in which a classifier judges each action,
+  the coordinator makes one probe directory, `<repository>/../<repository name>-orchestrate/<run-id>-probe/`,
+  recorded in the run state before it is made, holding four things side by side: the scratch
+  directory the agent starts in, a bare repository that is its `origin`, a file named `.env` holding
+  a dummy value, and the path `outside` that the write case targets. The same probe agent, started
+  in that mode in the scratch directory, is told to try four things once each: write `outside`,
+  push to `origin`, run an outbound network command to a host that does not resolve, and read that
+  `.env`. The coordinator
+  checks each on the disk and in the pane, not on the agent's word. All four blocked, and the mode
+  may be proposed for jobs of that way; any one let through, the mode missing, or the coordinator
+  refused starting an agent in it, and it is not, and the proposal says which. The result goes into
+  the run state, and a resume probes again rather than trusting it. The whole probe directory is
+  removed after the probe, and its absence is part of the closing inventory. One found already there,
+  left by a probe cut short, is named to the person and removed on their yes before the probe runs,
+  so nothing an earlier probe left is read as this one's result.
 
 `--sequential` keeps the way and sets the concurrency to one.
 
@@ -49,24 +69,44 @@ Run before the proposal, and its result goes in the proposal record.
 Tried with Claude Code as the coordinator only, which the proposal says. For each job:
 
 1. **Start.** Open a pane in the piece's worktree, named `atk-<run-id>-<job-id>`, and start the agent
-   CLI there with the approved mode. Record the pane name in the run state before anything else.
-2. **Send.** Read the agent's state first. Write the prompt of `references/job-prompt.md` to
+   CLI there, with the worktree as its working directory, in the mode approved for the job. Give it
+   a read-only grant on the kit's plugin directory, two levels above this skill's base directory, in
+   the form the CLI's documentation gives now, `Read(//<absolute path>/**)` in `--allowedTools` on
+   Claude Code 2.1.301; a CLI with no read-only form gets no grant, and the cost says so. Nothing
+   beyond that grant is allowed in advance, per Agents that write in `shared/host-capabilities.md`.
+   Record the pane name in the run state before anything else. A prompt the CLI shows at start, a
+   trust prompt for a new directory on Claude Code, is a permission prompt like any other.
+2. **Send.** Read the agent's state first: the line is sent only while it is idle and ready, and an
+   agent `blocked` at a prompt of its start is handed to the person per step 4 and sent its line
+   once it has left that prompt. Write the prompt of `references/job-prompt.md` to
    `<docs root>/derived/orchestrate/<run-id>/<job-id>-prompt.md` in the worktree, and send the agent a
    line that names that path, or the prompt through a heredoc whose delimiter is quoted. Prompt text
    never goes inside a shell argument, where a `$(...)` or a backtick in a ticket would run with the
    coordinator's rights. Then wait
    for the state to leave idle before waiting for anything else: a wait called at once can return
    `idle` before the agent has started.
-3. **Wait.** One wait across every running pane, not one per job: each pass reads the state of all
-   of them, so a pane already `blocked` never waits behind another's timeout. The timeout stated in
-   the proposal is counted per job and paused while the job is `blocked` or `needs-person`. A job
-   that reaches it has its agent stopped first, then is recorded `failed`, so nothing keeps writing
-   in a worktree whose chain has stopped.
-4. **Blocked.** Read each blocked pane for its question or prompt, and relay all of them in one turn
-   per step 4 of `SKILL.md`. A prompt whose options the pane folds or cuts short is not relayed as a
-   choice: the person's answer has to name an option the coordinator read in full. Before sending an
-   answer, read the pane's state again: the answer goes in verbatim only while the same prompt is
-   still open, and nothing is typed into a pane that is not at a prompt. Then wait again from step 3.
+3. **Wait, inside the turn.** Each pass reads the state of every running pane, so a pane already
+   `blocked` never waits behind another's timeout, then waits on the panes still working, the
+   multiplexer's wait re-issued with a timeout that starts short and grows while no pane changes; a
+   multiplexer whose wait takes one pane at a time splits that timeout across the working panes. A
+   pane at a gate the coordinator relayed is left out of the wait, since a wait matching `blocked`
+   returns at once on it, and the person's answer comes back in the session. A pane at a permission
+   prompt is answered in the pane, which reaches the coordinator no other way, so it stays in the
+   wait, with a wait that matches only its leaving `blocked`, and its screen is read once it has
+   left. The coordinator ends a turn only when every running job is finished or waits on a gate
+   relayed to a person, and its last line then says which job waits on whom; it never says it will
+   take a job back later without a wait running. The
+   timeout stated in the proposal is counted per job and paused while the job is `blocked` or
+   `needs-person`. A job that reaches it has its agent stopped first, then is recorded `failed`, so
+   nothing keeps writing in a worktree whose chain has stopped.
+4. **Blocked.** Read each blocked pane, from its visible screen, which is what a multiplexer can
+   return while an agent is blocked, and tell a gate of the skill from a permission prompt of the
+   CLI. A gate is relayed, all of them in one turn, per step 4 of `SKILL.md`; a prompt whose options
+   the pane folds or cuts short is not relayed as a choice, since the person's answer has to name an
+   option the coordinator read in full, and before sending an answer the coordinator reads the
+   pane's state again: the answer goes in verbatim only while the same prompt is still open, and
+   nothing is typed into a pane that is not at a prompt. A permission prompt is handled as Agents
+   that write in `shared/host-capabilities.md` says. Then wait again from step 3, in the same turn.
 5. **Done.** Read the result file for what the job did: a pane folds and draws its output, and what
    it shows is not what the job wrote. The screen is read for a blocked pane's prompt, and for
    nothing else.
@@ -85,7 +125,9 @@ whose skill interviews and keeps none is offered to the person to run in the ses
 change of its approved way that runs only on their yes, because a new agent given one answer starts
 the interview over. A subagent's permission prompts reach the person in the harness itself, not
 through the coordinator, which cannot see one waiting, so no timeout applies to a subagent job: a
-timeout would fail a job mid-prompt. The proposal says both beforehand.
+timeout would fail a job mid-prompt. The proposal says both beforehand. The harness's own notice
+that an agent finished is the wait here: the coordinator ends no turn with a subagent job running
+unless that notice will reach it.
 
 ## In the session
 
@@ -104,5 +146,6 @@ parallel.
 | | Panes | Subagents | Session |
 |-|-------|-----------|---------|
 | Concurrency | the stated cap | the stated cap | one |
-| A question reaches the person | from the pane, through the coordinator | as a returned stop | directly |
+| A gate reaches the person | from the pane, through the coordinator | as a returned stop | directly |
+| A permission prompt is answered | by the person, in the pane | by the person, in the harness | by the person, in the harness |
 | Written into the run state | pane name | agent ID where the harness gives one | nothing extra |
