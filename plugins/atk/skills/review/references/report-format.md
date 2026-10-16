@@ -31,8 +31,8 @@ number above the highest that report used, never one left free by a finding sinc
 branch, a commit and a pull request are each a target of its own, as the report's name spells it:
 a review of one carries no identifier from a report on another.
 
-**How a target becomes a name.** A pull request is named by its number. A branch, a commit, each end
-of a range, and the paths are made a slug first: every character other than a letter, a digit, `.`,
+**How a target becomes a name.** A pull request is named by its number, and a commit by its short
+hash, however it was given. A branch, each end of a range, and the paths are made a slug first: every character other than a letter, a digit, `.`,
 `_` and `-` becomes `-`, and a range joins its two ends with `--`. The branch
 `fix/orchestrate-trial-gaps` is named `fix-orchestrate-trial-gaps-<YYMMDD-HHMM>.md`, and the range
 `main...feat/15-export` is `main--feat-15-export-<YYMMDD-HHMM>.md`, so no target writes outside

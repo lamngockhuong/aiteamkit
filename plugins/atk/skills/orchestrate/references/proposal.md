@@ -21,11 +21,13 @@ is `TBD (ask <the person running the skill>)`, and no job starts until a person 
 of `shared/team-roles.md`.
 
 **At the close.** The `SUPERSEDED` question of How far an approval reaches, below, is asked first.
-Then only the settled records, `APPROVED` or `SUPERSEDED`, are offered for a commit through
-`atk:git --commit` in the coordinator's tree, staging those paths and nothing else: no review report
-copied under `<docs root>/derived/reviews/`, no run state. A record a chain still waits on is not
-committed. It stays untracked in the coordinator's tree, where its approver, `atk:help` and a resume
-find it, and a later close commits it once it is settled. `atk:git` never commits onto the default
+Then only the settled records are offered for a commit: a `SUPERSEDED` record, or an `APPROVED` one
+whose every chain has ended, done, failed or escalated, so that no job, resume or `Follows:` line
+still reads it from the tree. They go through `atk:git --commit` in the coordinator's tree,
+staging those paths and nothing else: no review report copied under `<docs root>/derived/reviews/`,
+no run state. A record a chain still runs under or waits on is not committed. It stays untracked in
+the coordinator's tree, where its approver, `atk:help` and a resume find it, and a later close
+commits it once it is settled. `atk:git` never commits onto the default
 branch, so the commit may leave the tree on a branch it created; the coordinator then switches the
 tree back to the `branch:` of the run state, and the close names the branch that holds the records
 and who must say yes to its push. Where git refuses the switch, the close says so with the command to
@@ -44,7 +46,8 @@ run, and the tree is left as it is. A stop between the commit and the switch is 
    the way offered, and any lower way the person may choose instead. Where a way is panes, the
    permission mode each pane job starts in and the read-only grant on the kit, or that the CLI has
    none. Where a way is panes or subagents, the line that the person answers the CLI's permission
-   prompts directly, in the job's pane or in the harness, and refuses a standing grant there, per
+   prompts directly, in the job's pane or in the harness, and refuses there a write or a command
+   outside the worktree, a standing grant such as "don't ask again", and approvals turned off, per
    Agents that write in `shared/host-capabilities.md`. Where a job's agent is the command line of another provider, the
    line that its request text, its worktree, and the profile and overrides copied into it go to that
    provider, and that the PM of the Team section, who owns client communication, says yes to it
@@ -74,9 +77,8 @@ run, and the tree is left as it is. A stop between the commit and the switch is 
    with those rights too, so each commit of a job's change is asked about, per step 3 of After a job
    ends in `references/worktrees.md`, and what the check for writes outside a worktree cannot see,
    per the same section. That the person also answers, in each pane, the trust prompt Claude Code
-   shows for a new worktree, and refuses there what Agents that write in
-   `shared/host-capabilities.md` lists. Where the classifier mode is proposed, its limit as that
-   section words it, so a test the job edited runs unseen.
+   shows for a new worktree. Where the classifier mode is proposed, its limit as Agents that write
+   in `shared/host-capabilities.md` words it, so a test the job edited runs unseen.
 5. **Decisions.** Who approved, when, and what they changed, written by that person or on their word.
 
 ## When the profile is not ready
