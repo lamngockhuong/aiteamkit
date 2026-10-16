@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.10](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.9...atk-v0.1.10) (2026-10-16)
+
+
+### Bug Fixes
+
+* close the four gaps the first full trial of atk:orchestrate found ([#127](https://github.com/lamngockhuong/aiteamkit/issues/127)) ([777cfa8](https://github.com/lamngockhuong/aiteamkit/commit/777cfa893b00055650ae06109a1d716170e32846))
+* cover the atk:orchestrate edge cases left open by the review of [#122](https://github.com/lamngockhuong/aiteamkit/issues/122), and let atk:review take a base ([#124](https://github.com/lamngockhuong/aiteamkit/issues/124)) ([3370eb5](https://github.com/lamngockhuong/aiteamkit/commit/3370eb5ffa5760e6684d829fe76467a3ccb83a39))
+
 ## [0.1.9](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.8...atk-v0.1.9) (2026-10-15)
 
 
