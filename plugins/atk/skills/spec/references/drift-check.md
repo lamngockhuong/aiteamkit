@@ -62,12 +62,14 @@ own, the schema index. Per document:
   little, and a caller handles only what it lists.
 - **Examples.** Each example body is an item. One that does not parse as the format it claims is
   `minor`.
-- **Real values.** Every item the document holds is scanned, its example bodies, table cells, sample
-  requests, change-history rows and notes alike, with the team's own names in the document's own
-  fields left out, per `shared/spec-docs.md`. A value shaped like a credential, a real person's
-  data, or an internal host is reported by document and field, and endpoint where there is one, and
-  never quoted, so the report prints nothing that would need masking; it is `major`, and the report
-  says the value is to be replaced, not judged. A value that
+- **Real values.** Every value the document holds is scanned, its example bodies, table cells,
+  sample requests, change-history rows and notes alike, with the team's own names and its links to
+  the team's own tracker, design and documents left out, per `shared/spec-docs.md`. A value shaped
+  like a credential, a real person's data, or an internal host is an item of its own on the coverage
+  list, status `rule breach`, whatever the status of the endpoint or row it sits in. It is reported
+  by document and field, and endpoint where there is one, and never quoted, so the report prints
+  nothing that would need masking; it is `major`, and the report says the value is to be replaced,
+  not judged. A value that
   may be a live credential is already in the repository's history and wherever it was pushed, so the
   report also says so, and leaves rotating it, the step What happens on a hit in
   `shared/secret-scan.md` asks of a value that reached a remote, as an open question for the
