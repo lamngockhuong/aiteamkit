@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.12](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.11...atk-v0.1.12) (2026-10-16)
+
+
+### Features
+
+* give atk:catchup a document mode that explains a kit record or any other document in plain words ([#131](https://github.com/lamngockhuong/aiteamkit/issues/131)) ([208c1c4](https://github.com/lamngockhuong/aiteamkit/commit/208c1c40dbd413355da699d9874e69fa5bd971a0))
+* give atk:spec content rules that hold under any shape and let it write from a project's own spec templates ([#133](https://github.com/lamngockhuong/aiteamkit/issues/133)) ([1a28b84](https://github.com/lamngockhuong/aiteamkit/commit/1a28b84e70e1c5bbbde96d0fc7215713a94e1c03))
+
 ## [0.1.11](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.10...atk-v0.1.11) (2026-10-16)
 
 
