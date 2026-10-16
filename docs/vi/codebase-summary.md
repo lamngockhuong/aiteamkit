@@ -8,7 +8,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | File | Mục đích |
 |------|----------|
 | `README.md` | Điểm vào công khai: sơ đồ vòng đời, bảng 25 skill, khối invocation, quy ước output, hướng dẫn cài đặt |
-| `CLAUDE.md` | Hướng dẫn cho người bảo trì: tiền đề về team, bố cục ba manifest, giải phẫu skill, nguyên tắc DRY của `plugins/atk/shared/`, danh sách file phải đồng bộ chéo, chính sách em-dash, mục review checklist `CONV-NNN` mà repo này bị soi theo, quy trình release, lệnh kiểm tra |
+| `CLAUDE.md` | Hướng dẫn cho người bảo trì: tiền đề về team, bố cục ba manifest, giải phẫu skill, nguyên tắc DRY của `plugins/atk/shared/`, danh sách file phải đồng bộ chéo, chính sách em-dash, mục review checklist `CONV-NNN` mà repo này bị soi theo, quy trình release, và những gì `tests/verify.sh` kiểm |
 | `LICENSE` | MIT |
 | `package.json` | `private: true`, không có scripts; tồn tại để mang version và metadata repo |
 | `release-please-config.json` | Tự động hóa release: kiểu `simple`, các cờ bump tiền 1.0, và mỗi plugin một package, `plugins/atk` gắn tag `atk-v*` và `plugins/atkx` gắn tag `atkx-v*`, mỗi package có pull request release riêng; `extra-files` mang version của `atk` có cả `/package.json` ở gốc |
@@ -82,7 +82,7 @@ này, và không skill nào đọc chúng cho dự án khác.
 
 | File | Mục đích |
 |------|----------|
-| `.atk/profile.md` | Profile của chính repo này: không có lệnh build cũng không có lệnh test, nên mục Commands trỏ tới mục "Common verification commands" trong `CLAUDE.md` thay cho chúng, và tới bốn phép kiểm đặt cạnh quy tắc của nó, cộng ba tầng là nội dung, docs và hook, thư mục docs là `docs/`, `CLAUDE.md` vừa là nơi giữ quy ước vừa là nơi giữ review checklist, và tracker là GitHub Issues |
+| `.atk/profile.md` | Profile của chính repo này: không có lệnh build cũng không có lệnh test, nên mục Commands trỏ tới `tests/verify.sh` thay cho chúng, và tới bốn phép kiểm đặt cạnh quy tắc của nó, cộng ba tầng là nội dung, docs và hook, thư mục docs là `docs/`, `CLAUDE.md` vừa là nơi giữ quy ước vừa là nơi giữ review checklist, và tracker là GitHub Issues |
 | `.atk/overrides/review.md` | Phần ghi đè mà `atk:tailor` viết cho `atk:review` ở đây: diff chạm vào một khối lệnh kiểm tra trong `CLAUDE.md` thì phải kiểm bằng cách chạy khối đó chứ không phải bằng cách đọc, ở mức `BLOCKING`. Các luật về nội dung repo không nằm trong file này; chúng là những dòng `CONV-NNN` trong `CLAUDE.md` |
 
 ## Các skill
@@ -145,7 +145,7 @@ Chỉ được nạp khi một bước trong workflow mở ra, nên chúng nằm
 | `plugins/atk/skills/convention/references/collaboration-files.md` | `CONTRIBUTING.md`, template pull request và `CODEOWNERS` mỗi file mang gì, mỗi host đặt chúng ở đâu, và vì sao người sở hữu không bao giờ suy ra từ lịch sử git |
 | `plugins/atk/skills/convention/references/stack-standards.md` | Cách nhận ra một ngôn ngữ hay công nghệ từ những gì có trên đĩa và theo thứ tự tin cậy nào, ngưỡng mà dưới đó nó không tính là stack, cách nhóm rule suy ra theo công nghệ và, khi một công nghệ trải qua nhiều layer của profile, theo layer, và hình dạng bộ `docs/standards/` |
 | `plugins/atk/skills/convention/references/standard-sources.md` | Bảy trường của `standard-sources.tsv` mang nghĩa gì, ngày `checked` chứng minh điều gì, một lần chạy được rút gì từ một dòng và không bao giờ được chép gì, team thêm nguồn riêng ở đâu, và cách clone thưa cùng chỗ đặt cache và luật khi lấy về hỏng |
-| `plugins/atk/skills/convention/references/standard-sources.tsv` | Chính mười sáu bộ chuẩn đã công bố, mỗi dòng một nguồn theo bảy trường mà `standard-sources.md` định nghĩa, dưới một dòng tiêu đề; số trường và ngày `checked` được kiểm trong `CLAUDE.md` |
+| `plugins/atk/skills/convention/references/standard-sources.tsv` | Chính mười sáu bộ chuẩn đã công bố, mỗi dòng một nguồn theo bảy trường mà `standard-sources.md` định nghĩa, dưới một dòng tiêu đề; số trường và ngày `checked` được kiểm bởi `tests/verify.sh` |
 | `plugins/atk/skills/plan/references/step-ordering.md` | Hai lần cắt, theo phase và theo bước, mỗi lần một quy tắc riêng |
 | `plugins/atk/skills/plan/references/plan-template.md` | Trang chỉ mục của kế hoạch và một file phase |
 | `plugins/atk/skills/plan/references/plan-self-review.md` | Tám điều một bản kế hoạch khẳng định, cách mở lại từng điều để đối chiếu với kho mã, xử lý ra sao với mỗi kết quả, và lượt quét tìm dạng cũ của một chỗ sửa trong mọi file của kế hoạch |
@@ -241,7 +241,8 @@ cũng phải ra cùng một kết quả.
 | `plugins/atkx/skills/skill-eval/references/review-mode.md` | Dò một lần chạy trong cuộc hội thoại theo các bước của skill, và phân loại từng chỗ lệch |
 | `plugins/atkx/skills/skill-eval/references/report-format.md` | Quy tắc tính điểm và khung báo cáo, dòng điểm đặt trên cùng |
 | `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Đánh giá một skill, đặt cạnh `tailor`, `review`, `convention`, `security`, `help` và `qa` |
-| `tests/skill-eval-fixtures/` | Ba skill mẫu tốt, yếu và độc hại của `atkx:skill-eval`, cùng `expected.json` ghi kết quả mỗi mẫu phải nhận; lệnh kiểm nằm trong `CLAUDE.md`. Đặt ngoài plugin vì Codex coi mọi `SKILL.md` nằm ở bất kỳ độ sâu nào dưới `skills/` là một skill riêng |
+| `tests/skill-eval-fixtures/` | Ba skill mẫu tốt, yếu và độc hại của `atkx:skill-eval`, cùng `expected.json` ghi kết quả mỗi mẫu phải nhận; lệnh kiểm nằm trong `tests/verify.sh`. Đặt ngoài plugin vì Codex coi mọi `SKILL.md` nằm ở bất kỳ độ sâu nào dưới `skills/` là một skill riêng |
+| `tests/verify.sh` | Các phép kiểm của repo, thay cho một bộ test: manifest, tên skill, hai dòng run trace, sự khớp nhau giữa `docs/` và `docs/vi/`, hook, ranh giới plugin, labeler, agent, secret scan, các tiền đề git của `atk:orchestrate`, danh sách `.tsv`, phiên bản và `atkx:skill-eval`. Mỗi phép kiểm đạt in một dòng bắt đầu bằng `OK`; mục kiểm tra ở cuối `CLAUDE.md` liệt kê chúng |
 
 ## Assets
 
