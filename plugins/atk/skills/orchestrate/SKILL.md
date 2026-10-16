@@ -143,8 +143,8 @@ commit that holds the profile, and the jobs held back for it go into a follow-up
 profile is not ready in `references/proposal.md`. Then do what
 `references/worktrees.md` says once per run, and per approved piece: the worktree beside the
 repository, its base, its branch by the project's rule, the profile it needs, and its run state's
-ignore file. A piece serialised after another gets its worktree only once its predecessor's code is
-committed and reviewed, from the branch the run state recorded for it.
+ignore file. A piece that waits on another gets its worktree once that wait ends, per Pieces that
+share files in `references/proposal.md`, from the base the run state records for it.
 
 ### 4. Run the jobs
 
@@ -182,7 +182,7 @@ default path, committed with the fix. The coordinator owns the review.
 ### 5. Review code jobs
 
 Once a code job's change is committed, run `atk:review "<base>...<branch>"` in its worktree, with
-`<base>` the piece's base as the run state records it, and
+`<base>` the base in the piece's entry, a sha or a branch, never `(detached)`, and
 `--out <docs root>/derived/orchestrate/<run-id>/<job-id>-review.md`, as `shared/review-fix-loop.md`
 says, all of it: Calling the review, with the plan and the requirement as intent and the cost stated first; What
 gets fixed; Disputing a finding, which goes to the Tech Lead and stops the chain; and The ceiling,
@@ -220,8 +220,8 @@ otherwise listed as still waiting.
 
 The run state is a progress log at `<docs root>/derived/orchestrate/<run-id>/progress.md` in the
 coordinator's tree, per Progress log in `shared/artifact-paths.md`. Its `subject:` is the slug of the
-run's first proposal record. One entry per job: piece, worktree, branch, state, result file, the
-child skill's progress log, and the review round; the child paths are required, since a child's log
+run's first proposal record. One entry per job: piece, its base, worktree, branch, state, result
+file, the child skill's progress log, and the review round; the child paths are required, since a child's log
 is invisible from the main tree. While any chain waits, the close writes one `<time> waiting:` entry
 per chain, naming the piece and the person, and leaves the log open so that `atk:help` sends people
 back; once none waits, the last line is the newest proposal record's path.

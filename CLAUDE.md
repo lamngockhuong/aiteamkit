@@ -1102,6 +1102,51 @@ assert m.returncode == 0 and '+x' in m.stdout, 'the working-tree mask failed in 
 for t in tmp: shutil.rmtree(t)
 print('OK secret scan, %d shapes found, %d clean lines passed, four modes' % (len(hit), len(ok)))"
 
+# The git behaviour atk:orchestrate's checks after a job rest on, in plugins/atk/skills/orchestrate/
+# references/worktrees.md: an ignored directory is one listing line, so the run directory is hashed
+# on its own; a nested repository is one line ending in /, so it is named rather than compared; a
+# worktree whose .git file a job rewrote runs that job's fsmonitor on the next git status, and does
+# not once --git-dir is the recorded line, which is why the file is read first; a rewritten commondir
+# beside that line still leads a --git-dir pin alone to a planted fsmonitor, and does not once
+# GIT_COMMON_DIR is pinned too; and hash-object applies a clean filter unless --no-filters is given.
+# Names are built from pieces, as above
+python3 -c "
+import os, shutil, subprocess, tempfile
+G = '.' + 'git'
+t = tempfile.mkdtemp(); m, w = os.path.join(t, 'm'), os.path.join(t, 'w')
+g = lambda d, *a: subprocess.run(['git', '-C', d] + list(a), capture_output=True, text=True)
+g(t, 'init', '-q', m); g(m, 'config', 'user.email', 'p@x'); g(m, 'config', 'user.name', 'p')
+open(os.path.join(m, G + 'ignore'), 'w').write('d/' + chr(10)); g(m, 'add', '-A'); g(m, 'commit', '-qm', 'root')
+os.makedirs(os.path.join(m, 'd', 'run1')); open(os.path.join(m, 'd', 'run1', 'p.md'), 'w').write('x')
+g(t, 'init', '-q', os.path.join(m, 'sub'))
+lines = g(m, 'status', '--porcelain', '--untracked-files=all', '--ignored=matching').stdout.splitlines()
+assert '!! d/' in lines and '?? sub/' in lines, 'listing: %s' % lines
+open(os.path.join(m, G + 'attributes'), 'w').write('*.txt filter=up' + chr(10)); g(m, 'config', 'filter.up.clean', 'tr a-z A-Z')
+open(os.path.join(m, 'a.txt'), 'w').write('abc' + chr(10))
+h = lambda *a: g(m, 'hash-object', *a, 'a.txt').stdout
+assert h() != h('--no-filters'), 'hash-object applied no filter, or --no-filters did not skip it'
+g(m, 'worktree', 'add', '-q', w, '-b', 'w')
+recorded = open(os.path.join(w, G)).read().split(': ', 1)[1].strip()
+x = os.path.join(w, 'x'); g(t, 'init', '-q', '--bare', x); g(x, 'config', 'core.bare', 'false')
+mark = os.path.join(t, 'ran'); s = os.path.join(t, 'fsm.sh')
+open(s, 'w').write('#!/bin/sh' + chr(10) + 'touch ' + mark + chr(10)); os.chmod(s, 0o755)
+g(x, 'config', 'core.fsmonitor', s); open(os.path.join(w, G), 'w').write('gitdir: ./x' + chr(10))
+subprocess.run(['git', '--git-dir=' + recorded, '--work-tree=' + w, 'status', '--porcelain'], capture_output=True, cwd=w)
+assert not os.path.exists(mark), 'git with the recorded --git-dir ran the planted fsmonitor'
+g(w, 'status', '--porcelain')
+assert os.path.exists(mark), 'a rewritten worktree file no longer leads git status to the planted fsmonitor'
+open(os.path.join(w, G), 'w').write('gitdir: ' + recorded + chr(10)); os.remove(mark)
+common = os.path.realpath(os.path.join(m, G)); y = os.path.join(t, 'y'); g(t, 'clone', '-q', '--bare', m, y)
+g(y, 'config', 'core.bare', 'false'); g(y, 'config', 'core.fsmonitor', s)
+open(os.path.join(recorded, 'commondir'), 'w').write(y + chr(10))
+subprocess.run(['git', '--git-dir=' + recorded, '--work-tree=' + w, 'status', '--porcelain'], capture_output=True, cwd=w,
+               env=dict(os.environ, GIT_COMMON_DIR=common))
+assert not os.path.exists(mark), 'git with GIT_COMMON_DIR pinned followed a rewritten commondir'
+subprocess.run(['git', '--git-dir=' + recorded, '--work-tree=' + w, 'status', '--porcelain'], capture_output=True, cwd=w)
+assert os.path.exists(mark), 'a rewritten commondir no longer leads a --git-dir pin alone to the planted fsmonitor'
+shutil.rmtree(t)
+print('OK orchestrate git premises')"
+
 # Trigger evals parse. This checks the files, not the triggering: a generic eval harness reports a
 # vacuous score against an installed plugin. To actually measure one, follow
 # docs/trigger-eval-measurement.md

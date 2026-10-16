@@ -228,10 +228,10 @@ a stand-up. `references/report-format.md` holds it, and the shape of everything 
 ## Output
 
 Every run writes a report to `docs/derived/reviews/<pr>-<date>.md` per `shared/artifact-paths.md`,
-asked for or not. A review costs more to produce than to keep, and the run that is only spoken into
-a session is gone the moment the terminal scrolls. It is derived: safe to delete, and rebuilt by
-running the review again. Where the target is not a pull request the name carries what was reviewed
-instead of the number: the branch, the short commit, a slug of the range or of the paths.
+asked for or not. A review costs more to produce than to keep, and the run only spoken into a
+session is gone when the terminal scrolls. It is derived: safe to delete, rebuilt by running the
+review again. Where the target is not a pull request the name carries what was reviewed instead of
+the number: the branch, the short commit, a slug of the range's ends joined by `--`, or of the paths.
 
 The session gets the summary, not the report: how many findings at each severity, the `BLOCKING`
 ones in one line each, how many the cap left to the report alone, and the path to the file. Whoever

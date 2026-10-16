@@ -474,22 +474,23 @@ cả từ file mẫu của dự án.
 
 ## `atk:review`
 
-**Sinh ra.** Một báo cáo review ở `docs/derived/reviews/<pr>-<date>.md`, lần chạy nào cũng viết, kèm
-một bản tóm tắt trong phiên nói có bao nhiêu phát hiện ở mỗi mức, nêu tên những phát hiện chặn merge,
-và trỏ tới file. Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới
-một dòng cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể. Báo cáo giữ mọi phát hiện đã
-qua thẩm tra; bản tóm tắt trong phiên và các comment inline chỉ mang nhiều nhất mười phát hiện, hoặc
-hai mươi khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Mỗi phát hiện mang một
-mã định danh có tiền tố theo mức nghiêm trọng, `B1`, `S1`, `N1`, nhờ đó cả nhóm gọi tên được một phát
+**Sinh ra.** Một báo cáo review ở `docs/derived/reviews/<pr>-<date>.md`, lần chạy nào cũng viết,
+`<pr>` được thay bằng thứ được review khi đối tượng review không phải pull request, kèm một bản tóm
+tắt trong phiên nói có bao nhiêu phát hiện ở mỗi mức, nêu tên những phát hiện chặn merge, và trỏ tới
+file. Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới một dòng
+cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể. Báo cáo giữ mọi phát hiện đã qua thẩm
+tra; bản tóm tắt trong phiên và các comment inline chỉ mang nhiều nhất mười phát hiện, hoặc hai mươi
+khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Mỗi phát hiện mang một mã
+định danh có tiền tố theo mức nghiêm trọng, `B1`, `S1`, `N1`, nhờ đó cả nhóm gọi tên được một phát
 hiện trong buổi họp nhanh hay trong một luồng trao đổi trên pull request; lượt review thứ hai trên
-cùng pull request đọc lại báo cáo đầu, hoặc bản tóm tắt lượt đầu đã đăng trên pull request, để những mã ấy vẫn trỏ đúng vào các phát hiện cũ. Báo cáo có hình dạng cố định
-chứ không phải mỗi lần chạy dựng lại một kiểu, và không mang điểm số nào, vì người review không phải
-người duyệt. Cờ `--out` đổi chỗ file, cờ `--comment` đăng phát hiện thành comment inline trên PR,
-kèm một comment tóm tắt liệt kê, ở dạng thu gọn, mọi phát hiện mà lượt review giữ lại và mọi câu hỏi
-mở, nên người đọc pull request đọc được mọi phát hiện mà không cần tới báo cáo. Một target viết dạng
-`<base>...<branch>` được review so với chính base ấy thay vì base do lượt review tự xác định, nhờ
-đó một nhánh xếp chồng lên một nhánh khác chưa push được review mà không lặp lại các commit của nhánh
-trước nó.
+cùng pull request đọc lại báo cáo đầu, hoặc bản tóm tắt lượt đầu đã đăng trên pull request, để những
+mã ấy vẫn trỏ đúng vào các phát hiện cũ. Báo cáo có hình dạng cố định chứ không phải mỗi lần chạy
+dựng lại một kiểu, và không mang điểm số nào, vì người review không phải người duyệt. Cờ `--out` đổi
+chỗ file, cờ `--comment` đăng phát hiện thành comment inline trên PR, kèm một comment tóm tắt liệt
+kê, ở dạng thu gọn, mọi phát hiện mà lượt review giữ lại và mọi câu hỏi mở, nên người đọc pull
+request đọc được mọi phát hiện mà không cần tới báo cáo. Một target viết dạng `<base>...<branch>`
+được review so với chính base ấy thay vì base do lượt review tự xác định, nhờ đó một nhánh xếp chồng
+lên một nhánh khác chưa push được review mà không lặp lại các commit của nhánh trước nó.
 
 **Dùng khi.** Trước khi approve một pull request, hoặc khi cần một ý kiến thứ hai.
 

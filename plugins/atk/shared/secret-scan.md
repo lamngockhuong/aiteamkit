@@ -277,7 +277,10 @@ The argument is what is under review:
   `origin/main` or whatever the pull request targets, never a name assumed to exist locally. A branch
   that is not checked out is `<base>...<branch>`.
 - **A range given as the target**, `<base>...<branch>`, as `atk:orchestrate` gives a branch stacked
-  on another: that range as given, with no base resolved in its place.
+  on another: that range as given, with no base resolved in its place. A range target is always
+  three dots: a two-dot `<base>..<branch>` is rewritten to three and the review says so in one line,
+  since two dots diff the two tips and would show the reverse of everything that landed on the base
+  since the fork as the branch's own change.
 - **One commit**: `<sha>~1..<sha>`. A bare sha is not a range and fails the scan.
 - **What is staged**, which `atk:git` reads before it writes a commit message: `--cached`. A staged
   deletion of a file rule 9 names never appears in it, and a removed line that held a value is masked
