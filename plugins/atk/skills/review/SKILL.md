@@ -215,8 +215,8 @@ The report carries every finding step 5 kept, `BLOCKING` first, a `NIT` in the o
 `references/report-format.md` if need be. The cap is on attention, not on the record: the summary,
 inline comments and visible part of a posted summary carry at most ten findings, or twenty under
 `--strict`, cutting `NIT` first, then `SHOULD FIX`, and say how many are left out, at what severity.
-`BLOCKING` is never cut; where it alone exceeds the cap, carry it all and say so: what to do with a
-change in that state is the Tech Lead's call, not a trimming decision the reviewer makes quietly.
+`BLOCKING` is never cut, nor the line answering an author's reply; where `BLOCKING` alone exceeds the
+cap, carry it all and say so: that change is the Tech Lead's call, not a quiet trimming decision.
 
 Each comment: the file and line, what goes wrong, and a concrete suggestion, addressed to the code
 and never the author. State what the change does well in one line: only negatives teach nothing.
@@ -255,10 +255,10 @@ section; `shared/artifact-paths.md` lists every derived kind the kit reads, and 
 ## Ticket
 
 Follow `shared/ticket-adapters.md`. Under `--comment`, post the findings the cap in step 6 allows as
-inline comments on the lines they cite, and the summary as one review comment that lists every
-finding itself, collapsed, per `references/report-format.md`. Post nothing before showing the list.
-In band 1 the reviewer agent only writes the report; the session shows the list from it and posts on
-consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
+inline comments, except one the author already answered, and one review comment that answers those
+and lists every finding, collapsed, per `references/report-format.md`. Post nothing before showing
+the list. In band 1 the reviewer agent only writes the report; the session shows the list from it
+and posts on consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
 
 ## Definition of done
 

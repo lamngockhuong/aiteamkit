@@ -533,7 +533,8 @@ without that list says so, and reviews the whole change rather than guess. The r
 chosen the way step 3 of the skill chooses them for any diff, and the band follows from the size of
 that subject, not from the size of the original change. Every finding of the first review that the
 fix set out to close is then checked by its identifier, and the report says of each whether it is
-closed or still open.
+closed or still open, and, where the author answered it on the pull request thread, carries that
+answer per *What the author answered is read with it* in `references/report-format.md`.
 
 The first report is the one the caller names in its prompt, not the newest found by name: a
 working-tree report is named after a slug of its paths, and a fix touches fewer paths than the
