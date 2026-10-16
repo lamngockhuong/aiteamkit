@@ -77,7 +77,8 @@ run, and the tree is left as it is. A stop between the commit and the switch is 
    with those rights too, so each commit of a job's change is asked about, per step 3 of After a job
    ends in `references/worktrees.md`, and what the check for writes outside a worktree cannot see,
    per the same section. That the person also answers, in each pane, the trust prompt Claude Code
-   shows for a new worktree. Where the classifier mode is proposed, its limit as Agents that write
+   shows for a new worktree, a yes to which trusts that worktree's path for good and is listed at
+   the close as a widening. Where the classifier mode is proposed, its limit as Agents that write
    in `shared/host-capabilities.md` words it, so a test the job edited runs unseen.
 5. **Decisions.** Who approved, when, and what they changed, written by that person or on their word.
 
