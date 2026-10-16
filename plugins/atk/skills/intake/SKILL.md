@@ -62,8 +62,8 @@ read the kit's `shared/run-trace.md` and do what it says before the file, at eac
 Quote the request verbatim into the artifact before interpreting it. Interpretation drifts; the
 quote does not.
 
-A design given with `--design` is read per `shared/design-sources.md`, which holds the three states
-of the Figma connection and the fallback to exported images. A picture cannot be quoted the way text
+A design given with `--design` is read per `shared/design-sources.md`, which applies the connection
+states of `shared/host-capabilities.md` to Figma and holds the fallback to exported images. A picture cannot be quoted the way text
 can, so in place of the quote the artifact records what was read: the source, in the form What a read records in
 `shared/design-sources.md` gives it, each frame with its
 `screen_id`, node ID and fingerprint, and the date. The line saying that Ready for dev could not be

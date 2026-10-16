@@ -192,7 +192,10 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   keeps its context for the artifact, and a harness without agents reads inline and says so.
   `atk:help` cites it for what it may name when a request falls outside the kit, the companion
   kit's skills included.
-  `plugins/atk/shared/design-sources.md` cites it for naming the Figma connection by what it does,
+  Its section Read through a connection holds how any connection to an outside service is found and
+  read: by what it can do, never through the harness's generic URL fetch, in three states because a
+  connector can be listed and still not signed in, with the signed-in account never written down.
+  `plugins/atk/shared/design-sources.md` cites it for naming the Figma connection and for that rule,
   and `plugins/atk/shared/independent-challenge.md` for the read-only agents a challenge spawns.
   Its section on agents that write is cited by `atk:orchestrate`, the one skill that runs other
   skills as jobs: the job's worktree as the boundary that is never widened, a terminal multiplexer
@@ -230,9 +233,9 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   on them. The first two ask the same question from opposite ends, and a narrower answer in either
   one is how a repository ends up with a second template that outranks the team's own.
 - `plugins/atk/shared/design-sources.md`: how a skill reads a Figma design, through whatever connection to
-  Figma the harness has, found by what it can do rather than by a tool name, told apart in three
-  states because a connector can be listed and still not signed in, and replaced by exported images
-  when none is ready, so no skill stops for want of it. It also holds the node ID as the stable key
+  Figma the harness has, found and told apart per Read through a connection in
+  `plugins/atk/shared/host-capabilities.md`, with the Figma signs of each state, and replaced by
+  exported images when none is ready, so no skill stops for want of it. It also holds the node ID as the stable key
   of a component and the fingerprint a read records, which is what lets a second run touch only the
   rows that changed. Cited by `atk:spec` for the `screen` kind, the one kind whose source is a
   design, by `atk:intake`, which takes a design as the request, and by `atk:qa`, which reads the design

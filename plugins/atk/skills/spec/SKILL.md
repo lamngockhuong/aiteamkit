@@ -129,8 +129,8 @@ the neighbours have none, and the summary says it was added.
 
 A `screen` document takes its source differently from the next two paragraphs: the design, unless
 its `design_source` starts with `retired`, in which case the code, and otherwise read
-per `shared/design-sources.md`, which holds the three states of the Figma connection, the fallback
-to exported images, and what the read records. Each row cites its node ID. Where the screen's code
+per `shared/design-sources.md`, which applies the connection states of `shared/host-capabilities.md`
+to Figma and holds the fallback to exported images and what the read records. Each row cites its node ID. Where the screen's code
 already exists, compare each row with the screen's code for its label, required mark, limits, and
 transition, to set `implemented` in step 4. The paragraphs on `--sync` below apply to it as well.
 
