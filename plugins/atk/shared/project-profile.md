@@ -219,11 +219,17 @@ already in a spec directory is.
   records approval or finality, which that section leaves to the approver. `atk:init` never
   guesses a map line, writes one only when a person gives it, and `--audit` reports a line that
   would be refused.
-- Also beside the kinds table, the Tech Lead's answer about a `conventions.md` or an `index.md` the
-  kit did not write, one line each, `API conventions document: <path> is | is not, <name>, <date>` and
-  `Schema index: <path> is | is not, <name>, <date>`, written by `atk:spec` when the answer comes,
-  as the profile's one entry a skill other than `atk:init` adds. A run reads it before asking, so
-  the question is asked once.
+- Also beside the kinds table, the Tech Lead's answers about a file in a spec directory, one line
+  each: about a `conventions.md` or an `index.md` the kit did not write,
+  `API conventions document: <path> is | is not, <name>, <date>` and
+  `Schema index: <path> is | is not, <name>, <date>`, and about a file named like a template,
+  `Not a template: <path>, <name>, <date>`. A run reads them before asking, so each question is
+  asked once.
+- Those answer lines are the profile's one entry a skill other than `atk:init` writes. `atk:spec`
+  adds a line when the answer comes, even to a profile at `APPROVED`: the line records a decision
+  the Tech Lead has just made, so the write moves `updated`, leaves `status` as it is, changes no
+  other line, and is named in the run summary. With no profile there is nowhere to write it: the
+  summary names the line for whoever writes the profile, and the next run asks again.
 - `Run trace: off`: no skill leaves a run trace in this project. A missing line, and a missing
   profile, mean on. `shared/run-trace.md` owns what a trace holds, and rule 10 of
   `shared/team-roles.md` is the obligation the line switches off.

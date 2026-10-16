@@ -291,7 +291,11 @@ dạng từ template đó thay vì từ template của kit. Khối thông tin đ
 nguyên, và các trường của kit được thêm vào bên cạnh. Bảng lịch sử thay đổi có thêm một dòng, số
 phiên bản tăng theo quy tắc của template. Những gì kit vẫn cần, như câu hỏi mở, dấu chưa triển khai,
 mã định danh của từng thành phần trong design màn hình, được đặt vào chỗ hình dạng đó dành cho ghi
-chú. Skill không bao giờ điền một trường ghi nhận việc phê duyệt.
+chú. Skill không bao giờ điền một trường ghi nhận việc phê duyệt. Khi Tech Lead trả lời một file có
+sẵn trong thư mục spec có phải là tài liệu quy ước API, chỉ mục schema hay template không, skill ghi
+câu trả lời đó thành một dòng trong profile, kể cả profile đã được duyệt, để không phải hỏi lại.
+Chạy lại khi code chưa đổi kể từ lần ghi trước, skill không sửa dòng nào mà liệt kê những gì mới thấy
+trong phần tóm tắt, nên phiên bản của tài liệu chỉ tăng khi code thật sự thay đổi.
 
 **Dùng khi.** Dự án chưa có contract nào được viết ra, một thay đổi đã merge bỏ quên tài liệu, hoặc
 không ai còn tin vào tài liệu nữa. Cờ `--sync` gấp thay đổi trên nhánh hiện tại vào đúng những tài

@@ -319,10 +319,33 @@ every `--check`:
 
 How `--check` reports a breach of each, and at which severity, is in
 `skills/spec/references/drift-check.md`. A document written before these rules is judged by them
-from its next `--check`, and brought in line on the next write of its whole subject, never by
-`--sync`, which touches only what the branch touched and names the gaps it saw in its summary.
+from its next `--check`, and brought in line on the next write of its whole subject once its code has
+moved, per A run on unchanged code below, never by `--sync`, which touches only what the branch touched and names the gaps it saw in its summary.
 Bringing a document in line, a `401` added or an `N/A` written, is a change to what it promises,
 so its `status` goes back to `IN REVIEW`.
+
+## A run on unchanged code
+
+A document written from the code changes when the code changes, and not because a later run read the
+same code more closely. Run again on a subject whose code has not moved since the document was last
+written, a run reads more and finds more: a value the handler never checks, an input the database
+rejects first. Written in, each of those adds a history row and a version under a project shape, and
+sets `status` back to `IN REVIEW`, so a reviewer sees a contract that moved twice where nothing
+moved at all.
+
+So before writing from the code, the run asks git whether the code moved: the paths the document
+cites, compared between the commit that last changed the document and the working tree,
+`git diff --quiet <that commit> -- <paths>`. Where nothing moved, the run changes no line of the
+document, front matter included. What it found that the document does not say, a new open question,
+a rule of Rules that hold under any shape the document breaks, goes into the run summary, naming
+who would answer each, for the author to carry in when the code next changes or by asking for it.
+The summary says the code had not moved since which commit.
+
+Where the code moved, the run writes as usual, and what it found on the way is written with it.
+A person who wants the findings written anyway says so, and the run writes them as a change like any
+other. A document never committed has no last commit and is written as usual. This holds for a write
+from the code only: a run from a design, `--from` or a `screen` document's design, follows its own
+rules for what changed, and `--check` writes nothing in any case.
 
 ## The sync obligation
 

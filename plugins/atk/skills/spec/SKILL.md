@@ -215,10 +215,11 @@ cites, and a write of a `db` table keeps that table's row and edges in `index.md
 directory, both directories resolved per `shared/artifact-paths.md`, each only where the document
 exists or the kit's template is the shape, per `references/api-spec-template.md` and
 `references/db-spec-template.md`, and the summary names which was written. The Tech Lead's answer
-about such a file the kit did not write is recorded in the profile, per `shared/project-profile.md`.
+about such a file, or about a file named like a template, is added to the profile, an `APPROVED`
+one included, per `shared/project-profile.md`.
 
-Two rules keep an update honest:
-
+Two rules keep an update honest, and a run on code that has not moved writes nothing, per A run on
+unchanged code in `shared/spec-docs.md`:
 - Never delete a statement you did not verify. A section about behaviour outside this change stays
   exactly as it is, even when it looks wrong, and goes into the drift report instead.
 - Everything the document cannot answer becomes an open question carrying the name of whoever can

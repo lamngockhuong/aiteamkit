@@ -107,6 +107,7 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 <!-- atk:spec adds, when the Tech Lead answers about a conventions.md or index.md the kit did not write: -->
 <!-- - API conventions document: `docs/api/conventions.md` is, <name>, YYYY-MM-DD -->
 <!-- - Schema index: `docs/database/index.md` is not, <name>, YYYY-MM-DD -->
+<!-- - Not a template: `docs/database/notification_templates.md`, <name>, YYYY-MM-DD -->
 
 ## Tracker
 

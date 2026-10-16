@@ -286,6 +286,11 @@ takes its shape from that template rather than the kit's: the template's own fro
 with the kit's fields added beside it, a change-history table gains a row and a version moves by the
 template's rule, and what the kit still needs, open questions, the not-implemented mark, a screen's
 node IDs, goes where the shape keeps notes. The skill never fills a field that records approval.
+When the Tech Lead answers whether a file already in a spec directory is the conventions document,
+the schema index, or a template, the skill records that answer as one line in the profile, an
+approved one included, so the question is not asked again. Run again on code that has not changed
+since the document was last written, it changes no line and lists what it newly noticed in its
+summary instead, so a document's version moves only when its code does.
 
 **Use when.** A project has no written contract, a merged change left one behind, or nobody trusts
 the documents any more. `--sync` folds the change on the current branch into the documents it

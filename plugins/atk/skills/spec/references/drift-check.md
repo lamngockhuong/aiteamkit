@@ -39,7 +39,7 @@ items go in `shared/spec-docs.md` puts them. A file at
 a `Template` path in the profile is a template, not a document, and is never listed. A file only
 named like a template, per the paragraphs under the kinds table in `shared/artifact-paths.md`, is
 listed and checked like any document, and marked as possibly a template for the Tech Lead to
-confirm.
+confirm, unless a `Not a template` line in the profile already records that answer.
 
 Two files in the kind directories are not a subject, per those same paragraphs: `conventions.md` in the
 `api` directory is listed as the conventions document, its items the code rows, and `index.md` in the

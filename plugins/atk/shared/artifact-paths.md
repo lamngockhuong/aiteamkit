@@ -179,7 +179,8 @@ Three skills write **artifacts** outside the docs root, for two different reason
 files above are a separate case and not counted here: they are the project's files rather than this
 kit's, and where they go is the host's decision rather than ours.
 
-`atk:init` writes to `.atk/profile.md` and `atk:tailor` writes to `.atk/overrides/<skill>.md`. Every
+`atk:init` writes to `.atk/profile.md`, apart from the answer lines `atk:spec` adds beside its kinds
+table, per `shared/project-profile.md`, and `atk:tailor` writes to `.atk/overrides/<skill>.md`. Every
 other artifact here is prose a person reads and reviews; these two are read by a skill, and mixing
 the two kinds makes the docs tree noisy. Both are committed, except under the `workspace` shape, where the project root belongs to no
 repository and nothing tracks either of them, and except where the repository refuses the file.
@@ -239,9 +240,11 @@ names is one. No write copies it as a neighbour, `--check` does not list it, and
 the directory reads it as a contract, since its endpoints and columns are placeholders. A file in a
 kind directory whose name holds `template` and that no profile names is still a document, since a
 subject can carry the word, a `notification_templates` table among them: a write does not copy its
-shape until the Tech Lead has said it is not a template, and `--check` and every skill that reads the
-directory list it as possibly a template, naming the Tech Lead to confirm, rather than drop it or
-read it without saying so.
+shape until the Tech Lead has said it is not a template, taking the shape from the next source
+meanwhile, and `--check` and every skill that reads the directory list it as possibly a template,
+naming the Tech Lead to confirm, rather than drop it or read it without saying so. Once the Tech
+Lead says it is not one, the `Not a template` line in the profile, per `shared/project-profile.md`,
+records it, and it is read as any other document from then on.
 
 A `Docs` row names where a kind of document lives, and that is all it does. It cannot move an
 artifact out of the persistence group Persistence below puts it in, and it cannot send one into a
@@ -538,7 +541,8 @@ A record whose file name carries the time, the `atk:qa` run record among them, i
 existing file: an existing path means a second file, not an edit. Where a skill names a narrow change
 it may make to one of its own records after writing it, a pointer or a redaction such as the `Ticket`
 cell and the redaction of a run record, that change is the only one, and it is allowed at `APPROVED`
-too, because it changes nothing the record found.
+too, because it changes nothing the record found. The answer lines `atk:spec` adds to the profile
+are the same kind of narrow change, per `shared/project-profile.md`.
 
 Until a record is committed it may still be corrected, and each correction is named in the session:
 a citation that proves wrong, a path, a count. A correction fixes what the record got wrong about its
