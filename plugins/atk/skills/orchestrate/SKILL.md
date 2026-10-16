@@ -241,8 +241,8 @@ the agents, panes and workspaces a previous run of this skill recorded. Resume t
 the person's yes. Never start a duplicate.
 
 **Record everything started.** Each pane and agent by the name the coordinator gave it, each
-worktree, branch and workspace, in the run state as it is started. A thing nobody wrote down is a
-thing nobody will stop.
+worktree, branch, workspace and probe directory, in the run state as it is started. A thing nobody
+wrote down is a thing nobody will stop.
 
 **Stop only what this run started.** Agents first, then the panes and workspaces they ran in, each
 closed by the name recorded for it. Then each worktree whose work is committed and reviewed, or that

@@ -58,7 +58,9 @@ Run before the proposal, and its result goes in the proposal record.
   may be proposed for jobs of that way; any one let through, the mode missing, or the coordinator
   refused starting an agent in it, and it is not, and the proposal says which. The result goes into
   the run state, and a resume probes again rather than trusting it. The whole probe directory is
-  removed after the probe, and its absence is part of the closing inventory.
+  removed after the probe, and its absence is part of the closing inventory. One found already there,
+  left by a probe cut short, is named to the person and removed on their yes before the probe runs,
+  so nothing an earlier probe left is read as this one's result.
 
 `--sequential` keeps the way and sets the concurrency to one.
 

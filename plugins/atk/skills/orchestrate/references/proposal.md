@@ -22,7 +22,7 @@ of `shared/team-roles.md`.
 
 **At the close.** The `SUPERSEDED` question of How far an approval reaches, below, is asked first.
 Then only the settled records are offered for a commit: a `SUPERSEDED` record, or an `APPROVED` one
-whose every chain has ended, done, failed or escalated, so that no job, resume or `Follows:` line
+whose every chain has ended, `done`, `stopped` or `escalated`, so that no job, resume or `Follows:` line
 still reads it from the tree. They go through `atk:git --commit` in the coordinator's tree,
 staging those paths and nothing else: no review report copied under `<docs root>/derived/reviews/`,
 no run state. A record a chain still runs under or waits on is not committed. It stays untracked in
