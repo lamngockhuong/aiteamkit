@@ -96,7 +96,9 @@ Every interview question, approval prompt and plan confirmation a job meets reac
 names word for word; every artifact waits for its own approver before the next job builds on it; and
 nothing leaves the local repository. It runs jobs in agents in terminal panes where the machine has
 a multiplexer, in the host's subagents where it does not, and one at a time in the session
-otherwise, so no team is blocked for lacking a tool.
+otherwise, so no team is blocked for lacking a tool. A permission prompt of a job's own agent CLI
+is not a gate: you answer it in that job's pane, never the coordinator, and the close leaves your
+tree on the branch it started on.
 
 ---
 

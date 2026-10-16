@@ -4,7 +4,7 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-11
-updated: 2026-10-15
+updated: 2026-10-16
 ticket: none
 ---
 
@@ -87,6 +87,20 @@ spawned edited the tree, apart from the band 1 reviewer writing what a review ru
 - **The name is shared with another kit's skill** installed on the maintainer's machine. The
   `description` and the trigger evals have to keep the two apart, and no plugin file may name the
   other.
+
+Amended 2026-10-16, after the first full trial: a permission prompt of a job agent's CLI is answered
+by the person where the agent shows it, in its pane or in the harness, never by a keystroke of the
+coordinator, which names the waiting pane, quotes the prompt as evidence, and records the answer. A
+job agent in a pane may read the kit's plugin directory without asking, through a read-only grant,
+and never write there. A job may also run in a mode in which its agent CLI has a classifier judge
+each action, named in the proposal with its limit, a judgement and not a sandbox, but only where the
+coordinator's probe on that machine shows the mode starts and blocks a write outside the worktree, a
+push, an outbound network command and a read of a file rule 9 names; the subagent way may then run
+under a session in that mode on the same condition. This leaves the rejection of a one-shot pipeline
+below standing: that pipeline has nobody to ask at a gate, while a job in a classifier mode still
+stops at its gates. On the maintainer's machine
+on 2026-10-16 it did not: a write outside the worktree ran. `plugins/atk/shared/host-capabilities.md`,
+under Agents that write, holds the rule.
 
 ## Alternatives rejected
 

@@ -150,17 +150,19 @@ share files in `references/proposal.md`, from the base the run state records for
 
 Start each job in the approved way, per `references/ways-to-run.md`, with the prompt of
 `references/job-prompt.md`, at most the stated concurrency at once. A job runs one `atk` skill, leaves
-its change in its worktree, and writes a result file; the coordinator reads that file as evidence
-rather than state, per Agents that write in `shared/host-capabilities.md`. A job ends `done`,
-`needs-person`, or `failed`:
+its change in its worktree, and writes a result file; the coordinator waits for it inside its own
+turn, per Wait in `references/ways-to-run.md`, and reads that file as evidence rather than state,
+per Agents that write in `shared/host-capabilities.md`. A job ends `done`, `needs-person`, or
+`failed`:
 
 - **`done`.** Check and commit what it left, per After a job ends in `references/worktrees.md`, and
   record the branch the commit is on. A commit that fails or is refused puts the chain under
   `needs-person` with the reason, and no review runs on it. An offer the job declined, a ticket
   comment or a push, goes to the close.
-- **`needs-person`.** A gate of its skill, or a permission prompt of its CLI. Relay it as Agents that
-  write says, its recipient checked first against the people the job's skill asks: the requester, the
-  artifact's approver from the profile or the front matter, and the person running the skill.
+- **`needs-person`.** A gate of its skill, relayed as Agents that write says, its recipient checked
+  first against the people the job's skill asks: the requester, the artifact's approver from the
+  profile or the front matter, and the person running the skill. A permission prompt of its CLI is
+  the person's to answer where it shows, never the coordinator's, per `references/ways-to-run.md`.
   Independent questions from several jobs go to the person in one turn; one for a person not in the
   session parks its chain, per States in `references/proposal.md`.
 - **`failed`.** It timed out, its agent ended without a final state, it wrote outside its worktree, or
@@ -174,10 +176,7 @@ Once they say it is edited, the coordinator reads its front matter there and, on
 the edit through `atk:git --commit` in that worktree, before step 6 reads the piece again. A
 rejection is relayed and recorded, per A rejected artifact in `references/proposal.md`.
 
-An `atk:implement` job is given its plan path, so its gate runs straight through, `--no-review` and
-`--out <docs root>/derived/orchestrate/<run-id>/<job-id>-record.md` in its worktree, which the run
-state's ignore file holds; an `atk:fix` job is given `--no-review`, and its fix report stays at its
-default path, committed with the fix. The coordinator owns the review.
+What an `atk:implement` or `atk:fix` job is given is item 2 of `references/job-prompt.md`.
 
 ### 5. Review code jobs
 
@@ -212,9 +211,9 @@ is based on another, its artifacts, its implementation record, its review report
 yes to the push, per the consent line in
 `shared/finalize-steps.md`; the offers jobs declined; the chains still waiting, with the person each
 waits on; the exclude lines the run added to the clone, per `references/worktrees.md`; and the
-proposal records, offered for a commit through `atk:git --commit` in the coordinator's tree. A record
-left unapproved is moved to `SUPERSEDED` on its approver's yes, asked once at the close, and
-otherwise listed as still waiting.
+settled proposal records, offered for a commit in the coordinator's tree, which then goes back to the
+run's starting branch, per At the close in `references/proposal.md`. A record left unapproved is
+moved to `SUPERSEDED` on its approver's yes, asked once first, and otherwise listed as still waiting.
 
 ### State and resuming
 
@@ -227,8 +226,8 @@ per chain, naming the piece and the person, and leaves the log open so that `atk
 back; once none waits, the last line is the newest proposal record's path.
 
 A later run offers Resume, Start fresh, Stop, or Run separately, as Progress log says, and
-`--resume` is how a person asks for that offer. On Resume it checks every
-recorded worktree, branch and agent, asks the person about one that is gone rather than guessing,
+`--resume` is how a person asks for that offer. On Resume it checks every recorded worktree, branch
+and agent, and its own `HEAD` against `branch:`, asks the person about one that is gone or differs,
 reads each piece again, and re-dispatches only interrupted jobs. Start fresh first stops and removes
 what the old run started, per `## Process management`, so nothing is left to a superseded log.
 
@@ -286,7 +285,7 @@ for `atk:git` or a person. Done is the approver's word.
 - [ ] No job ran past its chain's first gating artifact without a second, approved proposal record.
 - [ ] Every question, approval prompt and confirmation reached the named person word for word, its
       recipient checked, and no answer came from the coordinator.
-- [ ] No CLI permission prompt that widens the worktree boundary or turns approvals off was passed on.
+- [ ] No keystroke reached a CLI permission prompt, and no widening was passed on.
 - [ ] No artifact's state was moved by the coordinator or a job past what its skill gives it.
 - [ ] No job staged or committed; every change was committed by the coordinator through `atk:git`,
       on the branch the run state records.

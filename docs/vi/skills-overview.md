@@ -98,7 +98,9 @@ người được nêu tên, giữ nguyên văn; mọi artifact chờ người d
 dựa vào; và không gì rời khỏi repository cục bộ. Job chạy bằng agent trong các pane mà một công cụ
 chia màn hình dòng lệnh mở ra, khi máy có công cụ đó; trong subagent của host khi không có; và lần
 lượt từng job ngay trong phiên trong các trường hợp còn lại, nên không team nào bị chặn vì thiếu một
-công cụ.
+công cụ. Prompt quyền của chính CLI mà agent trong job dùng không phải cổng duyệt: bạn trả lời nó
+ngay trong pane của job đó, điều phối viên không bao giờ trả lời thay, và khi kết thúc, cây làm việc
+của bạn quay về nhánh lúc bắt đầu.
 
 ---
 

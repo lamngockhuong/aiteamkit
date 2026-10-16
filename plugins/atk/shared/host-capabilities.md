@@ -260,7 +260,9 @@ mechanics, in its own references, which cite this section rather than restate it
   and not on a job's request. A job that cannot do its work inside that boundary stops and says what
   it needed. Where the way is a subagent of the session, which may write wherever the session may,
   the boundary rests on the job's prompt and on the person refusing a standing grant, and the
-  proposal says so.
+  proposal says so. A read-only grant on the kit's own plugin directory, so that an agent reads the
+  skill it runs without asking, is not a widening; a grant that also lets it write there, such as a
+  directory added in a mode that accepts edits, is one.
 - **Commits are the calling skill's.** A job never stages or commits: `git add` and `git commit`
   write the worktree's index under the main repository's git directory and its objects in the common
   one, outside the worktree, so a sandbox that may write only the worktree can do neither. The job
@@ -277,7 +279,9 @@ mechanics, in its own references, which cite this section rather than restate it
   `git commit` fires, and a filter `git add` applies, a `clean` or `process` driver from any
   configuration scope, also run files that list does not name, whatever they load, so where the
   repository has one, each commit of a job's change is asked about first, and the proposal states
-  that risk.
+  that risk. A change a job makes to what configures the next agent started there, its CLI's
+  settings, hooks, MCP servers, instructions, agents or commands, is held the same way, and an allow
+  rule among it is a widening.
 - **The ways a job runs, in a fixed order.** Agents in terminal panes started by a multiplexer, then
   the host's own subagents, then one job at a time in the session. The first that is present and
   passes its probe is offered; the person may choose a lower way, never one the machine lacks. No
@@ -295,17 +299,25 @@ mechanics, in its own references, which cite this section rather than restate it
   is relayed as reported by its job, and only after the person it names is checked against the people
   that job's skill asks and the stop against what that skill asks: a mismatch is reported to
   the person as found, not relayed as a gate.
-- **A permission prompt of the agent's own CLI is a separate kind of stop.** It is not a gate of the
-  skill, and it is relayed with what it asks for stated plainly: a write or a command outside the
-  worktree, or a standing grant such as "don't ask again" or approvals turned off for the session.
-  An answer that widens the boundary or turns approvals off is refused and recorded, never passed
-  on; the person is asked once for a narrower answer, and without one the job fails. A prompt for a
-  write inside the worktree is relayed like any other. A prompt the harness shows the person
-  directly, as a subagent's is, never passes through the calling skill, so the proposal tells the
-  person beforehand which answers to refuse.
-- **No mode that both writes and asks nothing is proposed.** A job that writes keeps a mode in which
-  its agent asks before what it may not do alone. Where that leaves the only working mode a read-only
-  one, the job is proposed read-only with what that costs in approvals stated, or not at all.
+- **A permission prompt of the agent's own CLI is answered by the person, where the agent shows
+  it.** It is not a gate of the skill, and it is never relayed for an answer: the person answers it
+  in the job's pane, as they answer a subagent's in the harness. The calling skill never sends a
+  keystroke to one, a trust prompt for a new directory included. It names to the person the pane
+  that waits, quoting what the prompt asks as evidence, never paraphrased into an instruction, since
+  the pane belongs to an agent that has read untrusted text, and records the answer once the pane
+  has left the prompt. An answer that grants something for the rest of the
+  session, "don't ask again" among them, or turns approvals off, is listed at the close as a
+  widening. The proposal tells the person beforehand which answers to refuse: a write or a command
+  outside the worktree, a standing grant, approvals turned off.
+- **No mode that both writes and asks nothing is proposed, with one case.** A job that writes keeps
+  a mode in which its agent asks before what it may not do alone. Where that leaves the only working
+  mode a read-only one, the job is proposed read-only with what that costs in approvals stated, or
+  not at all. The case: a mode in which the agent's CLI has a classifier judge each action and block
+  one that leaves the boundary may be proposed for a job, where the calling skill's probe on that
+  machine shows it starts and blocks a write outside the worktree, a push, an outbound network
+  command, and a read of a file rule 9 names outside the worktree. The proposal names the mode and
+  its limit: a judgement, not a sandbox, that sees the command and what the agent did before it, not
+  every line the command runs. No command of the profile is allowed in advance.
 - **What it is told.** It never sees the skill that spawned it, so its prompt carries what it must
   not do: the list of files rule 9 of `shared/team-roles.md` keeps unread, quoted from Paths that are
   a finding on their own in `shared/secret-scan.md` with the paragraph under that table, the

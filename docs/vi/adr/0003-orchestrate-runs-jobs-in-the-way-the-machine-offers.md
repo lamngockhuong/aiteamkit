@@ -4,7 +4,7 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-11
-updated: 2026-10-15
+updated: 2026-10-16
 ticket: none
 ---
 
@@ -86,6 +86,21 @@ kit mở ra sửa cây mã, trừ agent review band 1 ghi những gì một lư�
   Verify được đề xuất cho từng nhánh, lần lượt từng cái.
 - **Tên skill trùng với một skill của kit khác** đang cài trên máy người bảo trì. `description` và
   trigger evals phải tách được hai skill, và không file nào trong plugin được nêu tên kit kia.
+
+Sửa đổi ngày 2026-10-16, sau lần chạy thử đầy đủ đầu tiên: prompt quyền của CLI mà agent của job
+hiện ra do người dùng trả lời ngay tại chỗ agent hiện nó, trong pane hoặc trong harness. Điều phối
+viên không bao giờ gửi phím vào đó: nó chỉ báo pane nào đang chờ, trích nguyên văn prompt làm bằng
+chứng, và ghi lại câu trả lời. Agent của job trong pane được đọc thư mục plugin của kit mà không bị
+hỏi, nhờ một quyền chỉ đọc, và không bao giờ được ghi vào đó. Job cũng có thể chạy ở chế độ mà CLI
+của agent dùng một bộ phân loại xét từng hành động. Proposal nêu tên chế độ đó cùng giới hạn của
+nó: đây là một phán đoán, không phải sandbox. Chế độ này chỉ được đề xuất khi điều phối viên thăm dò
+trên chính máy đó và thấy nó khởi động được, đồng thời chặn đủ bốn việc: ghi ra ngoài worktree,
+push, lệnh gọi mạng ra ngoài, và đọc file mà quy tắc 9 cấm. Với cùng điều kiện đó, cách chạy bằng
+subagent cũng được phép khi chính phiên đang ở chế độ này. Phương án pipeline một lần chạy ở dưới
+vẫn bị loại: pipeline đó không có ai để hỏi khi tới cổng duyệt, còn job ở chế độ có bộ phân loại vẫn
+dừng ở cổng duyệt của nó. Trên máy người bảo trì ngày
+2026-10-16 thăm dò không đạt: lệnh ghi ra ngoài worktree vẫn chạy. Quy tắc nằm trong
+`plugins/atk/shared/host-capabilities.md`, mục Agents that write.
 
 ## Các phương án bị loại
 

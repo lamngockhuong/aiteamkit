@@ -20,6 +20,18 @@ It opens with the shared front matter block: `status: DRAFT`, the person running
 is `TBD (ask <the person running the skill>)`, and no job starts until a person is named, per rule 1
 of `shared/team-roles.md`.
 
+**At the close.** The `SUPERSEDED` question of How far an approval reaches, below, is asked first.
+Then only the settled records, `APPROVED` or `SUPERSEDED`, are offered for a commit through
+`atk:git --commit` in the coordinator's tree, staging those paths and nothing else: no review report
+copied under `<docs root>/derived/reviews/`, no run state. A record a chain still waits on is not
+committed. It stays untracked in the coordinator's tree, where its approver, `atk:help` and a resume
+find it, and a later close commits it once it is settled. `atk:git` never commits onto the default
+branch, so the commit may leave the tree on a branch it created; the coordinator then switches the
+tree back to the `branch:` of the run state, and the close names the branch that holds the records
+and who must say yes to its push. Where git refuses the switch, the close says so with the command to
+run, and the tree is left as it is. A stop between the commit and the switch is caught by the
+`HEAD` check of Resume in `SKILL.md`.
+
 ## What it holds
 
 1. **The pieces.** One row each: the input, by ticket key or path where it has one, and otherwise
@@ -28,10 +40,12 @@ of `shared/team-roles.md`.
    the whole run and never reused by a later record of it; where it stands, and the row of
    `shared/state-signals.md` that said so; its base, branch and worktree, per
    `references/worktrees.md`; and the files its plan names, where it has a plan.
-2. **The ways.** What the probe of `references/ways-to-run.md` found, the way offered, and any lower
-   way the person may choose instead. Where a way is subagents, the line that the person answers
-   their permission prompts directly and refuses a standing grant there, per Agents that write in
-   `shared/host-capabilities.md`. Where a job's agent is the command line of another provider, the
+2. **The ways.** What the probe of `references/ways-to-run.md` found, the classifier cases included,
+   the way offered, and any lower way the person may choose instead. Where a way is panes, the
+   permission mode each pane job starts in and the read-only grant on the kit, or that the CLI has
+   none. Where a way is panes or subagents, the line that the person answers the CLI's permission
+   prompts directly, in the job's pane or in the harness, and refuses a standing grant there, per
+   Agents that write in `shared/host-capabilities.md`. Where a job's agent is the command line of another provider, the
    line that its request text, its worktree, and the profile and overrides copied into it go to that
    provider, and that the PM of the Team section, who owns client communication, says yes to it
    beside the record's approver, or `TBD (ask <the person running the skill>)` where none is named.
@@ -59,7 +73,10 @@ of `shared/team-roles.md`.
    rights. Where a commit would fire a hook or `git add` a filter, that they run files a job changed
    with those rights too, so each commit of a job's change is asked about, per step 3 of After a job
    ends in `references/worktrees.md`, and what the check for writes outside a worktree cannot see,
-   per the same section.
+   per the same section. That the person also answers, in each pane, the trust prompt Claude Code
+   shows for a new worktree, and refuses there what Agents that write in
+   `shared/host-capabilities.md` lists. Where the classifier mode is proposed, its limit as that
+   section words it, so a test the job edited runs unseen.
 5. **Decisions.** Who approved, when, and what they changed, written by that person or on their word.
 
 ## When the profile is not ready
@@ -82,7 +99,8 @@ The proposal suggests a default by kind of job, and the person changes any row:
   agent in a pane, or runs in the session, since a subagent hands each question back as a stop.
 - A job that writes code gets a mode that writes the worktree and asks before anything else.
 - No mode that both writes and asks nothing is proposed, per Agents that write in
-  `shared/host-capabilities.md`.
+  `shared/host-capabilities.md`, except a classifier mode whose four cases the probe saw blocked on
+  this machine.
 
 ## A chain
 
@@ -128,8 +146,8 @@ until then corrects it only as that section allows. The rest of the chain runs o
 record is `APPROVED`.
 
 A record the approver edited is checked again before anything runs: every row against the
-`argument-hint` of its skill, against the rule that no mode both writes and asks nothing, and against
-the machine's cap. A first record the approver rejects ends the run before any job, and the closing
+`argument-hint` of its skill, against the rule that no mode both writes and asks nothing as the
+defaults above state it, and against the machine's cap. A first record the approver rejects ends the run before any job, and the closing
 message says so; a later record rejected stops only the chain it was for, and the others go on. A
 record that ends unapproved, the run stopped or started fresh, is moved to `SUPERSEDED` only on its
 approver's yes, asked once, and is otherwise listed in the close as still waiting on them.
