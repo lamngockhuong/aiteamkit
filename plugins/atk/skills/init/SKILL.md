@@ -162,8 +162,10 @@ reorder the file. The output is a list the Tech Lead can act on, not a patch. A 
 line is never reported missing, per `shared/project-profile.md`. A `Template` path in the kinds table
 that no longer exists, or no longer passes the check in that file, is reported as drifted, with the
 path and what failed in place of a second value; so is one git does not track, by
-`git ls-files --error-unmatch`, since nobody reviews it and each clone may read a different file,
-and a front-matter map line that file would refuse.
+`git -C <repository> ls-files --error-unmatch <path>` in the repository that holds it, per the
+Repositories table where the shape names members, a path no repository holds reported as such,
+since nobody reviews it and each clone may read a different file, and a front-matter map line that
+file would refuse.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
 persistence line of the profile header names which of the four forms in
