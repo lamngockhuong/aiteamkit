@@ -165,7 +165,10 @@ path and what failed in place of a second value; so is one git does not track, b
 `git -C <repository> ls-files --error-unmatch <path>` in the repository that holds it, per the
 Repositories table where the shape names members, a path no repository holds reported as such,
 since nobody reviews it and each clone may read a different file, and a front-matter map line that
-file would refuse.
+file would refuse. A `Version rule` line for a kind whose row now names a template is reported as
+possibly stale, since `atk:spec` reads it only where the shape came from no template, per
+`shared/spec-docs.md`: the Tech Lead keeps it where the documents already in the directory won over
+the template, and removes it otherwise.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
 persistence line of the profile header names which of the four forms in

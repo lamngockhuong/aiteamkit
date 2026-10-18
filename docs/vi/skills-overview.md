@@ -115,8 +115,9 @@ template ở cột `Template`, do skill đề xuất từ các file nó tìm th�
 
 **Dùng khi.** Một team cài `atk` vào dự án lần đầu, và dùng lại khi dự án đã đi xa hơn những gì
 profile đang ghi. Cờ `--audit` đối chiếu profile hiện có với repo và không sửa gì, và báo đường dẫn
-`Template` nào không còn tồn tại hoặc không được git theo dõi; nếu người dùng trả lời các điểm lệch ngay trong phiên, lần chạy báo
-ra rồi tiếp tục thành một lần cập nhật.
+`Template` nào không còn tồn tại hoặc không được git theo dõi, cùng dòng `Version rule` có thể đã cũ
+vì loại tài liệu đó nay đã có template; nếu người dùng trả lời các điểm lệch ngay trong phiên, lần
+chạy báo ra rồi tiếp tục thành một lần cập nhật.
 
 **Không dùng khi.** Bạn muốn cấu hình kit một lần cho mọi dự án. Một profile chỉ đúng với một dự án
 và được commit cùng dự án đó; bản thân kit không giữ sự thật nào của dự án.

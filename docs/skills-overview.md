@@ -113,9 +113,9 @@ in its data. Where the project keeps its own spec templates, the kinds table nam
 
 **Use when.** A team first installs `atk` in a project, and again when the project has moved on from
 what the profile says. `--audit` compares an existing profile against the repository and changes
-nothing, and reports a `Template` path that no longer exists or that git does not track; when the
-user answers the drift in the
-same session, the run says so and continues as an update.
+nothing, and reports a `Template` path that no longer exists or that git does not track, and a
+`Version rule` line its kind's template has made possibly stale; when the user answers the drift in
+the same session, the run says so and continues as an update.
 
 **Do not use when.** You want the kit configured once for every project. A profile is true of one
 project and is committed with it; the kit itself holds no project facts.
