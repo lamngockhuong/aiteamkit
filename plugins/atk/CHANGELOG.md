@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.13](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.12...atk-v0.1.13) (2026-10-19)
+
+
+### Features
+
+* give atk:spec one answer for four project-shape questions, and have atk:init audit an untracked template ([#137](https://github.com/lamngockhuong/aiteamkit/issues/137)) ([7d1071a](https://github.com/lamngockhuong/aiteamkit/commit/7d1071aa9455d3f8c4097c8f0e3b29d745555870)), closes [#135](https://github.com/lamngockhuong/aiteamkit/issues/135)
+* keep real values out of every cell of an atk:spec reference document ([#136](https://github.com/lamngockhuong/aiteamkit/issues/136)) ([f066427](https://github.com/lamngockhuong/aiteamkit/commit/f06642774a6938fa4a639c0a171bcbe8dae1e411))
+
 ## [0.1.12](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.11...atk-v0.1.12) (2026-10-16)
 
 
