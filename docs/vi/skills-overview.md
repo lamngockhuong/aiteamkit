@@ -283,8 +283,10 @@ kèm tài liệu của nó và một `erDiagram` có tên khớp từng ký tự
 có thêm bảng Events, ghi màn hình làm gì khi mở, khi người dùng thao tác và khi có lỗi, và mỗi thành
 phần có thể ghi endpoint mà nó gọi. Có vài quy tắc áp dụng dù tài liệu chép hình dạng từ đâu, và
 `--check` báo mọi chỗ vi phạm: phần nào không áp dụng thì ghi `N/A` kèm lý do, endpoint cần xác thực
-thì liệt kê `401` và `403` ở nơi tài liệu có liệt kê các kết quả trả về, body ví dụ phải parse được và chỉ chứa giá trị bịa ra, và cột `*_id` không
-có khóa ngoại thì ghi lý do.
+thì liệt kê `401` và `403` ở nơi tài liệu có liệt kê các kết quả trả về, body ví dụ phải parse được,
+không giá trị nào trong tài liệu, từ ô bảng, request mẫu đến dòng lịch sử thay đổi chứ không riêng
+body ví dụ, chứa secret thật, dữ liệu của người thật hay host nội bộ, và cột `*_id` không có khóa
+ngoại thì ghi lý do.
 
 Nếu dự án có template spec riêng và ghi tên chúng trong profile, một thư mục còn trống sẽ lấy hình
 dạng từ template đó thay vì từ template của kit. Khối thông tin đầu file của template được giữ

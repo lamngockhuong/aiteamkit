@@ -58,17 +58,24 @@ own, the schema index. Per document:
 
 - **Required outcomes.** Where the shape lists outcomes at all, each endpoint that needs
   authentication has a `401` outcome, and each that checks a permission a `403`. One missing is
-  `major`: the document says nothing wrong, it says too
-  little, and a caller handles only what it lists.
+  `major`: the document says nothing wrong, it says too little, and a caller handles only what it
+  lists.
 - **Examples.** Each example body is an item. One that does not parse as the format it claims is
-  `minor`. A value shaped like a credential, a real person's data, or an internal host is reported
-  by document, endpoint and field, and never quoted, so the report prints nothing that would need
-  masking; it is `major`, and the report says the value is to be replaced, not judged. A value that
-  may be a live credential is already in the repository's history and wherever it was pushed, so the
-  report also says so, and leaves rotating it, the step What happens on a hit in
-  `shared/secret-scan.md` asks of a value that reached a remote, as an open question for the
-  credential's owner. The check itself does not stop: it changes nothing and unstages nothing, and
-  reports every other item.
+  `minor`.
+- **Real values.** Every value the document holds is scanned, its example bodies, table cells,
+  sample requests, change-history rows and notes alike, with the team's own names and its links to
+  the team's own tracker, design and documents left out, per `shared/spec-docs.md`. A value shaped
+  like a credential, a real person's data, or an internal host is an item of its own on the coverage
+  list, status `rule breach`, whatever the status of the endpoint or row it sits in. It is reported
+  by document and field, and endpoint where there is one, and never quoted, so the report prints
+  nothing that would need masking; it is `major`, and the report says the value is to be replaced,
+  not judged. A value that may be a live credential is already in the repository's history and
+  wherever it was pushed, so the report also says so, and leaves rotating it, the step What happens
+  on a hit in `shared/secret-scan.md` asks of a value that reached a remote, as an open question for
+  the credential's owner. The check itself does not stop: it changes nothing and unstages nothing,
+  and reports every other item. A document where the scan finds none says so in one line, every
+  value scanned and none found, rather than listing nothing, so a clean document does not read like
+  one never scanned.
 - **Error codes.** Where the conventions document exists, each code a resource document cites is
   compared with it, and one it lacks is `major`. Where the project keeps no conventions document,
   nothing is compared, and the report says so in one line rather than calling the codes checked.
@@ -134,8 +141,8 @@ It does not say which side should change. Where the direction is genuinely uncle
 dressed as a conclusion is worse than the question.
 
 A `rule breach` is the exception to the shape: it has no code side, so it carries the document's
-line, the rule it breaks, and the cost. A value shaped like a credential is never quoted, per
-Examples above, only placed by document, endpoint and field.
+line, the rule it breaks, and the cost. A value Real values above reports is never quoted, only
+placed by document and field, and endpoint where there is one.
 
 ## What is not drift
 

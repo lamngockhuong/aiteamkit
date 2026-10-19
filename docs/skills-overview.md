@@ -278,8 +278,10 @@ with its document and an `erDiagram` whose names match the table documents exact
 carries an Events table, what the screen does on opening, on an action and on an error, and each
 component can name the endpoint it calls. A few rules hold whatever shape a document copied, and
 `--check` reports a breach of each: a part that does not apply says `N/A` and why, an endpoint behind
-authentication lists its `401` and `403` where the document lists outcomes, an example body parses
-and holds only made-up values, and a `*_id` column with no foreign key says why.
+authentication lists its `401` and `403` where the document lists outcomes, an example body parses,
+no value the document carries, a table cell, a sample request or a history row as much as an example,
+holds a real secret, a real person's data or an internal host, and a `*_id` column with no foreign key
+says why.
 
 Where the project keeps spec templates of its own and names them in the profile, an empty directory
 takes its shape from that template rather than the kit's: the template's own front matter is kept
