@@ -185,8 +185,8 @@ Each with the name of the person who must answer it.
   it.
 - The `401` and `403` rows, the example body, and every other value the document carries follow
   Rules that hold under any shape in `shared/spec-docs.md`. An endpoint open to anyone says so in its
-  authentication paragraph, which is why it lists neither. An example is optional, a fenced `json` block, with placeholders such as
-  `example.com` addresses, all-zero identifiers and `Example name`.
+  authentication paragraph, which is why it lists neither. An example is optional, a fenced `json`
+  block, with placeholders such as `example.com` addresses, all-zero identifiers and `Example name`.
 - Under `Contract: first` the unit that carries the not-implemented mark is the endpoint, per
   `shared/spec-docs.md`, and only at `implemented: partial`. Its `<METHOD> /<path>` section opens with one line: `Not implemented yet.`,
   or `Not implemented yet: <what the contract changes>.` for an endpoint that exists and is changing.

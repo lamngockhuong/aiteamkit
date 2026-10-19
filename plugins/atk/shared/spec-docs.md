@@ -317,7 +317,7 @@ every `--check`:
   real value. Two things are not a real person's data or an internal host here, as that list keeps a
   run record's `Run by`, `Ticket` and `Evidence`: the team's own names wherever the shape or the kit
   asks for a person, `owner`, `approver`, the author of a history row, an open question's
-  `Who answers` and its answer; and the links a document keeps to the team's own tracker, design and
+  `Who answers` and the name that signs its answer; and the links a document keeps to the team's own tracker, design and
   documents. A document is copied into tickets, tests and chat, and a real value travels with it.
 - **A reference without a key says why.** A column named `*_id` with no foreign key carries the reason
   in its row: another service owns the row, a key would block an archive, the value is a reference
