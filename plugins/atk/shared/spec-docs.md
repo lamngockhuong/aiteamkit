@@ -188,13 +188,19 @@ The shape of a document is its heading order, depth of detail, table columns, la
 the shape keeps them, its own front matter and change history. It comes from the first of three
 sources that has one:
 
-1. **The documents already in the directory.** Read one and follow it. Where they are not all in one
-   shape, follow the shape most of them share; where shapes are shared by as many, the one of the
-   document committed most recently among them, by `git log -1 --format=%cI -- <document>`, a
-   document with no commit left out. A tie git cannot break, equal dates or a shallow clone, is not
-   picked: it becomes an open question for the kind's approver, and the run takes the shape from
-   the next source meanwhile. The run summary names the shape followed and how many documents carry
-   each, so the approver sees the split.
+1. **The documents already in the directory.** Read them and follow the shape they share; two
+   documents share a shape when their headings, in order, and their table columns match. Where
+   they are not all in one shape, follow the shape most of them share; where shapes are shared by
+   as many, the one of the document committed most recently among them, by
+   `git -C <repository> log -1 --format=%ct -- <path>`, run in the repository that holds the
+   document with the path relative to it, per the Repositories table of `shared/project-profile.md`
+   where the shape names members, a document with no commit left out. A tie git cannot break, equal
+   times, or a clone `git rev-parse --is-shallow-repository` calls shallow, is not picked and is
+   not passed to the next source, which would either send the run back here or add a shape the
+   directory does not hold: the run writes nothing to that document and opens a question for the
+   kind's approver naming the tied shapes, and the next write follows the shape they name. The run
+   summary names the shape followed and how many documents carry each, so the approver sees the
+   split.
 2. **The template the project names for the kind**, in the `Template` column of the kinds table in
    the Docs section of `.atk/profile.md`, per `shared/project-profile.md`, which also holds the check
    a path passes before it is opened.
@@ -269,11 +275,14 @@ A project shape that carries a change-history table, or a version field, is kept
   the rule they give is named in the summary for the approver to add to the template; never
   guessed. Where the shape came from no template, because the profile names none for the kind or
   the documents already in the directory won over it, the rule is read first from a `Version rule`
-  line in the Docs section of `.atk/profile.md`. Without one, the Tech Lead is asked, and their
-  answer is recorded there as one, per `shared/project-profile.md`, so the next write does not ask
-  again. Where the person running the skill is not the Tech Lead and the Tech Lead is not there to
-  answer, that person's rule serves this write alone, is named in the summary as theirs, and is
-  not recorded.
+  line in the Docs section of `.atk/profile.md`. Without one, the person running the skill is
+  asked, and the run establishes whether that person is the Tech Lead the way rule 2 of
+  `shared/team-roles.md` establishes an approver: the Team section against `git config user.name`
+  or the host login, asking when that does not settle it. Only the Tech Lead's own answer is
+  recorded there as one, per `shared/project-profile.md`, so the next write does not ask again.
+  Anyone else's rule, one they relay as the Tech Lead's included, serves this write alone, is named
+  in the summary as theirs, and opens a question naming the Tech Lead with the proposed
+  `Version rule` line for them to confirm.
 - A correction of wording follows the template's rule for one, and adds nothing where it has none.
 - A place the template says must agree with the last row, a version in the front matter or under the
   title, is set in the same write, except a value that records approval or finality, which is left
@@ -298,7 +307,8 @@ names each addition.
   two components share one, and the run summary says the label is the key. A label key is fixed
   once written: a component added later that repeats a label takes the next free suffix, never one
   by reading order, and a write that renames an item because its label changed in the design
-  renames its key in the same write, the node ID pairing the two, and names the pairing in the
+  renames its key in the same write, to the next free suffix of the new label where another item
+  already carries it, the node ID pairing the two, and names the pairing in the
   summary. An item the run cannot pair is asked about, never guessed. A document that already
   holds node IDs anywhere, a `Node` column, or beside
   `path:line` in a note, is read from there on its first write after this rule, so no row loses its

@@ -161,14 +161,15 @@ drifted entry shows both values and their sources. The audit itself changes noth
 reorder the file. The output is a list the Tech Lead can act on, not a patch. A missing `Run trace`
 line is never reported missing, per `shared/project-profile.md`. A `Template` path in the kinds table
 that no longer exists, or no longer passes the check in that file, is reported as drifted, with the
-path and what failed in place of a second value; so is one git does not track, by
+path and what failed in place of a second value. So is one git does not track, since nobody reviews
+it and each clone may read a different file: checked with
 `git -C <repository> ls-files --error-unmatch <path>` in the repository that holds it, per the
-Repositories table where the shape names members, a path no repository holds reported as such,
-since nobody reviews it and each clone may read a different file, and a front-matter map line that
-file would refuse. A `Version rule` line for a kind whose row now names a template is reported as
-possibly stale, since `atk:spec` reads it only where the shape came from no template, per
-`shared/spec-docs.md`: the Tech Lead keeps it where the documents already in the directory won over
-the template, and removes it otherwise.
+Repositories table where the shape names members, with the path relative to that repository, the
+member's own path taken off the front. A path no repository holds is reported as such. So is a
+front-matter map line that file would refuse. A `Version rule` line for a kind whose row now names a
+template is reported as possibly stale, since `atk:spec` reads it only where the shape came from no
+template, per `shared/spec-docs.md`: the Tech Lead keeps it where the documents already in the
+directory won over the template, and removes it otherwise.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
 persistence line of the profile header names which of the four forms in

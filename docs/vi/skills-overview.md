@@ -298,9 +298,9 @@ chú. Skill không bao giờ điền một trường ghi nhận việc phê duy�
 sẵn trong thư mục spec có phải là tài liệu quy ước API, chỉ mục schema hay template không, skill ghi
 câu trả lời đó thành một dòng trong profile, kể cả profile đã được duyệt, để không phải hỏi lại;
 quy tắc tăng phiên bản do Tech Lead đưa ra cũng được ghi như vậy khi hình dạng không lấy từ template
-nào. Khi các tài liệu có sẵn
-trong một thư mục không cùng một hình dạng, skill theo hình dạng mà nhiều tài liệu dùng nhất, nếu
-hòa thì theo tài liệu được commit gần nhất, và nói rõ điều đó trong phần tóm tắt.
+nào. Khi các tài liệu có sẵn trong một thư mục không cùng một hình dạng, skill theo hình dạng mà
+nhiều tài liệu dùng nhất, nếu hòa thì theo tài liệu được commit gần nhất, và nói rõ điều đó trong
+phần tóm tắt; nếu git không phân định được thì skill dừng ghi và hỏi approver chọn hình dạng nào.
 Chạy lại khi code chưa đổi kể từ lần ghi trước, skill không sửa dòng nào mà liệt kê những gì mới thấy
 trong phần tóm tắt, nên phiên bản của tài liệu chỉ tăng khi code thật sự thay đổi.
 

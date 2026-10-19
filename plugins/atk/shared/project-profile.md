@@ -199,7 +199,7 @@ English document. A tree that is not partitioned records that and nothing else;
 
 Three entries in Docs change what a skill does rather than where it writes. Beside the kinds table,
 the front-matter map changes what one field is called, and answer lines record what a file already
-in a spec directory is and how a version moves where no template says.
+in a spec directory is and how a version moves where a kind's shape came from no template.
 
 - `Contract: first` or `Contract: code`: whether a reference document of any kind but `screen` may
   exist before the code it describes. `shared/spec-docs.md` owns what each value means, and why a
