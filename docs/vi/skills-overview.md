@@ -115,8 +115,9 @@ template ở cột `Template`, do skill đề xuất từ các file nó tìm th�
 
 **Dùng khi.** Một team cài `atk` vào dự án lần đầu, và dùng lại khi dự án đã đi xa hơn những gì
 profile đang ghi. Cờ `--audit` đối chiếu profile hiện có với repo và không sửa gì, và báo đường dẫn
-`Template` nào không còn tồn tại; nếu người dùng trả lời các điểm lệch ngay trong phiên, lần chạy báo
-ra rồi tiếp tục thành một lần cập nhật.
+`Template` nào không còn tồn tại hoặc không được git theo dõi, cùng dòng `Version rule` đã cũ
+vì loại tài liệu đó nay đã có template; nếu người dùng trả lời các điểm lệch ngay trong phiên, lần
+chạy báo ra rồi tiếp tục thành một lần cập nhật.
 
 **Không dùng khi.** Bạn muốn cấu hình kit một lần cho mọi dự án. Một profile chỉ đúng với một dự án
 và được commit cùng dự án đó; bản thân kit không giữ sự thật nào của dự án.
@@ -295,7 +296,12 @@ phiên bản tăng theo quy tắc của template. Những gì kit vẫn cần, n
 mã định danh của từng thành phần trong design màn hình, được đặt vào chỗ hình dạng đó dành cho ghi
 chú. Skill không bao giờ điền một trường ghi nhận việc phê duyệt. Khi Tech Lead trả lời một file có
 sẵn trong thư mục spec có phải là tài liệu quy ước API, chỉ mục schema hay template không, skill ghi
-câu trả lời đó thành một dòng trong profile, kể cả profile đã được duyệt, để không phải hỏi lại.
+câu trả lời đó thành một dòng trong profile, kể cả profile đã được duyệt, để không phải hỏi lại;
+quy tắc tăng phiên bản do Tech Lead đưa ra cũng được ghi như vậy khi hình dạng không lấy từ template
+nào. Khi các tài liệu có sẵn trong một thư mục không cùng một hình dạng, skill theo hình dạng mà
+nhiều tài liệu dùng nhất, nếu hòa thì theo tài liệu được commit gần nhất, và nói rõ điều đó trong
+phần tóm tắt; nếu git không phân định được thì skill dừng ghi, hỏi approver chọn hình dạng nào và ghi câu trả lời vào
+profile.
 Chạy lại khi code chưa đổi kể từ lần ghi trước, skill không sửa dòng nào mà liệt kê những gì mới thấy
 trong phần tóm tắt, nên phiên bản của tài liệu chỉ tăng khi code thật sự thay đổi.
 

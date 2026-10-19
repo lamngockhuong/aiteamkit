@@ -168,7 +168,7 @@ record, and one that names a different file is asked about before anything is wr
 
 Under a project shape the key is read where Where the kit's own items go in `shared/spec-docs.md`
 puts node IDs, and what this section says of `Node` and `No` holds for that key and the shape's item
-ID.
+ID, or the visible label that section keys a shape with no item ID by.
 
 Rows are compared with the design by `Node`, never by `No`. From images the keys are not stable,
 since one component added near the top shifts every `#n` after it, so rows read from images are

@@ -198,8 +198,8 @@ English document. A tree that is not partitioned records that and nothing else;
 `shared/artifact-paths.md` owns what each skill then does with it.
 
 Three entries in Docs change what a skill does rather than where it writes. Beside the kinds table,
-the front-matter map changes what one field is called, and two answer lines record what a file
-already in a spec directory is.
+the front-matter map changes what one field is called, and answer lines record what a file already
+in a spec directory is and how a version moves where a kind's shape came from no template.
 
 - `Contract: first` or `Contract: code`: whether a reference document of any kind but `screen` may
   exist before the code it describes. `shared/spec-docs.md` owns what each value means, and why a
@@ -219,15 +219,21 @@ already in a spec directory is.
   records approval or finality, which that section leaves to the approver. `atk:init` never
   guesses a map line, writes one only when a person gives it, and `--audit` reports a line that
   would be refused.
-- Also beside the kinds table, the Tech Lead's answers about a file in a spec directory, one line
-  each: about a `conventions.md` or an `index.md` the kit did not write,
+- Also beside the kinds table, the Tech Lead's answers about a file in a spec directory or about
+  how a kind's documents are versioned, and a kind's approver's answer about which shape its
+  documents follow, one line each: about a `conventions.md` or an `index.md` the kit did not write,
   `API conventions document: <path> is | is not, <name>, <date>` and
   `Schema index: <path> is | is not, <name>, <date>`, and about a file named like a template,
-  `Not a template: <path>, <name>, <date>`. A run reads them before asking, so each question is
-  asked once.
+  `Not a template: <path>, <name>, <date>`, and, for a kind whose documents carry a version and
+  take their shape from no template, how that version moves, `Version rule: <kind>: <rule>, <name>,
+  <date>`, per Change history and version under a project shape in `shared/spec-docs.md`, and, for
+  a kind whose documents split into shapes git cannot choose between, `Shape: <kind>: follows
+  <path of a document in that shape>, <name>, <date>`, per The project's own shape wins there. A
+  run reads them before asking, so each question is asked once.
 - Those answer lines are the profile's one entry a skill other than `atk:init` writes. `atk:spec`
   adds a line when the answer comes, even to a profile at `APPROVED`: the line records a decision
-  the Tech Lead has just made, so the write moves `updated`, leaves `status` as it is, changes no
+  the Tech Lead, or for a `Shape` line the kind's approver, has just made, so the write moves
+  `updated`, leaves `status` as it is, changes no
   other line, and is named in the run summary. With no profile there is nowhere to write it: the
   summary names the line for whoever writes the profile, and the next run asks again.
 - `Run trace: off`: no skill leaves a run trace in this project. A missing line, and a missing
