@@ -115,7 +115,7 @@ template ở cột `Template`, do skill đề xuất từ các file nó tìm th�
 
 **Dùng khi.** Một team cài `atk` vào dự án lần đầu, và dùng lại khi dự án đã đi xa hơn những gì
 profile đang ghi. Cờ `--audit` đối chiếu profile hiện có với repo và không sửa gì, và báo đường dẫn
-`Template` nào không còn tồn tại hoặc không được git theo dõi, cùng dòng `Version rule` có thể đã cũ
+`Template` nào không còn tồn tại hoặc không được git theo dõi, cùng dòng `Version rule` đã cũ
 vì loại tài liệu đó nay đã có template; nếu người dùng trả lời các điểm lệch ngay trong phiên, lần
 chạy báo ra rồi tiếp tục thành một lần cập nhật.
 
@@ -300,7 +300,8 @@ câu trả lời đó thành một dòng trong profile, kể cả profile đã �
 quy tắc tăng phiên bản do Tech Lead đưa ra cũng được ghi như vậy khi hình dạng không lấy từ template
 nào. Khi các tài liệu có sẵn trong một thư mục không cùng một hình dạng, skill theo hình dạng mà
 nhiều tài liệu dùng nhất, nếu hòa thì theo tài liệu được commit gần nhất, và nói rõ điều đó trong
-phần tóm tắt; nếu git không phân định được thì skill dừng ghi và hỏi approver chọn hình dạng nào.
+phần tóm tắt; nếu git không phân định được thì skill dừng ghi, hỏi approver chọn hình dạng nào và ghi câu trả lời vào
+profile.
 Chạy lại khi code chưa đổi kể từ lần ghi trước, skill không sửa dòng nào mà liệt kê những gì mới thấy
 trong phần tóm tắt, nên phiên bản của tài liệu chỉ tăng khi code thật sự thay đổi.
 

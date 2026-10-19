@@ -167,9 +167,9 @@ it and each clone may read a different file: checked with
 Repositories table where the shape names members, with the path relative to that repository, the
 member's own path taken off the front. A path no repository holds is reported as such. So is a
 front-matter map line that file would refuse. A `Version rule` line for a kind whose row now names a
-template is reported as possibly stale, since `atk:spec` reads it only where the shape came from no
-template, per `shared/spec-docs.md`: the Tech Lead keeps it where the documents already in the
-directory won over the template, and removes it otherwise.
+template, and whose directory holds no document or only documents in that template's shape, by the
+test in `shared/spec-docs.md`, is reported as drifted, since `atk:spec` reads it only where the
+shape came from no template; where the documents won over the template it matches.
 
 Re-check how the profile is stored alongside the sections, in the same shape and ahead of them. The
 persistence line of the profile header names which of the four forms in

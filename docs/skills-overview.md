@@ -114,7 +114,7 @@ in its data. Where the project keeps its own spec templates, the kinds table nam
 **Use when.** A team first installs `atk` in a project, and again when the project has moved on from
 what the profile says. `--audit` compares an existing profile against the repository and changes
 nothing, and reports a `Template` path that no longer exists or that git does not track, and a
-`Version rule` line its kind's template has made possibly stale; when the user answers the drift in
+`Version rule` line its kind's template has made stale; when the user answers the drift in
 the same session, the run says so and continues as an update.
 
 **Do not use when.** You want the kit configured once for every project. A profile is true of one
@@ -295,7 +295,7 @@ approved one included, so the question is not asked again; so is the Tech Lead's
 version where the shape came from no template. Where the documents already in a directory are in
 more than one shape, the skill follows the shape most of them share, a tie going to the most
 recently committed, and says so in its summary; a tie git cannot break holds the write and asks the
-approver which shape. Run again on code that has not changed since the document was last written,
+approver which shape, and records the answer in the profile. Run again on code that has not changed since the document was last written,
 it changes no line and lists what it newly noticed in its summary instead, so a document's version
 moves only when its code does.
 

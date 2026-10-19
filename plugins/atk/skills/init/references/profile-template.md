@@ -104,11 +104,12 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 -->
 <!-- and, only when a person gives it, one line per kit field the project's template carries under its own name, never a field shared/spec-docs.md keeps by name: -->
 <!-- - Front-matter map: `owner: updated_by` -->
-<!-- atk:spec adds, when the Tech Lead answers about a conventions.md or index.md the kit did not write, or gives the version rule for a kind whose shape came from no template: -->
+<!-- atk:spec adds, when the Tech Lead answers about a conventions.md or index.md the kit did not write, or gives the version rule for a kind whose shape came from no template, or a kind's approver picks between tied shapes: -->
 <!-- - API conventions document: `docs/api/conventions.md` is, <name>, YYYY-MM-DD -->
 <!-- - Schema index: `docs/database/index.md` is not, <name>, YYYY-MM-DD -->
 <!-- - Not a template: `docs/database/notification_templates.md`, <name>, YYYY-MM-DD -->
 <!-- - Version rule: api: minor on a new field, major on a removed one, <name>, YYYY-MM-DD -->
+<!-- - Shape: api: follows `docs/api/users.md`, <name>, YYYY-MM-DD -->
 
 ## Tracker
 

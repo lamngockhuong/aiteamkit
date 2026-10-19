@@ -195,12 +195,15 @@ sources that has one:
    `git -C <repository> log -1 --format=%ct -- <path>`, run in the repository that holds the
    document with the path relative to it, per the Repositories table of `shared/project-profile.md`
    where the shape names members, a document with no commit left out. A tie git cannot break, equal
-   times, or a clone `git rev-parse --is-shallow-repository` calls shallow, is not picked and is
-   not passed to the next source, which would either send the run back here or add a shape the
-   directory does not hold: the run writes nothing to that document and opens a question for the
-   kind's approver naming the tied shapes, and the next write follows the shape they name. The run
-   summary names the shape followed and how many documents carry each, so the approver sees the
-   split.
+   times, or a clone `git -C <repository> rev-parse --is-shallow-repository` calls shallow, is not
+   picked and is not passed to the next source, which would either send the run back here or add a
+   shape the directory does not hold. A `Shape` line in the Docs section of `.atk/profile.md`, per
+   `shared/project-profile.md`, settles it where one names this kind; without one, the run writes
+   nothing to that document and opens a question for the kind's approver naming the tied shapes.
+   The kind's approver's answer, established as rule 2 of `shared/team-roles.md` establishes an
+   approver, is recorded as that line, so no later run asks again; anyone else's answer serves this
+   write alone and leaves the question open. The run summary names the shape followed and how many
+   documents carry each, so the approver sees the split.
 2. **The template the project names for the kind**, in the `Template` column of the kinds table in
    the Docs section of `.atk/profile.md`, per `shared/project-profile.md`, which also holds the check
    a path passes before it is opened.
