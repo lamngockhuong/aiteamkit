@@ -74,8 +74,9 @@ An override cannot turn the trace off, per the list of what an override may neve
   will be written. A skill of the `Not needed` group says it without naming the profile.
 - **The closing message.** When the run created the ignore file, its closing message names it, since
   it is a new file in the person's working tree.
-- **What a run needs.** A file write for the trace and the ignore file, and `git` through the shell
-  for the two checks. An interactive session may ask the person for each once; a headless run is
+- **What a run needs.** A file write for the trace and the ignore file, `git` through the shell
+  for the two checks, and the harness's version command where its context names no version. A
+  refused version command leaves the version out of `harness` and never the trace. An interactive session may ask the person for each once; a headless run is
   given them by the flags it was started with, or writes no trace and says which one it lacked.
 
 A trace is never staged, whatever the project does with `docs/derived/`: the ignore file holds that
@@ -89,7 +90,7 @@ a trace holds unless the project leaves `derived/` out of it. Whether to do so i
 
 ## The shape
 
-Two header lines, then one line per event, each opening with its time:
+Two header lines, then one line per event, each opening with its time, `end` included:
 
 ```
 skill: implement | kit: 0.1.8 | harness: claude-code 2.1.4 | way: subagent | flags: --no-review
@@ -99,7 +100,7 @@ subject: #15 | branch: feat/15-export | start: 6dfab99 | profile: present | over
 15:41 step 3 verify by layer: lint ran, test skipped (no Test command in the profile)
 15:50 review: 1 BLOCKING, 2 SHOULD FIX, round 2 of 2
 15:52 stop: review ceiling, escalated to Lam Ngoc Khuong
-end: no artifact: escalated, BLOCKING finding open
+15:52 end: no artifact: escalated, BLOCKING finding open
 ```
 
 ### The header
@@ -108,8 +109,10 @@ end: no artifact: escalated, BLOCKING finding open
 - `kit`: the `version` of the plugin manifest beside the skill, read before anything is written:
   `../../.claude-plugin/plugin.json` relative to the skill's `SKILL.md`, or the `.cursor-plugin` or
   `.codex-plugin` one in the same directory. `unknown` only when none of them can be read.
-- `harness`: the harness and its version, where the harness says it. The version is left out when
-  it does not.
+- `harness`: the harness and its version. The version is the one the harness puts in the run's
+  context, or else the one its own CLI prints for its version flag, run through the shell the run
+  already uses for `git`, `claude --version` on Claude Code. It is left out only when neither gives
+  one.
 - `way`: how the run was started, one of five values.
   - `session`: a person invoked the skill in this conversation, by its slash command or a request
     they typed.
@@ -159,11 +162,11 @@ Six kinds, and no others, so a pattern across runs can be counted:
 
 | Kind | Line | Written when |
 |------|------|--------------|
-| `step <n> <name>` | `ran`, `skipped` with the reason, or `failed` with what failed, by kind | each numbered step of the skill's `## Workflow` reaches an outcome |
-| `gate <kind>` | who was asked, how long it waited, and `answered`, `unanswered`, or `refused` | the run asks a person for an approval, a confirmation, or an answer it cannot find on disk |
+| `step <n> <name>` | `ran`, `skipped` with the reason, or `failed` with what failed, by kind | each numbered step of the skill's `## Workflow` reaches an outcome. A step this invocation never reaches, one that runs only when asked for, is `skipped (not requested)`, so every numbered step has a line |
+| `gate <kind>` | who was asked, how long it waited, and `answered`, `unanswered`, or `refused` | the run asks a person for an approval, a confirmation, or an answer it cannot find on disk, an answer to an open question the run left included |
 | `stop` | the ceiling or the escalation, and the person named | a ceiling ends a loop, or the run stops and hands a decision to a person |
 | `review` | the counts by severity, and the round of the ceiling | a review returns, its own or one it called |
-| `corrected by hand` | what a person changed afterwards, in that person's words, through the mask | that person says so in the session. Never inferred from a diff |
+| `corrected by hand` | what a person changed afterwards, in that person's words, through the mask | that person says so in the session: a change they made to the output, or a thing they told the run it got wrong. Never inferred from a diff, and never an answer the run asked for, which is a `gate` |
 | `end` | the artifact path, `no artifact:` and why, or `interrupted` | the run closes, or knows it is stopping before it closes |
 
 Nothing else is written, a note about the trace itself included: that its ignore file was created,
@@ -171,14 +174,25 @@ that a check passed, that a log could not be written. What such a line would say
 closing message instead. The directory holds the ignore file and the traces, and the run writes no
 other file there.
 
-`end:` is always the last line. A correction reported after the run closed is written above it. A
-trace whose last line is not `end:` is a run that stopped without closing, and `atk:tailor` counts it
-as interrupted, the same as `end: interrupted`.
+`end` is always the last line, and opens with its time like every other event. A correction
+reported after the run closed is written above it. A trace whose last line is not an `end` line is a
+run that stopped without closing, and `atk:tailor` counts it as interrupted, the same as an `end`
+line that says `interrupted`. Both are read with or without the time before `end`, since traces
+written before the time was asked for carry none.
+
+One trace is one session, so every time in it falls on the day its `<run-id>` names. A later
+session that takes up the same artifact, to record the answers to its open questions or to revise
+it, is a run of its own with a trace of its own under the same subject. Answers that arrive in a
+later session are that run's `gate` lines, and its waiting time starts when it asks, since what
+passed between the sessions is no run's wait.
 
 The names of the people who answered a gate stay, because who waited for whom is the point of the
-line. Git never carries a trace, but anything that reads the docs root does, per the paragraph on
-what the ignore file does not keep it from; what `atk:tailor` does before anything of it is sent is
-that skill's to say.
+line. Each is written as the Name column of the Team section of `.atk/profile.md` writes it, so one
+person is counted once across skills; a person the table does not hold, or a run with no profile,
+takes `git config user.name` where that person is the one running, and otherwise the name as the
+person gave it. Git never carries a trace, but anything that reads the docs root does, per the
+paragraph on what the ignore file does not keep it from; what `atk:tailor` does before anything of
+it is sent is that skill's to say.
 
 ## What a trace never holds
 
@@ -218,11 +232,13 @@ bytes divided by four, not a count any harness reported.
 
 What every traced run pays besides the file it writes:
 
-- Reading this file, 15,497 bytes, about 3,900 tokens by the same estimate. Most of a run's cost is
+- Reading this file, 17,286 bytes, about 4,300 tokens by the same estimate. Most of a run's cost is
   here, not in the trace.
 - A skill of the `Not needed` group reads the `Run trace` line of the profile when there is one,
   which costs the profile's size once; a run that already reads the profile pays nothing more.
 - `git` through the shell: `rev-parse --show-toplevel` and one `check-ignore` before the trace.
+- The harness's version command, where its context names no version: one more shell call, which an
+  interactive session may ask about once. Not measured yet.
 - Permission. In Claude Code's default mode the first file write of the run, the ignore file in a
   project that has none, is one question to the person, and a person who allows edits for the session
   is asked nothing more; `git` reads are not asked about. Measured headless, where the refusal stops the trace:

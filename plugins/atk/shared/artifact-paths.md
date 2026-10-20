@@ -274,7 +274,7 @@ named after the feature rather than the sprint, and a regression suite is update
 changes rather than written again, so test cases are reference and sit at the top level.
 
 One exception, and it is deliberate. ADRs stay at `docs/adr/` although they are records and are
-never edited, because people browse that directory the way they browse reference: numbered, one
+never edited once approved, because people browse that directory the way they browse reference: numbered, one
 line per decision, the short permanent form of a design document that has grown long. Burying it
 one level down hides the thing most likely to be looked up.
 
@@ -561,12 +561,19 @@ under Naming applies, so updating in place cannot happen by accident there. Plan
 old index `status` to `SUPERSEDED`, link the new directory from it, and link back. Otherwise the
 project accumulates plans that all look current.
 
-One narrow exception to the no-overwrite rule, for plans alone. `atk:plan --answer` and
+Two narrow exceptions to the no-overwrite rule. The first, for plans. `atk:plan --answer` and
 `atk:plan <plan-path> --challenge` edit an `APPROVED` plan in place while none of its phases is
 `done` or `in progress`, and move its index back to `IN REVIEW` with the same approver, who reads it
 again. Nothing has been built from it yet, and a new directory for every recorded answer would leave
 a chain of plans for one piece of work. Once a phase has started, both supersede it as above.
 `skills/plan/references/answer-mode.md` holds the procedure.
+
+The second, for a design and its ADR. While the design is `DRAFT` or `IN REVIEW`, `atk:design-doc`
+edits both in place, committed or not: review is where a design changes, an answer to its open
+questions, an option a reviewer asked for, a decision settled in review, and a new file for each
+would leave a chain of designs for one decision with no reviewer sure which one is in review. From
+`APPROVED` neither is edited, and a changed decision supersedes them as above.
+`skills/design-doc/references/answer-mode.md` holds the procedure for answers.
 
 Every record works this way, not only plans. A design that replaces an earlier design, a
 requirement document rewritten after the scope was renegotiated: the old file keeps its content,

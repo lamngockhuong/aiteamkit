@@ -186,10 +186,11 @@ When no trace is left to read, the directory empty, every trace left out, or a `
 none, the run says so in one line, with how many it left out and why, and writes no record: a record
 of no runs has nothing for the fork to sort.
 
-A trace whose last line is not `end:`, or is `end: interrupted`, counts as an interrupted run. A
-trace off its shape, a header field missing or forbidden, a line outside the six event kinds, is
-still read for what it holds, and the shape itself is a finding, counted like the others: "off its
-shape in <n> of <m> runs", with the runs and the defect.
+A trace whose last line is not an `end` line, or whose `end` line says `interrupted`, with its time
+before it or without in both cases, counts as an interrupted run. A trace off its shape, a header field missing or
+forbidden, a line outside the six event kinds, is still read for what it holds, and the shape itself
+is a finding, counted like the others: "off its shape in <n> of <m> runs", with the runs and the
+defect.
 
 Only a trace whose `kit` field names the version of the kit doing the reading is held to that shape.
 A trace of another version, or `kit: unknown`, is read for what it holds and never called off its
@@ -201,7 +202,8 @@ many traces each version wrote.
 
 Five patterns, each written as "<what> in <n> of <m> runs" with the runs behind it:
 
-1. a step skipped in most runs, with the reasons the traces give;
+1. a step skipped in most runs, with the reasons the traces give, and a step that runs only when
+   asked for counted apart, since `skipped (not requested)` is its ordinary line;
 2. a gate that waited longest, and for whom;
 3. a ceiling reached in more than one run;
 4. `BLOCKING` review findings of one kind across runs;

@@ -95,16 +95,16 @@ ship with the kit.
 The file is named after the subject, never after a ticket or a date. A screen is named by its
 `screen_id` where the design carries one, under the file-name rule in One link, several screens in
 `shared/design-sources.md`, and a link to a section holding several screens resolves to one file
-per screen. Read it first when it exists;
-this skill updates in place, and the reason is in the Persistence section of
-`shared/artifact-paths.md`.
+per screen. Read it first when it exists; this skill updates in place, and the reason is in the
+Persistence section of `shared/artifact-paths.md`.
 
 `--from` has two preconditions, checked here before anything is written. The `Contract` line in the
 Docs section of `.atk/profile.md` says `first`: a missing line or `TBD` means `code`, per
 `shared/spec-docs.md`, and changing it is the Tech Lead's call, so name that person and stop rather
 than write a document the project's own rules call stale. And the design is at `IN REVIEW` or
 `APPROVED`: a `DRAFT` is not a source, because nobody has been asked to look at it. Where either
-fails, say which and change nothing.
+fails, say which and change nothing. When both hold, find the documents the design makes untrue
+beyond those it names, and name each to the person, per `references/affected-documents.md`.
 
 `--design` belongs to the `screen` kind alone. Given with another kind, say that a design is the
 source of no other kind, per `shared/spec-docs.md`, and change nothing. `--from` is never a `screen`

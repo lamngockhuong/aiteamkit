@@ -245,8 +245,9 @@ cách rollback, rủi ro, danh sách người phải review, cùng ADR tương �
 
 **Dùng khi.** Trước khi implement bất cứ thứ gì đụng tới schema, một public contract, một module
 dùng chung, hoặc nhiều hơn một service. Khi profile ghi `Contract: first`, thiết kế nêu contract ở
-dạng tóm tắt và ghi tên các tài liệu tham chiếu mà `atk:spec --from` viết ra từ nó, thay vì chép mọi
-field hai lần.
+dạng tóm tắt và ghi tên các tài liệu tham chiếu mà `atk:spec --from` viết ra từ nó, cùng mọi tài
+liệu khác mà thay đổi làm sai đi, thay vì chép mọi field hai lần. Thiết kế nào cũng kết thúc bằng
+các câu hỏi còn mở, mỗi câu ghi tên người phải trả lời.
 
 `--spike "<question>"` đi trước khi các phương án chưa thể chấm điểm cho tới khi tìm ra một điều gì
 đó: một thư viện có làm đúng như trang của nó nói không, dữ liệu thật có migrate kịp trong khung giờ
@@ -259,6 +260,11 @@ QA, SRE, cùng một góc nhìn bảo mật khi thiết kế chạm tới ranh g
 đọc bản nháp mà không biết gì về cuộc trò chuyện, và nêu ra điều vai trò đó sẽ nêu. Những phản biện
 còn đứng vững sau khi đối chiếu với code được trả lời là đã sửa, hoặc để mở cho người giữ vai trò đó,
 trong một mục `Pre-review objections` nói rõ đây không phải một lượt review và không phải sự phê duyệt.
+
+`<design-path> --answer` ghi câu trả lời cho các câu hỏi mở đó trong lúc thiết kế đang review: giữ
+nguyên lời người trả lời, kèm tên người đó, trong mục con `Answered`, và sửa theo mọi mục mà câu trả
+lời làm thay đổi, kể cả ADR. Thiết kế được sửa tại chỗ cho tới khi `APPROVED`, sau đó thì thay bằng
+bản mới.
 
 **Không dùng khi.** Thay đổi nhỏ, cục bộ và dễ quay lui. Viết design doc cho một sửa đổi hai file
 tốn hơn phần nhận lại.

@@ -241,8 +241,9 @@ risks, required reviewers, and the matching ADR.
 
 **Use when.** Before implementing anything touching a schema, a public contract, a shared module, or
 more than one service. Where the profile says `Contract: first`, the design states the contract in
-summary and names the reference documents `atk:spec --from` writes from it, rather than carrying
-every field twice.
+summary and names the reference documents `atk:spec --from` writes from it, and every other one the
+change makes untrue, rather than carrying every field twice. Every design ends with its open
+questions, each naming the person who must answer it.
 
 `--spike "<question>"` comes first when the comparison cannot be scored until something is found
 out: whether a library does what its page says, whether the real data migrates in the window. It
@@ -254,6 +255,10 @@ BrSE/BA, QA, SRE, and a security lens where the design touches trust boundaries,
 with nothing of the conversation and raises what that role would raise. Objections that survive a
 check against the code are answered as changed or left open for the person who holds the role, in a
 `Pre-review objections` section that says plainly it is not a review and not an approval.
+
+`<design-path> --answer` records the answers to those open questions while the design is in review:
+verbatim, with who gave them, in an `Answered` subsection, and each section an answer changes edited
+to match, the ADR included. A design is edited in place until it is `APPROVED`, and superseded after.
 
 **Do not use when.** The change is local and reversible. A design document for a two-file fix costs
 more than it returns.
