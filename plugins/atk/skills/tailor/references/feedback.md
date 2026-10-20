@@ -67,7 +67,8 @@ ticket: <id or URL, or none>
 ## Findings
 
 <N> findings: <n> for the definition, <n> local to this project, <n> the definition already covers.
-Steps of `SKILL.md`: <n> of <total> ran. Under `--runs`: one line per step, "ran in <n> of <m> runs".
+Steps of `SKILL.md`: <n> of <total> ran, <n> not requested. Under `--runs`: one line per step, "ran in
+<n> of <m> runs, not requested in <n>".
 
 | # | Finding | Severity | Where it lands | Cites |
 |---|---------|----------|----------------|-------|
@@ -92,7 +93,9 @@ Steps of `SKILL.md`: <n> of <total> ran. Under `--runs`: one line per step, "ran
 | 2. <name> | no | <a question for the reader, not a guess at why> |
 
 Under `--runs` the `Ran` column holds "in <n> of <m> runs", and the note names the runs that skipped
-it and the reasons their traces give.
+it and the reasons their traces give. A step a trace marks `skipped (not requested)` is counted in
+the note as not requested, never as skipped, and a step a mode took the place of, per the
+`step <first>-<last> <mode> mode` line, is counted as replaced by that mode.
 
 ## Open questions
 
@@ -187,10 +190,11 @@ none, the run says so in one line, with how many it left out and why, and writes
 of no runs has nothing for the fork to sort.
 
 A trace whose last line is not an `end` line, or whose `end` line says `interrupted`, with its time
-before it or without in both cases, counts as an interrupted run. A trace off its shape, a header field missing or
-forbidden, a line outside the six event kinds, is still read for what it holds, and the shape itself
-is a finding, counted like the others: "off its shape in <n> of <m> runs", with the runs and the
-defect.
+before it or without in both cases, counts as an interrupted run. A trace whose `end` says
+`past midnight, continued in <run-id>` and the trace it names are read as one run. A trace off its
+shape, a header field missing or forbidden, a line outside the six event kinds, is still read for
+what it holds, and the shape itself is a finding, counted like the others: "off its shape in <n> of
+<m> runs", with the runs and the defect.
 
 Only a trace whose `kit` field names the version of the kit doing the reading is held to that shape.
 A trace of another version, or `kit: unknown`, is read for what it holds and never called off its
@@ -202,8 +206,9 @@ many traces each version wrote.
 
 Five patterns, each written as "<what> in <n> of <m> runs" with the runs behind it:
 
-1. a step skipped in most runs, with the reasons the traces give, and a step that runs only when
-   asked for counted apart, since `skipped (not requested)` is its ordinary line;
+1. a step skipped in most runs, with the reasons the traces give; a step that runs only when asked
+   for is counted apart, since `skipped (not requested)` is its ordinary line, and so is a step a
+   mode took the place of, which ran as that mode;
 2. a gate that waited longest, and for whom;
 3. a ceiling reached in more than one run;
 4. `BLOCKING` review findings of one kind across runs;

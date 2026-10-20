@@ -5,8 +5,9 @@ description: >
   decision behind it: current state, options with trade-offs, chosen approach, data and API changes,
   migration and rollback, risks, open questions, and the reviewers who must sign off.
   Use before implementing anything that touches a schema, a public contract, a shared module, or
-  more than one service. `--spike` investigates a question first; `--challenge` puts one agent per
-  signing role over the draft; `--answer` records answers to its open questions during review.
+  more than one service. `--spike` investigates a question first, time-boxed; `--challenge` puts
+  one agent per signing role over the draft; `--answer` records answers to its open questions
+  during review.
   Triggers on: "design doc", "technical design", "tech design", "thiết kế kỹ thuật", "tài liệu thiết kế",
   "ADR", "architecture decision", "設計書", "detail design", "how should we build this",
   "technical spike", "spike this", "nghiên cứu kỹ thuật", "spike kỹ thuật", "技術調査", "スパイク",
@@ -78,8 +79,15 @@ so.
 
 Under `--answer`, `references/answer-mode.md` takes the place of steps 1 to 5 on a design already
 written: on a design at `DRAFT` or `IN REVIEW` it edits the ADR that exists rather than numbering a
-new one, and leaves the status as it found it; an `APPROVED` design it does not edit at all. It records what a person answered and never answers a question itself. With `--spike` it is refused in one line, since a
-spike record carries no open question to answer.
+new one, and leaves the status as it found it; an `APPROVED` design it does not edit at all. It
+records what a person answered and never answers a question itself. With `--spike` it is refused in
+one line, since a spike record carries no open question to answer; the other flags are as that file
+says.
+
+A design path given without `--answer` is refused in one line that points at `--answer`: in review,
+an answer, an option a reviewer asked for, and a decision settled are all recorded through it. A
+plain run whose subject already has a design at `DRAFT` or `IN REVIEW` says so and points at the
+same line rather than writing a second design.
 
 ### 1. Read the requirement
 
@@ -116,9 +124,10 @@ places would leave two copies to disagree the first time review changes one, per
 `shared/spec-docs.md`. A missing line or `TBD` means `code`, and then this section carries the full
 shapes as above.
 
-End the design with its open questions: what the design could not settle and the repository cannot
-answer, each with the person who must answer it, per rule 1 of `shared/team-roles.md`, and the option
-or section it blocks. A design with none says so. `--answer` is how an answer gets back into it.
+End the design with an `## Open questions` section: what the design could not settle and the
+repository cannot answer, each with the person who must answer it, per rule 1 of
+`shared/team-roles.md`, and the option or section it blocks. A design with none says so. `--answer`
+is how an answer gets back into it.
 
 ### 5. ADR and review
 
@@ -177,8 +186,10 @@ front matter.
       the dropped ones are counted, and the section says it is not a review or an approval.
 - [ ] Under `--spike`, the record names who set the time box, cites every source with the date it
       was read, keeps prototype code out of the change, and recommends without deciding.
-- [ ] Every open question names the person who must answer it, or the design says it has none.
+- [ ] `## Open questions` names, per question, the person who must answer it and the option or
+      section it blocks, or says the design has none.
 - [ ] Under `Contract: first`, step 4 names every reference document the change makes untrue, not
       only the ones `atk:spec --from` will write.
 - [ ] Under `--answer`, each answer is recorded verbatim with who gave it, no question was answered
-      by the skill, and an `APPROVED` design was superseded rather than edited.
+      by the skill, and an `APPROVED` design was not edited: the run stopped naming the plain run
+      that supersedes it.

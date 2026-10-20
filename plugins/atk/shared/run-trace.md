@@ -30,8 +30,9 @@ run writes none and says nothing about it. A missing line and a missing profile 
 is no flag on any skill that turns one run's trace off: a person who wants one run untraced deletes
 that trace, which costs nothing, since it is derived.
 
-A skill of the `Not needed` group of `shared/project-profile.md` reads that one line when the profile
-is there, and still never mentions the profile.
+A skill of the `Not needed` group of `shared/project-profile.md` reads that line when the profile is
+there, and the Name column of its Team section for the names on `gate` lines, below, and still never
+mentions the profile.
 
 An override cannot turn the trace off, per the list of what an override may never remove in
 `shared/project-overrides.md`.
@@ -75,9 +76,12 @@ An override cannot turn the trace off, per the list of what an override may neve
 - **The closing message.** When the run created the ignore file, its closing message names it, since
   it is a new file in the person's working tree.
 - **What a run needs.** A file write for the trace and the ignore file, `git` through the shell
-  for the two checks, and the harness's version command where its context names no version. A
-  refused version command leaves the version out of `harness` and never the trace. An interactive session may ask the person for each once; a headless run is
-  given them by the flags it was started with, or writes no trace and says which one it lacked.
+  for the two checks and for `git config user.name` under `way: session`, and the harness's version
+  command where its context names no version. An interactive session may ask the person for each
+  once. A run lacking the file write or `git` for the checks writes no trace and says which one it
+  lacked; a headless run is given them by the flags it was started with. A run lacking the version
+  command, or `user.name`, leaves the version out of `harness`, or takes the name as given, and
+  still writes the trace.
 
 A trace is never staged, whatever the project does with `docs/derived/`: the ignore file holds that
 for a teammate's `git add .` as well as for `atk:git`. It is written as the run goes, line by line,
@@ -97,9 +101,12 @@ skill: implement | kit: 0.1.8 | harness: claude-code 2.1.4 | way: subagent | fla
 subject: #15 | branch: feat/15-export | start: 6dfab99 | profile: present | override: applied
 15:32 step 1 plan gate: ran, plan path given
 15:33 gate approval: asked Lam Ngoc Khuong, waited 1m 40s, answered
+15:38 step 2 write the code: ran
 15:41 step 3 verify by layer: lint ran, test skipped (no Test command in the profile)
+15:43 step 4 tidy the change: ran
 15:50 review: 1 BLOCKING, 2 SHOULD FIX, round 2 of 2
 15:52 stop: review ceiling, escalated to Lam Ngoc Khuong
+15:52 step 5 review and fix: failed, review ceiling reached
 15:52 end: no artifact: escalated, BLOCKING finding open
 ```
 
@@ -110,9 +117,12 @@ subject: #15 | branch: feat/15-export | start: 6dfab99 | profile: present | over
   `../../.claude-plugin/plugin.json` relative to the skill's `SKILL.md`, or the `.cursor-plugin` or
   `.codex-plugin` one in the same directory. `unknown` only when none of them can be read.
 - `harness`: the harness and its version. The version is the one the harness puts in the run's
-  context, or else the one its own CLI prints for its version flag, run through the shell the run
-  already uses for `git`, `claude --version` on Claude Code. It is left out only when neither gives
-  one.
+  context, or else the one its own CLI prints for its version flag, `claude --version` on Claude
+  Code, run once through the shell the run already uses for `git`, and only when that binary is
+  already on the `PATH`: never through a package runner, an installer, or a download. That version
+  is the CLI's, which may differ from an IDE extension running the session, so the context's wins
+  when it names one. Only the version token is kept; anything else the command prints is left out.
+  The version is left out when neither gives one.
 - `way`: how the run was started, one of five values.
   - `session`: a person invoked the skill in this conversation, by its slash command or a request
     they typed.
@@ -138,7 +148,9 @@ subject: #15 | branch: feat/15-export | start: 6dfab99 | profile: present | over
 - `flags`: the flags passed, each value through the mask below, or `none`.
 - `subject`: written as a progress log writes it, per Progress log in `shared/artifact-paths.md`: a
   ticket key, a pull request number in its host's form, a plan path, or the slug of a description,
-  or `none` when the invocation names no subject, per `<run-id>` above.
+  or `none` when the invocation names no subject, per `<run-id>` above. A run that takes up an
+  artifact an earlier run wrote, a design given to `--answer` among them, writes that artifact's
+  path, which is what the earlier run's `end` line names.
 - `branch` and `start`: as a progress log writes them, `(detached)` and `(none)` included.
 - `profile`: `present` or `absent`. The ten skills of the `Not needed` group write no `profile`
   field: `tailor`, `intake`, `catchup`, `estimate`, `design-doc`, `breakdown`, `incident`, `retro`,
@@ -162,8 +174,8 @@ Six kinds, and no others, so a pattern across runs can be counted:
 
 | Kind | Line | Written when |
 |------|------|--------------|
-| `step <n> <name>` | `ran`, `skipped` with the reason, or `failed` with what failed, by kind | each numbered step of the skill's `## Workflow` reaches an outcome. A step this invocation never reaches, one that runs only when asked for, is `skipped (not requested)`, so every numbered step has a line |
-| `gate <kind>` | who was asked, how long it waited, and `answered`, `unanswered`, or `refused` | the run asks a person for an approval, a confirmation, or an answer it cannot find on disk, an answer to an open question the run left included |
+| `step <n> <name>` | `ran`, `skipped` with the reason, or `failed` with what failed, by kind | each numbered step of the skill's `## Workflow` reaches an outcome. A step that runs only when a flag asks for it, and this invocation's flags never did, is `skipped (not requested)`. Steps a mode takes the place of share one line, `step <first>-<last> <mode> mode: ran`, as `step 1-5 answer mode: ran` under `atk:design-doc --answer`. A run that stops writes its `stop` or `end` and no line for the steps after it |
+| `gate <kind>` | who was asked, how long it waited, and `answered`, `unanswered`, or `refused`; for an answer the run did not ask for, `given in the prompt, no wait` | the run asks a person for an approval, a confirmation, or an answer it cannot find on disk, an answer to an open question the run left included, or takes such an answer from the prompt that invoked it |
 | `stop` | the ceiling or the escalation, and the person named | a ceiling ends a loop, or the run stops and hands a decision to a person |
 | `review` | the counts by severity, and the round of the ceiling | a review returns, its own or one it called |
 | `corrected by hand` | what a person changed afterwards, in that person's words, through the mask | that person says so in the session: a change they made to the output, or a thing they told the run it got wrong. Never inferred from a diff, and never an answer the run asked for, which is a `gate` |
@@ -180,24 +192,33 @@ run that stopped without closing, and `atk:tailor` counts it as interrupted, the
 line that says `interrupted`. Both are read with or without the time before `end`, since traces
 written before the time was asked for carry none.
 
-One trace is one session, so every time in it falls on the day its `<run-id>` names. A later
-session that takes up the same artifact, to record the answers to its open questions or to revise
-it, is a run of its own with a trace of its own under the same subject. Answers that arrive in a
+One trace is one session, so every time in it falls on the day its `<run-id>` names. A session is
+one conversation with the harness, from the invocation to the close; a conversation resumed after it
+closed, or after the harness restarted, is a new one. A session still running at midnight writes
+`end: no artifact: past midnight, continued in <run-id>` and goes on in a new trace, the header
+repeated, under the same subject and a `<run-id>` of the new day. A later session that takes up the
+same artifact, to record the answers to its open questions or to revise it, is a run of its own with
+a trace of its own, its subject the artifact's path, per the header above. Answers that arrive in a
 later session are that run's `gate` lines, and its waiting time starts when it asks, since what
 passed between the sessions is no run's wait.
 
 The names of the people who answered a gate stay, because who waited for whom is the point of the
 line. Each is written as the Name column of the Team section of `.atk/profile.md` writes it, so one
-person is counted once across skills; a person the table does not hold, or a run with no profile,
-takes `git config user.name` where that person is the one running, and otherwise the name as the
-person gave it. Git never carries a trace, but anything that reads the docs root does, per the
-paragraph on what the ignore file does not keep it from; what `atk:tailor` does before anything of
-it is sent is that skill's to say.
+person is counted once across skills: a name given in the session matches the row whose Name it
+equals or is part of, when exactly one row matches. A person the table does not hold, or a run with
+no profile, takes `git config user.name` under `way: session` when that person is the one running,
+and otherwise the name as the person gave it, never an email address or a handle. An answer given in
+the prompt, or relayed, carries the name of the person who brought it into this session. Git never
+carries a trace, but anything that reads the docs root does, per the paragraph on what the ignore
+file does not keep it from; what `atk:tailor` does before anything of it is sent is that skill's to
+say.
 
 ## What a trace never holds
 
 - Conversation text, a file's content, a command's output, or a secret value. A step that failed
-  says what failed, by kind, `lint failed`, never the failure text.
+  says what failed, by kind, `lint failed`, never the failure text. Two things a command prints are
+  kept, and nothing else of its output: the version token in `harness`, and a person's name on a
+  `gate` line.
 - A secret value, by rule 9 of `shared/team-roles.md`, and a real person's data or an internal host,
   masked as `<redacted: kind>` by the list in The data a record must not carry in
   `skills/qa/references/test-run.md`, the same list a progress log uses. The mask applies to every
@@ -232,11 +253,13 @@ bytes divided by four, not a count any harness reported.
 
 What every traced run pays besides the file it writes:
 
-- Reading this file, 17,286 bytes, about 4,300 tokens by the same estimate. Most of a run's cost is
+- Reading this file, 19,443 bytes, about 4,900 tokens by the same estimate. Most of a run's cost is
   here, not in the trace.
-- A skill of the `Not needed` group reads the `Run trace` line of the profile when there is one,
-  which costs the profile's size once; a run that already reads the profile pays nothing more.
-- `git` through the shell: `rev-parse --show-toplevel` and one `check-ignore` before the trace.
+- A skill of the `Not needed` group reads the `Run trace` line and the Team section of the profile
+  when there is one, which costs the profile's size once; a run that already reads the profile pays
+  nothing more.
+- `git` through the shell: `rev-parse --show-toplevel` and one `check-ignore` before the trace, and
+  `config user.name` under `way: session` when a gate name is not in the Team section.
 - The harness's version command, where its context names no version: one more shell call, which an
   interactive session may ask about once. Not measured yet.
 - Permission. In Claude Code's default mode the first file write of the run, the ignore file in a

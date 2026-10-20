@@ -70,17 +70,22 @@ later challenge hands it to agents.
 
 **An answer from somebody other than the person the question names is recorded, and the record says
 so.** The skill does not refuse it and does not decide whether it is enough: whether the Tech Lead's
-answer to a question addressed to the PM settles it is the approver's call. A question answered only
-in part stays open, with the part that was answered recorded beside it.
+answer to a question addressed to the PM settles it is the approver's call. Until the approver says
+so, the question stays open, its row in `Answered` reads `answered by <name>, not <named person>`,
+and nothing in a phase is edited from it. The approver's ruling is itself an answer, given to a
+later `--answer` like any other and recorded as `settled by <approver>` on that row; from it the
+question leaves the open list and its phases are edited. A question answered only in part stays
+open too, its row marked `partial`.
 
 ## Where it goes
 
-The question leaves the open list it was in, in the index or in its phase file. The record goes into
-an `Answered` subsection at the end of section 5 of the index, in the table above, so no section is
+A settled question leaves the open list it was in, in the index or in its phase file; one left open
+above stays there. Every record goes into an `Answered` subsection at the end of section 5 of the index, in the table above, so no section is
 renumbered and every answer to the plan sits in one place. When the person does not say who
 answered, ask: a record with no answerer is the chat thread again.
 
-An answer to an objection also replaces its `Open` in section 7 with `Settled by <name>, <date>`,
+An answer to an objection from the person who settles it also replaces its `Open` in section 7 with
+`Settled by <name>, <date>`,
 and the row goes into the same `Answered` table with its ID as the question. So does the objection a
 scope question came from, when that question is answered: one thing never reads `Open` in one place
 and answered in another.
@@ -122,9 +127,9 @@ names, and the recommendation.
 - [ ] No secret and no real person's data was written; each is `<redacted: kind>`.
 - [ ] Every record carries the question, the answer, who answered, the date, and who relayed it when
       that is someone else.
-- [ ] An answer from somebody other than the person named says so, and was neither refused nor
-      judged.
-- [ ] Each answered question left the open list, and its record is in the `Answered` subsection; a
+- [ ] An answer from somebody other than the person named says so, was neither refused nor judged,
+      and left its question open with no phase edited until the approver settled it.
+- [ ] Each settled question left the open list, and its record is in the `Answered` subsection; a
       settled objection reads the same in section 7.
 - [ ] Every phase the answer changed was edited and names the question; no other phase was edited
       for the answer, and a step 6 correction elsewhere is named as one.

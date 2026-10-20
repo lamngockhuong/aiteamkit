@@ -45,7 +45,8 @@ Không phải skill nào cũng có đủ năm chặng, và chặng bị bỏ qua
 **Điều kiện cần.** Skill nào chạy lệnh của dự án thì đọc `.atk/profile.md` trước và dừng lại khi
 thiếu nó, vì một lệnh test đoán bừa mà thoát 0 là thứ bằng chứng tệ nhất có thể có. Skill nào làm
 việc từ một tin nhắn chat thì không bao giờ đòi profile, và chỉ đọc dòng `Run trace` của nó, dòng
-quyết định lượt chạy có để lại trace hay không. `plugins/atk/shared/project-profile.md` nói rõ skill nào
+quyết định lượt chạy có để lại trace hay không, cùng cột Name trong mục Team, nơi lấy tên người ghi
+trên các dòng `gate` của trace. `plugins/atk/shared/project-profile.md` nói rõ skill nào
 thuộc nhóm nào.
 
 **Cổng.** Phần lớn skill kiểm một điều gì đó trước khi động tay: `atk:implement` chấm xem phần việc
@@ -73,8 +74,8 @@ commit đều phải hỏi, hỏi lại từng lần.
 ## Một skill với sang skill khác thế nào
 
 Trong hai mươi lăm file `SKILL.md`, đếm mỗi lần nhắc `atk:<name>` trừ chính skill của file và agent
-`atk:read-only-reviewer`, một skill gọi tên skill khác hai trăm mười bảy lượt, thành một trăm hai
-mươi bốn cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
+`atk:read-only-reviewer`, một skill gọi tên skill khác hai trăm hai mươi lượt, thành một trăm hai
+mươi lăm cặp có thứ tự, nghe như một đồ thị dày đặc. Thực ra không:
 phần lớn trong số đó là ranh giới chứ không phải cạnh. Có năm loại, và chỉ bốn loại đầu xảy ra lúc
 chạy.
 

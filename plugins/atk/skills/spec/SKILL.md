@@ -55,7 +55,7 @@ Never one document with a shared one.
 ```bash
 /atk:spec <subject>               # Write or update the document for one subject
 /atk:spec <subject> --kind api    # Say which kind when the subject alone is ambiguous
-/atk:spec <subject> --from <design-path>  # Contract-first: write the document from the design, before the code
+/atk:spec <subject> --from <design-path>  # Contract-first: write it from the design, and any it makes untrue on a yes
 /atk:spec <screen> --kind screen --design <figma-url>  # Write or update a screen spec from a Figma frame or section
 /atk:spec <screen> --kind screen --design <image-dir>  # The same from exported images, where Figma is out of reach
 /atk:spec <screen> --kind screen  # Update a screen spec from the design it already records
@@ -104,7 +104,7 @@ Docs section of `.atk/profile.md` says `first`: a missing line or `TBD` means `c
 than write a document the project's own rules call stale. And the design is at `IN REVIEW` or
 `APPROVED`: a `DRAFT` is not a source, because nobody has been asked to look at it. Where either
 fails, say which and change nothing. When both hold, find the documents the design makes untrue
-beyond those it names, and name each to the person, per `references/affected-documents.md`.
+beyond those it names, and ask which to write too, per `references/affected-documents.md`.
 
 `--design` belongs to the `screen` kind alone. Given with another kind, say that a design is the
 source of no other kind, per `shared/spec-docs.md`, and change nothing. `--from` is never a `screen`
@@ -272,7 +272,8 @@ one issue listing everything.
       a design document; under `--from`, every statement it wrote cites the design, or the ticket where the design
       cannot be reached, or names its author.
 - [ ] `--from` ran only where the profile says `Contract: first` and the design was `IN REVIEW` or
-      `APPROVED`, and `implemented` is `no` exactly when no item cites the code.
+      `APPROVED`, `implemented` is `no` exactly when no item cites the code, and the search for the
+      documents the design makes untrue met the items of `references/affected-documents.md`.
 - [ ] Under `Contract: first`, `implemented` matches the items: at `no` every item cites the design, the ticket
       standing in for an unreachable design, or its author, and none carries a mark; at `partial` every item without the mark is cited to the code; at `yes` no
       mark is left.
@@ -285,10 +286,9 @@ one issue listing everything.
       language branch was updated or named to the person running the skill.
 - [ ] `approver` matches the kind: Tech Lead for `api` and `db`, BrSE/BA for `feature` and `screen`.
 - [ ] A `screen` document records `design_source`, `design_node`, `design_read`, and
-      `design_fingerprint`, carries
-      the Ready for dev line and `implemented`, and holds no value the design did not show unless it
-      is marked as a proposal with its source; a missing Figma connection was reported by its state
-      and did not stop the run.
+      `design_fingerprint`, carries the Ready for dev line and `implemented`, and holds no value the
+      design did not show unless it is marked as a proposal with its source; a missing Figma
+      connection was reported by its state and did not stop the run.
 - [ ] Nothing unverified was deleted; what looked wrong went into the drift report instead.
 - [ ] Every open question carries the name of the person who must answer it.
 - [ ] What was written holds Rules that hold under any shape in `shared/spec-docs.md`, and the

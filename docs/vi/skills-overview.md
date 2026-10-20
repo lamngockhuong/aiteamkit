@@ -241,7 +241,8 @@ không học được gì từ nó.
 
 **Sinh ra.** Tài liệu thiết kế kỹ thuật: hiện trạng có trích dẫn `path:line`, tiêu chí ra quyết
 định, từ hai phương án trở lên được so sánh, mô hình dữ liệu và API contract được chọn, migration và
-cách rollback, rủi ro, danh sách người phải review, cùng ADR tương ứng.
+cách rollback, rủi ro, các câu hỏi còn mở kèm tên người trả lời từng câu, danh sách người phải
+review, cùng ADR tương ứng.
 
 **Dùng khi.** Trước khi implement bất cứ thứ gì đụng tới schema, một public contract, một module
 dùng chung, hoặc nhiều hơn một service. Khi profile ghi `Contract: first`, thiết kế nêu contract ở
@@ -261,7 +262,7 @@ QA, SRE, cùng một góc nhìn bảo mật khi thiết kế chạm tới ranh g
 còn đứng vững sau khi đối chiếu với code được trả lời là đã sửa, hoặc để mở cho người giữ vai trò đó,
 trong một mục `Pre-review objections` nói rõ đây không phải một lượt review và không phải sự phê duyệt.
 
-`<design-path> --answer` ghi câu trả lời cho các câu hỏi mở đó trong lúc thiết kế đang review: giữ
+`<design-path> --answer` ghi câu trả lời cho các câu hỏi mở đó khi thiết kế ở `DRAFT` hay `IN REVIEW`: giữ
 nguyên lời người trả lời, kèm tên người đó, trong mục con `Answered`, và sửa theo mọi mục mà câu trả
 lời làm thay đổi, kể cả ADR. Thiết kế được sửa tại chỗ cho tới khi `APPROVED`, sau đó thì thay bằng
 bản mới.
@@ -315,7 +316,9 @@ trong phần tóm tắt, nên phiên bản của tài liệu chỉ tăng khi cod
 không ai còn tin vào tài liệu nữa. Cờ `--sync` gấp thay đổi trên nhánh hiện tại vào đúng những tài
 liệu mà nó đụng tới. Với dự án có profile ghi `Contract: first`, còn dùng khi contract phải có trước
 code: `--from <design-path>` viết tài liệu từ một design đang được review, đánh dấu
-`implemented: no`, để frontend, backend và QA cùng làm theo một trang trong lúc code đuổi kịp.
+`implemented: no`, để frontend, backend và QA cùng làm theo một trang trong lúc code đuổi kịp. Nó
+cũng tìm trong docs những tài liệu mà design làm sai đi nhưng không nêu tên, rồi hỏi nên viết luôn
+tài liệu nào trong cùng lượt chạy.
 Và khi BrSE cần một spec màn hình để duyệt: `--kind screen --design <figma-url>` soạn bản nháp từ
 khung màn hình trong Figma, đề xuất những gì design không cho thấy kèm nguồn, và hỏi phần còn lại, có tên người trả lời.
 Nếu agent không có kết nối tới Figma, skill nói rõ điều đó rồi đọc một thư mục ảnh export thay thế.

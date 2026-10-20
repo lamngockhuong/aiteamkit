@@ -31,7 +31,8 @@ rule 7 of `shared/team-roles.md`.
 
 Per `shared/independent-challenge.md`, with the role as the lens. An objection left open reads
 `Open for <role>`, naming the role, as `Open for the Tech Lead` below: it stays in the table for
-the person who holds that role to settle in the review.
+the person who holds that role to settle in the review, and `--answer` records that settlement, per
+`references/answer-mode.md`.
 
 The chosen option is the Tech Lead's decision. An objection against it is answered by strengthening
 the comparison in step 3 or left open for the Tech Lead, never by switching the option quietly.

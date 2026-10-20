@@ -237,7 +237,8 @@ item with the time actually spent on it, read from the tracker before the git hi
 
 **Produces.** A technical design document: current state cited to `path:line`, decision criteria,
 two or more compared options, the chosen data model and API contracts, migration and rollback,
-risks, required reviewers, and the matching ADR.
+risks, its open questions with the person who answers each, required reviewers, and the matching
+ADR.
 
 **Use when.** Before implementing anything touching a schema, a public contract, a shared module, or
 more than one service. Where the profile says `Contract: first`, the design states the contract in
@@ -256,7 +257,8 @@ with nothing of the conversation and raises what that role would raise. Objectio
 check against the code are answered as changed or left open for the person who holds the role, in a
 `Pre-review objections` section that says plainly it is not a review and not an approval.
 
-`<design-path> --answer` records the answers to those open questions while the design is in review:
+`<design-path> --answer` records the answers to those open questions while the design is `DRAFT` or
+`IN REVIEW`:
 verbatim, with who gave them, in an `Answered` subsection, and each section an answer changes edited
 to match, the ADR included. A design is edited in place until it is `APPROVED`, and superseded after.
 
@@ -309,6 +311,8 @@ the documents any more. `--sync` folds the change on the current branch into the
 touched. In a project whose profile says `Contract: first`, also when the contract has to exist
 before the code: `--from <design-path>` writes the document from a design in review, marked
 `implemented: no`, so frontend, backend and QA build against the same page while the code catches up.
+It also searches the docs for the documents the design makes untrue without naming them, and asks
+which of them to write in the same run.
 And when a BrSE needs a screen spec to review: `--kind screen --design <figma-url>` drafts one from
 the frame, proposes what the design does not show with its source cited, and asks the rest by name.
 Where the agent has no Figma connection, it says so and reads a directory of exported images instead.

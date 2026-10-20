@@ -77,7 +77,7 @@ run:
 |-------|------------------|
 | `intake` | An interview question bank. The requirement template is done: `plugins/atk/skills/intake/references/requirement-template.md` |
 | `estimate` | The sizing scales with one worked example each. The sheet template and the complexity drivers are done: `plugins/atk/skills/estimate/references/estimate-template.md`, `plugins/atk/skills/estimate/references/complexity-drivers.md` |
-| `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode and the role challenge are done: `plugins/atk/skills/design-doc/references/spike.md`, `plugins/atk/skills/design-doc/references/role-challenge.md` |
+| `design-doc` | Design document template, ADR template, the option-comparison criteria set. The spike mode, the role challenge and the answer mode are done: `plugins/atk/skills/design-doc/references/spike.md`, `plugins/atk/skills/design-doc/references/role-challenge.md`, `plugins/atk/skills/design-doc/references/answer-mode.md` |
 | `breakdown` | Task table schema and the file-ownership rules for parallel lanes |
 | `qa` | Test case table schema. The negative and boundary dimensions are done: `plugins/atk/skills/qa/references/case-dimensions.md` |
 | `release` | Checklist template per environment, the client-notes style rules. The license audit is done: `plugins/atk/skills/release/references/license-audit.md` |

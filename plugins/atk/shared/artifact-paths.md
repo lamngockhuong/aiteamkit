@@ -274,8 +274,8 @@ named after the feature rather than the sprint, and a regression suite is update
 changes rather than written again, so test cases are reference and sit at the top level.
 
 One exception, and it is deliberate. ADRs stay at `docs/adr/` although they are records and are
-never edited once approved, because people browse that directory the way they browse reference: numbered, one
-line per decision, the short permanent form of a design document that has grown long. Burying it
+never edited once approved, because people browse that directory the way they browse reference:
+numbered, one line per decision, the short permanent form of a design document that has grown long. Burying it
 one level down hides the thing most likely to be looked up.
 
 A project that already keeps these kinds at the top level of its docs root keeps them there. The
@@ -538,7 +538,8 @@ Read the file if it already exists and update it in place. Do not overwrite an `
 supersede it, link the replacement, and say which decision changed.
 
 A record whose file name carries the time, the `atk:qa` run record among them, is never updated as an
-existing file: an existing path means a second file, not an edit. Where a skill names a narrow change
+existing file, apart from the two exceptions below: an existing path means a second file, not an
+edit. Where a skill names a narrow change
 it may make to one of its own records after writing it, a pointer or a redaction such as the `Ticket`
 cell and the redaction of a run record, that change is the only one, and it is allowed at `APPROVED`
 too, because it changes nothing the record found. The answer lines `atk:spec` adds to the profile
@@ -550,15 +551,16 @@ own evidence and never rewrites what it found; something that happened after it 
 finding fixed in the same session, is added beside what it found, in the place its skill names. From
 the commit on, every rule above holds, and "once written" in a skill's own file means once committed.
 A later run of the same skill over the same subject still writes a new file rather than correcting
-an earlier one, whether or not that one was committed.
+an earlier one, whether or not that one was committed, apart from the two exceptions below.
 
 The no-overwrite rule is about records. A reference document is updated in place by design, and
 superseding one would leave the project holding two files that both claim to describe the same live
 endpoint. Its front matter goes back to `IN REVIEW` when an update changes what it promises.
 
 A plan directory rarely collides, because its name carries the time, and where it does the suffix
-under Naming applies, so updating in place cannot happen by accident there. Planning the same work again therefore has to supersede by hand: set the
-old index `status` to `SUPERSEDED`, link the new directory from it, and link back. Otherwise the
+under Naming applies, so updating in place cannot happen by accident there. Planning the same work
+again therefore has to supersede by hand: set the old index `status` to `SUPERSEDED`, link the new
+directory from it, and link back. Otherwise the
 project accumulates plans that all look current.
 
 Two narrow exceptions to the no-overwrite rule. The first, for plans. `atk:plan --answer` and
@@ -569,13 +571,14 @@ a chain of plans for one piece of work. Once a phase has started, both supersede
 `skills/plan/references/answer-mode.md` holds the procedure.
 
 The second, for a design and its ADR. While the design is `DRAFT` or `IN REVIEW`, `atk:design-doc`
-edits both in place, committed or not: review is where a design changes, an answer to its open
-questions, an option a reviewer asked for, a decision settled in review, and a new file for each
-would leave a chain of designs for one decision with no reviewer sure which one is in review. From
-`APPROVED` neither is edited, and a changed decision supersedes them as above.
-`skills/design-doc/references/answer-mode.md` holds the procedure for answers.
+edits both in place, committed or not, in a later session too, though the design's name carries the
+time: review is where a design changes, an answer to its open questions, an option a reviewer asked
+for, a decision settled in review, and a new file for each would leave a chain of designs for one
+decision with no reviewer sure which one is in review. From `APPROVED` neither is edited, and a
+changed decision supersedes them as above. An ADR written alone by `--adr` follows the same rule by
+its own status. `skills/design-doc/references/answer-mode.md` holds the procedure for answers.
 
-Every record works this way, not only plans. A design that replaces an earlier design, a
+Every record is superseded this way, not only plans. A design that replaces an earlier design, a
 requirement document rewritten after the scope was renegotiated: the old file keeps its content,
 takes `SUPERSEDED`, and carries the link to what replaced it. Two files that both read as current
 is the failure this prevents, and it costs two links.

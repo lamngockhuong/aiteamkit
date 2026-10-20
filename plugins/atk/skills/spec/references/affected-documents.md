@@ -13,39 +13,52 @@ tree never learns they were.
 
 From the design's sections on the data model, the API contract, and the behaviour rules, collect
 what the change adds, alters, or removes: table and column names, enum names and their values,
-endpoint paths, and the named rules. Search the docs root for each, resolved per
-`shared/artifact-paths.md`, over every reference document, and over every language mirror the Docs
-section of `.atk/profile.md` declares. Records under `docs/records/` and anything under
-`docs/derived/` are not searched: they describe a moment, and a change does not make them untrue.
+endpoint paths, and the named rules. Search for each in the docs root resolved per
+`shared/artifact-paths.md`, and in the docs tree of every member repository the profile records,
+since a contract one member owns is documented there, per step 1 of `SKILL.md`. Every language
+branch is searched, resolved per A root partitioned by language in `shared/artifact-paths.md`, the
+mirrors the profile declares and those the tree shows alike. Records under `docs/records/` and
+anything under `docs/derived/` are not searched: they describe a moment, and a change does not make
+them untrue.
 
 A document counts when it describes one of those names as the system has it today, not when it
-merely mentions it in passing. A mirror counts with its source document, as one entry.
+merely mentions it in passing, and the result is grouped by document, each with the names it
+describes and how many, so a generic name such as `status` that matches most of the tree reads as one
+weak match rather than a list of them. A mirror counts with its source document, as one entry. A
+document whose items already cite this design was written from it and is not counted.
 
-## What is said
+Only the kinds `--from` writes are offered to be written: `api`, `db`, `feature`, and a kind the
+project declares in its profile. A document of any other kind the search finds is named with the
+skill that owns it, and never offered: a coding standard is `atk:convention`'s, and a screen
+document is updated from its own design with `atk:spec <screen> --kind screen`.
 
-A `--from` run writes one subject, the one it was invoked on, as `## Invocation` of `SKILL.md` says,
-and the design's documents are written one run each, per row 1 of `shared/state-signals.md`. So the
-search names documents and writes none of them. Before step 2, say in the session, and again in the
-step 5 summary:
+## What is asked
 
-- each document found that the design does not name, with the name it describes, the `path:line`
-  where it does, why the design makes it untrue, its approver, and the line that writes it,
-  `atk:spec <subject> --from <design path>`;
-- that none was found, when none was.
+Before step 2, list each document found that the design does not name, with the names it describes,
+the `path:line` where it does, why the design makes it untrue, and its approver, or say that none
+was found. Then ask the person, in one turn per `shared/host-capabilities.md`, which of them this
+run writes as well.
 
-The run does not decide whether such a document is written: it has an approver who may not expect
-the change, and the person running the skill knows whether the design's silence was an omission or a
-choice. Running the line is how the person chooses. When the run's own subject is one the design
-does not name, the run writes it as it writes a named one, from the design and its author per step 3
-of `SKILL.md`, and names the other documents found as above.
+The run does not decide: each document has an approver who may not expect the change, and the
+person running the skill knows whether the design's silence was an omission or a choice. A yes means
+this run writes that document after its own subject, from the design and its author per step 3 of
+`SKILL.md`, each document its own file with the approver of its kind. A no leaves it as it is, and
+the run summary names it with the line that writes it later, `atk:spec <subject> --from <design
+path>`. A run with nobody to ask, a headless one, writes its own subject alone and names the others
+the same way.
 
-Every `--from` run on the same design repeats the search, which costs a search of the docs root and
-asks nothing, so a run on the third document still names what the first run found, minus what has
-since been written from the design.
+When the run's own subject is one the design does not name, the run writes it as it writes a named
+one, and asks about the others as above.
+
+Every `--from` run on the same design repeats the search, so a run on the third document still names
+what the first run found, minus what has since been written from the design. A document a person
+declined is named again, since nothing outside that session records the no.
 
 ## Definition of done
 
 - [ ] Every name the design adds, alters, or removes was searched for across the reference documents
-      and their mirrors.
-- [ ] Each document found was named with its `path:line`, its approver and the line that writes it,
-      before step 2 and in the summary, and none of them was written unless it was the run's subject.
+      of the docs root, of every member's docs tree, and of every language branch.
+- [ ] Each document found was named with its `path:line`, its approver, and its kind, before step 2,
+      and the person was asked once which of those `--from` writes the run should write as well.
+- [ ] Only the documents the person said yes to were written beside the run's subject, each with the
+      approver of its kind, and the run summary names the rest with the line that writes each.

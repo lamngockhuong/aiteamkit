@@ -5,8 +5,8 @@ it. Referenced from `skills/<name>/SKILL.md` as `shared/host-capabilities.md`, w
 `../../shared/host-capabilities.md` relative to a skill file.
 
 Cited by `implement`, `fix`, and `verify` for the tidy step, by `review`, `design-doc`, and `plan`
-for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answer` for what counts as
-one turn of an interview,
+for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answer`, `design-doc --answer` and
+`spec --from` for what counts as one turn of an interview,
 by `independent-challenge.md` for the agents a challenge spawns, by `review-fix-loop.md` for the
 stated total of a review, by `design-sources.md` for naming
 a connection to a design tool and for how one is read, by `catchup` for how a linked document is

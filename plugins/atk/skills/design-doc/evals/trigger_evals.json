@@ -16,6 +16,13 @@
   { "query": "pressure-test this design from the QA and SRE side before it goes to review", "should_trigger": true },
   { "query": "phản biện thiết kế này theo góc nhìn từng người duyệt trước khi gửi review", "should_trigger": true },
   { "query": "/atk:design-doc docs/records/requirements/260920-1415-export.md --challenge", "should_trigger": true },
+  { "query": "the TL answered open question 3 in the design doc, record it in the design", "should_trigger": true },
+  { "query": "/atk:design-doc docs/records/design/260930-1200-export.md --answer", "should_trigger": true },
+  { "query": "ghi câu trả lời vào thiết kế, SRE đã trả lời câu hỏi mở về migration", "should_trigger": true },
+  { "query": "設計書の未解決の質問に回答を反映して", "should_trigger": true },
+  { "query": "record the design answers from yesterday's review meeting", "should_trigger": true },
+  { "query": "設計の回答を反映して", "should_trigger": true },
+  { "query": "ghi câu trả lời vào các câu hỏi mở của design doc", "should_trigger": true },
 
   { "query": "turn the client mail into user stories", "should_trigger": false },
   { "query": "the design is in review, write the API reference doc from it so frontend can start", "should_trigger": false },
@@ -33,9 +40,7 @@
   { "query": "challenge the implementation plan in plans/261001-1308-queue before I start", "should_trigger": false },
   { "query": "phản biện kế hoạch thực thi này giúp tôi trước khi code", "should_trigger": false },
   { "query": "この実装計画に反論して", "should_trigger": false },
-  { "query": "the TL answered open question 3 in the design doc, record it in the design", "should_trigger": true },
-  { "query": "/atk:design-doc docs/records/design/261016-0436-42-export.md --answer", "should_trigger": true },
-  { "query": "ghi câu trả lời vào thiết kế, SRE đã trả lời câu hỏi mở về migration", "should_trigger": true },
-  { "query": "設計書の未解決の質問に回答を反映して", "should_trigger": true },
-  { "query": "the TL answered question 2, update the plan", "should_trigger": false }
+  { "query": "the TL answered question 2, update the plan", "should_trigger": false },
+  { "query": "ghi câu trả lời vào plan, PM đã trả lời câu hỏi mở số 1", "should_trigger": false },
+  { "query": "計画の未解決事項に回答を反映して", "should_trigger": false }
 ]
