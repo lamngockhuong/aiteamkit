@@ -506,7 +506,19 @@ for f in ['SKILL.md', 'references/review-rounds.md', 'references/report-format.m
 s = open(d + 'SKILL.md').read()
 p = s[s.index('**Reach.**'):].split('\n\n')[0]
 assert re.findall(r'\((\d)\) ', p) == ['1', '2', '3', '4', '5'], 'the Reach paragraph of review/SKILL.md does not list five consequences'
-print('OK review reach in three files, five consequences')"
+assert 'finding is a \x60NIT\x60, unless' in ' '.join(p.split()), 'the Reach paragraph of review/SKILL.md no longer makes an edge finding a NIT'
+s = open(d + 'references/review-rounds.md').read()
+b = s[s.index('**\x60boundary\x60 on a rule written for an agent.**'):s.index('**\x60contract\x60 under')]
+for v in ['ordinary', 'edge']:
+    assert '\x60' + v + '\x60' in b, 'the boundary paragraph of review-rounds.md does not define reach %s' % v
+s = ' '.join(open(d + 'references/report-format.md').read().split())
+for f in ['**Correct**', '**Leave to the default**', '**Add a rule**']:
+    assert f in s, 'report-format.md does not name the fix form %s' % f
+r = open('plugins/atk/shared/team-roles.md').read()
+assert 'A state no rule of the skill covers' in r, 'rule 5 of team-roles.md lost its default for an uncovered state'
+for f in [d + 'SKILL.md', d + 'references/review-rounds.md', d + 'references/report-format.md', 'plugins/atk/shared/review-fix-loop.md']:
+    assert 'default of rule 5' in ' '.join(open(f).read().split()), '%s does not cite the default of rule 5' % f
+print('OK review reach in three files, five consequences, rule 5 default cited')"
 
 # The counts docs/flow/skill-lifecycle.md and its mirror give for how one skill names another: each
 # atk:<name> in a SKILL.md other than its own skill and the read-only agent, and the ordered pairs.

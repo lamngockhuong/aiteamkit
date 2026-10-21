@@ -10,7 +10,8 @@ ticket: none
 
 Approved by Lam Ngoc Khuong on 2026-10-21, by instruction to the agent. Returned to `IN REVIEW` on
 2026-10-21 by his instruction, to carry Q3 and Q4, answered during implementation, and approved again
-by him the same day.
+by him the same day. Edited on 2026-10-21 by his instruction to carry Q5 to Q8, answered on the
+review of PR #141, and kept `APPROVED`.
 
 # atk:review weighs how often an agent rule's gap is met, and a fix leaves an uncovered state to one default
 
@@ -185,8 +186,9 @@ Scope: a finding whose subject is a rule written for an agent to follow. That co
 Markdown an agent reads as instructions. Code, configuration, schemas and tests keep today's ranking.
 A finding on both, an instruction and the code it drives, is ranked as code.
 
-- **`ordinary`.** The trigger is input or a state the kit's users meet in normal work: a common
-  name in the teams it serves, a usual project shape, a run started the way a skill's `## Invocation`
+- **`ordinary`.** The trigger is input or a state the users of whatever follows the rule meet in
+  normal work, the kit's teams for a kit file and the project's team or its end users for a
+  project's file (Q6 in `Answered` below). For the kit, that is a common name in the teams it serves, a usual project shape, a run started the way a skill's `## Invocation`
   shows, a harness the kit supports. The finding says which.
 - **`edge`.** The trigger needs a combination that is not ordinary: two people whose names differ
   only by marks, a script the team does not use, a session that ends on the stroke of midnight.
@@ -220,10 +222,14 @@ Rule 5 of `shared/team-roles.md` gains one paragraph:
 > A state no rule of the skill covers is not filled by guessing what the rule would have said. The
 > run says the case is not covered, asks the person running the skill where the answer is theirs to
 > give, and otherwise names the person rule 3 gives it to and asks them, then goes on with the
-> answer; a run with nobody to ask stops and names the case in its closing message and its trace.
+> answer. Where that person is not in the session, the run records the case as an open question
+> carrying their name, per rule 1, in its artifact or its closing message, and goes on with what
+> does not depend on it; nothing reaches them past the consent line of `shared/finalize-steps.md`.
+> A run that can do neither stops, and names the case in its closing message and on its trace's
+> `end` line.
 
-The `boundary` round and step 5 of `review/SKILL.md` drop a candidate on an uncovered state when this
-default handles it correctly, that is, asking is safe and the person the default asks owns the
+The `boundary` round and step 5 of `review/SKILL.md` drop a candidate on an uncovered state of a rule
+an `atk` run follows when this default handles it correctly (Q6 in `Answered` below), that is, asking is safe and the person the default asks owns the
 answer. A gap where the default itself goes wrong is still a finding: a run that cannot stop, an
 answer whose owner the run cannot name, or a question that would leak a secret. The report names how many it
 dropped this way, as it counts refuted ones.
@@ -235,8 +241,12 @@ dropped this way, as it counts refuted ones.
 - **Correct:** a sentence says something false, and it is rewritten.
 - **Leave to the default:** a sentence fills a state no rule covered by guessing what the rule would
   have said, and rule 5's default answers that state correctly, so the sentence is removed or not
-  added. A state that is merely uncovered, with the default right for it, is no finding at all.
-- **Add a rule:** the default would give a wrong answer in an ordinary case. The finding names the
+  added. A state that is merely uncovered, with the default right for it, is no finding at all. A
+  false sentence that is such a guess takes this form before **Correct** (Q8 in `Answered` below),
+  and the form applies only to a rule an `atk` run follows (Q6).
+- **Add a rule:** the default would give a wrong answer in an ordinary case, or in any case whose
+  consequence is one of the five, or, on an agent file rule 5 does not govern, the state needs an
+  answer the file does not give (Q7 in `Answered` below). The finding names the
   states the new rule itself opens, in one line, so the fixer can weigh them.
 
 ### The narrowest fix
@@ -244,8 +254,9 @@ dropped this way, as it counts refuted ones.
 `shared/review-fix-loop.md`, the `SHOULD FIX` row and the paragraph under it, and `atk:fix` step 3:
 
 - On a rule an agent follows, take the first of the three forms that removes the finding: correct,
-  then leave to the default, then add a rule. A suggested fix is a suggestion. Where the fixer takes
-  another form, it says which and why.
+  then leave to the default, then add a rule; a false sentence that guesses at a state the default
+  answers is removed rather than rewritten (Q8). A suggested fix is a suggestion. Where the fixer
+  takes another form, it says which and why.
 - A fix that adds a rule names the states the rule opens and weighs them before it lands.
 - A fix that grows a file every run reads, `shared/team-roles.md`, `shared/run-trace.md` or
   `shared/artifact-paths.md`, writes its size before and after in the record.
@@ -332,10 +343,20 @@ None open.
 | Q2. Should the five protected consequences live in `shared/review-checklist.md`, where a project could add its own, or stay fixed in `review/SKILL.md`? | "ok, đồng ý", agreeing to the proposal put to him in the session: fixed in `review/SKILL.md` as the kit's floor; a project adds its own through a rule with a severity in its review checklist | Lam Ngoc Khuong | 2026-10-21 | |
 | Q3. S1 of the first implementation review: "Leave to the default" met the same condition as the dropped candidate. Which does it cover? | "Định nghĩa lại", choosing the proposal put to him: the form covers a sentence that guesses at a state the default answers, and its fix removes or leaves out that sentence; a state merely uncovered is dropped, not reported | Lam Ngoc Khuong | 2026-10-21 | |
 | Q4. S2 of the same review: should rule 5's default ask the person running the skill when rule 3 gives the answer to another role? | "Thêm điều kiện", choosing the proposal put to him: ask the person running the skill where the answer is theirs to give, otherwise the person rule 3 gives it to | Lam Ngoc Khuong | 2026-10-21 | |
+| Q5. S1 of the review of PR #141: what does the default do when the person rule 3 names is not in the session? | Choosing the review's proposal put to him: record an open question carrying that person's name, go on with what does not depend on it, send nothing past the consent line; stop only when neither is possible | Lam Ngoc Khuong | 2026-10-21 | |
+| Q6. S2 of the same review: does the default, and the drop and the form resting on it, cover a project's own agent file? | "Giới hạn default", choosing the proposal put to him: only a rule an `atk` run follows; on any other agent file the candidate is kept and ranked by reach, and `ordinary` means the users of whatever follows the rule | Lam Ngoc Khuong | 2026-10-21 | |
+| Q7. S3 of the same review: which form fits an `edge` finding kept for one of the five consequences? | Choosing the review's proposal put to him: **Add a rule**, whose condition now also covers any case whose consequence is one of the five; and, choosing "Mở rộng Add a rule" on S18 of the review of this fix, a state on an agent file rule 5 does not govern that needs an answer the file does not give | Lam Ngoc Khuong | 2026-10-21 | |
+| Q8. S4 of the same review: is a false sentence that guesses at a state the default answers rewritten or removed? | "Thêm ngoại lệ", choosing the proposal put to him: removed, so **Leave to the default** comes before **Correct** for it; the order is otherwise unchanged | Lam Ngoc Khuong | 2026-10-21 | |
 
 Q3 and Q4 were answered while the design was implemented. Q3 edited the `Leave to the default`
 bullet of `### The Fix of a finding`; Q4 edited the quoted paragraph and the paragraph under it in
 `### The default for a state no rule covers`, and the ADR.
+
+Q5 to Q8 were answered on the review of the pull request. Q5 edited the quoted paragraph in
+`### The default for a state no rule covers`; Q6 the `ordinary` bullet of
+`### Reach, and what it changes`, the paragraph under the quote, and the `Leave to the default` bullet; Q7 the `Add a rule`
+bullet and Q8 the `Leave to the default` bullet of `### The Fix of a finding` and the first bullet
+of `### The narrowest fix`; all four the ADR.
 
 Q1 edited `### Reach, and what it changes` (the `edge` bullet). Q2 edited the same section (the
 paragraph after the five consequences) and `### Files the implementation touches`.

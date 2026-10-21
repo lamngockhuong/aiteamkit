@@ -212,7 +212,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   produce no artifact and answer to no approver.
 
 - `plugins/atk/shared/review-fix-loop.md`: the loop that runs `atk:review` on a skill's own change before a
-  person reads it, the severities it fixes, a disputed finding, the two-round ceiling and the
+  person reads it, the severities it fixes, the narrowest of three forms a fix to a rule an agent
+  follows takes, a disputed finding, the two-round ceiling and the
   escalation by name, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
   `atk:fix`, and by `atk:orchestrate`, which runs it on the code jobs it commits: the verification of each asks whether the change works, and neither reads the diff for
   what it newly claims, which is what a review finds.

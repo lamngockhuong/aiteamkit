@@ -94,6 +94,10 @@ project has recorded nothing. They carry no `CONV-` ID because they are not the 
 | User input crossing a trust boundary is validated | `BLOCKING` |
 | Public behavior change is reflected in the docs that describe it | `SHOULD FIX` |
 
+On a rule written for an agent, a default severity here gives way to the reach of the finding, per
+step 6 of `skills/review/SKILL.md`: unlike a rule the project recorded, a baseline item does not
+hold its severity against an `edge` reach.
+
 ## Keeping them in step
 
 A rule the reviewer keeps repeating by hand belongs in the conventions document: `atk:review`

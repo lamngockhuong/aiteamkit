@@ -10,11 +10,12 @@ ticket: none
 
 Approved by Lam Ngoc Khuong on 2026-10-21, by instruction to the agent. Returned to `IN REVIEW` on
 2026-10-21 by his instruction, to carry Q3 and Q4, answered during implementation, and approved again
-by him the same day.
+by him the same day. Edited on 2026-10-21 by his instruction to carry Q5 to Q8 of the design,
+answered on the review of PR #141, and kept `APPROVED`.
 
 # ADR 0008: atk:review cân nhắc lỗ hổng trong luật cho agent hay gặp đến đâu, và một lần sửa để trạng thái chưa có luật cho một quy tắc mặc định
 
-Thiết kế: `docs/records/design/261021-0450-review-severity-by-reach.md`
+Design: `docs/records/design/261021-0450-review-severity-by-reach.md`
 
 ## Bối cảnh
 
@@ -36,7 +37,7 @@ cách sửa được gợi ý và làm đúng y như vậy. `plugins/atk/shared/
   - bí mật hay dữ liệu của một người bị lộ;
   - một hành động vượt quá ranh giới đồng ý;
   - lịch sử hay phần việc chưa commit bị mất;
-  - một public contract bị phá vỡ.
+  - một hợp đồng công khai bị phá vỡ.
 
   Năm loại này nằm cố định trong `review/SKILL.md`, là mức sàn của kit. Dự án muốn thêm hậu quả
   của riêng mình thì ghi một luật kèm mức độ vào review checklist của dự án, và Reach không bao giờ
@@ -44,11 +45,18 @@ cách sửa được gợi ý và làm đúng y như vậy. `plugins/atk/shared/
   Code giữ nguyên cách xếp mức độ hiện nay.
 - Luật 5 của `shared/team-roles.md` có thêm một quy tắc mặc định cho trạng thái không luật nào phủ
   tới: nói ra điều đó, hỏi người đang chạy skill khi câu trả lời thuộc về họ, nếu không thì hỏi người
-  mà luật 3 giao quyết định đó, và dừng lại khi không có ai để hỏi. Một lỗ hổng mà quy tắc mặc định
-  đã xử lý đúng thì không phải là finding.
+  mà luật 3 giao quyết định đó, ghi một câu hỏi mở mang tên người đó khi họ không có mặt trong phiên,
+  và dừng lại khi không có ai để hỏi. Trên luật mà một lượt chạy `atk` làm theo, lỗ hổng mà quy tắc
+  mặc định đã xử lý đúng thì không phải là finding. File agent của chính dự án không có quy tắc mặc
+  định này, nên lỗ hổng ở đó được xếp theo mức độ hay gặp, và `ordinary` tính theo những người làm
+  việc theo luật đó.
 - Mục `Fix` của một finding có ba dạng: sửa câu sai, để cho quy tắc mặc định bằng cách bỏ câu đoán
-  mò cho một trạng thái mà quy tắc mặc định đã trả lời đúng, hoặc thêm luật. Luật được thêm phải nêu
-  những trạng thái mới mà chính nó mở ra.
+  mò cho một trạng thái mà quy tắc mặc định đã trả lời đúng, hoặc thêm luật. Câu sai mà chính nó là
+  câu đoán mò như vậy, khi quy tắc mặc định trả lời đúng, thì bị bỏ đi chứ không viết lại. Chỉ thêm
+  luật khi quy tắc mặc định trả lời sai trong trường hợp thường gặp, hoặc trong bất kỳ trường hợp nào
+  có hậu quả thuộc năm loại trên, hoặc khi một trạng thái trong file agent không thuộc quyền chi phối
+  của luật 5 cần một câu trả lời mà file chưa có, và luật được thêm phải nêu những trạng thái mới mà
+  chính nó mở ra.
 - `atk:fix` và vòng review và sửa chọn dạng đầu tiên xóa được finding. Cách sửa được gợi ý chỉ là gợi
   ý, và bản ghi nêu dạng đã chọn.
 

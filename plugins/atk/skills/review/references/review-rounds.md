@@ -77,22 +77,31 @@ for, the same as any other skipped round.
 reaches, and the round is where they surface. Two things keep it from turning each of them into a
 new clause:
 
-- **The default first.** A state no rule covers is a candidate only where the default of rule 5 in
-  `shared/team-roles.md` goes wrong for it: a run that cannot stop, an answer whose owner the run
-  cannot name, a question that would leak a secret. Where asking is safe and the person the default
-  asks owns the answer, the candidate is dropped, listed under `## Verified and dropped`, and counted in `## Rounds`, per
-  `references/report-format.md`.
+- **The default first.** On a rule an `atk` run follows, a skill's `SKILL.md` or `references/` or
+  a shared file of the kit, a state no rule covers is a candidate only where the default of rule 5
+  in `shared/team-roles.md` goes wrong for it: a run that cannot stop, an answer whose owner the run
+  cannot name, a question that would leak a secret or a person's data. Where asking is safe and the
+  person the default asks owns the answer, the round returns the candidate marked as handled by the
+  default, and step 5 of `SKILL.md` drops it, lists it under `## Verified and dropped`, and counts it
+  in `## Rounds`, per `references/report-format.md`. Any other agent file, a project's agent
+  instructions file or a product's prompt, is followed by an agent that never reads rule 5, so a
+  candidate on it is kept and ranked by reach.
 - **Reach.** Each candidate that survives names its trigger and takes a reach, which step 6 of
-  `SKILL.md` ranks by. `ordinary`: input or a state the kit's users meet in normal work, a common
-  name in the teams it serves, a usual project shape, a run started the way a skill's `## Invocation`
-  shows, a harness the kit supports; the finding says which. `edge`: a combination that is not
+  `SKILL.md` ranks by. `ordinary`: input or a state the users of whatever follows the rule meet in
+  normal work, the kit's teams for a kit file and the project's team or its end users for a
+  project's file. For the kit, that is a common name in the teams it serves, a usual project shape, a
+  run started the way a skill's `## Invocation` shows, a harness the kit supports; the finding says
+  which. `edge`: a combination that is not
   ordinary, two people whose names differ only by marks, a script the team does not use, a session
   that ends on the stroke of midnight. Evidence that the trigger was met once, a run trace, a record,
   an issue or a test, makes it `ordinary`, and so does a reach the reviewer cannot judge, since a
   wrong `ordinary` costs one `SHOULD FIX` and a wrong `edge` ships a defect at `NIT`.
 
-Code, configuration, schemas and tests take no reach, whatever their round, and a finding on both an
-instruction and the code it drives is ranked as code.
+Code, configuration, schemas and tests take no reach, whatever their round, a command block an
+agent runs as written included, and a finding on both an instruction and the code it drives is
+ranked as code. A baseline item a round other than `rules` holds, from the table above, gives way to
+reach on a rule written for an agent: only a rule the project recorded keeps its severity whatever
+the reach, per step 6 of `SKILL.md`.
 
 **`contract` under `Contract: first`, and on a `screen` document.** The reference document is the
 agreed contract where the profile says `first`, and for a `screen` document under either line, per
@@ -121,8 +130,9 @@ implemented. Every round that starts from the diff is blind to work that is abse
 
 **Why readability has no round.** An agent told to go and find hard-to-read code will find some,
 whether or not any exists, and all of it will be `NIT`. One round like that fills the report with
-`NIT` and the ten slots of the summary in step 6, and returns nothing in exchange. Readability stays something any round may raise when it
-trips over it, and no round hunts for.
+`NIT` and the ten slots of the summary, per Cap in `references/report-format.md`, and returns
+nothing in exchange. Readability stays something any round may raise when it trips over it, and no
+round hunts for.
 
 ## How many copies a round runs
 
@@ -417,6 +427,11 @@ the difference in scope is the point:
   can name, together with the trigger that mechanism depends on. An agent that quietly drops what it
   half believes has decided the verdict alone and skipped step 5, which is where most missed defects
   go.
+- On prose an agent follows, rule 5's default quoted from `shared/team-roles.md`, the two reach
+  values above and the five consequences of step 6 of `SKILL.md`, quoted, with the instruction to
+  give each candidate its reach and its trigger, and to return a candidate the default handles
+  marked as such rather than drop it. An agent in a target project cannot open the kit's files, so
+  the prompt carries them.
 - The instruction to return each candidate as its own entry, never as a clause inside another's
   description. A second mechanism tucked into a `NIT` about something else takes that `NIT`'s
   severity and gets no verdict of its own.
@@ -442,7 +457,7 @@ reviewer is not. A round that would settle a question from history returns the c
 `git log` or `git blame` it could not run named.
 
 An agent returns its own findings, each with file, line, severity, the failure it causes, and a
-concrete suggestion. It does not rank against anyone else, because it cannot see them.
+concrete suggestion, and on a rule written for an agent its reach and its trigger. It does not rank against anyone else, because it cannot see them.
 
 ## Merging what comes back
 
@@ -460,7 +475,9 @@ Per round, as the round closes, not once for the whole review:
    wrong, and the only way to tell is to look.
 5. **Reconcile severity.** The majority severity wins. A tie takes the higher one and says in the
    finding why it was raised. A verdict of `PLAUSIBLE` holds the result at `SHOULD FIX` or below,
-   whatever the majority said.
+   whatever the majority said. On a rule written for an agent, reach is settled before severity:
+   copies that disagree take `ordinary`, a copy that gave none counts as no vote, and step 6 of
+   `SKILL.md` then ranks by the settled reach.
 Then once, after the last round has closed, across rounds:
 
 7. **Deduplicate again**, by the same test as step 2. Duplicates between rounds are ordinary, so this
@@ -468,14 +485,16 @@ Then once, after the last round has closed, across rounds:
 8. **Keep every tag.** A finding two rounds raised carries both, in the order the rounds ran:
    `[3/3 lines] [2/2 boundary]`. Dropping one would hide that two different questions reached the
    same line.
-9. **Take the highest severity, not the majority.** Across rounds the majority rule of step 5 does
-   not apply: the number of rounds that noticed something is not evidence about it, and a round
-   that saw the worse consequence is not outvoted by two that saw a milder one. Say in the finding
-   which round set the severity.
+9. **Take the highest severity, not the majority.** Reach is settled first, across rounds, by the
+   rule of step 5, and each round's severity follows from it. Across rounds the majority rule of
+   step 5 does not apply: the number of rounds that noticed something is not evidence about it, and
+   a round that saw the worse consequence is not outvoted by two that saw a milder one. Say in the
+   finding which round set the severity.
 10. **Renumber** in the skill's own order, severity first, into the severity-prefixed identifiers of
     `references/report-format.md`: `B`, `S`, `N`, from 1 within each severity, never one sequence
-    across the three. The cap in the skill's step 6, on what the summary and the comments carry,
-    applies to that final merged list, never to one round's and never to one copy's.
+    across the three. The cap, per Cap in `references/report-format.md`, on what the summary and
+    the comments carry, applies to that final merged list, never to one round's and never to one
+    copy's.
 
 `[k/N]` means something only between copies of one round. A round that ran once carries its round
 name instead: `[1/1]` would invite the reader to think eight other agents looked and disagreed, when
@@ -524,19 +543,21 @@ the list cannot look for what the list is missing.
 
 ## What the report adds
 
-Five things, and no more: the band the change fell in and the counts that put it there, gross,
+Six things, and no more: the band the change fell in and the counts that put it there, gross,
 net of what the repository regenerates, and naming the files that came out between them; the cost
 stated before anything was spawned, and any deviation the cap forced on it; whether the calling
 agent, which takes the verdicts and the ranking, was a fresh reviewer agent or the session that
 wrote the change, as it is above band 1, under `--parallel`, and on a harness that cannot spawn;
-which rounds ran, which were skipped and why, which came back empty, and which died; and a `[k/N]`
-tag on each finding a replicated round raised, every tag kept where more than one round raised it,
-with a round name on the rest and the sweep's own findings labelled as coming from the sweep. A
+which rounds ran, which were skipped and why, which came back empty, and which died; a `[k/N]` tag
+on each finding a replicated round raised, every tag kept where more than one round raised it, with
+a round name on the rest and the sweep's own findings labelled as coming from the sweep; and, where
+a finding or a dropped candidate is on a rule written for an agent, the count by reach and the count
+dropped to the default of rule 5, per Rounds in `references/report-format.md`. A
 reader who knows three of three copies raised something reads the list differently from one who
 does not, and a reader who thinks the review was thin can see the number that decided how wide it
 went.
 
-Five things is what the rounds owe the report. The report holds more than three sections, and
+Six things is what the rounds owe the report. The report holds more than three sections, and
 `references/report-format.md` is where the rest of them and their order live.
 
 The review is still one model's work, and the report never presents a count as agreement between

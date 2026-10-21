@@ -170,9 +170,9 @@ owes before the call rather than at step 6, both per Calling the review in
 `shared/review-fix-loop.md`.
 
 `shared/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
-`BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work, re-run the
-verification from step 3, and repeat at most twice, a resume included, per Progress log in
-`shared/artifact-paths.md`.
+`BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work, in the
+narrowest form that file names, re-run the verification from step 3, and repeat at most twice, a
+resume included, per Progress log in `shared/artifact-paths.md`.
 
 `NIT` findings are never fixed here and never block, exactly as `atk:review` defines them. Disputing
 a finding is not fixing it: a finding the author believes is wrong goes to the Tech Lead with the
@@ -218,10 +218,10 @@ The record holds: what was built and against which acceptance criteria; which pl
 and why; the files changed by layer; which conventions source was used, naming it as the project's
 own or as the baseline; what was verified with which command and what each run proved; which CI gate
 judges each layer touched and whether the local run matched it; what could not be verified and why;
-what the tidy step changed, or that it did not run and why; the review findings, which were fixed and
-which were deliberately kept;
-whether `atk:verify` ran on the change, and if not, that nobody has yet seen it run; and anything
-noticed but deliberately not done.
+what the tidy step changed, or that it did not run and why; the review findings, which were fixed
+and which were deliberately kept, and the form each fix to an agent rule took with what
+`shared/review-fix-loop.md` asks such a fix to record; whether `atk:verify` ran on the change, and
+if not, that nobody has yet seen it run; and anything noticed but deliberately not done.
 
 Under `--out` the file opens with the front matter block in `shared/artifact-paths.md`, like every
 other artifact the kit writes, with the author as `owner` and the reviewer as `approver`. In the

@@ -84,7 +84,7 @@ approval.
 | Severity | In this loop |
 |----------|--------------|
 | `BLOCKING` | Fix it, or escalate it. There is no third option |
-| `SHOULD FIX` | Fix it, unless it is genuinely separate work, in which case record it as carried forward with the reason |
+| `SHOULD FIX` | Fix it, in the narrowest form below, unless it is genuinely separate work, in which case record it as carried forward with the reason |
 | `NIT` | Never fixed here. Never blocks. Leave it for the author and the reviewer |
 
 The `NIT` rule is not laziness. A loop that silently applies preferences makes the diff larger for
@@ -97,13 +97,20 @@ covered the original change, which is the worst moment available for it.
 On a rule written for an agent, the smallest change is the first of the three forms in
 `skills/review/references/report-format.md` that removes the finding: correct the false sentence,
 then remove or leave out a clause that guesses at a state the default of rule 5 in
-`shared/team-roles.md` already answers, then add a rule. A suggested fix is a suggestion: where the
-fixer takes another form than the finding's `Fix` line, the record says which and why. A form that
-changes no text, or that rests on the default being right where the finding says it is wrong, is not
-a fix but a dispute, per Disputing a finding below. A fix that adds a rule names the states that
-rule opens and weighs them before it lands, since each one is what the next round finds. A fix that
-grows a file every run reads, `shared/team-roles.md`, `shared/run-trace.md` or
-`shared/artifact-paths.md`, writes that file's size before and after in the record.
+`shared/team-roles.md` already answers, then add a rule. A false sentence that is itself such a
+guess, where the default is right for its state, is removed rather than rewritten. Leaving to the
+default applies only to a rule an `atk` run follows; a project's own agent file has no such default.
+A suggested fix is a suggestion: the record names the form each fix to an agent rule took, and
+where the fixer takes another form than the finding's `Fix` line, says why. A form that changes no
+text, or that rests on the default being right where the finding says it is wrong, is not a fix but
+a dispute, per Disputing a finding below. Adding a rule is the form for a default that is wrong in an
+ordinary case, or in any case whose consequence is one of the five of step 6 of
+`skills/review/SKILL.md`, or, on an agent file rule 5 does not govern, for a state that needs an
+answer the file does not give; an `edge` finding kept for its consequence is fixed, not disputed. A
+fix that adds a rule names the states that rule opens and weighs them before it lands, since each
+one is what the next round finds. A fix that grows a file every run reads, `shared/team-roles.md`,
+`shared/run-trace.md` or `shared/artifact-paths.md`, writes that file's size before and after in
+the record.
 
 ## Disputing a finding
 
