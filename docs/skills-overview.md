@@ -472,14 +472,18 @@ fits inside it. Or nothing is broken and the code is merely unpleasant, which is
 **The habit that matters.** No file changes before the cause is proven, and the proving itself has a
 ceiling: three ruled-out hypotheses, then the skill stops and hands the investigation to a person by
 name, because what is left after three is usually somebody's knowledge rather than another search.
-`--investigate-only` exists
-because the explanation is often the whole deliverable, and stopping there is a valid result rather
-than an unfinished one. The clean-up step that follows verification is narrower here than anywhere
-else in the kit: it covers the lines the fix touched and nothing beside them, because a fix carrying
-a tidy-up of the surrounding file cannot be reverted cleanly. Then `atk:review` reads the diff the way
-`atk:implement` has it read, because verification asks whether the fix works and only a review asks
-what the fix newly claims, such as a sentence in a reference document one branch of the code does not
-honour yet. `--no-review` skips the call and leaves a line in the report naming who must review.
+`--investigate-only` exists because the explanation is often the whole deliverable, and stopping
+there is a valid result rather than an unfinished one. The clean-up step that follows verification
+is narrower here than anywhere else in the kit: it covers the lines the fix touched and nothing
+beside them, because a fix carrying a tidy-up of the surrounding file cannot be reverted cleanly.
+Then `atk:review` reads the diff the way `atk:implement` has it read, because verification asks
+whether the fix works and only a review asks what the fix newly claims, such as a sentence in a
+reference document one branch of the code does not honour yet. `--no-review` skips the call and
+leaves a line in the report naming who must review. A fix to a rule an agent follows takes the
+narrowest of three forms: correct the false sentence, remove a clause that guesses at a state the
+default of rule 5 in `shared/team-roles.md` already answers, or add a rule, and only the last when
+the first two cannot remove the finding. The report names the form, so a fix never adopts a review's
+suggested rule without weighing the states that rule opens in turn.
 
 ---
 
@@ -565,6 +569,16 @@ is not on it, and for the other places in the diff that repeat a finding already
 back empty rather than padded when there is nothing new. Where the cap cuts what the summary and the
 comments carry, correctness outranks convention and readability, and the review says how many
 findings are in the report alone and at what severity.
+
+A finding on a rule written for an agent, a skill, a shared file, a prompt, also carries a reach:
+`ordinary` when the kit's teams meet its trigger in normal work, `edge` when they do not. An `edge`
+finding is a `NIT`, unless it would let a role's decision be taken without its owner, expose a
+secret or a person's data, act past a person's consent, lose history, or break a public contract;
+those five keep their full weight whatever the reach. A state no rule covers is not a finding at all
+when the kit's default for it, say so, ask the person who owns the answer, stop when nobody can be
+asked, already gives the right answer. Code keeps the ranking above, whatever its reach. Without
+this, every gap a careful reader can name became a `SHOULD FIX`, every fix a new rule, and every new
+rule the next round's findings.
 
 The review runs as nine rounds, one job each, so no pass has to hold every concern at once and none
 of them skips the same ground for the same reason. Every round runs once by default. A change of

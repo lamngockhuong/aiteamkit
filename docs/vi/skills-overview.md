@@ -478,15 +478,18 @@ skill này nằm bên trong đó. Hoặc chẳng có gì hỏng và mã chỉ đ
 **Thói quen tạo ra khác biệt.** Không file nào đổi trước khi nguyên nhân được chứng minh, và chính
 việc chứng minh cũng có trần: ba giả thuyết bị loại thì skill dừng lại và giao cuộc điều tra cho một
 người có tên, vì thứ còn lại sau ba lần loại thường nằm trong đầu ai đó chứ không nằm ở một lượt tìm
-kiếm nữa. Cờ
-`--investigate-only` tồn tại vì lời giải thích thường đã là toàn bộ sản phẩm cần giao, và dừng ở đó
-là một kết quả hợp lệ chứ không phải một việc dang dở. Bước dọn mã sau lượt kiểm chứng ở đây hẹp hơn
-mọi chỗ khác trong kit: nó chỉ chạm đúng những dòng bản vá đã chạm, vì một bản vá mang kèm một lượt
-dọn dẹp cả file xung quanh thì không revert gọn được vào ngày cần revert. Sau đó `atk:review` đọc
-diff giống như cách `atk:implement` cho đọc: kiểm chứng chỉ hỏi bản vá có chạy đúng không, còn chỉ
-review mới hỏi bản vá vừa khẳng định thêm điều gì, chẳng hạn một câu trong tài liệu tham chiếu mà một
-nhánh của code chưa làm đúng. Cờ `--no-review` bỏ lượt gọi đó và để lại trong báo cáo một dòng ghi
-tên người phải review.
+kiếm nữa. Cờ `--investigate-only` tồn tại vì lời giải thích thường đã là toàn bộ sản phẩm cần giao,
+và dừng ở đó là một kết quả hợp lệ chứ không phải một việc dang dở. Bước dọn mã sau lượt kiểm chứng
+ở đây hẹp hơn mọi chỗ khác trong kit: nó chỉ chạm đúng những dòng bản vá đã chạm, vì một bản vá mang
+kèm một lượt dọn dẹp cả file xung quanh thì không revert gọn được vào ngày cần revert. Sau đó
+`atk:review` đọc diff giống như cách `atk:implement` cho đọc: kiểm chứng chỉ hỏi bản vá có chạy đúng
+không, còn chỉ review mới hỏi bản vá vừa khẳng định thêm điều gì, chẳng hạn một câu trong tài liệu
+tham chiếu mà một nhánh của code chưa làm đúng. Cờ `--no-review` bỏ lượt gọi đó và để lại trong báo
+cáo một dòng ghi tên người phải review. Khi sửa một quy tắc mà agent làm theo, bản sửa chọn dạng hẹp
+nhất trong ba dạng: sửa câu sai, bỏ câu đoán mò cho một trạng thái mà mặc định của quy tắc 5 trong
+`shared/team-roles.md` đã trả lời đúng, hoặc thêm quy tắc, và chỉ thêm quy tắc khi hai dạng đầu
+không gỡ được phát hiện. Báo cáo ghi rõ dạng đã chọn, nên bản sửa không bao giờ nhận nguyên quy tắc
+mà review gợi ý khi chưa cân những trạng thái mới mà chính quy tắc đó mở ra.
 
 ---
 
@@ -573,6 +576,17 @@ lại diff, chỉ đi tìm thứ chưa nằm trong danh sách và những chỗ 
 đã có, và thà trả về rỗng còn hơn độn thêm cho đủ. Khi trần cắt bớt những gì bản tóm tắt và comment
 mang theo, lỗi đúng sai đứng trên lỗi quy ước và chỗ mã khó đọc, và bản review nói rõ bao nhiêu phát
 hiện chỉ còn nằm trong báo cáo, ở mức nào.
+
+Phát hiện trên một quy tắc viết cho agent làm theo, như một skill, một file dùng chung hay một
+prompt, còn mang thêm phạm vi gặp: `ordinary` khi các team dùng kit gặp điều kiện kích hoạt của nó
+trong công việc thường ngày, `edge` khi không gặp. Phát hiện `edge` xếp ở `NIT`, trừ năm hậu quả
+luôn giữ nguyên mức dù phạm vi gặp là gì. Đó là khi nó để một vai trò bị quyết thay lúc người sở hữu
+vắng mặt, làm lộ bí mật hay dữ liệu của một người, hành động vượt quá sự đồng ý của một người, làm
+mất lịch sử, hoặc phá một hợp đồng công khai. Một trạng thái không quy tắc nào phủ tới thì không
+thành phát hiện, nếu mặc định của kit cho nó, tức là nói ra, hỏi người có quyền trả lời, và dừng khi
+không có ai để hỏi, đã cho ra câu trả lời đúng. Code vẫn xếp mức như trên, dù phạm vi gặp là gì.
+Thiếu điều này, khe hở nào một người đọc kỹ gọi được tên cũng thành `SHOULD FIX`, mỗi bản sửa thành
+một quy tắc mới, và mỗi quy tắc mới lại thành phát hiện của vòng sau.
 
 Bản review chạy theo chín vòng, mỗi vòng một việc, nên không lượt nào phải ôm hết mọi thứ cần để ý
 cùng lúc, và cũng không lượt nào bỏ sót đúng một vùng vì cùng một lý do. Mặc định mỗi vòng chạy

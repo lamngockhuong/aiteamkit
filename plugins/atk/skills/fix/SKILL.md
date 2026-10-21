@@ -130,6 +130,9 @@ The smallest change that removes the proven cause. Not the tidy-up next to it, n
 would make the file nicer, not a second bug noticed on the way. Those are separate work, and listing
 them in the report is the right way to carry them forward.
 
+Where the defect is in a rule an agent follows, the smallest change is the narrowest form
+`shared/review-fix-loop.md` names, and the report says which form it took.
+
 When the cause cannot be fixed safely without a wider change, say so before making it, with what the
 wider change touches. A refactor introduced quietly inside a fix is the change that makes a revert
 impossible on the day it is needed.
@@ -196,7 +199,7 @@ giving it the defect and the draft's path as intent, never as a path to review; 
 `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work; re-verify as
 Re-verify after each round in that file says; at most twice, a resume included, then escalate by
 name. A fix made here is held to step 3 like the first one: the smallest change that removes the
-finding.
+finding, in the form that file names, which may differ from the one the finding's `Fix` suggested.
 
 A loop that comes out clean offers `atk:verify`, per the same file, to run the captured
 reproduction and the blast radius against the running system rather than the suite; the report says

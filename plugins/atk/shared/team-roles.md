@@ -62,6 +62,11 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    once, link the ticket, cite the file path.
 5. **Ask only what the repository cannot answer.** Scan code, docs, git history, and tickets first.
    Interview for judgment, context, and agreements, not for facts already on disk.
+
+   A state no rule of the skill covers is not filled by guessing what the rule would have said. The
+   run says the case is not covered, asks the person running the skill where the answer is theirs to
+   give, and otherwise names the person rule 3 gives it to and asks them, then goes on with the
+   answer; a run with nobody to ask stops and names the case in its closing message and its trace.
 6. **Language.** Artifacts follow the team's working language, and three sources can name it, in
    this order. A `--lang` flag passed to the run wins, because it is the only one of the three a
    person chose for this run. Failing that, the working language recorded in the Team section of
