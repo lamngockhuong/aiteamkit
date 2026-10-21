@@ -10,7 +10,8 @@ ticket: none
 
 Approved by Lam Ngoc Khuong on 2026-10-21, by instruction to the agent. Returned to `IN REVIEW` on
 2026-10-21 by his instruction, to carry Q3 and Q4, answered during implementation, and approved again
-by him the same day.
+by him the same day. Edited on 2026-10-21 by his instruction to carry Q5 to Q8 of the design,
+answered on the review of PR #141, and kept `APPROVED`.
 
 # ADR 0008: atk:review weighs how often an agent rule's gap is met, and a fix leaves an uncovered state to one default
 
@@ -39,10 +40,16 @@ suggested fix applied as written. `plugins/atk/shared/run-trace.md`, read by eve
   value. Code keeps today's ranking.
 - Rule 5 of `shared/team-roles.md` gains a default for a state no rule covers: say so, ask the
   person running the skill where the answer is theirs to give and otherwise the person rule 3 gives
-  it to, and stop when nobody can be asked. A gap the default handles correctly is not a finding.
+  it to, record an open question in that person's name where they are not in the session, and stop
+  when nobody can be asked. On a rule an `atk` run follows, a gap the default handles correctly is
+  not a finding; a project's own agent file has no such default, so a gap there is ranked by reach,
+  and `ordinary` means the users of whatever follows the rule.
 - A finding's `Fix` is one of three forms: correct a false sentence, leave to the default by
-  removing a sentence that guesses at a state the default answers, or add a rule. A rule added must
-  name the states it opens.
+  removing a sentence that guesses at a state the default answers, or add a rule. A false sentence
+  that is such a guess, where the default is right, is removed rather than rewritten. A rule is added
+  where the default is wrong in an ordinary case, or in any case whose consequence is one of the
+  five, or, on an agent file rule 5 does not govern, where a state needs an answer the file does
+  not give, and must name the states it opens.
 - `atk:fix` and the review and fix loop take the first form that removes the finding. A suggested
   fix is a suggestion, and the record names the form taken.
 

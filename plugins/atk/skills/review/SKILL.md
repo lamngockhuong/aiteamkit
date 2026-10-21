@@ -176,8 +176,8 @@ This does not license the question dressed up as a finding. `PLAUSIBLE` still ne
 mechanism and a named trigger; what is uncertain is only whether that trigger occurs. A candidate
 naming neither is not plausible, it is unexamined, and it is dropped.
 
-A candidate on a state no rule covers is dropped, and counted, when the default of rule 5 in
-`shared/team-roles.md` handles it correctly, per the `boundary` round in `references/review-rounds.md`.
+A candidate on a state no rule of an `atk` run covers is dropped and counted, from any round, when
+rule 5's default in `shared/team-roles.md` handles it, per `boundary` in `references/review-rounds.md`.
 
 Then take one more pass, once, with the verified list in hand: in an agent of its own above band 1
 where one can be spawned, and in band 1 inside the reviewer agent. Read the diff and the code around
@@ -202,21 +202,22 @@ reads exactly like the run that found nothing.
 the `boundary` round in `references/review-rounds.md` defines them; code carries none. An `edge`
 finding is a `NIT`, unless its consequence is one of five, the kit's floor, which keep the severity
 they earn: (1) a role's decision taken, or an approval state entered, without its owner, per rules 2
-and 3 of `shared/team-roles.md`; (2) a secret or a person's data written, sent or shown, per rule 9;
-(3) an action past the consent line of `shared/finalize-steps.md`; (4) history or a person's
-uncommitted work lost or overwritten; (5) a public contract broken, per `shared/spec-docs.md`.
-
-A finding a round raised in several copies carries how many raised it, a round that ran once its
-name and never `[1/1]`, and one only a single copy raised was checked against the code first; the
-report never presents that count as agreement between people, per `references/review-rounds.md`.
+and 3 of `shared/team-roles.md`; (2) a secret or a person's data written, sent or shown, per rule 9
+and The data a record must not carry in `skills/qa/references/test-run.md`; (3) an action past the
+consent line of `shared/finalize-steps.md`; (4) history or a person's uncommitted work lost or
+overwritten; (5) a public contract broken, per `shared/spec-docs.md`. Where it cannot be judged
+whether a consequence is one of the five, it keeps its severity, as an unjudged reach is `ordinary`;
+reach is how often a trigger is met, not step 4's edge cases.
 
 A convention violation takes the severity recorded against its rule, which reach never lowers, and
-is how a project adds a consequence of its own. Raise it only when the concrete failure is worse
-than the rule anticipated, and say why.
+is how a project adds a consequence of its own; a baseline item another round holds is not such a
+rule, per `references/review-rounds.md`. Raise it only when the concrete failure is worse than the
+rule anticipated, and say why.
 
 The report carries every finding step 5 kept, `BLOCKING` first. The summary, inline comments and
 visible part of a posted summary carry at most ten, or twenty under `--strict`, per Cap in
-`references/report-format.md`, which says what is cut first and what never is.
+`references/report-format.md`, which says what is cut first and what never is, and gives a long
+`NIT` list its one-row form.
 
 Each comment: the file and line, what goes wrong, and a concrete suggestion, addressed to the code
 and never the author. State what the change does well in one line: only negatives teach nothing.
@@ -264,8 +265,8 @@ and posts on consent. A `BLOCKING` finding requests changes; `NIT` findings neve
 - [ ] Every `BLOCKING` finding names a concrete failing input or broken contract.
 - [ ] Every reported finding and every checkable "checked and fine" was verified, and a `PLAUSIBLE`
       finding names the check that would settle it.
-- [ ] Nothing was refuted for being unlikely: every drop rests on a line, a type, a guard, or the
-      absence of any observable effect.
+- [ ] Nothing was refuted for being unlikely: every drop rests on a line, a type, a guard, the
+      absence of any observable effect, or the default of rule 5 handling the state, listed and counted.
 - [ ] Preferences, and `edge` findings outside the five consequences, are `NIT` and do not block;
       every finding on a rule written for an agent carries its reach.
 - [ ] The report carries every verified finding; the summary, inline comments and the visible part

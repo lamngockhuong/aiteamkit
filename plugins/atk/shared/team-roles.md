@@ -66,7 +66,11 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    A state no rule of the skill covers is not filled by guessing what the rule would have said. The
    run says the case is not covered, asks the person running the skill where the answer is theirs to
    give, and otherwise names the person rule 3 gives it to and asks them, then goes on with the
-   answer; a run with nobody to ask stops and names the case in its closing message and its trace.
+   answer. Where that person is not in the session, the run records the case as an open question
+   carrying their name, per rule 1, in its artifact or its closing message, and goes on with what
+   does not depend on it; nothing reaches them past the consent line of `shared/finalize-steps.md`.
+   A run that can do neither stops, and names the case in its closing message and on its trace's
+   `end` line.
 6. **Language.** Artifacts follow the team's working language, and three sources can name it, in
    this order. A `--lang` flag passed to the run wins, because it is the only one of the three a
    person chose for this run. Failing that, the working language recorded in the Team section of

@@ -481,9 +481,12 @@ whether the fix works and only a review asks what the fix newly claims, such as 
 reference document one branch of the code does not honour yet. `--no-review` skips the call and
 leaves a line in the report naming who must review. A fix to a rule an agent follows takes the
 narrowest of three forms: correct the false sentence, remove a clause that guesses at a state the
-default of rule 5 in `shared/team-roles.md` already answers, or add a rule, and only the last when
-the first two cannot remove the finding. The report names the form, so a fix never adopts a review's
-suggested rule without weighing the states that rule opens in turn.
+default of rule 5 in `shared/team-roles.md` already answers, or add a rule. A false sentence that is
+itself such a guess is removed rather than rewritten, and removing applies only to the kit's own
+rules, which are the ones rule 5 governs. A rule is added only when the first two cannot remove the
+finding, or when the case is one of the five consequences a review never lowers. The report names
+the form, so a fix never adopts a review's suggested rule without weighing the states that rule
+opens in turn.
 
 ---
 
@@ -562,8 +565,8 @@ severity and names the decision and the person who made it, because reopening it
 Nothing reaches the list unverified. A finding is confirmed when the input that triggers it can be
 named, and plausible when the mechanism is real but the trigger depends on timing, environment, or
 configuration; a plausible one carries the single check that would settle it, which is what lets the
-author close it in a minute. A candidate is dropped only on something the code shows, never for
-being unlikely, because the second habit is what keeps races and rare-path failures in a review
+author close it in a minute. A candidate is dropped only on something the code shows, or on the
+default of rule 5 handling its state, listed and counted, never for being unlikely, because the second habit is what keeps races and rare-path failures in a review
 instead of in production. Once that list exists, one more pass reads the diff looking only for what
 is not on it, and for the other places in the diff that repeat a finding already on it, and comes
 back empty rather than padded when there is nothing new. Where the cap cuts what the summary and the
@@ -571,12 +574,16 @@ comments carry, correctness outranks convention and readability, and the review 
 findings are in the report alone and at what severity.
 
 A finding on a rule written for an agent, a skill, a shared file, a prompt, also carries a reach:
-`ordinary` when the kit's teams meet its trigger in normal work, `edge` when they do not. An `edge`
-finding is a `NIT`, unless it would let a role's decision be taken without its owner, expose a
-secret or a person's data, act past a person's consent, lose history, or break a public contract;
-those five keep their full weight whatever the reach. A state no rule covers is not a finding at all
-when the kit's default for it, say so, ask the person who owns the answer, stop when nobody can be
-asked, already gives the right answer. Code keeps the ranking above, whatever its reach. Without
+`ordinary` when the people who follow that rule, the kit's teams for a kit file and the project's
+team or its end users for a project's file, meet its trigger in normal work, `edge` when they do
+not. An `edge` finding is a `NIT`, unless it would let a role's decision be taken without its owner,
+expose a secret or a person's data, act past a person's consent, lose history or someone's
+uncommitted work, or break a public contract; those five keep their full weight whatever the reach,
+and so does one the reviewer cannot tell apart from them. On the kit's own rules, a state no
+rule covers is not a finding at all when the kit's default for it, say so, ask the person who owns
+the answer, record an open question in their name when they are not in the session, stop when
+nobody can be asked, already gives the right answer. Code takes no reach and keeps the ranking
+above. Without
 this, every gap a careful reader can name became a `SHOULD FIX`, every fix a new rule, and every new
 rule the next round's findings.
 

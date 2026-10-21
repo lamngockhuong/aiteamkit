@@ -212,7 +212,8 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   có ai duyệt.
 
 - `plugins/atk/shared/review-fix-loop.md`: vòng chạy `atk:review` trên chính thay đổi của một skill trước khi
-  một người đọc nó, những mức độ được sửa, một phát hiện bị phản đối, trần hai vòng và chuyển lên
+  một người đọc nó, những mức độ được sửa, dạng hẹp nhất trong ba dạng mà bản sửa một quy tắc cho
+  agent phải chọn, một phát hiện bị phản đối, trần hai vòng và chuyển lên
   người có tên, cùng dòng mà `--no-review` để lại trong bản ghi. `atk:implement` và `atk:fix` trích
   dẫn nó, `atk:orchestrate` cũng vậy cho các job viết mã mà nó commit: phần kiểm chứng của mỗi skill chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
   xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra.

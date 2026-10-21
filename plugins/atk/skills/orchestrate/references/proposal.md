@@ -126,9 +126,10 @@ a code job is the coordinator's, in step 5, and is not a row.
 The findings What gets fixed in `shared/review-fix-loop.md` selects become one fix job per review
 round in the piece's worktree, so at most two per code job, covered by the approval of the code job
 they follow. The job is `atk:implement "address the findings in <review report path> that What gets
-fixed selects"` with `--no-review` and `--out <run directory>/<job-id>-record.md`: the description is
-the coordinator's text naming a report, not request text. Its own verification is the re-verify
-step, with what item 3 of `references/job-prompt.md` adds where the chain's code job was `atk:fix`.
+fixed selects, each in the form that section names"` with `--no-review` and
+`--out <run directory>/<job-id>-record.md`: the description is the coordinator's text naming a
+report, not request text. Its own verification is the re-verify step, with what item 3 of
+`references/job-prompt.md` adds where the chain's code job was `atk:fix`.
 
 A description goes through `atk:implement`'s plan gate. A medium score sends its `atk:plan --inline`
 confirmation to the person as a gate, relayed like any other. A large score stops the job with no

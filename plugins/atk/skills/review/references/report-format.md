@@ -81,11 +81,11 @@ reissued. Decide the severity, then number.
 - **File:** `path/to/file.ts:32-40`, `path/to/other.ts:118`
 - **Rule:** `CONV-004` - "the rule, quoted exactly as the project wrote it"
 - **Issue:** What goes wrong, and the input or state that triggers it.
-- **Fix:** Correct, leave to the default, or add a rule, then the concrete change, naming the
-  function, file or pattern to use.
+- **Fix:** The concrete change, naming the function, file or pattern to use; on a rule written for
+  an agent, opened by its form.
 - **Decision:** Only where the fix reverses a recorded decision: `path:line`, and who made it.
 - **Author:** Only where the author answered it on the thread: the answer, and why the finding is kept.
-- **Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`, Reach: ordinary
+- **Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`
 ```
 
 Each label is a list item, and a label that runs onto a second line indents its continuation by two
@@ -107,11 +107,16 @@ exists to prevent.
   the line opens with one of three forms, the first that removes the finding: **Correct**, where a
   sentence says something false and is rewritten; **Leave to the default**, where a sentence fills a
   state no rule covered by guessing what the rule would have said, and the default of rule 5 in
-  `shared/team-roles.md` answers that state correctly: the sentence is removed, or not added. A state
-  that is merely uncovered, with the default right for it, is no finding at all, per the `boundary`
-  round;
-  **Add a rule**, where that default would give a wrong answer in an ordinary case, and the line then
-  names, in one more sentence, the states the new rule itself opens, so the fixer can weigh them.
+  `shared/team-roles.md` answers that state correctly: the sentence is removed, or not added. A
+  state that is merely uncovered, with the default right for it, is no finding at all, per the
+  `boundary` round. Where a false sentence is such a guess and the default is right for its state,
+  **Leave to the default** comes before **Correct**: rewriting the guess opens new states, removing
+  it opens none. This form, like the drop, applies only to a rule an `atk` run follows, per the
+  `boundary` round; **Add a rule**, where that default would give a wrong answer in an ordinary
+  case, or in any case whose consequence is one of the five of step 6 of `SKILL.md`, or, on an agent
+  file rule 5 does not govern, where the state needs an answer the file does not give, and the line
+  then names, in one more sentence, the states the new rule itself opens, so the fixer can weigh
+  them.
 - **Decision.** Only where the fix would reverse a decision the intent of step 1 records: in the
   plan, a design document, or an ADR. It names the decision with its source as a path and line, and
   the person who made it, and it goes between Fix and Raised by. The finding keeps the severity the
@@ -145,7 +150,11 @@ the argument, so every column is filled.
 |---|---|---|---|---|
 | `N4` | `path/to/file.ts:88` | What goes wrong, in one clause | The change to make | `lines` |
 | `N5` | `skills/x/SKILL.md:40` | A clause guesses at a state the default already answers | Leave to the default: remove the clause | `lines`, Reach: edge |
+| `N6 (was S3)` | `skills/x/SKILL.md:72` | A state met only after midnight, not one of the five | Correct: the change to make | `boundary`, Reach: edge |
 ```
+
+A finding renumbered into the `NIT` section keeps its old identifier in the ID cell, since the row
+has no title to carry it, per Finding identifiers above.
 
 A `NIT` quoting a convention rule keeps the heading form, because the rule has to be quoted verbatim.
 `BLOCKING` and `SHOULD FIX` always keep it.
@@ -255,8 +264,9 @@ agents, plus the sweep: 14, which is what the flag asks for.
 | sweep | - | 3 | not a round; first attempt died, re-run |
 ```
 
-Below the table, where any finding is on a rule written for an agent, one line counts the findings
-by reach and the candidates the `boundary` round dropped because the default of rule 5 handled them:
+Below the table, where any finding or dropped candidate is on a rule written for an agent, one line
+counts the findings by reach and the candidates step 5 dropped because the default of rule 5 handled
+them, whichever round returned them:
 `Reach: 4 ordinary, 9 edge (7 of them NIT). Dropped to the default: 6.` A fix loop reading two
 reports in turn sees from it how the loop converged.
 
@@ -314,14 +324,14 @@ a `BLOCKING` finding blocks whatever the rest of the list says.
 ## Under `--comment`
 
 The inline comment on a line opens with the finding's ID, so the thread on GitHub and the report say
-the same name for the same thing. Inline comments go only to the findings within the cap of step 6,
-and never to a finding the author already answered.
+the same name for the same thing. Inline comments go only to the findings within the cap, per Cap
+above, and never to a finding the author already answered.
 
 **A finding the author answered.** A comment that repeats it reads as a reviewer that never read the
 answer. So the summary answers it visibly, above the `<details>` block, one line per answered
-finding: its ID and its `Author` line, or for one the answer closed, what closed it. The cap of
-step 6 never cuts these lines. Where the review has something new against the answer, evidence the
-answer did not meet or a claim in it the code does not bear out, it says so as a reply in the
+finding: its ID and its `Author` line, or for one the answer closed, what closed it. The cap never
+cuts these lines, per Cap above. Where the review has something new against the answer, evidence
+the answer did not meet or a claim in it the code does not bear out, it says so as a reply in the
 finding's existing thread, the inline comment that opens with its ID, with the reply command in
 `shared/ticket-adapters.md`, and never as a new comment on another line. Where the author answered
 in a general comment rather than in that thread, the new evidence goes in the finding's visible line
@@ -332,7 +342,7 @@ comment, then carries the counts per severity and the blocking titles with their
 `<details>` block the reader opens on purpose, it lists every finding the review kept, one line each:
 the ID, the title, and the `file:line` it cites, plus the failure in one sentence for a finding the
 cap kept off the thread. The same block lists each open question with the person who must answer
-it, and the number of convention gaps, since the report is not there to hold them. The cap of step 6
+it, and the number of convention gaps, since the report is not there to hold them. The cap
 is on attention, and a collapsed block costs none; what the list buys is that a reader of the pull
 request reaches every finding and every question without the report, and a later review finds every
 identifier this one issued.

@@ -487,9 +487,12 @@ không, còn chỉ review mới hỏi bản vá vừa khẳng định thêm đi�
 tham chiếu mà một nhánh của code chưa làm đúng. Cờ `--no-review` bỏ lượt gọi đó và để lại trong báo
 cáo một dòng ghi tên người phải review. Khi sửa một quy tắc mà agent làm theo, bản sửa chọn dạng hẹp
 nhất trong ba dạng: sửa câu sai, bỏ câu đoán mò cho một trạng thái mà mặc định của quy tắc 5 trong
-`shared/team-roles.md` đã trả lời đúng, hoặc thêm quy tắc, và chỉ thêm quy tắc khi hai dạng đầu
-không gỡ được phát hiện. Báo cáo ghi rõ dạng đã chọn, nên bản sửa không bao giờ nhận nguyên quy tắc
-mà review gợi ý khi chưa cân những trạng thái mới mà chính quy tắc đó mở ra.
+`shared/team-roles.md` đã trả lời đúng, hoặc thêm quy tắc. Câu sai mà chính nó là câu đoán mò như
+vậy thì bị bỏ đi chứ không viết lại, và dạng bỏ câu chỉ áp cho quy tắc của chính kit, vì quy tắc 5
+chỉ chi phối những quy tắc đó. Chỉ thêm quy tắc khi hai dạng đầu không gỡ được phát hiện, hoặc khi
+hậu quả thuộc năm loại mà review không bao giờ hạ mức. Báo cáo ghi rõ dạng đã chọn, nên bản sửa
+không bao giờ nhận nguyên quy tắc mà review gợi ý khi chưa cân những trạng thái mới mà chính quy tắc
+đó mở ra.
 
 ---
 
@@ -570,7 +573,8 @@ Không phát hiện nào vào danh sách mà chưa qua thẩm tra. Một phát h
 đầu vào làm nó xảy ra, và là `PLAUSIBLE` khi cơ chế có thật nhưng điều kiện kích hoạt còn tuỳ thời
 điểm, môi trường hay cấu hình; phát hiện `PLAUSIBLE` mang theo đúng một phép kiểm tra đủ để kết luận,
 nhờ vậy tác giả đóng được nó trong một phút. Chỉ bỏ một ứng viên khi chính mã chỉ ra chỗ nó sai,
-không bao giờ bỏ vì cho rằng khó xảy ra: đó mới là thói quen giữ lỗi race condition và lỗi trên nhánh
+hoặc khi mặc định của quy tắc 5 đã xử lý đúng trạng thái của nó, có liệt kê và có đếm, không bao giờ
+bỏ vì cho rằng khó xảy ra: đó mới là thói quen giữ lỗi race condition và lỗi trên nhánh
 hiếm nằm lại trong bản review thay vì trôi ra production. Có danh sách đó rồi thì thêm một lượt đọc
 lại diff, chỉ đi tìm thứ chưa nằm trong danh sách và những chỗ khác trong diff lặp lại một phát hiện
 đã có, và thà trả về rỗng còn hơn độn thêm cho đủ. Khi trần cắt bớt những gì bản tóm tắt và comment
@@ -578,13 +582,17 @@ mang theo, lỗi đúng sai đứng trên lỗi quy ước và chỗ mã khó đ
 hiện chỉ còn nằm trong báo cáo, ở mức nào.
 
 Phát hiện trên một quy tắc viết cho agent làm theo, như một skill, một file dùng chung hay một
-prompt, còn mang thêm phạm vi gặp: `ordinary` khi các team dùng kit gặp điều kiện kích hoạt của nó
-trong công việc thường ngày, `edge` khi không gặp. Phát hiện `edge` xếp ở `NIT`, trừ năm hậu quả
-luôn giữ nguyên mức dù phạm vi gặp là gì. Đó là khi nó để một vai trò bị quyết thay lúc người sở hữu
-vắng mặt, làm lộ bí mật hay dữ liệu của một người, hành động vượt quá sự đồng ý của một người, làm
-mất lịch sử, hoặc phá một hợp đồng công khai. Một trạng thái không quy tắc nào phủ tới thì không
-thành phát hiện, nếu mặc định của kit cho nó, tức là nói ra, hỏi người có quyền trả lời, và dừng khi
-không có ai để hỏi, đã cho ra câu trả lời đúng. Code vẫn xếp mức như trên, dù phạm vi gặp là gì.
+prompt, còn mang thêm mức độ hay gặp: `ordinary` khi những người làm việc theo quy tắc đó gặp điều
+kiện kích hoạt của nó trong công việc thường ngày, `edge` khi không gặp. Với file của kit, đó là các
+team dùng kit; với file của dự án, đó là team dự án hoặc người dùng cuối của sản phẩm. Phát hiện
+`edge` xếp ở `NIT`, trừ năm hậu quả luôn giữ nguyên mức dù hay gặp hay không. Đó là khi nó để một
+vai trò bị quyết thay lúc người sở hữu vắng mặt, làm lộ bí mật hay dữ liệu của một người, hành động
+vượt quá sự đồng ý của một người, làm mất lịch sử hay phần việc chưa commit của ai đó, hoặc phá một
+hợp đồng công khai. Khi người review không phân định được một hậu quả có thuộc năm loại này hay không, nó cũng giữ nguyên mức.
+Trên quy tắc của chính kit, một trạng thái không quy tắc nào phủ tới thì không thành phát hiện, nếu
+mặc định của kit cho nó đã cho ra câu trả lời đúng: nói ra, hỏi người có quyền trả lời, ghi một câu
+hỏi mở mang tên người đó khi họ không có mặt trong phiên, và dừng khi không có ai để hỏi. Code không
+mang mức độ hay gặp và vẫn xếp mức như trên.
 Thiếu điều này, khe hở nào một người đọc kỹ gọi được tên cũng thành `SHOULD FIX`, mỗi bản sửa thành
 một quy tắc mới, và mỗi quy tắc mới lại thành phát hiện của vòng sau.
 
