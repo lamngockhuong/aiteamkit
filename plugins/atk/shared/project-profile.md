@@ -279,10 +279,15 @@ The practical test: delete the profile, run the skill again, and compare. A `Not
 produces the same artifact with the same confidence, only having worked a little harder to find what
 the profile would have told it.
 
-One line is read by every `Not needed` skill whenever the profile is there: `Run trace` in Docs,
-which decides whether the run leaves a trace, per `shared/run-trace.md`. Reading it changes nothing
-the user sees. The skill still never mentions the profile, and a trace it does not write is never
-explained by naming the file.
+Two things are read by every `Not needed` skill whenever the profile is there: `Run trace` in Docs,
+which decides whether the run leaves a trace, and the Name and Host identifier columns of the Team
+section, which write the names on a trace's `gate` lines, both per `shared/run-trace.md`. Reading it
+changes nothing the user sees, with two exceptions to the test above. `atk:design-doc --answer`
+writes the names in its `Answered by` and `Relayed by` cells by the same rule, so a person reads as
+one name in the design and in the trace, and without the profile by the fallback of that rule. And a
+name that only partly matches a row is confirmed with the person, a question no run without the
+profile asks. The skill still
+never mentions the profile, and a trace it does not write is never explained by naming the file.
 
 `atk:spec` is Required-soft rather than Required because it has two other ways to find its
 footing: the documents already in the directory, whose shape it copies, and the four default kinds.

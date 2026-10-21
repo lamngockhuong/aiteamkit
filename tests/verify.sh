@@ -439,6 +439,80 @@ for f in plugins/*/skills/*/evals/trigger_evals.json; do
   python3 -c "import json,sys; d=json.load(open('$f')); assert isinstance(d,list) and d" || echo "FAIL $f"
 done; echo "OK evals"
 
+# A query is a positive of one skill at most: two skills that both claim it leave the harness to
+# pick, and each skill's own evals pass while the two descriptions compete for the same request
+python3 -c "
+import glob, json
+seen = {}
+for f in sorted(glob.glob('plugins/*/skills/*/evals/trigger_evals.json')):
+    for q in json.load(open(f)):
+        if q.get('should_trigger'): seen.setdefault(' '.join(q['query'].lower().split()), set()).add(f.split('/')[3])
+dup = {q: sorted(s) for q, s in seen.items() if len(s) > 1}
+assert not dup, 'a query is a positive of more than one skill: %s' % dup
+print('OK eval positives, each claimed by one skill')"
+
+# Every description fits the 1,024 characters a harness reads, counted as atkx:skill-eval counts
+# them: the folded scalar joined with spaces, by code point. Only a hand run of that check caught
+# one over the limit before
+python3 -c "
+import glob, re
+bad = []
+for f in sorted(glob.glob('plugins/*/skills/*/SKILL.md')):
+    head = open(f).read().replace('\r\n', '\n').split('\n---', 1)[0]
+    m = re.search(r'^description: [>|][-+0-9]* *\n((?:(?:  .*)?\n)+)', head, re.M) or re.search(r'^description: (.+)$', head, re.M)
+    assert m, 'no description found in %s' % f
+    assert not re.fullmatch(r'[>|][-+0-9]*\s*', m.group(1)), 'description block indicator not parsed in %s' % f
+    lines = m.group(1).rstrip('\n').splitlines()
+    d = ' '.join(l.strip() for l in lines if l.strip())
+    n = len(d) + sum(1 for l in lines if not l.strip())
+    if n > 1024: bad.append('%s %d' % (f, n))
+assert not bad, 'description over 1,024 characters: %s' % bad
+print('OK descriptions within 1,024 characters')"
+
+# Every references/*.md of either plugin has its row in docs/codebase-summary.md and in the vi mirror,
+# which goes stale silently whenever a reference is added
+python3 -c "
+import glob
+for doc in ('docs/codebase-summary.md', 'docs/vi/codebase-summary.md'):
+    s = open(doc).read()
+    miss = [f for f in sorted(glob.glob('plugins/*/skills/*/references/*.md')) if '\n| \x60%s\x60 |' % f not in s]
+    assert not miss, '%s has no row for %s' % (doc, miss)
+print('OK every reference has a summary row in both languages')"
+
+# The trace example in plugins/atk/shared/run-trace.md is the shape every run copies: after its two
+# header lines, each line opens with its time and one of the six event kinds
+python3 -c "
+import re
+s = open('plugins/atk/shared/run-trace.md').read()
+block = s[s.index('## The shape'):].split('\x60\x60\x60')[1].strip().splitlines()
+fields = lambda l: [x.split(':')[0].strip() for x in l.split(' | ')]
+assert fields(block[0]) == ['skill', 'kit', 'harness', 'way', 'flags'], 'the example header line 1 is off its order'
+assert fields(block[1]) == ['subject', 'branch', 'start', 'profile', 'override'], 'the example header line 2 is off its order'
+kinds = r'(step \d+(-\d+)? |gate |stop: |review: |corrected by hand: |end: )'
+bad = [l for l in block[2:] if not re.match(r'^\d\d:\d\d ' + kinds, l)]
+assert bad == [], 'example lines off the event shape: %s' % bad
+assert block[-1][6:].startswith('end: '), 'the example does not end on its end line'
+print('OK run-trace example shape')"
+
+# The counts docs/flow/skill-lifecycle.md and its mirror give for how one skill names another: each
+# atk:<name> in a SKILL.md other than its own skill and the read-only agent, and the ordered pairs.
+# A change that moves them fails here, and the fix is the two documents and the numbers below
+python3 -c "
+import glob, re
+names = {f.split('/')[3] for f in glob.glob('plugins/atk/skills/*/SKILL.md')}
+mentions, pairs = 0, set()
+for f in glob.glob('plugins/atk/skills/*/SKILL.md'):
+    own = f.split('/')[3]
+    for x in re.findall(r'atk:([a-z][a-z-]*[a-z])', open(f).read()):
+        if x != own and x in names: mentions += 1; pairs.add((own, x))
+assert (mentions, len(pairs)) == (221, 125), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
+words = {'docs/flow/skill-lifecycle.md': ('two hundred and twenty-one times', 'a hundred and twenty-five ordered pairs'),
+         'docs/vi/flow/skill-lifecycle.md': ('hai trăm hai mươi mốt lượt', 'một trăm hai mươi lăm cặp')}
+for doc, phrases in words.items():
+    text = ' '.join(open(doc).read().split())
+    for w in phrases: assert w in text, '%s no longer says \'%s\': update it, or the words in this check' % (doc, w)
+print('OK skill-lifecycle counts, 221 mentions in 125 pairs')"
+
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
 # holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs
 # unique and shaped `<component>-NN`, its dimension a number from 1 to 10, and its technique a code

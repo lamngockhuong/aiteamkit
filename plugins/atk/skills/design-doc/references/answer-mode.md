@@ -1,0 +1,203 @@
+# Answering a design's open questions
+
+Loaded by `atk:design-doc` under `--answer`. Step 4 ends every design with its open questions and the
+person who must answer each, and a design in review collects those answers over days: in a meeting,
+in a pull request comment, in a chat. Without this mode each answer is a separate "update the design"
+in a separate session, and nothing says where it goes, who gave it, or what else it changed.
+
+This mode records what a person answered. It never answers a question itself: a question the
+repository could have settled is not open, and one a role owns is that role's, per rule 3 of
+`shared/team-roles.md`.
+
+Each session that records answers is a run of its own with a trace of its own, the design's path as
+its subject, which is the path the trace of the run that wrote it ends on, per `shared/run-trace.md`.
+Steps 1 to 5 share the line `step 1-5 answer mode`. An answer it asks for, or takes from the prompt,
+is a `gate` line, never `corrected by hand`.
+
+The other flags: `--challenge` is refused in one line, since the challenge belongs to step 5 of the
+run that writes a design, before its review. `--out`, `--options` and `--adr` are refused in one
+line, since the mode edits a design that exists, compares no new set of options, and writes no ADR
+alone. For `--challenge` and `--adr` the line names the route by the design's status: at `DRAFT`,
+`atk:design-doc <design-path> --challenge` or `--adr`, per `SKILL.md`; at `IN REVIEW`, that the
+design goes back to `DRAFT` first, which its author does by editing the status and telling the
+approver named in it, since a reviewer who asks for an ADR or a challenge is asking for a draft step
+the design skipped. `--no-adr` is ignored, saying why: the mode edits the ADR the design links, and
+writes none where there is none. `--lang` is ignored, saying why: answers go in the design's own
+language.
+
+A run with nobody to ask, a headless one, records the answers its prompt holds and asks nothing.
+It records each answer the prompt attributes to a person, and leaves open, naming them in the
+session, the ones it does not attribute; where the prompt holds no answer at all, it records nothing
+and says what it lacked. Where no turn from a person appears in the session, per the rule for
+names on `gate` lines in `shared/run-trace.md`, its `Relayed by` cell holds the way the run was
+started, `pane`, `subagent` or `unknown` as the trace header writes it, since no person brought the
+answer into the run, so a reader sees that the person credited did not give it here. A person who
+typed the invocation and answers a later turn brought it, and is named instead.
+
+## What it reads
+
+A design under `docs/records/design/`, resolved per `shared/artifact-paths.md` with its language
+branch, and the ADR it links when one was written. Without a path, list the designs at `DRAFT` or
+`IN REVIEW` and ask which one; a run with nobody to ask lists them and stops. Where there is none,
+say so and stop.
+
+## Before any edit
+
+Each check stops or changes the run before a file is touched.
+
+- **Not a design of this kit.** A path outside the resolved design directory, a requirement or a
+  plan index among them, is refused in one line, and so is a file there with no front matter
+  `status` and no `## Open questions` section: there is nowhere to record an answer. A design
+  written before that heading was named, with its questions under a heading of its own, is asked
+  about in the turn below: the person names the section, and the run records under it.
+- **About another repository.** A design is a project-level record, and the code it cites may sit in
+  a member. Before any citation is checked, each cited path is resolved in the repository the
+  design names for it, per A project that spans several repositories in `shared/artifact-paths.md`;
+  where the design is about another repository altogether, the test of
+  `## Is this plan about this repository` in `skills/plan/references/plan-review-mode.md` applies,
+  and on positive evidence the run stops there.
+- **A spike record.** Refused in one line: it recommends, and its question is answered by the design
+  that follows it.
+- **Retired.** A design at `SUPERSEDED` is refused in one line, naming the design that replaced it.
+- **Not the version under review.** A design a pull request carries, at `DRAFT` or `IN REVIEW`, is
+  edited on that pull request's branch. Where the branch checked out is another one, or the remote
+  branch holds commits to the file that the local branch lacks, say so, name the branch that holds
+  the version in review, and stop. Local changes ahead of the remote are expected: an earlier session
+  recorded answers that wait for a push. The pull request is found and read with the host's own
+  command per `shared/ticket-adapters.md`, its files and head branch only, never with the checkout
+  line of that section, which would switch the branch this check reads; the head branch is fetched
+  before the comparison. A design no pull request carries goes on. Where the host cannot be read,
+  say so and go on only on a branch the person confirms; a run with nobody to ask stops.
+- **The ADR disagrees.** The design's status governs its ADR, and these pairs are the only ones
+  that agree: a design at `DRAFT` with its ADR at `DRAFT`, which is how `--adr` writes one beside a
+  draft, or at `IN REVIEW`, which is a run that died after step 5 wrote the ADR and before it set the
+  design's status, or a design its author sent back, both read as a complete draft by `SKILL.md`;
+  a design at `IN REVIEW` with its ADR at `DRAFT` or
+  `IN REVIEW`; and a design at `APPROVED` with its ADR at `APPROVED`. Any other pair, an ADR at a
+  status outside those three, a template's own `Accepted` or a `SUPERSEDED` among them, or an ADR
+  with no front matter `status`, is said, and the run stops naming the approver. The approver's
+  ruling is the status they set on the ADR by hand; the next run reads it.
+- **Approved.** The approver signed the version on disk, and from `APPROVED` a design and its ADR
+  are not edited, per `## Output` of `SKILL.md`. Say so and stop. A changed decision is a new design
+  and a new ADR that supersede these, per Before writing in `shared/artifact-paths.md`, written by a
+  plain run, `atk:design-doc <requirement-path>`, with the answers given to it as input.
+- **Draft or in review.** Edit in place, reading the file again just before each edit, since
+  another session may have recorded an answer since this one read it. At `IN REVIEW`, say in the
+  session that the reviewers and the approver named in the design are reading an older version, and
+  who they are.
+- **Any other status**, a project template's own such as `Accepted` or `On hold`, or none: say it
+  and stop, naming the approver, who says which of the four it is.
+
+A design with no open question left, no objection still `Open for <role>`, and no review request in
+the prompt is said, and the run stops. At `DRAFT` the line names `atk:design-doc <design-path>`,
+which takes up a draft for its author.
+
+## Collecting the answers
+
+List every open question, numbered, each with the person it names and the option or section it
+blocks, and after them every objection of `Pre-review objections` still `Open for <role>`, with its
+ID and the person who holds that role, per `references/role-challenge.md`. Then ask in one turn,
+per `shared/host-capabilities.md`, which are answered and what each answer is. Answers already in
+the prompt are taken from there, and only what they leave unclear is asked about.
+
+A request a reviewer made that the design never listed, an option to compare, a decision settled in
+the review meeting, is taken the same way: its question is the request as the person states it,
+with who asked it and the person who owns that decision, the Tech Lead for the chosen approach and
+the ADR per `references/role-challenge.md` and rule 3 of `shared/team-roles.md`, and its answer is
+what was decided and by whom. A decision from anyone but that owner or the approver is held as the
+next paragraph holds an answer from the wrong person. One that is not decided yet goes into
+`## Open questions` with the person who must answer it, and nothing is edited from it.
+
+What is recorded per answer:
+
+| Field | Holds |
+|-------|-------|
+| Question | As written in the design, unchanged, or a review request as the person stated it |
+| Answer | Verbatim, as the person gave it. A summary is a second author |
+| Answered by | The person who answered, matched and spelled by the rule for names on `gate` lines in `shared/run-trace.md` applied to that person, a partial match confirmed in the turn that collects the answers; a person that rule does not name from the Team section, by name and role |
+| Date | The date of the answer, or the date it was recorded, saying which |
+| Relayed by | The person who brought the answer here, when that is not the person who answered, written the same way; where no turn from a person appears in the session, the way the run was started |
+
+"Verbatim" never means keeping a secret or a real person's data. A password, a token, an internal
+host, a client's email address is replaced with `<redacted: kind>`, as
+`skills/qa/references/test-run.md` does for a run record under The data a record must not carry, and
+the session says what was redacted by kind, never by repeating it. The names in `Answered by` and
+`Relayed by` are the exception that list makes for the team's own names, and never an email address
+or a handle. The mask holds for every section edited from an answer, not only for the record; a
+host the decision itself rests on is named by its role, `the payment gateway`, rather than masked
+away.
+
+An answer from somebody other than the person the question names is recorded, and the record says
+so; whether it settles the question is the approver's call. Who answered is compared with the person
+named on the name as given until a partial match is confirmed: `Minh` is not `Tran Minh` until
+somebody says so, and a run with nobody to ask records the answer as from somebody else. The
+approver's ruling is matched the same way, so a run with nobody to ask records no ruling given under
+a name that only partly matches the approver: it says so and names the approver, who gives the
+ruling in a session that can ask. Until the
+approver says so, the question stays open, its row reads `answered by <name>, not <named person>`,
+and nothing is edited from it. The approver's ruling is itself an answer, given to this `--answer`
+or a later one like any other and recorded as `settled by <approver>` on that row; from it the
+question leaves the open list and its sections are edited. A question answered only in part stays
+open too, its row in `Answered` marked `partial`. Both are settled before the approver sets the
+design to `APPROVED`: the ruling on each is recorded here first, since from `APPROVED` the design is
+not edited and the ruling would have nowhere to go. A plain open question may stand at approval, as
+a gap the approver accepts; a held answer may not, since somebody gave it and nobody ruled on it.
+When the person does not say who answered, ask: a record with no answerer is the chat thread again.
+
+## Where it goes
+
+A settled question leaves the open questions section, and every record goes into an `Answered`
+subsection at its end, in the table above, so every answer to the design sits in one place. An
+answer to an objection from the person who holds its role, or the approver's ruling on it, also
+replaces its `Open for <role>` with `Settled by <name>, <date>`, and its row goes into the same
+table with the objection's ID as the question, so nothing reads open in one place and answered in
+the other.
+
+Each section the answer changes is then edited to match it, and the edit names the question it came
+from, so a reader can tell what the author designed from what an answer put there. A section the
+answer does not change is not touched.
+
+- **An answer that chooses among the options**, or asks for one the design did not compare, changes
+  step 3 and the chosen approach of step 4. A new option is scored against the same criteria as the
+  others, since an option added without a score is a preference.
+- **An answer that changes the decision** changes the ADR with it, while the design is not
+  `APPROVED`: its decision, its consequences, and its rejected alternatives. Where the design has
+  no ADR, under `--no-adr` or a draft that never reached step 5, the session says the decision
+  changed with no ADR to carry it.
+- **An answer that opens a question the design cannot settle** is a new open question, with the
+  person who must answer it.
+- **Under `Contract: first`**, an answer that changes a table, an enum, an endpoint, or a rule
+  changes the list of reference documents step 4 names, and the session says which reference
+  documents `atk:spec --from` now has to revisit.
+
+## After the edits
+
+Read the design back as a whole. Every term an answer renamed is searched for in the rest of the
+design and the ADR, and every `path:line` a changed section cites is checked against the code again.
+What the read-back corrects outside the sections the answers changed is named as a correction,
+apart from the answers.
+
+The status stays where it was, `DRAFT` or `IN REVIEW`. Under `IN REVIEW` the session names who has to
+read it again and what changed. Where the answers changed the chosen approach and the design carries
+`Pre-review objections`, the session says those were raised against the approach it replaced, so a
+reviewer reads them as history rather than as cover for the new one.
+
+The session gets the questions answered, the sections edited, and the questions still open with
+their names.
+
+## Definition of done
+
+- [ ] `## Before any edit` ran first, on the branch that carries the version in review, and an
+      `APPROVED` design was not edited.
+- [ ] At `IN REVIEW`, the session named the reviewers and the approver reading an older version.
+- [ ] No question was answered by the skill; every answer came from a person and is verbatim.
+- [ ] No secret and no real person's data was written; each is `<redacted: kind>`.
+- [ ] Every record carries the question, the answer, who answered, the date, and who relayed it when
+      that is someone else.
+- [ ] Each settled question left the open list, a settled objection reads `Settled by`, and each
+      record is in the `Answered` subsection; an answer from someone other than the named person, or
+      a partial one, left its question open and edited nothing until the approver settled it.
+- [ ] Every section the answer changed was edited and names the question; a new option was scored;
+      the ADR moved with a changed decision; under `Contract: first`, the session named the
+      reference documents `atk:spec --from` has to revisit.
+- [ ] The read-back ran, and any correction outside the answered sections is named as one.

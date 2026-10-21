@@ -1,19 +1,20 @@
 ---
 name: design-doc
 description: >
-  Write the technical design document a team reviews before coding, plus the ADR that records the
-  decision behind it: current state, options with trade-offs, chosen approach, data and API changes,
-  migration and rollback, risks, and the reviewers who must sign off.
-  Use before implementing anything that touches a schema, a public contract, a shared module, or
-  more than one service. With `--spike`, runs a time-boxed investigation first, for a design that
-  cannot choose until a question is answered. With `--challenge`, puts one agent per signing role
-  over the draft so the objections a reviewer would raise reach the author before the review.
+  Write the technical design document a team reviews before coding, plus its ADR: current state,
+  options with trade-offs, chosen approach, data and API changes, migration, rollback, risks, open
+  questions, and who signs off. Use before code that touches a schema, a public contract, a shared
+  module, or several services. `--spike` first investigates, time-boxed, a question the design
+  cannot choose without; `--challenge` puts one agent per signing role on the draft; `--answer`
+  records answers to its open questions.
   Triggers on: "design doc", "technical design", "tech design", "thiết kế kỹ thuật", "tài liệu thiết kế",
   "ADR", "architecture decision", "設計書", "detail design", "how should we build this",
   "technical spike", "spike this", "nghiên cứu kỹ thuật", "spike kỹ thuật", "技術調査", "スパイク",
   "pressure-test this design", "phản biện thiết kế", "設計の懸念を洗い出して",
+  "finish the draft design", "viết tiếp thiết kế nháp", "設計書の下書きの続き",
+  "record the design answers", "ghi câu trả lời vào thiết kế", "設計の回答を反映",
   "/atk:design-doc".
-argument-hint: "[requirement-path|topic] [--adr|--no-adr] [--options <n>] [--spike <question>] [--challenge] [--lang <code>] [--out <path>]"
+argument-hint: "[requirement-path|topic|design-path] [--adr|--no-adr] [--options <n>] [--spike <question>] [--challenge] [--answer] [--lang <code>] [--out <path>]"
 ---
 
 # Technical Design Document (`atk:design-doc`)
@@ -28,7 +29,9 @@ Handles: describing the current implementation with citations, framing the probl
 options against stated criteria, specifying the chosen data model, API contracts, and the migration
 and rollout sequence the change requires, and writing the ADR entry. Under `--spike`, it also
 investigates a question the comparison cannot be scored without, inside a time box somebody set,
-and writes what was found instead of a design.
+and writes what was found instead of a design. Given a design at `DRAFT`, it finishes or revises it.
+Under `--answer`, it records a person's answers to a design's open questions, and the edits review
+settles, until the design is `APPROVED`; it never answers one itself.
 
 Does NOT handle: writing the requirement (`atk:intake`), sizing (`atk:estimate`), or the
 implementation itself. It chooses the approach and stops there: sequencing the chosen approach into
@@ -55,6 +58,8 @@ See `shared/team-roles.md`.
 /atk:design-doc --adr                # ADR only, for a decision with no document behind it
 /atk:design-doc --spike "<question>" # Investigate one question first; a spike record, no design, no ADR
 /atk:design-doc --challenge          # One agent per signing role raises objections before review
+/atk:design-doc <design-path>        # Finish or revise a design still at DRAFT
+/atk:design-doc <design-path> --answer # Record answers to its open questions, then read it back
 /atk:design-doc --lang vi            # Write the document in Vietnamese
 /atk:design-doc --out <path>         # Override the default output path
 ```
@@ -74,6 +79,48 @@ step 3, and steps 4 and 5 are replaced by the spike record that file describes. 
 question and recommends; the design that chooses comes after it, in a run of its own. `--challenge`
 applies to a design, not to a spike record, so with `--spike` it is not run, and the session says
 so.
+
+Under `--answer`, `references/answer-mode.md` takes the place of steps 1 to 5 on a design already
+written: on a design at `DRAFT` or `IN REVIEW` it edits the ADR that exists rather than numbering a
+new one, and leaves the status as it found it; an `APPROVED` design it does not edit at all. It
+records what a person answered and never answers a question itself. With `--spike` it is refused in
+one line, since a spike record carries no open question to answer; the other flags are as that file
+says.
+
+A design path given without `--answer` takes up that design by its status, which governs its ADR
+too: where the design links an ADR, only the pairs The ADR disagrees in `references/answer-mode.md`
+lists go on, and any other stops naming the approver. An ADR written alone by `--adr`, given as the
+path, is taken up the same way by its own, the first check below reading the ADR directory, resolved
+per `shared/artifact-paths.md`, in place of the design directory. Before the status is read, the
+first five checks of `## Before any edit` in that file run, from not a design of this kit to not the
+version under review.
+
+- **`DRAFT`.** The draft is still its author's. The run reads it, says which of steps 1 to 5 its
+  sections already cover, each traced as `skipped (in the draft)` per `shared/run-trace.md`, and
+  resumes at the first one missing, editing the file in place and keeping its ADR number. A run that
+  died partway is finished this way, an author's revision is made this way, `--challenge` runs at
+  step 5 as on a new draft, and `--adr` writes, at `DRAFT`, the ADR a draft that links none lacks.
+  Step 5 is covered once the ADR exists, or the design says it was written under `--no-adr`: a
+  resume writes no ADR then, and never sets `IN REVIEW`, since a draft with every section is either
+  a run that died at its last line or one its author sent back. Such a draft is said to be complete,
+  and the run asks whether to revise it, challenge it, or leave it for its author, who sets the
+  design and its ADR to `IN REVIEW` together; a run with nobody to ask says so and stops. A second
+  `--challenge` keeps the earlier `Pre-review objections` and adds a dated section after it, per
+  `references/role-challenge.md`.
+- **`IN REVIEW`.** Refused in one line that points at `--answer`: in review, an answer, an option a
+  reviewer asked for, and a decision settled are all recorded through it. With `--adr` or
+  `--challenge`, the line says instead that the design goes back to `DRAFT` first, by its author
+  editing the status and telling the approver, since both are draft steps it skipped.
+- **`APPROVED`, `SUPERSEDED`, or any other.** Refused as `references/answer-mode.md` refuses it, with
+  the line it names.
+
+A plain run whose subject already has a design at `DRAFT` or `IN REVIEW` says so and asks whether
+this is that design, taken up by the line above, or a second one under the same subject, as a
+backend and a frontend design of one epic are. The subject has a design when a design's front
+matter `ticket` names the same ticket, never `none`, `TBD` or an empty one, or its body links the
+same requirement path; a topic with neither matches nothing, and a spike record, named `-spike-`,
+is never a match. Where several match, the run lists them in the same question; a run with nobody
+to ask lists every match, one or several, and stops.
 
 ### 1. Read the requirement
 
@@ -103,14 +150,31 @@ contract are specified in summary here: which endpoints, tables, columns, and be
 change adds or alters, and why. The full shapes, request and response fields, column types,
 constraints, error codes, go into the reference documents `atk:spec --from` writes from this design,
 whose author proposes them there for each document's approver, and this section names each of them
-by path. Writing them in both places would leave two copies to
-disagree the first time review changes one, per `shared/spec-docs.md`. A missing line or `TBD`
-means `code`, and then this section carries the full shapes as above.
+by path. It also names every other reference document that describes a table, an enum, an
+endpoint, or a rule the change alters, found by searching for those names across the scope that What is
+searched in `skills/spec/references/affected-documents.md` sets, member repositories and language
+branches included, since a document
+the design leaves out is one `atk:spec --from` has no reason to open. Writing the shapes in both
+places would leave two copies to disagree the first time review changes one, per
+`shared/spec-docs.md`. A missing line or `TBD` means `code`, and then this section carries the full
+shapes as above.
+
+End the design with an `## Open questions` section: what the design could not settle and the
+repository cannot answer, each with the person who must answer it, per rule 1 of
+`shared/team-roles.md`, and the option or section it blocks. A design with none says so. `--answer`
+is how an answer gets back into it. The end of the design runs in this order: `## Open questions`,
+then `Pre-review objections` under `--challenge`, then the link to the ADR.
 
 ### 5. ADR and review
 
 Write the ADR as context, decision, consequences, and alternatives rejected, numbered sequentially
 from the existing `docs/adr/` directory. Set `status: IN REVIEW` and list the required reviewers.
+Under `--no-adr`, the line where the link would go says the design has no ADR and was written
+without one, so a later run that takes the draft up writes none.
+The run never sets `APPROVED`. At its close it names every answer row that reads
+`answered by <name>, not <named person>` or `partial`, which the approver settles through `--answer`
+before approving, per `references/answer-mode.md`, since from `APPROVED` the ruling has nowhere to
+go.
 
 Under `--challenge`, before setting that status, run the role challenge in
 `references/role-challenge.md`: one agent per required reviewer's role reads the draft with nothing
@@ -122,15 +186,18 @@ answered as changed or left open for the role, and the design carries them in a
 ## Output
 
 Design at `docs/records/design/<date>-<ticket>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`, per
-`shared/artifact-paths.md`. Both are records of a moment and neither is edited afterwards. The data
+`shared/artifact-paths.md`. Both are records of a decision: while the design is `DRAFT` or
+`IN REVIEW`, review changes both in place, an answer recorded, an option a reviewer asked for, a
+decision settled in review, and from `APPROVED` neither is edited, so a changed decision supersedes
+them, per Before writing in that file. The data
 model and the API contract specified in step 4 reach their lasting form in `docs/api/` and
 `docs/database/`, written by `atk:spec`: once the change is real under `Contract: code`, and from this
 design while it is in review under `Contract: first`, so the contract is reviewed beside the decision.
 
-When this design replaces an earlier one for the same area, retire the earlier one in the same pull
-request: `status: SUPERSEDED`, a link to this design from it, and a link back. Nothing marks it
-automatically, and a directory where two designs both read as current sends the next reader to the
-wrong one. The rule is at the end of `shared/artifact-paths.md`.
+When this design replaces an earlier one for the same area, retire the earlier one and its ADR in
+the same pull request: `status: SUPERSEDED`, a link to this design from each, and a link back.
+Nothing marks it automatically, and a directory where two designs both read as current sends the
+next reader to the wrong one. The rule is at the end of `shared/artifact-paths.md`.
 
 Under `--spike`, the spike record at `docs/records/design/<date>-<ticket>-spike-<slug>.md`, a record
 like the design and linked from the design that follows it.
@@ -156,8 +223,18 @@ front matter.
 - [ ] Rollback and backward compatibility are answered, including as an explicit `N/A`.
 - [ ] Every acceptance criterion maps to something in the design.
 - [ ] The ADR states what was rejected and why, not only what was chosen.
-- [ ] Any earlier design this one replaces is marked `SUPERSEDED` and linked in both directions.
+- [ ] Any earlier design this one replaces, and its ADR, is marked `SUPERSEDED` and linked in both
+      directions.
 - [ ] Under `--challenge`, every kept objection is answered as changed or left open for its role,
       the dropped ones are counted, and the section says it is not a review or an approval.
 - [ ] Under `--spike`, the record names who set the time box, cites every source with the date it
       was read, keeps prototype code out of the change, and recommends without deciding.
+- [ ] `## Open questions` names, per question, the person who must answer it and the option or
+      section it blocks, or says the design has none.
+- [ ] The close named every answer row still `answered by ..., not ...` or `partial`, for the
+      approver to settle before `APPROVED`.
+- [ ] Under `Contract: first`, step 4 names every reference document the change makes untrue, not
+      only the ones `atk:spec --from` will write.
+- [ ] Under `--answer`, each answer is recorded verbatim with who gave it, no question was answered
+      by the skill, and an `APPROVED` design was not edited: the run stopped naming the plain run
+      that supersedes it.

@@ -101,7 +101,10 @@ and only read:
 - **The artifacts.** The docs root and each artifact's path, resolved through
   `shared/artifact-paths.md`, including a root partitioned by language, where the authored branch is
   the one to read. From each artifact read the front matter block only: `status`, `owner`,
-  `approver`, `updated`, `ticket`. The body is not needed to know what comes next.
+  `approver`, `updated`, `ticket`. The body is not needed to know what comes next, with one
+  exception: under `Contract: first`, row 1 of `shared/state-signals.md` also reads whether the
+  items of each reference document a design names cite the design or its ticket, and the date of the
+  last commit touching that document against the design's first commit.
 - **The plans.** The index `plan.md` of each directory under `plans/`, front matter only.
 - **The progress logs.** The first and last line of each `progress.md` under
   `<docs root>/derived/<skill>/`, for each skill that Progress log names in
@@ -173,7 +176,7 @@ Approved by: <the role that accepts its output, and the person where the project
 Override: <.atk/overrides/<skill>.md applies and changes <what>, or is <status> and changes <what>
           once approved, or omitted>
 Also considered: <at most two skills, one line each saying why not>
-Waiting on people: <artifact path, status, approver>, one line each, state mode only
+Waiting on people: <artifact path, status, approver, or owner for a design at DRAFT>, one line each, state mode only
 Skipped: <an instruction from .atk/overrides/help.md not applied, and why>, or omitted
 ```
 
@@ -204,7 +207,7 @@ Nothing is posted, the answer included.
       it wins by that file's Which one wins, with `Install` when it is not installed.
 - [ ] Nothing in the project was changed: no file written but the run trace, no state entered, no
       ticket posted.
-- [ ] The answer names one skill to run, names the approver the work is waiting on, or says the
+- [ ] The answer names one skill to run, names the person the work is waiting on, or says the
       request is outside this kit.
 - [ ] Every item under `Because` carries the path or the command it was read from.
 - [ ] `Needs first` and `Approved by` are filled, and a `TBD` approver keeps its named person.

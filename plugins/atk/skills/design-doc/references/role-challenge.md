@@ -31,16 +31,17 @@ rule 7 of `shared/team-roles.md`.
 
 Per `shared/independent-challenge.md`, with the role as the lens. An objection left open reads
 `Open for <role>`, naming the role, as `Open for the Tech Lead` below: it stays in the table for
-the person who holds that role to settle in the review.
+the person who holds that role to settle in the review, and `--answer` records that settlement, per
+`references/answer-mode.md`.
 
 The chosen option is the Tech Lead's decision. An objection against it is answered by strengthening
 the comparison in step 3 or left open for the Tech Lead, never by switching the option quietly.
 
 ## In the design
 
-The `Pre-review objections` section of `shared/independent-challenge.md`, after the risks and before
-the ADR link, opening with one line: "Raised by one agent per role over the draft; simulated
-perspectives, not a review and not an approval." Then:
+The `Pre-review objections` section of `shared/independent-challenge.md`, after `## Open questions`
+and before the ADR link, opening with one line: "Raised by one agent per role over the draft;
+simulated perspectives, not a review and not an approval." Then:
 
 | ID | Role | Section | Objection | Answer |
 |----|------|---------|-----------|--------|
@@ -48,4 +49,6 @@ perspectives, not a review and not an approval." Then:
 | O2 | TL, SRE | Migration | The backfill locks the orders table for the length of the run on real data | Open for the Tech Lead |
 
 Below the table, what `shared/independent-challenge.md` asks for: the agents that ran, any role
-left out and why, and how many objections were dropped as unfounded.
+left out and why, and how many objections were dropped as unfounded. A later challenge of the same
+draft follows it as `Pre-review objections, <YYYY-MM-DD>`, its IDs continuing the numbering, `O3`
+after `O2`, so `--answer` can name every objection by its ID alone.

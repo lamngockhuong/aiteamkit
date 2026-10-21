@@ -55,7 +55,7 @@ Never one document with a shared one.
 ```bash
 /atk:spec <subject>               # Write or update the document for one subject
 /atk:spec <subject> --kind api    # Say which kind when the subject alone is ambiguous
-/atk:spec <subject> --from <design-path>  # Contract-first: write the document from the design, before the code
+/atk:spec <subject> --from <design-path>  # Contract-first: write it from the design, and any it makes untrue on a yes
 /atk:spec <screen> --kind screen --design <figma-url>  # Write or update a screen spec from a Figma frame or section
 /atk:spec <screen> --kind screen --design <image-dir>  # The same from exported images, where Figma is out of reach
 /atk:spec <screen> --kind screen  # Update a screen spec from the design it already records
@@ -95,16 +95,16 @@ ship with the kit.
 The file is named after the subject, never after a ticket or a date. A screen is named by its
 `screen_id` where the design carries one, under the file-name rule in One link, several screens in
 `shared/design-sources.md`, and a link to a section holding several screens resolves to one file
-per screen. Read it first when it exists;
-this skill updates in place, and the reason is in the Persistence section of
-`shared/artifact-paths.md`.
+per screen. Read it first when it exists; this skill updates in place, and the reason is in the
+Persistence section of `shared/artifact-paths.md`.
 
 `--from` has two preconditions, checked here before anything is written. The `Contract` line in the
 Docs section of `.atk/profile.md` says `first`: a missing line or `TBD` means `code`, per
 `shared/spec-docs.md`, and changing it is the Tech Lead's call, so name that person and stop rather
 than write a document the project's own rules call stale. And the design is at `IN REVIEW` or
 `APPROVED`: a `DRAFT` is not a source, because nobody has been asked to look at it. Where either
-fails, say which and change nothing.
+fails, say which and change nothing. When both hold, find the documents the design makes untrue,
+named or not, and ask which to write too, per `references/affected-documents.md`.
 
 `--design` belongs to the `screen` kind alone. Given with another kind, say that a design is the
 source of no other kind, per `shared/spec-docs.md`, and change nothing. `--from` is never a `screen`
@@ -142,18 +142,18 @@ them and the code is exactly what this document exists to expose. Where they dis
 finding for step 5, not something to smooth over while writing.
 
 `--from` is the one exception, and it has two sources, each cited. What the design decided is taken
-from the design named, citing its section in place of `path:line`. Where a reader of the pull request cannot reach the
-design's path, by the test in Front matter in `shared/artifact-paths.md`, the committed document cannot
-point there: cite the ticket the design was written for instead.
-What the design leaves to the
-reference document, which under `Contract: first` is the full shape (fields, types, limits, status
-and error codes), is asked of the person running the skill, who is this document's author: list
-every gap in one prompt, and write each answer as the author's proposal, citing the author by name,
-for the approver to accept or change. A gap the author cannot answer becomes an open question for
-the document's approver rather than a plausible value filled in. A ticket or a Figma file is still
-not a source, even here; the design and its author are, because the approver reviews both. A
-ticket cited in place of an unreachable design stands in for the citation only: what the item says
-still comes from the design.
+from the design named, citing its section in place of `path:line`. Where a reader of the pull
+request cannot reach the design's path, by the test in Front matter in `shared/artifact-paths.md`,
+the committed document cannot point there: cite the ticket the design was written for instead. What
+the design leaves to the reference document, which under `Contract: first` is the full shape
+(fields, types, limits, status and error codes), is asked of the person running the skill, who is
+this document's author: list every gap in the turn that asks which other documents to write, per
+What is asked in `references/affected-documents.md`, and write each answer as the author's proposal,
+citing the author by name, for the approver to accept or change. A gap the author cannot answer
+becomes an open question for the document's approver rather than a plausible value filled in. A
+ticket or a Figma file is still not a source, even here; the design and its author are, because the
+approver reviews both. A ticket cited in place of an unreachable design stands in for the citation
+only: what the item says still comes from the design.
 
 For `--sync`, read the diff of the change on the current branch rather than the whole module,
 through the `mask` scan of `shared/secret-scan.md`, and touch only what the diff touched. A sync that rewrites sections the change never reached is an
@@ -272,7 +272,8 @@ one issue listing everything.
       a design document; under `--from`, every statement it wrote cites the design, or the ticket where the design
       cannot be reached, or names its author.
 - [ ] `--from` ran only where the profile says `Contract: first` and the design was `IN REVIEW` or
-      `APPROVED`, and `implemented` is `no` exactly when no item cites the code.
+      `APPROVED`, `implemented` is `no` exactly when no item cites the code, and the search for the
+      documents the design makes untrue met the items of `references/affected-documents.md`.
 - [ ] Under `Contract: first`, `implemented` matches the items: at `no` every item cites the design, the ticket
       standing in for an unreachable design, or its author, and none carries a mark; at `partial` every item without the mark is cited to the code; at `yes` no
       mark is left.
@@ -285,10 +286,9 @@ one issue listing everything.
       language branch was updated or named to the person running the skill.
 - [ ] `approver` matches the kind: Tech Lead for `api` and `db`, BrSE/BA for `feature` and `screen`.
 - [ ] A `screen` document records `design_source`, `design_node`, `design_read`, and
-      `design_fingerprint`, carries
-      the Ready for dev line and `implemented`, and holds no value the design did not show unless it
-      is marked as a proposal with its source; a missing Figma connection was reported by its state
-      and did not stop the run.
+      `design_fingerprint`, carries the Ready for dev line and `implemented`, and holds no value the
+      design did not show unless it is marked as a proposal with its source; a missing Figma
+      connection was reported by its state and did not stop the run.
 - [ ] Nothing unverified was deleted; what looked wrong went into the drift report instead.
 - [ ] Every open question carries the name of the person who must answer it.
 - [ ] What was written holds Rules that hold under any shape in `shared/spec-docs.md`, and the

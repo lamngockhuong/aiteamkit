@@ -49,5 +49,8 @@
   { "query": "phản biện bản thiết kế này giúp tôi", "should_trigger": false },
   { "query": "この設計書の懸念を洗い出して", "should_trigger": false },
   { "query": "record the client's answers to the open questions in the intake document", "should_trigger": false },
-  { "query": "ghi câu trả lời vào các câu hỏi mở của design doc", "should_trigger": false }
+  { "query": "ghi câu trả lời vào các câu hỏi mở của design doc", "should_trigger": false },
+  { "query": "the TL answered open question 3 in the design doc, record it in the design", "should_trigger": false },
+  { "query": "ghi câu trả lời vào thiết kế, SRE đã trả lời câu hỏi mở về migration", "should_trigger": false },
+  { "query": "設計書の未解決の質問に回答を反映して", "should_trigger": false }
 ]

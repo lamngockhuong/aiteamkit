@@ -9,6 +9,9 @@ This mode records what a person answered. It never answers a question itself: a 
 repository could have settled was settled by step 6 and is not open, and one a role owns is that
 role's, per rule 3 of `shared/team-roles.md`.
 
+It takes the place of steps 1 to 5 of `SKILL.md`, which share the trace line `step 1-5 answer mode`
+per `shared/run-trace.md`, and steps 6 and 7 follow it with lines of their own.
+
 ## What it reads
 
 A plan directory, its `plan.md` and every `phase-NN-*.md` beside it. Without a path, list the plan
@@ -48,19 +51,18 @@ touched.
 
 List every open question of the index and of each phase file, numbered, each with the person it
 names and the phase it blocks, and after them every objection of section 7 still answered `Open`,
-with its ID and the person who settles it. Then ask, in one turn per `shared/host-capabilities.md`, which of
-them are answered and what each answer is. Answers already in the prompt are taken from there, and
-only the questions they leave unclear are asked about.
+with its ID and the person who settles it. Then ask, in one turn per `shared/host-capabilities.md`,
+which of them are answered and what each answer is. Answers already in the prompt are taken from
+there, and only the questions they leave unclear are asked about.
 
-What is recorded per answer:
-
-| Field | Holds |
-|-------|-------|
-| Question | As written in the plan, unchanged |
-| Answer | Verbatim, as the person gave it. A summary is a second author |
-| Answered by | The person who answered |
-| Date | The date of the answer, or the date it was recorded, saying which |
-| Relayed by | The person who brought the answer here, when that is not the person who answered |
+What is recorded per answer is the table under What is recorded per answer in
+`skills/design-doc/references/answer-mode.md`, read with the plan in place of the design: the same
+five fields, the names written by the same rule, so one person reads the same in a plan and in a
+design. A run with nobody to ask follows the paragraph on a headless run near the top of that file,
+with the plan in place of the design: it records each answer the prompt attributes to a person and
+leaves the others open, naming them. The rule is cited from that skill rather than kept in
+`shared/`, as `atk:design-doc` cites `references/plan-review-mode.md` of this one: it is one skill's
+procedure that a second reads, and it moves to `shared/` when a third skill needs it.
 
 "Verbatim" never means keeping a secret or a real person's data. A password, a token, an internal
 host, a client's email address is replaced with `<redacted: kind>`, as
@@ -69,21 +71,27 @@ the session says what was redacted by kind, never by repeating it. The plan is c
 later challenge hands it to agents.
 
 **An answer from somebody other than the person the question names is recorded, and the record says
-so.** The skill does not refuse it and does not decide whether it is enough: whether the Tech Lead's
-answer to a question addressed to the PM settles it is the approver's call. A question answered only
-in part stays open, with the part that was answered recorded beside it.
+so.** The rule is the one in `skills/design-doc/references/answer-mode.md` for an answer from
+somebody other than the person the question names, with phases in place of sections: the question
+stays open, its row reads `answered by <name>, not <named person>`, nothing in a phase is edited
+from it until the approver's ruling, given to this `--answer` or a later one, is recorded as
+`settled by <approver>`, and a question answered only in part stays open, marked `partial`. That
+file's sentence on settling both before `APPROVED` does not hold for a plan, which an answer can
+still reach at `APPROVED`, sent back to `IN REVIEW` per `## Before any edit` above: a held answer
+stays open there like any other.
 
 ## Where it goes
 
-The question leaves the open list it was in, in the index or in its phase file. The record goes into
-an `Answered` subsection at the end of section 5 of the index, in the table above, so no section is
-renumbered and every answer to the plan sits in one place. When the person does not say who
-answered, ask: a record with no answerer is the chat thread again.
+A settled question leaves the open list it was in, in the index or in its phase file; one left open
+above stays there. Every record goes into an `Answered` subsection at the end of section 5 of the
+index, in the table that file names, so no section is renumbered and every answer to the plan sits
+in one place. When the person does not say who answered, ask: a record with no answerer is the chat
+thread again.
 
-An answer to an objection also replaces its `Open` in section 7 with `Settled by <name>, <date>`,
-and the row goes into the same `Answered` table with its ID as the question. So does the objection a
-scope question came from, when that question is answered: one thing never reads `Open` in one place
-and answered in another.
+An answer to an objection from the person who settles it, or the approver's ruling on it, also
+replaces its `Open` in section 7 with `Settled by <name>, <date>`, and the row goes into the same
+`Answered` table with its ID as the question. So does the objection a scope question came from,
+when that question is settled: one thing never reads `Open` in one place and answered in another.
 
 Each phase the answer changes is then edited to match it, and the edit names the question it came
 from, so a reader can tell a step the author planned from one an answer put there. A phase the
@@ -122,9 +130,9 @@ names, and the recommendation.
 - [ ] No secret and no real person's data was written; each is `<redacted: kind>`.
 - [ ] Every record carries the question, the answer, who answered, the date, and who relayed it when
       that is someone else.
-- [ ] An answer from somebody other than the person named says so, and was neither refused nor
-      judged.
-- [ ] Each answered question left the open list, and its record is in the `Answered` subsection; a
+- [ ] An answer from somebody other than the person named says so, was neither refused nor judged,
+      and left its question open with no phase edited until the approver settled it.
+- [ ] Each settled question left the open list, and its record is in the `Answered` subsection; a
       settled objection reads the same in section 7.
 - [ ] Every phase the answer changed was edited and names the question; no other phase was edited
       for the answer, and a step 6 correction elsewhere is named as one.

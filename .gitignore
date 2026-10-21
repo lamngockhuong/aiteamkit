@@ -13,3 +13,4 @@ __pycache__/
 node_modules/
 plans/
 docs/derived/
+.claude/settings.local.json

@@ -70,7 +70,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
 | `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, what the work touches and where it is in the code, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
-| `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. With `--spike`, a time-boxed investigation of the one question a design cannot choose without, ending in a recommendation for the Tech Lead. With `--challenge`, one agent per signing role raises objections against the draft before the real reviewers see it. |
+| `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. With `--spike`, a time-boxed investigation of the one question a design cannot choose without, ending in a recommendation for the Tech Lead. With `--challenge`, one agent per signing role raises objections against the draft before the real reviewers see it. With `--answer`, records the answers to its open questions until it is approved; given the path of a draft, finishes or revises it. |
 | `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, and the components of each screen read from its Figma design, updated in place and checked against the code, and the design, for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, grouped by each language and technology it detects, each classified as enforced by tooling, checked in review, or merely aspirational. A project with nothing written gets one standards document per technology under `docs/standards/`. With `--suggest` it also proposes rules from published standards for that stack, each one waiting for the Tech Lead. Offers to draft the collaboration files the project has none of, and writes only the ones you pick. |
@@ -94,31 +94,31 @@ read to learn this project's test, build and lint commands, its layer layout, an
 Every skill is its own slash command, namespaced `atk:`. There is no separate command layer.
 
 ```bash
-/atk:help [question|skill]                # --lang
-/atk:orchestrate [requests|tickets|paths] # --concurrency --sequential --resume
-/atk:init                                 # --audit --lang --out
-/atk:tailor [<skill>]                     # --audit --feedback --runs --since --out
-/atk:intake <request-file|ticket|text>    # --design --interview|--no-interview --lang --out
-/atk:catchup <epic|pr|file|doc-url|text>  # --no-check --lang --out
-/atk:estimate <backlog|epic>              # --points|--days --sprint --capacity --out
-/atk:design-doc <requirement|topic>       # --adr|--no-adr --options --spike --challenge --lang --out
-/atk:spec [subject]                       # --kind --from --design --sync --check --lang --out
-/atk:breakdown <design|epic>              # --members --parallel --tdd --out
-/atk:convention                           # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
-/atk:plan <ticket|design|text|plan-path>  # --inline --challenge --answer --review --comment --layer --out
-/atk:implement <plan|ticket|description>  # --layer --tdd --no-review --out
-/atk:fix <issue|report|description>       # --layer --investigate-only --no-review --out
-/atk:verify <module|paths|ticket|pr>      # --ui --report-only --out
-/atk:review <pr|branch|range|paths>       # --against --comment --strict --parallel --out
+/atk:help [question|skill]                 # --lang
+/atk:orchestrate [requests|tickets|paths]  # --concurrency --sequential --resume
+/atk:init                                  # --audit --lang --out
+/atk:tailor [<skill>]                      # --audit --feedback --runs --since --out
+/atk:intake <request-file|ticket|text>     # --design --interview|--no-interview --lang --out
+/atk:catchup <epic|pr|file|doc-url|text>   # --no-check --lang --out
+/atk:estimate <backlog|epic>               # --points|--days --sprint --capacity --out
+/atk:design-doc <requirement|topic|design> # --adr|--no-adr --options --spike --challenge --answer --lang --out
+/atk:spec [subject]                        # --kind --from --design --sync --check --lang --out
+/atk:breakdown <design|epic>               # --members --parallel --tdd --out
+/atk:convention                            # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
+/atk:plan <ticket|design|text|plan-path>   # --inline --challenge --answer --review --comment --layer --out
+/atk:implement <plan|ticket|description>   # --layer --tdd --no-review --out
+/atk:fix <issue|report|description>        # --layer --investigate-only --no-review --out
+/atk:verify <module|paths|ticket|pr>       # --ui --report-only --out
+/atk:review <pr|branch|range|paths>        # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature|cases|run|issue> # --plan|--cases|--regression|--update|--record|--bug|--retest|--review --lang --out
-/atk:run-cases <cases-path>               # --env --only --dry-run --out
-/atk:security [branch|range|paths]        # --threat-model --checklist --lang --out
-/atk:git                                  # --commit|--pr|--merge|--rebase|--resolve|--stack --draft --lang --out
-/atk:release <version|range>              # --notes|--checklist --audience --env --out
-/atk:incident                             # --live|--postmortem|--runbook --out
-/atk:retro <sprint|range>                 # --data-only|--report --audience --lang --out
-/atk:onboard                              # --role --refresh|--audit --lang --out
-/atk:handover --from <a> --to <b>         # --scope --phase|--offboard --lang --out
+/atk:run-cases <cases-path>                # --env --only --dry-run --out
+/atk:security [branch|range|paths]         # --threat-model --checklist --lang --out
+/atk:git                                   # --commit|--pr|--merge|--rebase|--resolve|--stack --draft --lang --out
+/atk:release <version|range>               # --notes|--checklist --audience --env --out
+/atk:incident                              # --live|--postmortem|--runbook --out
+/atk:retro <sprint|range>                  # --data-only|--report --audience --lang --out
+/atk:onboard                               # --role --refresh|--audit --lang --out
+/atk:handover --from <a> --to <b>          # --scope --phase|--offboard --lang --out
 ```
 
 ## Where the output goes
@@ -128,7 +128,8 @@ stage. The full path table, the naming rules, and the shared front matter live i
 [plugins/atk/shared/artifact-paths.md](plugins/atk/shared/artifact-paths.md).
 
 Not every artifact has the same fate. A reference document is updated in place forever, a record is
-never edited and rarely deleted, and one directory is safe to delete or leave out of git entirely.
+never edited, apart from a design and its ADR until approved and a plan until a phase starts, and
+rarely deleted, and one directory is safe to delete or leave out of git entirely.
 Which is which, what each deletion costs, and the three policies a team can choose between:
 [docs/artifact-lifecycle.md](docs/artifact-lifecycle.md)
 ([Tiếng Việt](docs/vi/artifact-lifecycle.md)).

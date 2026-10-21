@@ -36,5 +36,11 @@
   { "query": "dịch màn hình Figma này", "should_trigger": false },
   { "query": "implement this Figma screen in React", "should_trigger": false },
   { "query": "phân tích yêu cầu từ bản Figma này thành user story", "should_trigger": false },
-  { "query": "đối chiếu màn hình vừa code với bản Figma", "should_trigger": false }
+  { "query": "đối chiếu màn hình vừa code với bản Figma", "should_trigger": false },
+  { "query": "write the API doc from the design, and update the enum doc it changes too", "should_trigger": true },
+  { "query": "viết tài liệu API từ bản thiết kế, và cập nhật luôn tài liệu enum mà nó làm thay đổi", "should_trigger": true },
+  { "query": "設計書からAPI仕様書を書いて、変更されるenumの仕様書も更新して", "should_trigger": true },
+  { "query": "record the TL's answer in the design", "should_trigger": false },
+  { "query": "ghi câu trả lời của TL vào bản thiết kế", "should_trigger": false },
+  { "query": "TLの回答を設計書に反映して", "should_trigger": false }
 ]

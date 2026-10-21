@@ -35,9 +35,14 @@ Step 1 of `SKILL.md` reads a piece's artifacts this way and no other.
   there that no commit holds yet, on a resume among other times, is first offered to its approver as
   the commit step 4 of `SKILL.md` makes, and nothing that builds on the artifact is proposed until it
   is committed.
-- **Rows 4 and 14.** Two reads besides front matter, neither printing content:
+- **Rows 1, 4 and 14.** Reads besides front matter, none printing content:
   `git diff --name-only "<base>...<branch>"` for row 4, and `git log -1 --format=%cI "<ref>" -- "<path>"`
-  for the dates row 14 compares. Row 15 hashes a file's content, which this skill does not read, so
+  for the dates row 14 compares. Row 1 uses the same `git log` for a named document's last commit
+  and `git log --reverse --format=%cI "<ref>" -- "<design path>"`, first line, for the design's first,
+  and asks whether the document cites the design or its ticket with
+  `git grep -c -F "<design path or ticket>" "<ref>" -- "<path>"`, which prints a count only; in a
+  worktree the uncommitted file is counted with `grep -c -F` on it, so a rewrite not yet committed
+  is not proposed again. Row 15 hashes a file's content, which this skill does not read, so
   it is left out for a piece and the proposal says so, naming `atk:help` as where it is read.
 
 ## Before the first worktree, once per run

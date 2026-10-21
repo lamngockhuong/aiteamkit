@@ -106,7 +106,7 @@ This produces the size discipline in the kit:
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
 | `plugins/atk/shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
 | `plugins/atk/shared/run-trace.md` | On every run, sent there by the two trace lines of every workflow, unless the profile says `Run trace: off` | The cost stated under Cost in the file itself |
-| `.atk/profile.md` | Once per run: in full by the skills that need project facts, and for its `Run trace` line by the rest | A page of pointers and commands, never prose |
+| `.atk/profile.md` | Once per run: in full by the skills that need project facts, and for its `Run trace` line and the Name column of its Team section by the rest | A page of pointers and commands, never prose |
 
 One agent ships beside the skills, `plugins/atk/agents/read-only-reviewer.md`. Claude Code loads its
 frontmatter with the plugin and namespaces it `atk:read-only-reviewer`; its body is read only when a
@@ -139,7 +139,8 @@ One is reached from every skill's workflow, which opens with two lines that star
 rule 10 of `team-roles.md` asks for:
 
 - `plugins/atk/shared/run-trace.md`: the run trace every run leaves under
-  `docs/derived/traces/<skill>/`, its header and its six event kinds, what it never holds, the
+  `docs/derived/traces/<skill>/`, its header and its six event kinds, the names on its `gate` lines
+  with a partial match confirmed, what it never holds, the
   ignore file inside its directory and the check that must pass before it is written, the twenty kept per skill, trimmed only by `atk:tailor --runs` on a yes, and the `Run trace: off`
   line that turns it off for a project. It exists so a run nobody watched, in a subagent or another
   agent's CLI, can still be read afterwards, and `atk:tailor --feedback` is the only skill that
@@ -287,10 +288,11 @@ The last two describe files that do not ship with the kit at all:
   parent holding member repositories and a workspace holding none of its own each cost, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message never mention it, and
-  read one line of it when it is there, `Run trace`. Three Docs entries change what a skill does rather
-  than where it writes: `Contract`, whose meaning lives in `plugins/atk/shared/spec-docs.md`, the
-  `Template` column of the kinds table, which gives `atk:spec` a project's own template as the shape
-  of an empty directory, per the same file, and `Run trace: off`, which stops every skill leaving a run trace, per
+  read two things of it when it is there, the `Run trace` line and the Name column of the Team
+  section. Three Docs entries change what a skill does rather than where it writes: `Contract`,
+  whose meaning lives in `plugins/atk/shared/spec-docs.md`, the `Template` column of the kinds
+  table, which gives `atk:spec` a project's own template as the shape of an empty directory, per the
+  same file, and `Run trace: off`, which stops every skill leaving a run trace, per
   `plugins/atk/shared/run-trace.md`.
   `atk:init` writes the profile, so it belongs to no group.
 

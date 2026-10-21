@@ -105,7 +105,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
 | `plugins/atk/shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
 | `plugins/atk/shared/run-trace.md` | Ở mọi lượt chạy, do hai dòng trace trong workflow của mọi skill dẫn tới, trừ khi profile ghi `Run trace: off` | Chi phí ghi ở mục Cost ngay trong file |
-| `.atk/profile.md` | Một lần mỗi lượt chạy: đọc trọn bởi skill nào cần sự thật của dự án, và chỉ dòng `Run trace` bởi các skill còn lại | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
+| `.atk/profile.md` | Một lần mỗi lượt chạy: đọc trọn bởi skill nào cần sự thật của dự án, và chỉ dòng `Run trace` cùng cột Name của mục Team bởi các skill còn lại | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
 
 Bên cạnh các skill có một agent đi kèm, `plugins/atk/agents/read-only-reviewer.md`. Claude Code nạp
 frontmatter của nó cùng plugin và đặt tên `atk:read-only-reviewer`; phần thân chỉ được đọc khi một
@@ -138,7 +138,8 @@ Một file được gọi tới từ workflow của mọi skill, nơi mở đầ
 nguyên tắc 10 của `team-roles.md` đòi hỏi:
 
 - `plugins/atk/shared/run-trace.md`: run trace mà mỗi lượt chạy để lại trong
-  `docs/derived/traces/<skill>/`, phần đầu và sáu loại sự kiện của nó, những gì nó không bao giờ chứa,
+  `docs/derived/traces/<skill>/`, phần đầu và sáu loại sự kiện của nó, tên trên các dòng `gate`, tên
+  chỉ khớp một phần thì phải được xác nhận, những gì nó không bao giờ chứa,
   file ignore nằm trong chính thư mục của nó cùng bước kiểm tra phải qua trước khi ghi, hai mươi trace giữ lại cho mỗi skill, chỉ được `atk:tailor --runs` cắt bớt khi có người đồng ý, và dòng
   `Run trace: off` tắt nó cho cả dự án. File này có để một lượt chạy không ai theo dõi, trong một
   subagent hay trong CLI của agent khác, vẫn đọc lại được về sau, và chỉ `atk:tailor --feedback` mới
@@ -285,10 +286,11 @@ Hai file cuối mô tả những file không đi kèm kit:
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không bao giờ nhắc tới
-  nó, và chỉ đọc một dòng của nó khi có file, dòng `Run trace`. Ba mục trong Docs đổi việc skill làm
-  chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở `plugins/atk/shared/spec-docs.md`, cột
-  `Template` trong bảng các loại tài liệu, cho `atk:spec` lấy template riêng của dự án làm hình dạng
-  của một thư mục còn trống, theo cùng file đó, và `Run trace: off`, khiến mọi skill thôi để lại run trace, theo `plugins/atk/shared/run-trace.md`.
+  nó, và chỉ đọc hai thứ của nó khi có file, dòng `Run trace` và cột Name của mục Team. Ba mục
+  trong Docs đổi việc skill làm chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở
+  `plugins/atk/shared/spec-docs.md`, cột `Template` trong bảng các loại tài liệu, cho `atk:spec` lấy
+  template riêng của dự án làm hình dạng của một thư mục còn trống, theo cùng file đó, và
+  `Run trace: off`, khiến mọi skill thôi để lại run trace, theo `plugins/atk/shared/run-trace.md`.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
 - `plugins/atk/shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,
