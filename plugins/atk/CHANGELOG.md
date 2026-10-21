@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.15](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.14...atk-v0.1.15) (2026-10-21)
+
+
+### Features
+
+* have atk:review weigh how often an agent rule's gap is met, and give an uncovered state one default ([#141](https://github.com/lamngockhuong/aiteamkit/issues/141)) ([ae7ef05](https://github.com/lamngockhuong/aiteamkit/commit/ae7ef05cbf56af5aaf6f6e56ce7a505a88370578))
+
+
+### Bug Fixes
+
+* give rule 5's default a route for an absent owner, and carry reach to every review round ([#143](https://github.com/lamngockhuong/aiteamkit/issues/143)) ([3a0c95b](https://github.com/lamngockhuong/aiteamkit/commit/3a0c95b6f7012684dbd89dd68af7f11d966d5160))
+
 ## [0.1.14](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.13...atk-v0.1.14) (2026-10-21)
 
 
