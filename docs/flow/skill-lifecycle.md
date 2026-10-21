@@ -44,10 +44,10 @@ Not every skill has all five, and the ones it skips are as informative as the on
 
 **Precondition.** The skills that run project commands read `.atk/profile.md` first and stop when it
 is missing, because a guessed test command that exits zero is the worst evidence available. The
-skills that work from a chat message never require it, and read only two things of it: its `Run trace` line, which
-decides whether the run leaves a trace, and the Name column of its Team section, which names the
-people on the trace's `gate` lines. `plugins/atk/shared/project-profile.md` says which is
-which.
+skills that work from a chat message never require it, and read only two things of it: its
+`Run trace` line, which decides whether the run leaves a trace, and the Name and Host identifier
+columns of its Team section, which name the people on the trace's `gate` lines. `plugins/atk/shared/project-profile.md`
+says which is which.
 
 **Gate.** Most skills check something before doing anything: `atk:implement` scores how much
 agreement the work needs, `atk:fix` proves the cause and checks the behaviour is not a recorded
@@ -72,7 +72,7 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another two hundred and twenty times across the twenty-five `SKILL.md` files,
+One skill names another two hundred and twenty-one times across the twenty-five `SKILL.md` files,
 counting each `atk:<name>` other than the file's own skill and the `atk:read-only-reviewer` agent,
 in a hundred and twenty-five ordered pairs, which sounds like a dense graph. It is
 not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at

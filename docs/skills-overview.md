@@ -54,7 +54,7 @@ skill runs without it.
 
 **Produces.** No file. An answer in the session: the skill to run next with the line to type, the
 evidence in the project behind it, what that skill needs first, who approves what it produces, and
-every artifact still waiting on a named approver.
+every artifact still waiting on a named person, its approver or, for a draft design, its author.
 
 **Use when.** You do not know which skill fits, you want to know what the project is waiting on and
 what comes next, or you want to know what one skill is for before running it. `/atk:help <skill>` explains
@@ -262,7 +262,8 @@ check against the code are answered as changed or left open for the person who h
 verbatim, with who gave them, in an `Answered` subsection, and each section an answer changes edited
 to match, the ADR included. A design is edited in place until it is `APPROVED`, and superseded after.
 Every answer from someone other than the person named, and every partial one, is settled by the
-approver before the design is approved. A design path given alone, while the draft is still
+approver before the design is approved; a name that only partly matches the person named counts as
+someone else until confirmed. A design path given alone, while the draft is still
 `DRAFT`, finishes it from the first missing section or takes its author's revision, and takes
 `--challenge` and `--adr` there.
 
@@ -315,8 +316,9 @@ the documents any more. `--sync` folds the change on the current branch into the
 touched. In a project whose profile says `Contract: first`, also when the contract has to exist
 before the code: `--from <design-path>` writes the document from a design in review, marked
 `implemented: no`, so frontend, backend and QA build against the same page while the code catches up.
-It also searches the docs for the documents the design makes untrue without naming them, and asks
-which of them to write in the same run.
+It also searches the docs for the documents the design makes untrue without naming them, lists the
+existing ones it names that nothing has rewritten yet, and asks which of them to write in the same
+run.
 And when a BrSE needs a screen spec to review: `--kind screen --design <figma-url>` drafts one from
 the frame, proposes what the design does not show with its source cited, and asks the rest by name.
 Where the agent has no Figma connection, it says so and reads a directory of exported images instead.

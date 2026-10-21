@@ -41,7 +41,8 @@ characters, outside this pull request; its prose was shortened and its triggers 
 
 The fix was reviewed twice with `atk:review`. The first round raised three more, all fixed; the
 second raised one, S4 of that review, which was fixed after the last review call and has not been
-reviewed again. The pull request body (S29, N44, N45) is not yet rewritten: it waits for his yes.
+reviewed again. The pull request body (S29, N44, N45) was rewritten for `a4eb5d1` and posted at his
+request after this report was written.
 
 Lam Ngoc Khuong is the approver of this report and the change.
 
@@ -97,7 +98,7 @@ and not the states beside it. The name rule handled one name per row and not one
 `plugins/atk/shared/run-trace.md:206-208` at `c122b2b`. The design-path refusal handled a design in
 review and not a draft, `plugins/atk/skills/design-doc/SKILL.md:87-90`. The midnight cut named its
 closing line and not its time, `run-trace.md:195-199`. The `--from` search left out
-`docs/records/` and not the ADR directory, `plugins/atk/skills/spec/references/affected-documents.md:19-21`.
+`docs/records/` and not the ADR directory, `plugins/atk/skills/spec/references/affected-documents.md:20-22`.
 
 Three have narrower causes:
 
@@ -199,7 +200,7 @@ rather than restated:
   both languages), N50 (the trace example shape), N51 (220 mentions in 125 pairs), N58 (a positive
   in one skill only).
 - `docs/records/fixes/261020-1334-139-review-findings.md`, still `IN REVIEW`: S29's two missing
-  corrections (`:24`, `:361`), S27 (review runs cited by time), N53.
+  corrections (`:24`, `:360`), S27 (review runs cited by time), N53.
 - Wider than the review: `plugins/atk/skills/catchup/SKILL.md`, whose description was 1,220
   characters and failed S53's check. Its prose was shortened to 1,020; every trigger stayed, in all
   three languages.

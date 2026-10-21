@@ -37,7 +37,7 @@ go into the pull request body:
 - **B1.** Its section 5 says `--from` "asks nothing" (`:295`). The rule chosen for SP1 (`:170`) is
   that it searches and asks, and this change makes it so.
 - **S3.** Its DD2 bullet says the README "now says the same" as the lifecycle row. It did not; the
-  README now says a record is never edited, apart from a design and its ADR while in review.
+  README now says a record is never edited, apart from a design and its ADR until approved.
 - **S27.** It cites its two review rounds by paths under `docs/derived/`, which a reader of the pull
   request cannot reach. They are the two `atk:review` runs of 2026-10-20 at 10:55 and 11:01.
 - **N10.** Its old line numbers at `:96-97` and `:158` are off by one to eight.
@@ -45,7 +45,7 @@ go into the pull request body:
   `APPROVED`, until a phase starts.
 - **`:24`.** "the review that read the change ended with no `BLOCKING` finding open" stopped being
   true at the next review, which found B1.
-- **`:361`.** "`shared/state-signals.md` row 1 is unchanged" is no longer true: this change edits
+- **`:360`.** "`shared/state-signals.md` row 1 is unchanged" is no longer true: this change edits
   row 1 to name the documents a `--from` run's search finds.
 
 The fix was reviewed twice with `atk:review`. The second round raised two more, S5 and S6 of that

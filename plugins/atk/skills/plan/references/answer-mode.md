@@ -51,14 +51,18 @@ touched.
 
 List every open question of the index and of each phase file, numbered, each with the person it
 names and the phase it blocks, and after them every objection of section 7 still answered `Open`,
-with its ID and the person who settles it. Then ask, in one turn per `shared/host-capabilities.md`, which of
-them are answered and what each answer is. Answers already in the prompt are taken from there, and
-only the questions they leave unclear are asked about.
+with its ID and the person who settles it. Then ask, in one turn per `shared/host-capabilities.md`,
+which of them are answered and what each answer is. Answers already in the prompt are taken from
+there, and only the questions they leave unclear are asked about.
 
 What is recorded per answer is the table under What is recorded per answer in
 `skills/design-doc/references/answer-mode.md`, read with the plan in place of the design: the same
 five fields, the names written by the same rule, so one person reads the same in a plan and in a
-design.
+design. A run with nobody to ask follows the paragraph on a headless run near the top of that file,
+with the plan in place of the design: it records each answer the prompt attributes to a person and
+leaves the others open, naming them. The rule is cited from that skill rather than kept in
+`shared/`, as `atk:design-doc` cites `references/plan-review-mode.md` of this one: it is one skill's
+procedure that a second reads, and it moves to `shared/` when a third skill needs it.
 
 "Verbatim" never means keeping a secret or a real person's data. A password, a token, an internal
 host, a client's email address is replaced with `<redacted: kind>`, as
@@ -71,15 +75,18 @@ so.** The rule is the one in `skills/design-doc/references/answer-mode.md` for a
 somebody other than the person the question names, with phases in place of sections: the question
 stays open, its row reads `answered by <name>, not <named person>`, nothing in a phase is edited
 from it until the approver's ruling, given to this `--answer` or a later one, is recorded as
-`settled by <approver>`, and a question answered only in part stays open, marked `partial`.
+`settled by <approver>`, and a question answered only in part stays open, marked `partial`. That
+file's sentence on settling both before `APPROVED` does not hold for a plan, which an answer can
+still reach at `APPROVED`, sent back to `IN REVIEW` per `## Before any edit` above: a held answer
+stays open there like any other.
 
 ## Where it goes
 
 A settled question leaves the open list it was in, in the index or in its phase file; one left open
 above stays there. Every record goes into an `Answered` subsection at the end of section 5 of the
-index, in the table above, so no section is renumbered and every answer to the plan sits in one
-place. When the person does not say who
-answered, ask: a record with no answerer is the chat thread again.
+index, in the table that file names, so no section is renumbered and every answer to the plan sits
+in one place. When the person does not say who answered, ask: a record with no answerer is the chat
+thread again.
 
 An answer to an objection from the person who settles it, or the approver's ruling on it, also
 replaces its `Open` in section 7 with `Settled by <name>, <date>`, and the row goes into the same

@@ -139,7 +139,8 @@ One is reached from every skill's workflow, which opens with two lines that star
 rule 10 of `team-roles.md` asks for:
 
 - `plugins/atk/shared/run-trace.md`: the run trace every run leaves under
-  `docs/derived/traces/<skill>/`, its header and its six event kinds, what it never holds, the
+  `docs/derived/traces/<skill>/`, its header and its six event kinds, the names on its `gate` lines
+  with a partial match confirmed, what it never holds, the
   ignore file inside its directory and the check that must pass before it is written, the twenty kept per skill, trimmed only by `atk:tailor --runs` on a yes, and the `Run trace: off`
   line that turns it off for a project. It exists so a run nobody watched, in a subagent or another
   agent's CLI, can still be read afterwards, and `atk:tailor --feedback` is the only skill that

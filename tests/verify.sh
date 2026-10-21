@@ -446,8 +446,8 @@ import glob, json
 seen = {}
 for f in sorted(glob.glob('plugins/*/skills/*/evals/trigger_evals.json')):
     for q in json.load(open(f)):
-        if q.get('should_trigger'): seen.setdefault(' '.join(q['query'].lower().split()), []).append(f.split('/')[3])
-dup = {q: s for q, s in seen.items() if len(s) > 1}
+        if q.get('should_trigger'): seen.setdefault(' '.join(q['query'].lower().split()), set()).add(f.split('/')[3])
+dup = {q: sorted(s) for q, s in seen.items() if len(s) > 1}
 assert not dup, 'a query is a positive of more than one skill: %s' % dup
 print('OK eval positives, each claimed by one skill')"
 
@@ -458,11 +458,14 @@ python3 -c "
 import glob, re
 bad = []
 for f in sorted(glob.glob('plugins/*/skills/*/SKILL.md')):
-    head = open(f).read().split('\n---', 1)[0]
-    m = re.search(r'^description: >-?\n((?:  .*\n?)+)', head, re.M) or re.search(r'^description: (.+)$', head, re.M)
+    head = open(f).read().replace('\r\n', '\n').split('\n---', 1)[0]
+    m = re.search(r'^description: [>|][-+0-9]* *\n((?:(?:  .*)?\n)+)', head, re.M) or re.search(r'^description: (.+)$', head, re.M)
     assert m, 'no description found in %s' % f
-    d = ' '.join(l.strip() for l in m.group(1).splitlines() if l.strip())
-    if len(d) > 1024: bad.append('%s %d' % (f, len(d)))
+    assert not re.fullmatch(r'[>|][-+0-9]*\s*', m.group(1)), 'description block indicator not parsed in %s' % f
+    lines = m.group(1).rstrip('\n').splitlines()
+    d = ' '.join(l.strip() for l in lines if l.strip())
+    n = len(d) + sum(1 for l in lines if not l.strip())
+    if n > 1024: bad.append('%s %d' % (f, n))
 assert not bad, 'description over 1,024 characters: %s' % bad
 print('OK descriptions within 1,024 characters')"
 
@@ -472,7 +475,7 @@ python3 -c "
 import glob
 for doc in ('docs/codebase-summary.md', 'docs/vi/codebase-summary.md'):
     s = open(doc).read()
-    miss = [f for f in sorted(glob.glob('plugins/*/skills/*/references/*.md')) if '\x60%s\x60' % f not in s]
+    miss = [f for f in sorted(glob.glob('plugins/*/skills/*/references/*.md')) if '\n| \x60%s\x60 |' % f not in s]
     assert not miss, '%s has no row for %s' % (doc, miss)
 print('OK every reference has a summary row in both languages')"
 
@@ -482,7 +485,9 @@ python3 -c "
 import re
 s = open('plugins/atk/shared/run-trace.md').read()
 block = s[s.index('## The shape'):].split('\x60\x60\x60')[1].strip().splitlines()
-assert block[0].startswith('skill: ') and block[1].startswith('subject: '), 'the example lost its header'
+fields = lambda l: [x.split(':')[0].strip() for x in l.split(' | ')]
+assert fields(block[0]) == ['skill', 'kit', 'harness', 'way', 'flags'], 'the example header line 1 is off its order'
+assert fields(block[1]) == ['subject', 'branch', 'start', 'profile', 'override'], 'the example header line 2 is off its order'
 kinds = r'(step \d+(-\d+)? |gate |stop: |review: |corrected by hand: |end: )'
 bad = [l for l in block[2:] if not re.match(r'^\d\d:\d\d ' + kinds, l)]
 assert bad == [], 'example lines off the event shape: %s' % bad
@@ -500,8 +505,13 @@ for f in glob.glob('plugins/atk/skills/*/SKILL.md'):
     own = f.split('/')[3]
     for x in re.findall(r'atk:([a-z][a-z-]*[a-z])', open(f).read()):
         if x != own and x in names: mentions += 1; pairs.add((own, x))
-assert (mentions, len(pairs)) == (220, 125), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
-print('OK skill-lifecycle counts, 220 mentions in 125 pairs')"
+assert (mentions, len(pairs)) == (221, 125), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
+words = {'docs/flow/skill-lifecycle.md': ('two hundred and twenty-one times', 'a hundred and twenty-five ordered pairs'),
+         'docs/vi/flow/skill-lifecycle.md': ('hai trăm hai mươi mốt lượt', 'một trăm hai mươi lăm cặp')}
+for doc, phrases in words.items():
+    text = ' '.join(open(doc).read().split())
+    for w in phrases: assert w in text, '%s no longer says \'%s\': update it, or the words in this check' % (doc, w)
+print('OK skill-lifecycle counts, 221 mentions in 125 pairs')"
 
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
 # holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs

@@ -1,14 +1,14 @@
 ---
 name: catchup
 description: >
-  Summarise an epic or a pull request for someone who was not in the conversation that produced it:
+  Summarise an epic or a pull request for someone not in the conversation that produced it:
   what the work is and for whom, why now, scope, what it touches and where in the code, who
   decides, unfamiliar terms, and where it is easy to go wrong. For an epic, also the understanding
   check the developer answers before coding. Use when a person joins work in flight, picks up an
   epic they did not write, or reviews a pull request in an unfamiliar area; what merged work now
   does is `atk:spec`. Also explains in plain words, finding by finding or section by section, a
-  document a person was handed, such as a vendor's penetration test report or a client's
-  specification; turning one into requirements is `atk:intake`.
+  document a person was handed, a record the kit wrote or any other, such as a vendor's penetration
+  test report; turning one into requirements is `atk:intake`.
   Triggers on: "catchup", "summarize issue", "summarize PR", "explain this document", "explain these
   findings simply", "tóm tắt issue", "tóm tắt PR", "giải thích epic", "hiểu epic này", "giải thích
   tài liệu này dễ hiểu", "giải thích finding dễ hiểu", "キャッチアップ", "ブリーフ",

@@ -114,8 +114,9 @@ run, not once per piece.
   `atk:intake --design <link>`, and a defect report at `atk:fix`.
 - **Reading stops at row 3, not before.** Row 1 above it still becomes an `atk:spec` job, and row 2
   is named in the proposal as the read a person owes, `atk:qa --review` by the BrSE/BA or the QA
-  lead, never a job. Then a gating artifact at `DRAFT` or `IN REVIEW` means the piece waits for the
-  approver its front matter names, under `needs-approval`, before anything else is proposed for it.
+  lead, never a job. Then a gating artifact at `DRAFT` or `IN REVIEW` waits for the approver its
+  front matter names, under `needs-approval`, before anything else is proposed for it; a design at
+  `DRAFT` is its author's instead, an `atk:design-doc <design path>` job its `owner` answers.
 - **A row whose skill this run does not propose.** Rows 7, 18 and 22, a pull request, a release and
   a question, mean the piece waits on a person, named in the proposal; at row 22 with an approved
   requirement and no design or plan for its ticket, `atk:plan <that ticket>` is proposed instead, and

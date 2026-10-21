@@ -138,7 +138,8 @@ Một file được gọi tới từ workflow của mọi skill, nơi mở đầ
 nguyên tắc 10 của `team-roles.md` đòi hỏi:
 
 - `plugins/atk/shared/run-trace.md`: run trace mà mỗi lượt chạy để lại trong
-  `docs/derived/traces/<skill>/`, phần đầu và sáu loại sự kiện của nó, những gì nó không bao giờ chứa,
+  `docs/derived/traces/<skill>/`, phần đầu và sáu loại sự kiện của nó, tên trên các dòng `gate`, tên
+  chỉ khớp một phần thì phải được xác nhận, những gì nó không bao giờ chứa,
   file ignore nằm trong chính thư mục của nó cùng bước kiểm tra phải qua trước khi ghi, hai mươi trace giữ lại cho mỗi skill, chỉ được `atk:tailor --runs` cắt bớt khi có người đồng ý, và dòng
   `Run trace: off` tắt nó cho cả dự án. File này có để một lượt chạy không ai theo dõi, trong một
   subagent hay trong CLI của agent khác, vẫn đọc lại được về sau, và chỉ `atk:tailor --feedback` mới

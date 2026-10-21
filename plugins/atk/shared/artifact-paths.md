@@ -261,7 +261,7 @@ merged and which directory it goes in.
 | Group | Which | Directory | After the merge |
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
-| Record | requirements, planning, design, orchestration proposals, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then. A design and its ADR are edited in place until `APPROVED`, per Before writing |
+| Record | requirements, planning, design, orchestration proposals, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then. A design and its ADR are edited in place until `APPROVED`, and an `APPROVED` plan while no phase has started, per Before writing |
 | Derived | the implementation record, the review report, the catchup brief and its document-mode page, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify`, `implement` and `orchestrate`, with the job result files beside the last, the run trace of every skill | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, or the trace of a finished run, never staged either, whose deletion costs only the evidence it held |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
@@ -578,7 +578,8 @@ decision with no reviewer sure which one is in review. From `APPROVED` neither i
 changed decision supersedes them as above. An ADR written alone by `--adr` follows the same rule by
 its own status. `skills/design-doc/references/answer-mode.md` holds the procedure for answers.
 
-Every record is superseded the way a plan is, above, not only plans. A design that replaces an earlier design, a
-requirement document rewritten after the scope was renegotiated: the old file keeps its content,
-takes `SUPERSEDED`, and carries the link to what replaced it. Two files that both read as current
-is the failure this prevents, and it costs two links.
+Every record is superseded as the paragraph on planning the same work again says, above, not only
+plans. A design that replaces an earlier design, a requirement document rewritten after the scope
+was renegotiated: the old file keeps its content, takes `SUPERSEDED`, and carries the link to what
+replaced it. Two files that both read as current is the failure this prevents, and it costs two
+links.

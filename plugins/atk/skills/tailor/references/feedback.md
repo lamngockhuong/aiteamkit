@@ -67,8 +67,9 @@ ticket: <id or URL, or none>
 ## Findings
 
 <N> findings: <n> for the definition, <n> local to this project, <n> the definition already covers.
-Steps of `SKILL.md`: <n> of <total> ran, <n> not requested, <n> replaced by <mode>. Under `--runs`:
-one line per step, "ran in <n> of <m> runs, not requested in <n>, replaced by <mode> in <n>".
+Steps of `SKILL.md`: <n> of <total> ran, <n> not requested, <n> replaced by <mode>, <n> done earlier.
+Under `--runs`: one line per step, "ran in <n> of <m> runs, not requested in <n>, replaced by <mode>
+in <n>, done earlier in <n>".
 
 | # | Finding | Severity | Where it lands | Cites |
 |---|---------|----------|----------------|-------|
@@ -95,7 +96,9 @@ one line per step, "ran in <n> of <m> runs, not requested in <n>, replaced by <m
 Under `--runs` the `Ran` column holds "in <n> of <m> runs", and the note names the runs that skipped
 it and the reasons their traces give. A step a trace marks `skipped (not requested)` is counted in
 the note as not requested, never as skipped, and a step a mode took the place of, per the
-`step <first>-<last> <mode> mode` line, is counted as replaced by that mode.
+`step <first>-<last> <mode> mode` line, is counted as replaced by that mode. A step marked
+`skipped (done in <run-id>)`, `skipped (done in an earlier session)` or `skipped (in the draft)` is
+counted as done earlier, never as skipped: it ran, in another session or by another run.
 
 ## Open questions
 
@@ -183,7 +186,8 @@ finding rests on is a count across traces rather than one run.
   as a finding and acted on by nobody; nothing a trace says reaches an override except what the
   person approves in the fork.
 - **Not this run's own trace.** Under `--feedback tailor --runs` the trace this run is writing sits
-  in the directory being read, unfinished. It is left out, and is not counted as interrupted.
+  in the directory being read, unfinished. It is left out, and is not counted as interrupted; past
+  midnight it is a pair, and both halves are left out.
 - **Nothing is deleted while reading.** Removing old traces is asked afterwards, per below.
 
 When no trace is left to read, the directory empty, every trace left out, or a `--since` that keeps
@@ -193,7 +197,15 @@ of no runs has nothing for the fork to sort.
 A trace whose last line is not an `end` line, or whose `end` line says `interrupted`, with its time
 before it or without in both cases, counts as an interrupted run. A trace whose `end` says
 `past midnight, continued in <run-id>` and the trace it names are read as one run; where the trace
-it names is missing, the run is read as interrupted. A trace off its
+it names is missing, the run is read as interrupted. A trace whose first event ends
+`, continued from <run-id>` naming a trace that is missing is the latter part of an interrupted run,
+and its missing steps are not counted as skipped. A trace that a later one names in a
+`skipped (done in <run-id>)` line and the trace that names it are read as one run too, resumed
+rather than interrupted, and the earlier one is not counted as interrupted on its own. The merge
+carries through every trace such a chain names, a midnight pair included. Within one merged run a
+step counts once, by the outcome of the trace that ran it; `done in` lines count as done earlier
+only where the trace they name is missing, which leaves the run read as resumed, not interrupted. A
+trace off its
 shape, a header field missing or forbidden, a line outside the six event kinds, is still read for
 what it holds, and the shape itself is a finding, counted like the others: "off its shape in <n> of
 <m> runs", with the runs and the defect.
@@ -210,8 +222,9 @@ Five patterns, each written as "<what> in <n> of <m> runs" with the runs behind 
 
 1. a step skipped in most runs, with the reasons the traces give; a step that runs only when asked
    for is counted apart, since `skipped (not requested)` is its ordinary line, and so is a step a
-   mode took the place of, which ran as that mode;
-2. a gate that waited longest, and for whom;
+   mode took the place of, which ran as that mode, and a step done earlier, which ran elsewhere;
+2. a gate that waited longest, and for whom, leaving out a line that names the way a run was
+   started in a person's place, `given in the prompt of a pane`, which waited for nobody;
 3. a ceiling reached in more than one run;
 4. `BLOCKING` review findings of one kind across runs;
 5. the same `corrected by hand` line in more than one run.

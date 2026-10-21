@@ -103,8 +103,8 @@ Docs section of `.atk/profile.md` says `first`: a missing line or `TBD` means `c
 `shared/spec-docs.md`, and changing it is the Tech Lead's call, so name that person and stop rather
 than write a document the project's own rules call stale. And the design is at `IN REVIEW` or
 `APPROVED`: a `DRAFT` is not a source, because nobody has been asked to look at it. Where either
-fails, say which and change nothing. When both hold, find the documents the design makes untrue
-beyond those it names, and ask which to write too, per `references/affected-documents.md`.
+fails, say which and change nothing. When both hold, find the documents the design makes untrue,
+named or not, and ask which to write too, per `references/affected-documents.md`.
 
 `--design` belongs to the `screen` kind alone. Given with another kind, say that a design is the
 source of no other kind, per `shared/spec-docs.md`, and change nothing. `--from` is never a `screen`
@@ -142,18 +142,18 @@ them and the code is exactly what this document exists to expose. Where they dis
 finding for step 5, not something to smooth over while writing.
 
 `--from` is the one exception, and it has two sources, each cited. What the design decided is taken
-from the design named, citing its section in place of `path:line`. Where a reader of the pull request cannot reach the
-design's path, by the test in Front matter in `shared/artifact-paths.md`, the committed document cannot
-point there: cite the ticket the design was written for instead.
-What the design leaves to the
-reference document, which under `Contract: first` is the full shape (fields, types, limits, status
-and error codes), is asked of the person running the skill, who is this document's author: list
-every gap in one prompt, and write each answer as the author's proposal, citing the author by name,
-for the approver to accept or change. A gap the author cannot answer becomes an open question for
-the document's approver rather than a plausible value filled in. A ticket or a Figma file is still
-not a source, even here; the design and its author are, because the approver reviews both. A
-ticket cited in place of an unreachable design stands in for the citation only: what the item says
-still comes from the design.
+from the design named, citing its section in place of `path:line`. Where a reader of the pull
+request cannot reach the design's path, by the test in Front matter in `shared/artifact-paths.md`,
+the committed document cannot point there: cite the ticket the design was written for instead. What
+the design leaves to the reference document, which under `Contract: first` is the full shape
+(fields, types, limits, status and error codes), is asked of the person running the skill, who is
+this document's author: list every gap in the turn that asks which other documents to write, per
+What is asked in `references/affected-documents.md`, and write each answer as the author's proposal,
+citing the author by name, for the approver to accept or change. A gap the author cannot answer
+becomes an open question for the document's approver rather than a plausible value filled in. A
+ticket or a Figma file is still not a source, even here; the design and its author are, because the
+approver reviews both. A ticket cited in place of an unreachable design stands in for the citation
+only: what the item says still comes from the design.
 
 For `--sync`, read the diff of the change on the current branch rather than the whole module,
 through the `mask` scan of `shared/secret-scan.md`, and touch only what the diff touched. A sync that rewrites sections the change never reached is an

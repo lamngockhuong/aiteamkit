@@ -1,17 +1,17 @@
 ---
 name: design-doc
 description: >
-  Write the technical design document a team reviews before coding, plus the ADR recording the
-  decision behind it: current state, options with trade-offs, chosen approach, data and API changes,
-  migration and rollback, risks, open questions, and who must sign off. Use before implementing
-  anything touching a schema, a public contract, a shared module, or more than one service.
-  `--spike` first investigates, time-boxed, a question the design cannot choose without;
-  `--challenge` puts one agent per signing role on the draft; `--answer` records answers to its
-  open questions until approved.
+  Write the technical design document a team reviews before coding, plus its ADR: current state,
+  options with trade-offs, chosen approach, data and API changes, migration, rollback, risks, open
+  questions, and who signs off. Use before code that touches a schema, a public contract, a shared
+  module, or several services. `--spike` first investigates, time-boxed, a question the design
+  cannot choose without; `--challenge` puts one agent per signing role on the draft; `--answer`
+  records answers to its open questions.
   Triggers on: "design doc", "technical design", "tech design", "thiết kế kỹ thuật", "tài liệu thiết kế",
   "ADR", "architecture decision", "設計書", "detail design", "how should we build this",
   "technical spike", "spike this", "nghiên cứu kỹ thuật", "spike kỹ thuật", "技術調査", "スパイク",
   "pressure-test this design", "phản biện thiết kế", "設計の懸念を洗い出して",
+  "finish the draft design", "viết tiếp thiết kế nháp", "設計書の下書きの続き",
   "record the design answers", "ghi câu trả lời vào thiết kế", "設計の回答を反映",
   "/atk:design-doc".
 argument-hint: "[requirement-path|topic|design-path] [--adr|--no-adr] [--options <n>] [--spike <question>] [--challenge] [--answer] [--lang <code>] [--out <path>]"
@@ -88,24 +88,39 @@ one line, since a spike record carries no open question to answer; the other fla
 says.
 
 A design path given without `--answer` takes up that design by its status, which governs its ADR
-too: where the ADR's status says otherwise, the run says so and stops, naming the approver, as
-`references/answer-mode.md` does. An ADR written alone by `--adr`, given as the path, is taken up
-the same way by its own.
+too: where the design links an ADR, only the pairs The ADR disagrees in `references/answer-mode.md`
+lists go on, and any other stops naming the approver. An ADR written alone by `--adr`, given as the
+path, is taken up the same way by its own, the first check below reading the ADR directory, resolved
+per `shared/artifact-paths.md`, in place of the design directory. Before the status is read, the
+first five checks of `## Before any edit` in that file run, from not a design of this kit to not the
+version under review.
 
 - **`DRAFT`.** The draft is still its author's. The run reads it, says which of steps 1 to 5 its
-  sections already cover, and resumes at the first one missing, editing the file in place and
-  keeping its ADR number. A run that died partway is finished this way, an author's revision is made
-  this way, `--challenge` runs at step 5 as on a new draft, and `--adr` writes the ADR a draft that
-  links none lacks.
+  sections already cover, each traced as `skipped (in the draft)` per `shared/run-trace.md`, and
+  resumes at the first one missing, editing the file in place and keeping its ADR number. A run that
+  died partway is finished this way, an author's revision is made this way, `--challenge` runs at
+  step 5 as on a new draft, and `--adr` writes, at `DRAFT`, the ADR a draft that links none lacks.
+  Step 5 is covered once the ADR exists, or the design says it was written under `--no-adr`: a
+  resume writes no ADR then, and never sets `IN REVIEW`, since a draft with every section is either
+  a run that died at its last line or one its author sent back. Such a draft is said to be complete,
+  and the run asks whether to revise it, challenge it, or leave it for its author, who sets the
+  design and its ADR to `IN REVIEW` together; a run with nobody to ask says so and stops. A second
+  `--challenge` keeps the earlier `Pre-review objections` and adds a dated section after it, per
+  `references/role-challenge.md`.
 - **`IN REVIEW`.** Refused in one line that points at `--answer`: in review, an answer, an option a
-  reviewer asked for, and a decision settled are all recorded through it.
+  reviewer asked for, and a decision settled are all recorded through it. With `--adr` or
+  `--challenge`, the line says instead that the design goes back to `DRAFT` first, by its author
+  editing the status and telling the approver, since both are draft steps it skipped.
 - **`APPROVED`, `SUPERSEDED`, or any other.** Refused as `references/answer-mode.md` refuses it, with
   the line it names.
 
-A plain run whose subject already has a design at `DRAFT` or `IN REVIEW` says so and points at the
-line that takes it up, rather than writing a second design. The subject has a design when a design's
-front matter `ticket` names the same ticket, or its body links the same requirement path; a topic
-with neither matches nothing. Where two designs match, the run lists both and asks which.
+A plain run whose subject already has a design at `DRAFT` or `IN REVIEW` says so and asks whether
+this is that design, taken up by the line above, or a second one under the same subject, as a
+backend and a frontend design of one epic are. The subject has a design when a design's front
+matter `ticket` names the same ticket, never `none`, `TBD` or an empty one, or its body links the
+same requirement path; a topic with neither matches nothing, and a spike record, named `-spike-`,
+is never a match. Where several match, the run lists them in the same question; a run with nobody
+to ask lists every match, one or several, and stops.
 
 ### 1. Read the requirement
 
@@ -154,9 +169,12 @@ then `Pre-review objections` under `--challenge`, then the link to the ADR.
 
 Write the ADR as context, decision, consequences, and alternatives rejected, numbered sequentially
 from the existing `docs/adr/` directory. Set `status: IN REVIEW` and list the required reviewers.
-The design reaches `APPROVED` only once no answer row reads `answered by <name>, not <named person>`
-or `partial`: the approver's ruling on each is recorded through `--answer` first, since from
-`APPROVED` it has nowhere to go.
+Under `--no-adr`, the line where the link would go says the design has no ADR and was written
+without one, so a later run that takes the draft up writes none.
+The run never sets `APPROVED`. At its close it names every answer row that reads
+`answered by <name>, not <named person>` or `partial`, which the approver settles through `--answer`
+before approving, per `references/answer-mode.md`, since from `APPROVED` the ruling has nowhere to
+go.
 
 Under `--challenge`, before setting that status, run the role challenge in
 `references/role-challenge.md`: one agent per required reviewer's role reads the draft with nothing
@@ -213,7 +231,8 @@ front matter.
       was read, keeps prototype code out of the change, and recommends without deciding.
 - [ ] `## Open questions` names, per question, the person who must answer it and the option or
       section it blocks, or says the design has none.
-- [ ] A design set to `APPROVED` holds no answer row still `answered by ..., not ...` or `partial`.
+- [ ] The close named every answer row still `answered by ..., not ...` or `partial`, for the
+      approver to settle before `APPROVED`.
 - [ ] Under `Contract: first`, step 4 names every reference document the change makes untrue, not
       only the ones `atk:spec --from` will write.
 - [ ] Under `--answer`, each answer is recorded verbatim with who gave it, no question was answered

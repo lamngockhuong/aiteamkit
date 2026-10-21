@@ -73,7 +73,9 @@ changing the decision quietly.
 A section named `Pre-review objections`, placed where the citer says, opening with one line:
 "Raised by one agent per <role or lens> over the draft; simulated perspectives, not a review and not
 an approval." Then a table with the columns `ID`, the citer's name for a lens, `Section`,
-`Objection`, and `Answer`, one row per kept objection, numbered `O1`, `O2`.
+`Objection`, and `Answer`, one row per kept objection, numbered `O1`, `O2`. A later challenge of
+the same draft continues the numbering rather than starting again, and is dated where the citer
+puts it: a section of its own after the earlier one, or a round line inside it.
 
 Below the table: the agents that ran, any lens left out and why, and how many objections were
 dropped as unfounded. Where nothing was kept, the section is still written, with `None kept.` in

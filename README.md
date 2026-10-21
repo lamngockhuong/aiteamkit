@@ -128,8 +128,8 @@ stage. The full path table, the naming rules, and the shared front matter live i
 [plugins/atk/shared/artifact-paths.md](plugins/atk/shared/artifact-paths.md).
 
 Not every artifact has the same fate. A reference document is updated in place forever, a record is
-never edited, apart from a design and its ADR until approved, and rarely deleted, and one directory
-is safe to delete or leave out of git entirely.
+never edited, apart from a design and its ADR until approved and a plan until a phase starts, and
+rarely deleted, and one directory is safe to delete or leave out of git entirely.
 Which is which, what each deletion costs, and the three policies a team can choose between:
 [docs/artifact-lifecycle.md](docs/artifact-lifecycle.md)
 ([Tiếng Việt](docs/vi/artifact-lifecycle.md)).
