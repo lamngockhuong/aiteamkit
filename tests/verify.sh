@@ -494,6 +494,20 @@ assert bad == [], 'example lines off the event shape: %s' % bad
 assert block[-1][6:].startswith('end: '), 'the example does not end on its end line'
 print('OK run-trace example shape')"
 
+# atk:review's reach is one label across three files: SKILL.md ranks by it, review-rounds.md defines
+# its two values, report-format.md writes it; SKILL.md holds the five consequences an edge keeps
+python3 -c "
+import re
+d = 'plugins/atk/skills/review/'
+for f in ['SKILL.md', 'references/review-rounds.md', 'references/report-format.md']:
+    s = open(d + f).read()
+    for v in ['ordinary', 'edge']:
+        assert re.search(r'Reach: ' + v + r'\b|\x60' + v + r'\x60', s), '%s does not name reach %s' % (f, v)
+s = open(d + 'SKILL.md').read()
+p = s[s.index('**Reach.**'):].split('\n\n')[0]
+assert re.findall(r'\((\d)\) ', p) == ['1', '2', '3', '4', '5'], 'the Reach paragraph of review/SKILL.md does not list five consequences'
+print('OK review reach in three files, five consequences')"
+
 # The counts docs/flow/skill-lifecycle.md and its mirror give for how one skill names another: each
 # atk:<name> in a SKILL.md other than its own skill and the read-only agent, and the ordered pairs.
 # A change that moves them fails here, and the fix is the two documents and the numbers below

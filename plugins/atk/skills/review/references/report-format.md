@@ -81,10 +81,11 @@ reissued. Decide the severity, then number.
 - **File:** `path/to/file.ts:32-40`, `path/to/other.ts:118`
 - **Rule:** `CONV-004` - "the rule, quoted exactly as the project wrote it"
 - **Issue:** What goes wrong, and the input or state that triggers it.
-- **Fix:** The concrete change, naming the function, file or pattern to use.
+- **Fix:** Correct, leave to the default, or add a rule, then the concrete change, naming the
+  function, file or pattern to use.
 - **Decision:** Only where the fix reverses a recorded decision: `path:line`, and who made it.
 - **Author:** Only where the author answered it on the thread: the answer, and why the finding is kept.
-- **Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`
+- **Raised by:** `[3/3 lines]` `[2/2 boundary]` `criteria`, Reach: ordinary
 ```
 
 Each label is a list item, and a label that runs onto a second line indents its continuation by two
@@ -102,7 +103,15 @@ exists to prevent.
   raised above the severity recorded against its rule, this line says why.
 - **Issue.** What breaks and why it matters. `BLOCKING` names a failing input or a broken contract,
   per the definition of done.
-- **Fix.** What to do. A finding with no suggestion is a complaint.
+- **Fix.** What to do. A finding with no suggestion is a complaint. On a rule written for an agent,
+  the line opens with one of three forms, the first that removes the finding: **Correct**, where a
+  sentence says something false and is rewritten; **Leave to the default**, where a sentence fills a
+  state no rule covered by guessing what the rule would have said, and the default of rule 5 in
+  `shared/team-roles.md` answers that state correctly: the sentence is removed, or not added. A state
+  that is merely uncovered, with the default right for it, is no finding at all, per the `boundary`
+  round;
+  **Add a rule**, where that default would give a wrong answer in an ordinary case, and the line then
+  names, in one more sentence, the states the new rule itself opens, so the fixer can weigh them.
 - **Decision.** Only where the fix would reverse a decision the intent of step 1 records: in the
   plan, a design document, or an ADR. It names the decision with its source as a path and line, and
   the person who made it, and it goes between Fix and Raised by. The finding keeps the severity the
@@ -122,7 +131,10 @@ exists to prevent.
 - **Raised by.** The tags from `references/review-rounds.md`: `[k/N]` for a replicated round, the
   round name alone where it ran once, `sweep` for the closing pass. A `PLAUSIBLE` verdict is stated
   here with the one check that would settle it. `CONFIRMED` is the default and is not written out,
-  because a word on every finding stops being read.
+  because a word on every finding stops being read. A finding on a rule written for an agent adds
+  `Reach: ordinary` or `Reach: edge`, per step 6 of `SKILL.md`, beside a `PLAUSIBLE` where both
+  apply; a finding on code carries none. A report written before reach existed carries none either,
+  which reads as not assessed, and a later review gives the finding one as it renumbers it.
 
 **The one-row form, for `NIT` only.** Where the `NIT` section runs long, it may be a table rather than
 a heading per finding. The row is shorter, not emptier: an author has to be able to act on it without
@@ -132,6 +144,7 @@ the argument, so every column is filled.
 | ID | File | Issue | Fix | Raised by |
 |---|---|---|---|---|
 | `N4` | `path/to/file.ts:88` | What goes wrong, in one clause | The change to make | `lines` |
+| `N5` | `skills/x/SKILL.md:40` | A clause guesses at a state the default already answers | Leave to the default: remove the clause | `lines`, Reach: edge |
 ```
 
 A `NIT` quoting a convention rule keeps the heading form, because the rule has to be quoted verbatim.
@@ -217,9 +230,13 @@ conventions document resolved per `shared/review-checklist.md` belongs here too,
 **What the change does well.** One line at least. A review of only negatives teaches nothing about
 what to repeat.
 
-**Cap.** Nothing is cut from this file. This section names, by identifier, the findings the session
-summary, the inline comments and the visible part of a posted summary left out, so a reader knows
-those are not the whole review. `None.` when the cap cut nothing.
+**Cap.** Nothing is cut from this file. The cap is on attention, not on the record: the session
+summary, the inline comments and the visible part of a posted summary carry at most ten findings, or
+twenty under `--strict`, cutting `NIT` first, then `SHOULD FIX`, and say how many are left out, at
+what severity. `BLOCKING` is never cut, nor the line answering an author's reply; where `BLOCKING`
+alone exceeds the cap, all of it is carried and the report says so, since that change is the Tech
+Lead's call, not a quiet trimming decision. This section names, by identifier, the findings the cap
+left out, so a reader knows those are not the whole review. `None.` when the cap cut nothing.
 
 **Rounds.** The band and the count that put the change in it, then one row per round:
 
@@ -237,6 +254,11 @@ agents, plus the sweep: 14, which is what the flag asks for.
 | `callers` | 0 of 2 | - | dead: dispatched twice, died twice; not run |
 | sweep | - | 3 | not a round; first attempt died, re-run |
 ```
+
+Below the table, where any finding is on a rule written for an agent, one line counts the findings
+by reach and the candidates the `boundary` round dropped because the default of rule 5 handled them:
+`Reach: 4 ordinary, 9 edge (7 of them NIT). Dropped to the default: 6.` A fix loop reading two
+reports in turn sees from it how the loop converged.
 
 One row per round, and the three states of `references/review-rounds.md` are three different rows:
 `skipped` names the condition that fired, `empty` means it ran and reported nothing, `dead` says so
@@ -271,7 +293,8 @@ command or CI job that produced it, and pre-existing failures separated from int
 count and location.
 
 **Verified and dropped.** What was refuted and on what line, type, guard or absent effect, so the
-next reviewer does not pay for it twice.
+next reviewer does not pay for it twice. A candidate dropped because the default of rule 5 handles
+its state is listed here too, with the state, so its count below the round table can be checked.
 
 **Convention gaps.** Rules the review wanted and the project has not recorded, reported for
 `atk:convention` and not applied as if agreed.

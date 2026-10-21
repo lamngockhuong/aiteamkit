@@ -176,16 +176,14 @@ This does not license the question dressed up as a finding. `PLAUSIBLE` still ne
 mechanism and a named trigger; what is uncertain is only whether that trigger occurs. A candidate
 naming neither is not plausible, it is unexamined, and it is dropped.
 
+A candidate on a state no rule covers is dropped, and counted, when the default of rule 5 in
+`shared/team-roles.md` handles it correctly, per the `boundary` round in `references/review-rounds.md`.
+
 Then take one more pass, once, with the verified list in hand: in an agent of its own above band 1
 where one can be spawned, and in band 1 inside the reviewer agent. Read the diff and the code around
 it looking only for what is not on that list: the job is the gaps, not a second opinion on what has
 already been found. Surface at most eight new candidates, or nothing at all when there is nothing
 new: a padded sweep costs the author the attention that makes the rest of the list worth reading.
-
-What a first pass misses is predictable, so start there: code moved or extracted that left a guard or
-an anchor behind, setup and teardown that stopped matching each other in a test, a default flipped in
-configuration, a predicate that turns out to have a side effect, a lock whose scope quietly shrank,
-and a listed finding's claim or pattern repeated elsewhere, per `references/review-rounds.md`.
 
 New candidates go through the verdicts above like any other, and are labelled apart from every
 round's findings, per `references/review-rounds.md`. A sweep that died before it reported is re-run
@@ -200,23 +198,25 @@ reads exactly like the run that found nothing.
 | `SHOULD FIX` | Real problem, safe to fix in a follow-up if the author agrees |
 | `NIT` | Preference. Never blocks. Say so in the comment |
 
-Where a round ran several copies, each of its findings carries how many of them raised it, and a
-finding only one copy raised was checked against the code before it reached this list. That count
-means something only between copies of one round; a round that ran once carries its round name
-instead, never `[1/1]`, which would suggest other agents looked and disagreed when none was asked.
-The report says which rounds ran, which were skipped, which came back empty and which died, per
-`references/review-rounds.md`, which names those three states. It never presents a count of agreeing
-copies as agreement between people.
+**Reach.** A finding on a rule written for an agent carries `Reach: ordinary` or `Reach: edge`, as
+the `boundary` round in `references/review-rounds.md` defines them; code carries none. An `edge`
+finding is a `NIT`, unless its consequence is one of five, the kit's floor, which keep the severity
+they earn: (1) a role's decision taken, or an approval state entered, without its owner, per rules 2
+and 3 of `shared/team-roles.md`; (2) a secret or a person's data written, sent or shown, per rule 9;
+(3) an action past the consent line of `shared/finalize-steps.md`; (4) history or a person's
+uncommitted work lost or overwritten; (5) a public contract broken, per `shared/spec-docs.md`.
 
-A convention violation takes the severity recorded against its rule. Raise it only when the concrete
-failure is worse than the rule anticipated, and say why.
+A finding a round raised in several copies carries how many raised it, a round that ran once its
+name and never `[1/1]`, and one only a single copy raised was checked against the code first; the
+report never presents that count as agreement between people, per `references/review-rounds.md`.
 
-The report carries every finding step 5 kept, `BLOCKING` first, a `NIT` in the one-row form of
-`references/report-format.md` if need be. The cap is on attention, not on the record: the summary,
-inline comments and visible part of a posted summary carry at most ten findings, or twenty under
-`--strict`, cutting `NIT` first, then `SHOULD FIX`, and say how many are left out, at what severity.
-`BLOCKING` is never cut, nor the line answering an author's reply; where `BLOCKING` alone exceeds the
-cap, carry it all and say so: that change is the Tech Lead's call, not a quiet trimming decision.
+A convention violation takes the severity recorded against its rule, which reach never lowers, and
+is how a project adds a consequence of its own. Raise it only when the concrete failure is worse
+than the rule anticipated, and say why.
+
+The report carries every finding step 5 kept, `BLOCKING` first. The summary, inline comments and
+visible part of a posted summary carry at most ten, or twenty under `--strict`, per Cap in
+`references/report-format.md`, which says what is cut first and what never is.
 
 Each comment: the file and line, what goes wrong, and a concrete suggestion, addressed to the code
 and never the author. State what the change does well in one line: only negatives teach nothing.
@@ -238,10 +238,8 @@ ones in one line each, how many the cap left to the report alone, and the path t
 has just watched the review run needs to know whether they are blocked and where to read the rest;
 the argument behind each finding is what the file is for.
 
-`references/report-format.md` holds what that file looks like: the finding identifiers, the labels
-under each finding, the round table, and the sections in order. This section decides where the
-report goes and what reaches the session; that file decides its shape, so a report does not get
-rebuilt from nothing once per run.
+`references/report-format.md` holds what that file looks like, its identifiers, labels, round table
+and sections; this section decides only where it goes and what reaches the session.
 
 Read the newest earlier report on the same target first, and on a pull request its newest
 `atk:review` summary. A second review reuses the first's identifiers, so `B1` stays `B1`;
@@ -268,7 +266,8 @@ and posts on consent. A `BLOCKING` finding requests changes; `NIT` findings neve
       finding names the check that would settle it.
 - [ ] Nothing was refuted for being unlikely: every drop rests on a line, a type, a guard, or the
       absence of any observable effect.
-- [ ] Preferences are labelled `NIT` and do not block.
+- [ ] Preferences, and `edge` findings outside the five consequences, are `NIT` and do not block;
+      every finding on a rule written for an agent carries its reach.
 - [ ] The report carries every verified finding; the summary, inline comments and the visible part
       of a posted summary are within the cap, and a cut names how many it left out, at what severity.
 - [ ] A sweep for gaps ran once against the verified list, in its own agent above band 1 where one

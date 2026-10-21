@@ -119,6 +119,9 @@ Then one line for the reference documents, per `shared/spec-docs.md`: which move
 that the fix changed no public contract, or that the document was right and the code is what
 changed. A document the fix owed and did not move is not this line; it is in section 9.
 
+Where the change is to a rule an agent follows, one line for the form it took, and one per review
+finding fixed in section 6b, with what `shared/review-fix-loop.md` asks a fix of that kind to record.
+
 ## 6. Verified
 
 **Skipped in the same three cases as section 5**, for the same reason.

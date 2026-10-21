@@ -94,6 +94,17 @@ A fix here is the smallest change that removes the finding. The loop is not the 
 refactor: a wider change made while responding to a review arrives after the verification that
 covered the original change, which is the worst moment available for it.
 
+On a rule written for an agent, the smallest change is the first of the three forms in
+`skills/review/references/report-format.md` that removes the finding: correct the false sentence,
+then remove or leave out a clause that guesses at a state the default of rule 5 in
+`shared/team-roles.md` already answers, then add a rule. A suggested fix is a suggestion: where the
+fixer takes another form than the finding's `Fix` line, the record says which and why. A form that
+changes no text, or that rests on the default being right where the finding says it is wrong, is not
+a fix but a dispute, per Disputing a finding below. A fix that adds a rule names the states that
+rule opens and weighs them before it lands, since each one is what the next round finds. A fix that
+grows a file every run reads, `shared/team-roles.md`, `shared/run-trace.md` or
+`shared/artifact-paths.md`, writes that file's size before and after in the record.
+
 ## Disputing a finding
 
 Not every finding is right. A finding the author believes is wrong is not fixed and not quietly

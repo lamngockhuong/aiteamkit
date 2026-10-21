@@ -610,7 +610,7 @@ its Layers table, and the mirror check in `tests/verify.sh` excludes both paths.
 | `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup` |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup`, `0008` how `atk:review` weighs a gap in an agent rule |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
 | `flow/project-flow.md` | The 25 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
@@ -741,7 +741,8 @@ plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matc
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
 hold; trigger evals parse; no trigger eval positive is claimed by two skills; every description
 fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the
-run-trace example keeps its header order and event shape; the skill-lifecycle counts match both
+run-trace example keeps its header order and event shape; `atk:review` names both reach values in
+its three files and its five protected consequences; the skill-lifecycle counts match both
 documents; every `references/*.tsv` line is well formed; no dated name lost its time; no reference
 template carries a ticket line; each release package agrees on its version;
 `atkx:skill-eval` judges its fixtures as `expected.json` says, holds its behaviours outside them,

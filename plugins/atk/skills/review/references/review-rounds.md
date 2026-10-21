@@ -72,6 +72,28 @@ each has one substitution, so the analogy stops being invented once per run:
 A round whose substitution finds nothing to open is skipped and names the substitution it looked
 for, the same as any other skipped round.
 
+**`boundary` on a rule written for an agent.** Prose an agent follows, a skill's `SKILL.md` or
+`references/`, a shared file, a prompt, a project's agent instructions file, has states no sentence
+reaches, and the round is where they surface. Two things keep it from turning each of them into a
+new clause:
+
+- **The default first.** A state no rule covers is a candidate only where the default of rule 5 in
+  `shared/team-roles.md` goes wrong for it: a run that cannot stop, an answer whose owner the run
+  cannot name, a question that would leak a secret. Where asking is safe and the person the default
+  asks owns the answer, the candidate is dropped, listed under `## Verified and dropped`, and counted in `## Rounds`, per
+  `references/report-format.md`.
+- **Reach.** Each candidate that survives names its trigger and takes a reach, which step 6 of
+  `SKILL.md` ranks by. `ordinary`: input or a state the kit's users meet in normal work, a common
+  name in the teams it serves, a usual project shape, a run started the way a skill's `## Invocation`
+  shows, a harness the kit supports; the finding says which. `edge`: a combination that is not
+  ordinary, two people whose names differ only by marks, a script the team does not use, a session
+  that ends on the stroke of midnight. Evidence that the trigger was met once, a run trace, a record,
+  an issue or a test, makes it `ordinary`, and so does a reach the reviewer cannot judge, since a
+  wrong `ordinary` costs one `SHOULD FIX` and a wrong `edge` ships a defect at `NIT`.
+
+Code, configuration, schemas and tests take no reach, whatever their round, and a finding on both an
+instruction and the code it drives is ranked as code.
+
 **`contract` under `Contract: first`, and on a `screen` document.** The reference document is the
 agreed contract where the profile says `first`, and for a `screen` document under either line, per
 `shared/spec-docs.md`. A `screen` document whose `design_source` starts with `retired` is the
@@ -469,6 +491,11 @@ finding and has read the diff many times over; it is the most loaded context in 
 sweep is the one job that asks for a fresh reading of that diff against that list. The two compete,
 and on a large change the sweep is what loses. An agent that starts with the list and nothing else
 does the same job with none of that behind it.
+
+What a first pass misses is predictable, so the sweep starts there: code moved or extracted that
+left a guard or an anchor behind, setup and teardown that stopped matching each other in a test, a
+default flipped in configuration, a predicate that turns out to have a side effect, a lock whose
+scope quietly shrank, and a listed finding's claim or pattern repeated elsewhere, below.
 
 In band 1 without `--parallel` the reviewer agent runs the sweep itself, like everything else. It
 started fresh, so the competition above is smaller there, and a spawned agent cannot always spawn
