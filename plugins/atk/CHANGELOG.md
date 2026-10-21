@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.14](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.13...atk-v0.1.14) (2026-10-21)
+
+
+### Features
+
+* close eight definition gaps found by the 2026-10-20 run feedback ([#139](https://github.com/lamngockhuong/aiteamkit/issues/139)) ([ae774f4](https://github.com/lamngockhuong/aiteamkit/commit/ae774f4cc694d573065ff5b674826dd7f06c68d8))
+
 ## [0.1.13](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.12...atk-v0.1.13) (2026-10-19)
 
 
