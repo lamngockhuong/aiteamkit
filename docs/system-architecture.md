@@ -287,10 +287,11 @@ The last two describe files that do not ship with the kit at all:
   parent holding member repositories and a workspace holding none of its own each cost, and what each
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message never mention it, and
-  read two things of it when it is there, the `Run trace` line and the Name column of the Team section. Three Docs entries change what a skill does rather
-  than where it writes: `Contract`, whose meaning lives in `plugins/atk/shared/spec-docs.md`, the
-  `Template` column of the kinds table, which gives `atk:spec` a project's own template as the shape
-  of an empty directory, per the same file, and `Run trace: off`, which stops every skill leaving a run trace, per
+  read two things of it when it is there, the `Run trace` line and the Name column of the Team
+  section. Three Docs entries change what a skill does rather than where it writes: `Contract`,
+  whose meaning lives in `plugins/atk/shared/spec-docs.md`, the `Template` column of the kinds
+  table, which gives `atk:spec` a project's own template as the shape of an empty directory, per the
+  same file, and `Run trace: off`, which stops every skill leaving a run trace, per
   `plugins/atk/shared/run-trace.md`.
   `atk:init` writes the profile, so it belongs to no group.
 

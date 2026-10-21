@@ -9,6 +9,9 @@ This mode records what a person answered. It never answers a question itself: a 
 repository could have settled was settled by step 6 and is not open, and one a role owns is that
 role's, per rule 3 of `shared/team-roles.md`.
 
+It takes the place of steps 1 to 5 of `SKILL.md`, which share the trace line `step 1-5 answer mode`
+per `shared/run-trace.md`, and steps 6 and 7 follow it with lines of their own.
+
 ## What it reads
 
 A plan directory, its `plan.md` and every `phase-NN-*.md` beside it. Without a path, list the plan
@@ -52,15 +55,10 @@ with its ID and the person who settles it. Then ask, in one turn per `shared/hos
 them are answered and what each answer is. Answers already in the prompt are taken from there, and
 only the questions they leave unclear are asked about.
 
-What is recorded per answer:
-
-| Field | Holds |
-|-------|-------|
-| Question | As written in the plan, unchanged |
-| Answer | Verbatim, as the person gave it. A summary is a second author |
-| Answered by | The person who answered |
-| Date | The date of the answer, or the date it was recorded, saying which |
-| Relayed by | The person who brought the answer here, when that is not the person who answered |
+What is recorded per answer is the table under What is recorded per answer in
+`skills/design-doc/references/answer-mode.md`, read with the plan in place of the design: the same
+five fields, the names written by the same rule, so one person reads the same in a plan and in a
+design.
 
 "Verbatim" never means keeping a secret or a real person's data. A password, a token, an internal
 host, a client's email address is replaced with `<redacted: kind>`, as
@@ -69,26 +67,24 @@ the session says what was redacted by kind, never by repeating it. The plan is c
 later challenge hands it to agents.
 
 **An answer from somebody other than the person the question names is recorded, and the record says
-so.** The skill does not refuse it and does not decide whether it is enough: whether the Tech Lead's
-answer to a question addressed to the PM settles it is the approver's call. Until the approver says
-so, the question stays open, its row in `Answered` reads `answered by <name>, not <named person>`,
-and nothing in a phase is edited from it. The approver's ruling is itself an answer, given to a
-later `--answer` like any other and recorded as `settled by <approver>` on that row; from it the
-question leaves the open list and its phases are edited. A question answered only in part stays
-open too, its row marked `partial`.
+so.** The rule is the one in `skills/design-doc/references/answer-mode.md` for an answer from
+somebody other than the person the question names, with phases in place of sections: the question
+stays open, its row reads `answered by <name>, not <named person>`, nothing in a phase is edited
+from it until the approver's ruling, given to this `--answer` or a later one, is recorded as
+`settled by <approver>`, and a question answered only in part stays open, marked `partial`.
 
 ## Where it goes
 
 A settled question leaves the open list it was in, in the index or in its phase file; one left open
-above stays there. Every record goes into an `Answered` subsection at the end of section 5 of the index, in the table above, so no section is
-renumbered and every answer to the plan sits in one place. When the person does not say who
+above stays there. Every record goes into an `Answered` subsection at the end of section 5 of the
+index, in the table above, so no section is renumbered and every answer to the plan sits in one
+place. When the person does not say who
 answered, ask: a record with no answerer is the chat thread again.
 
-An answer to an objection from the person who settles it also replaces its `Open` in section 7 with
-`Settled by <name>, <date>`,
-and the row goes into the same `Answered` table with its ID as the question. So does the objection a
-scope question came from, when that question is answered: one thing never reads `Open` in one place
-and answered in another.
+An answer to an objection from the person who settles it, or the approver's ruling on it, also
+replaces its `Open` in section 7 with `Settled by <name>, <date>`, and the row goes into the same
+`Answered` table with its ID as the question. So does the objection a scope question came from,
+when that question is settled: one thing never reads `Open` in one place and answered in another.
 
 Each phase the answer changes is then edited to match it, and the edit names the question it came
 from, so a reader can tell a step the author planned from one an answer put there. A phase the

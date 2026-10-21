@@ -285,10 +285,11 @@ Hai file cuối mô tả những file không đi kèm kit:
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không bao giờ nhắc tới
-  nó, và chỉ đọc hai thứ của nó khi có file, dòng `Run trace` và cột Name của mục Team. Ba mục trong Docs đổi việc skill làm
-  chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở `plugins/atk/shared/spec-docs.md`, cột
-  `Template` trong bảng các loại tài liệu, cho `atk:spec` lấy template riêng của dự án làm hình dạng
-  của một thư mục còn trống, theo cùng file đó, và `Run trace: off`, khiến mọi skill thôi để lại run trace, theo `plugins/atk/shared/run-trace.md`.
+  nó, và chỉ đọc hai thứ của nó khi có file, dòng `Run trace` và cột Name của mục Team. Ba mục
+  trong Docs đổi việc skill làm chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở
+  `plugins/atk/shared/spec-docs.md`, cột `Template` trong bảng các loại tài liệu, cho `atk:spec` lấy
+  template riêng của dự án làm hình dạng của một thư mục còn trống, theo cùng file đó, và
+  `Run trace: off`, khiến mọi skill thôi để lại run trace, theo `plugins/atk/shared/run-trace.md`.
   `atk:init` là skill viết ra profile nên không thuộc nhóm nào.
 
 - `plugins/atk/shared/project-overrides.md`: nội dung của `.atk/overrides/<skill>.md` bên trong **dự án đích**,

@@ -261,6 +261,10 @@ check against the code are answered as changed or left open for the person who h
 `IN REVIEW`:
 verbatim, with who gave them, in an `Answered` subsection, and each section an answer changes edited
 to match, the ADR included. A design is edited in place until it is `APPROVED`, and superseded after.
+Every answer from someone other than the person named, and every partial one, is settled by the
+approver before the design is approved. A design path given alone, while the draft is still
+`DRAFT`, finishes it from the first missing section or takes its author's revision, and takes
+`--challenge` and `--adr` there.
 
 **Do not use when.** The change is local and reversible. A design document for a two-file fix costs
 more than it returns.

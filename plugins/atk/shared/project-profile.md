@@ -282,7 +282,9 @@ the profile would have told it.
 Two things are read by every `Not needed` skill whenever the profile is there: `Run trace` in Docs,
 which decides whether the run leaves a trace, and the Name column of the Team section, which writes
 the names on a trace's `gate` lines, both per `shared/run-trace.md`. Reading it changes nothing
-the user sees. The skill still never mentions the profile, and a trace it does not write is never
+the user sees, with one difference the test above allows: `atk:design-doc --answer` writes the
+names in its `Answered by` and `Relayed by` cells by the same rule, so a person reads as one name
+in the design and in the trace, and without the profile reads as the person gave it. The skill still never mentions the profile, and a trace it does not write is never
 explained by naming the file.
 
 `atk:spec` is Required-soft rather than Required because it has two other ways to find its

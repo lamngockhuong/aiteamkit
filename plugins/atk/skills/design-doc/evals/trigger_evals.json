@@ -42,5 +42,12 @@
   { "query": "この実装計画に反論して", "should_trigger": false },
   { "query": "the TL answered question 2, update the plan", "should_trigger": false },
   { "query": "ghi câu trả lời vào plan, PM đã trả lời câu hỏi mở số 1", "should_trigger": false },
-  { "query": "計画の未解決事項に回答を反映して", "should_trigger": false }
+  { "query": "計画の未解決事項に回答を反映して", "should_trigger": false },
+  { "query": "record the client's answers to the open questions in the intake document", "should_trigger": false },
+  { "query": "ghi câu trả lời của khách vào các câu hỏi mở trong tài liệu yêu cầu", "should_trigger": false },
+  { "query": "要件定義書の未解決事項にお客様の回答を反映して", "should_trigger": false },
+  { "query": "finish the draft design at docs/records/design/261001-0900-export.md, the run died after the options", "should_trigger": true },
+  { "query": "viết tiếp bản thiết kế nháp docs/records/design/261001-0900-export.md", "should_trigger": true },
+  { "query": "下書きの設計書 docs/records/design/261001-0900-export.md の続きを書いて", "should_trigger": true },
+  { "query": "the approved design for the queue no longer holds, we changed the decision, write the replacement", "should_trigger": true }
 ]

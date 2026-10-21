@@ -43,6 +43,10 @@ go into the pull request body:
 - **N10.** Its old line numbers at `:96-97` and `:158` are off by one to eight.
 - **N11.** "as plans already do" (`:111`) is not exact: a plan is edited in place even at
   `APPROVED`, until a phase starts.
+- **`:24`.** "the review that read the change ended with no `BLOCKING` finding open" stopped being
+  true at the next review, which found B1.
+- **`:361`.** "`shared/state-signals.md` row 1 is unchanged" is no longer true: this change edits
+  row 1 to name the documents a `--from` run's search finds.
 
 The fix was reviewed twice with `atk:review`. The second round raised two more, S5 and S6 of that
 review; Lam Ngoc Khuong chose for S6 that a decision recorded through `--answer` passes the same gate
@@ -52,9 +56,10 @@ Lam Ngoc Khuong, as Tech Lead, is the approver of this report and the change.
 
 ## 1. Symptom as captured
 
-The findings as the review stated them, `docs/derived/reviews/139-261020-1155.md`, base `main` @
+The findings as the review stated them, the `atk:review` run of 2026-10-20 at 11:55, base `main` @
 `71ff246`, head `7662946`, 19 files, 710 lines. The review's head is the commit this run started
-from, so every line it cites is current.
+from, so every line it cites is current. S1 and S23 of that review are not listed: the review
+itself raised S1 to B1 and lowered S23 to N25.
 
 ```
 B1. `--from` asks nothing, but the rule chosen for SP1 is that it searches and asks
@@ -200,8 +205,8 @@ shared files are not reference documents.
 
 | Round | Report | Result |
 |---|---|---|
-| 1 | `docs/derived/reviews/139-fix-findings-261020-1358.md` | 0 `BLOCKING`, 4 `SHOULD FIX`, 10 `NIT`. S1 to S4 fixed: `--challenge` with `--answer` refused without "run it after"; a review request never listed is recorded as a stated question; `atk:plan` keeps a wrong-person answer open in `## Where it goes` and its definition of done too; the approver's ruling is an answer recorded as `settled by <approver>`, in both skills. N1 to N10 left as `NIT` for the author |
-| 2 | `docs/derived/reviews/139-fix-findings-261020-1406.md` | S1 to S4 closed; 0 `BLOCKING`, 2 `SHOULD FIX`, 3 `NIT`. S5 (the approver's ruling on an objection left `Open for <role>` standing) and S6 (a decided review request named no owner, so the S20 gate never applied) fixed after the last call, S6 as Lam Ngoc Khuong chose: **not reviewed again**. N11 to N13 left as `NIT` |
+| 1 | the `atk:review` run of 2026-10-20 at 13:58 | 0 `BLOCKING`, 4 `SHOULD FIX`, 10 `NIT`. S1 to S4 fixed: `--challenge` with `--answer` refused without "run it after"; a review request never listed is recorded as a stated question; `atk:plan` keeps a wrong-person answer open in `## Where it goes` and its definition of done too; the approver's ruling is an answer recorded as `settled by <approver>`, in both skills. N1 to N10 left as `NIT` for the author |
+| 2 | the `atk:review` run of 2026-10-20 at 14:06 | S1 to S4 closed; 0 `BLOCKING`, 2 `SHOULD FIX`, 3 `NIT`. S5 (the approver's ruling on an objection left `Open for <role>` standing) and S6 (a decided review request named no owner, so the S20 gate never applied) fixed after the last call, S6 as Lam Ngoc Khuong chose: **not reviewed again**. N11 to N13 left as `NIT` |
 
 Afterwards, at Lam Ngoc Khuong's request, the author read the fixes again: the `Question` field of
 `answer-mode.md` now also holds a review request as the person stated it, and two paragraphs were

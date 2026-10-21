@@ -70,7 +70,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
 | `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, what the work touches and where it is in the code, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
 | `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
-| `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. With `--spike`, a time-boxed investigation of the one question a design cannot choose without, ending in a recommendation for the Tech Lead. With `--challenge`, one agent per signing role raises objections against the draft before the real reviewers see it. With `--answer`, records the answers to its open questions while it is in review. |
+| `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. With `--spike`, a time-boxed investigation of the one question a design cannot choose without, ending in a recommendation for the Tech Lead. With `--challenge`, one agent per signing role raises objections against the draft before the real reviewers see it. With `--answer`, records the answers to its open questions until it is approved; given the path of a draft, finishes or revises it. |
 | `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, and the components of each screen read from its Figma design, updated in place and checked against the code, and the design, for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
 | `atk:convention` | The team's real conventions derived from the code, grouped by each language and technology it detects, each classified as enforced by tooling, checked in review, or merely aspirational. A project with nothing written gets one standards document per technology under `docs/standards/`. With `--suggest` it also proposes rules from published standards for that stack, each one waiting for the Tech Lead. Offers to draft the collaboration files the project has none of, and writes only the ones you pick. |
@@ -128,7 +128,7 @@ stage. The full path table, the naming rules, and the shared front matter live i
 [plugins/atk/shared/artifact-paths.md](plugins/atk/shared/artifact-paths.md).
 
 Not every artifact has the same fate. A reference document is updated in place forever, a record is
-never edited, apart from a design and its ADR while in review, and rarely deleted, and one directory
+never edited, apart from a design and its ADR until approved, and rarely deleted, and one directory
 is safe to delete or leave out of git entirely.
 Which is which, what each deletion costs, and the three policies a team can choose between:
 [docs/artifact-lifecycle.md](docs/artifact-lifecycle.md)

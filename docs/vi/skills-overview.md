@@ -265,7 +265,10 @@ trong một mục `Pre-review objections` nói rõ đây không phải một lư
 `<design-path> --answer` ghi câu trả lời cho các câu hỏi mở đó khi thiết kế ở `DRAFT` hay `IN REVIEW`: giữ
 nguyên lời người trả lời, kèm tên người đó, trong mục con `Answered`, và sửa theo mọi mục mà câu trả
 lời làm thay đổi, kể cả ADR. Thiết kế được sửa tại chỗ cho tới khi `APPROVED`, sau đó thì thay bằng
-bản mới.
+bản mới. Câu trả lời đến từ người khác người được nêu tên, hay câu trả lời mới đúng một phần, đều
+phải được approver giải quyết trước khi thiết kế được duyệt. Khi chỉ nhận đường dẫn của một thiết kế
+còn ở `DRAFT`, skill viết tiếp bản nháp từ mục đầu tiên còn thiếu hoặc nhận bản sửa của tác giả, và
+chạy được `--challenge` cùng `--adr` trên đó.
 
 **Không dùng khi.** Thay đổi nhỏ, cục bộ và dễ quay lui. Viết design doc cho một sửa đổi hai file
 tốn hơn phần nhận lại.

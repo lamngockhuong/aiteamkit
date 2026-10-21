@@ -44,7 +44,7 @@ Không phải skill nào cũng có đủ năm chặng, và chặng bị bỏ qua
 
 **Điều kiện cần.** Skill nào chạy lệnh của dự án thì đọc `.atk/profile.md` trước và dừng lại khi
 thiếu nó, vì một lệnh test đoán bừa mà thoát 0 là thứ bằng chứng tệ nhất có thể có. Skill nào làm
-việc từ một tin nhắn chat thì không bao giờ đòi profile, và chỉ đọc dòng `Run trace` của nó, dòng
+việc từ một tin nhắn chat thì không bao giờ đòi profile, và chỉ đọc hai thứ của nó: dòng `Run trace`, dòng
 quyết định lượt chạy có để lại trace hay không, cùng cột Name trong mục Team, nơi lấy tên người ghi
 trên các dòng `gate` của trace. `plugins/atk/shared/project-profile.md` nói rõ skill nào
 thuộc nhóm nào.
