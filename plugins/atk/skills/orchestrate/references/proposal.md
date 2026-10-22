@@ -183,6 +183,28 @@ person is asked whether it starts from that branch as it stands, from the run's 
 waiting. A wait that would close a cycle, two pieces each waiting on the other, goes to the person,
 who orders them; the coordinator never breaks one.
 
+**The master test plan.** The `atk:qa --master` job that row 13 of `shared/state-signals.md` names
+is proposed once per run, as a job of the first piece that reaches the row, however many pieces
+reach it. Before proposing it, the run looks for a master plan its base does not hold yet: in each
+worktree and on each branch the run states of earlier runs record, read as Reading a piece in
+`references/worktrees.md` reads a piece. A master plan found there is not proposed again, since a
+second one would put the same questions to the PM and the Tech Lead twice and conflict at merge; the
+record names the branch that holds it and that it waits for a push and merge, and that branch stands
+in for the job's below. Every piece at row 13 but the one whose job writes the master plan, and
+every piece at the row when an earlier run's branch holds it, is treated as sharing a file with that
+piece or that branch, so the test plan its own job writes reads the master plan rather than asking
+its questions again:
+
+- **A piece with no worktree yet** gets one once the master plan is committed, stacked on that
+  branch as above.
+- **A piece whose worktree already exists**, the usual case, since its requirement is approved
+  between runs, is not given a new one, and the coordinator never merges into it. Its `atk:qa` job
+  waits for the master plan's commit; the chain is then `needs-person`, or `parked` where that
+  person is not in the session, naming the QA lead from the Team section, or
+  `TBD (ask <the person running the skill>)`, with the question of bringing the master plan's branch
+  into the piece's branch, by a merge or a rebase that person makes. A later run reads the piece's
+  tree again, per step 1 of `SKILL.md`, and proposes its `atk:qa` job once the master plan is there.
+
 ## A breakdown's tasks
 
 An approved breakdown turns its tasks into new pieces, each with its own worktree and branch, based

@@ -10,9 +10,10 @@ rule apply at every login after that.
 ## Where the target comes from
 
 The target is a row of the `Environments` section the feature's test plan resolves to, per Reading a
-section in `skills/qa/references/test-plan-template.md`: the feature plan's own section where it has
-one, otherwise the master test plan's, found per Where the master plan is in the same file, with the
-rows the feature plan adds or replaces under Differences from the master plan. The person names the
+section in `skills/qa/references/test-plan-template.md`: the feature plan's own `Environments`
+section where it has one, a heading of that name anywhere but under Differences from the master
+plan, otherwise the master test plan's, found per Where the master plan is in the same file,
+with the rows the feature plan's `Environments` table under Differences adds or replaces. The person names the
 row, with `--env <name>` or in answer to the question the skill asks when the plan has more than
 one. `--env` must match one row's `Environment` exactly; a name that matches none, or several, is
 asked about with the rows listed. A row is never chosen for them: two rows with similar names are

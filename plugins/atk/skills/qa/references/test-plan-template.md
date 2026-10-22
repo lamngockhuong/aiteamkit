@@ -257,11 +257,14 @@ A skill that needs a feature's Test levels, Test types, Environments, Compatibil
 criteria, or Defect severity finds it in this order, matching a heading by its name with any leading
 number ignored:
 
-1. **The feature plan's own section of that name, whole.** A plan written without a master plan, or
-   before one existed, carries it, and for that feature it wins, since its approver approved it. Entry
-   and exit criteria is the one section every feature plan has: its Entry is always the feature
-   plan's, and so is its Exit, unless the cell says `As in the master plan`, which sends the reader to
-   the Exit of the master plan's `Entry and exit criteria`.
+1. **The feature plan's own section of that name, whole.** It is a heading of that name anywhere in
+   the feature plan except under Differences from the master plan, whose tables are applied in step 2
+   alone. A plan written without a master plan, or before one existed,
+   carries the section, and for that feature it wins, since its approver approved it. Entry and exit
+   criteria is the one section every feature plan has: its Entry is the master plan's Entry together
+   with the feature plan's, or the feature plan's alone in a plan that says `No master test plan`, and
+   its Exit is the feature plan's, unless the cell says `As in the master plan`, which sends the
+   reader to the Exit of the master plan's `Entry and exit criteria`.
 2. **The master plan's section, with the feature plan's Differences applied.** A row there replaces a
    master row as Differences from the master plan says, by its `Environment` name or its `Replaces`
    cell; any other row is added. With no feature plan at all, the master plan's section is read
