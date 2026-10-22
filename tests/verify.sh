@@ -40,9 +40,9 @@ print('OK trace lines, %d skills' % len(files))"
 x=$(find plugins/*/skills -mindepth 3 -name SKILL.md)
 test -z "$x" && echo "OK no nested SKILL.md" || echo "FAIL nested SKILL.md: $x"
 
-# docs/ and docs/vi/ are mirrored
-diff <(cd docs && find . -name '*.md' -not -path './vi/*' \
-              -not -path './derived/*' -not -path './records/*' | sort) \
+# docs/ and docs/vi/ are mirrored; of the records, only the designs are
+diff <(cd docs && find . -name '*.md' -not -path './vi/*' -not -path './derived/*' \
+              \( -not -path './records/*' -o -path './records/design/*' \) | sort) \
      <(cd docs/vi && find . -name '*.md' | sort)
 
 # Both registration files parse, the scripts are valid Node, and check-profile stays silent where a
