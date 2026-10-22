@@ -4,7 +4,7 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-17
-updated: 2026-10-01
+updated: 2026-10-22
 ticket: none
 ---
 
@@ -44,7 +44,9 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
      layer. They are output, and their shape belongs to the skill that writes them. `docs/derived/`
      is gitignored; `docs/records/` is committed, because a record is the only account of what was
      true at a moment. Neither is mirrored in `docs/vi/`: translating a record would be translating
-     history. CLAUDE.md, section "Docs are bilingual", carries the same exclusion. -->
+     history. The one exception is a design record, whose Vietnamese copy the author writes at
+     `docs/vi/records/design/`, since the kit never mirrors a record itself. CLAUDE.md, section
+     "Docs are bilingual", carries the same exclusion and the exception. -->
 
 ## Commands
 
@@ -73,7 +75,7 @@ Four further checks live outside that section, each beside the rule it enforces:
 - Docs root: `docs/` <!-- source: existing directory -->
 - Authored language: `en` <!-- source: CLAUDE.md, section "Docs are bilingual" -->
 - Language mirrors: `docs/vi/`, file-for-file including subdirectories, except `docs/derived/` and
-  `docs/records/`
+  `docs/records/`; `docs/records/design/` is copied to `docs/vi/records/design/` by its author
 - Conventions: `CLAUDE.md` <!-- source: no CONTRIBUTING.md, no .editorconfig -->
 - Review checklist: `CLAUDE.md`, section "Review checklist" <!-- source: written by /atk:convention on 2026-09-18 -->
 - Designs: `docs/system-architecture.md`

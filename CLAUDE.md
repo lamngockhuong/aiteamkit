@@ -602,6 +602,14 @@ moment, in the language of the run that produced it. Translating one would be tr
 and the person who needs it reads the pull request it belongs to. `.atk/profile.md` says the same in
 its Layers table, and the mirror check in `tests/verify.sh` excludes both paths.
 
+One kind of record is the exception: a design under `docs/records/design/` has its Vietnamese copy
+at `docs/vi/records/design/`, same filename. A design is read before it is approved and long after,
+by the whole team, which is not true of a fix report. The maintainer chose this on 2026-10-22. The
+kit itself never mirrors a record, per `plugins/atk/shared/artifact-paths.md`, so `atk:design-doc`
+writes the English design and the author writes the copy beside it in the same pull request. While
+the design is `DRAFT` or `IN REVIEW`, an edit to one, an answer recorded through `--answer` among
+them, is made to both; from `APPROVED` neither is edited. The mirror check covers this subtree.
+
 | File | Purpose |
 |------|---------|
 | `skills-overview.md` | Reader-facing explanation of every skill: what it produces, when to use, when not to |
@@ -698,7 +706,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
 | `CONV-001` | Adding, renaming, or removing an `atk` skill touches all twelve groups of file listed for it | `REVIEWED` | none for ten groups; the skill-lifecycle counts check in `tests/verify.sh` for part of group 10, the labeler check for group 12 | `BLOCKING` | "Adding or changing a skill touches several files" |
-| `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the mirror `diff` in `tests/verify.sh` | `BLOCKING` | "Docs are bilingual" |
+| `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted, `docs/records/design/` included | `REVIEWED` | the mirror `diff` in `tests/verify.sh` | `BLOCKING` | "Docs are bilingual" |
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` in that section | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` in that section | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the name check in `tests/verify.sh` | `BLOCKING` | "SKILL.md `name` field convention" |
