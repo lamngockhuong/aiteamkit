@@ -84,7 +84,7 @@ flowchart TD
     end
 
     subgraph S6["6. Test"]
-        V0["atk:qa<br/><small>QA writes the plan and cases</small>"] --> V1["Testers run the cases<br/><small>recorded with atk:qa --record</small>"]
+        V0["atk:qa<br/><small>the QA lead writes the master test plan once, QA each feature's plan and cases</small>"] --> V1["Testers run the cases<br/><small>recorded with atk:qa --record</small>"]
         V0 --> VR["atk:run-cases<br/><small>the agent runs the automatable cases on DEV or staging</small>"]
         V1 --> V2{"QA signs off"}
         VR --> V2

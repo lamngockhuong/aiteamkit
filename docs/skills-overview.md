@@ -608,7 +608,7 @@ criteria, test cases traced to acceptance criteria,
 negative and boundary coverage, and a regression matrix that justifies each entry with a shared
 module, table, or endpoint.
 
-**Use when.** A feature reaches QA, a release needs a regression pass, or there are no written cases.
+**Use when.** A project starts testing, a feature reaches QA, a release needs a regression pass, or there are no written cases.
 Migration, rollback, rollout and performance cases come from the design. Under `Contract: first`
 expected values come from the reference documents in `docs/api/`, `docs/database/` and
 `docs/features/`, so cases can be written before the code exists; under `code`, from the design for
@@ -616,9 +616,10 @@ what the change alters and from the reference documents for what it leaves alone
 
 `--master` writes the project's master test plan, `docs/qa/master-test-plan.md`, once when testing
 starts: the test levels, test types, environments, compatibility, default exit criteria and defect
-severity, which a QA team decides for the whole project rather than per feature. The name follows IEEE
+severity, which the project decides once rather than per feature: the PM the exit criteria and
+the severity, the Tech Lead the environments. The name follows IEEE
 829 and the ISTQB glossary; ISO/IEC/IEEE 29119 calls it the project test plan. A feature's plan then
-holds its scope, its regression and its entry criteria, and only where it differs from the master
+holds its scope, its regression and its entry and exit criteria, and only where it differs from the master
 plan, so the PM is asked for a severity scale once and an environment URL changes in one file. A
 project with no master plan still gets a feature plan, which carries those sections itself as before.
 

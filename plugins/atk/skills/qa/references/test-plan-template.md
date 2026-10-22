@@ -2,18 +2,18 @@
 
 Loaded by `atk:qa` in steps 4 and 5, under `--master`, and on any run that writes or reads a plan:
 the default run, `--plan`, `--regression`, `--update`, and `--retest`, which read the Regression
-section. `atk:run-cases` reads the environments and `atk:release` the defect severity through Reading
-a section, below.
+section, and `--record` and `--review`, which read a section through Reading a section, below.
+`atk:run-cases` reads the environments and `atk:release` the defect severity the same way.
 
-A project has two kinds of test plan, following the master test plan and the level test plans of
-IEEE 829 and the ISTQB glossary, which ISO/IEC/IEEE 29119 calls the project test plan:
+A project has two kinds of test plan, following the master test plan, which ISO/IEC/IEEE 29119
+calls the project test plan, and the level test plans of IEEE 829 and the ISTQB glossary:
 
 - **The master test plan**, one per project at `docs/qa/master-test-plan.md`: what the team decides
   once, when the project starts, and holds for every feature. The test levels, the test types, the
   environments, compatibility, the default exit criteria, and the defect severity.
 - **The test plan of a feature or a release**, at `docs/qa/test-plan-<slug>.md`, per
-  `shared/artifact-paths.md`: its scope, its regression, its entry criteria, and only the places where
-  it differs from the master plan.
+  `shared/artifact-paths.md`: its scope, its regression, its entry and exit criteria, and only the
+  places where it differs from the master plan.
 
 The standards split the lower plans by test level; a team splits them by feature, and the feature plan
 here is that, not a level test plan. A company test strategy, which holds for every project of the
@@ -23,8 +23,9 @@ it.
 The project's own template wins over these shapes in the same order as
 `references/test-case-template.md` gives: an override that names one, then an existing plan under
 `docs/qa/`. A team that keeps its master plan outside the repository, in a spreadsheet or a wiki,
-names where in the override, and Where the master plan is, under Reading a section, is the one place
-that location is resolved.
+names it on the `Master test plan:` line of the override, per The one line other skills read in
+`shared/project-overrides.md`, and Where the master plan is, under Reading a section, is the one
+place that location is resolved.
 
 Two things no plan ever does. It never places a value nobody gave: a date, a response target, an
 environment URL left unknown stays empty with the name of who will fill it, because a provisional
@@ -75,7 +76,7 @@ One row per non-functional requirement the project actually states, and none for
 | Type | Level | Requirement | How it is checked |
 |------|-------|-------------|-------------------|
 | Performance | ST | <the requirement's expectation, quoted> | <tool or procedure> |
-| Compatibility | ST | Section 5 below | Cross-browser run |
+| Compatibility | ST | The Compatibility section below | Cross-browser run |
 
 ## 4. Environments
 
@@ -137,9 +138,12 @@ answered:
    strategy where the person names one.
 3. The person, for what neither gives.
 
-Where the master plan is kept outside the repository, `--master` writes nothing into `docs/qa/`: it
-reads that plan, shows the changes it would make, and leaves them to the plan's owner, since a second
-copy in the repository would disagree with the one the team keeps.
+Where the master plan is kept outside the repository, `--master` writes nothing, into `docs/qa/` or
+through a connection, whatever the person asks: it reads that plan, and shows each value it would
+change as an open question for that value's owner, the approver the plan names, or the PM for the
+exit criteria and the defect severity and the Tech Lead for the environments where it names none,
+since a second copy in the repository would disagree with the one the team keeps, and an edit to it
+would change the PM's figures with no approval. The plan's owner makes the change there.
 
 Where two feature plans disagree on a value, two severity scales, two URLs for one environment, the
 value is an open question for its owner, the PM or the Tech Lead, and none of them is picked. The run
@@ -156,7 +160,7 @@ master plan, and the Tech Lead who provides any environment it adds.
 title: "Test plan: <feature or release>"
 status: IN REVIEW
 owner: <QA>
-approver: <PM for the exit criteria, and for the defect severity where this plan carries it; TL for the environments this plan carries or adds; QA lead or TL for the rest>
+approver: <PM for the exit criteria, for the defect severity where this plan carries it, and for a test level nobody decided where it carries Test levels; TL for the environments this plan carries or adds; QA lead or TL for the rest>
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 ticket: <ticket, or none>
@@ -164,7 +168,7 @@ ticket: <ticket, or none>
 
 # Test plan: <feature or release>
 
-- Master test plan: <its location, per Where the master plan is>, status <status>; or `No master test plan`
+- Master test plan: <its path, per Where the master plan is, or `the master test plan named in .atk/overrides/qa.md` for one kept outside the repository, never its link>, status <status>; or `No master test plan`
 
 ## 1. Scope
 
@@ -183,6 +187,9 @@ decided.
 | Type | Level | Requirement | How it is checked | Replaces | Reason | Decided by |
 |------|-------|-------------|-------------------|----------|--------|------------|
 
+A feature's `Performance` row quotes the design's expectation, which steps 1 and 4 of `SKILL.md`
+take it from.
+
 ### Environments
 
 | Environment | Kind | Used for | URL or location | Data | Provided by | Reason | Decided by |
@@ -196,7 +203,8 @@ An environment's name is what a run names it by, so two rows of one name cannot 
 | Browser, OS, or device | Version | Responsive checked | Replaces | Reason | Decided by |
 |------------------------|---------|--------------------|----------|--------|------------|
 
-In these two tables a row replaces a master row only when its `Replaces` cell names that row, as the
+In the Test types and Compatibility tables a row replaces a master row only when its `Replaces`
+cell names that row, as the
 master plan writes it; any other row is added, `none` in the cell included. A feature with a
 performance figure of its own beside the project's has two `Performance` rows, and both are tested.
 
@@ -218,7 +226,7 @@ performance cases the design calls for, one case each.
 
 | Level | Entry | Exit |
 |-------|-------|------|
-| ST | <build, seed data, the accounts this feature needs beyond the master plan's, the not-implemented list, and who delivers each> | <`As in the master plan`, or this feature's threshold with the PM who set it> |
+| ST | <only what this feature adds to the master plan's Entry: its build, seed data, the accounts by role beyond the master plan's, the not-implemented list, and who delivers each> | <`As in the master plan`, or this feature's threshold with the PM who set it> |
 
 ## 5. Schedule
 
@@ -231,7 +239,8 @@ A link to the estimate or breakdown that holds the test effort and dates, or `no
 ````
 
 Test levels and defect severity have no table under Differences. A level one feature skips is part of
-its scope, and the project keeps one severity scale, because `atk:release` reads every feature's
+its scope, and the project keeps one severity scale once older plans drop their copy, because
+`atk:release` reads every feature's
 defects against it in one release.
 
 ### Without a master plan
@@ -240,18 +249,23 @@ Where no master plan exists, per Where the master plan is, the session says so a
 first, since a feature plan written now asks the PM what the master plan would ask once for every
 feature. Where the person goes on, the feature plan carries the master plan's sections itself, Test
 levels, Test types, Environments, Compatibility, and Defect severity, in the master plan's shapes
-and in place of Differences, with its Exit written out rather than `As in the master plan`, and its
-header line says `No master test plan`. A plan written before the master plan existed looks the
-same, and Reading a section reads both alike.
+and in place of Differences, with its Entry written out whole, the environment and the accounts by
+role included, its Exit written out rather than `As in the master plan`, and its header line says
+`No master test plan`. A plan written before the master plan existed has no header line at all, and
+Reading a section reads it the same way.
 
 ## Reading a section
 
-**Where the master plan is.** `docs/qa/master-test-plan.md`, or the location `.atk/overrides/qa.md`
-names for a master plan the team keeps outside the repository. A reader opens an outside one per Read
-through a connection in `shared/host-capabilities.md`, and asks the person for a value when no
-connection reaches it. A skill that does not otherwise read the `qa` override, `atk:run-cases` and
-`atk:release`, opens it for this line alone. Either location is a master plan wherever the kit asks
-whether one exists, and every other mention of the master plan's path means this one.
+**Where the master plan is.** `docs/qa/master-test-plan.md`, resolved against the project's docs
+root, per A project that spans several repositories in `shared/artifact-paths.md`, or the location
+the `Master test plan:` line of `.atk/overrides/qa.md` names for a master plan the team keeps outside
+the repository, per The one line other skills read in `shared/project-overrides.md`, which says who
+reads the line and that it applies only from an approved override. A reader opens an outside one per
+Read through a connection in `shared/host-capabilities.md`, never writes through that connection,
+and asks the person for a value when no connection reaches it. Where both exist, the reader names
+both and asks the QA lead which one holds, and reads neither until they answer. Either location is a
+master plan wherever the kit asks whether one exists, and every other mention of the master plan's
+path means this one.
 
 A skill that needs a feature's Test levels, Test types, Environments, Compatibility, Entry and exit
 criteria, or Defect severity finds it in this order, matching a heading by its name with any leading
@@ -262,12 +276,14 @@ number ignored:
    alone. A plan written without a master plan, or before one existed,
    carries the section, and for that feature it wins, since its approver approved it. Entry and exit
    criteria is the one section every feature plan has: its Entry is the master plan's Entry together
-   with the feature plan's, or the feature plan's alone in a plan that says `No master test plan`, and
+   with the feature plan's, or the feature plan's alone in a plan that says `No master test plan` or
+   has no `Master test plan:` line, and
    its Exit is the feature plan's, unless the cell says `As in the master plan`, which sends the
    reader to the Exit of the master plan's `Entry and exit criteria`.
 2. **The master plan's section, with the feature plan's Differences applied.** A row there replaces a
    master row as Differences from the master plan says, by its `Environment` name or its `Replaces`
-   cell; any other row is added. With no feature plan at all, the master plan's section is read
+   cell; any other row is added. From Test levels, a level the feature's Scope says it skips is
+   removed. With no feature plan at all, the master plan's section is read
    alone.
 3. **Neither.** The section does not exist for that feature, and the reader does what it does when
    there is no test plan.
@@ -284,7 +300,8 @@ a plan is written in, because `atk:qa --record`, `--update`, `--retest`, `atk:ru
 `Test levels`, `Test types`, `Environments`, `Compatibility`, `Entry and exit criteria`,
 `Defect severity`, `Differences from the master plan`, and `Regression`; the column names of every
 table; the marks `MUST TEST`, `SPOT CHECK` and `NOT AFFECTED`; the lines `None`,
-`As in the master plan`, and `No master test plan`; and the front matter keys and statuses. A
+`As in the master plan`, and `No master test plan`; the header label `Master test plan:`; and the
+front matter keys and statuses. A
 severity's name is the master plan's to choose, and stays however it spells it.
 
 ## Updating

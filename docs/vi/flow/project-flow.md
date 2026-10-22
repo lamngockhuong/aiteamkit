@@ -85,7 +85,7 @@ flowchart TD
     end
 
     subgraph S6["6. Kiểm thử"]
-        V0["atk:qa<br/><small>QA viết kế hoạch và test case</small>"] --> V1["Tester chạy các case<br/><small>ghi lại bằng atk:qa --record</small>"]
+        V0["atk:qa<br/><small>QA lead viết master test plan một lần, QA viết test plan và test case của từng tính năng</small>"] --> V1["Tester chạy các case<br/><small>ghi lại bằng atk:qa --record</small>"]
         V0 --> VR["atk:run-cases<br/><small>agent chạy các case tự động được trên DEV hoặc staging</small>"]
         V1 --> V2{"QA ký nhận"}
         VR --> V2

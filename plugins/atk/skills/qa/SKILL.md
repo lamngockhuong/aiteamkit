@@ -165,16 +165,18 @@ there. With no master test plan, per Where the master plan is in that file, the 
 `--master` first, and a plan written without one carries those sections itself, per Without a master
 plan in the same file.
 
-Entry: what the developer must deliver before QA starts, including build, environment, test account,
-seed data, and the list of what is not implemented yet. Where a reference document carries
-`implemented`, per `shared/spec-docs.md`, that list starts from its value and its marks rather than
-from memory. Exit: the pass rate, the severity thresholds
-that block a release, and who signs off.
+Entry: only what this feature adds to the master plan's Entry, what the developer must deliver
+before QA starts: its build, seed data, the accounts by role beyond the master plan's, and the list
+of what is not implemented yet. Where a reference document carries `implemented`, per
+`shared/spec-docs.md`, that list starts from its value and its marks rather than from memory. Exit:
+`As in the master plan`, unless the PM set a figure of the feature's own, written with their name.
+A plan written without a master plan writes both out whole, per Without a master plan.
 
 ## Output
 
-The master test plan at `docs/qa/master-test-plan.md`, or where the override says the team keeps it,
-a feature's test plan at
+The master test plan at `docs/qa/master-test-plan.md`; where the override names one outside the
+repository, no file: the proposed changes, shown in the session as open questions, per Writing it in
+`references/test-plan-template.md`. A feature's test plan at
 `docs/qa/test-plan-<slug>.md`, and cases at `docs/qa/test-cases-<slug>.md` per
 `shared/artifact-paths.md`. The Markdown table is the source. A CSV beside it,
 `docs/qa/test-cases-<slug>.csv`, is written by the export rules in `references/test-case-template.md`
@@ -209,8 +211,9 @@ who raised the bug closes it, or whoever the team's own flow names. The whole pr
 - [ ] Entry and exit criteria name who provides what and who signs off.
 - [ ] A feature plan repeats nothing of the master test plan: it names the master plan, or says there
       is none and carries its sections, and every row under Differences has a reason and who decided.
-- [ ] Under `--master`, every value came from a feature plan, a requirement, a strategy the person
-      named, or the person; two sources that disagree left an open question for the value's owner.
+- [ ] Under `--master`, every value came from a feature plan, a requirement, the profile's Team
+      section, a strategy the person named, or the person; two sources that disagree left an open
+      question for the value's owner.
 - [ ] Every case has a section, a testcase type, and a source, and no ID was given to a second case.
 - [ ] Every field with a stated limit has its boundary cases, and every validation rule has one
       accepted and one rejected case.

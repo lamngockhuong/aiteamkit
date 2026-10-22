@@ -69,6 +69,22 @@ One file rather than several, because the path is then derivable. A reviewer ope
 knows which file to read from the skill name alone, and `atk:tailor --audit` checks one file per
 skill rather than discovering how many exist.
 
+### The one line other skills read
+
+One line of one override is read by skills other than its own: the location of a master test plan
+the team keeps outside the repository, in a spreadsheet or a wiki, written in `## Before` of
+`.atk/overrides/qa.md` as `Master test plan: <location>`, on a line of its own that starts with the
+label, with no list marker or emphasis, the label in English whatever language the rest of the file
+is in, per rule 6 of `shared/team-roles.md`, since `atk:orchestrate` finds it by matching. `atk:tailor`
+writes it in that form. `atk:qa`, `atk:run-cases`, `atk:release`, `atk:help` and `atk:orchestrate`
+read it, through Where the master plan is in `skills/qa/references/test-plan-template.md`, and the
+four that are not `atk:qa` read that line and the front matter, nothing else of the file.
+
+The line applies only from an `APPROVED` override, per Only an approved override applies below.
+From any other state each reader prints the line that section gives, and the master plan is
+`docs/qa/master-test-plan.md` alone; `atk:qa --master` then writes no copy there either, and stops
+after saying so, since where the plan lives is what the approver has not yet approved.
+
 ## Format
 
 The standard front matter block from `shared/artifact-paths.md`, then at most two sections:

@@ -26,7 +26,7 @@ From that row the run takes:
 | `Environment` | The name written into the record's `Environment` header field |
 | `Kind` | Whether the run may proceed at all, per Acceptable targets below |
 | `URL or location` | The base URL; an empty cell is asked for, from the person the row names |
-| `Data` | What recon expects to find, the test accounts by role, and the lock threshold |
+| `Data` | What recon expects to find, the test accounts by role, and the lock threshold; never a credential, per the last paragraph of Credentials below |
 | `Provided by` | The environment owner: the person a stop names, and the person who answers what the row leaves open |
 
 A row whose `Provided by` holds a role with no name, or nothing, stops the run before any request,
@@ -70,7 +70,8 @@ hold a term with none of the four values beside it, `QA` or `sandbox`. Each is h
 The run asks the person which kind the row is, with the four values to choose from, and records the
 answer in the record's `Environment` header field with who gave it and how:
 `Environment: <name> (kind: staging, given by <person> in the session; the test plan has no Kind)`.
-The answer is never written back into the test plan, whose owner edits it, and the session says what
+The answer is never written back into the plan that holds the row, whose owner edits it, and the
+session says what
 is missing so that owner can fix it. An answer of `production` or `local` stops the run exactly as
 the cell would have. An answer the owner gave rather than the person is recorded with the owner's name
 and where they gave it.
@@ -145,6 +146,8 @@ navigation to another host. That URL is never logged and never captured in a scr
 a credential prompt part-way through the run, is the gate forgetting the session, never a defect:
 pass it again and carry on.
 
-A credential found where it should not be, in a page, a response, or the cases file itself, is
-reported in the session by kind and place, never by value, and its owner is named as the person who
-rotates it.
+A credential found where it should not be, in a page, a response, the cases file itself, or a plan
+read through a connection, a password in the `Data` cell of a master test plan kept in a spreadsheet
+among them, is never used and never quoted. It is reported in the session by kind and place, never
+by value, and its owner is named as the person who rotates it, with the plan's owner as the person
+who removes it from the plan.

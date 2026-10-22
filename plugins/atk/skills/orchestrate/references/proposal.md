@@ -184,26 +184,46 @@ waiting. A wait that would close a cycle, two pieces each waiting on the other, 
 who orders them; the coordinator never breaks one.
 
 **The master test plan.** The `atk:qa --master` job that row 13 of `shared/state-signals.md` names
-is proposed once per run, as a job of the first piece that reaches the row, however many pieces
-reach it. Before proposing it, the run looks for a master plan its base does not hold yet: in each
-worktree and on each branch the run states of earlier runs record, read as Reading a piece in
-`references/worktrees.md` reads a piece. A master plan found there is not proposed again, since a
-second one would put the same questions to the PM and the Tech Lead twice and conflict at merge; the
-record names the branch that holds it and that it waits for a push and merge, and that branch stands
-in for the job's below. Every piece at row 13 but the one whose job writes the master plan, and
-every piece at the row when an earlier run's branch holds it, is treated as sharing a file with that
-piece or that branch, so the test plan its own job writes reads the master plan rather than asking
-its questions again:
+is proposed once per run, however many pieces reach the row, in a worktree and on a branch of its
+own cut from the run's base, never on a piece's branch, so the branch that carries the master plan
+carries nothing else. Before proposing it, the run looks for a master plan on the run's base, in
+each worktree and on each branch the run states of earlier runs record, read as Reading a piece in
+`references/worktrees.md` reads a piece, and on the `Master test plan:` line of an approved
+`.atk/overrides/qa.md`. One the base holds, or one kept outside the repository, counts as present:
+no job is proposed, and no piece waits on it, apart from a piece whose tree lacks one the base
+holds, or lacks the approved `Master test plan:` line the base's `.atk/overrides/qa.md` holds, read
+in the piece's tree as on the base, below. One on an earlier run's branch is not proposed again,
+since a second would put
+the same questions to the PM and the Tech Lead twice and conflict at merge; the record names that
+branch and that it waits for a push and merge, and it stands in for the job's branch below.
 
-- **A piece with no worktree yet** gets one once the master plan is committed, stacked on that
-  branch as above.
+Every piece at row 13 waits on the master plan's branch as on a piece it shares a file with, so the
+test plan its own job writes reads the master plan rather than asking its questions again. The wait
+ends when the master plan is `APPROVED` on that branch, not when it is committed, since a feature
+plan that says `As in the master plan` cites figures the PM has to have accepted. The master plan
+chain's `needs-approval` is therefore the wait itself here, not an end of it: only `parked`,
+`escalated` or `stopped` ends it otherwise, and goes to the person as the paragraph on how every
+wait of this section ends says.
+
+- **A piece with no worktree yet** gets one from the master plan's branch, stacked on it as above:
+  its review is given `<master plan branch>...<its branch>`, and the master plan's branch is pushed
+  first.
 - **A piece whose worktree already exists**, the usual case, since its requirement is approved
-  between runs, is not given a new one, and the coordinator never merges into it. Its `atk:qa` job
-  waits for the master plan's commit; the chain is then `needs-person`, or `parked` where that
-  person is not in the session, naming the QA lead from the Team section, or
-  `TBD (ask <the person running the skill>)`, with the question of bringing the master plan's branch
-  into the piece's branch, by a merge or a rebase that person makes. A later run reads the piece's
-  tree again, per step 1 of `SKILL.md`, and proposes its `atk:qa` job once the master plan is there.
+  between runs, or whose tree lacks a master plan, or the override line, the run's base holds, is
+  not given a new one, and
+  the coordinator never merges into it. Its `atk:qa` job waits; the chain is then `needs-person`, or
+  `parked` where that person is not in the session, naming the QA lead from the Team section, or
+  `TBD (ask <the person running the skill>)`, with the question of bringing the master plan's branch,
+  or the base, into the piece's branch, by a merge or a rebase that person makes. The question says
+  whether the piece's worktree holds uncommitted edits, from the read of step 1 of `SKILL.md`. A
+  later run reads the piece's tree again and, once the master plan or the line is in it, records
+  the piece's `HEAD` after that merge or rebase as its last commit, and where the base was brought
+  in and the piece's recorded base was the run's base, the base commit it merged or rebased onto
+  as the piece's base, per After a job ends in `references/worktrees.md`; a piece stacked on another
+  piece's branch keeps that branch as its base, with its push order, and the merge is noted beside
+  it. A merge of anything else is shown to the person. It then proposes its `atk:qa` job; where the
+  master plan's branch was brought in, the piece is stacked on it from then on, with the review
+  target and push order of the bullet above.
 
 ## A breakdown's tasks
 

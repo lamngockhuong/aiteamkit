@@ -23,8 +23,9 @@ are the same directory, and the next subsection changes nothing.
 Where the shape in `.atk/profile.md` names member repositories, the docs root hangs off the project
 root, and that is where an artifact about the project goes: the requirements, the design and its ADR,
 the breakdown, the estimate, the retro, the release record, the security record and the threat
-model, the incident record, the runbook, the onboarding documents, the conventions, the reference
-document of any contract two members share, and the run trace of every skill, whose `git` checks run
+model, the incident record, the runbook, the onboarding documents, the conventions, the master test
+plan, the reference document of any contract two members share, and the run trace of every skill,
+whose `git` checks run
 in the repository that holds that root, `git -C <its directory>`, never in the member the session
 started in.
 One tree, read by every team.
@@ -208,7 +209,8 @@ wins, exactly as the docs root rule works above.
 ### Named after the subject: `plan` is dated, `spec` is not
 
 `atk:spec`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither a ticket nor
-a date, and so are the test plan and the cases file of `atk:qa`, whose run records and review reports
+a date, and so are the test plans and the cases file of `atk:qa`, the master test plan named after the
+project and the others after their feature, whose run records and review reports
 are dated like any record or report, and so is the threat model `atk:security` writes. A reference document is named after the thing it describes, one file per resource, per
 table, per feature, per screen, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
@@ -270,7 +272,8 @@ its name says by carrying a ticket, a date, a sprint, or a version? Then it is a
 left describes the system as it currently is, or as it is agreed to be, and that is reference.
 
 The question about the name is the one that settles the cases people argue about. `docs/qa/` is
-named after the feature rather than the sprint, and a regression suite is updated when the feature
+named after the feature, or the project for the master test plan, rather than the sprint, and a
+regression suite is updated when the feature
 changes rather than written again, so test cases are reference and sit at the top level.
 
 One exception, and it is deliberate. ADRs stay at `docs/adr/` although they are records and are

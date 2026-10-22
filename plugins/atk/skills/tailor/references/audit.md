@@ -55,10 +55,12 @@ Name what the skill has now, so the reader can answer without opening it.
 
 ## Check 3: the cheap ones
 
-Three things worth reporting as facts because they are unambiguous:
+Four things worth reporting as facts because they are unambiguous:
 
 - A heading other than `## Before` and `## After` carrying instructions. It is ignored at run time,
   so the team wrote a rule that has never once applied.
+- A `qa` override that names where a master test plan is kept in any form but the line of The one
+  line other skills read in `shared/project-overrides.md`, which `atk:orchestrate` does not find.
 - Front matter with no approver, or an approver still `TBD` with no name attached.
 - Any `status` other than `APPROVED`, or no front matter at all. The override is not applied and
   the skill runs as shipped, per Only an approved override applies in `shared/project-overrides.md`,

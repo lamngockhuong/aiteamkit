@@ -155,7 +155,7 @@ ticket: <ticket, or none>
 # Test run: <feature or release>, <scope>
 
 - Cases: `docs/qa/test-cases-<slug>.md`, as of `<short sha>` of the last commit that changed it, or `not tracked`, status `<status>`, <clean | with uncommitted changes>
-- Test plan: `docs/qa/test-plan-<slug>.md`, and the master test plan's location for the sections read from it; or the master test plan's location alone, where the feature has no plan; or `No test plan: exit criteria not assessed`
+- Test plan: `docs/qa/test-plan-<slug>.md`, and the master test plan's path for the sections read from it, or `the master test plan named in .atk/overrides/qa.md` for one kept outside the repository, never its link; or that master test plan alone, where the feature has no plan; or `No test plan: exit criteria not assessed`
 - Build: <version or commit>. Environment: <name>
 - Scope: <full | smoke | regression | ids | retest>. Case IDs: <the IDs, where the scope is ids or retest>
 - Run by: <names>, <dates>
