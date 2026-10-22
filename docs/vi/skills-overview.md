@@ -612,15 +612,26 @@ bản cùng nói một điều vẫn là công việc của một mô hình, kh�
 
 ## `atk:qa`
 
-**Sinh ra.** Test plan có tiêu chí vào và tiêu chí ra, test case truy vết tới tiêu chí nghiệm thu,
+**Sinh ra.** Master test plan của dự án, test plan cho từng tính năng có tiêu chí vào và tiêu chí
+ra, test case truy vết tới tiêu chí nghiệm thu,
 các case âm và biên, và ma trận regression trong đó mỗi dòng đều có lý do là chung module, chung
 bảng hay chung endpoint.
 
-**Dùng khi.** Một tính năng chuyển sang QA, một bản release cần chạy regression, hoặc team chưa có
+**Dùng khi.** Dự án bắt đầu kiểm thử, một tính năng chuyển sang QA, một bản release cần chạy regression, hoặc team chưa có
 test case viết ra. Các case migration, rollback, rollout và performance lấy từ thiết kế. Khi `Contract: first`, giá trị
 mong đợi lấy từ tài liệu tham chiếu trong `docs/api/`, `docs/database/` và `docs/features/`, nên test
 case có thể viết trước khi có code; khi `code`, lấy từ thiết kế cho phần thay đổi sửa và từ tài liệu
 tham chiếu cho phần nó không đụng tới.
+
+`--master` viết master test plan của dự án, `docs/qa/master-test-plan.md`, một lần khi bắt đầu kiểm
+thử: các cấp test, loại test, môi trường, tương thích, tiêu chí ra mặc định và mức severity của lỗi,
+tức những điều dự án quyết định một lần chứ không cho từng tính năng: PM quyết định tiêu chí ra và
+severity, Tech Lead quyết định môi trường. Tên gọi theo IEEE 829 và
+bảng thuật ngữ ISTQB; ISO/IEC/IEEE 29119 gọi nó là project test plan. Sau đó test plan của từng tính
+năng chỉ giữ phạm vi, regression, tiêu chí vào và tiêu chí ra, cùng những chỗ khác với master test plan, nên PM chỉ phải
+trả lời về thang severity một lần, và URL của một môi trường đổi thì chỉ sửa một file. Dự án chưa có
+master test plan vẫn viết được test plan cho tính năng; khi đó test plan mang luôn các mục này như
+trước.
 
 Case âm và case biên có được nhờ đưa từng tiêu chí đi qua mười chiều: tác nhân, input, số lượng,
 trạng thái, thời điểm, lỗi, môi trường, dữ liệu, tích hợp, và quy tắc; chiều nào không cho ra case

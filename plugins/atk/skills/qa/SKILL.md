@@ -1,20 +1,20 @@
 ---
 name: qa
 description: >
-  Plan and write the team's testing: a test plan with scope and exit criteria, test cases traced to
-  acceptance criteria, a regression matrix, test data and environment needs, and the handoff a
-  developer owes QA. Afterwards, records a test run, raises its failed cases as bugs, and records
-  the retest of a fixed bug. Also brings existing cases level with a changed spec. Use when a
-  feature reaches QA, when a release needs a regression pass, when a team has no written test cases,
-  when the spec changed under existing cases, when results need recording, or when cases need review
-  before approval.
-  Triggers on: "test plan", "test case", "QA", "kiểm thử", "viết test case", "regression",
-  "update the test cases", "cập nhật test case", "テストケース更新",
-  "test results", "log the failed cases as bugs", "retest", "ghi kết quả test", "log bug",
-  "review these test cases", "review test case", "duyệt test case", "テスト計画", "テストケース",
-  "テスト結果", "不具合報告", "再テスト", "テストケースレビュー", "how do we test this", "QA handoff",
+  Plan and write the team's testing: the project's master test plan, a plan per feature with
+  scope and exit criteria, test cases traced to acceptance criteria, a regression matrix, and the
+  handoff a developer owes QA. Afterwards, records a test run, raises its failures as bugs, and
+  records a fixed bug's retest, and brings existing cases level with a changed spec. Use when a
+  project starts testing, a feature reaches QA or has no written cases, a release needs a regression
+  pass, the spec changed under existing cases, results need recording, or cases need review before
+  approval.
+  Triggers on: "test plan", "master test plan", "test case", "QA", "kiểm thử", "viết test case",
+  "kế hoạch kiểm thử tổng thể", "regression", "update the test cases", "cập nhật test case",
+  "テストケース更新", "test results", "log the failed cases as bugs", "retest", "ghi kết quả test",
+  "review these test cases", "duyệt test case", "テスト計画", "マスターテスト計画",
+  "テストケース", "テストケースレビュー", "テスト結果", "不具合報告", "再テスト", "how do we test this", "QA handoff",
   "/atk:qa".
-argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--plan|--cases|--regression|--update|--record|--bug|--retest|--review] [--lang <code>] [--out <path>]"
+argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--master|--plan|--cases|--regression|--update|--record|--bug|--retest|--review] [--lang <code>] [--out <path>]"
 ---
 
 # QA Planning and Test Cases (`atk:qa`)
@@ -25,10 +25,11 @@ cases both become visible.
 
 ## Scope
 
-Handles: writing the test plan, deriving test cases from acceptance criteria, adding negative and
-boundary cases, building the regression matrix from change impact, listing test data and environment
-needs, defining the QA entry and exit criteria, and afterwards recording what the team's own test
-execution found: the run record, its defects raised on the tracker, and the retest of a fixed bug.
+Handles: writing the project's master test plan and each feature's test plan, deriving test cases
+from acceptance criteria, adding negative and boundary cases, building the regression matrix from
+change impact, listing test data and environment needs, defining the QA entry and exit criteria, and
+afterwards recording what the team's own test execution found: the run record, its defects raised on
+the tracker, and the retest of a fixed bug.
 
 Does NOT handle: writing automated test code, which belongs to `atk:implement`; running the
 suite or executing the cases, which the testers do, or `atk:run-cases` where an agent executes them
@@ -37,8 +38,9 @@ other; deciding a result on the tester's behalf; or signing off a release (`atk:
 
 ## Roles
 
-QA owns the plan and the cases. BrSE/BA confirms cases match the requirement intent. Dev owns the
-handoff and the test data. PM owns the exit criteria. The QA who ran the cases owns the run record
+QA owns the plans and the cases, the QA lead the master test plan. BrSE/BA confirms cases match the
+requirement intent. Dev owns the handoff and the test data. PM owns the exit criteria and the defect
+severity scale, and the Tech Lead the environments. The QA who ran the cases owns the run record
 and its results, the QA lead approves it, or the Tech Lead where there is none. Under `--review` the
 reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 `shared/team-roles.md`.
@@ -47,6 +49,7 @@ reviewer is the BrSE/BA or the QA lead, never the owner of the cases file. See
 
 ```bash
 /atk:qa <requirement-path>      # Test plan plus cases from a requirement artifact
+/atk:qa --master                # Master test plan for the project, written once and kept current
 /atk:qa --plan <feature>        # Test plan only
 /atk:qa --cases <feature>       # Test cases only
 /atk:qa --regression <release>  # Regression matrix for a release scope
@@ -75,6 +78,10 @@ is `--update`, and the session says so. Written again from step 2, every ID woul
 an approved file would change without a question, and a person's edits would be lost, while run
 records and bugs already point at those IDs. The test plan beside it is updated in place like any
 reference document.
+
+`--master` replaces the five steps with Writing it in `references/test-plan-template.md`: the
+project's test levels, test types, environments, compatibility, default exit criteria and defect
+severity, decided once and read by every feature plan, so no feature asks the PM again.
 
 `--update` replaces the five steps with `references/update-mode.md`: it compares each source with what
 the cases file's Sources table recorded at the last run, and adds, rewrites, or strikes rows
@@ -151,18 +158,26 @@ in the release's plan. `--update` and `--retest` read it there.
 
 ### 5. Entry and exit criteria
 
-The test plan takes the shape of `references/test-plan-template.md`: levels, test types, environments,
-compatibility, and defect severity beside the criteria below.
+The test plan takes the feature shape of `references/test-plan-template.md`. Test levels, test
+types, environments, compatibility, defect severity and the default exit criteria live in the master
+test plan, and the feature plan holds only where it differs, per Differences from the master plan
+there. With no master test plan, per Where the master plan is in that file, the session offers
+`--master` first, and a plan written without one carries those sections itself, per Without a master
+plan in the same file.
 
-Entry: what the developer must deliver before QA starts, including build, environment, test account,
-seed data, and the list of what is not implemented yet. Where a reference document carries
-`implemented`, per `shared/spec-docs.md`, that list starts from its value and its marks rather than
-from memory. Exit: the pass rate, the severity thresholds
-that block a release, and who signs off.
+Entry: only what this feature adds to the master plan's Entry, what the developer must deliver
+before QA starts: its build, seed data, the accounts by role beyond the master plan's, and the list
+of what is not implemented yet. Where a reference document carries `implemented`, per
+`shared/spec-docs.md`, that list starts from its value and its marks rather than from memory. Exit:
+`As in the master plan`, unless the PM set a figure of the feature's own, written with their name.
+A plan written without a master plan writes both out whole, per Without a master plan.
 
 ## Output
 
-Test plan at `docs/qa/test-plan-<slug>.md` and cases at `docs/qa/test-cases-<slug>.md` per
+The master test plan at `docs/qa/master-test-plan.md`; where the override names one outside the
+repository, no file: the proposed changes, shown in the session as open questions, per Writing it in
+`references/test-plan-template.md`. A feature's test plan at
+`docs/qa/test-plan-<slug>.md`, and cases at `docs/qa/test-cases-<slug>.md` per
 `shared/artifact-paths.md`. The Markdown table is the source. A CSV beside it,
 `docs/qa/test-cases-<slug>.csv`, is written by the export rules in `references/test-case-template.md`
 when the person asks for one, when the override asks for one, or when one already exists; an existing
@@ -194,6 +209,11 @@ who raised the bug closes it, or whoever the team's own flow names. The whole pr
       criterion carries the assumption that made it irrelevant.
 - [ ] The regression matrix justifies each entry with a shared module, table, or endpoint.
 - [ ] Entry and exit criteria name who provides what and who signs off.
+- [ ] A feature plan repeats nothing of the master test plan: it names the master plan, or says there
+      is none and carries its sections, and every row under Differences has a reason and who decided.
+- [ ] Under `--master`, every value came from a feature plan, a requirement, the profile's Team
+      section, a strategy the person named, or the person; two sources that disagree left an open
+      question for the value's owner.
 - [ ] Every case has a section, a testcase type, and a source, and no ID was given to a second case.
 - [ ] Every field with a stated limit has its boundary cases, and every validation rule has one
       accepted and one rejected case.

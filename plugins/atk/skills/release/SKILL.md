@@ -101,10 +101,14 @@ is the fallback for a name that carries no time. Then:
   unchecked, naming the approver it waits on. A feature in the range with no run record is listed as
   having none.
 - **Blocking defects.** A defect blocks when its severity is one of the two most severe levels in the
-  severity table of that feature's test plan, read from what each level means rather than from where
+  severity table of that feature's test plan, which is the master test plan's where the feature plan
+  has none, per Reading a section in `skills/qa/references/test-plan-template.md`, with the master
+  plan found per Where the master plan is in the same file, read from what each
+  level means rather than from where
   it sits in the table, whatever the plan names them; where the order cannot be told, ask the QA lead.
   A severity of `TBD` blocks too, and the QA lead's classification is recorded in this release
-  record's checklist beside the item, since a run record's content cannot change. With no plan, the
+  record's checklist beside the item, since a run record's content cannot change. With neither
+  plan, the
   tester's scale decides, and the item says there was none. The defects read are those in the range,
   plus any still blocking in the previous release record, carried forward so a defect found before
   that release and never fixed does not drop out of sight.

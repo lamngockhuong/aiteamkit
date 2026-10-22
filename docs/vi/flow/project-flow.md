@@ -85,7 +85,7 @@ flowchart TD
     end
 
     subgraph S6["6. Kiểm thử"]
-        V0["atk:qa<br/><small>QA viết kế hoạch và test case</small>"] --> V1["Tester chạy các case<br/><small>ghi lại bằng atk:qa --record</small>"]
+        V0["atk:qa<br/><small>QA lead viết master test plan một lần, QA viết test plan và test case của từng tính năng</small>"] --> V1["Tester chạy các case<br/><small>ghi lại bằng atk:qa --record</small>"]
         V0 --> VR["atk:run-cases<br/><small>agent chạy các case tự động được trên DEV hoặc staging</small>"]
         V1 --> V2{"QA ký nhận"}
         VR --> V2
@@ -143,7 +143,8 @@ flowchart TD
 | 5. Làm | `atk:verify` | Dev | Người review thay đổi, trước khi duyệt nó | `IN REVIEW` sang `APPROVED` |
 | 5. Làm | `atk:review` | Người review, không bao giờ là tác giả | TL, khi vòng lặp chạm trần | không có |
 | 5. Làm | `atk:git` | Dev | Người review, người duyệt pull request mà nó mở | không có |
-| 6. Kiểm thử | `atk:qa` | QA | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
+| 6. Kiểm thử | `atk:qa --master` | QA Leader | PM cho tiêu chí ra, thang severity của lỗi và cấp test chưa ai quyết; TL cho các môi trường và phần còn lại | `IN REVIEW` sang `APPROVED` |
+| 6. Kiểm thử | `atk:qa` | QA | QA Leader hoặc TL; PM cho tiêu chí ra và thang severity mà test plan tự mang; TL cho các môi trường test plan tự mang hoặc thêm vào | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm thử | `atk:qa --record`, `--retest` | QA đã chạy các case | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm thử | `atk:run-cases` | QA đã khởi động lần chạy | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | Bất cứ lúc nào: định kỳ, hoặc trước hay sau khi phát hành | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận | `IN REVIEW` sang `APPROVED` |

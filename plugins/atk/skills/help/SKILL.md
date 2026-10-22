@@ -97,7 +97,9 @@ and only read:
 
 - **The profile.** Whether `.atk/profile.md` exists, and which of its sections still say `TBD`.
 - **The overrides.** Which `.atk/overrides/<skill>.md` files exist, since an override changes what
-  its skill does here.
+  its skill does here, and for row 13 of `shared/state-signals.md` the `Master test plan:` line of
+  an approved `.atk/overrides/qa.md`, per The one line other skills read in
+  `shared/project-overrides.md`.
 - **The artifacts.** The docs root and each artifact's path, resolved through
   `shared/artifact-paths.md`, including a root partitioned by language, where the authored branch is
   the one to read. From each artifact read the front matter block only: `status`, `owner`,

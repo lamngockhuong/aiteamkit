@@ -20,15 +20,15 @@ they are executable and complete. The approver named in the front matter still a
 
 ## What it reads
 
-The cases file; its test plan beside it, when there is one; and the sources its Sources table names,
-opened, not remembered. A file written by hand or in the team's own template may have no Sources
-table: then the sources are the ticket in its front matter, the requirement it traces to, and every
-path its `Source` column names, and a pass with none of those to open says it could not run. The
-sources are the requirement, the reference documents, the screen spec, or the design,
-per `shared/design-sources.md` for a design. It also reads `references/test-case-template.md`,
-`references/case-dimensions.md`, and `references/checklists.md` with its list, since those are what
-the cases were supposed to follow; where the override names the team's own template or checklist,
-that one is what they were supposed to follow instead.
+The cases file; its test plan beside it and the master test plan, when there are any; and the
+sources its Sources table names, opened, not remembered. A file written by hand or in the team's own
+template may have no Sources table: then the sources are the ticket in its front matter, the
+requirement it traces to, and every path its `Source` column names, and a pass with none of those to
+open says it could not run. The sources are the requirement, the reference documents, the screen
+spec, or the design, per `shared/design-sources.md` for a design. It also reads
+`references/test-case-template.md`, `references/case-dimensions.md`, and `references/checklists.md`
+with its list, since those are what the cases were supposed to follow; where the override names the
+team's own template or checklist, that one is what they were supposed to follow instead.
 
 A source the reviewer cannot open is said at the top of the report, and every pass that needed it
 says it did not run rather than coming back clean.

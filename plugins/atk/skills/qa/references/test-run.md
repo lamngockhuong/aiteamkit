@@ -33,6 +33,10 @@ still holds the value, and it does not make a leaked credential safe: the sessio
 the credential's owner as the person who rotates it. That is what lets a release ask which build passed, and a retest point at the run that
 failed.
 
+Wherever this file says the test plan's environments, exit criteria, or severity, they are read per
+Reading a section in `references/test-plan-template.md`, so they may come from the master test plan,
+found per Where the master plan is there, and the record names the plan each came from.
+
 The values another skill reads by matching them stay spelled as this file spells them, whatever
 language the prose is in, per rule 6 of `shared/team-roles.md`: the results `Passed`, `Failed`,
 `Pending`, `N/A`; the scopes `full`, `smoke`, `regression`, `ids`, `retest`; `none`, `not raised`, its five
@@ -124,10 +128,11 @@ A case in scope with no result is `Pending`, never `Passed`. A result given for 
 does not have, or for a case struck through as removed, is asked about, not dropped and not added. A
 scope of `ids` with no IDs in it is not a run: ask for the list.
 
-**Without a test plan.** Where the feature has no `docs/qa/test-plan-<slug>.md`, the record says
-`No test plan: exit criteria not assessed`, takes the severity scale the tester names or leaves each
-severity `TBD (ask <QA lead>)`, takes the environment from the tester, and offers `--plan` in the
-session. It never invents definitions or criteria to fill the gap.
+**Without a test plan.** Where the feature has no `docs/qa/test-plan-<slug>.md` and the project no
+master test plan, the record says `No test plan: exit criteria not assessed`, takes the severity
+scale the tester names or leaves each severity `TBD (ask <QA lead>)`, takes the environment from the
+tester, and offers `--master` or `--plan` in the session. It never invents definitions or criteria
+to fill the gap.
 
 **What the cases were.** The header records the cases file's `status` and whether it had uncommitted
 changes. A run against cases that are not `APPROVED`, or not committed, is recorded all the same, and
@@ -150,7 +155,7 @@ ticket: <ticket, or none>
 # Test run: <feature or release>, <scope>
 
 - Cases: `docs/qa/test-cases-<slug>.md`, as of `<short sha>` of the last commit that changed it, or `not tracked`, status `<status>`, <clean | with uncommitted changes>
-- Test plan: `docs/qa/test-plan-<slug>.md`, or `No test plan: exit criteria not assessed`
+- Test plan: `docs/qa/test-plan-<slug>.md`, and the master test plan's path for the sections read from it, or `the master test plan named in .atk/overrides/qa.md` for one kept outside the repository, never its link; or that master test plan alone, where the feature has no plan; or `No test plan: exit criteria not assessed`
 - Build: <version or commit>. Environment: <name>
 - Scope: <full | smoke | regression | ids | retest>. Case IDs: <the IDs, where the scope is ids or retest>
 - Run by: <names>, <dates>

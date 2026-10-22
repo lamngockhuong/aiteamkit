@@ -9,12 +9,15 @@ rule apply at every login after that.
 
 ## Where the target comes from
 
-The target is a row of section `4. Environments` in the feature's test plan,
-`docs/qa/test-plan-<slug>.md`, per `skills/qa/references/test-plan-template.md`. The person names the
-row, with `--env <name>` or in answer to the question the skill asks when the plan has more than one.
-`--env` must match one row's `Environment` exactly; a name that matches none, or several, is asked
-about with the rows listed. A row is never chosen for them: two rows with similar names are the usual
-way a run reaches the wrong environment.
+The target is a row of the `Environments` section the feature's test plan resolves to, per Reading a
+section in `skills/qa/references/test-plan-template.md`: the feature plan's own `Environments`
+section where it has one, a heading of that name anywhere but under Differences from the master
+plan, otherwise the master test plan's, found per Where the master plan is in the same file,
+with the rows the feature plan's `Environments` table under Differences adds or replaces. The person names the
+row, with `--env <name>` or in answer to the question the skill asks when the plan has more than
+one. `--env` must match one row's `Environment` exactly; a name that matches none, or several, is
+asked about with the rows listed. A row is never chosen for them: two rows with similar names are
+the usual way a run reaches the wrong environment.
 
 From that row the run takes:
 
@@ -23,17 +26,19 @@ From that row the run takes:
 | `Environment` | The name written into the record's `Environment` header field |
 | `Kind` | Whether the run may proceed at all, per Acceptable targets below |
 | `URL or location` | The base URL; an empty cell is asked for, from the person the row names |
-| `Data` | What recon expects to find, the test accounts by role, and the lock threshold |
+| `Data` | What recon expects to find, the test accounts by role, and the lock threshold; never a credential, per the last paragraph of Credentials below |
 | `Provided by` | The environment owner: the person a stop names, and the person who answers what the row leaves open |
 
 A row whose `Provided by` holds a role with no name, or nothing, stops the run before any request,
 per rule 1 of `shared/team-roles.md`: a stop that names nobody reaches nobody. The session says which
-row and asks the person who started the run to get a name into the test plan from its owner.
+row and asks the person who started the run to get a name into the plan that holds the row from its
+owner.
 
-Where the feature has no test plan, or the plan has no section 4, the run asks the person for the
-environment's name, kind, URL, and owner, writes `No test plan: exit criteria not assessed` in the
-record as `skills/qa/references/test-run.md` requires, and offers `atk:qa --plan` in the session. It
-never invents a row.
+Where that reading finds no `Environments` section, the run asks the person for the environment's
+name, kind, URL, and owner, writes `No test plan: exit criteria not assessed` in the record where
+neither plan exists, as `skills/qa/references/test-run.md` requires, and offers `atk:qa --master`,
+then `atk:qa --plan`, in the session, as `skills/qa/references/test-run.md` does, since environments
+are the master test plan's to hold and the scope is the feature plan's. It never invents a row.
 
 ## Acceptable targets
 
@@ -65,7 +70,8 @@ hold a term with none of the four values beside it, `QA` or `sandbox`. Each is h
 The run asks the person which kind the row is, with the four values to choose from, and records the
 answer in the record's `Environment` header field with who gave it and how:
 `Environment: <name> (kind: staging, given by <person> in the session; the test plan has no Kind)`.
-The answer is never written back into the test plan, whose owner edits it, and the session says what
+The answer is never written back into the plan that holds the row, whose owner edits it, and the
+session says what
 is missing so that owner can fix it. An answer of `production` or `local` stops the run exactly as
 the cell would have. An answer the owner gave rather than the person is recorded with the owner's name
 and where they gave it.
@@ -91,8 +97,8 @@ in `shared/project-overrides.md`, and an instruction that asks for one is skippe
 
 ### The lock threshold
 
-How many failed logins lock an account is a fact of the project, and it lives in the test plan, in
-the `Data` cell of the row, where `skills/qa/references/test-plan-template.md` asks for it. The run
+How many failed logins lock an account is a fact of the project, and it lives in the `Data` cell of
+the row, in whichever plan holds it, where `skills/qa/references/test-plan-template.md` asks for it. The run
 counts every failed login it causes on each account, a wrong one-time code or a mistyped password
 included, since the product counts them the same way, and the count is per run, across recon and
 every round: a round that asks again does not start it afresh.
@@ -140,6 +146,8 @@ navigation to another host. That URL is never logged and never captured in a scr
 a credential prompt part-way through the run, is the gate forgetting the session, never a defect:
 pass it again and carry on.
 
-A credential found where it should not be, in a page, a response, or the cases file itself, is
-reported in the session by kind and place, never by value, and its owner is named as the person who
-rotates it.
+A credential found where it should not be, in a page, a response, the cases file itself, or a plan
+read through a connection, a password in the `Data` cell of a master test plan kept in a spreadsheet
+among them, is never used and never quoted. It is reported in the session by kind and place, never
+by value, and its owner is named as the person who rotates it, with the plan's owner as the person
+who removes it from the plan.

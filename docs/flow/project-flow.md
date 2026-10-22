@@ -84,7 +84,7 @@ flowchart TD
     end
 
     subgraph S6["6. Test"]
-        V0["atk:qa<br/><small>QA writes the plan and cases</small>"] --> V1["Testers run the cases<br/><small>recorded with atk:qa --record</small>"]
+        V0["atk:qa<br/><small>the QA lead writes the master test plan once, QA each feature's plan and cases</small>"] --> V1["Testers run the cases<br/><small>recorded with atk:qa --record</small>"]
         V0 --> VR["atk:run-cases<br/><small>the agent runs the automatable cases on DEV or staging</small>"]
         V1 --> V2{"QA signs off"}
         VR --> V2
@@ -142,7 +142,8 @@ flowchart TD
 | 5. Build | `atk:verify` | Dev | The reviewer of the change, before approving it | `IN REVIEW` to `APPROVED` |
 | 5. Build | `atk:review` | Reviewer, never the author | TL when the loop hits its ceiling | n/a |
 | 5. Build | `atk:git` | Dev | The reviewer, who approves the pull request it opens | n/a |
-| 6. Test | `atk:qa` | QA | QA lead or TL | `IN REVIEW` to `APPROVED` |
+| 6. Test | `atk:qa --master` | QA lead | PM for the exit criteria, the defect severity scale, and a test level nobody decided; TL for the environments and the rest | `IN REVIEW` to `APPROVED` |
+| 6. Test | `atk:qa` | QA | QA lead or TL; PM for the exit criteria and a severity scale the plan carries; TL for the environments it carries or adds | `IN REVIEW` to `APPROVED` |
 | 6. Test | `atk:qa --record`, `--retest` | QA who ran the cases | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | 6. Test | `atk:run-cases` | QA who started the run | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | Any time: scheduled, or before or after a release | `atk:security` | Dev or TL | TL, or the security officer where the team has one; each unfixed finding accepted by the PM or the Stakeholder | `IN REVIEW` to `APPROVED` |

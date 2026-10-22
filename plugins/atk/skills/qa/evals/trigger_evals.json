@@ -22,6 +22,9 @@
   { "query": "review giúp bộ test case này trước khi duyệt", "should_trigger": true },
   { "query": "このテストケースをレビューして", "should_trigger": true },
   { "query": "duyệt giúp bộ test case của màn hình xuất CSV", "should_trigger": true },
+  { "query": "write the master test plan for this project: test levels, environments, severity", "should_trigger": true },
+  { "query": "lập kế hoạch kiểm thử tổng thể cho dự án", "should_trigger": true },
+  { "query": "このプロジェクトのマスターテスト計画を作って", "should_trigger": true },
 
   { "query": "start the app and confirm the whole flow works", "should_trigger": false },
   { "query": "chạy thử thật xem đơn hàng có vào database không", "should_trigger": false },

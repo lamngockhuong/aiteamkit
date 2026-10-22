@@ -87,11 +87,12 @@ read the kit's `shared/run-trace.md` and do what it says before the file, at eac
 
 ### 1. Load
 
-Read the cases file and its test plan, `docs/qa/test-plan-<slug>.md`, skipping the rows struck
-through as removed, per The cases to triage in `references/triage.md`. Note the cases file's `status`
-and whether it has uncommitted changes, for the record's header. A file that is not `APPROVED` is
-asked about before anything else: the person may run it all the same, and the record says so, as
-`skills/qa/references/test-run.md` does under What the cases were.
+Read the cases file, its test plan, `docs/qa/test-plan-<slug>.md`, and the master test plan, found
+per Where the master plan is in `skills/qa/references/test-plan-template.md`, whose sections the feature plan may leave to it, skipping the rows
+struck through as removed, per The cases to triage in `references/triage.md`. Note the cases file's
+`status` and whether it has uncommitted changes, for the record's header. A file that is not
+`APPROVED` is asked about before anything else: the person may run it all the same, and the record
+says so, as `skills/qa/references/test-run.md` does under What the cases were.
 
 Check whether the harness offers browser automation, per Browser automation in
 `shared/host-capabilities.md`. Where it offers none, the run carries on as a dry run and ends after

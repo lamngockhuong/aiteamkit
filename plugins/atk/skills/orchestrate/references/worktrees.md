@@ -44,6 +44,11 @@ Step 1 of `SKILL.md` reads a piece's artifacts this way and no other.
   worktree the uncommitted file is counted with `grep -c -F` on it, so a rewrite not yet committed
   is not proposed again. Row 15 hashes a file's content, which this skill does not read, so
   it is left out for a piece and the proposal says so, naming `atk:help` as where it is read.
+- **Row 13, the one read of an override.** Whether the project keeps its master test plan outside the
+  repository: the front matter of `.atk/overrides/qa.md` as above, and, where it is `APPROVED`,
+  `git grep -c "^Master test plan:" "<ref>" -- .atk/overrides/qa.md`, in a worktree `grep -c` on the
+  file, which prints a count only, per The one line other skills read in
+  `shared/project-overrides.md`.
 
 ## Before the first worktree, once per run
 
@@ -178,8 +183,12 @@ The run state marks the job `done` before step 1 and records the commit once ste
 job found `done` with no commit recorded, after a crash or on a resume, goes through these steps
 again from step 1. A piece's last recorded commit is its base until a commit is made, and every
 commit the coordinator makes in its worktree, a job's, an approver's edit, an `atk:verify` commit, is
-recorded as the piece's last. For a job found `done` with no commit recorded, where `HEAD` has moved
-past that commit and `git merge-base --is-ancestor <recorded> HEAD` confirms it descends from it,
+recorded as the piece's last, and so is the `HEAD` a person's merge or rebase leaves when The master
+test plan in `references/proposal.md` asked for one, with the base commit it brought in recorded as
+the piece's base where it brought in the base and the piece's base was the run's, never where the
+piece is stacked on another piece's branch. For a job found `done` with no commit
+recorded, where `HEAD` has moved past that commit and `git merge-base --is-ancestor <recorded>
+HEAD` confirms it descends from it,
 steps 1 to 4 read the paths of `<recorded>..HEAD` in place of the working tree, and only then is the
 commit shown to the person and, on their word, recorded as the job's, from step 6; a `HEAD` that does
 not descend from it, after a reset or an amend, is shown to the person and the job is held. An

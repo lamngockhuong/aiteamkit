@@ -23,8 +23,9 @@ are the same directory, and the next subsection changes nothing.
 Where the shape in `.atk/profile.md` names member repositories, the docs root hangs off the project
 root, and that is where an artifact about the project goes: the requirements, the design and its ADR,
 the breakdown, the estimate, the retro, the release record, the security record and the threat
-model, the incident record, the runbook, the onboarding documents, the conventions, the reference
-document of any contract two members share, and the run trace of every skill, whose `git` checks run
+model, the incident record, the runbook, the onboarding documents, the conventions, the master test
+plan, the reference document of any contract two members share, and the run trace of every skill,
+whose `git` checks run
 in the repository that holds that root, `git -C <its directory>`, never in the member the session
 started in.
 One tree, read by every team.
@@ -150,7 +151,7 @@ to `docs/adr/` as well.
 | `fix` | `docs/records/fixes/<date>-<ticket>-<slug>.md`; while it runs, a progress log at `docs/derived/fix/<run-id>/progress.md` (see Progress log, below) |
 | `verify` | `docs/records/verification/<date>-<ticket>-<slug>.md`, with any screenshots in `docs/records/verification/<date>-<ticket>-<slug>/` beside it; while it runs, a progress log at `docs/derived/verify/<run-id>/progress.md` (see Progress log, below) |
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run, `<pr>` replaced as `## Output` of `atk:review` says where the target is not a pull request; under `--comment` the findings also go to the pull request |
-| `qa` | `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--record` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes once committed only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
+| `qa` | `docs/qa/master-test-plan.md`, one per project, under `--master`; `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--record` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes once committed only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
 | `run-cases` | A run record at the path `qa` uses for one, `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids.md`, under the same rules, with its evidence in `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids/` beside it; the triage report and the run log at `docs/derived/run-cases/<run-id>/` |
 | `security` | `docs/records/security/<date>-<ticket>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
@@ -208,7 +209,8 @@ wins, exactly as the docs root rule works above.
 ### Named after the subject: `plan` is dated, `spec` is not
 
 `atk:spec`, `atk:tailor` and `atk:onboard` are the skills whose file names carry neither a ticket nor
-a date, and so are the test plan and the cases file of `atk:qa`, whose run records and review reports
+a date, and so are the test plans and the cases file of `atk:qa`, the master test plan named after the
+project and the others after their feature, whose run records and review reports
 are dated like any record or report, and so is the threat model `atk:security` writes. A reference document is named after the thing it describes, one file per resource, per
 table, per feature, per screen, or per skill, because the next person looks for the subject rather than for the
 sprint it was built in. The `spec` kinds:
@@ -270,7 +272,8 @@ its name says by carrying a ticket, a date, a sprint, or a version? Then it is a
 left describes the system as it currently is, or as it is agreed to be, and that is reference.
 
 The question about the name is the one that settles the cases people argue about. `docs/qa/` is
-named after the feature rather than the sprint, and a regression suite is updated when the feature
+named after the feature, or the project for the master test plan, rather than the sprint, and a
+regression suite is updated when the feature
 changes rather than written again, so test cases are reference and sit at the top level.
 
 One exception, and it is deliberate. ADRs stay at `docs/adr/` although they are records and are

@@ -83,4 +83,6 @@ client who has never seen the ticket system is a different document from one for
 
 Read back what was captured, grouped into `## Before` and `## After`, before writing anything. A
 team hearing its own rules read back finds the missing one about a third of the time, and that is
-cheaper than a second run of the skill.
+cheaper than a second run of the skill. Where a `qa` team names where it keeps its master test plan
+outside the repository, that answer is written in `## Before` as the one line of The one line other
+skills read in `shared/project-overrides.md`, in exactly that form.
