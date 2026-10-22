@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.16](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.15...atk-v0.1.16) (2026-10-22)
+
+
+### Features
+
+* split the atk:qa test plan into a master test plan and per-feature plans ([#144](https://github.com/lamngockhuong/aiteamkit/issues/144)) ([a5e6ec1](https://github.com/lamngockhuong/aiteamkit/commit/a5e6ec1aaa65b963ae76098fafdb941b1deac00d))
+
 ## [0.1.15](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.14...atk-v0.1.15) (2026-10-21)
 
 
