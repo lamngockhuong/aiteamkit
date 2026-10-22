@@ -618,7 +618,7 @@ them, is made to both; from `APPROVED` neither is edited. The mirror check cover
 | `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup`, `0008` how `atk:review` weighs a gap in an agent rule |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup`, `0008` how `atk:review` weighs a gap in an agent rule, `0009` the model of the agents a skill spawns, chosen by the team |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
 | `flow/project-flow.md` | The 25 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
