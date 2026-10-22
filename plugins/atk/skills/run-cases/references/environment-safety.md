@@ -9,12 +9,14 @@ rule apply at every login after that.
 
 ## Where the target comes from
 
-The target is a row of section `4. Environments` in the feature's test plan,
-`docs/qa/test-plan-<slug>.md`, per `skills/qa/references/test-plan-template.md`. The person names the
-row, with `--env <name>` or in answer to the question the skill asks when the plan has more than one.
-`--env` must match one row's `Environment` exactly; a name that matches none, or several, is asked
-about with the rows listed. A row is never chosen for them: two rows with similar names are the usual
-way a run reaches the wrong environment.
+The target is a row of the `Environments` section the feature's test plan resolves to, per Reading a
+section in `skills/qa/references/test-plan-template.md`: the feature plan's own section where it has
+one, otherwise the master test plan's, found per Where the master plan is in the same file, with the
+rows the feature plan adds or replaces under Differences from the master plan. The person names the
+row, with `--env <name>` or in answer to the question the skill asks when the plan has more than
+one. `--env` must match one row's `Environment` exactly; a name that matches none, or several, is
+asked about with the rows listed. A row is never chosen for them: two rows with similar names are
+the usual way a run reaches the wrong environment.
 
 From that row the run takes:
 
@@ -28,12 +30,14 @@ From that row the run takes:
 
 A row whose `Provided by` holds a role with no name, or nothing, stops the run before any request,
 per rule 1 of `shared/team-roles.md`: a stop that names nobody reaches nobody. The session says which
-row and asks the person who started the run to get a name into the test plan from its owner.
+row and asks the person who started the run to get a name into the plan that holds the row from its
+owner.
 
-Where the feature has no test plan, or the plan has no section 4, the run asks the person for the
-environment's name, kind, URL, and owner, writes `No test plan: exit criteria not assessed` in the
-record as `skills/qa/references/test-run.md` requires, and offers `atk:qa --plan` in the session. It
-never invents a row.
+Where that reading finds no `Environments` section, the run asks the person for the environment's
+name, kind, URL, and owner, writes `No test plan: exit criteria not assessed` in the record where
+neither plan exists, as `skills/qa/references/test-run.md` requires, and offers `atk:qa --master`,
+then `atk:qa --plan`, in the session, as `skills/qa/references/test-run.md` does, since environments
+are the master test plan's to hold and the scope is the feature plan's. It never invents a row.
 
 ## Acceptable targets
 
@@ -91,8 +95,8 @@ in `shared/project-overrides.md`, and an instruction that asks for one is skippe
 
 ### The lock threshold
 
-How many failed logins lock an account is a fact of the project, and it lives in the test plan, in
-the `Data` cell of the row, where `skills/qa/references/test-plan-template.md` asks for it. The run
+How many failed logins lock an account is a fact of the project, and it lives in the `Data` cell of
+the row, in whichever plan holds it, where `skills/qa/references/test-plan-template.md` asks for it. The run
 counts every failed login it causes on each account, a wrong one-time code or a mistyped password
 included, since the product counts them the same way, and the count is per run, across recon and
 every round: a round that asks again does not start it afresh.

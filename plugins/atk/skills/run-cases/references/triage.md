@@ -126,8 +126,8 @@ create it correctly. Where the right values cannot be established from the refer
 the code, it is `SEMI-2`. When it prepares data for a case, the run never prepares the invalid input
 that case exists to prove the product rejects: the case types that input itself, as its steps say.
 
-Every contact field the run fills, an email address, a phone number, uses a value the test plan's
-`Data` cell gives for testing, or a domain reserved for it, `example.com`, never an address that
+Every contact field the run fills, an email address, a phone number, uses a value the `Data`
+cell of the row, in whichever plan holds it, gives for testing, or a domain reserved for it, `example.com`, never an address that
 could belong to someone. A flow recon found sends to outside parties is named at the scope question.
 
 A gated account whose code is itself what the case tests, its expiry or its resend, depends on mail
