@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.17](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.16...atk-v0.1.17) (2026-10-23)
+
+
+### Features
+
+* let the team choose the model of the read-only agents atk spawns ([#148](https://github.com/lamngockhuong/aiteamkit/issues/148)) ([52b0260](https://github.com/lamngockhuong/aiteamkit/commit/52b02601384cd365d49c7201f51402161d664dbf))
+* read the review loop's last fixes once more and offer its leftovers as issues ([#150](https://github.com/lamngockhuong/aiteamkit/issues/150)) ([77f9536](https://github.com/lamngockhuong/aiteamkit/commit/77f9536843dd6c41e82e39e80e9b1a2629cc48a6))
+
 ## [0.1.16](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.15...atk-v0.1.16) (2026-10-22)
 
 
