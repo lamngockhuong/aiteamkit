@@ -341,7 +341,7 @@ docs, all in the diff.
   report. Giving `atk:git` the fix report offers its section 9, but those findings stay in the run
   state, which step 5 does not read. Closing it means either writing them into the fix report or
   naming the run state as a second source in step 5. Lam Ngoc Khuong left it for a later pull request
-  at 10:55.
+  at 10:55. Issue: #151.
 - `N1` to `N7` of the review rounds, left as `NIT`: `## Output` of `orchestrate` does not list the
   records (`N1`); `pr-body.md:55-58` when `In short` is not the template's first section (`N2`); a
   search word starting with `-` (`N3`); the check lists in `CLAUDE.md` and both codebase summaries
@@ -350,6 +350,6 @@ docs, all in the diff.
   split the wrong way (`N7`). Lam Ngoc Khuong decides which become work.
 - N6, a further stale list found on the way: `shared/host-capabilities.md` cites
   `review-fix-loop.md` on `main` already, and the `CLAUDE.md:185` row does not name it. It predates
-  this pull request.
+  this pull request. Issue: #152.
 - No reference document is owed: the change is to skill rules and the kit's own docs, and every
   file it moved is in the diff.
