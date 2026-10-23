@@ -262,7 +262,7 @@ done: this skill is the author, and done is the approver's word.
 - [ ] No finding's severity was lowered by the author, and nothing was pushed or opened while a
       `BLOCKING` finding was disputed or escalated.
 - [ ] The review loop ran at most twice before escalating, a fix made after the second call had the
-      closing read, and none was made after it.
+      closing read, or is marked not read with why, and none was made after it.
 - [ ] The record says whether `atk:verify` ran, and a change nobody has run is named as one.
 - [ ] A plan whose steps prescribe test-first was followed that way for those steps, and the record
       says the plan asked for it.

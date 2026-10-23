@@ -216,8 +216,8 @@ themselves, per rule 2 of `shared/team-roles.md`.
 
 Then the ticket, per `shared/ticket-adapters.md`: show the comment, post it on a yes, link both
 ways, a reference document excepted per Linking rule there, and move the ticket to the team's
-"in review" state. Never to done. With no ticket behind the change, report the step as `N/A`
-rather than skipping it quietly, per step 5 of `shared/finalize-steps.md`. Then offer the record's
+"in review" state. Never to done. With no ticket behind the change, report the comment and the move
+as `N/A` rather than skipping them quietly, per step 5 of `shared/finalize-steps.md`. Then offer the record's
 left-for-later items and carried-forward findings as issues, as that step says.
 
 ### 5. Merge
@@ -267,8 +267,8 @@ ticket, per `shared/finalize-steps.md`.
       was ticked that this run did not verify.
 - [ ] No second pull request was opened for a branch that already had one, and an open body was left
       as its reviewer last read it.
-- [ ] A step with nothing to run, the ticket step above all, was reported as `N/A` rather than
-      passed over in silence.
+- [ ] A step with nothing to run, the ticket's comment and move above all, was reported as `N/A`
+      rather than passed over in silence.
 - [ ] The readiness gate ran before any merge, and a refusal said which of the four caused it.
 - [ ] No pull request opened in this run was merged in the same run without a separate yes.
 - [ ] How far the branch and its remote had moved apart was read in step 1, after noting what the

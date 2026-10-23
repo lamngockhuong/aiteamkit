@@ -229,7 +229,8 @@ gh issue list --state open --search '<words from the item>' --json number,title,
 ```
 
 The words are the item's distinctive terms, a path or an identifier before prose, inside single
-quotes and without the record's backticks, so the shell runs nothing in them. A result covers the
+quotes and without the record's backticks, and limited to letters, digits and `/ . _ -`, so the
+shell runs nothing in them and no apostrophe ends the quote. A result covers the
 item when it describes the same work, not when it merely shares a word; read its body with
 `gh issue view <number>` where the title leaves that open. Where several cover it, show each. Other trackers read their open
 issues through their connection, per Read through a connection in `shared/host-capabilities.md`;

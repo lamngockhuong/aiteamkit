@@ -52,10 +52,10 @@ that does not exist.
 - **The artifact stays linked**, by its path in the repository, under whichever section carries the
   detail. The template is the shape the reviewer reads; the artifact is the evidence behind it, and
   a body that drops the link has lost it.
-- **After the last round stays first.** A fix report or an implementation record that carries the
-  section The closing read in `shared/review-fix-loop.md` describes keeps it at the top of the body,
-  above the template's first section, since it points the reviewer at the passages written after
-  the last round of fixing. The template's own sections follow in their order.
+- **After the last round follows In short.** A fix report or an implementation record that carries
+  the section The closing read in `shared/review-fix-loop.md` describes keeps it right after the
+  record's `In short`, above the template's other sections, since it points the reviewer at the
+  passages written after the last round of fixing. The template's own sections follow in their order.
 - **Instruction comments** in the template are addressed to whoever opens the pull request. Remove
   the ones whose section is now filled, and leave the ones whose section is still open, so the
   person who finishes it still has the instruction.

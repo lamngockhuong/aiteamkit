@@ -280,8 +280,8 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
 - [ ] Where step 6 ran, `atk:review` was called on the change after its cost was stated, or
       `--no-review` was passed and the report names who must review.
 - [ ] Where step 6 ran, every `BLOCKING` finding is fixed or escalated by name, the loop ran at most twice, a resume
-      included, a fix made after the second call had the closing read and none was made after it, no
-      `NIT` was fixed, and the report says whether `atk:verify` was offered and ran.
+      included, a fix made after the second call had the closing read, or is marked not read with
+      why, and none was made after it, no `NIT` was fixed, and the report says whether `atk:verify` was offered and ran.
 - [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
       difference recorded as unverified.
 - [ ] The report says whether the fix changed a public contract, and if it did, which reference

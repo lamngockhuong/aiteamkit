@@ -232,7 +232,8 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   người có tên, lượt đọc cuối dành cho những gì vòng hai đã sửa, sau đó không sửa gì nữa và các bản
   sửa ấy được liệt kê đầu tiên trong bản ghi, cùng dòng mà `--no-review` để lại trong bản ghi. `atk:implement` và `atk:fix` trích
   dẫn nó, `atk:orchestrate` cũng vậy cho các job viết mã mà nó commit: phần kiểm chứng của mỗi skill chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
-  xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra.
+  xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra. `atk:git` cũng trích dẫn nó để biết
+  phần After the last round của bản ghi nằm ở đâu trong phần thân pull request.
 
 - `plugins/atk/shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
   là gì khi profile của dự án ghi `Contract: first` cùng field `implemented` cho biết code của nó đã

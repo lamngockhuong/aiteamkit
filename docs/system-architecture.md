@@ -232,7 +232,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   escalation by name, the closing read of what the second round fixed, with nothing fixed after it
   and those fixes listed first in the record, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
   `atk:fix`, and by `atk:orchestrate`, which runs it on the code jobs it commits: the verification of each asks whether the change works, and neither reads the diff for
-  what it newly claims, which is what a review finds.
+  what it newly claims, which is what a review finds. `atk:git` cites it too, for where the record's After the last round
+  section sits in the pull request body.
 
 - `plugins/atk/shared/spec-docs.md`: what separates a reference document from a design document, what one is
   in a project whose profile says `Contract: first` and the `implemented` field that tracks whether

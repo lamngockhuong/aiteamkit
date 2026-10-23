@@ -539,6 +539,16 @@ for f in [d + 'SKILL.md', d + 'references/review-rounds.md', d + 'references/rep
     assert 'default of rule 5' in ' '.join(open(f).read().split()), '%s does not cite the default of rule 5' % f
 print('OK review reach in three files, five consequences, rule 5 default cited')"
 
+# The closing read of review-fix-loop.md reaches a run only through the skills that cite it, and the
+# offer of a record's leftovers only through atk:git; a citer that loses its sentence loses the step
+python3 -c "
+d = 'plugins/atk/skills/'
+for f in ['fix', 'implement', 'orchestrate']:
+    assert 'The closing read' in ' '.join(open(d + f + '/SKILL.md').read().split()), '%s/SKILL.md does not cite The closing read' % f
+assert 'After the last round' in open(d + 'git/references/pr-body.md').read(), 'git/references/pr-body.md does not place After the last round'
+assert 'left-for-later items and carried-forward findings' in ' '.join(open(d + 'git/SKILL.md').read().split()), 'git/SKILL.md does not offer the leftovers as issues'
+print('OK closing read cited by fix, implement and orchestrate, leftovers offered by git')"
+
 # The counts docs/flow/skill-lifecycle.md and its mirror give for how one skill names another: each
 # atk:<name> in a SKILL.md other than its own skill and the read-only agent, and the ordered pairs.
 # A change that moves them fails here, and the fix is the two documents and the numbers below
@@ -550,13 +560,13 @@ for f in glob.glob('plugins/atk/skills/*/SKILL.md'):
     own = f.split('/')[3]
     for x in re.findall(r'atk:([a-z][a-z-]*[a-z])', open(f).read()):
         if x != own and x in names: mentions += 1; pairs.add((own, x))
-assert (mentions, len(pairs)) == (221, 125), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
-words = {'docs/flow/skill-lifecycle.md': ('two hundred and twenty-one times', 'a hundred and twenty-five ordered pairs'),
-         'docs/vi/flow/skill-lifecycle.md': ('hai trăm hai mươi mốt lượt', 'một trăm hai mươi lăm cặp')}
+assert (mentions, len(pairs)) == (223, 125), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
+words = {'docs/flow/skill-lifecycle.md': ('two hundred and twenty-three times', 'a hundred and twenty-five ordered pairs'),
+         'docs/vi/flow/skill-lifecycle.md': ('hai trăm hai mươi ba lượt', 'một trăm hai mươi lăm cặp')}
 for doc, phrases in words.items():
     text = ' '.join(open(doc).read().split())
     for w in phrases: assert w in text, '%s no longer says \'%s\': update it, or the words in this check' % (doc, w)
-print('OK skill-lifecycle counts, 221 mentions in 125 pairs')"
+print('OK skill-lifecycle counts, 223 mentions in 125 pairs')"
 
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
 # holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs

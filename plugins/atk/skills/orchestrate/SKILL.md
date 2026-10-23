@@ -208,10 +208,10 @@ a yes, never as a job; a commit it makes goes back through step 5, and its workt
 is declined or done. Then clean up per `## Process management`.
 
 Close with the branches that wait for a push, each with its base, the order to push them in where one
-is based on another, its artifacts, its implementation record, its review report, and who must say
-yes to the push, per the consent line in
-`shared/finalize-steps.md`; the offers jobs declined; the chains still waiting, with the person each
-waits on; the exclude lines the run added to the clone, per `references/worktrees.md`; and the
+is based on another, its artifacts, its implementation record, or an `atk:fix` job's fix report, and each fix job's implementation
+record, the records by their copies in the coordinator's run directory once the worktree is gone, each the artifact `atk:git` is to
+be given so step 5 of `shared/finalize-steps.md` offers its left-for-later items and carried-forward findings, its review report, and who must say yes to the push, per the consent
+line in that file; the offers jobs declined; the chains still waiting, with the person each waits on; the exclude lines the run added to the clone, per `references/worktrees.md`; and the
 settled proposal records, offered for a commit in the coordinator's tree, which then goes back to the
 run's starting branch, per At the close in `references/proposal.md`. A record left unapproved is
 moved to `SUPERSEDED` on its approver's yes, asked once first, and otherwise listed as still waiting.
