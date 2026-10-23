@@ -279,6 +279,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/adr/0006-run-trace-written-by-the-agent-until-measured.md` | Agent tự ghi trace cho tới khi đo được rằng một script Node không hỏi phiên tương tác thêm câu hỏi quyền nào |
 | `docs/adr/0007-plain-explanation-of-a-document-is-a-catchup-mode.md` | Giải thích dễ hiểu một tài liệu, record của kit hay bất kỳ tài liệu nào khác, là một mode của `atk:catchup`, không phải skill mới hay cờ trên từng skill viết record |
 | `docs/adr/0008-review-weighs-reach-of-agent-rule-gaps.md` | Finding về luật cho agent mang mức độ hay gặp, `ordinary` hoặc `edge`, và finding `edge` là `NIT` trừ khi hậu quả thuộc năm loại kit không bao giờ chấp nhận; luật 5 có thêm quy tắc mặc định cho trạng thái không luật nào phủ tới; một lần sửa chọn dạng hẹp nhất trong ba dạng thay vì nhận nguyên luật được gợi ý |
+| `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md` | Hai dòng tuỳ chọn trong phần Team của profile ghi, theo từng harness, model cho agent đọc rộng và cho agent của review hay challenge; skill truyền model đó lúc sinh agent, không có dòng thì không truyền gì, và không bao giờ đụng tới phiên, reviewer band 1, hay agent ghi file |
 | `docs/vi/**/*.md` | Bản tiếng Việt của mười tám file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub

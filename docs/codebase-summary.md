@@ -278,6 +278,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/adr/0006-run-trace-written-by-the-agent-until-measured.md` | The agent writes the trace until a Node script is measured to ask an interactive session no more permission questions |
 | `docs/adr/0007-plain-explanation-of-a-document-is-a-catchup-mode.md` | A plain explanation of a document, a kit record or any other, is a mode of `atk:catchup`, not a new skill or a flag on each record-writing skill |
 | `docs/adr/0008-review-weighs-reach-of-agent-rule-gaps.md` | A finding on a rule an agent follows carries a reach, `ordinary` or `edge`, and an `edge` one is a `NIT` unless its consequence is one of five the kit never accepts; rule 5 gains a default for a state no rule covers; a fix takes the narrowest of three forms rather than a suggested rule unexamined |
+| `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md` | Two optional lines in the Team section of the profile name, per harness, the model of the agents that read wide and of the agents of a review or a challenge; a skill passes it at spawn, passes nothing without a line, and never touches the session, the band 1 reviewer, or an agent that writes |
 | `docs/vi/**/*.md` | Vietnamese mirror of the eighteen files above, at the same relative paths |
 
 ## GitHub
