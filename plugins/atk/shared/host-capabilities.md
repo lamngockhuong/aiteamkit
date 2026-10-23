@@ -323,8 +323,9 @@ kind of agent takes which line. Spawning such an agent:
    tell are each said once, in the same place or in the closing message.
 
 No run stops over a model line. A skill of the Required or Required-soft group of
-`shared/project-profile.md` names the line in those sentences: `the line Review agent model named
-<model> for this harness, which could not be passed`. A skill of the `Not needed` group,
+`shared/project-profile.md` names the line in those sentences, `Reading agent model` or `Review
+agent model` as the agent's kind takes: `the line <name> named <model> for this harness, which could
+not be passed`. A skill of the `Not needed` group,
 `atk:catchup`, `atk:onboard` and `atk:design-doc --challenge`, speaks of the agent and the model
 only, never of the file or the line:
 

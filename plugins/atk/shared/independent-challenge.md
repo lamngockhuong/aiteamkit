@@ -35,13 +35,13 @@ pattern cannot express, and a secret it comes across cited by its path and key, 
 is the one result this pass exists to avoid. Every lens agent takes the `Review agent model` line,
 per The model of a read-only agent in `shared/host-capabilities.md`.
 
-The number of agents and the concurrency cap are stated before the first one is spawned, and the cap
-is the machine's, under the policy for independent reviewers in `shared/host-capabilities.md`: read
-the available memory and allow roughly 1.5 GB per agent running at once, the measure
-`skills/review/references/review-rounds.md` uses. Where the memory cannot be read, run at most two
-agents at once and say so in the statement, which also names any model asked for. Where the harness cannot run agents in parallel,
-the lens passes run one after another in this session, and the artifact says they shared the
-author's context, which makes them weaker.
+The number of agents, the concurrency cap and any model asked for are stated before the first one
+is spawned, and the cap is the machine's, under the policy for independent reviewers in
+`shared/host-capabilities.md`: read the available memory and allow roughly 1.5 GB per agent running
+at once, the measure `skills/review/references/review-rounds.md` uses. Where the memory cannot be
+read, run at most two agents at once and say so in the statement. Where the harness cannot run
+agents in parallel, the lens passes run one after another in this session, and the artifact says
+they shared the author's context, which makes them weaker.
 
 ## What an agent returns
 

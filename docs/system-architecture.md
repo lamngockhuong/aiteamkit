@@ -129,9 +129,10 @@ its profile, a model per harness, and a skill passes it when it spawns that kind
 model of a read-only agent in `plugins/atk/shared/host-capabilities.md`. The route differs per
 harness, each read from its documentation on 2026-10-22 and none measured here: Claude Code takes a
 `model` parameter on the `Agent` tool, ahead of the agent's frontmatter and of
-`CLAUDE_CODE_SUBAGENT_MODEL`; Cursor lets the parent name a model when it launches a subagent, with
-two open forum reports of it not being respected; Codex takes a model in the spawn, which only a
-custom agent file setting its own would outrank, and the kit ships none. The band 1 reviewer and
+`CLAUDE_CODE_SUBAGENT_MODEL`, unless `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` is set, which overrides
+both; Cursor lets the parent name a model when it launches a subagent, with two open forum reports
+of it not being respected; Codex takes a model in the spawn, which only a custom agent file setting
+its own would outrank, and the kit ships none. The band 1 reviewer and
 every agent that writes take no model line. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
 records why the choice is the team's and why it is not in the agent file.
 

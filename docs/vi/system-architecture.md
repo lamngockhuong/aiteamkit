@@ -128,9 +128,10 @@ mục Team của profile, mỗi harness một model, và skill truyền model đ
 theo mục The model of a read-only agent trong `plugins/atk/shared/host-capabilities.md`. Mỗi harness
 nhận model theo một đường riêng, đều lấy từ tài liệu của họ đọc ngày 2026-10-22 và chưa đo ở đây:
 Claude Code nhận tham số `model` trên công cụ `Agent`, được ưu tiên hơn frontmatter của agent và
-`CLAUDE_CODE_SUBAGENT_MODEL`; Cursor cho agent cha nêu model khi khởi chạy subagent, kèm hai báo cáo
-trên diễn đàn vẫn mở về việc model đó không được tôn trọng; Codex nhận model khi tạo agent, chỉ thua
-một file agent tuỳ chỉnh tự đặt model, mà kit không mang file nào như vậy. Reviewer band 1 và mọi
+`CLAUDE_CODE_SUBAGENT_MODEL`, trừ khi đặt `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1`, biến này thắng cả
+hai; Cursor cho agent cha nêu model khi khởi chạy subagent, kèm hai báo cáo trên diễn đàn vẫn mở về
+việc model đó không được tôn trọng; Codex nhận model khi tạo agent, chỉ thua một file agent tuỳ
+chỉnh tự đặt model, mà kit không mang file nào như vậy. Reviewer band 1 và mọi
 agent có quyền ghi không nhận dòng model nào. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
 ghi lý do lựa chọn này thuộc về đội và vì sao nó không nằm trong file agent.
 
@@ -299,7 +300,7 @@ Hai file cuối mô tả những file không đi kèm kit:
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không bao giờ nhắc tới
-  nó, và chỉ đọc hai thứ của nó khi có file, dòng `Run trace` và cột Name của mục Team, thêm thứ ba
+  nó, và đọc hai thứ của nó khi có file, dòng `Run trace` và cột Name của mục Team, thêm thứ ba
   khi tạo agent chỉ đọc là dòng model của loại agent đó. Hai dòng tuỳ chọn trong Team,
   `Reading agent model` và `Review agent model`, nêu theo từng harness model của agent đọc rộng và
   của agent mà một lượt review hay phản biện tạo ra; thiếu dòng thì harness tự chọn. Ba mục
