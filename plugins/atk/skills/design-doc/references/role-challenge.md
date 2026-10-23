@@ -48,7 +48,7 @@ simulated perspectives, not a review and not an approval." Then:
 | O1 | QA | Error handling | The retry path has no observable outcome to assert | Changed: the retry now records an attempt count in the audit table |
 | O2 | TL, SRE | Migration | The backfill locks the orders table for the length of the run on real data | Open for the Tech Lead |
 
-Below the table, what `shared/independent-challenge.md` asks for: the agents that ran, any role
-left out and why, and how many objections were dropped as unfounded. A later challenge of the same
+Below the table, what `shared/independent-challenge.md` asks for: the agents that ran, with any
+model asked for, any role left out and why, and how many objections were dropped as unfounded. A later challenge of the same
 draft follows it as `Pre-review objections, <YYYY-MM-DD>`, its IDs continuing the numbering, `O3`
 after `O2`, so `--answer` can name every objection by its ID alone.

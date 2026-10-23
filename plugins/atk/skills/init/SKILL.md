@@ -94,10 +94,11 @@ The team table is one question covering every role, never one question per role.
 A question the repository can answer is a defect in step 1, not a question. If an answer is not
 available now, or the budget runs out, write `TBD` plus the name of the person who owes it and move
 on; `--audit` picks those up later. Never leave a field blank, and never invent a plausible value.
-Two exceptions, each a field whose absence already has a meaning, per `shared/project-profile.md`:
+Three exceptions, each a field whose absence already has a meaning, per `shared/project-profile.md`:
 the `Run trace` line, written only when the team turns traces off, since a missing line means on;
-and a `Template` cell, written only for a kind the project has a template for, since an empty cell
-means the kit's template.
+the `Reading agent model` and `Review agent model` lines, never asked and written only when a person
+gives one, since a missing line means the harness's own choice; and a `Template` cell, written only
+for a kind the project has a template for, since an empty cell means the kit's template.
 
 ### 4. Write
 
@@ -145,7 +146,8 @@ entry shows both values and both sources, the same shape `--audit` reports.
 A value that matches what the profile already records is confirmed by that agreement. Ask only about
 drift, about fields still marked `TBD`, and about a fixed-turn field the profile lacks entirely. The
 `Run trace` line is not such a field, per `shared/project-profile.md`; a team that wants traces back
-on after turning them off says so, and the update removes the line. That
+on after turning them off says so, and the update removes the line. Nor are the two agent model
+lines, which the update keeps as written and adds or removes only when a person asks. That
 is what shrinks the interview: of the four fixed turns in `references/detection.md`, only the ones the
 existing file leaves unanswered are still owed.
 
@@ -159,9 +161,10 @@ comment leaves it alone.
 Re-run step 1 against an existing profile and report per section: matches, drifted, or missing. A
 drifted entry shows both values and their sources. The audit itself changes nothing and does not
 reorder the file. The output is a list the Tech Lead can act on, not a patch. A missing `Run trace`
-line is never reported missing, per `shared/project-profile.md`. A `Template` path in the kinds table
-that no longer exists, or no longer passes the check in that file, is reported as drifted, with the
-path and what failed in place of a second value. So is one git does not track, since nobody reviews
+line, and a missing `Reading agent model` or `Review agent model` line, is never reported missing,
+per `shared/project-profile.md`. A `Template` path in the kinds table that no longer exists, or no
+longer passes the check in that file, is reported as drifted, with the path and what failed in
+place of a second value. So is one git does not track, since nobody reviews
 it and each clone may read a different file: checked with
 `git -C <repository> ls-files --error-unmatch <path>` in the repository that holds it, per the
 Repositories table where the shape names members, with the path relative to that repository, the

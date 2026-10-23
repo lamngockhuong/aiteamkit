@@ -130,6 +130,10 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 
 - Working language: <language the team writes artifacts in>
 
+<!-- Optional, never asked: `- Reading agent model:` and `- Review agent model:` go here, each
+     `inherit` or `<harness> <model>` pairs separated by `;`, the harness one of claude-code,
+     cursor, codex. A missing line means the harness's own choice. See shared/project-profile.md. -->
+
 <!-- Roles the team does not have are omitted, not filled with a placeholder person. -->
 <!-- The host identifier is what a code host knows the person by, and it is what a CODEOWNERS
      entry or a review request has to carry. A real name is not one. Leave it empty where the

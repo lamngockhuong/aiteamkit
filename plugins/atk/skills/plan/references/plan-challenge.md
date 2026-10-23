@@ -102,13 +102,14 @@ because" and what was looked for, so the reader can tell it from a check that ne
 How it is delivered depends on who called:
 
 - **A person.** Where the recommendation is to challenge, print it, its reason, the number of
-  agents a challenge would spawn and the concurrency cap measured per
-  `shared/independent-challenge.md`, and ask one question: run it now or not. On a no, print the
-  line to type later and stop. Where it is to answer first, or no, print it with its reason and
+  agents a challenge would spawn, any model asked for under the `Review agent model` line, and the
+  concurrency cap measured per `shared/independent-challenge.md`, and ask one question: run it now
+  or not. On a no, print the line to type later and stop. Where it is to answer first, or no, print it with its reason and
   stop: there is nothing to ask.
 - **`--inline`.** The recommendation rides inside the one confirmation step 7 already asks, with
   its reason. Where it is to challenge, the answers are yes, no, or challenge first, and the
-  confirmation states the agent count and the measured cap; on "challenge first"
+  confirmation states the agent count, any model asked for, and the measured cap; on "challenge
+  first"
   the challenge runs, then the handback of step 7 in `SKILL.md` is sent again in full, with every
   open question the challenge created and every objection left `Open`, each with the phase it
   blocks, and the confirmation is asked again with yes or no only. A caller confirming from the

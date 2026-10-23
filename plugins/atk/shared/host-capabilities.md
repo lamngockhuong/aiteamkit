@@ -220,7 +220,8 @@ What stays here is the policy the procedure may not overrule:
   list asks for before it spawns the first one, so it says that number, and the measured cap, before
   spawning rather than after. A person who can see the cost can stop it or pay it; a person who
   cannot see it finds out from the rate limit. The skill that calls the review says the same number
-  before it calls, since a run's cost is what its caller spends.
+  before it calls, since a run's cost is what its caller spends. The statement also names any model
+  asked for, per The model of a read-only agent below.
 - Every agent within a round receives the same scope. Agents split by file agree trivially and prove
   nothing; the point of running copies is independent passes over one diff. Scope differs between
   rounds on purpose, because each round is a different question over that same whole diff.
@@ -237,7 +238,10 @@ What stays here is the policy the procedure may not overrule:
   runs or starts anything. Every agent a review spawns, rounds, copies and the sweep, under
   `--parallel` too, every lens agent of a challenge, and every agent that reads wide per the section
   below is spawned as that type. The band 1 reviewer is the one exception: it writes the report and
-  runs the whole skill. Where the type is not in the harness's live agent list, the run spawns a
+  runs the whole skill. The same split decides the model: rounds, copies, the sweep and lenses take
+  `Review agent model`, an agent that reads wide takes `Reading agent model`, and the band 1
+  reviewer and every agent that writes take none, since they do the session's own work.
+  Where the type is not in the harness's live agent list, the run spawns a
   general agent with the same prompt and says in its artifact that the limit rested on the prompt.
   On Cursor and Codex, where the type was not tested, that prompt is the route.
 
@@ -293,6 +297,44 @@ reads a handful of files reads them itself, since an agent costs a round trip an
 - **Without agents.** The step reads inline, and the run says it did: where the artifact lists what
   it read, or, for a skill whose artifact has no such place, in the closing message of the run. That
   is the rule of When the capability is missing, above, applied to this one.
+- **The model.** The agent takes the `Reading agent model` line, per The model of a read-only agent
+  below.
+
+## The model of a read-only agent
+
+`.atk/profile.md` may name, per harness, the model of the agents that read wide and of the agents
+of a review or a challenge, in two lines of its Team section. `shared/project-profile.md` owns their
+form and what a missing, repeated or malformed value means; the reviewer bullet above says which
+kind of agent takes which line. Spawning such an agent:
+
+1. Resolve the line for its kind per `shared/project-profile.md`. Where it gives a model, pass it
+   with the spawn through the harness's own parameter, `model` of the `Agent` tool in Claude Code;
+   otherwise pass none, which leaves the harness's own choice, a person's default for subagents
+   included.
+2. Say the model asked for wherever the run already states what it spawns: the stated total above,
+   the cost line and report of `atk:review`, the statement and record of a challenge, the place a
+   wide reading reports. Say nothing about a model when no line applied.
+3. Where the harness offers no way to name a model for one agent, spawn as before and say so in the
+   same place. A spawn the harness refuses for the model, an unknown name or one an allowlist
+   blocks, is retried once with no model, and the run says so there too. A harness that replaces a
+   model without refusing cannot be seen doing it, so the run states what it asked for, never what
+   ran.
+4. A line that could not be read, a second pair for the same harness, and a harness the run cannot
+   tell are each said once, in the same place or in the closing message.
+
+No run stops over a model line. A skill of the Required or Required-soft group of
+`shared/project-profile.md` names the line in those sentences, `Reading agent model` or `Review
+agent model` as the agent's kind takes: `the line <name> named <model> for this harness, which could
+not be passed`. A skill of the `Not needed` group,
+`atk:catchup`, `atk:onboard` and `atk:design-doc --challenge`, speaks of the agent and the model
+only, never of the file or the line:
+
+- `reading agent: asked to run on <model>`, or `lens agents: asked to run on <model>`
+- `could not pass <model> on this harness, the agent ran on the harness's own choice`
+- `the harness refused <model>, spawned again with no model`
+- `a second model for this harness, <model>, was ignored`
+- `<value> is not a harness and model pair, so no model was passed`
+- `the harness could not be told, so no model was passed`
 
 ## Agents that write
 

@@ -32,15 +32,16 @@ reviewer changes nothing in `shared/host-capabilities.md`, and on Claude Code is
 on their own in `shared/secret-scan.md` with the paragraph under that table on the two rows a search
 pattern cannot express, and a secret it comes across cited by its path and key, its value
 `<redacted: kind>`. An agent that has read the author's reasoning agrees with it, which
-is the one result this pass exists to avoid.
+is the one result this pass exists to avoid. Every lens agent takes the `Review agent model` line,
+per The model of a read-only agent in `shared/host-capabilities.md`.
 
-The number of agents and the concurrency cap are stated before the first one is spawned, and the cap
-is the machine's, under the policy for independent reviewers in `shared/host-capabilities.md`: read
-the available memory and allow roughly 1.5 GB per agent running at once, the measure
-`skills/review/references/review-rounds.md` uses. Where the memory cannot be read, run at most two
-agents at once and say so in the statement. Where the harness cannot run agents in parallel,
-the lens passes run one after another in this session, and the artifact says they shared the
-author's context, which makes them weaker.
+The number of agents, the concurrency cap and any model asked for are stated before the first one
+is spawned, and the cap is the machine's, under the policy for independent reviewers in
+`shared/host-capabilities.md`: read the available memory and allow roughly 1.5 GB per agent running
+at once, the measure `skills/review/references/review-rounds.md` uses. Where the memory cannot be
+read, run at most two agents at once and say so in the statement. Where the harness cannot run
+agents in parallel, the lens passes run one after another in this session, and the artifact says
+they shared the author's context, which makes them weaker.
 
 ## What an agent returns
 
@@ -77,7 +78,7 @@ an approval." Then a table with the columns `ID`, the citer's name for a lens, `
 the same draft continues the numbering rather than starting again, and is dated where the citer
 puts it: a section of its own after the earlier one, or a round line inside it.
 
-Below the table: the agents that ran, any lens left out and why, and how many objections were
+Below the table: the agents that ran, with any model asked for, any lens left out and why, and how many objections were
 dropped as unfounded. Where nothing was kept, the section is still written, with `None kept.` in
 place of the table and the same lines below it. A reviewer reading a table with no drops and no
 open rows should be able to tell that from a pass that found nothing.
