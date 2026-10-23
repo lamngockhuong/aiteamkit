@@ -46,7 +46,7 @@ built per job, since the way and the piece change them. In this order:
 7. **Where it ends.** At the state the skill gives its artifact, with every change left in the
    working tree: the job never runs `git add` or `git commit`, and its skill's own hand-off to
    `atk:git` is not taken. The first step of `shared/finalize-steps.md`, the reference documents a
-   contract change owes, still is, in the working tree, `--no-review` or not. Never a push, a pull request, a ticket comment, a merge, or a change to an artifact's
+   contract change owes, still is, in the working tree, `--no-review` or not. Never a push, a pull request, a ticket comment, an issue, a merge, or a change to an artifact's
    `status` the skill does not make itself. An offer of one of those that the skill makes is
    declined and written to the result file as a `stop:` line of kind `offer`, for the coordinator's
    close.

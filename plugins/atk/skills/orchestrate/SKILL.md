@@ -184,13 +184,13 @@ What an `atk:implement` or `atk:fix` job is given is item 2 of `references/job-p
 Once a code job's change is committed, run `atk:review "<base>...<branch>"` in its worktree, with
 `<base>` the base in the piece's entry, a sha or a branch, never `(detached)`, and
 `--out <docs root>/derived/orchestrate/<run-id>/<job-id>-review.md`, as `shared/review-fix-loop.md`
-says, all of it: Calling the review, with the plan and the requirement as intent and the cost stated first; What
-gets fixed; Disputing a finding, which goes to the Tech Lead and stops the chain; and The ceiling,
-two rounds, counted in the run state so a resume cannot reset it. The findings What gets fixed
-selects become a fix job, per Fix jobs in `references/proposal.md`, which the approved record
-already counted; a `SHOULD FIX` finding carried forward is written in the run state with its reason.
-The next review names the report before it and the commits since. Past the ceiling, mark the chain
-`escalated`. The loop's record lines go to the run state and into the record
+says, all of it: Calling the review, with the plan and the requirement as intent and the cost stated
+first; What gets fixed; Disputing a finding, which goes to the Tech Lead and stops the chain; The
+ceiling, two rounds, and The closing read, counted in the run state so a resume resets neither. The
+findings What gets fixed selects become a fix job, per Fix jobs in `references/proposal.md`, which
+the approved record already counted; a `SHOULD FIX` finding carried forward is written in the run
+state with its reason. The next review names the report before it and the commits since. Past the
+ceiling, mark the chain `escalated`. The loop's record lines go to the run state and into the record
 `shared/review-fix-loop.md` names for this skill. Agreement between reviewers is not an approval.
 
 ### 6. Re-confirm after a gate

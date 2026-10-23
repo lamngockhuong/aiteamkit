@@ -146,7 +146,8 @@ Twenty-one files hold what skills would otherwise repeat. The first three are ci
   rules, and front matter.
 - `plugins/atk/shared/ticket-adapters.md`: tracker detection and its three outcomes, including the one where a
   tracker is configured and answers nothing, the vocabulary map, which trackers store a sprint's
-  dates, and what to report where field history is missing.
+  dates, what to report where field history is missing, and how open issues are searched before an
+  item is offered as one.
 
 One is reached from every skill's workflow, which opens with two lines that start the run trace
 rule 10 of `team-roles.md` asks for:
@@ -172,8 +173,9 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   recorded nothing. `atk:implement` reads the file for that resolution and for the baseline items,
   which it falls back to when a project really has recorded no conventions of its own.
 - `plugins/atk/shared/finalize-steps.md`: the closing sequence for a finished piece of work, the consent
-  line that every action past the commit has to cross, and the order a change spanning several
-  repositories is carried in. `atk:git` is what carries it out; this file
+  line that every action past the commit has to cross, the offer of a record's left-for-later items
+  and carried-forward findings as issues, created only where a person names them, and the order a
+  change spanning several repositories is carried in. `atk:git` is what carries it out; this file
   stays the contract, which is what lets the code-changing skills and the artifact-writing ones
   close the same way. Cited by `atk:fix`, `atk:implement` and `atk:verify`, which hand off to
   `atk:git`, by `atk:plan`, `atk:tailor` and `atk:qa` for the consent line alone, by `atk:orchestrate` for the consent line
@@ -227,7 +229,8 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
 - `plugins/atk/shared/review-fix-loop.md`: the loop that runs `atk:review` on a skill's own change before a
   person reads it, the severities it fixes, the narrowest of three forms a fix to a rule an agent
   follows takes, a disputed finding, the two-round ceiling and the
-  escalation by name, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
+  escalation by name, the closing read of what the second round fixed, with nothing fixed after it
+  and those fixes listed first in the record, and the line `--no-review` leaves in the record. Cited by `atk:implement` and
   `atk:fix`, and by `atk:orchestrate`, which runs it on the code jobs it commits: the verification of each asks whether the change works, and neither reads the diff for
   what it newly claims, which is what a review finds.
 

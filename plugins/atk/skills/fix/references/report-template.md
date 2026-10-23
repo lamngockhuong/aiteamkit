@@ -25,8 +25,8 @@ section of `.atk/profile.md` or asked for; when neither gives one, `TBD` naming 
 reviewer, per `shared/team-roles.md`. Under `--investigate-only` the status is `DRAFT`, because
 there is nothing to approve yet. A run the hypothesis ceiling stopped is `DRAFT` too: the work is
 not finished, and a reader who sees `IN REVIEW` will assume it is. So is the draft step 6 writes
-before its review: sections 5 to 8 are still missing, and step 7 sets `IN REVIEW` when it completes
-the file.
+before its review: After the last round and sections 5 to 8 are still missing, and step 7 sets
+`IN REVIEW` when it completes the file.
 
 The `<record path>#<ID>` form, several references, and a record that is not committed follow Front
 matter in `shared/artifact-paths.md`.
@@ -36,9 +36,9 @@ matter in `shared/artifact-paths.md`.
 When the argument names more than one defect, they share one report, which becomes one pull request
 body. Each defect gets an ID the report uses throughout, taken from its source where it has one, such
 as `SF1` or `D2`, and sections 1 to 4b and section 8 are written once per defect, as a block headed by
-that ID, so each cause is read against its own evidence. Sections 5 to 7 and 9 are shared, with every
-line naming the defect it concerns. `ticket` lists each reference. The hypothesis
-count is per defect, and a defect the ceiling stopped keeps its block with what ruled its hypotheses
+that ID, so each cause is read against its own evidence. After the last round and sections 5 to 7
+and 9 are shared, with every line naming the defect it concerns. `ticket` lists each reference. The
+hypothesis count is per defect, and a defect the ceiling stopped keeps its block with what ruled its hypotheses
 out.
 `status` is `DRAFT` only when every defect was stopped; otherwise it is `IN REVIEW`, and the title
 names the stopped defect so no reader takes the report for complete.
@@ -53,6 +53,13 @@ sentence or two each.
 
 The prose of every section below follows the same file. Sections 1 and 3 keep their blocks verbatim,
 and the words around those blocks are what the file governs.
+
+## After the last round
+
+**Skipped in the same three cases as section 5.**
+
+Between In short and section 1, holding what The closing read in `shared/review-fix-loop.md` asks
+of it.
 
 ## 1. Symptom as captured
 
@@ -139,8 +146,9 @@ A pass is reported as what it covers, not as "tests pass".
 The rounds of `atk:review` that ran, the path of each review report, and per finding its severity
 and what happened to it: fixed, carried forward with the reason, disputed with the person who answers,
 escalated with the five points of The ceiling in `shared/review-fix-loop.md` and the person named,
-or left as a `NIT`. A finding fixed after the last call is marked as Re-verify after each round in
-`shared/review-fix-loop.md` says, here and in section 7. Then whether `atk:verify` was offered after a clean loop, and whether it ran.
+or left as a `NIT`. Then one line for the closing read: its report path and counts by severity, apart
+from the two rounds, or that there was nothing to read, or that it did not run and why; its findings
+are listed like a round's, none of them fixed. Then whether `atk:verify` was offered after a clean loop, and whether it ran.
 Under `--no-review`, the one line `shared/review-fix-loop.md` asks for: the fix is
 unreviewed, and who must review it before merge.
 
@@ -148,6 +156,9 @@ unreviewed, and who must review it before merge.
 
 What could not be checked, and why. An infrastructure change that only had its syntax validated
 belongs here, as does a caller that has no test and was not exercised by hand.
+
+A fix the closing read did not cover goes here, as The closing read in
+`shared/review-fix-loop.md` says.
 
 An empty section here is a strong claim. Write it only when every caller in the blast radius was
 actually run, and say so in those words.
@@ -161,6 +172,9 @@ list section 7 draws from, and the first thing a reviewer will check against the
 
 Anything found during the investigation and deliberately not done: the second bug, the refactor the
 file needs, the missing test elsewhere. One line each, with enough detail to become a ticket.
+
+Step 5 of `shared/finalize-steps.md` offers these lines, and the `SHOULD FIX` findings section 6b
+carries forward, as issues, and ends each line with the result it writes back.
 
 A reference document the fix owed and could not move goes here as the one line
 `shared/finalize-steps.md` asks for: what is stale, and who will fix it. Step 6 writes this section

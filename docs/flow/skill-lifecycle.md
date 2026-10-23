@@ -117,7 +117,8 @@ flowchart TD
 
 The two solid loops are the ones a team feels daily. `implement` and `fix` each call `review` on their
 own output, at most twice, before escalating by name, because a finding that survives two rounds of fixing
-is usually a design problem being patched. `implement` stopping at the large gate is the other:
+is usually a design problem being patched. What the second round fixed is reviewed once more, and
+nothing is fixed after that read. `implement` stopping at the large gate is the other:
 work that touches a schema, a public contract, a shared module, or more than one service changes no
 file until somebody has approved how.
 

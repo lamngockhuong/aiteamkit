@@ -21,10 +21,12 @@ of truth for the same rules, and two sources of one rule drift apart quietly.
 
 ```
 [call atk:review] -> [classify] -> [fix BLOCKING and SHOULD FIX] -> [re-verify] -> [call again]
+  -> after the second call's fixes: [re-verify] -> [closing read, nothing fixed after it]
 ```
 
-At most twice. The second pass is there because a fix can introduce a finding; a third pass is there
-because the first two did not work, which is a different problem from the one more fixing solves.
+At most twice, then one closing read of what the second round fixed, per The closing read below.
+The second pass is there because a fix can introduce a finding; a third pass is there because the
+first two did not work, which is a different problem from the one more fixing solves.
 
 The second call reviews the fix, not one round picked because it raised the finding and not the
 whole change again. The change is still uncommitted at this point, so nothing in git marks where the
@@ -143,8 +145,8 @@ job too, whose prompt names the fix report that holds it. Not the full order eve
 narrowest check covering what the fix touched, the layer,
 and the blast radius if the fix widened it.
 
-Fixes made after the last call are reviewed only by the person. The record marks each as fixed and
-not reviewed again, and lists it among what was not verified.
+Fixes made after the second call are re-verified the same way, and then read once more, per The
+closing read below.
 
 A fix that was never re-verified is a change nobody has run, arriving at the end of the process when
 attention is lowest.
@@ -172,6 +174,42 @@ the consent line in `shared/finalize-steps.md`. The named person is given the fi
 file and line and the path of the review report, since a branch nobody pushed is readable only on
 the author's machine.
 
+## The closing read
+
+Fixes made after the second call are read once more by `atk:review`, and nothing is fixed after that
+read. It is a review, not a third round: the ceiling above still counts two rounds of fixing, and the
+read neither adds one nor resets the count.
+
+It runs once those fixes pass the re-verification above, given what the second call is given: the
+files the fixes touched, the second call's report named as the earlier report and the first beside
+it as history, neither as a path to review, per Called again after a fix in
+`skills/review/references/review-rounds.md`. Its cost is said first, as in Calling the review. A
+person who declines it, and a call that ends without writing a report, leave those fixes not read:
+the record marks each as fixed and not reviewed again, says why and, for a decline, who declined,
+and lists it among what was not verified.
+
+What it finds is recorded, never fixed:
+
+| Severity | After the closing read |
+|----------|------------------------|
+| `BLOCKING` | Escalates as The ceiling says, beside any finding the second round left, and the finalize step stops at the commit |
+| `SHOULD FIX` | Carried forward, with the closing read as the reason |
+| `NIT` | Recorded, as in the rounds |
+
+A finding the author believes is wrong goes as Disputing a finding says, and is still not fixed.
+
+No closing read runs when nothing was fixed after the second call, including a loop that never
+reached one, or under `--no-review`, below. The record then says there was nothing to read. A resumed
+run that finds a closing read in its progress log does not run it again.
+
+The record carries a section, After the last round, ahead of everything but its `In short`, so the
+reviewer reads it first. It lists each fix made after the second call with its finding ID, its
+`path:line` range, its form, and what the closing read found in it, or that it was not read and why.
+Fixes that added a rule come first, each naming the states that rule opens, since each one is what a
+reader finds next. With no such fix, the section is one line saying so; under `--no-review` it holds
+the line that section below asks for. It also names the closing read's report path and its counts by
+severity, apart from the two rounds.
+
 ## When the loop comes out clean
 
 A clean loop means no `BLOCKING` finding remains. It does not mean anybody has seen the change run.
@@ -188,10 +226,10 @@ real side effects, and `shared/finalize-steps.md` holds the rule about acting on
 
 ## Under `--no-review`
 
-The loop does not run. The record says so in its own line: that the review was skipped, that the
-change is unreviewed, and who must review it before merge. Where the caller reviews the change
-itself, as `orchestrate` does for its jobs, that caller adds the path of its review report beside the
-line.
+The loop does not run, and neither does the closing read. The record says so in its own line: that
+the review was skipped, that the change is unreviewed, and who must review it before merge. Where
+the caller reviews the change itself, as `orchestrate` does for its jobs, that caller adds the path
+of its review report beside the line.
 
 The flag exists for the case where a review is already arranged through another route, not as a way
 to move faster. A skipped review that leaves no trace is indistinguishable from one that was

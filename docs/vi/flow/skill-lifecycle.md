@@ -118,7 +118,8 @@ flowchart TD
 
 Hai vòng nét liền là hai vòng một đội cảm nhận hằng ngày. `implement` và `fix` đều gọi `review` lên
 chính sản phẩm của mình, mỗi skill chạy nhiều nhất hai lượt rồi báo lên đích danh một người, vì một phát hiện sống sót
-qua hai lượt sửa thường là vấn đề thiết kế đang bị vá. Vòng còn lại là lúc `implement` dừng ở cổng
+qua hai lượt sửa thường là vấn đề thiết kế đang bị vá. Những gì lượt hai đã sửa được review thêm
+một lần, và sau lượt đọc đó không sửa gì nữa. Vòng còn lại là lúc `implement` dừng ở cổng
 lớn: phần việc chạm vào schema, một hợp đồng công khai, một module dùng chung, hoặc nhiều hơn một
 service thì không file nào được đổi cho tới khi có người duyệt cách làm.
 

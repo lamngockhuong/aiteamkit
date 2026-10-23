@@ -388,9 +388,10 @@ means those four, whose logs sit at `docs/derived/<skill>/<run-id>/progress.md`,
   even before its first commit; on a detached `HEAD`, where it prints nothing, the branch is
   `(detached)`. In a repository with no commit yet the start is `(none)`.
 - **One entry per unit of work.** A hypothesis proved or ruled out, a round of fix and retry, a
-  review round, a step of work done without a plan, each with its time and its result in a line or
-  two. A review round's entry also names its report's path and the files its fixes touched, which
-  the next call has to name, per `shared/review-fix-loop.md`. Written under rule 9 of `shared/team-roles.md`: a secret value is masked as in any artifact.
+  review round, the closing read after the last one, a step of work done without a plan, each with
+  its time and its result in a line or two. A review round's entry also names its report's path and
+  the files its fixes touched, which the next call has to name, per `shared/review-fix-loop.md`; the
+  closing read's entry names its report's path. Written under rule 9 of `shared/team-roles.md`: a secret value is masked as in any artifact.
   A real person's data and an internal host are masked too, as `<redacted: kind>`, by the list in
   The data a record must not carry in `skills/qa/references/test-run.md`, since a log summarises a
   running system. A response body or a command's output is summarised by its status and the lines
@@ -420,7 +421,7 @@ on, for the person to pick one. A fourth answer, **Run separately**, leaves them
 waiting chains included, and starts this run with a `<run-id>` of its own.
 
 It never resumes without that answer. The counts that bound a run, hypotheses in `atk:fix`, rounds
-in `atk:verify`, review rounds in `atk:implement`, `atk:fix` and `atk:orchestrate`, carry over only on a resume, so a resumed run
+in `atk:verify`, review rounds and the closing read in `atk:implement`, `atk:fix` and `atk:orchestrate`, carry over only on a resume, so a resumed run
 cannot reset its own ceiling.
 
 The offer also names the test that failed when the log looks stale: its branch is not the current

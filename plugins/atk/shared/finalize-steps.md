@@ -32,6 +32,7 @@ ago on a different change.
 | Push the branch | yes |
 | Open a pull request | yes |
 | Comment on the issue | yes |
+| Create an issue | yes |
 | Move the ticket or assign a reviewer | yes |
 | Merge a pull request | yes, for that merge, every time |
 | Rewrite history already on the remote | yes, and only where the section below allows it |
@@ -115,7 +116,32 @@ document is the exception, linked one way only, per Linking rule in `shared/tick
 Move the ticket to the status the team's flow calls "in review" or its local equivalent. Do not move
 it to done. Done is the approver's word, and this skill is the author.
 
-Where there is no ticket, and where the project has no tracker at all, this step is `N/A`. Say that;
+Then the work the change leaves behind is offered as issues, once the pull request is open. The
+items are every line of the record's left-for-later list, section 9 of a fix report or the
+noticed-but-not-done list of an implementation record, and every `SHOULD FIX` finding the record
+carries forward, the closing read's included, per `shared/review-fix-loop.md`. A `NIT` is never one.
+The skill that wrote the record hands it to `atk:git` and makes no offer of its own.
+
+1. **Search first.** For each item, search the tracker's open issues, per Search open issues in
+   `shared/ticket-adapters.md`. An issue that covers the item replaces its draft with that issue's
+   key, and the item is never created a second time; a person who says in the answer that the issue
+   does not cover it gets the draft instead.
+2. **One list, answered once.** Number the items, each with a draft title and a body that cites the
+   record's path and the pull request, or with the issue that covers it. Ask once: all, some by
+   number, or none.
+3. **Create only what was named**, with no assignee and no label unless the person names one in the
+   same answer: the Team section never assigns work nobody asked for.
+4. **Write the result back.** Each item's line in the record gains its issue's key, or
+   `no ticket: declined by <name>`, or the key of the issue that already covered it. The yes covers
+   this, shown in the list as what it also does, each that applies: a commit and push of a record
+   committed on the branch, and an edit of the pull request body where the record is the body.
+
+With no item to offer, or no tracker, the offer is `N/A` and says which of the two. While the change
+stops at its commit, as a disputed or escalated `BLOCKING` finding stops it, no issue is offered: the
+items wait in the record for the run that takes the change further.
+
+Where there is no ticket, the comment and the move are `N/A`, and the offer above still runs where
+there is a tracker; where the project has no tracker at all, the whole step is `N/A`. Say that;
 do not pass over it in silence. A step that did not run and a step that had nothing to run are
 different facts, and only the second one is safe to read as nothing missing. The artifact's front
 matter already carries `ticket: none` per `shared/ticket-adapters.md`, and this is the same fact

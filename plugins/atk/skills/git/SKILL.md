@@ -217,7 +217,8 @@ themselves, per rule 2 of `shared/team-roles.md`.
 Then the ticket, per `shared/ticket-adapters.md`: show the comment, post it on a yes, link both
 ways, a reference document excepted per Linking rule there, and move the ticket to the team's
 "in review" state. Never to done. With no ticket behind the change, report the step as `N/A`
-rather than skipping it quietly, per step 5 of `shared/finalize-steps.md`.
+rather than skipping it quietly, per step 5 of `shared/finalize-steps.md`. Then offer the record's
+left-for-later items and carried-forward findings as issues, as that step says.
 
 ### 5. Merge
 
@@ -275,3 +276,4 @@ ticket, per `shared/finalize-steps.md`.
       forced and the kind that may not before any push was offered.
 - [ ] No history already on the remote was rewritten outside the cases in `shared/finalize-steps.md`.
 - [ ] The issue was not closed and the ticket was not moved to done.
+- [ ] The offer of issues ran as step 5 of `shared/finalize-steps.md` says, or was reported `N/A`.

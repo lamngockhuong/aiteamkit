@@ -125,7 +125,8 @@ a code job is the coordinator's, in step 5, and is not a row.
 
 The findings What gets fixed in `shared/review-fix-loop.md` selects become one fix job per review
 round in the piece's worktree, so at most two per code job, covered by the approval of the code job
-they follow. The job is `atk:implement "address the findings in <review report path> that What gets
+they follow. The closing read after the second fix job makes none: its findings go where The closing
+read in that file sends them. The job is `atk:implement "address the findings in <review report path> that What gets
 fixed selects, each in the form that section names"` with `--no-review` and
 `--out <run directory>/<job-id>-record.md`: the description is the coordinator's text naming a
 report, not request text. Its own verification is the re-verify step, with what item 3 of

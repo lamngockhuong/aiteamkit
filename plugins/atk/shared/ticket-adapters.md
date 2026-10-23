@@ -219,6 +219,22 @@ handing the artifact straight to the flag drops it silently.
 do not shell out to `curl` with a token found in the environment. Print the field-by-field mapping
 and let the user paste it, or ask for the credential path explicitly.
 
+### Search open issues
+
+Before an issue is offered for an item, step 5 of `shared/finalize-steps.md` searches the open ones,
+so the same work is not raised twice. On GitHub:
+
+```bash
+gh issue list --state open --search '<words from the item>' --json number,title,url
+```
+
+The words are the item's distinctive terms, a path or an identifier before prose, inside single
+quotes and without the record's backticks, so the shell runs nothing in them. A result covers the
+item when it describes the same work, not when it merely shares a word; read its body with
+`gh issue view <number>` where the title leaves that open. Where several cover it, show each. Other trackers read their open
+issues through their connection, per Read through a connection in `shared/host-capabilities.md`;
+where none answers, say so, and offer the item with its draft and no match.
+
 ## Linking rule
 
 Both directions, every time:
