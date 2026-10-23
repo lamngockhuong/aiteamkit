@@ -377,6 +377,9 @@ short trace of the steps it ran, who it waited for and where it stopped, under t
 `derived/traces/`, naming who answered each question it asked, kept out of git but read by anything
 that builds or packs the docs root, per `shared/run-trace.md`; does the team want that off? It costs no turn either. Only an answer of off is written. No answer, or on, leaves the line
 out, which every skill reads as on, so this is the one question whose missing answer is not `TBD`.
+The `Reading agent model` and `Review agent model` lines in Team are never asked, in this turn or
+any other: their absence is the harness's own choice, and a model is written only when a person
+gives one, per `shared/project-profile.md`.
 
 That leaves four turns for the ambiguities the section above can raise: which directory is the
 project root, two lock files, a watch-mode test script, a command that needs another command first,

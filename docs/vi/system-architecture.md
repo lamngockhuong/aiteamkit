@@ -105,7 +105,7 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 | `references/*.tsv` | Chỉ khi file tham chiếu quản nó được đọc | Mỗi dòng một bản ghi, nên nó lớn thêm từng dòng chứ không thêm văn xuôi |
 | `plugins/atk/shared/*.md` | Chỉ khi một skill trích dẫn nó | Nhỏ, vì nhiều skill có thể cùng mở |
 | `plugins/atk/shared/run-trace.md` | Ở mọi lượt chạy, do hai dòng trace trong workflow của mọi skill dẫn tới, trừ khi profile ghi `Run trace: off` | Chi phí ghi ở mục Cost ngay trong file |
-| `.atk/profile.md` | Một lần mỗi lượt chạy: đọc trọn bởi skill nào cần sự thật của dự án, và chỉ dòng `Run trace` cùng cột Name của mục Team bởi các skill còn lại | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
+| `.atk/profile.md` | Một lần mỗi lượt chạy: đọc trọn bởi skill nào cần sự thật của dự án, và chỉ dòng `Run trace` cùng cột Name của mục Team bởi các skill còn lại, thêm dòng `Reading agent model` hoặc `Review agent model` của mục Team khi skill đó tạo loại agent tương ứng | Một trang gồm con trỏ và lệnh, không bao giờ là văn xuôi |
 
 Bên cạnh các skill có một agent đi kèm, `plugins/atk/agents/read-only-reviewer.md`. Claude Code nạp
 frontmatter của nó cùng plugin và đặt tên `atk:read-only-reviewer`; phần thân chỉ được đọc khi một
@@ -121,6 +121,18 @@ nên agent không có shell và không có luật chặn: agent gọi nó ghi di
 trong `plugins/atk/shared/secret-scan.md`, vào thư mục git của repository. Cursor và Codex chưa được thử: Cursor tự tìm thư mục `agents/` và file đặt
 `readonly: true` cho nó, plugin của Codex không mang agent, và cả hai điều này lấy từ tài liệu của
 họ, đọc ngày 2026-10-10. Trên cả hai, các prompt trong `references/` vẫn là đường đi.
+
+Không file agent nào và không `SKILL.md` nào ghi tên model. Đội muốn các agent này chạy trên model
+khác với lựa chọn mặc định của harness thì ghi `Reading agent model` hoặc `Review agent model` vào
+mục Team của profile, mỗi harness một model, và skill truyền model đó khi tạo loại agent tương ứng,
+theo mục The model of a read-only agent trong `plugins/atk/shared/host-capabilities.md`. Mỗi harness
+nhận model theo một đường riêng, đều lấy từ tài liệu của họ đọc ngày 2026-10-22 và chưa đo ở đây:
+Claude Code nhận tham số `model` trên công cụ `Agent`, được ưu tiên hơn frontmatter của agent và
+`CLAUDE_CODE_SUBAGENT_MODEL`; Cursor cho agent cha nêu model khi khởi chạy subagent, kèm hai báo cáo
+trên diễn đàn vẫn mở về việc model đó không được tôn trọng; Codex nhận model khi tạo agent, chỉ thua
+một file agent tuỳ chỉnh tự đặt model, mà kit không mang file nào như vậy. Reviewer band 1 và mọi
+agent có quyền ghi không nhận dòng model nào. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
+ghi lý do lựa chọn này thuộc về đội và vì sao nó không nằm trong file agent.
 
 ## Lớp `shared/`
 
@@ -287,7 +299,10 @@ Hai file cuối mô tả những file không đi kèm kit:
   của parent chứa các repo thành viên và của workspace không thuộc repository nào, và cách từng
   skill cư xử khi file đó vắng mặt. Skill nào chạy lệnh thì dừng; skill nào chỉ đọc diff thì chạy
   tiếp và nói rõ là thiếu profile; skill nào làm việc từ một tin nhắn chat thì không bao giờ nhắc tới
-  nó, và chỉ đọc hai thứ của nó khi có file, dòng `Run trace` và cột Name của mục Team. Ba mục
+  nó, và chỉ đọc hai thứ của nó khi có file, dòng `Run trace` và cột Name của mục Team, thêm thứ ba
+  khi tạo agent chỉ đọc là dòng model của loại agent đó. Hai dòng tuỳ chọn trong Team,
+  `Reading agent model` và `Review agent model`, nêu theo từng harness model của agent đọc rộng và
+  của agent mà một lượt review hay phản biện tạo ra; thiếu dòng thì harness tự chọn. Ba mục
   trong Docs đổi việc skill làm chứ không đổi chỗ nó ghi: `Contract`, ý nghĩa nằm ở
   `plugins/atk/shared/spec-docs.md`, cột `Template` trong bảng các loại tài liệu, cho `atk:spec` lấy
   template riêng của dự án làm hình dạng của một thư mục còn trống, theo cùng file đó, và

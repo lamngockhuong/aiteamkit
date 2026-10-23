@@ -46,8 +46,10 @@ Không phải skill nào cũng có đủ năm chặng, và chặng bị bỏ qua
 thiếu nó, vì một lệnh test đoán bừa mà thoát 0 là thứ bằng chứng tệ nhất có thể có. Skill nào làm
 việc từ một tin nhắn chat thì không bao giờ đòi profile, và chỉ đọc hai thứ của nó: dòng `Run trace`, dòng
 quyết định lượt chạy có để lại trace hay không, cùng cột Name và cột Host identifier trong mục Team,
-nơi lấy tên người ghi trên các dòng `gate` của trace. `plugins/atk/shared/project-profile.md` nói rõ skill nào
-thuộc nhóm nào.
+nơi lấy tên người ghi trên các dòng `gate` của trace. Ba skill trong số đó có tạo agent chỉ đọc,
+`catchup`, `onboard` và `design-doc --challenge`, đọc thêm thứ ba là dòng model trong mục Team cho
+loại agent ấy, `Reading agent model` hoặc `Review agent model`. `plugins/atk/shared/project-profile.md`
+nói rõ skill nào thuộc nhóm nào.
 
 **Cổng.** Phần lớn skill kiểm một điều gì đó trước khi động tay: `atk:implement` chấm xem phần việc
 cần bao nhiêu đồng thuận, `atk:fix` chứng minh nguyên nhân rồi kiểm xem hành vi hiện tại có phải một

@@ -187,7 +187,7 @@ a section to delete.
 | Commands | Per app: test, build, lint, and any extra command a change requires | plan, implement, fix, verify |
 | Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, whether the project writes its reference documents before the code or after it, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row, adds one, or names a template of its own for a kind, with the front-matter map beside it | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release; and every skill detecting a tracker, per `shared/ticket-adapters.md` |
-| Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, and the language the team writes artifacts in | all |
+| Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, the language the team writes artifacts in, and, optionally, `Reading agent model` and `Review agent model`, the model of the agents a skill spawns to read wide and to review | all |
 | Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to bring the data store to the branch's state, which stores other sessions also read, how to clean up, how to be sure the target is local | verify |
 
 The authored language in Docs is not the working language in Team, and a profile that fills one
@@ -240,16 +240,42 @@ in a spec directory is and how a version moves where a kind's shape came from no
   profile, mean on. `shared/run-trace.md` owns what a trace holds, and rule 10 of
   `shared/team-roles.md` is the obligation the line switches off.
 
+Two optional lines in Team change what a skill does too: the model it asks for when it spawns a
+read-only agent. They are the team's cost decision, approved with the rest of the profile; the kit
+ships no model name as a default and never chooses one.
+
+- `Reading agent model`: for the agents that read wide, and `Review agent model`: for the agents a
+  review or a challenge spawns, each kind as the reviewer bullet of `shared/host-capabilities.md`
+  defines it, the band 1 reviewer taking neither.
+- The value is `inherit`, or `<harness> <model>` pairs separated by `;`, the harness one of
+  `claude-code`, `cursor` and `codex`. An example of the form, not a default:
+  `- Reading agent model: claude-code sonnet; codex <a model ID Codex accepts>`.
+- The run names its own harness from its own context, reading `codex-cli` as `codex`, and never from
+  the run trace header, so the lines hold under `Run trace: off`. A run that cannot tell which of
+  the three it is on passes no model and says so, never guessing.
+- The model is copied as written, an alias or a full ID, and passed as it is. The kit keeps no table
+  of models and checks no name; the harness judges it.
+- A missing line, `inherit`, or a line with no pair for the run's harness passes no model, which is
+  the harness's own choice and every project's behaviour before these lines.
+- A harness named twice: the first pair wins, and the run says the second was ignored.
+- A malformed value, a pair with no harness name or no model, or a harness name outside the three,
+  is read as no line, and the run says the line could not be read.
+
+`shared/host-capabilities.md` owns what a skill does with the model: passing it, saying so where the
+run already states what it spawns, and degrading where the harness cannot take it.
+
 Every entry is a pointer or a command, never prose copied from elsewhere. A section that runs long
 because it has started explaining instead of linking is duplicating a document; a section that runs
 long because it is a list of short labelled fields, as Verify is, is fine.
 
 An answer nobody has yet is recorded as `TBD` plus the name of the person who owes it. Never blank,
-and never guessed. The exception is `Run trace`, a line whose absence already has a meaning: with no
-answer it is left out rather than written `TBD`, since a missing line is read as on, and a `TBD`
-there would read the same while looking like a question somebody still owes. For the same reason a
-re-run of `atk:init` never asks for the line again, and `--audit` never reports it as missing or
-drifted: its absence is an answer.
+and never guessed. The exceptions are `Run trace`, `Reading agent model` and `Review agent model`,
+lines whose absence already has a meaning: with no answer each is left out rather than written
+`TBD`, since a missing `Run trace` is read as on and a missing model line as the harness's own
+choice, and a `TBD` there would read the same while looking like a question somebody still owes. For
+the same reason a re-run of `atk:init` never asks for `Run trace` again, its first run never asks for
+either model line, and `--audit` never reports any of the three as missing or drifted: its absence
+is an answer.
 
 ## The precondition rule
 
@@ -281,13 +307,18 @@ the profile would have told it.
 
 Two things are read by every `Not needed` skill whenever the profile is there: `Run trace` in Docs,
 which decides whether the run leaves a trace, and the Name and Host identifier columns of the Team
-section, which write the names on a trace's `gate` lines, both per `shared/run-trace.md`. Reading it
-changes nothing the user sees, with two exceptions to the test above. `atk:design-doc --answer`
+section, which write the names on a trace's `gate` lines, both per `shared/run-trace.md`. A third is
+read by such a skill that spawns a read-only agent, `atk:catchup` and `atk:onboard` reading wide and
+`atk:design-doc --challenge` with its lenses: the model line for that kind of agent in Team. Reading
+it changes nothing the user sees, with three exceptions to the test above. `atk:design-doc --answer`
 writes the names in its `Answered by` and `Relayed by` cells by the same rule, so a person reads as
 one name in the design and in the trace, and without the profile by the fallback of that rule. And a
 name that only partly matches a row is confirmed with the person, a question no run without the
-profile asks. The skill still
-never mentions the profile, and a trace it does not write is never explained by naming the file.
+profile asks. And where a model line applies, the run says which model it asked for, and what kept
+it from being passed, in words about the agent and the model and never about the file or the line,
+the forms of The model of a read-only agent in `shared/host-capabilities.md`. Without the profile
+there is no line, so none of these appears. The skill still never mentions the
+profile, and a trace it does not write is never explained by naming the file.
 
 `atk:spec` is Required-soft rather than Required because it has two other ways to find its
 footing: the documents already in the directory, whose shape it copies, and the four default kinds.

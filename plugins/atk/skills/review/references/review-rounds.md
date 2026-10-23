@@ -275,8 +275,9 @@ rounds at 1.
 
 **Say what it will cost before the first agent is spawned.** The round list, the band, the copies
 and the cap are all known by this point, so the run states the three numbers it has derived: how
-many round runs, how many agents, and the concurrency the machine allows.
-`shared/host-capabilities.md` holds why, and the rule is not local to this file: the total of a run
+many round runs, how many agents, and the concurrency the machine allows, then any model asked for
+under the `Review agent model` line, per The model of a read-only agent in
+`shared/host-capabilities.md`. `shared/host-capabilities.md` holds why, and the rule is not local to this file: the total of a run
 is stated rather than bounded, because a person who can see it can stop it or pay it. The run does
 not wait for an answer; the line is there so that stopping it is possible. A review that announces
 its cost after a rate limit has stopped it has told the person nothing they could use.
@@ -284,7 +285,9 @@ its cost after a rate limit has stopped it has told the person nothing they coul
 Band 1 without `--parallel` states it in one line: one reviewer agent, nine rounds, nothing in
 parallel. A harness with no parallel agents says instead that it spawned nothing and ran the nine
 rounds in the session. Neither sentence is skipped, because a reader who finds no cost stated cannot
-tell a run that owed none from a run that owed one and kept quiet.
+tell a run that owed none from a run that owed one and kept quiet. Where a `Review agent model` pair
+matches the harness, band 1 without `--parallel` adds that the line reaches no agent here, since the
+band 1 reviewer runs every round itself and takes no model; with no such pair it adds nothing.
 
 ## When an agent does not come back
 

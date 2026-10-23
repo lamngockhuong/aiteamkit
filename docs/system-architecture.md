@@ -106,7 +106,7 @@ This produces the size discipline in the kit:
 | `references/*.tsv` | Only when the reference file that governs it is read | One record per line, so it grows by lines and never by prose |
 | `plugins/atk/shared/*.md` | Only when a skill cites it | Small, since several skills may open it |
 | `plugins/atk/shared/run-trace.md` | On every run, sent there by the two trace lines of every workflow, unless the profile says `Run trace: off` | The cost stated under Cost in the file itself |
-| `.atk/profile.md` | Once per run: in full by the skills that need project facts, and for its `Run trace` line and the Name column of its Team section by the rest | A page of pointers and commands, never prose |
+| `.atk/profile.md` | Once per run: in full by the skills that need project facts, and for its `Run trace` line and the Name column of its Team section by the rest, with the `Reading agent model` or `Review agent model` line of Team when such a skill spawns that kind of agent | A page of pointers and commands, never prose |
 
 One agent ships beside the skills, `plugins/atk/agents/read-only-reviewer.md`. Claude Code loads its
 frontmatter with the plugin and namespaces it `atk:read-only-reviewer`; its body is read only when a
@@ -122,6 +122,18 @@ the diff it needs, masked by the scan in `plugins/atk/shared/secret-scan.md`, in
 were not tested: Cursor auto-discovers `agents/` and the file sets `readonly: true` for it, Codex
 plugins bundle no agents, and both statements come from their documentation as read on 2026-10-10.
 On both, the prompts in `references/` remain the route.
+
+No agent file and no `SKILL.md` names a model. A team that wants these agents on another model than
+the harness's own choice writes `Reading agent model` or `Review agent model` in the Team section of
+its profile, a model per harness, and a skill passes it when it spawns that kind of agent, per The
+model of a read-only agent in `plugins/atk/shared/host-capabilities.md`. The route differs per
+harness, each read from its documentation on 2026-10-22 and none measured here: Claude Code takes a
+`model` parameter on the `Agent` tool, ahead of the agent's frontmatter and of
+`CLAUDE_CODE_SUBAGENT_MODEL`; Cursor lets the parent name a model when it launches a subagent, with
+two open forum reports of it not being respected; Codex takes a model in the spawn, which only a
+custom agent file setting its own would outrank, and the kit ships none. The band 1 reviewer and
+every agent that writes take no model line. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
+records why the choice is the team's and why it is not in the agent file.
 
 ## The `shared/` layer
 
@@ -290,8 +302,11 @@ The last two describe files that do not ship with the kit at all:
   skill does when that file is missing. Skills that run commands stop; skills that only read a diff
   continue and say the profile was absent; skills that work from a chat message never mention it, and
   read two things of it when it is there, the `Run trace` line and the Name column of the Team
-  section. Three Docs entries change what a skill does rather than where it writes: `Contract`,
-  whose meaning lives in `plugins/atk/shared/spec-docs.md`, the `Template` column of the kinds
+  section, and a third when they spawn a read-only agent, the model line for that kind of agent. Two
+  optional Team lines, `Reading agent model` and `Review agent model`, name per harness the model of
+  the agents that read wide and of those a review or a challenge spawns; a missing line is the
+  harness's own choice. Three Docs entries change what a skill does rather than where it writes:
+  `Contract`, whose meaning lives in `plugins/atk/shared/spec-docs.md`, the `Template` column of the kinds
   table, which gives `atk:spec` a project's own template as the shape of an empty directory, per the
   same file, and `Run trace: off`, which stops every skill leaving a run trace, per
   `plugins/atk/shared/run-trace.md`.

@@ -247,11 +247,12 @@ alone exceeds the cap, all of it is carried and the report says so, since that c
 Lead's call, not a quiet trimming decision. This section names, by identifier, the findings the cap
 left out, so a reader knows those are not the whole review. `None.` when the cap cut nothing.
 
-**Rounds.** The band and the count that put the change in it, then one row per round:
+**Rounds.** The band and the count that put the change in it, the cost line with any model asked
+for under the `Review agent model` line, then one row per round:
 
 ```markdown
 Band **2**, `--parallel 3`: 1,349 counted lines across 43 counted files. 16 round runs in 13
-agents, plus the sweep: 14, which is what the flag asks for.
+agents, plus the sweep: 14, which is what the flag asks for, each asked to run on `<model>`.
 
 | Round | Copies | Findings | Note |
 |---|---|---|---|

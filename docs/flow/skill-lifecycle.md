@@ -46,8 +46,10 @@ Not every skill has all five, and the ones it skips are as informative as the on
 is missing, because a guessed test command that exits zero is the worst evidence available. The
 skills that work from a chat message never require it, and read only two things of it: its
 `Run trace` line, which decides whether the run leaves a trace, and the Name and Host identifier
-columns of its Team section, which name the people on the trace's `gate` lines. `plugins/atk/shared/project-profile.md`
-says which is which.
+columns of its Team section, which name the people on the trace's `gate` lines. The three of them
+that spawn a read-only agent, `catchup`, `onboard` and `design-doc --challenge`, read a third, the
+`Reading agent model` or `Review agent model` line of Team for that kind of agent.
+`plugins/atk/shared/project-profile.md` says which is which.
 
 **Gate.** Most skills check something before doing anything: `atk:implement` scores how much
 agreement the work needs, `atk:fix` proves the cause and checks the behaviour is not a recorded
