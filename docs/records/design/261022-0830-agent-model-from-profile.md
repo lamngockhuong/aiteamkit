@@ -1,12 +1,14 @@
 ---
 title: The team chooses the model of the agents atk spawns, through the profile
-status: IN REVIEW
+status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-22
-updated: 2026-10-22
+updated: 2026-10-23
 ticket: none
 ---
+
+Approved by Lam Ngoc Khuong on 2026-10-23, by instruction to the agent.
 
 # The team chooses the model of the agents atk spawns, through the profile
 
@@ -251,8 +253,9 @@ committed file.
 
 The cost of a review falls in proportion to the price of the model the team names for its rounds,
 since rounds are most of a review's tokens; the session's share does not change. Whether a cheaper
-model misses findings a stronger one returns is the question this design cannot answer, and is open
-below.
+model misses findings a stronger one returns is the question this design cannot answer. The Tech
+Lead allowed the review line without that measurement, per the answer to Q1, so the stated total and
+the review report naming the model are what lets a reader weigh a review's findings.
 
 ### Files the implementation touches
 
@@ -265,19 +268,19 @@ below.
 - `plugins/atk/skills/init/references/profile-template.md` and `references/detection.md`: the
   comment, and that the lines are never asked for.
 - `docs/system-architecture.md` and `docs/vi/system-architecture.md`: the profile row of the load
-  table.
+  table, and the route on each harness, the Cursor one stated as read from its documentation on
+  2026-10-22 and not measured, per the answer to Q2.
 - `CLAUDE.md`: the `project-profile.md` row of the shared table.
 
 ## Open questions
 
-- **Q1. May the review line name a cheaper model at all, or only the reading line?** A review that
-  misses a `BLOCKING` finding because of a cheaper model costs more than it saves, and the kit's
-  premise is that a review is evidence a person acts on. Measuring it means running `atk:review` on
-  the same diff with two models and comparing the findings. Who answers: Lam Ngoc Khuong. Blocks:
-  The two lines, the second line.
-- **Q2. Does Cursor honour a model named at spawn for a plugin's agent?** Its documentation says yes;
-  its forum carries open reports that it does not. Measuring it means one run on Cursor. Who
-  answers: Lam Ngoc Khuong. Blocks: nothing in the design; it decides whether `docs/system-architecture.md`
-  states the Cursor route as measured or as read.
+None open.
+
+### Answered
+
+| Question | Answer | Answered by | Date | Relayed by |
+|---|---|---|---|---|
+| Q1. May the review line name a cheaper model at all, or only the reading line? | "Cho cả hai dòng", choosing the option put to him in the session: keep the design as written, the team decides both the reading and the review line, and the review report names the model used | Lam Ngoc Khuong | 2026-10-22 | |
+| Q2. Does Cursor honour a model named at spawn for a plugin's agent? | "Ghi theo tài liệu", choosing the option put to him in the session: no measurement now; `docs/system-architecture.md` states the Cursor route as read from its documentation on 2026-10-22, not measured | Lam Ngoc Khuong | 2026-10-22 | |
 
 ADR: `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`

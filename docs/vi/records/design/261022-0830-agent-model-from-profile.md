@@ -1,12 +1,14 @@
 ---
 title: Team chọn model cho các agent mà atk sinh ra, thông qua profile
-status: IN REVIEW
+status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-22
-updated: 2026-10-22
+updated: 2026-10-23
 ticket: none
 ---
+
+Approved by Lam Ngoc Khuong on 2026-10-23, by instruction to the agent.
 
 # Team chọn model cho các agent mà atk sinh ra, thông qua profile
 
@@ -255,7 +257,9 @@ bí mật và có thể nằm trong một file được commit.
 
 Chi phí của một lần review giảm theo tỉ lệ với giá của model mà đội nêu cho các round, vì round chiếm
 phần lớn token của một lần review; phần của phiên không đổi. Model rẻ hơn có bỏ sót finding mà model
-mạnh hơn tìm ra hay không là câu hỏi bản design này không trả lời được, và được để mở ở dưới.
+mạnh hơn tìm ra hay không là câu hỏi bản design này không trả lời được. Tech Lead cho phép dòng
+review dù chưa đo, theo câu trả lời của Q1, nên dòng nêu tổng số agent và báo cáo review ghi tên model
+là chỗ để người đọc cân nhắc các finding của một lần review.
 
 ### Các file mà phần triển khai chạm tới
 
@@ -267,18 +271,20 @@ mạnh hơn tìm ra hay không là câu hỏi bản design này không trả l�
 - `plugins/atk/shared/independent-challenge.md`: một câu, rằng agent của lens dùng dòng review.
 - `plugins/atk/skills/init/references/profile-template.md` và `references/detection.md`: chú thích,
   và việc các dòng không bao giờ được hỏi.
-- `docs/system-architecture.md` và `docs/vi/system-architecture.md`: hàng profile của bảng nạp.
+- `docs/system-architecture.md` và `docs/vi/system-architecture.md`: hàng profile của bảng nạp, và
+  đường đi trên từng harness, riêng Cursor ghi là theo tài liệu đọc ngày 2026-10-22, chưa đo, theo câu
+  trả lời của Q2.
 - `CLAUDE.md`: hàng `project-profile.md` trong bảng dùng chung.
 
 ## Câu hỏi mở
 
-- **Q1. Dòng review có được nêu model rẻ hơn không, hay chỉ dòng đọc mới được?** Một lần review bỏ sót
-  một finding `BLOCKING` vì model rẻ hơn thì tốn hơn số tiết kiệm được, và tiền đề của kit là review
-  là bằng chứng để một người hành động. Muốn đo thì chạy `atk:review` trên cùng một diff với hai model
-  rồi so finding. Người trả lời: Lam Ngoc Khuong. Chặn: mục Hai dòng, dòng thứ hai.
-- **Q2. Cursor có tôn trọng model nêu lúc sinh agent cho agent của plugin không?** Tài liệu của nó nói
-  có; diễn đàn của nó có các báo cáo còn mở nói không. Muốn đo thì chạy một lần trên Cursor. Người trả
-  lời: Lam Ngoc Khuong. Chặn: không gì trong design; câu trả lời quyết định
-  `docs/system-architecture.md` nêu đường đi trên Cursor là đã đo hay chỉ đọc tài liệu.
+Không còn câu nào.
+
+### Đã trả lời
+
+| Câu hỏi | Câu trả lời | Người trả lời | Ngày | Người chuyển lời |
+|---|---|---|---|---|
+| Q1. Dòng review có được nêu model rẻ hơn không, hay chỉ dòng đọc mới được? | "Cho cả hai dòng", chọn phương án được đưa ra trong phiên: giữ design như đã viết, team quyết cả dòng đọc lẫn dòng review, và báo cáo review ghi model đã dùng | Lam Ngoc Khuong | 2026-10-22 | |
+| Q2. Cursor có tôn trọng model nêu lúc sinh agent cho agent của plugin không? | "Ghi theo tài liệu", chọn phương án được đưa ra trong phiên: chưa đo lúc này; `docs/system-architecture.md` ghi đường đi trên Cursor là theo tài liệu đọc ngày 2026-10-22, chưa đo | Lam Ngoc Khuong | 2026-10-22 | |
 
 ADR: `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`

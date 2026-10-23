@@ -1,12 +1,14 @@
 ---
 title: "ADR 0009: The team chooses the model of the agents atk spawns, through the profile"
-status: IN REVIEW
+status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-22
-updated: 2026-10-22
+updated: 2026-10-23
 ticket: none
 ---
+
+Approved by Lam Ngoc Khuong on 2026-10-23, by instruction to the agent.
 
 # ADR 0009: The team chooses the model of the agents atk spawns, through the profile
 
@@ -40,9 +42,10 @@ The session's model, the band 1 reviewer of `atk:review`, and every agent that w
   profile, and revert by deleting a line.
 - A model named at spawn outranks a person's own default for subagents on Claude Code and Codex, for
   the kit's agents only and only where the team named one for that harness. The stated total shows it.
-- Whether a cheaper review model misses findings is unmeasured; the design leaves it open for the
-  Tech Lead.
-- Cursor's honouring of a spawn model is documented but not measured here.
+- Whether a cheaper review model misses findings is unmeasured. The Tech Lead allowed both lines
+  anyway, answering Q1 of the design, and the review report names the model a round ran on.
+- Cursor's honouring of a spawn model is documented but not measured here, and
+  `docs/system-architecture.md` states it as read, per the answer to Q2 of the design.
 
 ## Alternatives rejected
 

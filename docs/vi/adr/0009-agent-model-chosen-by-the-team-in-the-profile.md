@@ -1,12 +1,14 @@
 ---
 title: "ADR 0009: Team chọn model cho các agent mà atk sinh ra, qua profile"
-status: IN REVIEW
+status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-22
-updated: 2026-10-22
+updated: 2026-10-23
 ticket: none
 ---
+
+Approved by Lam Ngoc Khuong on 2026-10-23, by instruction to the agent.
 
 # ADR 0009: Team chọn model cho các agent mà atk sinh ra, qua profile
 
@@ -42,8 +44,10 @@ nào.
 - Trên Claude Code và Codex, model truyền lúc sinh agent được ưu tiên hơn mặc định cho subagent mà một
   người tự đặt. Điều này chỉ xảy ra với agent của kit, và chỉ khi team đã ghi model cho harness đó.
   Dòng nêu tổng số agent cho thấy điều đó.
-- Chưa ai đo xem model review rẻ hơn có bỏ sót finding không; design để ngỏ câu hỏi này cho Tech Lead.
-- Cursor có tôn trọng model truyền lúc sinh agent hay không mới có trong tài liệu, chưa được đo ở đây.
+- Chưa ai đo xem model review rẻ hơn có bỏ sót finding không. Tech Lead vẫn cho phép cả hai dòng khi
+  trả lời Q1 của design, và báo cáo review ghi model mà mỗi round đã chạy.
+- Cursor có tôn trọng model truyền lúc sinh agent hay không mới có trong tài liệu, chưa được đo ở đây,
+  và `docs/system-architecture.md` ghi điều này theo tài liệu, theo câu trả lời Q2 của design.
 
 ## Các phương án bị loại
 
