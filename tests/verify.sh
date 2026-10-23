@@ -494,6 +494,25 @@ assert bad == [], 'example lines off the event shape: %s' % bad
 assert block[-1][6:].startswith('end: '), 'the example does not end on its end line'
 print('OK run-trace example shape')"
 
+# atk ships no model name: the model of a read-only agent is the team's choice, written in its
+# profile, and a name in a skill is how a default starts. The pattern holds the Claude families and
+# the GPT ones Codex and Cursor take; the plugin manifests sit in dot-directories, which a recursive
+# glob skips, so they are added by name. Two lines may name a model, a measurement and an example
+# value; atkx:skill-eval sets a default of its own and is outside this check
+python3 -c "
+import glob, re
+allowed = {
+    ('plugins/atk/shared/run-trace.md', 'Measured on 2026-10-14 with Claude Code 2.1.296, model sonnet, each skill run headless in a scratch'),
+    ('plugins/atk/shared/project-profile.md', '\x60- Reading agent model: claude-code sonnet; codex <a model ID Codex accepts>\x60.'),
+}
+hit = [(f, l.strip()) for f in sorted(glob.glob('plugins/atk/**/*', recursive=True) + glob.glob('plugins/atk/.*-plugin/plugin.json'))
+       if f.endswith(('.md', '.json', '.mjs', '.tsv')) and not f.endswith('CHANGELOG.md')
+       for l in open(f) if re.search(r'\b(sonnet|haiku|opus|fable|gpt-?\d[\w.-]*)\b', l, re.I)]
+bad = [h for h in hit if h not in allowed]
+assert not bad, 'a model named in atk: %s' % bad
+assert set(hit) == allowed, 'an allowed line moved or changed, update this check: %s' % sorted(allowed - set(hit))
+print('OK atk names no model, %d allowed lines' % len(allowed))"
+
 # atk:review's reach is one label across three files: SKILL.md ranks by it, review-rounds.md defines
 # its two values, report-format.md writes it; SKILL.md holds the five consequences an edge keeps
 python3 -c "

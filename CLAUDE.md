@@ -749,7 +749,8 @@ plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matc
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
 hold; trigger evals parse; no trigger eval positive is claimed by two skills; every description
 fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the
-run-trace example keeps its header order and event shape; `atk:review` names both reach values in
+run-trace example keeps its header order and event shape; `atk` names no model outside its two
+allowed lines; `atk:review` names both reach values in
 its three files, its five protected consequences and its three fix forms, and rule 5 keeps the
 default its files cite; the skill-lifecycle counts match both
 documents; every `references/*.tsv` line is well formed; no dated name lost its time; no reference
