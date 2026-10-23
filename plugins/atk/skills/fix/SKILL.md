@@ -198,7 +198,8 @@ in `shared/review-fix-loop.md`, and run the loop that file holds: call `atk:revi
 giving it the defect and the draft's path as intent, never as a path to review; fix every
 `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work; re-verify as
 Re-verify after each round in that file says; at most twice, a resume included, then escalate by
-name. A fix made here is held to step 3 like the first one: the smallest change that removes the
+name. What the second round fixed gets The closing read of that file, and nothing is fixed after
+it. A fix made here is held to step 3 like the first one: the smallest change that removes the
 finding, in the form that file names, which may differ from the one the finding's `Fix` suggested.
 
 A loop that comes out clean offers `atk:verify`, per the same file, to run the captured
@@ -215,7 +216,8 @@ Complete the report step 6 drafted, from `references/report-template.md`, in the
 it to `IN REVIEW`; under `--no-review` or a stop before step 6, write it here. Then hand off to `atk:git` for the branch, the
 commit, and anything that leaves the local repository. `shared/finalize-steps.md` is the contract it
 carries out, and it opens with the reference documents the change owes. The report is the pull
-request body.
+request body, and that skill, not this one, offers its section 9 and carried-forward findings as
+issues.
 
 A fix reaches that first step less often than an implementation does, and the case that matters is
 the one where the document was right all along and the code was wrong. Fixing the code closes the
@@ -278,7 +280,8 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
 - [ ] Where step 6 ran, `atk:review` was called on the change after its cost was stated, or
       `--no-review` was passed and the report names who must review.
 - [ ] Where step 6 ran, every `BLOCKING` finding is fixed or escalated by name, the loop ran at most twice, a resume
-      included, no `NIT` was fixed, and the report says whether `atk:verify` was offered and ran.
+      included, a fix made after the second call had the closing read, or is marked not read with
+      why, and none was made after it, no `NIT` was fixed, and the report says whether `atk:verify` was offered and ran.
 - [ ] The CI gate for each layer touched is named, and a local command weaker than it left the
       difference recorded as unverified.
 - [ ] The report says whether the fix changed a public contract, and if it did, which reference

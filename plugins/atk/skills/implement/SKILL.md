@@ -172,7 +172,8 @@ owes before the call rather than at step 6, both per Calling the review in
 `shared/review-fix-loop.md` holds the loop: call `atk:review` on the change, fix every
 `BLOCKING` finding and every `SHOULD FIX` finding that is not genuinely separate work, in the
 narrowest form that file names, re-run the verification from step 3, and repeat at most twice, a
-resume included, per Progress log in `shared/artifact-paths.md`.
+resume included, per Progress log in `shared/artifact-paths.md`. What the second round fixed is
+re-verified and gets The closing read of that file, and nothing is fixed after it.
 
 `NIT` findings are never fixed here and never block, exactly as `atk:review` defines them. Disputing
 a finding is not fixing it: a finding the author believes is wrong goes to the Tech Lead with the
@@ -214,14 +215,17 @@ The deliverable is the code. Alongside it, the skill produces an implementation 
 session by default, which becomes the body of the pull request per `shared/finalize-steps.md`.
 `--out` writes it to a file as well, per `shared/artifact-paths.md`.
 
-The record holds: what was built and against which acceptance criteria; which plan gate level fired
-and why; the files changed by layer; which conventions source was used, naming it as the project's
-own or as the baseline; what was verified with which command and what each run proved; which CI gate
-judges each layer touched and whether the local run matched it; what could not be verified and why;
-what the tidy step changed, or that it did not run and why; the review findings, which were fixed
-and which were deliberately kept, and the form each fix to an agent rule took with what
-`shared/review-fix-loop.md` asks such a fix to record; whether `atk:verify` ran on the change, and
-if not, that nobody has yet seen it run; and anything noticed but deliberately not done.
+The record opens with After the last round, the section The closing read in
+`shared/review-fix-loop.md` describes. Then it holds: what was built and against which acceptance
+criteria; which plan gate level fired and why; the files changed by layer; which conventions source
+was used, naming it as the project's own or as the baseline; what was verified with which command
+and what each run proved; which CI gate judges each layer touched and whether the local run matched
+it; what could not be verified and why; what the tidy step changed, or that it did not run and why;
+the review findings, which were fixed and which were deliberately kept, and the form each fix to an
+agent rule took with what `shared/review-fix-loop.md` asks such a fix to record; whether
+`atk:verify` ran on the change, and if not, that nobody has yet seen it run; and anything noticed
+but deliberately not done, which the finalize sequence offers as issues and marks with the result,
+per step 5 of `shared/finalize-steps.md`.
 
 Under `--out` the file opens with the front matter block in `shared/artifact-paths.md`, like every
 other artifact the kit writes, with the author as `owner` and the reviewer as `approver`. In the
@@ -257,7 +261,8 @@ done: this skill is the author, and done is the approver's word.
 - [ ] Every `BLOCKING` finding is fixed or escalated by name, and no `NIT` was fixed silently.
 - [ ] No finding's severity was lowered by the author, and nothing was pushed or opened while a
       `BLOCKING` finding was disputed or escalated.
-- [ ] The review loop ran at most twice before escalating.
+- [ ] The review loop ran at most twice before escalating, a fix made after the second call had the
+      closing read, or is marked not read with why, and none was made after it.
 - [ ] The record says whether `atk:verify` ran, and a change nobody has run is named as one.
 - [ ] A plan whose steps prescribe test-first was followed that way for those steps, and the record
       says the plan asked for it.

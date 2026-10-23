@@ -749,7 +749,9 @@ PM, hoặc về khách hàng khi hợp đồng nói vậy.
 phần đã stage được quét tìm thông tin đăng nhập và dữ liệu riêng tư, thay đổi được chia sao cho mỗi
 commit revert được một mình, và push, pull request, merge đều chờ một lời đồng ý dành riêng cho hành
 động đó. Nếu dự án có template pull request, template đó là hình dạng của phần thân và artifact điền
-vào, chỉ tick những mục checklist mà lượt chạy này thực sự kiểm chứng.
+vào, chỉ tick những mục checklist mà lượt chạy này thực sự kiểm chứng. Khi pull request đã mở, các
+mục để lại sau và các phát hiện chuyển tiếp trong bản ghi được đề nghị tạo issue trong một danh
+sách, sau khi tìm trong các issue đang mở, và chỉ những mục người dùng nêu tên mới được tạo.
 
 **Dùng khi.** Một skill hoặc một người đã làm xong và kiểm chứng xong một phần việc, và nó cần đi vào
 repository. Cũng dùng khi một nhánh đã tụt lại sau nhánh gốc, khi có conflict chắn đường, hoặc khi

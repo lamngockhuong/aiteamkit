@@ -74,7 +74,7 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another two hundred and twenty-one times across the twenty-five `SKILL.md` files,
+One skill names another two hundred and twenty-three times across the twenty-five `SKILL.md` files,
 counting each `atk:<name>` other than the file's own skill and the `atk:read-only-reviewer` agent,
 in a hundred and twenty-five ordered pairs, which sounds like a dense graph. It is
 not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at
@@ -117,7 +117,8 @@ flowchart TD
 
 The two solid loops are the ones a team feels daily. `implement` and `fix` each call `review` on their
 own output, at most twice, before escalating by name, because a finding that survives two rounds of fixing
-is usually a design problem being patched. `implement` stopping at the large gate is the other:
+is usually a design problem being patched. What the second round fixed is reviewed once more, and
+nothing is fixed after that read. `implement` stopping at the large gate is the other:
 work that touches a schema, a public contract, a shared module, or more than one service changes no
 file until somebody has approved how.
 

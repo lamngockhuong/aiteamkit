@@ -145,7 +145,8 @@ Hai mươi mốt file giữ những gì các skill sẽ phải lặp lại. Ba f
   quy tắc đặt tên, front matter.
 - `plugins/atk/shared/ticket-adapters.md`: cách phát hiện tracker và ba kết cục của nó, gồm cả kết cục tracker
   đã cấu hình nhưng không trả lời, bảng ánh xạ từ vựng, tracker nào lưu ngày mở và ngày đóng của một
-  sprint, và báo cáo thế nào khi thiếu lịch sử thay đổi trường.
+  sprint, báo cáo thế nào khi thiếu lịch sử thay đổi trường, và cách tìm trong các issue đang mở
+  trước khi đề nghị tạo issue cho một mục.
 
 Một file được gọi tới từ workflow của mọi skill, nơi mở đầu bằng hai dòng khởi động run trace mà
 nguyên tắc 10 của `team-roles.md` đòi hỏi:
@@ -169,8 +170,9 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   một thư mục tài liệu chuẩn là chưa ghi quy ước nào. `atk:implement` đọc file này để lấy thứ tự tra
   ấy và các mục nền, dùng khi dự án thật sự chưa ghi quy ước nào của riêng mình.
 - `plugins/atk/shared/finalize-steps.md`: trình tự khép lại một phần việc đã xong, gồm nhánh, commit, ranh
-  giới xin phép mà mọi hành động sau commit phải vượt qua, và thứ tự tiến hành một thay đổi trải
-  trên nhiều repository. `atk:git` là thứ thi hành nó; file này
+  giới xin phép mà mọi hành động sau commit phải vượt qua, lời đề nghị tạo issue cho các mục để
+  lại sau và các phát hiện chuyển tiếp trong bản ghi, chỉ tạo những mục người dùng nêu tên, và thứ
+  tự tiến hành một thay đổi trải trên nhiều repository. `atk:git` là thứ thi hành nó; file này
   vẫn là hợp đồng, và chính điều đó khiến nhóm skill sửa mã với nhóm skill viết tài liệu khép lại
   theo cùng một đường. Được `atk:fix`, `atk:implement` và `atk:verify` trích dẫn, ba skill giao việc
   cho `atk:git`; được `atk:plan`, `atk:tailor` và `atk:qa` trích riêng phần ranh giới xin phép; được `atk:orchestrate`
@@ -227,9 +229,11 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
 - `plugins/atk/shared/review-fix-loop.md`: vòng chạy `atk:review` trên chính thay đổi của một skill trước khi
   một người đọc nó, những mức độ được sửa, dạng hẹp nhất trong ba dạng mà bản sửa một quy tắc cho
   agent phải chọn, một phát hiện bị phản đối, trần hai vòng và chuyển lên
-  người có tên, cùng dòng mà `--no-review` để lại trong bản ghi. `atk:implement` và `atk:fix` trích
+  người có tên, lượt đọc cuối dành cho những gì vòng hai đã sửa, sau đó không sửa gì nữa và các bản
+  sửa ấy được liệt kê đầu tiên trong bản ghi, cùng dòng mà `--no-review` để lại trong bản ghi. `atk:implement` và `atk:fix` trích
   dẫn nó, `atk:orchestrate` cũng vậy cho các job viết mã mà nó commit: phần kiểm chứng của mỗi skill chỉ hỏi thay đổi có chạy đúng không, không bên nào đọc diff để
-  xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra.
+  xem nó vừa khẳng định thêm điều gì, và đó là điều một lượt review tìm ra. `atk:git` cũng trích dẫn nó để biết
+  phần After the last round của bản ghi nằm ở đâu trong phần thân pull request.
 
 - `plugins/atk/shared/spec-docs.md`: điều tách một tài liệu tham chiếu khỏi một tài liệu thiết kế, tài liệu ấy
   là gì khi profile của dự án ghi `Contract: first` cùng field `implemented` cho biết code của nó đã

@@ -175,7 +175,7 @@ Six kinds, and no others, so a pattern across runs can be counted:
 | `step <n> <name>` | `ran`, `skipped` with the reason, or `failed` with what failed, by kind | each numbered step of the skill's `## Workflow` reaches an outcome. A step that runs only when a flag asks for it, and this invocation's flags never did, is `skipped (not requested)`; a step that runs when the person asks for it, by flag or by request, and nobody did, is the same. Steps a mode takes the place of share one line, `step <first>-<last> <mode> mode:` with an outcome like any step's, as `step 1-5 answer mode: ran` under `atk:design-doc --answer`, or `skipped` or `failed` with the reason where the mode stopped before any edit. A run that stops writes its `stop` or `end` and no line for the steps after it |
 | `gate <kind>` | who was asked, how long it waited, and `answered`, `unanswered`, or `refused`; for an answer the run did not ask for, `given in the prompt, no wait`, or `given in the prompt of <way>, no wait` where no person brought it, per the names below | the run asks a person for an approval, a confirmation, or an answer it cannot find on disk, an answer to an open question the run left included, or takes such an answer from the prompt that invoked it |
 | `stop` | the ceiling or the escalation, and the person named | a ceiling ends a loop, or the run stops and hands a decision to a person |
-| `review` | the counts by severity, and the round of the ceiling | a review returns, its own or one it called |
+| `review` | the counts by severity, and the round of the ceiling, or `closing read` for the read after the last round, per `shared/review-fix-loop.md` | a review returns, its own or one it called |
 | `corrected by hand` | what a person changed afterwards, in that person's words, through the mask | that person says so in the session: a change they made to the output, or a thing they told the run it got wrong. Never inferred from a diff, and never an answer the run asked for, which is a `gate` |
 | `end` | the artifact path, `no artifact:` and why, or `interrupted` | the run closes, or knows it is stopping before it closes |
 
@@ -312,7 +312,7 @@ bytes divided by four, not a count any harness reported.
 
 What every traced run pays besides the file it writes:
 
-- Reading this file, 24,781 bytes, about 6,200 tokens by the same estimate. Most of a run's cost is
+- Reading this file, 24,867 bytes, about 6,200 tokens by the same estimate. Most of a run's cost is
   here, not in the trace.
 - A skill of the `Not needed` group reads the `Run trace` line and the Team section of the profile
   when there is one, which costs the profile's size once; a run that already reads the profile pays

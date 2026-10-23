@@ -184,13 +184,13 @@ What an `atk:implement` or `atk:fix` job is given is item 2 of `references/job-p
 Once a code job's change is committed, run `atk:review "<base>...<branch>"` in its worktree, with
 `<base>` the base in the piece's entry, a sha or a branch, never `(detached)`, and
 `--out <docs root>/derived/orchestrate/<run-id>/<job-id>-review.md`, as `shared/review-fix-loop.md`
-says, all of it: Calling the review, with the plan and the requirement as intent and the cost stated first; What
-gets fixed; Disputing a finding, which goes to the Tech Lead and stops the chain; and The ceiling,
-two rounds, counted in the run state so a resume cannot reset it. The findings What gets fixed
-selects become a fix job, per Fix jobs in `references/proposal.md`, which the approved record
-already counted; a `SHOULD FIX` finding carried forward is written in the run state with its reason.
-The next review names the report before it and the commits since. Past the ceiling, mark the chain
-`escalated`. The loop's record lines go to the run state and into the record
+says, all of it: Calling the review, with the plan and the requirement as intent and the cost stated
+first; What gets fixed; Disputing a finding, which goes to the Tech Lead and stops the chain; The
+ceiling, two rounds, and The closing read, counted in the run state so a resume resets neither. The
+findings What gets fixed selects become a fix job, per Fix jobs in `references/proposal.md`, which
+the approved record already counted; a `SHOULD FIX` finding carried forward is written in the run
+state with its reason. The next review names the report before it and the commits since. Past the
+ceiling, mark the chain `escalated`. The loop's record lines go to the run state and into the record
 `shared/review-fix-loop.md` names for this skill. Agreement between reviewers is not an approval.
 
 ### 6. Re-confirm after a gate
@@ -208,10 +208,10 @@ a yes, never as a job; a commit it makes goes back through step 5, and its workt
 is declined or done. Then clean up per `## Process management`.
 
 Close with the branches that wait for a push, each with its base, the order to push them in where one
-is based on another, its artifacts, its implementation record, its review report, and who must say
-yes to the push, per the consent line in
-`shared/finalize-steps.md`; the offers jobs declined; the chains still waiting, with the person each
-waits on; the exclude lines the run added to the clone, per `references/worktrees.md`; and the
+is based on another, its artifacts, its implementation record, or an `atk:fix` job's fix report, and each fix job's implementation
+record, the records by their copies in the coordinator's run directory once the worktree is gone, each the artifact `atk:git` is to
+be given so step 5 of `shared/finalize-steps.md` offers its left-for-later items and carried-forward findings, its review report, and who must say yes to the push, per the consent
+line in that file; the offers jobs declined; the chains still waiting, with the person each waits on; the exclude lines the run added to the clone, per `references/worktrees.md`; and the
 settled proposal records, offered for a commit in the coordinator's tree, which then goes back to the
 run's starting branch, per At the close in `references/proposal.md`. A record left unapproved is
 moved to `SUPERSEDED` on its approver's yes, asked once first, and otherwise listed as still waiting.
