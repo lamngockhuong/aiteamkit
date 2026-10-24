@@ -38,6 +38,7 @@
   { "query": "review this branch against our conventions before I approve it", "should_trigger": false },
   { "query": "run a security review of this release and write the threat model", "should_trigger": false },
   { "query": "write the retrospective for last sprint", "should_trigger": false },
+  { "query": "go through the review findings on this PR with me, answer each one and fix the ones we agree on", "should_trigger": false },
   { "query": "explain what atk:review does and when to use it", "should_trigger": false },
   { "query": "atk:security dùng để làm gì, giải thích giúp mình", "should_trigger": false }
 ]

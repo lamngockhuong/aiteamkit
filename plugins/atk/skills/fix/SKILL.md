@@ -88,8 +88,8 @@ it, asking first when it looks stale, per Progress log in `shared/artifact-paths
 add an entry to the log each time a hypothesis is proved or ruled out, and for each review round in
 step 6.
 
-Under `--findings`, and for a pull request URL whose thread it reads to ask whether to walk a review
-posted there, `references/findings-mode.md` runs first, explaining through `atk:catchup`, and
+Under `--findings`, and for a pull request URL or a review report given without it, to ask whether
+to walk that review, `references/findings-mode.md` runs first, explaining through `atk:catchup`, and
 changes step 7; the steps below take its fix set.
 
 ### 1. Capture and prove

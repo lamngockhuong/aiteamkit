@@ -1,5 +1,7 @@
 [
   { "query": "go through the review findings on this PR with me and fix what we agree on", "should_trigger": true },
+  { "query": "cùng mình xử lý từng finding của review trên PR này, cái nào thống nhất thì sửa", "should_trigger": true },
+  { "query": "このPRのレビュー指摘に対応したい、一つずつ確認して合意したものを直して", "should_trigger": true },
   { "query": "fix this bug: the total on the invoice screen is off by one row", "should_trigger": true },
   { "query": "/atk:fix https://github.com/acme/app/issues/318", "should_trigger": true },
   { "query": "this test started failing and I do not know why", "should_trigger": true },
@@ -26,5 +28,6 @@
   { "query": "estimate how long the payment integration will take", "should_trigger": false },
   { "query": "summarize this epic for me before I start", "should_trigger": false },
   { "query": "log the failed cases from the test run as bugs", "should_trigger": false },
-  { "query": "retest the bug, the fix is on staging", "should_trigger": false }
+  { "query": "retest the bug, the fix is on staging", "should_trigger": false },
+  { "query": "explain the review posted on this PR finding by finding, I only want to understand it", "should_trigger": false }
 ]

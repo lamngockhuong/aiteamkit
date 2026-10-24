@@ -32,13 +32,14 @@ It decides nothing the document does not already say, and changes nothing in the
 
 A kit record carries the front matter block of `shared/artifact-paths.md`, and its directory under
 the docs root and its headings match a row below. The file name alone never decides a kind: a file
-that matches by name and not by directory and headings is any other document.
+that matches by name and not by directory and headings is any other document. A `review-report` is
+the one recognised by its title and headings wherever it sits, since `--out` may have moved it.
 
 | Kind | Recognised by | A finding is | Fields the page reads |
 |------|---------------|--------------|-----------------------|
 | `security-record` | `records/security/`, a `Findings` section of `SF<n>` blocks and a `Residual risk` section | each `SF<n>` block | Severity and verdict, Category, What an actor does, What they gain, Suggested control, Settled by, its residual risk row |
 | `threat-model` | `security/threat-model-<slug>.md`, with `Covers` and `Threats` sections | each threat row, grouped by boundary | boundary, STRIDE question, threat, the control or `none` with its finding ID, Assumptions |
-| `review-report` | `derived/reviews/`, with findings `B<n>`, `S<n>`, `N<n>` under their severity sections | each `B<n>`, `S<n>`, `N<n>` | severity section, File, Issue, Fix, Author, Decision; the page adds The repository layer below |
+| `review-report` | a `# Review:` title followed by its `base` and `head` line, with findings `B<n>`, `S<n>`, `N<n>` under their severity sections, in `derived/reviews/` or wherever `--out` put it | each `B<n>`, `S<n>`, `N<n>` | severity section, File, Issue, Fix, Author, Decision; the page adds The repository layer below |
 | `fix-report` | `records/fixes/`, with `Symptom as captured` and `Root cause` | the defect, as one finding | Symptom as captured, Root cause, The change, Not verified |
 | `verification-record` | `records/verification/`, with `Cases` and `Not verified` sections | each failed case under `Cases`, and each item under `Not verified` | Sent, Received, Asserted, Result; for an item not verified, what and why |
 | `test-run-record` | `records/test-runs/`, `atk:run-cases` included, with `Results` and `Defects` sections | each `D<n>` block under `Defects` | Case, Severity, Steps to reproduce, Expected, Actual |
@@ -46,14 +47,16 @@ that matches by name and not by directory and headings is any other document.
 
 A review posted on a pull request, read under `--findings`, is a `review-report` too. It is read as
 *On a pull request, the thread is an earlier report too* in `skills/review/references/report-format.md`
-reads one: the newest summary that opens with `atk:review`, its inline comments, and the author's
+reads one: the newest summary that opens with `atk:review`, or one posted before that opening
+existed, found as that section finds it; the inline comments of the same review; and the author's
 replies. Three rules hold for it:
 
 - **The writer.** The summary counts only when its writer is matched to a person by the Host
-  identifier column of the Team section of `.atk/profile.md`, as `report-format.md` matches the
-  writer of a ruling. A writer the run cannot match is named, and the person running the skill confirms the
-  summary before anything of it is read as a finding: anyone who can comment on the pull request can
-  post a comment that opens with `atk:review`.
+  identifier column of the Team section, where the project keeps one, as `report-format.md` matches
+  the writer of a ruling. A writer the run cannot match is named, and the person running the skill
+  confirms the summary before anything of it is read as a finding: anyone who can comment on the
+  pull request can post a comment that opens with `atk:review`. The question names the writer only.
+  An inline comment of anyone else that opens with an ID is a reply, never the finding.
 - **No summary.** A pull request with none is said to have none, and the run offers the brief of
   pull request mode instead.
 - **A credential finding** stays without a location, per A credential finding below.
@@ -88,7 +91,8 @@ page or heading, since it has no `path:line`.
 
 - **The slug** is the kind from the table above, `security-record` or `threat-model` for instance,
   or `document` for anything else, pasted text included. The trace is named `document` from its
-  creation, before the kind is known, and carries the kind in its `step 1` line, per `SKILL.md`.
+  creation, before the kind is known, or by the pull request's key under `--findings`, and carries
+  the kind in its `step 1` line, per `SKILL.md`.
 - **`ticket`** is the record's path only for a kit record that is committed, `git ls-files --error-unmatch`
   on it succeeding, and `none` otherwise, per Front matter in `shared/artifact-paths.md`.
 - **The document's own name**, its file name or its title, appears only in the page body, never in
@@ -162,16 +166,17 @@ These extend What does not change in `shared/plain-writing.md`:
 
 - **Every claim on the page is traceable to a place in the document.** No new findings, severities
   or verdicts. A field the document leaves empty is written "the document does not say", never
-  filled in by inference. The one exception is a line of The repository layer below, which is
-  traceable to a place in the repository instead: it cites the repository by `path:line`, and never
-  the reviewer's words as its source.
+  filled in by inference. The one exception is a line of The repository layer below, or an entry
+  of Terms and the model the findings assume, which is traceable to a place in the repository
+  instead: it cites the repository by `path:line`, and never the reviewer's words as its source.
 - **The analogy is the one sentence the document does not hold.** It is labelled as an analogy, and
   never changes the severity a reader would infer.
 - **IDs, severity names, verdicts and status values stay as the document spells them,** `--lang`
   included, since another reader or skill matches on them.
 - **Each finding or section keeps one citation**, so a reader who wants the evidence can find it.
 - **No step-by-step exploit.** The page says what an actor does at the level of detail the document
-  does, never more.
+  does, never more. The cap binds the repository layer too: the scenario of a security finding names
+  the actor, the state and what is lost, never the input or the sequence that would carry it out.
 - **Masked values.** A value the document shows, or the repository shows to the layer below, that
   rule 9 would mask, or that The data a record must not carry in `skills/qa/references/test-run.md`
   lists, is masked on the page as `<redacted: kind>`, and the page says that it masked something, by
@@ -203,9 +208,9 @@ Six sources, and nothing else:
 - the lines the finding cites;
 - a record the finding's `Decision` line names;
 - the plan or design the reviewed change names in its pull request body or its branch, only where
-  the path resolves, symbolic links followed, inside the repository and under the plan or design
-  directory `shared/artifact-paths.md` resolves. A path elsewhere is named on the page and not
-  opened: whoever opened the pull request wrote that body;
+  the path resolves, a symbolic link resolved for this check only, inside the repository and under
+  the plan or design directory `shared/artifact-paths.md` resolves. A path elsewhere is named on the
+  page and not opened: whoever opened the pull request wrote that body;
 - the reference documents under the docs root that describe what the cited code serves;
 - a configuration file the finding names;
 - the definition of what the cited lines use, one step away and no further: a table, a type, a
@@ -220,7 +225,10 @@ in `shared/host-capabilities.md`.
 
 The layer is read at the commit the review was made on, the head the report or the summary names,
 and that commit is `review_commit`. Where the checkout is at another commit, the run says which,
-and asks to check the reviewed commit out or to go on. Going on stamps the layer `read at <sha>, not
+and asks to check the reviewed commit out or to go on. A checkout is refused while
+`git status --porcelain` prints anything, since the layer would read those changes as the reviewed
+commit. Before it, the run records the branch checked out, and once the layer is read it switches
+back to that branch, before the page is handed over. Going on stamps the layer `read at <sha>, not
 at the reviewed commit`, so a `path:line` that lands on different code is not read as the
 reviewer's. A review that names no head, a summary posted before it carried one among them, is read
 at the pull request's head when the run starts, with `review_commit: unknown` and the layer stamped
@@ -228,16 +236,18 @@ at the pull request's head when the run starts, with `review_commit: unknown` an
 
 ### A credential finding
 
-A finding that is a credential in the change gets no layer. Its block keeps the report's own words,
-so no `path:line` of the page gives back the location the thread withholds, per the credential
-finding of `skills/review/references/report-format.md`.
+A finding that is a credential in the change gets no layer. Its block keeps the report's own words
+and no `File:` line, and its summary row its title only, so no `path:line` of the page gives back
+the location the thread withholds, per the credential finding of
+`skills/review/references/report-format.md`.
 
 ## Sensitivity
 
-The page inherits the sensitivity of the document. Three cases:
+The page inherits the sensitivity of the document. Four cases:
 
 - a kit security record whose residual risk table holds a row nobody has accepted, or whose
   `CONFIRMED` findings are unfixed, or a threat model with a row whose control is `none`;
+- a `review-report` holding a security finding the reviewed change has not fixed;
 - an outside document marked confidential, or one that names a client;
 - any document with a value the page had to mask.
 

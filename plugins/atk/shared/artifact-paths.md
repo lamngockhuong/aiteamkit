@@ -322,7 +322,8 @@ A record nobody has filed yet is the only copy there is, and a review run withou
 nothing, so its report is the only written copy until it is rebuilt; both are a reason to keep the
 directory rather than a break in the chain. A run trace is read only to improve a skill, so losing
 one costs that evidence and nothing downstream. The document-mode page of `atk:catchup` is an
-explanation rebuilt by running the skill again, and no skill reads it. Ten skills read one of the ten
+explanation rebuilt by running the skill again, and no later run reads it: `atk:fix --findings`
+walks only the page its own `atk:catchup` call returns in the same session. Ten skills read one of the ten
 kinds before it. `atk:fix`, `atk:verify`,
 `atk:implement` and `atk:orchestrate` each read their own unfinished progress log, per Progress log, below,
 and `atk:orchestrate` its job result files with it.
@@ -333,13 +334,16 @@ request the newest `atk:review` summary posted there beside it, to carry its fin
 forward, and starts numbering at 1 and says so only when there is neither;
 `atk:plan --review` and `atk:qa --review` each read the newest report for the same plan or the same
 cases file, whatever its date, for the same reason; and `atk:convention` reads the `Convention gaps` section of the reports written for the project, per
-Keeping them in step in `shared/review-checklist.md`. And `atk:tailor --feedback --runs` reads the
+Keeping them in step in `shared/review-checklist.md`. `atk:fix`, already counted, also reads a
+review report it is given under `--findings`, to walk its findings with their author. And
+`atk:tailor --feedback --runs` reads the
 run traces of one skill, to count what repeats across its runs, and removes old ones only as
 Retention in `shared/run-trace.md` says. Nothing
 else reads any of the ten. Losing a
 progress log costs the ruled-out work, done again, and losing a
-report costs a set of identifiers, unless a `--comment` run posted them, and a list of gaps the next review raises again, rather than a step
-in the chain. A team that
+report costs a set of identifiers, unless a `--comment` run posted them, a list of gaps the next
+review raises again, and the walk of `atk:fix --findings` on a review never posted, rather than a
+step in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Three derived
 kinds are never staged whatever the project does with the directory: the progress log, held out by

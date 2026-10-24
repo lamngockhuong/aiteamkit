@@ -95,8 +95,9 @@ khi profile ghi `Run trace: off`, là loại thứ mười: không bao giờ đ�
 `atk:tailor --feedback --runs` đề nghị và có người đồng ý, và chỉ được đọc để cải thiện skill, nên xóa một trace thì mất phần bằng chứng ấy và không ảnh
 hưởng gì phía sau. Trang mà `atk:catchup` viết ở document mode, trong
 `docs/derived/catchup/documents/`, là loại thứ mười một: một trang tạm được giữ ngoài git bằng file
-ignore trong chính thư mục của nó, không bao giờ được đề nghị commit, và không skill nào đọc, nên xóa
-một trang chỉ tốn công chạy lại skill. Có mười skill đọc một trong mười loại đầu. Bốn skill ấy, trước khi bắt đầu,
+ignore trong chính thư mục của nó, không bao giờ được đề nghị commit, và không lượt chạy nào sau đó
+đọc, vì `atk:fix --findings` chỉ đi qua trang mà chính lời gọi `atk:catchup` của nó trả về trong cùng
+phiên, nên xóa một trang chỉ tốn công chạy lại skill. Có mười skill đọc một trong mười loại đầu. Bốn skill ấy, trước khi bắt đầu,
 mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
 trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
 chạy trước trên cùng file test case, để đề nghị chạy tiếp những case lần đó đã hoãn và để nêu dữ
@@ -109,11 +110,14 @@ nên người chạy tự nêu các case qua `--only`. Bốn skill còn lại đ
 biệt một kết quả tác giả đã thấy mà không sửa với một kết quả vừa mới sinh ra sau một tuần commit;
 `atk:qa --review` đọc báo cáo mới nhất của cùng file test case, cũng để giữ mã định danh; còn
 `atk:convention` đọc mục `Convention gaps` của báo cáo, đó là đường đi để một luật mà lượt review
-muốn có tới được tài liệu ghi luật. Còn `atk:tailor --feedback --runs` đọc các run trace của một
+muốn có tới được tài liệu ghi luật. `atk:fix`, một trong bốn skill đầu, còn đọc báo cáo review được
+đưa cho nó dưới `--findings`, để cùng tác giả đi qua từng phát hiện. Còn
+`atk:tailor --feedback --runs` đọc các run trace của một
 skill để đếm những gì lặp lại giữa các lần chạy; nó không xóa trace nào trong lúc đọc, và chỉ sau đó
 mới đề nghị xóa những trace cũ nhất vượt quá hai mươi. Xóa báo cáo ấy làm lượt review sau mất một bộ mã định danh, trừ
-khi một lượt chạy `--comment` đã đăng chúng lên pull request, và mất những khoảng trống quy ước đáng
-lẽ được mang sang, chứ không đứt mắt xích nào.
+khi một lượt chạy `--comment` đã đăng chúng lên pull request, mất những khoảng trống quy ước đáng
+lẽ được mang sang, và mất đầu vào của `atk:fix --findings` với một review chưa từng được đăng, chứ
+không đứt mắt xích nào.
 
 ## Lịch sử git không phải đường lùi
 

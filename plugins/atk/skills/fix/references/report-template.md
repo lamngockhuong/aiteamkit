@@ -198,6 +198,8 @@ this run included:
 | `S3` | `deferred` | waiting on <name> for <the question> | posted |
 
 The answer is one of the four kinds of the table in `references/findings-mode.md`; the reply is
-`posted`, `not posted` with why, or `none` for a local report. A `fixed` row names the commit and
+`posted`, `not posted` with why, or `none` for a local report with no pull request. A row answered
+by someone other than the pull request's author names that person after the reason, as the reply
+does, per Who answers in `references/findings-mode.md`. A `fixed` row names the commit and
 points at its defect block above. A credential finding's row names no file, no line and no path,
 per the credential finding of `skills/review/references/report-format.md`.

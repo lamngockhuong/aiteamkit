@@ -59,7 +59,10 @@ starts at 1 and
 **What the author answered is read with it.** The same read takes the author's replies: those inside
 each inline comment's thread, which come back with the inline comments, and any comment or review
 body of the author's that names a finding by its ID. Each answer is one of four: fixed, deferred to
-a place it names, declined with a reason, or disputed. A reply the run cannot tie to one finding
+a place it names, declined with a reason, or disputed. A reply that says it answers for the
+author, `(answered for the author by <name>)` as `atk:fix --findings` writes one, is read the same
+way, and the `Author` line names who answered. Where one finding was answered twice, the newer
+answer is read. A reply the run cannot tie to one finding
 becomes an open question to its author rather than a guess. The answer goes into the finding's
 `Author` line, and what the posted review does with it is under *Under `--comment`*. A ruling on a
 disputed finding by the person who holds the call per `## Roles` of `SKILL.md` is read the same

@@ -95,8 +95,9 @@ is the tenth: never staged, trimmed to twenty per skill only when `atk:tailor --
 offers it and a person says yes, and read only to improve a skill, so deleting
 one costs that evidence and nothing downstream. The page `atk:catchup` writes in document mode, under
 `docs/derived/catchup/documents/`, is the eleventh: a temporary page held out of git by an ignore
-file in its own directory, never offered to be committed, and read by no skill, so deleting one
-costs only running the skill again. Ten skills read one of the first ten. Those four each read their own newest unfinished log before starting, and
+file in its own directory, never offered to be committed, and read by no later run, since
+`atk:fix --findings` walks only the page its own `atk:catchup` call returns in the same session, so
+deleting one costs only running the skill again. Ten skills read one of the first ten. Those four each read their own newest unfinished log before starting, and
 offer to resume it, asking first when its branch or start commit no longer matches. `atk:run-cases`
 reads the run log of an earlier run of the same cases file, to offer the cases that run deferred and
 to name data it created with no record after it; where that run wrote a record, the record lists the
@@ -107,12 +108,15 @@ pull request, and numbers from 1 and says so when there is neither; `atk:plan --
 newest one for the same plan, for the same identifiers and to tell a result the author has already
 declined from one a week of commits has just created; `atk:qa --review` reads the newest one for the
 same cases file, for the same identifiers; and `atk:convention` reads its `Convention gaps` section,
-which is how a rule the review wanted reaches the file that records it. And
+which is how a rule the review wanted reaches the file that records it. `atk:fix`, one of the
+first four, also reads a review report it is given under `--findings`, to walk its findings with
+their author. And
 `atk:tailor --feedback --runs` reads the run traces of one skill, to count what repeats across its
 runs; it deletes none of them while it reads, and only afterwards offers to remove the oldest
 beyond twenty. Deleting that report costs
-the next review a set of identifiers, unless a `--comment` run posted them on the pull request, and
-the gaps it would have carried across, not a step in the chain.
+the next review a set of identifiers, unless a `--comment` run posted them on the pull request, the
+gaps it would have carried across, and the walk of `atk:fix --findings` on a review never posted,
+not a step in the chain.
 
 ## Git history is not a fallback
 
