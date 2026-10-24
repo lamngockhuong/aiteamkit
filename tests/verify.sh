@@ -599,7 +599,7 @@ for f in glob.glob('plugins/*/skills/*/references/*.tsv'):
 # Should print nothing (grep exits 1)
 grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/ README.md docs/ \
   --exclude=CHANGELOG.md \
-  | grep -v -E '^docs/(records|derived)/'
+  | grep -v -E '^docs/(vi/)?(records|derived)/'
 
 # No reference document template carries a ticket line: a reference document has no ticket field,
 # per Front matter in plugins/atk/shared/artifact-paths.md, and a template that regains one stamps
