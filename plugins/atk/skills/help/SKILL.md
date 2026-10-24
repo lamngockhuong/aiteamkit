@@ -34,9 +34,9 @@ for a question no `atk` skill covers, and saying plainly when a request is outsi
 
 Does NOT handle: running the skill it recommends, which the person asking does by typing the line;
 getting a new member started on the project itself (`atk:onboard`, which writes the onboarding
-document); summarising an epic or a pull request (`atk:catchup`); setting the kit up for a project
-(`atk:init`); changing what a skill does for this team (`atk:tailor`); or doing the work a question
-describes. "Help me write the release notes" is `atk:release`, not this.
+document); summarising an epic or a pull request, or explaining a review report or any other
+document in plain words (`atk:catchup`); setting the kit up for a project (`atk:init`); changing
+what a skill does for this team (`atk:tailor`); or doing the work a question describes. "Help me write the release notes" is `atk:release`, not this.
 
 ## Roles
 
