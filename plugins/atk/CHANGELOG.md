@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.18](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.17...atk-v0.1.18) (2026-10-24)
+
+
+### Features
+
+* explain a review's findings from the repository and answer them in atk:fix ([#153](https://github.com/lamngockhuong/aiteamkit/issues/153)) ([1698f34](https://github.com/lamngockhuong/aiteamkit/commit/1698f3412f1643abed3a77bcd2248e95bcc86ac2))
+
 ## [0.1.17](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.16...atk-v0.1.17) (2026-10-23)
 
 
