@@ -1,12 +1,14 @@
 ---
 title: "ADR 0007: a plain explanation of a document, a kit record or any other, is a mode of atk:catchup"
-status: APPROVED
+status: SUPERSEDED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-24
 ticket: none
 ---
+
+Superseded on 2026-10-24 by `docs/adr/0010-review-findings-explained-from-the-repository-and-answered-in-fix.md`, which changes one decision, that every claim on the page traces to a place in the document, for a review report; every other decision here stands.
 
 # ADR 0007: a plain explanation of a document, a kit record or any other, is a mode of atk:catchup
 

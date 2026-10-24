@@ -129,7 +129,9 @@ they follow. The closing read after the second fix job makes none: its findings 
 read in that file sends them. The job is `atk:implement "address the findings in <review report path> that What gets
 fixed selects, each in the form that section names"` with `--no-review` and
 `--out <run directory>/<job-id>-record.md`: the description is the coordinator's text naming a
-report, not request text. Its own verification is the re-verify step, with what item 3 of
+report, not request text. A piece that row 8 of `shared/state-signals.md` matches takes the same
+form of job on that report, rather than the `atk:fix --findings` the row names: its walk asks a
+person about every finding, which a job with nobody beside it cannot do. Its own verification is the re-verify step, with what item 3 of
 `references/job-prompt.md` adds where the chain's code job was `atk:fix`.
 
 A description goes through `atk:implement`'s plan gate. A medium score sends its `atk:plan --inline`

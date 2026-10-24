@@ -171,7 +171,9 @@ question that four commits sit on a name the project will not take. Create it wi
 whatever it starts from: from a remote ref such as `origin/main` git otherwise records that ref as
 its upstream, and from the local default branch `branch.autoSetupMerge=inherit` copies that
 branch's upstream, so either way a bare `git push` under `push.default=upstream` then lands on the
-default branch. The push in step 4 sets the upstream to the branch's own name.
+default branch. The push in step 4 sets the upstream to the branch's own name. Work belonging to a
+pull request already open is the exception, per the same step: it is committed on that pull
+request's head branch, once it is confirmed to be the one checked out, and its name is not checked.
 
 A write-mode pre-commit hook changes what the commit holds after step 2 read it.
 `references/commit-craft.md` holds which hooks do this and how to find out: the secret scan is re-run

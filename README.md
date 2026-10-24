@@ -99,7 +99,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:init                                  # --audit --lang --out
 /atk:tailor [<skill>]                      # --audit --feedback --runs --since --out
 /atk:intake <request-file|ticket|text>     # --design --interview|--no-interview --lang --out
-/atk:catchup <epic|pr|file|doc-url|text>   # --no-check --lang --out
+/atk:catchup <epic|pr|file|doc-url|text>   # --findings --no-check --lang --out
 /atk:estimate <backlog|epic>               # --points|--days --sprint --capacity --out
 /atk:design-doc <requirement|topic|design> # --adr|--no-adr --options --spike --challenge --answer --lang --out
 /atk:spec [subject]                        # --kind --from --design --sync --check --lang --out
@@ -107,7 +107,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:convention                            # --audit|--init|--sync|--scaffold --suggest --scope --lang --out
 /atk:plan <ticket|design|text|plan-path>   # --inline --challenge --answer --review --comment --layer --out
 /atk:implement <plan|ticket|description>   # --layer --tdd --no-review --out
-/atk:fix <issue|report|description>        # --layer --investigate-only --no-review --out
+/atk:fix <issue|report|pr|description>     # --findings --layer --investigate-only --no-review --out
 /atk:verify <module|paths|ticket|pr>       # --ui --report-only --out
 /atk:review <pr|branch|range|paths>        # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature|cases|run|issue> # --master|--plan|--cases|--regression|--update|--record|--bug|--retest|--review --lang --out

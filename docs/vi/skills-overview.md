@@ -202,7 +202,13 @@ tóm tắt đó nhưng gói trong phạm vi diff, không có phần tự kiểm.
 đoạn văn bản dán vào, hoặc link được đọc qua một kết nối mà harness có: một trang tạm, nằm ngoài git,
 giải thích tài liệu bằng lời dễ hiểu theo từng finding hoặc từng mục, giữ nguyên ID, mức độ và bằng
 chứng của tài liệu, kèm bảng tổng hợp, thứ tự xử lý đề xuất có ghi tên người quyết định, và các câu
-hỏi tài liệu còn để ngỏ.
+hỏi tài liệu còn để ngỏ. Trang của một review report đọc rộng hơn, không cần cờ nào: mỗi finding có
+thêm phần What the repository says, gồm một kịch bản, chuyện đó có xảy ra trên thực tế không, vì sao
+mã viết như vậy, và cách sửa thực sự tốn gì. Lớp này do agent đọc từ sáu nguồn có giới hạn tại commit
+được review, dòng nào cũng trích `path:line`, giá trị nhạy cảm được che, và finding về credential thì
+không có lớp này. Thêm `--findings` sau URL của một pull request thì skill giải thích bản
+`atk:review` mới nhất đã đăng ở đó thay cho diff, và chỉ tính bản đó khi người viết là một người trong
+phần Team hoặc khi người chạy skill xác nhận.
 
 **Dùng khi.** Một người nhận epic mà họ không tham gia soạn, vào một việc đang chạy giữa chừng, hoặc
 phải review một pull request ở mảng họ không nắm. Hoặc một người được giao một tài liệu phải hành
@@ -494,6 +500,15 @@ hậu quả thuộc năm loại mà review không bao giờ hạ mức. Báo cá
 không bao giờ nhận nguyên quy tắc mà review gợi ý khi chưa cân những trạng thái mới mà chính quy tắc
 đó mở ra.
 
+Cờ `--findings`, đặt sau URL của một pull request hoặc đường dẫn một review report local, biến lần chạy
+thành một lượt phân loại các phát hiện của `atk:review`. Skill gọi `atk:catchup` để có phần giải thích
+dễ hiểu, cùng tác giả đi qua từng phát hiện, và ghi mỗi câu trả lời theo một trong bốn loại mà lần
+review sau đọc lại: fixed, deferred, declined hoặc disputed; câu "chờ một người" được đăng thành
+deferred kèm tên người đó và câu hỏi. Skill soạn trả lời cho từng thread và chỉ đăng khi được đồng ý,
+trả lời `fixed` chỉ đăng sau khi đã push, rồi sửa những phát hiện tác giả chọn ngay trên nhánh của
+pull request đó, không mở pull request thứ hai. Báo cáo sửa lỗi lần nào cũng được viết, có mục Findings
+answered, kể cả khi không sửa gì.
+
 ---
 
 ## `atk:verify`
@@ -536,8 +551,8 @@ cả từ file mẫu của dự án.
 
 **Sinh ra.** Một báo cáo review ở `docs/derived/reviews/<pr>-<date>.md`, lần chạy nào cũng viết,
 `<pr>` được thay bằng thứ được review khi đối tượng review không phải pull request, kèm một bản tóm
-tắt trong phiên nói có bao nhiêu phát hiện ở mỗi mức, nêu tên những phát hiện chặn merge, và trỏ tới
-file. Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới một dòng
+tắt trong phiên nói có bao nhiêu phát hiện ở mỗi mức, nêu tên những phát hiện chặn merge, trỏ tới
+file, và đưa dòng `/atk:catchup <report path>` để giải thích từng phát hiện bằng lời dễ hiểu. Các phát hiện được xếp hạng `BLOCKING`, `SHOULD FIX` và `NIT`, mỗi phát hiện trỏ tới một dòng
 cụ thể, nói rõ nó gây hỏng gì và đề xuất một thay đổi cụ thể. Báo cáo giữ mọi phát hiện đã qua thẩm
 tra; bản tóm tắt trong phiên và các comment inline chỉ mang nhiều nhất mười phát hiện, hoặc hai mươi
 khi chạy `--strict`, và phát hiện chặn merge thì không bao giờ bị cắt. Mỗi phát hiện mang một mã
@@ -551,7 +566,8 @@ mới chống lại câu trả lời ấy được đăng ngay trong thread sẵ
 dựng lại một kiểu, và không mang điểm số nào, vì người review không phải người duyệt. Cờ `--out` đổi
 chỗ file, cờ `--comment` đăng phát hiện thành comment inline trên PR, kèm một comment tóm tắt liệt
 kê, ở dạng thu gọn, mọi phát hiện mà lượt review giữ lại và mọi câu hỏi mở, nên người đọc pull
-request đọc được mọi phát hiện mà không cần tới báo cáo. Một target viết dạng `<base>...<branch>`
+request đọc được mọi phát hiện mà không cần tới báo cáo, và kết thúc bằng dòng
+`/atk:catchup <pr-url> --findings` cho ai muốn nghe giải thích từng phát hiện. Một target viết dạng `<base>...<branch>`
 được review so với chính base ấy thay vì base do lượt review tự xác định, nhờ đó một nhánh xếp chồng
 lên một nhánh khác chưa push được review mà không lặp lại các commit của nhánh trước nó.
 

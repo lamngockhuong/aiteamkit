@@ -59,7 +59,10 @@ starts at 1 and
 **What the author answered is read with it.** The same read takes the author's replies: those inside
 each inline comment's thread, which come back with the inline comments, and any comment or review
 body of the author's that names a finding by its ID. Each answer is one of four: fixed, deferred to
-a place it names, declined with a reason, or disputed. A reply the run cannot tie to one finding
+a place it names, declined with a reason, or disputed. A reply that says it answers for the
+author, `(answered for the author by <name>)` as `atk:fix --findings` writes one, is read the same
+way, and the `Author` line names who answered. Where one finding was answered twice, the newer
+answer is read. A reply the run cannot tie to one finding
 becomes an open question to its author rather than a guess. The answer goes into the finding's
 `Author` line, and what the posted review does with it is under *Under `--comment`*. A ruling on a
 disputed finding by the person who holds the call per `## Roles` of `SKILL.md` is read the same
@@ -338,8 +341,9 @@ finding's existing thread, the inline comment that opens with its ID, with the r
 in a general comment rather than in that thread, the new evidence goes in the finding's visible line
 instead.
 
-The summary comment opens with `atk:review` and the target, so a later run can tell it from any other
-comment, then carries the counts per severity and the blocking titles with their IDs. Below them, in a
+The summary comment opens with `atk:review`, the target and the head commit it reviewed, as
+`atk:review #88 @ 3f2c1ab`, so a later run can tell it from any other comment and knows what code
+its `file:line` citations point at. It then carries the counts per severity and the blocking titles with their IDs. Below them, in a
 `<details>` block the reader opens on purpose, it lists every finding the review kept, one line each:
 the ID, the title, and the `file:line` it cites, plus the failure in one sentence for a finding the
 cap kept off the thread. The same block lists each open question with the person who must answer
@@ -347,6 +351,10 @@ it, and the number of convention gaps, since the report is not there to hold the
 is on attention, and a collapsed block costs none; what the list buys is that a reader of the pull
 request reaches every finding and every question without the report, and a later review finds every
 identifier this one issued.
+
+The summary closes with one line for a reader who wants each finding explained in plain words,
+`/atk:catchup <pr-url> --findings`, with the pull request's URL: the one pointer it carries, since
+that line reads the thread and not the report.
 
 A finding that is a credential in the change, whether the mask took the line out, the scan named
 the file without reading it, a staged `.env.production` or an `env.bak` renamed from `.env`, or a

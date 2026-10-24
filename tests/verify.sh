@@ -560,13 +560,33 @@ for f in glob.glob('plugins/atk/skills/*/SKILL.md'):
     own = f.split('/')[3]
     for x in re.findall(r'atk:([a-z][a-z-]*[a-z])', open(f).read()):
         if x != own and x in names: mentions += 1; pairs.add((own, x))
-assert (mentions, len(pairs)) == (223, 125), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
-words = {'docs/flow/skill-lifecycle.md': ('two hundred and twenty-three times', 'a hundred and twenty-five ordered pairs'),
-         'docs/vi/flow/skill-lifecycle.md': ('hai trăm hai mươi ba lượt', 'một trăm hai mươi lăm cặp')}
+assert (mentions, len(pairs)) == (230, 127), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
+words = {'docs/flow/skill-lifecycle.md': ('two hundred and thirty times', 'a hundred and twenty-seven ordered pairs'),
+         'docs/vi/flow/skill-lifecycle.md': ('hai trăm ba mươi lượt', 'một trăm hai mươi bảy cặp')}
 for doc, phrases in words.items():
     text = ' '.join(open(doc).read().split())
     for w in phrases: assert w in text, '%s no longer says \'%s\': update it, or the words in this check' % (doc, w)
-print('OK skill-lifecycle counts, 223 mentions in 125 pairs')"
+print('OK skill-lifecycle counts, 230 mentions in 127 pairs')"
+
+# atk:fix --findings walks the page atk:catchup writes for a review report by its field names, its
+# front matter keys and the count of its finding fields, and records answers in the four kinds
+# atk:review reads back; a rename or a new field on one side fails here
+python3 -c "
+import re
+page = ' '.join(open('plugins/atk/skills/catchup/references/document-explainer.md').read().split())
+walk = ' '.join(open('plugins/atk/skills/fix/references/findings-mode.md').read().split())
+fmt = ' '.join(open('plugins/atk/skills/review/references/report-format.md').read().split())
+names = ['What the repository says', 'What the fix costs', 'review_source', 'review_summary', 'review_commit']
+for field in names:
+    assert field in page and field in walk, 'document-explainer.md and findings-mode.md no longer both name \'%s\'' % field
+block = page[page.index('A finding carries:'):page.index('A \x60review-report\x60 finding then carries')]
+fields = re.findall(r'- \*\*([^*]+)\*\*', block)
+assert len(fields) == 7 and 'the seven fields' in walk, 'document-explainer.md has %d finding fields, findings-mode.md walks the seven' % len(fields)
+kinds = ['fixed', 'deferred', 'declined', 'disputed']
+answers = fmt[fmt.index('Each answer is one of four:'):][:120]
+for k in kinds:
+    assert k in answers and '\x60%s\x60' % k in walk, 'answer kind \'%s\' is not in both report-format.md and findings-mode.md' % k
+print('OK findings-mode walks what document-explainer names: %d names, 7 finding fields, and the four answer kinds of report-format' % len(names))"
 
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
 # holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs
@@ -595,11 +615,12 @@ for f in glob.glob('plugins/*/skills/*/references/*.tsv'):
 
 # No example of a dated artifact name has lost its time: plugins/atk/shared/artifact-paths.md dates every name
 # YYMMDD-HHMM, and a six-digit date followed by a slug, an extension, `/` or `)` is the shape it
-# replaced.
+# replaced. Records and derived files are skipped, and so is a record's Vietnamese mirror under
+# docs/vi/records/, like the record it copies.
 # Should print nothing (grep exits 1)
 grep -rnE '(^|[^0-9])[0-9]{6}(-[A-Za-z]|\.[a-z]+|/|\))' plugins/ README.md docs/ \
   --exclude=CHANGELOG.md \
-  | grep -v -E '^docs/(records|derived)/'
+  | grep -v -E '^docs/(vi/)?(records|derived)/'
 
 # No reference document template carries a ticket line: a reference document has no ticket field,
 # per Front matter in plugins/atk/shared/artifact-paths.md, and a template that regains one stamps

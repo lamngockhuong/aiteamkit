@@ -1,12 +1,14 @@
 ---
 title: atk:catchup explains a document in plain words, a kit record or any other
-status: APPROVED
+status: SUPERSEDED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-24
 ticket: none
 ---
+
+Superseded on 2026-10-24 by `docs/records/design/261023-1609-review-findings-explained-and-answered.md`, which changes one decision, that every claim on the page traces to a place in the document, for a review report; every other decision here stands.
 
 # atk:catchup explains a document in plain words, a kit record or any other
 

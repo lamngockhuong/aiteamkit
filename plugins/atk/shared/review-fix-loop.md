@@ -48,8 +48,9 @@ first step of `shared/finalize-steps.md`, rather than at the finalize step. The 
 the document beside the code, and can check that what it says holds, per The sync obligation in
 `shared/spec-docs.md`; a document moved after the review is one no review ever read. Where the
 document cannot move now, the one line that step asks for, what is stale and who will fix it, is
-written before the call too. There is no pull request yet for the review to find it in, so it goes
-to the review with the intent, and a deliberate skip is not reported as a missing document. A
+written before the call too. No pull request body the review can read holds the run's record: none
+exists yet, or the one that exists keeps its author's body, per step 4 of `shared/finalize-steps.md`.
+So it goes to the review with the intent, and a deliberate skip is not reported as a missing document. A
 document in another repository, usually the parent of a member repository, is not in the change's
 diff, so the call names its path and a second `diff.patch` of that repository, written with
 `mask --worktree` of `shared/secret-scan.md` run there, and the record says which document moved

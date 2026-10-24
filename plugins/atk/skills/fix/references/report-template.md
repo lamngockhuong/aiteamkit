@@ -43,6 +43,11 @@ out.
 `status` is `DRAFT` only when every defect was stopped; otherwise it is `IN REVIEW`, and the title
 names the stopped defect so no reader takes the report for complete.
 
+Under `--findings`, per `references/findings-mode.md`, the defects are the review findings answered
+"fix", each under its review ID, and section 10 is added. A triage that fixed nothing still writes
+the report, with `In short`, sections 9 and 10, and no change section, at `DRAFT`, since there is no
+change to approve.
+
 ## In short
 
 Before section 1, the summary from The opening summary in `shared/plain-writing.md`: the defect as the
@@ -182,3 +187,19 @@ before the review, so the review reads the skip as stated rather than as a missi
 
 An empty section is fine and common. A section used as a place to put work that this fix actually
 needed is not.
+
+## 10. Findings answered
+
+Only under `--findings`. One row per finding of the review, in its order, the ones answered before
+this run included:
+
+| ID | Answer | Reason or place | Reply |
+|----|--------|-----------------|-------|
+| `S3` | `deferred` | waiting on <name> for <the question> | posted |
+
+The answer is one of the four kinds of the table in `references/findings-mode.md`; the reply is
+`posted`, `not posted` with why, or `none` for a local report with no pull request. A row answered
+by someone other than the pull request's author names that person after the reason, as the reply
+does, per Who answers in `references/findings-mode.md`. A `fixed` row names the commit and
+points at its defect block above. A credential finding's row names no file, no line and no path,
+per the credential finding of `skills/review/references/report-format.md`.

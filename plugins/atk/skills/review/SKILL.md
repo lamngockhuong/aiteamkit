@@ -235,9 +235,9 @@ review again. A target that is not a pull request is named by what was reviewed,
 a range or paths, as How a target becomes a name in `references/report-format.md` says.
 
 The session gets the summary, not the report: how many findings at each severity, the `BLOCKING`
-ones in one line each, how many the cap left to the report alone, and the path to the file. Whoever
-has just watched the review run needs to know whether they are blocked and where to read the rest;
-the argument behind each finding is what the file is for.
+ones in one line each, how many the cap left to the report alone, the path to the file, and
+`/atk:catchup <report path>`, which explains each finding in plain words. Whoever watched the run
+needs to know whether they are blocked and where to read the rest; the argument is the file's.
 
 `references/report-format.md` holds what that file looks like, its identifiers, labels, round table
 and sections; this section decides only where it goes and what reaches the session.
