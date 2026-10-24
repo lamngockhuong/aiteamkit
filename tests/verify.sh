@@ -560,13 +560,22 @@ for f in glob.glob('plugins/atk/skills/*/SKILL.md'):
     own = f.split('/')[3]
     for x in re.findall(r'atk:([a-z][a-z-]*[a-z])', open(f).read()):
         if x != own and x in names: mentions += 1; pairs.add((own, x))
-assert (mentions, len(pairs)) == (223, 125), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
-words = {'docs/flow/skill-lifecycle.md': ('two hundred and twenty-three times', 'a hundred and twenty-five ordered pairs'),
-         'docs/vi/flow/skill-lifecycle.md': ('hai trăm hai mươi ba lượt', 'một trăm hai mươi lăm cặp')}
+assert (mentions, len(pairs)) == (230, 127), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
+words = {'docs/flow/skill-lifecycle.md': ('two hundred and thirty times', 'a hundred and twenty-seven ordered pairs'),
+         'docs/vi/flow/skill-lifecycle.md': ('hai trăm ba mươi lượt', 'một trăm hai mươi bảy cặp')}
 for doc, phrases in words.items():
     text = ' '.join(open(doc).read().split())
     for w in phrases: assert w in text, '%s no longer says \'%s\': update it, or the words in this check' % (doc, w)
-print('OK skill-lifecycle counts, 223 mentions in 125 pairs')"
+print('OK skill-lifecycle counts, 230 mentions in 127 pairs')"
+
+# atk:fix --findings walks the page atk:catchup writes for a review report by its field names, so
+# both files must name the same two fields of the repository layer; a rename in one fails here
+python3 -c "
+page = ' '.join(open('plugins/atk/skills/catchup/references/document-explainer.md').read().split())
+walk = ' '.join(open('plugins/atk/skills/fix/references/findings-mode.md').read().split())
+for field in ['What the repository says', 'What the fix costs']:
+    assert field in page and field in walk, 'document-explainer.md and findings-mode.md no longer both name \'%s\'' % field
+print('OK findings-mode walks the fields document-explainer names: What the repository says, What the fix costs')"
 
 # Every line of a references/*.tsv list carries the header's field count, and a `checked` column
 # holds a date or nothing. A checklist, the list whose header has `technique`, also keeps its IDs

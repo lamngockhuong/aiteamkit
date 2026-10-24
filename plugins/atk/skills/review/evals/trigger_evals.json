@@ -31,6 +31,8 @@
   { "query": "review the test cases my colleague wrote for the export screen", "should_trigger": false },
   { "query": "review giúp bộ test case này trước khi duyệt", "should_trigger": false },
   { "query": "このテストケースをレビューして", "should_trigger": false },
+  { "query": "I don't understand the review posted on PR 88, explain each finding in plain words", "should_trigger": false },
+  { "query": "go through the review findings on this PR with me and fix what we agree on", "should_trigger": false },
 
   {"query": "run PR 82 for real and check the feature actually works", "should_trigger": false},
   {"query": "chạy thử thật PR 82 xem tính năng có hoạt động không", "should_trigger": false},

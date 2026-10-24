@@ -6,12 +6,13 @@ description: >
   purpose, make the smallest change that removes the cause, verify it by layer, stop after three
   ruled-out hypotheses with a named person rather than guessing, call the team review on its own
   change and fix what it blocks on, and write the report that shows what was checked and what was
-  not.
-  Use for a bug report, a failing test, a broken endpoint or screen, or an investigation that has to
-  end in an explanation rather than a guess.
-  Triggers on: "fix bug", "debug", "bug", "sửa bug", "điều tra lỗi", "tìm nguyên nhân", "lỗi này",
-  "バグ修正", "不具合調査", "原因調査", "/atk:fix".
-argument-hint: "[issue-url|report-path|description] [--layer <name>] [--investigate-only] [--no-review] [--out <path>]"
+  not. Use for a bug report, a failing test, a broken endpoint or screen, or an investigation that
+  has to end in an explanation rather than a guess; with --findings, to go through an atk:review's
+  findings with their author, answer each, and fix the chosen ones on the pull request's branch.
+  Triggers on: "fix bug", "debug", "bug", "go through the review findings", "sửa bug", "điều tra
+  lỗi", "tìm nguyên nhân", "lỗi này", "xử lý từng finding của review", "バグ修正", "不具合調査",
+  "原因調査", "レビュー指摘に対応", "/atk:fix".
+argument-hint: "[issue-url|report-path|pr-url|description] [--findings] [--layer <name>] [--investigate-only] [--no-review] [--out <path>]"
 ---
 
 # Fix a Defect (`atk:fix`)
@@ -30,8 +31,8 @@ on, because what is left at that point is usually somebody's knowledge rather th
 
 Handles: capturing the failure, tracing it to the line that produces it, proving the cause, checking
 the fix against recorded intent, making the minimal change, verifying by layer, tidying the lines the
-fix touched, calling `atk:review` on its own change and fixing what it blocks on, and writing the
-report a reviewer can check against the evidence.
+fix touched, calling `atk:review` on its own change and fixing what it blocks on, writing the report
+a reviewer can check against the evidence, and under `--findings` triaging a review's findings.
 
 Does NOT handle: a production incident in progress, which is `atk:incident` and owns the timeline,
 the severity, and the client communication while users are down; reviewing somebody else's change
@@ -52,6 +53,7 @@ the symptom is gone against the reproduction in the report, not against the deve
 /atk:fix <issue-url>           # Start from a bug report in the detected tracker
 /atk:fix <report-path>         # Start from an existing investigation write-up
 /atk:fix "<description>"       # Start from a description in the prompt
+/atk:fix <pr-url|review-report> --findings   # Walk an atk:review's findings, answer, fix the chosen
 /atk:fix --layer api           # Skip surface mapping when the layer is already known
 /atk:fix --investigate-only    # Stop after the cause is proven, change no file but the run trace
 /atk:fix --no-review           # Skip the review call, and record that it was skipped
@@ -85,6 +87,10 @@ Then read the newest unfinished progress log of this skill for the same defect a
 it, asking first when it looks stale, per Progress log in `shared/artifact-paths.md`. Through the run,
 add an entry to the log each time a hypothesis is proved or ruled out, and for each review round in
 step 6.
+
+Under `--findings`, and for a pull request URL whose thread it reads to ask whether to walk a review
+posted there, `references/findings-mode.md` runs first, explaining through `atk:catchup`, and
+changes step 7; the steps below take its fix set.
 
 ### 1. Capture and prove
 

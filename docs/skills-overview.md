@@ -199,7 +199,12 @@ the diff, without the check. For a document, a local file, pasted text, or a lin
 connection the harness has: a temporary page, held out of git, that explains it in plain words,
 finding by finding or section by section, with the document's IDs, severities and evidence kept as
 they are, a summary table, a suggested order of work that names who decides it, and the questions
-it leaves open.
+it leaves open. A review report's page reads further, with no flag: each finding gains What the
+repository says, a scenario, whether it happens in practice, why the code is this way, and what the
+fix really costs. That layer is read through agents from six bounded sources at the reviewed commit,
+every line cited by `path:line`, masked, and absent for a credential finding. `--findings` on a
+pull request URL explains the newest `atk:review` posted there instead of the diff, counted only when
+its writer is a person of the Team section or the person running the skill confirms it.
 
 **Use when.** Someone picks up an epic they did not help write, joins work already in flight, or has
 to review a pull request in an area they do not know. Or someone is handed a document they have to
@@ -488,6 +493,15 @@ finding, or when the case is one of the five consequences a review never lowers.
 the form, so a fix never adopts a review's suggested rule without weighing the states that rule
 opens in turn.
 
+`--findings`, on a pull request URL or a local review report, turns the run into a triage of an
+`atk:review`. It calls `atk:catchup` for the plain explanation, walks the findings with their author
+one at a time, and records each answer as fixed, deferred, declined or disputed, the four kinds the
+next review reads back; "wait on a person" is posted as deferred with that person and the question.
+It drafts a reply for each thread and posts it on a yes, a `fixed` one only after the push, and
+fixes the findings the author chose on the pull request's own branch, opening no second pull
+request. The fix report is always written, with a Findings answered section, even when nothing was
+fixed.
+
 ---
 
 ## `atk:verify`
@@ -530,8 +544,8 @@ fills in values of its own, not even from the project's example file.
 
 **Produces.** A review report at `docs/derived/reviews/<pr>-<date>.md`, written on every run, `<pr>`
 replaced by what was reviewed when the target is not a pull request, and a summary in the session
-that says how many findings there are at each severity, names the blocking ones, and points at the
-file. The findings are ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each citing a line, stating the
+that says how many findings there are at each severity, names the blocking ones, points at the
+file, and gives the line `/atk:catchup <report path>` that explains each finding in plain words. The findings are ranked `BLOCKING`, `SHOULD FIX`, and `NIT`, each citing a line, stating the
 failure it causes, and suggesting a concrete change. The report keeps every finding that survived
 verification; the session summary and the inline comments carry at most ten, or twenty under
 `--strict`, with the blocking ones never cut. Each one carries an identifier prefixed by its
@@ -544,7 +558,8 @@ evidence against the answer goes into that finding's existing thread. The
 report has a fixed shape rather than one rebuilt per run, and it carries no score of any kind,
 because the reviewer is not the approver. `--out` moves the file, `--comment` posts the findings as
 inline PR comments, with one summary comment that lists every finding the review kept and every open
-question, collapsed, so a reader of the pull request reaches every finding without the report. A
+question, collapsed, so a reader of the pull request reaches every finding without the report, and
+closes with `/atk:catchup <pr-url> --findings` for one who wants each explained. A
 target written `<base>...<branch>` is reviewed against that base rather than one the review
 resolves, which is how a branch stacked on another unpushed branch is reviewed without its
 predecessor's commits.

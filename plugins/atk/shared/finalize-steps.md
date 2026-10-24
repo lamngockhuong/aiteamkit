@@ -32,6 +32,7 @@ ago on a different change.
 | Push the branch | yes |
 | Open a pull request | yes |
 | Comment on the issue | yes |
+| Reply in a pull request thread | yes |
 | Create an issue | yes |
 | Move the ticket or assign a reviewer | yes |
 | Merge a pull request | yes, for that merge, every time |
@@ -73,6 +74,9 @@ afterwards costs nothing in git and leaves two names pointing at one piece of wo
 part nobody cleans up. A name that cannot be resolved against any rule, because the project has
 none, is not a finding: say which source was checked and carry on.
 
+Work that belongs to a pull request already open is committed on that pull request's head branch,
+after confirming it is the one checked out; no branch is created or renamed.
+
 ## 3. Commit
 
 Same source order as the branch rule decides the commit convention. Absent any convention, use
@@ -103,6 +107,9 @@ artifact fills it. A team that wrote a template wrote down what its reviewers ne
 body that quietly replaces it has overruled a decision belonging to that team. Tick only what this
 run verified, name what is left open, and keep the artifact linked by its path. Where a template is
 found and how each section is filled are `atk:git`'s, in `skills/git/references/pr-body.md`.
+
+A branch that already has an open pull request gets no second one: its body stays, and the
+artifact is offered as a comment on it, per `atk:git`.
 
 Reviewers come from the Team section of `.atk/profile.md`. Never assign a person the team has not
 named, and never request a review from someone because they touched the file last.
