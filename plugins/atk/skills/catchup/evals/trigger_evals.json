@@ -14,6 +14,8 @@
   { "query": "giải thích tài liệu này dễ hiểu giúp mình: docs/records/fixes/261016-0613-review-author-replies.md", "should_trigger": true },
   { "query": "khách hàng gửi bản đặc tả này, mình chỉ cần hiểu nó nói gì, giải thích từng mục dễ hiểu", "should_trigger": true },
   { "query": "このセキュリティ記録の指摘を一つずつわかりやすく説明して", "should_trigger": true },
+  { "query": "this review report lists findings I do not follow, walk me through what each one means in plain words: docs/derived/reviews/pr-88.md", "should_trigger": true },
+  { "query": "explain the review that was posted on https://github.com/acme/app/pull/88, finding by finding", "should_trigger": true },
   { "query": "この監査報告書をわかりやすく説明して", "should_trigger": true },
 
   { "query": "the client sent this chat message, turn it into user stories", "should_trigger": false },
