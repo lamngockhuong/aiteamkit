@@ -1,12 +1,14 @@
 ---
 title: "ADR 0007: giải thích dễ hiểu một tài liệu, record của kit hay bất kỳ tài liệu nào khác, là một mode của atk:catchup"
-status: APPROVED
+status: SUPERSEDED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-24
 ticket: none
 ---
+
+Bị thay thế ngày 2026-10-24 bởi `docs/adr/0010-review-findings-explained-from-the-repository-and-answered-in-fix.md`, ADR đổi một quyết định, rằng mọi điều trang nói đều truy được về một chỗ trong tài liệu, với review report; mọi quyết định khác ở đây vẫn giữ nguyên.
 
 # ADR 0007: giải thích dễ hiểu một tài liệu, record của kit hay bất kỳ tài liệu nào khác, là một mode của atk:catchup
 

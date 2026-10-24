@@ -1,12 +1,14 @@
 ---
 title: atk:catchup giải thích một tài liệu bằng lời dễ hiểu, dù là record của kit hay tài liệu nào khác
-status: APPROVED
+status: SUPERSEDED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-24
 ticket: none
 ---
+
+Bị thay thế ngày 2026-10-24 bởi `docs/records/design/261023-1609-review-findings-explained-and-answered.md`, design đổi một quyết định, rằng mọi điều trang nói đều truy được về một chỗ trong tài liệu, với review report; mọi quyết định khác ở đây vẫn giữ nguyên.
 
 # atk:catchup giải thích một tài liệu bằng lời dễ hiểu, dù là record của kit hay tài liệu nào khác
 
