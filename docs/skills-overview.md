@@ -224,11 +224,13 @@ the skill. A brief nobody has to respond to is a brief nobody has read.
 
 ## `atk:estimate`
 
-**Produces.** A per-item estimate with its basis and confidence, a visible risk buffer, a capacity
-calculation showing leave and ceremonies as explicit subtractions, a sprint commitment, and the
-overflow list.
+**Produces.** Points and hours per task, feature, or screen, each with its basis and confidence,
+and a visible risk buffer, with the total split by discipline (BE, FE, QA) and, for a sheet in hours,
+given in man-days too. Capacity and the sprint commitment are not in it: the PM works them out in sprint
+planning from these numbers and the team's resources.
 
-**Use when.** Sprint planning, a client asks how long, or scope changed and the numbers need redoing.
+**Use when.** Before sprint planning, a client asks how long, or scope changed and the numbers need
+redoing.
 
 **Do not use when.** The items have no acceptance criteria. The skill will mark them `NEEDS INTAKE`
 rather than guess, which is the correct answer but not the one you wanted.

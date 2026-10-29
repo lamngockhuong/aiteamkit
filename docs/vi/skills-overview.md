@@ -228,11 +228,13 @@ tóm tắt không bắt ai phản hồi là bản tóm tắt không ai đọc.
 
 ## `atk:estimate`
 
-**Sinh ra.** Ước lượng từng hạng mục kèm căn cứ và độ tin cậy, phần buffer rủi ro hiện rõ thành một
-dòng riêng, bảng tính capacity trong đó ngày nghỉ và các buổi họp là những phép trừ tường minh, cam
-kết sprint, và danh sách phần không nhét vừa.
+**Sinh ra.** Point và giờ cho từng task, tính năng hay màn hình, mỗi con số kèm căn cứ và độ tin
+cậy, cùng phần buffer rủi ro hiện rõ thành một dòng riêng, và tổng được tách theo discipline (BE,
+FE, QA), với sheet tính bằng giờ thì ghi thêm cả man-day. Capacity và cam kết sprint không nằm ở đây: PM tính
+chúng trong buổi sprint planning từ các con số này và nhân lực của team.
 
-**Dùng khi.** Họp sprint planning, khách hỏi mất bao lâu, hoặc phạm vi đổi và cần ước lượng lại.
+**Dùng khi.** Trước buổi sprint planning, khách hỏi mất bao lâu, hoặc phạm vi đổi và cần ước lượng
+lại.
 
 **Không dùng khi.** Các hạng mục chưa có tiêu chí nghiệm thu. Skill sẽ đánh dấu `NEEDS INTAKE` thay
 vì đoán, đó là câu trả lời đúng nhưng không phải câu bạn muốn nghe.

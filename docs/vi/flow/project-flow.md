@@ -53,7 +53,7 @@ flowchart TD
     end
 
     subgraph S2["2. Ước lượng"]
-        E0["atk:estimate<br/><small>Dev hoặc TL ước lượng, PM soát năng lực</small>"] --> E1{"PM và Stakeholder<br/>chốt sprint"}
+        E0["atk:estimate<br/><small>Dev hoặc TL ước lượng point và giờ</small>"] --> E1{"PM lên sprint<br/>từ ước lượng và nhân lực"}
         E1 -->|Phạm vi không vừa| R0
         E1 -->|Đã chốt| E2["Backlog của sprint"]
     end
@@ -133,7 +133,7 @@ flowchart TD
 | 0. Thiết lập | `atk:tailor` | TL, hoặc ai sở hữu thứ skill đó sinh ra | Vai sở hữu kết quả của skill được tùy biến | `IN REVIEW` sang `APPROVED` |
 | 1. Yêu cầu | `atk:intake` | BrSE/BA | Stakeholder, về phạm vi và tiêu chí | `IN REVIEW` sang `APPROVED` |
 | 1. Yêu cầu | `atk:catchup` | Người mới vào việc | Không ai; phần kiểm tra hiểu bài là tự chấm | `DRAFT` |
-| 2. Ước lượng | `atk:estimate` | Dev hoặc TL lo kích thước, PM soát năng lực | PM và Stakeholder cùng chốt | `DRAFT` khi còn thiếu số liệu capacity, rồi `IN REVIEW` sang `APPROVED` |
+| 2. Ước lượng | `atk:estimate` | Dev hoặc TL lo kích thước | PM, cùng Stakeholder khi khách hàng yêu cầu | `IN REVIEW` sang `APPROVED` |
 | 3. Thiết kế | `atk:design-doc` | TL hoặc Dev | TL, người nắm quyết định kỹ thuật cuối | `IN REVIEW` sang `APPROVED` |
 | 3. Thiết kế | `atk:spec` | Dev, và BrSE/BA với loại `screen` | TL với loại `api` và `db`, BrSE/BA với loại `feature` và `screen` | `IN REVIEW` sang `APPROVED`, sau đó ghi đè tại chỗ mãi mãi |
 | 4. Chia việc | `atk:breakdown` | TL hoặc PM | Từng Dev nhận phần việc của mình | `IN REVIEW` sang `APPROVED` |

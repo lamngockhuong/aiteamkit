@@ -16,7 +16,7 @@ Nodes are artifacts. Edge labels are the skill that turns one into the next.
 flowchart TD
     A0["Raw request<br/><small>chat, mail, ticket</small>"]
     A1["Requirements<br/><small>stories, criteria, open questions</small>"]
-    A2["Estimate<br/><small>sizes, capacity, commitment</small>"]
+    A2["Estimate<br/><small>points and hours, with basis</small>"]
     A3["Design + ADR"]
     A3b["Reference documents<br/><small>API, schema, feature, screen</small>"]
     A4["Task list<br/><small>owners, lanes, dependencies</small>"]
@@ -89,7 +89,7 @@ lands, per `plugins/atk/shared/spec-docs.md`.
 | `tailor` | A shipped `SKILL.md`, and what the team says it wants different; under `--feedback --runs`, the run traces of that skill | Project override for that skill | The skill it is named after |
 | `intake` | A raw request, or a Figma design | Requirements with open questions | `estimate`, `design-doc`, `qa`; from a design, `spec --kind screen`, with `design-doc` skipped unless the screen's change touches a schema, a public contract, a shared module, or more than one service |
 | `catchup` | An epic or a pull request; in document mode, a local file, pasted text, or a linked document, a kit record or any other; under `--findings`, the newest `atk:review` posted on a pull request | A brief plus an understanding check; in document mode, a temporary page explaining the document, held out of git | The person; and `fix` under `--findings`, which walks the page |
-| `estimate` | Requirements or an epic | Sizes, capacity, sprint commitment | `breakdown` |
+| `estimate` | Requirements or an epic | Points and hours per task, with basis and buffer | `breakdown` |
 | `design-doc` | Requirements, and the reference documents for the area; given its path, a draft to finish or revise; under `--answer`, a design in review | Design plus ADR, with its open questions; under `Contract: first` the contract in summary, naming the reference documents; under `--answer`, recorded answers | `breakdown`, `plan`, `implement`, and `spec` under `Contract: first` |
 | `spec` | The code, and the documents already in `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, or for an empty directory the template the profile names for the kind; under `Contract: first`, the design too; for a screen, its Figma design or the images exported from it | Reference documents kept current, with the API conventions document and the schema index where the kit's template is the shape or the project keeps them, or a drift report; under `--from`, also the documents its search finds the design makes untrue, on the person's yes | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | A design or an epic | Owned tasks, lanes, dependency graph | `plan`, `implement` |

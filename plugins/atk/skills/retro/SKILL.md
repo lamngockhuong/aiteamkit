@@ -23,8 +23,8 @@ Handles: gathering sprint evidence from git, the tracker, and CI, checking the p
 actions, structuring the discussion, capturing what the team says, and writing both the retro record
 and the status report.
 
-Does NOT handle: running the meeting for the team, deciding priority for the next sprint
-(`atk:estimate`), or performance evaluation of individuals, which this skill never produces.
+Does NOT handle: running the meeting for the team, deciding priority for the next sprint, which
+the PM does in sprint planning, or performance evaluation of individuals, which this skill never produces.
 
 ## Roles
 

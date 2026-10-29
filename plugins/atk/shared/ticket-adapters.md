@@ -46,7 +46,9 @@ for an MCP server or a REST integration. `gh auth status`, or an endpoint that n
 user, proves only that some account is signed in. On a machine that holds several accounts, the
 signed-in one may not be the one that can see this repository, and the run would then report a
 tracker as reachable that it cannot read. Once per run, and once per distinct tracker
-the run will read, which in a project where a member tracks its own work is two.
+the run will read, which in a project where a member tracks its own work is two. On GitHub,
+`gh repo view` proves issues and not a Project, which a token can be refused while it reads issues,
+so a Project field, a sprint, a status or an actual time, can still fail to read, as below.
 
 Three outcomes, and each has a sentence of its own:
 
@@ -62,7 +64,8 @@ them none was found sends them to set up what they already have.
 A proof that succeeded does not make every later read succeed. A call that fails afterwards, a wrong
 project key, a permission covering part of the board, a request that times out, puts that one item in
 the third row rather than ending the run: the tracker is reachable and this reading of it was not.
-Treat it as the third outcome for that item alone and carry on with the rest.
+Treat it as the third outcome for that item alone and carry on with the rest. A field the run could
+not read is unread, not missing: never report the tracker as lacking it.
 
 **Say what failed, not what the tool printed.** Name the class of failure, authentication expired,
 host unreachable, forbidden, not found, and keep the tool's own error text out of the session and out
