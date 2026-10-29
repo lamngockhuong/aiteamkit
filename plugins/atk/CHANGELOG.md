@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.19](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.18...atk-v0.1.19) (2026-10-29)
+
+
+### Features
+
+* estimate points and hours per task, by discipline, without sprint fit ([#158](https://github.com/lamngockhuong/aiteamkit/issues/158)) ([cb16052](https://github.com/lamngockhuong/aiteamkit/commit/cb160524dbcb10bae2e4537d8d19b4eadecc4dd8))
+
 ## [0.1.18](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.17...atk-v0.1.18) (2026-10-24)
 
 
