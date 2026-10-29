@@ -15,7 +15,7 @@ Các nút là artifact. Nhãn trên mũi tên là skill biến artifact này th�
 flowchart TD
     A0["Yêu cầu thô<br/><small>chat, mail, ticket</small>"]
     A1["Yêu cầu<br/><small>user story, tiêu chí, câu hỏi bỏ ngỏ</small>"]
-    A2["Ước lượng<br/><small>khối lượng, năng lực, cam kết</small>"]
+    A2["Ước lượng<br/><small>point và giờ, kèm căn cứ</small>"]
     A3["Thiết kế + ADR"]
     A3b["Tài liệu tham chiếu<br/><small>API, schema, tính năng, màn hình</small>"]
     A4["Danh sách task<br/><small>chủ sở hữu, làn, phụ thuộc</small>"]
@@ -87,7 +87,7 @@ từ code chuyển từng mục sang code khi mục đó được làm xong, the
 | `tailor` | Một `SKILL.md` của kit, và điều đội nói là muốn khác đi; với `--feedback --runs`, các run trace của skill đó | File ghi đè cho skill đó | Chính skill mang tên file đó |
 | `intake` | Một yêu cầu thô, hoặc một design Figma | Yêu cầu kèm câu hỏi bỏ ngỏ | `estimate`, `design-doc`, `qa`; từ design thì `spec --kind screen`, bỏ qua `design-doc` trừ khi thay đổi của màn hình chạm tới schema, public contract, shared module, hoặc hơn một service |
 | `catchup` | Một epic hoặc một pull request; ở document mode, một file local, đoạn văn bản dán vào, hoặc một tài liệu qua link, là record của kit hay bất kỳ tài liệu nào khác; với `--findings`, bản `atk:review` mới nhất đã đăng trên một pull request | Bản tóm tắt kèm phần kiểm tra hiểu bài; ở document mode, một trang tạm giải thích tài liệu, nằm ngoài git | Con người; và `fix` khi có `--findings`, skill đi qua từng finding trên trang |
-| `estimate` | Yêu cầu hoặc epic | Khối lượng, năng lực, cam kết sprint | `breakdown` |
+| `estimate` | Yêu cầu hoặc epic | Point và giờ cho từng task, kèm căn cứ và buffer | `breakdown` |
 | `design-doc` | Yêu cầu, và tài liệu tham chiếu của vùng sắp đổi; khi được đưa đường dẫn, một bản nháp cần viết tiếp hay sửa lại; với `--answer`, một thiết kế đang review | Thiết kế kèm ADR, có các câu hỏi còn mở; khi `Contract: first` thì contract ở dạng tóm tắt, kèm tên các tài liệu tham chiếu; với `--answer`, các câu trả lời đã ghi | `breakdown`, `plan`, `implement`, và `spec` khi `Contract: first` |
 | `spec` | Code, và những tài liệu đã có trong `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, hoặc với thư mục còn trống thì template mà profile ghi cho loại đó; khi `Contract: first` thì cả thiết kế; với màn hình thì design Figma của nó hoặc ảnh export từ đó | Tài liệu tham chiếu được giữ đúng, kèm tài liệu quy ước API và chỉ mục schema ở nơi hình dạng lấy từ template của kit hoặc dự án có giữ, hoặc một báo cáo lệch; với `--from`, cả những tài liệu mà lần tìm kiếm thấy thiết kế làm cho sai, khi người chạy đồng ý | `design-doc`, `qa`, `plan`, `implement`, `review` |
 | `breakdown` | Thiết kế hoặc epic | Task có chủ, làn song song, đồ thị phụ thuộc | `plan`, `implement` |

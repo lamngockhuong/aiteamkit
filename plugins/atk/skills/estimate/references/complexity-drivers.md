@@ -55,12 +55,13 @@ code:
   the screens sharing its tables, statuses, and vocabulary pay less. A screen touching a different
   set of tables is not a sibling.
 
-It is paid once per screen for each layer whose implementer has to understand it, and a second task
-on the same screen and layer pays little, because the answers already exist.
+It is paid once per screen for each discipline whose implementer has to understand it, as a line of
+that discipline, and a second task on the same screen and discipline pays little, because the
+answers already exist. Whether points include these lines is decided in step 3 of `SKILL.md`.
 
 ## A project's own rubric
 
 The drivers above are deliberately stack-neutral. A project with its own, such as the number of
 row-level security policies changed or the queues a screen enqueues to, writes it in the `## Before`
 section of `.atk/overrides/estimate.md`, saying whether it replaces this table or adds to it. The
-sheet then names the rubric it used in section 2 of `references/estimate-template.md`.
+sheet then names the rubric it used in Appendix C of `references/estimate-template.md`.

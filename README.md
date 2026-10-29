@@ -69,7 +69,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:tailor` | What this team wants a skill to do differently, written to `.atk/overrides/<skill>.md` in the project rather than edited into the kit, with the role that owns the output named as approver. |
 | `atk:intake` | A raw request, or a Figma design, turned into user stories, testable acceptance criteria, non-goals, and open questions with an owner each. |
 | `atk:catchup` | A brief for someone who was not in the conversation: scope in and out, what the work touches and where it is in the code, who decides, the unfamiliar terms, and the understanding check a developer answers before writing code. |
-| `atk:estimate` | Sizes with a stated basis and confidence, net capacity after leave and ceremonies, a sprint commitment, and the overflow that did not fit. |
+| `atk:estimate` | Points and hours per task, feature, or screen, each with a stated basis and confidence, and the risk buffer as a visible line. |
 | `atk:design-doc` | A technical design reviewable without a meeting: cited current state, compared options, data and API changes, rollback, plus the ADR. With `--spike`, a time-boxed investigation of the one question a design cannot choose without, ending in a recommendation for the Tech Lead. With `--challenge`, one agent per signing role raises objections against the draft before the real reviewers see it. With `--answer`, records the answers to its open questions until it is approved; given the path of a draft, finishes or revises it. |
 | `atk:spec` | Reference documents that stay true: the API contract per resource, the schema per table, the behaviour per feature, and the components of each screen read from its Figma design, updated in place and checked against the code, and the design, for drift. |
 | `atk:breakdown` | An epic split into owned tasks with a dependency graph, parallel lanes with file ownership, and a definition of done per task. |
@@ -100,7 +100,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:tailor [<skill>]                      # --audit --feedback --runs --since --out
 /atk:intake <request-file|ticket|text>     # --design --interview|--no-interview --lang --out
 /atk:catchup <epic|pr|file|doc-url|text>   # --findings --no-check --lang --out
-/atk:estimate <backlog|epic>               # --points|--days --sprint --capacity --out
+/atk:estimate <backlog|epic>               # --points|--days --out
 /atk:design-doc <requirement|topic|design> # --adr|--no-adr --options --spike --challenge --answer --lang --out
 /atk:spec [subject]                        # --kind --from --design --sync --check --lang --out
 /atk:breakdown <design|epic>               # --members --parallel --tdd --out

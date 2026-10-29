@@ -74,9 +74,9 @@ everything past it is asked for every time.
 
 ## How one skill reaches another
 
-One skill names another two hundred and thirty times across the twenty-five `SKILL.md` files,
+One skill names another two hundred and twenty-nine times across the twenty-five `SKILL.md` files,
 counting each `atk:<name>` other than the file's own skill and the `atk:read-only-reviewer` agent,
-in a hundred and twenty-seven ordered pairs, which sounds like a dense graph. It is
+in a hundred and twenty-six ordered pairs, which sounds like a dense graph. It is
 not: most of those are boundaries rather than edges. Five kinds, and only the first four happen at
 run time.
 

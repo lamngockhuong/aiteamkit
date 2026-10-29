@@ -560,13 +560,13 @@ for f in glob.glob('plugins/atk/skills/*/SKILL.md'):
     own = f.split('/')[3]
     for x in re.findall(r'atk:([a-z][a-z-]*[a-z])', open(f).read()):
         if x != own and x in names: mentions += 1; pairs.add((own, x))
-assert (mentions, len(pairs)) == (230, 127), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
-words = {'docs/flow/skill-lifecycle.md': ('two hundred and thirty times', 'a hundred and twenty-seven ordered pairs'),
-         'docs/vi/flow/skill-lifecycle.md': ('hai trăm ba mươi lượt', 'một trăm hai mươi bảy cặp')}
+assert (mentions, len(pairs)) == (229, 126), 'skill-lifecycle counts moved to %d mentions, %d pairs: update both documents and this check' % (mentions, len(pairs))
+words = {'docs/flow/skill-lifecycle.md': ('two hundred and twenty-nine times', 'a hundred and twenty-six ordered pairs'),
+         'docs/vi/flow/skill-lifecycle.md': ('hai trăm hai mươi chín lượt', 'một trăm hai mươi sáu cặp')}
 for doc, phrases in words.items():
     text = ' '.join(open(doc).read().split())
     for w in phrases: assert w in text, '%s no longer says \'%s\': update it, or the words in this check' % (doc, w)
-print('OK skill-lifecycle counts, 230 mentions in 127 pairs')"
+print('OK skill-lifecycle counts, 229 mentions in 126 pairs')"
 
 # atk:fix --findings walks the page atk:catchup writes for a review report by its field names, its
 # front matter keys and the count of its finding fields, and records answers in the four kinds
