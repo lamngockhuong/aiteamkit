@@ -35,9 +35,9 @@ Before any item is matched:
      the rest.
    - A read that fails before any page arrived goes to the fallback.
 
-`updated` is the time of the record that holds the actual: the issue on Jira, Backlog and Redmine;
-the Project item on GitHub. On GitHub an edit to the actual-time field moves the Project item's time
-and can leave the issue's own time where it was, so the issue's time would miss a corrected actual.
+`updated` is the time of the record that holds the actual, per the table below. On GitHub that is
+the Project item, because an edit to the actual-time field moves the Project item's time and can leave
+the issue's own time where it was, so the issue's time would miss a corrected actual.
 
 The proof of access in Detected is not reachable of `shared/ticket-adapters.md` still runs once per
 run before this read. On GitHub it proves issues, not the Project, so a Project field that fails to
@@ -54,7 +54,7 @@ pool.
 | Jira | JQL `project = <key> AND statusCategory = Done AND timespent > 0` | JQL `project = <key> AND updated >= "<date>"` | the full read's JQL, asking for the key alone | the issue's `updated` |
 | Backlog | the closed status the issue list filters by, and only issues with actual hours where the API filters on it | the issue list's `updatedSince` | the full read, asking for the key alone where the API allows it | the issue's `updated` |
 | Redmine | `status_id=closed`, and only issues with spent time where the API filters on it | `updated_on=>=<date>` | the full read, asking for the id alone where the API allows it | the issue's `updated_on` |
-| GitHub | `ProjectV2.items(query: "is:closed <field-slug>:>0")` | `ProjectV2.items(query: "updated:><date>")` | the full read's query, asking for each item's issue number alone | the Project item's `updatedAt` |
+| GitHub | `ProjectV2.items(query: "is:closed <field-slug>:>0")` | `ProjectV2.items(query: "updated:><date>")` | the full read's query, asking for each item's repository and issue number alone | the Project item's `updatedAt` |
 
 The fields asked for are the key, the title, the labels, the estimate and actual fields the
 vocabulary map of `shared/ticket-adapters.md` names, the closing date, the linked pull request where
@@ -95,8 +95,11 @@ one never replaces the other's fallback.
 key	title	labels	estimate	actual	closed	pr	updated
 ```
 
-- `key` is the ticket in the form `shared/ticket-adapters.md` gives. `pr` is the linked pull request
-  where the tracker records one, empty otherwise. `updated` is per The read above.
+- `key` is the ticket in the form `shared/ticket-adapters.md` gives, and on GitHub always
+  `<owner>/<repo>#<number>`, since a Project can hold issues of several repositories, each with its
+  own `#42`, and a bare number would let one item's row replace another's. `pr` is the linked pull request
+  where the tracker records one, empty otherwise. `updated` is per the table in The filter per
+  tracker.
 - `read` is the time the successful read started, in UTC. `filter` is `server` when the tracker
   filtered, `session` when the run paged and filtered itself. `items` is the count of item lines.
 - No body, no comment, no assignee, and no custom field beyond the estimate and actual fields.
@@ -126,31 +129,25 @@ Persistence in `shared/artifact-paths.md`, and is never staged.
 
 ## The ignore file
 
-`<docs root>/derived/estimate/.gitignore`, holding the single line `*`, created and checked as Where it
-lives in `shared/run-trace.md` does for the trace, all three steps, before the snapshot or its
-temporary file is written:
-
-1. The real path of `<docs root>/derived/estimate/`, or of the nearest part of it that exists,
-   symbolic links included, sits inside the directory `git rev-parse --show-toplevel` prints for the
-   repository that holds the docs root.
-2. The ignore file is created with the harness's own file write where it is missing, and never
-   written to where it is present.
-3. `git check-ignore -q` passes on the snapshot's path and on the temporary file's path.
+`<docs root>/derived/estimate/.gitignore`, holding the single line `*`, created and checked by the
+three steps of Where it lives in `shared/run-trace.md`, before the snapshot or its temporary file is
+written: the real path of `<docs root>/derived/estimate/` sits inside the repository, the ignore file
+is created only where it is missing, and the closing message names it when this run created it. The
+one difference is the last step, `git check-ignore -q`, which runs on the snapshot's path and on the
+temporary file's path.
 
 Where any of the three fails, the run still reads the pool, writes no snapshot and no temporary file,
-and says so in one line. Without a snapshot to load, every run is then a full read. When the run
-created the ignore file, its closing message names it, since it is a new file in the person's working
-tree.
+and says so in one line. Without a snapshot to load, every run is then a full read.
 
 ## The fallback
 
-The snapshot stands in for the tracker only where the tracker is down: the class of failure, per Say
-what failed, not what the tool printed in `shared/ticket-adapters.md`, is host unreachable, or a
-request that timed out. A timeout is named on the sheet as `host unreachable (request timed out)`, a
-case of that class rather than a class of its own.
+The snapshot stands in for the tracker only where the tracker is down, which among the classes of
+failure in Say what failed, not what the tool printed in `shared/ticket-adapters.md` is host
+unreachable. A request that timed out is a case of that class, named on the sheet as
+`host unreachable (request timed out)` rather than as a class of its own.
 
-Forbidden, not found and authentication expired are not an outage. They may mean this person's access
-was revoked or narrowed, and a snapshot read while it was wider would carry on a board the tracker no
+The other classes, forbidden, not found and authentication expired, are not an outage. They may mean
+this person's access was revoked or narrowed, and a snapshot read while it was wider would carry on a board the tracker no
 longer shows them. On those the run uses no snapshot: it is in the third outcome of
 `shared/ticket-adapters.md`, names the class of failure, and sizes from the repository and
 decomposition alone, as it would with no snapshot at all. A Project field that fails to read while
@@ -162,8 +159,8 @@ confidence its sample earns: the snapshot dropped, at its last successful read, 
 the filter, and the sheet names its date, so the reader judges the age. There is no age past which a
 snapshot stops being used.
 
-The tool's error text stays out of the sheet, out of the snapshot, and out of the session, per the same
-section of `shared/ticket-adapters.md`: only the class of failure is named.
+The tool's error text stays out of the snapshot as well as the sheet, per the same section of
+`shared/ticket-adapters.md`.
 
 ## Several runs at once
 
@@ -177,17 +174,9 @@ costs more than a second read.
 ## The sheet
 
 The sheet names where the pool came from only when it was not a complete read. Where the run used the
-snapshot or a partial read, it says so in three places of `references/estimate-template.md`:
-
-- **Appendix B**, the `Source of the actual` of every row taken from it: `snapshot read <date>` or
-  `partial read <date>`.
-- **Appendix C**, the `Comparables pool` item: which of the two was used and the class of failure,
-  with the snapshot's date and age, or the gap the partial read left.
-- **Section 2**, the open question whether to re-run once the tracker answers, owned by the person who
-  accepts the estimate, outside the cap of five unknowns, since it moves no total.
-
-The project-wide share of the measurement check in step 2 is computed from the pool, and the line that
-gives it names the pool's size and the date it was read.
+snapshot or a partial read, it says so in the three places `references/estimate-template.md` gives
+their wording: the `Source of the actual` of each row in Appendix B, the `Comparables pool` item of
+Appendix C, and the re-run question in section 2.
 
 A complete read, full or incremental, writes none of these. Its kind goes to the run trace instead:
 the step 2 line says whether the pool came from a full read, an incremental read, a partial read, the

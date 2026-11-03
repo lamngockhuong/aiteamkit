@@ -82,10 +82,13 @@ still open is a question for its owner, not a number to plan on.
 
 ### 2. Find comparables
 
-Look for similar past work: a similar endpoint, a similar migration, a similar screen. Read the
-tracker first, for closed items like it and the time actually spent on them, from the field
-`shared/ticket-adapters.md` maps as Actual time. Then search the repository, or every repository the
-work touches where the project has several, and the git history. The tracker comes first because a
+Before any item is matched, read the tracker's pool once for the whole run: every closed item that
+records an actual time, from the field `shared/ticket-adapters.md` maps as Actual time, per
+`references/comparables-pool.md`, which holds the query per tracker, the snapshot, and the fallback.
+
+Then, for each item, look for similar past work: a similar endpoint, a similar migration, a similar
+screen. Match it against the pool first, then search the repository, or every repository the work
+touches where the project has several, and the git history. The tracker comes first because a
 squashed history records when work merged, not how long it took. A comparable with a real elapsed
 time beats an opinion. Cite it, by ticket or pull request and the number taken from it.
 
@@ -96,8 +99,8 @@ team's way of working changed, samples from before that date were not built the 
 
 Check that an actual time was measured before it becomes a basis. When most of the comparables the
 sheet cites record an actual exactly equal to their estimate, the field was most likely copied rather
-than measured, and a project-wide share may be given beside that count: say so in
-the artifact, and no item sized from those samples goes above `MEDIUM` confidence.
+than measured, and a project-wide share, computed from the pool, may be given beside that count: say
+so in the artifact, and no item sized from those samples goes above `MEDIUM` confidence.
 
 ### 3. Size
 
@@ -161,6 +164,9 @@ Written to `docs/records/planning/estimate-<date>-<ticket>.md` per `shared/artif
 shape `references/estimate-template.md` fixes: front matter, a one-line total, two numbered
 sections (tasks, open questions), then a folded appendix, in the same order on every
 run, so two estimates for two tickets can be read side by side.
+
+The run also keeps the comparables snapshot of step 2, derived and never staged, per
+`references/comparables-pool.md`; it is not an output anyone reviews.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`: the branch, the commit, and the judgement about whether this one belongs

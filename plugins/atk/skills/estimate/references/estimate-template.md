@@ -91,6 +91,10 @@ At most the five unknowns that would move the total most, one line each: the que
 moves and by roughly how much, and the person who must answer it, per rule 1 of
 `shared/team-roles.md`. The rest go in Appendix A, beside the line they move.
 
+Where Appendix C holds the `Comparables pool` item, one more line follows them, outside the five
+since it moves no total: whether to re-run the estimate once the tracker answers, owned by the person
+who accepts the estimate.
+
 ## Appendix
 
 The whole appendix is one block, so it stays folded where the Markdown renderer supports it:
@@ -148,9 +152,12 @@ coding:
 
 The table is the record of every comparable the lines cite, keyed by its ticket, which is how the
 lines cite it. `Built` is `AI assisted`, `by hand`, or `unknown`. A row whose layer, technology, or way of building
-differs from the task it supports cannot lift that task to `HIGH` confidence. Below the table, one
-line with the measurement check from step 2: how many samples record an actual exactly equal to
-their estimate, the project-wide share where the run measured it, and what that did to confidence.
+differs from the task it supports cannot lift that task to `HIGH` confidence. `Source of the actual`
+names the field the actual came from, and for a row the tracker did not give in a complete read,
+`snapshot read <date>` or `partial read <date>`, per `references/comparables-pool.md`. Below the
+table, one line with the measurement check from step 2: how many samples record an actual exactly
+equal to their estimate, the project-wide share where the run measured it, with the size of the pool
+it was computed from and the date the pool was read, and what that did to confidence.
 An estimate already on the ticket is not a comparable and does not appear here.
 
 ### C. Units, scale, and policy
@@ -179,6 +186,9 @@ A list, one item each:
 - **Comparison model**: the estimate model the project already keeps, and any formula, rate or
   share the Comparison column holds, each named as a source of that column and not of any basis;
   `none` when the column is dropped.
+- **Comparables pool**, written only when the run used the snapshot or a partial read, per
+  `references/comparables-pool.md`, and left out otherwise: which of the two, the class of failure
+  that put the run there, and the snapshot's date and age, or the gap the partial read left.
 
 ### D. Buffer
 
