@@ -4,9 +4,10 @@ Shared output convention for every `atk` skill. Referenced from `skills/<name>/S
 `shared/artifact-paths.md`, which is `../../shared/artifact-paths.md` relative to a skill file.
 
 Every skill that writes a file writes Markdown into the **target project**, never into the atk kit
-itself; `atk:help` writes none, its run trace aside, which is not an artifact. The one exception is `atk:convention`, which may also write the
-project's own collaboration files, one of which is not Markdown; the paragraph after the table says
-what they are.
+itself; `atk:help` writes none, its run trace aside, which is not an artifact. Three exceptions write
+a file that is not Markdown: `atk:convention`, which may also write the project's own collaboration
+files, one of which is not Markdown, as the paragraph after the table says; `atk:qa`, whose cases
+may be exported as CSV; and `atk:estimate`, whose comparables snapshot is tab-separated.
 
 ## Root
 
@@ -24,8 +25,8 @@ Where the shape in `.atk/profile.md` names member repositories, the docs root ha
 root, and that is where an artifact about the project goes: the requirements, the design and its ADR,
 the breakdown, the estimate, the retro, the release record, the security record and the threat
 model, the incident record, the runbook, the onboarding documents, the conventions, the master test
-plan, the reference document of any contract two members share, and the run trace of every skill,
-whose `git` checks run
+plan, the reference document of any contract two members share, the run trace of every skill, and
+the comparables snapshot of `estimate`, whose `git` checks run
 in the repository that holds that root, `git -C <its directory>`, never in the member the session
 started in.
 One tree, read by every team.
@@ -141,7 +142,7 @@ to `docs/adr/` as well.
 | `tailor` | `.atk/overrides/<skill>.md` (see the exception below); a `--feedback` record at `docs/derived/feedback/<skill>-<date>.md`, with everything in the skill name that is not a letter, a digit, or a hyphen flattened to a hyphen, so a namespace becomes `<namespace>-<skill>` and no name a person typed can write outside the directory |
 | `intake` | `docs/records/requirements/<date>-<ticket>-<slug>.md` |
 | `catchup` | `docs/derived/catchup/<date>-<ticket>-<slug>.md`; in document mode, a temporary page at `docs/derived/catchup/documents/<date>-<slug>.md`, held out of git by an ignore file holding `*` in that directory and never offered to be committed, per `skills/catchup/references/document-explainer.md` |
-| `estimate` | `docs/records/planning/estimate-<date>-<ticket>.md`, where `-<ticket>` is the epic when the run was given one, the ticket when it was given exactly one, and left out otherwise: several tickets, a backlog document, or none. Two epics estimated in one minute get two names; two runs that still collide take the next free suffix. Beside it, the comparables snapshot, derived and never staged, at `docs/derived/estimate/comparables-<tracker>-<project>.tsv`, per `skills/estimate/references/comparables-pool.md` |
+| `estimate` | `docs/records/planning/estimate-<date>-<ticket>.md`, where `-<ticket>` is the epic when the run was given one, the ticket when it was given exactly one, and left out otherwise: several tickets, a backlog document, or none. Two epics estimated in one minute get two names; two runs that still collide take the next free suffix. Beside it, the comparables snapshot, derived and never staged, at `docs/derived/estimate/comparables-<tracker>-<project>.tsv`, per `skills/estimate/references/comparables-pool.md`. `--out` moves the sheet alone: the snapshot stays under the docs root, where the next run finds it |
 | `design-doc` | `docs/records/design/<date>-<ticket>-<slug>.md`, ADR at `docs/adr/NNNN-<slug>.md`; under `--spike`, `docs/records/design/<date>-<ticket>-spike-<slug>.md` and no ADR |
 | `spec` | `docs/api/<resource>.md`, `docs/database/<table>.md`, `docs/features/<slug>.md`, `docs/screens/<screen>.md` (see below); `docs/api/conventions.md` and `docs/database/index.md`, the API conventions document and the schema index, where the kit's template is the shape or the project already keeps one |
 | `breakdown` | `docs/records/planning/breakdown-<epic>.md` |
@@ -351,9 +352,9 @@ wants a smaller repository adds one line to `.gitignore`; a team that
 wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Four derived
 kinds are never staged whatever the project does with the directory: the progress log, held out by
 a line in the local exclude file, the rest of its run directory by the staging rule of
-`shared/finalize-steps.md`, or for `atk:orchestrate`'s whole run directory by its own ignore file, and the run trace, held out by an ignore file in its own directory,
-per the two subsections below, the document-mode page of `atk:catchup`, held out as its row
-above says, and the comparables snapshot of `atk:estimate`, held out by an ignore file in its own
+`shared/finalize-steps.md`, or for `atk:orchestrate`'s whole run directory by its own ignore file;
+the run trace, held out by an ignore file in its own directory, per the two subsections below; the
+document-mode page of `atk:catchup`, held out as its row above says; and the comparables snapshot of `atk:estimate`, held out by an ignore file in its own
 directory, per `skills/estimate/references/comparables-pool.md`.
 
 The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two

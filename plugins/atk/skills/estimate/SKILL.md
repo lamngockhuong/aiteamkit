@@ -48,7 +48,9 @@ the unit the tracker records actual time in, so the next estimate can be set aga
 turned into, and in hours where it records none. A field the run could not read is not a tracker
 that records none, per Detected is not reachable in `shared/ticket-adapters.md`: ask before sizing
 whether to wait for access or go on in points alone, and record the choice in Appendix C of the
-sheet.
+sheet. During an outage, where the run falls back to a snapshot whose header names the same field
+and unit, per `references/comparables-pool.md`, that unit answers the question, and Appendix C says
+so.
 
 Two more facts come from `.atk/overrides/estimate.md` before sizing, for a sheet with time: the
 team's disciplines, such as `BE`, `FE`, `QA`, and, for a sheet in hours, the working hours in one person-day. Where it lacks
@@ -193,3 +195,6 @@ Write back only after the team accepts the numbers.
 - [ ] On a sheet with time, every line names one discipline, section 1 totals each discipline, and
       no feature's end-to-end QA is counted on more than one task.
 - [ ] The buffer is a visible line by confidence, not folded into the sizes.
+- [ ] A sheet whose tracker read was not complete, or failed, names it in Appendix B's source
+      column, Appendix C's `Comparables pool` item and the re-run line of section 2, per
+      `references/comparables-pool.md`.

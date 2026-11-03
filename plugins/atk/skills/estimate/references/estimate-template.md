@@ -137,7 +137,11 @@ coding:
   counts that decided it, or for a QA line the tester's steps, `1 h writing 8 cases, 0.5 h
   reviewing them, 2 h executing, 0.5 h smoke and final run`. A share of another line names the
   pairs it was measured on, per step 3 of `SKILL.md`. A number taken over unchecked says
-  `carried over, unchecked` with a link to where it came from.
+  `carried over, unchecked` with a link to where it came from. A title or label the sheet quotes,
+  here or in Appendix B, goes through the list in The data a record must not carry in
+  `skills/qa/references/test-run.md`, as the snapshot's fields do per
+  `references/comparables-pool.md`, so the committed sheet never shows what the ignored snapshot
+  masks.
 - **Hours** is in the sheet's time unit, hours or person-days. Under `--points` the lines table is
   left out, since a line is time and the sheet has none.
 - **Comparison** holds the figure of the model named in Appendix C, and any formula, rate or share
@@ -151,7 +155,7 @@ coding:
 |--------------|-------------|----------------------|-------|-----------|--------|----------------------|
 
 The table is the record of every comparable the lines cite, keyed by its ticket, which is how the
-lines cite it. `Built` is `AI assisted`, `by hand`, or `unknown`. A row whose layer, technology, or way of building
+lines cite it. `What it was` is masked as the Basis column is. `Built` is `AI assisted`, `by hand`, or `unknown`. A row whose layer, technology, or way of building
 differs from the task it supports cannot lift that task to `HIGH` confidence. `Source of the actual`
 names the field the actual came from, and for a row the tracker did not give in a complete read,
 `snapshot read <date>` or `partial read <date>`, per `references/comparables-pool.md`. Below the
@@ -164,8 +168,9 @@ An estimate already on the ticket is not a comparable and does not appear here.
 
 A list, one item each:
 
-- **Time unit** and why: the flag that named it, the tracker field that records actual time, or
-  hours because it records none; or no time, under `--points` or because the field could not be
+- **Time unit** and why: the flag that named it, the tracker field that records actual time, the
+  unit of the snapshot read `<date>` when the tracker was unreachable and the snapshot's mapping
+  matched, or hours because it records none; or no time, under `--points` or because the field could not be
   read, with the class of failure, and the person chose to go on in points alone.
 - **Points**, per Units below: sized from the drivers or from a calibrated rate, and for a rate the
   samples it was calibrated from and the period they cover.
@@ -186,9 +191,11 @@ A list, one item each:
 - **Comparison model**: the estimate model the project already keeps, and any formula, rate or
   share the Comparison column holds, each named as a source of that column and not of any basis;
   `none` when the column is dropped.
-- **Comparables pool**, written only when the run used the snapshot or a partial read, per
-  `references/comparables-pool.md`, and left out otherwise: which of the two, the class of failure
-  that put the run there, and the snapshot's date and age, or the gap the partial read left.
+- **Comparables pool**, written whenever the tracker was read and the read was not complete, or the
+  tracker could not be read, per `references/comparables-pool.md`, and left out otherwise, a tracker
+  that records no actual time and no tracker detected included: the snapshot, a partial read, both, or
+  none; the class of failure that put the run there; and the snapshot's date and age, or the gap the
+  partial read left.
 
 ### D. Buffer
 

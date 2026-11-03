@@ -469,15 +469,15 @@ for f in sorted(glob.glob('plugins/*/skills/*/SKILL.md')):
 assert not bad, 'description over 1,024 characters: %s' % bad
 print('OK descriptions within 1,024 characters')"
 
-# Every references/*.md of either plugin has its row in docs/codebase-summary.md and in the vi mirror,
-# which goes stale silently whenever a reference is added
+# Every references/*.md of either plugin and every ADR has its row in docs/codebase-summary.md and in
+# the vi mirror, which goes stale silently whenever one is added
 python3 -c "
 import glob
 for doc in ('docs/codebase-summary.md', 'docs/vi/codebase-summary.md'):
     s = open(doc).read()
-    miss = [f for f in sorted(glob.glob('plugins/*/skills/*/references/*.md')) if '\n| \x60%s\x60 |' % f not in s]
+    miss = [f for f in sorted(glob.glob('plugins/*/skills/*/references/*.md') + glob.glob('docs/adr/*.md')) if '\n| \x60%s\x60 |' % f not in s]
     assert not miss, '%s has no row for %s' % (doc, miss)
-print('OK every reference has a summary row in both languages')"
+print('OK every reference and ADR has a summary row in both languages')"
 
 # The trace example in plugins/atk/shared/run-trace.md is the shape every run copies: after its two
 # header lines, each line opens with its time and one of the six event kinds
