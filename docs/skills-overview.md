@@ -227,7 +227,9 @@ the skill. A brief nobody has to respond to is a brief nobody has read.
 **Produces.** Points and hours per task, feature, or screen, each with its basis and confidence,
 and a visible risk buffer, with the total split by discipline (BE, FE, QA) and, for a sheet in hours,
 given in man-days too. Capacity and the sprint commitment are not in it: the PM works them out in sprint
-planning from these numbers and the team's resources.
+planning from these numbers and the team's resources. Beside the sheet it keeps a dated snapshot of
+the tracker's comparables under `docs/derived/estimate/`, held out of git, which the next run
+refreshes and which stands in for the tracker while it is down.
 
 **Use when.** Before sprint planning, a client asks how long, or scope changed and the numbers need
 redoing.

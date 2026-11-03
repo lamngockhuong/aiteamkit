@@ -34,7 +34,7 @@ flowchart TB
 |-------|---------------|--------|-----------------|-----------------|
 | Reference | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Yes, except under the `workspace` shape, where the project root belongs to no repository and nothing tracks them | Always, in place | No. It is the only statement of what the system does today, or, under `Contract: first`, is agreed to do |
 | Record | everything under `docs/records/`, plus `docs/adr/` | Yes | No. Supersede it instead. A design and its ADR are edited in place until `APPROVED`, and an `APPROVED` plan until a phase starts. A test run record takes its `status`, its `Ticket` cells, and a recorded redaction, and nothing else | Only as a decision somebody owns, never as a blanket rule |
-| Derived | everything under `docs/derived/` | Optional, apart from the progress log, the run trace, and the document-mode page of `atk:catchup` in `docs/derived/catchup/documents/`, which are never staged | Run the skill again | Yes, freely, apart from an unfinished progress log, which costs the ruled-out work |
+| Derived | everything under `docs/derived/` | Optional, apart from the progress log, the run trace, the document-mode page of `atk:catchup` in `docs/derived/catchup/documents/`, and the comparables snapshot of `atk:estimate` in `docs/derived/estimate/`, which are never staged | Run the skill again | Yes, freely, apart from an unfinished progress log, which costs the ruled-out work, and the comparables snapshot, which costs the next estimate one full read of the tracker and, while the tracker is down, its fallback |
 
 ## The three files that are not in any group
 
@@ -72,7 +72,7 @@ actions; the person who handed over left six months ago and their handover file 
 that survived them; a branch nobody remembers opening came from a client request, and only the
 orchestration proposal that ran it says which.
 
-**Derived.** Nothing, apart from the progress log and the run traces below. The implementation record and the shipping
+**Derived.** Nothing, apart from the progress log, the run traces and the comparables snapshot below. The implementation record and the shipping
 record are copies of what lives on the pull request, a feedback record is a copy of what was filed
 on the kit repository, a catchup brief is rebuilt by running `atk:catchup` again, a review report by
 running `atk:review` again, or `atk:plan --review` where what was reviewed was a plan, or
@@ -97,7 +97,13 @@ one costs that evidence and nothing downstream. The page `atk:catchup` writes in
 `docs/derived/catchup/documents/`, is the eleventh: a temporary page held out of git by an ignore
 file in its own directory, never offered to be committed, and read by no later run, since
 `atk:fix --findings` walks only the page its own `atk:catchup` call returns in the same session, so
-deleting one costs only running the skill again. Ten skills read one of the first ten. Those four each read their own newest unfinished log before starting, and
+deleting one costs only running the skill again. The comparables snapshot `atk:estimate` keeps under
+`docs/derived/estimate/`, one file per tracker and project, is the twelfth: held out of git by an
+ignore file in its own directory, never staged, and read by the next run of `atk:estimate`, which
+refreshes it from what changed and falls back to it when the tracker is down, so deleting one costs
+that run one full read of the tracker, and during an outage the fallback. Eleven skills read one of
+the twelve kinds: the progress log, the run log of `atk:run-cases`, the review report, the run trace,
+and the comparables snapshot. The four that write a progress log each read their own newest unfinished log before starting, and
 offer to resume it, asking first when its branch or start commit no longer matches. `atk:run-cases`
 reads the run log of an earlier run of the same cases file, to offer the cases that run deferred and
 to name data it created with no record after it; where that run wrote a record, the record lists the
@@ -133,9 +139,10 @@ decision that vanished without leaving a note saying what it had decided.
 `docs/derived/` is the only part of the tree the kit says a project may keep out of git. One line in
 `.gitignore` and the copies stop accumulating. Nothing in the skill chain breaks, because every
 original is still on the pull request or a single command away. A project that commits it still
-leaves the progress logs, the run traces and the document-mode pages of `atk:catchup` out, since
-each is one person's working state, one run's account, or a temporary explanation, not a copy, and
-all three are held out of git whatever the project does.
+leaves the progress logs, the run traces, the document-mode pages of `atk:catchup` and the
+comparables snapshots of `atk:estimate` out, since each is one person's working state, one run's
+account, a temporary explanation, or one working tree's copy of the tracker, which a teammate would
+otherwise read as current, and all four are held out of git whatever the project does.
 
 Do not extend the same line to `docs/records/`, for two reasons that have nothing to do with disk
 space:
