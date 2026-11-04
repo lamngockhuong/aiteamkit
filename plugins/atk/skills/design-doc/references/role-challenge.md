@@ -52,3 +52,6 @@ Below the table, what `shared/independent-challenge.md` asks for: the agents tha
 model asked for, any role left out and why, and how many objections were dropped as unfounded. A later challenge of the same
 draft follows it as `Pre-review objections, <YYYY-MM-DD>`, its IDs continuing the numbering, `O3`
 after `O2`, so `--answer` can name every objection by its ID alone.
+
+The run's closing message lists every kept objection with its answer, per In the closing message in
+`shared/independent-challenge.md`.

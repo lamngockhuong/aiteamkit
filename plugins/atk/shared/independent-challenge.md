@@ -82,3 +82,12 @@ Below the table: the agents that ran, with any model asked for, any lens left ou
 dropped as unfounded. Where nothing was kept, the section is still written, with `None kept.` in
 place of the table and the same lines below it. A reviewer reading a table with no drops and no
 open rows should be able to tell that from a pass that found nothing.
+
+## In the closing message
+
+The person who ran the challenge reads its result in the run's closing message, not by opening the
+artifact. The message lists every objection kept, one line each: its ID, its lenses, the objection
+in one line, and its answer, `Changed` with the section or `Open for` the person or role the citer
+names. Then how many were raised, merged and dropped, and any lens not run. What the run thinks
+matters most may follow the list, never replace it. Where nothing was kept, the message says
+`None kept.` with the same counts.

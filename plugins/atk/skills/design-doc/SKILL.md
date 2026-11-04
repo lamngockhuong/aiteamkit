@@ -110,7 +110,12 @@ version under review.
 - **`IN REVIEW`.** Refused in one line that points at `--answer`: in review, an answer, an option a
   reviewer asked for, and a decision settled are all recorded through it. With `--adr` or
   `--challenge`, the line says instead that the design goes back to `DRAFT` first, by its author
-  editing the status and telling the approver, since both are draft steps it skipped.
+  editing the status and telling the approver, since both are draft steps it skipped. The author
+  may tell the agent to make that edit, as rule 2 of `shared/team-roles.md` lets an approver: an
+  instruction from the design's `owner`, established as that rule establishes the approver's and
+  given after that line was said, to send it back or to run the step anyway, sets the design and its
+  ADR to `DRAFT` together, is traced as a `gate` line of its own, `gate return to DRAFT`, and is
+  followed by the reminder to tell the approver. A request made before the line was said is not one.
 - **`APPROVED`, `SUPERSEDED`, or any other.** Refused as `references/answer-mode.md` refuses it, with
   the line it names.
 
@@ -174,7 +179,8 @@ without one, so a later run that takes the draft up writes none.
 The run never sets `APPROVED`. At its close it names every answer row that reads
 `answered by <name>, not <named person>` or `partial`, which the approver settles through `--answer`
 before approving, per `references/answer-mode.md`, since from `APPROVED` the ruling has nowhere to
-go.
+go. Under `--challenge`, the close also lists every kept objection with its answer, per In the
+closing message in `shared/independent-challenge.md`.
 
 Under `--challenge`, before setting that status, run the role challenge in
 `references/role-challenge.md`: one agent per required reviewer's role reads the draft with nothing
@@ -226,7 +232,8 @@ front matter.
 - [ ] Any earlier design this one replaces, and its ADR, is marked `SUPERSEDED` and linked in both
       directions.
 - [ ] Under `--challenge`, every kept objection is answered as changed or left open for its role,
-      the dropped ones are counted, and the section says it is not a review or an approval.
+      the dropped ones are counted, the section says it is not a review or an approval, and the
+      close listed every kept objection with its answer.
 - [ ] Under `--spike`, the record names who set the time box, cites every source with the date it
       was read, keeps prototype code out of the change, and recommends without deciding.
 - [ ] `## Open questions` names, per question, the person who must answer it and the option or

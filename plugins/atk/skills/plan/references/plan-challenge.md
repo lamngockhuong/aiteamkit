@@ -49,7 +49,8 @@ A section 7, `Pre-review objections`, in `plan.md`, after the open questions and
 in the shape `shared/independent-challenge.md` gives, with `Lens` as the second column and the
 opening line "Raised by one agent per lens over the draft; simulated perspectives, not a review and
 not an approval." The section is written only after a challenge ran; a plan never challenged has no
-section 7.
+section 7. The run's closing message lists every kept objection with its answer, per In the closing
+message in `shared/independent-challenge.md`.
 
 What each agent gets, per `shared/independent-challenge.md`, is the plan without its section 7. A
 plan challenged before carries the author's answers there, the reasoning that file keeps from the
