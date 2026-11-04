@@ -225,7 +225,7 @@ the skill. A brief nobody has to respond to is a brief nobody has read.
 ## `atk:estimate`
 
 **Produces.** Points and hours per task, feature, or screen, each with its basis and confidence,
-and a visible risk buffer, with the total split by discipline (BE, FE, QA) and, for a sheet in hours,
+and a visible risk buffer, with the total split by discipline (BE, FE, QA) in points and hours and, for a sheet in hours,
 given in man-days too. Capacity and the sprint commitment are not in it: the PM works them out in sprint
 planning from these numbers and the team's resources. Beside the sheet it keeps a dated snapshot of
 the tracker's comparables under `docs/derived/estimate/`, held out of git, which the next run
@@ -234,7 +234,8 @@ refreshes and which stands in for the tracker while it is down.
 **Use when.** Before sprint planning, a client asks how long, or scope changed and the numbers need
 redoing.
 
-**Do not use when.** The items have no acceptance criteria. The skill will mark them `NEEDS INTAKE`
+**Do not use when.** The items have no acceptance criteria, neither on the ticket nor in a design it
+links or a pull request that names it. The skill will mark them `NEEDS INTAKE`
 rather than guess, which is the correct answer but not the one you wanted.
 
 **The habit that matters.** Every number carries the basis it came from, usually a comparable past

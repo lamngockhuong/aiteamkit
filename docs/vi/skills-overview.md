@@ -230,7 +230,7 @@ tóm tắt không bắt ai phản hồi là bản tóm tắt không ai đọc.
 
 **Sinh ra.** Point và giờ cho từng task, tính năng hay màn hình, mỗi con số kèm căn cứ và độ tin
 cậy, cùng phần buffer rủi ro hiện rõ thành một dòng riêng, và tổng được tách theo discipline (BE,
-FE, QA), với sheet tính bằng giờ thì ghi thêm cả man-day. Capacity và cam kết sprint không nằm ở đây: PM tính
+FE, QA) cả bằng point lẫn giờ, với sheet tính bằng giờ thì ghi thêm cả man-day. Capacity và cam kết sprint không nằm ở đây: PM tính
 chúng trong buổi sprint planning từ các con số này và nhân lực của team. Bên cạnh sheet, skill giữ
 một snapshot có ngày của các việc tương tự trên tracker ở `docs/derived/estimate/`, nằm ngoài git,
 được lần chạy sau làm mới và thay cho tracker khi tracker không truy cập được.
@@ -238,7 +238,8 @@ một snapshot có ngày của các việc tương tự trên tracker ở `docs/
 **Dùng khi.** Trước buổi sprint planning, khách hỏi mất bao lâu, hoặc phạm vi đổi và cần ước lượng
 lại.
 
-**Không dùng khi.** Các hạng mục chưa có tiêu chí nghiệm thu. Skill sẽ đánh dấu `NEEDS INTAKE` thay
+**Không dùng khi.** Các hạng mục chưa có tiêu chí nghiệm thu, cả trên ticket lẫn trong thiết kế mà
+ticket liên kết tới hay pull request nhắc tới ticket. Skill sẽ đánh dấu `NEEDS INTAKE` thay
 vì đoán, đó là câu trả lời đúng nhưng không phải câu bạn muốn nghe.
 
 **Thói quen tạo ra khác biệt.** Mỗi con số đều mang theo căn cứ của nó, thường là một hạng mục tương
