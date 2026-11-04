@@ -552,10 +552,12 @@ cả từ file mẫu của dự án.
 
 Khi thay đổi chạm vào thư mục app trong dòng `App` không bắt buộc của profile, run còn điều khiển app
 trên thiết bị Android. Run kiểm tra backend của bản build là máy này trước khi khởi động bất cứ thứ
-gì, khởi động emulator khi chưa có cái nào chạy, build và cài bản thay đổi, đi qua tiêu chí chấp nhận
+gì, khởi động emulator khi người dùng chọn dùng một emulator, build và cài bản thay đổi, đi qua tiêu chí chấp nhận
 bằng khả năng tự động hoá thiết bị của harness, rồi kiểm hiệu ứng phụ trong stack local như với mọi
 request. Thiết bị thật chỉ được dùng khi người dùng nêu tên nó, nó chỉ chứa tài khoản test, và người
-dùng đồng ý cài; nó tới được stack local qua port reverse trên USB, thứ run gỡ đi khi kết thúc. Bước
+dùng đồng ý cài; nó tới được stack local qua port reverse trên USB, thứ run gỡ đi khi kết thúc, hoặc,
+khi người dùng đồng ý, qua địa chỉ của máy này trên mạng nội bộ, mà báo cáo ghi theo loại chứ không
+ghi chính địa chỉ. Bước
 dọn dẹp chỉ tắt emulator do chính run này khởi động và không bao giờ gỡ app khỏi thiết bị thật. Không
 có khả năng tự động hoá thiết bị thì stack và các phép kiểm request vẫn chạy, và báo cáo liệt kê các
 tiêu chí của app là chưa được thực thi.

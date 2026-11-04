@@ -46,6 +46,10 @@ bao giờ tự chạy case và `verify` vẫn là bước lập trình viên t�
 phần việc còn cần và, khi có người duyệt, chạy chúng song song trong các worktree, chuyển mọi câu hỏi
 và yêu cầu duyệt tới đúng người chứ không trả lời thay, và dừng mã nguồn ở một commit cục bộ.
 
+Client thiết bị đến sau đó: `verify` và `run-cases` điều khiển một app Android native trên emulator
+hoặc điện thoại bên cạnh trình duyệt, như `docs/adr/0011-run-cases-drives-a-device-as-a-second-client.md`
+ghi lại. iOS được theo dõi ở #155, còn việc đo khả năng tự động hoá thiết bị trên Cursor và Codex ở #156.
+
 Lớp `plugins/atk/shared/` giữ những gì lẽ ra phải lặp lại hai mươi lăm lần: từ vựng vai trò, quy ước đường dẫn
 artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười chín file còn lại là hợp đồng
 giữa những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
@@ -62,7 +66,7 @@ thế nào cho người chưa mở file nào nó trích dẫn, `independent-chal
 giá trị bí mật duy nhất cùng danh sách file mà nguyên tắc 9 giữ không đọc, `review-fix-loop.md` là
 lượt review mà `implement`, `fix` và `orchestrate` chạy trên chính thay đổi của mình, `run-trace.md`
 là những gì mỗi lượt chạy để lại cho `tailor` đọc, `device-sessions.md` là những gì
-`run-cases` và `verify` làm trên thiết bị khi client của chúng là một app, `project-profile.md` mô tả
+`verify` và `run-cases` làm trên thiết bị khi client của chúng là một app, `project-profile.md` mô tả
 `.atk/profile.md`, một file nằm trong dự án đích chứ không
 nằm trong kit, và `project-overrides.md` mô tả
 `.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ

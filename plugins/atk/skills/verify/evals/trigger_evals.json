@@ -34,5 +34,8 @@
   { "query": "PR 82 を実機確認して", "should_trigger": true },
   { "query": "execute the test cases file against the DEV environment", "should_trigger": false },
   { "query": "thực thi bộ test case này trên môi trường DEV", "should_trigger": false },
-  { "query": "STG環境でテストケースを実行して", "should_trigger": false }
+  { "query": "STG環境でテストケースを実行して", "should_trigger": false },
+  { "query": "run the written test cases on the Android app on my phone against the DEV environment", "should_trigger": false },
+  { "query": "chạy bộ test case đã viết trên app Android ở máy ảo, với môi trường DEV", "should_trigger": false },
+  { "query": "書いたテストケースをAndroidエミュレータのアプリでSTG環境に対して実行して", "should_trigger": false }
 ]

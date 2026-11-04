@@ -15,9 +15,11 @@ in the triage report, never scored and never run.
 A row whose `Platform` cell names only platforms other than the run's client, `Android` on a browser
 run or `Web` on an Android one, is skipped the same way: counted in the triage report beside the
 removed rows, never scored and never run. An empty cell, or no such column, means every client, per
-The Platform column in `skills/qa/references/test-case-template.md`. A case with an empty cell whose steps name a control only one platform has, the
+The Platform column in `skills/qa/references/test-case-template.md`. A value other than `Web`,
+`Android` or `iOS` is asked about once, with the rows that carry it, before any of them is skipped
+or scored. A case with an empty cell whose steps name a control only one platform has, the
 Android system back control on a browser run, is `BLOCKED` with that reason, as a page grounding
-cannot find is.
+cannot find is, and that is settled here, beside the two skips, before any case is scored.
 
 The table is read by the columns that template names. A file that lacks `Page` or `Priority`, or
 names them differently, is asked about once: which column holds the page, which the priority. With no
@@ -109,11 +111,11 @@ Criteria 2 and 6 are stated for the browser client above. On a device client the
 
 | # | Criterion | 2 | 1 | 0 |
 |---|-----------|---|---|---|
-| 2 | The result can be observed on the device | In the app's accessibility hierarchy, or the screen reached | Reachable indirectly: another screen, a pull to refresh, the app relaunched | Out of reach: pixels, a file, a mail, a push notification's content the automation cannot read, a server log, a request's status or body, the app's log |
-| 6 | It can be driven on the device | Launch, tap, type, select, scroll | Swipe, long press, a system permission dialog, rotation, the system back control | Outside the app: another app, the camera or microphone with real input, biometrics on a real device, a phone call or SMS |
+| 2 | The result can be observed on the device | In the app's accessibility hierarchy, or the screen reached, named by the hierarchy | Reachable indirectly: another screen, a pull to refresh, the app relaunched | Out of reach: pixels, a file, a mail, a push notification's content the automation cannot read, a server log, a request's status or body, the app's log |
+| 6 | It can be driven on the device | Launch, tap, type, select, scroll | Swipe, long press, a system permission dialog, rotation, the system back control; on an emulator where the device automation can simulate them, biometrics, a location and a push notification | Outside the app: another app, the camera or microphone with real input, biometrics on a real device, a phone call or SMS |
 
-Biometrics, a location and a push notification score 1 on criterion 6, not 0, on an emulator where
-the device automation can simulate them, and the triage report says the score depends on that. A
+Where biometrics, a location or a push notification scores 1 on criterion 6, the triage report says
+the score depends on the device automation simulating it on an emulator. A
 case that reaches a field by position, per Ground the cases in the code above, scores criterion 3 no
 higher than 1, and its line in the triage report says why.
 
@@ -132,8 +134,8 @@ Apply in this order. The first two steps are absolute, and no later step or scor
    `references/environment-safety.md`. A case whose result is subjective or cannot be observed has
    nothing to automate, and one that leaves the run's client, the browser or the app, or depends on a flow that will not repeat
    cannot be run to a result the run saw.
-2. **`BLOCKED`** when grounding found no page for it, or its steps name a control the run's client
-   does not have, per The cases to triage. It is never attempted.
+2. **`BLOCKED`** when grounding found no page for it, or, per The cases to triage, its steps name a
+   control the run's client does not have. It is never attempted.
 3. **`SEMI-1`, `SEMI-2`, or `SEMI-3`** when one obstacle stands between the case and a run, per the
    table below. A blocker that no person's single step can clear makes the case `MANUAL` instead.
 4. **By total** for what is left: 13 to 16 `AUTO`; 9 to 12 a `SEMI` subtype by its obstacle, or

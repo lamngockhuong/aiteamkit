@@ -7,7 +7,10 @@ assert that something really happened, and how to put the machine back the way i
 Every command in this file is a blank. The real one comes from the `Verify` and `Commands` sections
 of `.atk/profile.md`, which is per project. A tool name or a port number written into this file would
 be right for one repository and wrong for every other, and would be copied anyway because a written
-command looks authoritative.
+command looks authoritative. The device commands the `App` line does not hold, booting an emulator,
+listing devices and their port reverses, setting up and removing a reverse, and shutting an emulator
+down, come from the platform tool's own help at the time of use, are shown to the person before they
+run, and carry the confirmed serial.
 
 ## The data store before anything starts
 
@@ -107,26 +110,39 @@ factory the tests use, a seed file.
 
 Only where the change touches the app's directory in the `App` line of the profile's Verify section,
 so that step 1 settled a device client. A profile with no `App` line, or a change outside that
-directory, skips this section and every device paragraph below.
+directory, skips this section and every device paragraph below; an acceptance criterion the app
+shows, in a run with no device client, still goes to Not verified as not exercised. On a device
+client every rule of `shared/device-sessions.md` holds, as it does in `atk:run-cases`.
 
-Step 1 runs this check with the local-only check, before the stack, an emulator or a build is
-started. The backend of the variant the `App` line's install command builds is read per Reading a
+Step 1 settles the client with the local-only check, before the stack, an emulator or a build is
+started: which device, one already running or an emulator the run boots. It is settled only where
+the harness lists device automation, per Device automation in `shared/host-capabilities.md`;
+otherwise there is no device client, and nothing is booted, built or installed. A real device is
+used only once the person says, in one answer, that it holds test accounts only, per Real devices
+in `shared/device-sessions.md`, and yes to installing on it.
+The running emulators, the attached devices and their port reverses are listed here, with the
+process inventory, and a port the person already reverses is never reused.
+
+The backend of the variant the `App` line's install command builds is read per Reading a
 build in `shared/device-sessions.md`: from the build configuration in the repository, or, where that
 names no backend or points at a file rule 9 of `shared/team-roles.md` keeps unread, from the person's
 confirmation of where the build points. The `Local only` command checks the stack, never the build.
 The backend must be this machine, reached the way the device can reach it:
 
-- on an emulator, the emulator's alias for the host loopback;
-- on a real device, the host loopback through a port reverse over USB to the confirmed serial, so
+- on either kind of device, the host loopback through a port reverse to the confirmed serial, so
   the stack keeps listening on loopback alone. The reverse is a resource this run creates, recorded
   with the command that removes it, per Cleaning up;
-- on a real device, this machine's address on the local network only on the person's yes, with the
-  address the stack then listens on recorded in the report, since the stack is reachable from that
-  network for the length of the run.
+- on an emulator, the emulator's alias for the host loopback;
+- on a real device, this machine's address on the local network only on the person's yes, the
+  report saying the stack listened on the host's LAN address, never the address itself, since the
+  stack is reachable from that network for the length of the run.
 
 A build pointing anywhere else stops the run, as a host that is not this machine does at step 1, and
 names the person the `Team` section gives for the environment. The report says which source the
-check rests on, the repository or the person's confirmation.
+check rests on, the repository or the person's confirmation. Where it rests on the person's word,
+and the stack logs each request, the first case waits for the app's first request in that log,
+and a request that never arrives stops the run the same way; where the stack logs none, the report
+says the backend rests on the person's word alone.
 
 ## Starting
 
@@ -138,18 +154,26 @@ Start in dependency order, and treat each step as unfinished until its readiness
 3. **Anything that consumes in the background.** Workers and schedulers, when the case under
    verification depends on one. A queue assertion against a system with no consumer running proves
    only that the message was enqueued, which is worth writing down as exactly that.
-4. **The app on a device**, when step 1 settled a device client, once the stack is ready. Boot an
-   emulator only when the run chose to, recording the boot's command, PID and device serial; wait for
-   it to report itself booted, with a timeout stated in the report. Set up the port reverse a real
-   device needs. Build and install the app with the `App` line's install command, under the
-   conditions The device in `shared/device-sessions.md` sets for every command of that line, on a
-   real device only after the person's yes to installing. Where the install command does not run,
-   because that file's conditions hold it back or the person says no, nothing is launched: the
-   build on the device is not the change, and each criterion that needs the app goes to Not
-   verified with that reason. After a round of step 4 that changed files
-   under the app's directory, build and install again before the re-run, since a case re-run
-   against the earlier build says nothing about the fix. Then launch the app by the line's identifier through the harness's
+4. **The app on a device**, only when step 1 settled a device client, which the harness's device
+   automation can drive, and once the stack is ready. Boot an emulator only when the run chose to,
+   with its quick-boot state not saved on shutdown, recording the boot's command, PID and device
+   serial; wait for it to report itself booted, with a timeout stated in the report. Set up the port
+   reverse the build needs. Build and install the app with the `App` line's install command, on a
+   real device only after the person's yes to installing. Each command of the `App` line is shown
+   before its first run in the session, as `Start` is, from a profile at any status, per The device
+   in `shared/device-sessions.md`.
+   Where the install command does not run, because it carries no serial or the person says no,
+   nothing is launched: the build on the device is not the change, and each criterion that needs
+   the app goes to Not verified with that reason. After any change under the app's directory, a
+   round of step 4 or the tidy of step 5, build and install again before the re-run, since a case
+   re-run against the earlier build says nothing about the change; the tidy's re-run comes before
+   the device is cleaned up. Then launch the app by the line's identifier through the harness's
    device automation, and record the build's version per Reading a build in that file.
+
+   Where the app crashes, or a case cannot complete on the device, the case is scored in this
+   skill's terms, never as unresolved: a crash or a wrong screen in the change's own steps is a fail
+   and goes to a round of step 4; a cause the change cannot have made, a device that stopped
+   answering or a system dialog the case does not name, puts the case in Not verified with it.
 
 Record the command, the PID, and the port for each, as `## Process management` in `SKILL.md`
 requires. Record them as they start, not at the end from memory.
@@ -302,9 +326,10 @@ verified that the profile has no `Shared stores` line, and names `/atk:init --au
 
 On a device, cleanup shuts down an emulator only when this run booted it, and leaves one the person
 had running. The build this run installed is left on the device, and the report says so, with the
-identifier and the version; an app is never uninstalled from a real device. A port reverse this run
+identifier and the version, per Real devices in `shared/device-sessions.md`. A port reverse this run
 set up is removed by its recorded command, and the device's list of reverses read again to show it
-gone.
+gone. The running emulators and attached devices are listed again, as at preflight, and the report
+carries what the listing showed.
 
 A resource the run itself created, a database, a container, a bucket, a file outside the working
 tree, a port reverse on a device, is recorded like a process as it is created: what it is, and the command that removes it. At
@@ -344,8 +369,11 @@ On a resume:
   only on the same condition as a process, `HEAD` and `git status` matching the log; otherwise the
   app is built and installed again before the first case, since a build from older code verifies
   nothing about this tree.
+- On a device, the port reverse the log records is read again from the device's list before it is
+  counted as this run's, and a real device's yes to installing is asked again before any install.
 - The data store check of step 1 runs again. What the earlier session saw may no longer be true.
 
 A fresh start chosen by the person counts from zero and treats nothing in the old log as its own:
 a process that log recorded and the inventory still finds is reported to the person as left by an
-earlier run, and is not stopped without their word.
+earlier run, and is not stopped without their word. On a device client the running emulators and
+attached devices are listed too, and an emulator found there is treated the same way.

@@ -92,9 +92,11 @@ tag; on a first release every record counts. Records sort by the time in their f
 `YYMMDD-HHMM`, then by a `-2`, `-3` suffix, the unsuffixed file first, which is what "newest", "after" and "later" mean below; `created` holds only a date and
 is the fallback for a name that carries no time. Then:
 
-- **Evidence behind QA's sign-off.** For each cases file the range touches, link its newest run record
-  whose scope is not `retest`, and, where that one's scope is `ids`, every other run record of the same
-  build whose scope is not `retest`, since a run split between testers and `atk:run-cases` is several
+- **Evidence behind QA's sign-off.** For each cases file the range touches, and for each client its
+  records were run on, a record's client being the suffix of its `Environment`, none meaning the
+  browser, link its
+  newest run record on that client whose scope is not `retest`, and, where that one's scope is `ids`,
+  every other run record of the same client and build whose scope is not `retest`, since a run split between testers and `atk:run-cases` is several
   `ids` records that together make the pass; then the retest records after them, with the build tested, the scope, the
   summary, and the record's `status` as the record states them. Where that run tested an earlier build
   than the one being released, say so; where a record is not `APPROVED`, the QA sign-off line stays
@@ -112,7 +114,8 @@ is the fallback for a name that carries no time. Then:
   tester's scale decides, and the item says there was none. The defects read are those in the range,
   plus any still blocking in the previous release record, carried forward so a defect found before
   that release and never fixed does not drop out of sight.
-  A defect stops blocking once a later record passed its case, whatever that record's scope: a retest,
+  A defect stops blocking once a later record on the same client, as above, passed its case,
+  whatever that record's scope: a retest,
   a full run, or an `ids` run such as one `atk:run-cases` wrote. A
   `Ticket` of `not raised: not a bug` or `not raised: duplicate of ...` lifts the block only when the
   person named after it is the QA lead, and the item says who. One bug is one item: defects whose `Ticket` names the same

@@ -21,9 +21,10 @@ and stop at the first hit:
    criterion). Copy its columns and its ID scheme.
 
 A file whose table is this template's without the `Platform` column is this template too, as an
-earlier version of this skill wrote it, and gets the column only when a case needs one. A file in
-that earlier kit shape is not the team's template either: it is what an older version of this
-skill wrote. It carries no `Section`, `Testcase type`, `Source`, or Sources table, and copying it would
+earlier version of this skill wrote it, and gets the column only when a case needs one; on an
+`APPROVED` file that is one structural change, asked once, per `references/update-mode.md`. A file
+in the kit's earlier shape (ID, title, ...) is not the team's template either: it is what an older
+version of this skill wrote. It carries no `Section`, `Testcase type`, `Source`, or Sources table, and copying it would
 carry those gaps forward. Offer to migrate it to the shape below, keeping every ID, and ask before
 changing it.
 
@@ -270,6 +271,8 @@ run that changes the Markdown, so the two never disagree; nobody edits it by han
    prefix that section gives, so a paste lines up with the sheet column for column.
    A cases file without a `Platform` column exports without one in this table's own layout, and
    with no `Platform:` in the prefix in the company layout.
+   A column the Markdown gained since the CSV was written, `Platform` among them, is added to the
+   header of the CSV beside it when it is regenerated; keeping the old header would drop it.
 2. Rows sorted by Page, then Section in the order `ACCESSING`, `GUI`, `FUNCTION`, then Category,
    Sub-category, Sub-sub category, each of those in the order it first appears in the Markdown rather
    than alphabetically, so the sheet reads in the order the author wrote. The IDs do not change when

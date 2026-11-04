@@ -144,6 +144,8 @@ The approver accepted this set of cases. The run adds, and asks about everything
 - A `MODIFIED` or `DELETED` change to an existing row leaves the row as it is and opens a question
   with both versions: what the row says, and what the source now says. `Take the source` applies it
   on the next run, per section 2.
+- Adding the `Platform` column, when a case first needs one, is one structural change rather than a
+  change to each row: it is asked once, as one question, and every row gains only its empty cell.
 
 Either branch sets `status` back to `IN REVIEW` when any row changed or any question was opened, and
 the approver is who moves it on. The run never sets `APPROVED` on its own; the approver moves it,

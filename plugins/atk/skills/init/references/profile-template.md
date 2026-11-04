@@ -154,9 +154,9 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 - App: <platform, Android in this version>
   - Directory: `<the app's directory from the project root>`
   - Install: `<command that builds the app against the local stack and installs it on adb -s <serial>>`
-  - Id: `<the application identifier to launch>`
-  - Clear: `<command that clears the app's data on the emulator adb -s <serial>>`, or none
-  - Version: `<command that prints the installed build's version on adb -s <serial>>`, or none
+  - Id: `<the package name the chosen variant installs, its suffixes included>`
+  - Clear: `<command that clears the data of the app <id> on the emulator adb -s <serial>>`, or none
+  - Version: `<command that prints the version of the installed app <id> on adb -s <serial>>`, or none
 
 <!-- Local only may read an environment file: rule 9 of shared/team-roles.md counts the approved
      profile as the person's permission. The command prints the host alone, such as
@@ -166,8 +166,11 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
      `Runs from` is what says which. -->
 <!-- App is optional, one line per platform, and only for a project that builds a native or
      cross-platform mobile app. A profile with no App line runs atk:verify and atk:run-cases as
-     before, with no device. `<serial>` stays a placeholder: a skill fills it with the device the
-     person confirmed for the run, so a second device attached never receives the command. Clear
+     before, with no device. It sits in the block of the backend the app builds against, and its
+     commands run from that block's `Runs from`. `<serial>` stays a placeholder: a skill fills it with the device the
+     person confirmed for the run, so a second device attached never receives the command. `<id>`
+     stays one too: a skill fills it with the package it drives, which on a deployed build is not
+     always `Id`. Clear
      runs on an emulator only, never on a real device. See shared/device-sessions.md. -->
 <!-- Prepare is not the Setup line under Commands: Setup installs dependencies, Prepare brings the
      data the application reads to the state of the branch. A command that wipes something another

@@ -99,25 +99,26 @@ struck through as removed, per The cases to triage in `references/triage.md`. No
 says so, as `skills/qa/references/test-run.md` does under What the cases were.
 
 Check which automations the harness offers, browser and device, per Browser automation and Device
-automation in `shared/host-capabilities.md`, and record both. The client is chosen at step 2, and
-only a client whose automation is present can run. Where neither is offered, the run carries on as a
+automation in `shared/host-capabilities.md`, and record the browser automation, and the device
+automation only where step 2 offers a device client. The client is chosen at step 2, and only a
+client whose automation is present can run. Where neither is offered, the run carries on as a
 dry run and ends after step 5, handing the agreed scope to `atk:qa --record`, and the session says so
 now rather than after the triage.
 
-Read the newest run log of an earlier run of this cases file, per The run log in
-`references/execution.md`: offer its deferred cases as `--only`, so a run split over several sessions
+Once step 2 has settled the client, read the newest run log of an earlier run of this cases file on
+that client, per The run log in `references/execution.md`: offer its deferred cases as `--only`, so a run split over several sessions
 picks up where it stopped, and name to the person any data it shows created with no record after it.
 
 ### 2. Target
 
-Settle the client with the target, in the same confirmation: the browser, the default, or an app on
-an Android device, offering the test plan's Compatibility rows where it has them. The device client
-is offered only where the harness lists device automation, the profile has an `App` line, or the
-Compatibility rows name a device; otherwise the browser is settled without a question about it. A device client
-names the device and its kind, and a real device only once the person says it holds test accounts
-only, per `shared/device-sessions.md`. An iOS device is refused in one line, since this version
-drives Android alone, naming https://github.com/lamngockhuong/aiteamkit/issues/155 as where iOS is
-tracked. Where the client the person wants has no automation in the
+Settle the client before the target: the browser, the default, or an app on an Android device,
+offering the test plan's Compatibility rows where it has them. The device client is offered only
+where the profile has an `App` line or a Compatibility row names a native app; otherwise the browser
+is settled without a question about it, and device automation alone never raises one. A device
+client names the device and its kind, a real device only as Real devices in
+`shared/device-sessions.md` allows; the target's confirmation then shows the variant read from that
+device, or the person's answer. An iOS device is
+refused in one line, since this version drives Android alone. Where the client the person wants has no automation in the
 harness, say so here, before any triage: the run carries on as a dry run on that client, as step 1
 says for none.
 

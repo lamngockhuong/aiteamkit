@@ -104,7 +104,7 @@ that would print more is not run; ask for it narrowed. A host that is not this m
 run: this skill sends real requests and writes real side effects, and doing that to a shared
 environment is a real outage rather than a failed test. Say what was found, and hand it to the
 person the `Team` section names for the environment. A role with no name attached reaches nobody,
-and a team that has no SRE deletes that row from its profile, so "tell SRE" can resolve to no one. A change under the app's directory in the profile's `App` line settles the client here too: which device, one running or an emulator the run boots, a real one only with the person's yes to install, and its build's backend checked at the same time, never by the `Local only` host, per The build's backend, on a device in `references/runtime-checks.md`.
+and a team that has no SRE deletes that row from its profile, so "tell SRE" can resolve to no one. A change under the app's directory in the profile's `App` line settles the device client here too, per The build's backend, on a device in `references/runtime-checks.md`.
 
 Then the data store, per The data store before anything starts in `references/runtime-checks.md`:
 the read-only check from the profile's `Prepare` line tells whether the store matches the branch.
@@ -191,8 +191,8 @@ because that is what the next person needs in order to trust it.
 
 Where a round changed code, tidy it first, with the host's code clean-up capability, `/simplify` in
 Claude Code, per `shared/host-capabilities.md`. It covers only what the rounds changed, and the case
-that was failing is re-run after it: a clean-up that puts that case back to red is reverted rather
-than debugged, and the report says so. A run whose rounds changed nothing skips this.
+that was failing is re-run after it, on a device per Starting in `references/runtime-checks.md`: a
+clean-up that turns that case red again is reverted, not debugged, and the report says so. A run whose rounds changed nothing skips this.
 
 Then close it by handing off to `atk:git`, like any other change the kit makes: the reference
 documents the change owes, the branch, the commit, and the consent line that everything past the

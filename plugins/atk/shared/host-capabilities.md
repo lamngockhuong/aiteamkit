@@ -157,7 +157,9 @@ way, per its own runtime checks. Only `atk:run-cases` stops without it, per Brow
 
 A device automation may send usage telemetry by default. That is the person's to configure: a
 skill never changes the automation's configuration or its environment to turn telemetry on or off,
-and a run records the setting as the person reports it, or as not reported.
+and a run asks the person the setting at its first device action and records it as they report
+it, or as not reported. Where it is on or not known, the run says in one line, at its first device action and before the first credential is
+typed, what may leave the machine through it.
 
 The device and the automation's own server belong to the person's machine. A skill never stops
 either unless it started it under its own process management, and what a run does on a device, the

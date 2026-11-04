@@ -46,6 +46,10 @@ while `qa` still never executes a case and `verify` stays the developer's check 
 each piece still needs and, once a person approves, runs them side by side in worktrees, relaying
 every question and approval rather than answering it, and stopping code at a local commit.
 
+A device client came after that: `verify` and `run-cases` drive a native Android app on an emulator
+or a phone beside the browser, as `docs/adr/0011-run-cases-drives-a-device-as-a-second-client.md`
+records. iOS is tracked in #155, and measuring device automation on Cursor and Codex in #156.
+
 The `plugins/atk/shared/` layer holds what would otherwise be repeated twenty-five times: the role vocabulary,
 the artifact path convention, and the tracker adapters, cited by every skill. The other nineteen
 are contracts between smaller groups: `review-checklist.md` between `convention` and `review`,
@@ -63,7 +67,7 @@ it cold, `state-signals.md`, the rows `help` and `orchestrate` read to say what 
 next, `secret-scan.md`, the one scan for secrets and the list of files rule 9 keeps unread,
 `review-fix-loop.md`, the review `implement`, `fix` and `orchestrate` run on their own change,
 `run-trace.md`, what every run leaves for `tailor` to read, `device-sessions.md`, what
-`run-cases` and `verify` do on a device when their client is an app, `project-profile.md`,
+`verify` and `run-cases` do on a device when their client is an app, `project-profile.md`,
 which describes `.atk/profile.md`, a file that lives in the target project rather than in the kit,
 and `project-overrides.md`, which describes `.atk/overrides/<skill>.md` and reaches every skill
 through rule 7 of `team-roles.md` rather than by being cited directly.

@@ -23,9 +23,9 @@ From that row the run takes:
 
 | Column | Used for |
 |--------|----------|
-| `Environment` | The name written into the record's `Environment` header field |
+| `Environment` | The name written into the record's `Environment` header field, followed on a device client by the suffix The record in `references/execution.md` gives |
 | `Kind` | Whether the run may proceed at all, per Acceptable targets below |
-| `URL or location` | The base URL, or on a device client the backend the build must talk to; an empty cell is asked for, from the person the row names |
+| `URL or location` | The base URL, or on a device client the backend the build must talk to, matched per On a device below; an empty cell is asked for, from the person the row names |
 | `Data` | What recon expects to find, the test accounts by role, and the lock threshold; never a credential, per the last paragraph of Credentials below |
 | `Provided by` | The environment owner: the person a stop names, and the person who answers what the row leaves open |
 
@@ -47,8 +47,10 @@ The run proceeds only when both hold:
 1. The row's `Kind` is `staging` or `development`, or a term of the project's own with one of those
    two beside it.
 2. The person who started the run confirms it, in answer to a question that shows the row's name,
-   kind, and URL together, and on a device client the build's variant and the backend it was read
-   to use, per On a device below. The same question asks whether another run or another tester is using the
+   kind, and URL together, and on a device client the deployed build's package for the person to
+   pick, per The device and the app are there below, and the build's variant, read from the device
+   confirmed at step 2 of the skill or given by the person in answer to this question, and the
+   backend it was read to use, per On a device below. The same question asks whether another run or another tester is using the
    row's test accounts now, for The lock threshold below. The confirmation is asked once per run,
    before the first request.
 
@@ -58,11 +60,12 @@ It stops, and changes nothing, in each of these cases:
 |---------------|-----|-----------------------|
 | `Kind` is `production`, or a project term with `production` beside it | The run creates data, logs in with real accounts, and leaves records behind. On production each of those is an incident | That this skill never runs against production, and the row's owner by name |
 | The name or URL carries `prod`, `production`, `live`, or the team's own word for it in the plan's language, as a whole word or a whole part of the host name, whatever `Kind` says. `product` and `delivery` do not match | A `Kind` cell is one person's typing; a URL that says `prod` is the stronger evidence, and the two disagreeing is a question for the owner | The disagreement, and the owner by name as the person who settles it |
-| `Kind` is `local`, or the URL is `localhost`, a loopback address (`127.0.0.0/8`, `::1`), `0.0.0.0`, or this machine's own host name or address | The local stack is the developer's, and `atk:verify` is the skill that runs it, with the process management a local run needs | That a local target is `atk:verify`'s |
-| The URL cannot be reached, or answers with an error other than a gate's, see Credentials below. Not checked under `--dry-run`, which sends nothing | A verdict against an environment that is down is about the environment, not the product | What was tried, by status class, and the owner by name. The run never falls back to another row |
+| `Kind` is `local`, or the URL is `localhost`, a loopback address (`127.0.0.0/8`, `::1`), `0.0.0.0`, this machine's own host name or address, or on a device client the emulator's alias for the host loopback (`10.0.2.2` on the Android emulator) | The local stack is the developer's, and `atk:verify` is the skill that runs it, with the process management a local run needs | That a local target is `atk:verify`'s |
+| The URL cannot be reached, or answers with an error other than a gate's, see Credentials below; on a device client, any answer below `5xx` from the backend counts as reachable. Not checked under `--dry-run`, which sends nothing | A verdict against an environment that is down is about the environment, not the product | What was tried, by status class, and the owner by name. The run never falls back to another row |
 
 A private-network address is not a local one: a development environment often lives on one. The
-question is whether the address is this machine, not whether it is public.
+question is whether the address is this machine, not whether it is public, which is why the
+emulator's alias for the host loopback is local.
 
 ### On a device
 
@@ -71,9 +74,12 @@ target, and every rule above applies to it. Four things are added, all checked b
 launches the app, so before its first request, and the methods they use are in
 `shared/device-sessions.md`.
 
-- **The device and the app are there.** No device answers under the confirmed serial, or the app's
-  identifier from the profile's `App` line is not installed on it: the run stops at step 2 and names
-  what is missing. It never installs the app itself.
+- **The device and the app are there.** No device answers under the confirmed serial, or no
+  package sharing the application ID of the profile's `App` line `Id` is installed on it: the run
+  stops at step 2 and names what is missing. The deployed build's package is the person's pick among
+  those, per The device in `shared/device-sessions.md`, asked in the confirmation of Acceptable
+  targets, since the `Id` names the local variant. It never installs the app itself. A device client that became a dry run, for
+  want of device automation, skips this check, since it sends nothing to the device.
 
 - **The client is not the target.** An emulator on this machine is not a local target, and does not
   trigger the local refusal. The refusal applies to what the build talks to: a row of `Kind` `local`
@@ -81,12 +87,17 @@ launches the app, so before its first request, and the methods they use are in
 - **The build must point at the confirmed row.** The backend each build variant uses is read per
   Reading a build in `shared/device-sessions.md`, from the build configuration in the repository and
   never from a file rule 9 of `shared/team-roles.md` keeps unread, and the variant installed on the
-  device is read as Which variant is installed in that file says. A variant whose backend is
-  production, local, or another row stops the run exactly as a production or local row stops it,
-  naming the row's owner. Where the repository does not say, the person confirms that the build
-  points at the row, and the run log records that the check rests on their confirmation.
-- **The build is identified.** Its version and build number, read in the order Reading a build
-  gives, go into the record's `Build`, and the run log says which source they came from.
+  device is read as Which variant is installed in that file says. A backend matches the row when
+  its scheme and host, and its port where either names one, are those of the row's cell, or of the
+  backend host the row's owner gave for it. Where the cell names the web application rather than a
+  backend, or nothing, the owner is asked once which backend host the build must point at, and the
+  run log records the answer and who gave it. A variant whose backend is anything but the confirmed
+  row's, production, local, another row, or a host no row names, stops the run exactly as a
+  production or local row stops it, naming the row's owner. Where the repository does not say, the
+  person confirms that the build points at the row, and the run log records that the check rests on
+  their confirmation.
+- **The build is identified** per Its version, under Reading a build: its version and build number
+  go into the record's `Build`, and the run log says which source they came from.
 
 ### A row with no usable `Kind`
 
@@ -143,7 +154,8 @@ the account a whole team tests with.
 
 The run needs accounts, and often a gate in front of the application, such as HTTP Basic
 authentication, before the application's own login. A gate of that kind sits in front of a browser;
-a native client does not meet it, and a sign-in screen inside the app is a login like any other. Credentials come from one of two places, the
+on a device client, a gate in front of the backend is the reachability check's, below, and a
+sign-in screen inside the app is a login like any other. Credentials come from one of two places, the
 first preferred, since what is typed into a session stays in its transcript:
 
 1. **Read from a file the project keeps for this purpose**, when the person names one. A file inside

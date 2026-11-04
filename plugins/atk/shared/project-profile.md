@@ -269,12 +269,13 @@ because it has started explaining instead of linking is duplicating a document; 
 long because it is a list of short labelled fields, as Verify is, is fine.
 
 An answer nobody has yet is recorded as `TBD` plus the name of the person who owes it. Never blank,
-and never guessed. The exceptions are `Run trace`, `Reading agent model` and `Review agent model`,
-lines whose absence already has a meaning: with no answer each is left out rather than written
-`TBD`, since a missing `Run trace` is read as on and a missing model line as the harness's own
-choice, and a `TBD` there would read the same while looking like a question somebody still owes. For
-the same reason a re-run of `atk:init` never asks for `Run trace` again, its first run never asks for
-either model line, and `--audit` never reports any of the three as missing or drifted: its absence
+and never guessed. The exceptions are `Run trace`, `Reading agent model`, `Review agent model` and
+`App`, lines whose absence already has a meaning: with no answer each is left out rather than
+written `TBD`, since a missing `Run trace` is read as on, a missing model line as the harness's own
+choice and a missing `App` line as a project with no app on a device, a web project among them, and
+a `TBD` there would read the same while looking like a question somebody still owes. For the same
+reason a re-run of `atk:init` never asks for `Run trace` again, its first run never asks for either
+model line, and `--audit` never reports any of the first three as missing or drifted: its absence
 is an answer.
 
 ## The precondition rule

@@ -202,7 +202,7 @@ Sixteen are contracts between a named handful of skills rather than kit-wide rul
   several questions in a single prompt. It draws the line the kit had drawn only one way before: a
   capability the harness itself ships may be named and used, a command belonging to another kit may
   not, because the first is there for everyone who installed atk on that harness and the second is
-  not. Cited by `atk:run-cases` for browser automation and device automation, and by `atk:verify` for
+  not. Cited by `atk:verify` for device automation, and by `atk:run-cases` for browser automation and
   device automation, which are neither: each
   is named by what it does and never by the plugin or server supplying it, and the one the run's
   client needs is the one capability whose absence stops a skill, since for that skill the browser or
@@ -311,7 +311,7 @@ Sixteen are contracts between a named handful of skills rather than kit-wide rul
   read without opening a file rule 9 keeps unread, the order of assertions, a field the hierarchy
   cannot name, the rules for a real device, the status-bar check on screenshots and element
   lists, a system dialog the case does not name, and text on the device read as evidence. It holds the method both device clients use; which way each skill's target rule points
-  stays in that skill. Cited by `atk:run-cases` and `atk:verify` for their device clients.
+  stays in that skill. Cited by `atk:verify` and `atk:run-cases` for their device clients.
 
 The last two describe files that do not ship with the kit at all:
 
