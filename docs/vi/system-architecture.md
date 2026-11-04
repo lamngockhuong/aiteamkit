@@ -139,7 +139,7 @@ ghi lý do lựa chọn này thuộc về đội và vì sao nó không nằm tr
 
 ## Lớp `shared/`
 
-Hai mươi mốt file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 25 skill trích dẫn:
+Hai mươi hai file giữ những gì các skill sẽ phải lặp lại. Ba file đầu được cả 25 skill trích dẫn:
 
 - `plugins/atk/shared/team-roles.md`: bảng vai trò và mười nguyên tắc mà mọi skill tuân theo.
 - `plugins/atk/shared/artifact-paths.md`: đường dẫn output mặc định theo từng skill, cách một cây docs chia theo
@@ -161,7 +161,7 @@ nguyên tắc 10 của `team-roles.md` đòi hỏi:
   subagent hay trong CLI của agent khác, vẫn đọc lại được về sau, và chỉ `atk:tailor --feedback` mới
   đánh giá một trace có ý nghĩa gì.
 
-Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
+Mười sáu file tiếp theo là hợp đồng giữa một nhóm skill có tên cụ thể, không phải nguyên tắc toàn kit:
 
 - `plugins/atk/shared/review-checklist.md`: nơi một dự án đặt quy ước của mình và thứ tự tra ra nơi đó, định
   dạng bản ghi quy tắc mà `atk:convention` viết ra và `atk:review` trích dẫn theo ID, luật rằng một
@@ -298,6 +298,16 @@ Mười lăm file tiếp theo là hợp đồng giữa một nhóm skill có tê
   chờ một người. `atk:help` trích dẫn file này cho dự án đang làm, còn `atk:orchestrate` đọc nó một
   lần cho mỗi phần việc, ngay trong worktree mà phần việc ấy có riêng. File được chuyển ra khỏi
   references của `atk:help` để hai skill đọc chung một danh sách thay vì hai.
+- `plugins/atk/shared/device-sessions.md`: lượt chạy làm gì trên điện thoại, simulator hoặc emulator
+  khi client của nó là một app trên thiết bị: thiết bị mà một client nêu tên và serial mà mọi lệnh
+  gửi tới nó phải mang, hai ID của cùng một thiết bị, một phiên app cho mỗi lượt chạy, trạng thái
+  sạch qua lệnh xoá dữ liệu trong dòng `App` của profile và chỉ trên emulator, cách đọc backend và
+  phiên bản của một bản build mà không mở file nào nguyên tắc 9 giữ không đọc, thứ tự các phép kiểm,
+  một trường mà cây accessibility không gọi được tên, các quy tắc cho thiết bị thật, và phép kiểm
+  thanh trạng thái trên ảnh chụp màn hình và danh sách phần tử. File giữ cách làm mà cả hai client
+  thiết bị dùng chung; quy tắc đích của mỗi skill hướng về phía nào thì vẫn nằm trong skill đó. Chưa
+  skill nào trích dẫn file này: `atk:run-cases` và `atk:verify` sẽ dùng nó cùng client thiết bị của
+  mình.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

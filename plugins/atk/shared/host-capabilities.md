@@ -137,6 +137,28 @@ saying in the session that the harness offered none. That is the exception to "N
 missing host capability" above, and it stays the only one: a skill whose work a browser only
 improves degrades the usual way.
 
+## Device automation
+
+Driving an installed app on a phone, a simulator or an emulator from the agent: launching and
+stopping the app, reading its accessibility hierarchy, tapping, typing, swiping, pressing the system
+back or home control, answering a system dialog, and taking a screenshot. It is a tool of the person's machine
+like browser automation, supplied by a server, a framework or an integration that differs from one
+machine to the next, so a skill names it "the harness's device automation", and never by the server,
+framework, package or tool that supplies it on one machine, for the reason the section above gives.
+
+Resolve it as Browser automation above is resolved. Which platforms and which device kinds it can drive, an emulator, a simulator or a
+real device, are read from the tool at that time, never assumed: an automation that lists only
+Android devices offers no iOS client.
+
+A device automation may send usage telemetry by default. That is the person's to configure: a
+skill never changes the automation's configuration or its environment to turn telemetry on or off,
+and a run records the setting as the person reports it, or as not reported.
+
+The device and the automation's own server belong to the person's machine. A skill never stops
+either unless it started it under its own process management, and what a run does on a device, the
+app session, the clean state, the order of assertions and the rules for a real device, is in
+`shared/device-sessions.md`.
+
 ## Several questions in one prompt
 
 Claude Code ships this as a single prompt carrying up to four questions, which the user answers in

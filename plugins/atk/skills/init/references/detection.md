@@ -323,6 +323,29 @@ than one worktree or session points at. Detection says which stores exist and re
 shared; the user corrects that in step 2 with every other detected value, so it costs no turn. An
 application with no data store records `none` for both.
 
+### The app on a device
+
+Only for a project that builds a mobile app, and optional: a profile with no `App` line is valid,
+and the skills that read it run as they did without one.
+
+An Android app shows as a Gradle module applying the Android application plugin,
+`com.android.application` or its `alias(libs.plugins...)` form in that module's build file, or as
+the `android/` project of a cross-platform app. The module's directory is `Directory`, and its
+`applicationId`, or the `namespace` where none is set, is `Id`. The build variants or product
+flavours of the module, and the build-config fields each sets, say which variant points at the
+local stack: read them, never a file rule 9 of `shared/team-roles.md` names, and record the variant
+with its file and line as the source.
+
+`Install` is the Gradle task that builds and installs that variant, run against the device by its
+serial, such as `ANDROID_SERIAL=<serial> ./gradlew :app:installLocalDebug`. `Clear` and `Version`
+are the platform tool's commands for that identifier, `adb -s <serial> shell pm clear <id>` and
+`adb -s <serial> shell dumpsys package <id>` narrowed to the version lines, each keeping `<serial>`
+as a placeholder per The device in `shared/device-sessions.md`.
+
+Ask only for what no file holds: which variant is the local one where several could be, and whether
+the project wants `Clear` at all. An iOS project is recorded as found and left without an `App`
+line, since this version drives Android alone.
+
 ## What is never detectable
 
 Ask these, and nothing else:

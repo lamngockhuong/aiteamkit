@@ -198,7 +198,7 @@ open.
 | 5 | The stop after three ruled-out hypotheses | `skills/fix/SKILL.md` |
 | 6 | The stop after three verification rounds | `skills/verify/SKILL.md` |
 | 7 | The read-only boundary of drift checking | `skills/spec/SKILL.md` |
-| 8 | The limits of an agent-executed run: never against production or the local stack, never automating a case that changes data the run did not create or that submits wrong credentials, never recording a result it did not observe, and the stop after three rounds | `skills/run-cases/references/environment-safety.md` |
+| 8 | The limits of an agent-executed run: never against production or the local stack, never automating a case that changes data the run did not create or that submits wrong credentials, never recording a result it did not observe, and the stop after three rounds; and on a device, never clearing data but on an emulator with the profile's command, never uninstalling, installing on a real device only on the person's yes, and a real device only once the person says it holds test accounts only | `skills/run-cases/references/environment-safety.md`, `shared/device-sessions.md` |
 | 9 | The rule that a skill neither opens nor searches `.env` or a credential file without the person's permission, and masks a secret value in everything a run writes or relays | `shared/team-roles.md` rule 9 |
 | 10 | The run trace every run leaves, which only `Run trace: off` in `.atk/profile.md` turns off, for the whole project | `shared/team-roles.md` rule 10 |
 

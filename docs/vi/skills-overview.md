@@ -666,8 +666,10 @@ checklist riêng, kể cả checklist của công ty, thì dùng checklist đó.
 Test case theo một template cố định: ba nhóm `ACCESSING`, `GUI` và `FUNCTION`, một loại test case, nguồn
 cho mọi kết quả mong đợi, ID không bao giờ dùng lại, các cột kết quả chạy để trống, và bản xuất CSV mở
 được trong bảng tính với mỗi bước trên một dòng. Case `GUI` lấy text từ spec màn hình trong
-`docs/screens/`, hoặc từ design khi chưa có spec. Team đã có template hoặc mẫu của công ty thì giữ nguyên
-mẫu đó.
+`docs/screens/`, hoặc từ design khi chưa có spec. Một tính năng giao trên nhiều client có thể điền cột
+`Platform` không bắt buộc, `Web`, `Android` hoặc `iOS`, cho case chỉ đúng trên một nền tảng; ô để
+trống, hoặc file không có cột này, nghĩa là mọi client. Team đã có template hoặc mẫu của công ty thì
+giữ nguyên mẫu đó.
 
 Khi requirement, tài liệu tham chiếu, spec màn hình hay design thay đổi, `--update` đưa file test case
 theo kịp thay vì viết lại từ đầu: case mới nhận ID mới, case bị đổi được viết lại và xóa các ô kết quả

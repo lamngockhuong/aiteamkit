@@ -151,6 +151,12 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
 - Shared stores: <each cache, bucket, mail catcher, or database another session also reads; for a cache or bucket, the read-only command that lists its entries and the command that removes one; for a mail catcher, the read-only commands that list its messages and read one, never one that deletes>, or none
 - Cleanup: `<how to stop what was started>`
 - Local only: `<command that prints the host the app points at, and nothing else>`
+- App: <platform, Android in this version>
+  - Directory: `<the app's directory from the project root>`
+  - Install: `<command that builds the app against the local stack and installs it on adb -s <serial>>`
+  - Id: `<the application identifier to launch>`
+  - Clear: `<command that clears the app's data on the emulator adb -s <serial>>`, or none
+  - Version: `<command that prints the installed build's version on adb -s <serial>>`, or none
 
 <!-- Local only may read an environment file: rule 9 of shared/team-roles.md counts the approved
      profile as the person's permission. The command prints the host alone, such as
@@ -158,6 +164,11 @@ this file and there is nowhere to commit it. It costs what the excluded form abo
      host never reaches the session. -->
 <!-- One block per app. A project whose apps live in different repositories has one block each, and
      `Runs from` is what says which. -->
+<!-- App is optional, one line per platform, and only for a project that builds a native or
+     cross-platform mobile app. A profile with no App line runs atk:verify and atk:run-cases as
+     before, with no device. `<serial>` stays a placeholder: a skill fills it with the device the
+     person confirmed for the run, so a second device attached never receives the command. Clear
+     runs on an emulator only, never on a real device. See shared/device-sessions.md. -->
 <!-- Prepare is not the Setup line under Commands: Setup installs dependencies, Prepare brings the
      data the application reads to the state of the branch. A command that wipes something another
      session uses, such as a seed that resets a shared login pool, does not belong here; name the

@@ -47,7 +47,7 @@ phần việc còn cần và, khi có người duyệt, chạy chúng song song 
 và yêu cầu duyệt tới đúng người chứ không trả lời thay, và dừng mã nguồn ở một commit cục bộ.
 
 Lớp `plugins/atk/shared/` giữ những gì lẽ ra phải lặp lại hai mươi lăm lần: từ vựng vai trò, quy ước đường dẫn
-artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười tám file còn lại là hợp đồng
+artifact và các adapter tracker, đều được mọi skill trích dẫn. Mười chín file còn lại là hợp đồng
 giữa những nhóm nhỏ hơn: `review-checklist.md` giữa `convention` và `review`, `finalize-steps.md` cùng
 `layer-verification.md` giữa ba skill đổi mã nguồn, `diagram-conventions.md` giữa bảy skill có
 artifact mang sơ đồ, `host-capabilities.md` và `tidy-pass.md` quanh phần năng lực do chính harness
@@ -61,7 +61,8 @@ thế nào cho người chưa mở file nào nó trích dẫn, `independent-chal
 `help` và `orchestrate` đọc để biết một phần việc cần gì tiếp theo, `secret-scan.md` là phép quét
 giá trị bí mật duy nhất cùng danh sách file mà nguyên tắc 9 giữ không đọc, `review-fix-loop.md` là
 lượt review mà `implement`, `fix` và `orchestrate` chạy trên chính thay đổi của mình, `run-trace.md`
-là những gì mỗi lượt chạy để lại cho `tailor` đọc, `project-profile.md` mô tả
+là những gì mỗi lượt chạy để lại cho `tailor` đọc, `device-sessions.md` là những gì
+`run-cases` và `verify` làm trên thiết bị khi client của chúng là một app, `project-profile.md` mô tả
 `.atk/profile.md`, một file nằm trong dự án đích chứ không
 nằm trong kit, và `project-overrides.md` mô tả
 `.atk/overrides/<skill>.md`, tới được mọi skill qua luật 7 của `team-roles.md` chứ không phải nhờ

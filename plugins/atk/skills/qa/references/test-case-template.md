@@ -20,7 +20,9 @@ and stop at the first hit:
    from the kit's earlier shape (ID, title, precondition, steps, test data, expected result, priority,
    criterion). Copy its columns and its ID scheme.
 
-A file in that earlier kit shape is not the team's template: it is what an older version of this
+A file whose table is this template's without the `Platform` column is this template too, as an
+earlier version of this skill wrote it, and gets the column only when a case needs one. A file in
+that earlier kit shape is not the team's template either: it is what an older version of this
 skill wrote. It carries no `Section`, `Testcase type`, `Source`, or Sources table, and copying it would
 carry those gaps forward. Offer to migrate it to the shape below, keeping every ID, and ask before
 changing it.
@@ -79,9 +81,9 @@ Last run: YYYY-MM-DD HH:MM:SS +HH:MM, atk:qa --cases
 
 ## Cases
 
-| ID | Page | Section | Category | Sub-category | Sub-sub category | Criterion | Pre-condition | Test data | Steps | Expected result | Priority | Testcase type | Source | Test result | Executed date | Tester | Environment | Note |
-|----|------|---------|----------|--------------|------------------|-----------|---------------|-----------|-------|-----------------|----------|---------------|--------|-------------|---------------|--------|-------------|------|
-| TC-SA0201-FUN-003 | User list | FUNCTION | Check data validation | Email | Max length | AC-1 | Signed in as Service Admin | Local part of 65 characters | 1. Open the user list<br>2. Click Add<br>3. Enter the test data in Email<br>4. Click Save | The message `E-VAL-012` appears under Email and nothing is saved | Medium | Abnormal_Others | `docs/api/users.md`, POST /users; dimension 2, BVA | | | | | |
+| ID | Page | Section | Category | Sub-category | Sub-sub category | Criterion | Pre-condition | Test data | Steps | Expected result | Priority | Testcase type | Platform | Source | Test result | Executed date | Tester | Environment | Note |
+|----|------|---------|----------|--------------|------------------|-----------|---------------|-----------|-------|-----------------|----------|---------------|----------|--------|-------------|---------------|--------|-------------|------|
+| TC-SA0201-FUN-003 | User list | FUNCTION | Check data validation | Email | Max length | AC-1 | Signed in as Service Admin | Local part of 65 characters | 1. Open the user list<br>2. Click Add<br>3. Enter the test data in Email<br>4. Click Save | The message `E-VAL-012` appears under Email and nothing is saved | Medium | Abnormal_Others | | `docs/api/users.md`, POST /users; dimension 2, BVA | | | | | |
 
 ## Open questions
 
@@ -106,6 +108,7 @@ Last run: YYYY-MM-DD HH:MM:SS +HH:MM, atk:qa --cases
 | Expected result | Yes | What a tester can observe, per step 2 of `atk:qa` |
 | Priority | Yes | `High`, `Medium`, or `Low`, from the table in `references/case-dimensions.md` |
 | Testcase type | Yes | One value from Testcase types below |
+| Platform | No | Empty for a case that holds on every client; otherwise one or more of `Web`, `Android`, `iOS`, separated by commas, per The Platform column below |
 | Source | Yes | Where the expected result comes from, per The Source column below |
 | Test result | Left empty | Filled by the tester in the project's own tracking; see below |
 | Executed date | Left empty | As above |
@@ -117,6 +120,15 @@ The five execution columns stay empty in this file. It is a reference document, 
 the feature changes, and a pass recorded in it would be true of one build and read as true of all of
 them. They exist so the exported sheet has the columns a tester fills in, in the order the team's
 spreadsheet expects.
+
+## The Platform column
+
+Optional, for a feature delivered on more than one client: a web app and a mobile app, or an app on
+two mobile platforms. `Web` is the browser client; `Android` and `iOS` are the app on a device of
+that platform. A case that names a platform holds on that platform alone, such as a case on the
+Android system back control, and a case whose cell is empty holds on every client. A cases file
+without the column reads the same as one whose cells are all empty, so no file written before the
+column existed needs editing, and a feature delivered on one client never needs it.
 
 ## The three sections
 
@@ -233,13 +245,14 @@ source. The mapping onto such a sheet is exact for every column it has and says 
 | Sub-sub category | Sub-sub category |
 | Pre-condition, Test data, Steps, Expected result | The same names |
 | Priority, Testcase type | The same names |
+| Platform | Note, in the prefix beside the criterion and the source, as `Platform: Android`, and only where the cell is filled |
 | Test result, Executed date, Tester, Environment | The same names |
 | Criterion, Source | Note, as a prefix before anything the tester writes: `AC-1; docs/api/users.md, POST /users` |
 | Note | Note, after that prefix |
 
 The sheet gains no column: a form whose rules forbid extra columns, such as a test objective or a
-specs column, keeps its header exactly. Where the sheet does have a column for the criterion or the
-source, use it instead of the prefix. A team whose sheet differs from both layouts writes its own
+specs column, keeps its header exactly. Where the sheet does have a column for the criterion, the
+source or the platform, use it instead of the prefix. A team whose sheet differs from both layouts writes its own
 mapping in the override, per The project's own template wins.
 
 ## Exporting to CSV
@@ -255,6 +268,8 @@ run that changes the Markdown, so the two never disagree; nobody edits it by han
    the company layout of Mapping to a spreadsheet form as the two usual answers, rather than choosing.
    A sheet in the company layout gets that layout, its columns only, with the joins and the `Note`
    prefix that section gives, so a paste lines up with the sheet column for column.
+   A cases file without a `Platform` column exports without one in this table's own layout, and
+   with no `Platform:` in the prefix in the company layout.
 2. Rows sorted by Page, then Section in the order `ACCESSING`, `GUI`, `FUNCTION`, then Category,
    Sub-category, Sub-sub category, each of those in the order it first appears in the Markdown rather
    than alphabetically, so the sheet reads in the order the author wrote. The IDs do not change when
@@ -291,7 +306,8 @@ them by matching:
 
 - the headings `Sources`, `Summary`, `Coverage`, `Skipped`, `Cases`, `Open questions`, and the
   `Last run:` line;
-- the column names of the Sources table, `Source` and `Read as`, and of the cases table;
+- the column names of the Sources table, `Source` and `Read as`, and of the cases table, and the
+  `Platform` values `Web`, `Android` and `iOS`;
 - the sections `ACCESSING`, `GUI`, `FUNCTION`, the categories, and the testcase types;
 - the ID shape, the `Removed YYYY-MM-DD:` and `Removed by hand on YYYY-MM-DD.` marks, and
   `[ASSUMPTION]`;

@@ -655,8 +655,10 @@ that keeps its own checklist, a company one included, uses that instead.
 Cases follow a fixed template: the sections `ACCESSING`, `GUI` and `FUNCTION`, a testcase type, a
 source for every expected result, an ID never reused, and empty execution columns, with a CSV export
 that opens in a spreadsheet with each step on its own line. `GUI` cases take their text from the
-screen spec in `docs/screens/`, or from the design when there is none. A team that already has its own
-template or company form keeps it.
+screen spec in `docs/screens/`, or from the design when there is none. A feature delivered on more
+than one client may fill an optional `Platform` column, `Web`, `Android` or `iOS`, for a case that
+holds on one platform alone; an empty cell, or a file without the column, means every client. A team
+that already has its own template or company form keeps it.
 
 When a requirement, a reference document, a screen spec, or a design changes, `--update` brings the
 cases file level with it instead of writing it again: new cases take new IDs, changed cases are
