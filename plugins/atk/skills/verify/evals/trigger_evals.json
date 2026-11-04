@@ -1,6 +1,9 @@
 [
   { "query": "the tests pass but nobody has actually run this, verify it works", "should_trigger": true },
   { "query": "/atk:verify checkout-flow --ui", "should_trigger": true },
+  { "query": "I changed the Android app's login screen, run it on the emulator against my local backend and check the session row is written", "should_trigger": true },
+  { "query": "kiểm chứng thay đổi trên app mobile Android với backend chạy local", "should_trigger": true },
+  { "query": "モバイルアプリの変更をエミュレータでローカル環境に対して動作確認して", "should_trigger": true },
   { "query": "start the app and check the order really gets written to the database", "should_trigger": true },
   { "query": "kiểm chứng tính năng này trên app chạy thật trước khi giao cho QA", "should_trigger": true },
   { "query": "chạy thử thật xem đơn hàng có được ghi vào database không", "should_trigger": true },

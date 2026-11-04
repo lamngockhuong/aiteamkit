@@ -68,6 +68,14 @@ how long it took. Resources the run created that are not processes follow, each 
 that removes it, and the fixtures written before the first request, each with its command and the
 case that needs it.
 
+Where the client was an app on a device: the platform, its OS version, the device kind, the device
+automation's ID for it beside the platform's serial, and the automation's telemetry setting as the
+person reported it. Then the build: the install command, the commit it was built from, its version
+with the source that version came from, and the check of its backend with the source that check
+rests on, the repository or the person's confirmation, per The build's backend, on a device in `references/runtime-checks.md`. An emulator this
+run booted is one of the processes above; a port reverse, or the network address the stack listened
+on for a real device, is one of the resources.
+
 ## 3. Cases
 
 One block per case. Each block holds:
@@ -112,7 +120,8 @@ conclusion, no recommendation dressed as a result.
 
 What could not be checked, and why. A queue with no consumer running, a screen with no design to
 compare against, a case whose data could not be set up, a path that needs an integration this machine
-cannot reach.
+cannot reach. Where the harness had no device automation, each acceptance criterion that needed the
+app, listed as not exercised, with that reason.
 
 An empty section here is a strong claim. Write it only when every case in section 1 was actually
 exercised and asserted, and say so in those words.
@@ -130,6 +139,10 @@ data by its kind, per Cleaning up in `references/runtime-checks.md`. For each sh
 user answered, and the rows each case left there when the answer was to run them. For each mail
 catcher or other channel a code was read from, how many messages each listing held and which message
 the code came from, never the code or the link, and a statement that nothing was deleted from it.
+
+On a device: whether an emulator this run booted was shut down, or one the person had running left
+as it was; the build left installed, by identifier and version; and each port reverse removed, with
+the device's list read again after.
 
 Anything deliberately left running or left in place, why, and how to stop or remove it. A backup
 taken before a preparation is always in this list, with its restore command.

@@ -543,6 +543,16 @@ database other sessions use waits for an answer first, because no listing can sa
 this run's. A start that fails for missing configuration stops with a question too: the run never
 fills in values of its own, not even from the project's example file.
 
+Where the change touches the app's directory in the profile's optional `App` line, the run also
+drives the app on an Android device. It checks that the build's backend is this machine before
+anything starts, boots an emulator when none is running, builds and installs the change, walks the
+acceptance criterion through the harness's device automation, and asserts the side effect in the
+local stack as for any request. A real device is used only when the person names it, holds test
+accounts only, and says yes to the install; it reaches the local stack through a port reverse over
+USB, which the run removes at the end. Cleanup shuts down only an emulator this run booted and never
+uninstalls from a real device. Without device automation the stack and the request checks still
+run, and the report lists the app's criteria as not exercised.
+
 ---
 
 ## `atk:review`

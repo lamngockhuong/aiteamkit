@@ -4,7 +4,8 @@ What a run does on a phone, a simulator or an emulator when its client is an app
 than a browser. Referenced from `skills/<name>/SKILL.md` as `shared/device-sessions.md`, which is
 `../../shared/device-sessions.md` relative to a skill file.
 
-Cited by `run-cases`, for a run on a device client.
+Cited by `run-cases` and `verify`, for a run on a device client, by `host-capabilities.md`, and by
+`init`'s references for the `<serial>` placeholder of the `App` line.
 
 The capability that drives the device is Device automation in `shared/host-capabilities.md`; this
 file is what a run does with it. Which way a skill's own target rule points, a deployed environment

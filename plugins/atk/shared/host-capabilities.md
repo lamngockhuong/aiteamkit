@@ -10,7 +10,7 @@ for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answe
 by `independent-challenge.md` for the agents a challenge spawns, by `review-fix-loop.md` for the
 stated total of a review, by `design-sources.md` for naming
 a connection to a design tool and for how one is read, by `catchup` for how a linked document is
-read in its document mode, by `run-cases` for browser automation and device automation, by `help` for what it may
+read in its document mode, by `run-cases` for browser automation and device automation, by `verify` for device automation, by `help` for what it may
 name, by `init`, `catchup`, `spec`, `convention`, `security`, `fix`, and `onboard` for reading
 wide through an agent, and by `orchestrate` for agents that write and for the parallel-agents policy
 its concurrency follows. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
@@ -151,6 +151,9 @@ framework, package or tool that supplies it on one machine, for the reason the s
 Resolve it as Browser automation above is resolved. Which platforms and which device kinds it can drive, an emulator, a simulator or a
 real device, are read from the tool at that time, never assumed: an automation that lists only
 Android devices offers no iOS client.
+
+`atk:verify` uses it to exercise a change to an app on a device, and degrades without it the usual
+way, per its own runtime checks. Only `atk:run-cases` stops without it, per Browser automation above.
 
 A device automation may send usage telemetry by default. That is the person's to configure: a
 skill never changes the automation's configuration or its environment to turn telemetry on or off,
