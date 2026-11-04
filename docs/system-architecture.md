@@ -27,7 +27,7 @@ aiteamkit/
     assets/*.svg                  icon and logo for marketplace listings
     CHANGELOG.md                  written by release-please for this plugin
     LICENSE                       a copy of the root licence, since the install carries nothing else
-  plugins/atkx/                       a second plugin, three manifests, and skills/skill-eval/
+  plugins/atkx/                       a second plugin, three manifests, skills/skill-eval/ and skills/doc-audit/
     LICENSE                       the same copy
   docs/, docs/vi/               bilingual project documentation
   .atk/                         the kit's own profile and overrides, for running its skills on itself
@@ -77,7 +77,7 @@ There is no `commands/` layer. A skill is its own slash command, named from its 
 ## A second plugin: atkx
 
 `plugins/atkx/` sits beside `plugins/atk/` in the same marketplace, with the same three manifest
-folders and one skill, `skill-eval`. It is for utility skills that depend on no artifact and on
+folders and two skills, `skill-eval` and `doc-audit`. It is for utility skills that depend on no artifact and on
 no delivery lifecycle. The dependency runs one way: an `atkx` skill may call an `atk` skill, and
 `atk` never calls an `atkx` one, so `atk` installed alone stays whole. The one place `atk` names
 `atkx` is `atk:help`, which suggests an `atkx` skill, with its install commands, for a question no
@@ -464,11 +464,18 @@ title + intro      what this produces and the one habit that makes it work
 
 An `atk` skill is that file, its `references/` and its `evals/`, and it may carry `scripts/` as
 well, Node only, for the checks whose answer must repeat; the maintainer allowed it on 2026-10-14,
-and no `atk` skill carries one yet. `atkx:skill-eval` is the one skill with a `scripts/` directory beside them, Node like the hooks and
-for the same reason. Its sample skills must get the same verdict on every run, and a credential
-masked, a host matched against the `SKILL.md`, or a weighted score added up by an agent comes out
-slightly different each time. So the checks whose answer must repeat are scripts, and what needs
-reading stays in `references/`. ADR 0002 records the choice.
+and no `atk` skill carries one yet. Both `atkx` skills carry a `scripts/` directory beside them, Node
+like the hooks and for the same reason. `atkx:skill-eval`'s sample skills must get the same verdict on
+every run, and a credential masked, a host matched against the `SKILL.md`, or a weighted score added
+up by an agent comes out slightly different each time; `atkx:doc-audit`'s citations either resolve or
+they do not, and its verdict table must be refused and counted the same way twice, where a pilot's
+agent miscounted its own. So the checks whose answer must repeat are scripts, and what needs reading
+stays in `references/`. ADR 0002 records the choice for `skill-eval`, and ADR 0012 for `doc-audit`.
+
+`atkx:doc-audit` also keeps copies of `atk` rules it must obey, the files never opened, the value
+mask, the agent rules and the independent challenge, since an install of `atkx` cannot read `atk`'s
+files. Each copy is marked with its origin's GitHub link, and `tests/verify.sh` fails when a copy and
+its origin differ, so a change to one of those `atk` sections lands in `atkx` in the same change.
 
 ## Data flow at runtime
 

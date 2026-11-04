@@ -30,7 +30,7 @@ removed, or renamed; update it in the same commit.
 | `plugins/atk/.codex-plugin/plugin.json` | Codex CLI metadata with `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, plus the `interface{}` listing block: descriptions, `defaultPrompt`, `brandColor`, icon paths |
 | `plugins/atkx/.claude-plugin/plugin.json` | Claude Code metadata for `atkx`, with `"dependencies": ["atk"]` so installing it installs `atk` |
 | `plugins/atkx/.cursor-plugin/plugin.json` | Cursor metadata for `atkx`, with `displayName` and `"skills": "./skills/"` |
-| `plugins/atkx/.codex-plugin/plugin.json` | Codex CLI metadata for `atkx`, with `"skills": "./skills/"` and an `interface{}` block naming `skill-eval` |
+| `plugins/atkx/.codex-plugin/plugin.json` | Codex CLI metadata for `atkx`, with `"skills": "./skills/"` and an `interface{}` block naming `skill-eval` and `doc-audit` |
 
 ## Shared layer
 
@@ -227,9 +227,9 @@ all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` 
 | `plugins/atk/skills/onboard/evals/trigger_evals.json` | A person joining, against `handover`, `init`, and `catchup` |
 | `plugins/atk/skills/handover/evals/trigger_evals.json` | A person leaving, against `onboard` and `catchup` |
 
-## The `atkx` skill
+## The `atkx` skills
 
-`skill-eval` is the one skill with `scripts/`: Node, for the checks whose answer must repeat.
+Both carry `scripts/`: Node, for the checks whose answer must repeat.
 
 | File | Purpose |
 |------|---------|
@@ -246,8 +246,20 @@ all three trigger languages. `atk` ships no runner; `atkx:skill-eval --trigger` 
 | `plugins/atkx/skills/skill-eval/references/review-mode.md` | Walking a run in the conversation against the skill's steps, and classifying each deviation |
 | `plugins/atkx/skills/skill-eval/references/report-format.md` | The scoring rules and the report's shape, score line first |
 | `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Evaluating a skill, against `tailor`, `review`, `convention`, `security`, `help` and `qa` |
+| `plugins/atkx/skills/doc-audit/SKILL.md` | Audits documents claim by claim against the code, a requirement source or another document: scope, cheap pass and ranking, the person's pick, full audit, second read, cross-document pass, red team under `--red-team`, and a report kept out of git |
+| `plugins/atkx/skills/doc-audit/references/safety.md` | Copies from `atk`, each marked with its origin and held to it by `tests/verify.sh`: the paths never opened, the `<redacted: kind>` mask with its key kept, and the agent rules, plus the rules every prompt of the skill carries |
+| `plugins/atkx/skills/doc-audit/scripts/cite-check.mjs` | Every path and `path:line` a document cites, checked against the repository that holds it: exists, line in range, a cited identifier within three lines, a path leaving the repository or naming an unread file refused before anything is opened, and per document the counts the ranking uses, printed as JSON of paths, line numbers, booleans and counts only |
+| `plugins/atkx/skills/doc-audit/scripts/tally.mjs` | Validates the verdict table, one of three verdicts per row, evidence on every `CORRECT` and `WRONG`, an owner on every `UNVERIFIABLE`, a second read that agrees with its row, and under `--final` every `WRONG` and the `CORRECT` sample read a second time, then counts it per document as JSON; `--report-dir` makes the fallback directory readable by the user alone |
+| `plugins/atkx/skills/doc-audit/references/claims.md` | What a checkable claim is, the types `BEHAVIOUR` and `INTENT`, the three verdicts and the evidence each needs, who owns an `UNVERIFIABLE` claim, and checking and counting the table by hand without Node |
+| `plugins/atkx/skills/doc-audit/references/full-audit.md` | The prompt of the agent that audits one document, the nine-column verdict table it returns, what the session does with it, and the cross-document pass over the documents audited and those inside the repository they link |
+| `plugins/atkx/skills/doc-audit/references/re-verify.md` | The second read: every `WRONG` and a sample of the `CORRECT` verdicts, one agent per document that does not see the first agent's reasoning, its three answers and what each does to the verdict |
+| `plugins/atkx/skills/doc-audit/references/report-format.md` | Where the report goes, inside the repository and ignored by git or in a directory only the user reads, and what it holds, from `In short` to the full table, with the notes each run states where they apply and the cost line a later run reads back |
+| `plugins/atkx/skills/doc-audit/references/cheap-pass.md` | The pass over every document that reads no code: the citation check, one agent per batch for contradictions inside a document and the signals only reading finds, what each script field means, the ranking with records and mirrors left out, and the citation check by hand without Node |
+| `plugins/atkx/skills/doc-audit/references/red-team.md` | Under `--red-team`, the four lenses agents read a document through, three marked copies of `atk`'s independent challenge held to their origin by `tests/verify.sh`, the objection table of the report, and the prompt |
+| `plugins/atkx/skills/doc-audit/evals/trigger_evals.json` | Auditing a document claim by claim, against `spec`, `catchup`, `review`, `design-doc`, `plan`, `intake` and `skill-eval` |
 | `tests/skill-eval-fixtures/` | A good, a weak and a malicious sample skill for `atkx:skill-eval`, and `expected.json` with the verdict each must get; the check is in `tests/verify.sh`. Outside the plugin, because Codex lists a `SKILL.md` found at any depth under `skills/` as a skill of its own |
-| `tests/verify.sh` | The repository's verification checks, which stand in for a test suite: manifests, names, run-trace lines, the docs mirror, hooks, plugin boundaries, labeler, agents, the secret scan, `atk:orchestrate`'s git premises, trigger eval positives claimed once, description length, summary rows, the run-trace example, the reach of `atk:review` and the rule 5 default its files cite, the skill-lifecycle counts, the layer fields `atk:fix --findings` walks, `.tsv` lists, versions and `atkx:skill-eval`. Every passing check prints a line starting with `OK`; `CLAUDE.md` lists them under "Common verification commands" |
+| `tests/doc-audit-fixtures/` | Sample documents for `atkx:doc-audit`'s two scripts: under `cite/`, a small tree whose documents cite a correct, a stale, an out-of-range and a missing line, with `expected.json` giving each citation's status; the check in `tests/verify.sh` copies it into a scratch repository and builds there the cases that cannot be committed, the unread files, the links and the paths out of the repository; under `tally/`, a valid table, a table the second read has not reached, and a malformed one, with `expected.json` giving the counts and every refusal by row |
+| `tests/verify.sh` | The repository's verification checks, which stand in for a test suite: manifests, names, run-trace lines, the docs mirror, hooks, plugin boundaries, labeler, agents, the secret scan, `atk:orchestrate`'s git premises, trigger eval positives claimed once, description length, summary rows, the run-trace example, the reach of `atk:review` and the rule 5 default its files cite, the skill-lifecycle counts, the layer fields `atk:fix --findings` walks, `.tsv` lists, versions, `atkx:skill-eval`, and `atkx:doc-audit`'s copies of `atk` rules and its two scripts. Every passing check prints a line starting with `OK`; `CLAUDE.md` lists them under "Common verification commands" |
 
 ## Assets
 

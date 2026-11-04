@@ -5,8 +5,8 @@ to reach for it, and when not to.
 
 Read this before adopting the kit: every skill works alone, and a team can start with one.
 
-`atkx`, the plugin beside `atk`, adds a skill that belongs to no phase: `atkx:skill-eval`, described
-after the last `atk` skill.
+`atkx`, the plugin beside `atk`, adds two skills that belong to no phase, `atkx:skill-eval` and
+`atkx:doc-audit`, described after the last `atk` skill.
 
 ## Where they sit
 
@@ -907,6 +907,34 @@ text, a link leaving the skill is reported without opening its target, and nothi
 changes. The security gate is a list of patterns, so a clean gate means none of the listed forms was
 found, not that the skill is safe; a skill from a source you do not trust is still read before it is
 installed.
+
+---
+
+## `atkx:doc-audit`
+
+**Produces.** A report under `docs/derived/doc-audit/`, ignored by git: every checkable claim of the
+documents audited with its line and exactly one verdict, `CORRECT` or `WRONG` with the `path:line`
+or quoted line that settles it, or `UNVERIFIABLE` with the source that would settle it and the
+person, by name, who must answer. Every `WRONG` verdict and a sample of the `CORRECT` ones are read
+again by an agent that never saw the first one's reasoning, and the report prints how many were
+overturned. Contradictions inside a document and between documents are listed apart from the
+verdicts. Given a directory, a cheap pass that reads no code checks every citation with a script,
+looks for contradictions inside each document, and ranks them, with mirrors and records left out;
+the person picks which get the full audit, shown a cost range from earlier runs. `--red-team` adds
+objections from agents reading the document cold, for what no source can settle; `--source` names
+the requirement sources an intent claim is checked against.
+
+**Use when.** A document an agent or a person wrote is about to be trusted, by a tester writing cases
+from it or a developer building against it, and nobody has checked it against the code; or a
+directory of documents has grown faster than anyone could read it.
+
+**Do not use when.** You want the document corrected, which its owner does from the report, or
+`atk:spec` for the reference documents it keeps; you want a document explained, which is
+`atk:catchup`; or the thing to read is a pull request, which is `atk:review`.
+
+**The habit that matters.** A verdict carries its evidence or it is not a verdict. A second agent
+re-reading the same text has nothing to compare it with, so every claim is checked against the line
+that decides it, and a claim nothing in reach decides is named as such, with the person who can.
 
 ---
 

@@ -47,6 +47,7 @@ read from a `SKILL.md` come from here instead:
 | Skill | Use when | Invocation | Harnesses |
 |-------|----------|------------|-----------|
 | `atkx:skill-eval` | Evaluating an agent skill a project has written: its structure, metadata and safety, the project's own conventions for skills, which requests it triggers on, and one score with a grade. Reads the skill and changes nothing in it | `/atkx:skill-eval <skill-path>`; `--trigger` adds trigger measurement | Claude Code, Codex, Cursor; trigger measurement on Claude Code only |
+| `atkx:doc-audit` | Checking a written document claim by claim against the code, a requirement source or another document: one verdict per claim with evidence, contradictions listed apart, and on a directory a cheap pass and a ranking before a person picks what gets the full audit. Changes no document, and its report stays out of git | `/atkx:doc-audit <file>...` or `<dir>`; `--red-team` adds objections to what no source settles | Claude Code, Codex, Cursor |
 
 ## Install
 

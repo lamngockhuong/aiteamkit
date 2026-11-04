@@ -223,11 +223,12 @@ If either works or fails for you, an issue saying which one helps the next perso
 ### atkx
 
 `atkx` is a second plugin in the same marketplace, for utility skills that need no project profile
-and no delivery lifecycle. It holds one skill so far:
+and no delivery lifecycle. It holds two skills so far:
 
 | Skill | What it does |
 |-------|--------------|
 | `atkx:skill-eval` | Evaluates a skill a project has written, for Claude Code, Codex or Cursor: a static check with a security gate, the project's own conventions, trigger measurement on Claude Code, drafted trigger cases, a review of one run, and a composite score with a grade. Changes nothing in the skill it reads |
+| `atkx:doc-audit` | Checks a written document claim by claim against the code, a requirement source or another document: one verdict per claim with its evidence, wrong verdicts read a second time, contradictions listed apart, and on a directory a cheap pass and a ranking before a person picks what gets the full audit. Changes no document; its report stays out of git |
 
 ```bash
 /plugin install atkx@atk
@@ -238,9 +239,17 @@ and no delivery lifecycle. It holds one skill so far:
 /atkx:skill-eval <skill-path> --draft-cases  # also draft trigger cases into a temporary file
 /atkx:skill-eval <skill-path> --review       # also review the skill's run earlier in the conversation
 /atkx:skill-eval <skill-path> --out <path>   # also save the report, no save question
+
+/atkx:doc-audit <file>...                    # full audit of the named documents
+/atkx:doc-audit <dir>                        # cheap pass and ranking, then you pick what to audit
+/atkx:doc-audit <dir> --cheap                # cheap pass and ranking only
+/atkx:doc-audit <path> --source <path-or-issue>...   # requirement sources for intent claims
+/atkx:doc-audit <path> --red-team            # add objections to what no source settles
+/atkx:doc-audit <path> --code <dir>          # code root, when not the repository root
+/atkx:doc-audit <path> --out <path>          # report elsewhere, still ignored by git
 ```
 
-Its scripts need Node, which the `atk` hooks already ask for.
+Their scripts need Node, which the `atk` hooks already ask for.
 
 On Claude Code that installs `atk` with it. On Codex, run `codex plugin add atk@atk` and
 `codex plugin add atkx@atk`, since Codex installs no dependency. `atk` never needs `atkx`.

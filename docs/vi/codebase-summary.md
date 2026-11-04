@@ -30,7 +30,7 @@ thêm, xóa hoặc đổi tên; hãy cập nhật trong cùng commit đó.
 | `plugins/atk/.codex-plugin/plugin.json` | Metadata cho Codex CLI, có `"skills": "./skills/"`, `"hooks": "./hooks/codex-hooks.json"`, cộng khối `interface{}`: mô tả, `defaultPrompt`, `brandColor`, đường dẫn icon |
 | `plugins/atkx/.claude-plugin/plugin.json` | Metadata của `atkx` cho Claude Code, có `"dependencies": ["atk"]` nên cài nó là cài cả `atk` |
 | `plugins/atkx/.cursor-plugin/plugin.json` | Metadata của `atkx` cho Cursor, có `displayName` và `"skills": "./skills/"` |
-| `plugins/atkx/.codex-plugin/plugin.json` | Metadata của `atkx` cho Codex CLI, có `"skills": "./skills/"` và khối `interface{}` nêu tên `skill-eval` |
+| `plugins/atkx/.codex-plugin/plugin.json` | Metadata của `atkx` cho Codex CLI, có `"skills": "./skills/"` và khối `interface{}` nêu tên `skill-eval` và `doc-audit` |
 
 ## Lớp dùng chung
 
@@ -227,10 +227,10 @@ bằng cả ba ngôn ngữ trigger. `atk` không kèm bộ chạy; `atkx:skill-e
 | `plugins/atk/skills/onboard/evals/trigger_evals.json` | Một người vào dự án, đối lại `handover`, `init` và `catchup` |
 | `plugins/atk/skills/handover/evals/trigger_evals.json` | Một người rời việc, đối lại `onboard` và `catchup` |
 
-## Skill của `atkx`
+## Các skill của `atkx`
 
-`skill-eval` là skill duy nhất có `scripts/`: viết bằng Node, cho những phép kiểm tra mà lần nào chạy
-cũng phải ra cùng một kết quả.
+Cả hai đều có `scripts/`: viết bằng Node, cho những phép kiểm tra mà lần nào chạy cũng phải ra cùng
+một kết quả.
 
 | File | Mục đích |
 |------|---------|
@@ -247,8 +247,20 @@ cũng phải ra cùng một kết quả.
 | `plugins/atkx/skills/skill-eval/references/review-mode.md` | Dò một lần chạy trong cuộc hội thoại theo các bước của skill, và phân loại từng chỗ lệch |
 | `plugins/atkx/skills/skill-eval/references/report-format.md` | Quy tắc tính điểm và khung báo cáo, dòng điểm đặt trên cùng |
 | `plugins/atkx/skills/skill-eval/evals/trigger_evals.json` | Đánh giá một skill, đặt cạnh `tailor`, `review`, `convention`, `security`, `help` và `qa` |
+| `plugins/atkx/skills/doc-audit/SKILL.md` | Kiểm từng khẳng định của tài liệu với code, nguồn yêu cầu hoặc tài liệu khác: phạm vi, lượt rà rẻ và xếp hạng, người dùng chọn, kiểm đầy đủ, đọc lại lần hai, đối chiếu giữa các tài liệu, red team khi có `--red-team`, và báo cáo nằm ngoài git |
+| `plugins/atkx/skills/doc-audit/references/safety.md` | Các bản sao từ `atk`, mỗi bản đánh dấu nguồn và được `tests/verify.sh` giữ khớp với nguồn: các đường dẫn không bao giờ mở, cách che `<redacted: kind>` giữ lại khóa, và các quy tắc cho agent, cùng những quy tắc mà mọi prompt của skill phải mang |
+| `plugins/atkx/skills/doc-audit/scripts/cite-check.mjs` | Mọi đường dẫn và `path:line` mà một tài liệu trích dẫn, đối chiếu với repo chứa tài liệu: có tồn tại không, dòng có trong phạm vi không, định danh được nhắc có nằm trong ba dòng quanh đó không; đường dẫn ra khỏi repo hoặc trỏ tới file không được đọc bị từ chối trước khi mở bất cứ thứ gì; và theo từng tài liệu là các con số dùng để xếp hạng, in ra JSON chỉ gồm đường dẫn, số dòng, giá trị đúng/sai và số đếm |
+| `plugins/atkx/skills/doc-audit/scripts/tally.mjs` | Kiểm bảng kết luận, mỗi dòng đúng một trong ba kết luận, có bằng chứng cho mọi `CORRECT` và `WRONG`, có người trả lời cho mọi `UNVERIFIABLE`, lượt đọc lại khớp với dòng của nó, và khi có `--final` thì mọi `WRONG` cùng mẫu `CORRECT` đều đã được đọc lại, rồi đếm theo từng tài liệu ra JSON; `--report-dir` tạo thư mục dự phòng chỉ người dùng đọc được |
+| `plugins/atkx/skills/doc-audit/references/claims.md` | Thế nào là một khẳng định kiểm được, hai loại `BEHAVIOUR` và `INTENT`, ba kết luận và bằng chứng mỗi loại cần, ai chịu trách nhiệm trả lời một khẳng định `UNVERIFIABLE`, và cách kiểm, đếm bảng bằng tay khi không có Node |
+| `plugins/atkx/skills/doc-audit/references/full-audit.md` | Prompt của agent kiểm một tài liệu, bảng kết luận chín cột mà nó trả về, phiên chính làm gì với bảng đó, và lượt đối chiếu giữa các tài liệu được kiểm với những tài liệu trong repo mà chúng liên kết tới |
+| `plugins/atkx/skills/doc-audit/references/re-verify.md` | Lượt đọc lại: mọi `WRONG` và một mẫu các kết luận `CORRECT`, mỗi tài liệu một agent không thấy lập luận của agent đầu, ba câu trả lời của nó và mỗi câu làm gì với kết luận |
+| `plugins/atkx/skills/doc-audit/references/report-format.md` | Báo cáo được ghi ở đâu, trong repo và bị git bỏ qua hoặc trong một thư mục chỉ người dùng đọc được, và báo cáo gồm gì, từ `In short` tới bảng đầy đủ, cùng các ghi chú mỗi lần chạy phải nêu khi áp dụng và dòng chi phí mà lần chạy sau đọc lại |
+| `plugins/atkx/skills/doc-audit/references/cheap-pass.md` | Lượt rà không đọc code trên mọi tài liệu: kiểm trích dẫn, mỗi lô một agent tìm mâu thuẫn trong từng tài liệu và các tín hiệu chỉ đọc mới thấy, ý nghĩa từng trường của script, cách xếp hạng có bỏ bản ghi và bản dịch, và cách kiểm trích dẫn bằng tay khi không có Node |
+| `plugins/atkx/skills/doc-audit/references/red-team.md` | Khi có `--red-team`: bốn lăng kính mà các agent dùng để đọc một tài liệu, ba bản sao có đánh dấu từ phần independent challenge của `atk` được `tests/verify.sh` giữ khớp với nguồn, bảng phản biện trong báo cáo, và prompt |
+| `plugins/atkx/skills/doc-audit/evals/trigger_evals.json` | Kiểm một tài liệu theo từng khẳng định, đặt cạnh `spec`, `catchup`, `review`, `design-doc`, `plan`, `intake` và `skill-eval` |
 | `tests/skill-eval-fixtures/` | Ba skill mẫu tốt, yếu và độc hại của `atkx:skill-eval`, cùng `expected.json` ghi kết quả mỗi mẫu phải nhận; lệnh kiểm nằm trong `tests/verify.sh`. Đặt ngoài plugin vì Codex coi mọi `SKILL.md` nằm ở bất kỳ độ sâu nào dưới `skills/` là một skill riêng |
-| `tests/verify.sh` | Các phép kiểm của repo, thay cho một bộ test: manifest, tên skill, hai dòng run trace, sự khớp nhau giữa `docs/` và `docs/vi/`, hook, ranh giới plugin, labeler, agent, secret scan, các tiền đề git của `atk:orchestrate`, mỗi positive của trigger eval chỉ thuộc một skill, độ dài description, dòng tóm tắt, ví dụ run trace, mức độ hay gặp của `atk:review` cùng quy tắc mặc định của luật 5 mà các file của nó trích dẫn, các con số của skill-lifecycle, các trường mà `atk:fix --findings` đọc trên trang, danh sách `.tsv`, phiên bản và `atkx:skill-eval`. Mỗi phép kiểm đạt in một dòng bắt đầu bằng `OK`; mục kiểm tra ở cuối `CLAUDE.md` liệt kê chúng |
+| `tests/doc-audit-fixtures/` | Tài liệu mẫu cho hai script của `atkx:doc-audit`: trong `cite/` là một cây nhỏ có tài liệu trích dẫn một dòng đúng, một dòng đã cũ, một dòng ngoài phạm vi và một file không còn, cùng `expected.json` ghi trạng thái từng trích dẫn; phép kiểm trong `tests/verify.sh` chép nó vào một repo tạm và dựng ở đó những case không thể commit: các file không được đọc, các link và đường dẫn ra khỏi repo; trong `tally/` là một bảng hợp lệ, một bảng chưa qua lượt đọc lại và một bảng sai định dạng, cùng `expected.json` ghi số đếm và từng lần từ chối theo dòng |
+| `tests/verify.sh` | Các phép kiểm của repo, thay cho một bộ test: manifest, tên skill, hai dòng run trace, sự khớp nhau giữa `docs/` và `docs/vi/`, hook, ranh giới plugin, labeler, agent, secret scan, các tiền đề git của `atk:orchestrate`, mỗi positive của trigger eval chỉ thuộc một skill, độ dài description, dòng tóm tắt, ví dụ run trace, mức độ hay gặp của `atk:review` cùng quy tắc mặc định của luật 5 mà các file của nó trích dẫn, các con số của skill-lifecycle, các trường mà `atk:fix --findings` đọc trên trang, danh sách `.tsv`, phiên bản, `atkx:skill-eval`, và các bản sao quy tắc `atk` cùng hai script của `atkx:doc-audit`. Mỗi phép kiểm đạt in một dòng bắt đầu bằng `OK`; mục kiểm tra ở cuối `CLAUDE.md` liệt kê chúng |
 
 ## Assets
 
