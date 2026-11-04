@@ -10,5 +10,9 @@
 | docs/c.md | 10 | H | BEHAVIOUR | CORRECT | src/c.js:5 | - | - | CORRECT cannot tell |
 | docs/c.md | 11 | I | INTENT | UNVERIFIABLE | no source given | the requirement note | Requirement owner | UNVERIFIABLE holds |
 | docs/c.md | 12 | J | BEHAVIOUR | CORRECT | src/c.js:6 | - | - | maybe |
+| docs/c.md | 14 | L | BEHAVIOUR | CORRECT | at 10:30 | - | - | - |
+| docs/c.md | 0 | M | BEHAVIOUR | CORRECT | src/c.js:8 | - | - | - |
+| docs/c.md | 4 | B | BEHAVIOUR | CORRECT | looks right | - | - | - |
+| docs/c.md | 15 | N | BEHAVIOUR | CORRECT | host:80 | - | - | - |
 
 | docs/c.md | 13 | K | BEHAVIOUR | WRONG | src/c.js:7 | - | - | - |

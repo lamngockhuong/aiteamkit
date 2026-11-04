@@ -101,9 +101,47 @@
         "is not \"<first verdict> holds|overturned|cannot tell\""
       ],
       [
+        "docs/c.md:14",
+        "CORRECT without evidence"
+      ],
+      [
+        "docs/c.md:0",
+        "not a number from 1"
+      ],
+      [
+        "docs/c.md:4",
+        "repeats the row at line 4"
+      ],
+      [
+        "docs/c.md:15",
+        "CORRECT without evidence"
+      ],
+      [
         "docs/c.md:13",
         "a row outside a table"
       ]
     ]
+  },
+  "empty.md": {
+    "final": true,
+    "documents": {}
+  },
+  "root-file.md": {
+    "final": true,
+    "documents": {
+      "docs/r.md": {
+        "claims": 1,
+        "CORRECT": 1,
+        "WRONG": 0,
+        "UNVERIFIABLE": 0,
+        "BEHAVIOUR": 1,
+        "INTENT": 0,
+        "wrongRead": 0,
+        "wrongOverturned": 0,
+        "sampleRead": 1,
+        "sampleOverturned": 0,
+        "cannotTell": 0
+      }
+    }
   }
 }

@@ -61,8 +61,13 @@ Found by the session, never by an agent, and written by name only:
 1. The Team section of `.atk/profile.md`, when the project has one: the role that owns the kind of
    source named, the BrSE or BA for a requirement, the Tech Lead for a design reason.
 2. Otherwise the git author of the document lines the claim rests on, by
-   `git log -1 --no-patch --format=%an -L <line>,<line>:<document>`, which prints the name and
-   nothing of the file.
+   `git blame --incremental -L <line>,<line> -- <document>`, its `author` line. The incremental
+   form prints commit headers and no line of the file, on every git version, and it blames the
+   file as it is on disk, so the line numbers are the agent's. The header also carries the
+   author's and committer's email addresses and the commit's subject: the session sees them, as it
+   would in any `git log` of the team's own repository, and never writes them anywhere, the email
+   by rule 3 below. A line whose author is `Not Committed Yet`, or a document git does not track,
+   where the command fails, has no author yet: rule 3 applies, and the report's Notes say why.
 3. Never an email address, never a handle, and never "the team". A name that cannot be found is
    written as the role that must answer, `Requirement owner`, and the report says the name was not
    found.

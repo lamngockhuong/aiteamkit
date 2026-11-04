@@ -936,9 +936,11 @@ tên người phải trả lời. Mọi kết luận `WRONG` và một mẫu cá
 trong một tài liệu và giữa các tài liệu được liệt kê riêng, tách khỏi các kết luận. Khi được giao một
 thư mục, một lượt rà rẻ không đọc code sẽ kiểm mọi trích dẫn bằng script, tìm mâu thuẫn trong từng
 tài liệu và xếp hạng chúng, bỏ qua bản dịch và bản ghi; người dùng chọn tài liệu nào được kiểm đầy
-đủ, kèm một khoảng chi phí lấy từ các lần chạy trước. `--red-team` thêm phản biện từ các agent đọc
-tài liệu mà không biết gì trước, cho phần không nguồn nào quyết định được; `--source` chỉ ra nguồn
-yêu cầu để đối chiếu các khẳng định về mục đích.
+đủ, kèm một khoảng chi phí: lấy từ hai lần chạy thử ở lần chạy đầu, và từ các báo cáo trước của dự
+án về sau. `--cheap` dừng sau bước xếp hạng đó. `--red-team` thêm phản biện từ các agent đọc tài liệu
+mà không biết gì trước, cho phần không nguồn nào quyết định được; `--source` chỉ ra nguồn yêu cầu để
+đối chiếu các khẳng định về mục đích; `--code` chỉ ra thư mục gốc của code khi nó không phải gốc của
+repository; `--out` ghi báo cáo vào chỗ khác, vẫn là nơi git bỏ qua.
 
 **Dùng khi.** Một tài liệu do agent hay người viết sắp được tin dùng, bởi tester viết case từ nó hay
 developer xây dựng theo nó, mà chưa ai đối chiếu với code; hoặc một thư mục tài liệu đã lớn nhanh

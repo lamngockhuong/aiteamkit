@@ -110,8 +110,8 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 Bên cạnh các skill có một agent đi kèm, `plugins/atk/agents/read-only-reviewer.md`. Claude Code nạp
 frontmatter của nó cùng plugin và đặt tên `atk:read-only-reviewer`; phần thân chỉ được đọc khi một
 skill tạo agent đó: mọi agent của `atk:review` trừ reviewer band 1, mọi lăng kính của
-`atk:design-doc --challenge` và `atk:plan --challenge`, và agent mà mỗi skill trong bảy skill đọc
-nhiều giao phần đọc rộng; khi thiếu kiểu agent này thì dùng agent thường với cùng prompt. Danh sách
+`atk:design-doc --challenge` và `atk:plan --challenge`, agent mà mỗi skill trong bảy skill đọc
+nhiều giao phần đọc rộng, và mọi agent của `atkx:doc-audit` khi `atk` được cài cùng; khi thiếu kiểu agent này thì dùng agent thường với cùng prompt. Danh sách
 công cụ của nó là Read, Grep và Glob. Trên Claude Code 2.1.296, agent có danh sách đó không có
 công cụ Bash, Edit hay Write nào để gọi, và một lượt review cùng một lượt phản biện kế hoạch chạy ở
 đó đều tạo đúng kiểu agent này cho mọi vòng và mọi lăng kính. Một mẫu trong danh sách công cụ chỉ
@@ -132,7 +132,9 @@ Claude Code nhận tham số `model` trên công cụ `Agent`, được ưu tiê
 hai; Cursor cho agent cha nêu model khi khởi chạy subagent, kèm hai báo cáo trên diễn đàn vẫn mở về
 việc model đó không được tôn trọng; Codex nhận model khi tạo agent, chỉ thua một file agent tuỳ
 chỉnh tự đặt model, mà kit không mang file nào như vậy. Reviewer band 1 và mọi
-agent có quyền ghi không nhận dòng model nào. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
+agent có quyền ghi không nhận dòng model nào. Đây là quy tắc của `atk`: skill của `atkx` không đọc
+dòng model nào, nên `atkx:doc-audit` không yêu cầu model kể cả khi profile có ghi, và đó là chủ ý.
+`docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
 ghi lý do lựa chọn này thuộc về đội và vì sao nó không nằm trong file agent.
 
 ## Lớp `shared/`

@@ -67,8 +67,17 @@ else:
 
 The session matches each answer to its claim by `#`, never by line: one line often holds several
 claims, a table row three of them. A `#` with no answer was cut off: the agent is asked once more
-for the missing numbers, and a claim still unanswered keeps no second read, which
-`tally.mjs --final` then refuses for a `WRONG`.
+for the missing numbers. A claim still unanswered, a `WRONG` or a `CORRECT` of the sample, becomes
+`UNVERIFIABLE`: its `Evidence` the reason `second read not returned`, its `Settled by` a second read
+of that line, its owner found as `references/claims.md` finds one, and its `Second read` cell left
+`-`. The report's Notes count those claims. Left as they were, `tally.mjs --final` would refuse the
+table and no report could be written.
+
+A `CORRECT` of the sample lost this way leaves the sample one short, since the minimum still counts
+the `CORRECT` claims left. Each one lost is replaced by the next `CORRECT` claim of the document not
+yet sampled, sent to a second agent once, and the same applies to a replacement lost in turn. That
+ends when the sample holds or no `CORRECT` claim is left unsampled, and in the second case the
+minimum has fallen to what was read, so `--final` accepts the table either way.
 
 ## What each answer does
 
@@ -84,4 +93,5 @@ unread or a sample too small.
 
 An `overturned` answer is not trusted more than the first verdict because it came second. Where the
 session's own reading of the decisive line agrees with neither, the claim is `UNVERIFIABLE`, its
-reason that two reads disagreed, and both lines are named.
+reason that two reads disagreed, its `Settled by` naming both lines, and its owner found as
+`references/claims.md` finds one.

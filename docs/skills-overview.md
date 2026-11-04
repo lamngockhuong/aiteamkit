@@ -920,9 +920,11 @@ again by an agent that never saw the first one's reasoning, and the report print
 overturned. Contradictions inside a document and between documents are listed apart from the
 verdicts. Given a directory, a cheap pass that reads no code checks every citation with a script,
 looks for contradictions inside each document, and ranks them, with mirrors and records left out;
-the person picks which get the full audit, shown a cost range from earlier runs. `--red-team` adds
-objections from agents reading the document cold, for what no source can settle; `--source` names
-the requirement sources an intent claim is checked against.
+the person picks which get the full audit, shown a cost range: from the two pilots on a first run,
+and from the project's earlier reports after that. `--cheap` stops after that ranking. `--red-team`
+adds objections from agents reading the document cold, for what no source can settle; `--source`
+names the requirement sources an intent claim is checked against; `--code` names the code root when
+it is not the repository's; `--out` writes the report elsewhere, still where git ignores it.
 
 **Use when.** A document an agent or a person wrote is about to be trusted, by a tester writing cases
 from it or a developer building against it, and nobody has checked it against the code; or a

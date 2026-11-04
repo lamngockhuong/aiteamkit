@@ -23,5 +23,11 @@
   {"query": "challenge this plan before anyone builds on it", "should_trigger": false, "belongs_to": "atk:plan"},
   {"query": "review this plan against the repository", "should_trigger": false, "belongs_to": "atk:plan"},
   {"query": "evaluate the skill in .claude/skills/release-notes before we share it", "should_trigger": false, "belongs_to": "atkx:skill-eval"},
-  {"query": "turn this client email into user stories", "should_trigger": false, "belongs_to": "atk:intake"}
+  {"query": "turn this client email into user stories", "should_trigger": false, "belongs_to": "atk:intake"},
+  {"query": "tài liệu API của endpoint đơn hàng có còn khớp với code không, cập nhật lại giúp mình", "should_trigger": false, "belongs_to": "atk:spec"},
+  {"query": "画面仕様書を今の実装に合わせて更新して", "should_trigger": false, "belongs_to": "atk:spec"},
+  {"query": "chuyển ghi chú cuộc họp với khách hàng thành user story và acceptance criteria", "should_trigger": false, "belongs_to": "atk:intake"},
+  {"query": "このお客様の要望メールを要件として整理して", "should_trigger": false, "belongs_to": "atk:intake"},
+  {"query": "đánh giá chất lượng skill release-notes trước khi chia sẻ cho đội", "should_trigger": false, "belongs_to": "atkx:skill-eval"},
+  {"query": "このスキルの品質を評価して", "should_trigger": false, "belongs_to": "atkx:skill-eval"}
 ]

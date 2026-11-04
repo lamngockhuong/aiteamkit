@@ -9,6 +9,11 @@ same pass runs on them before the full audit, for its contradictions and broken 
 1. **The citation check.** `node <this skill>/scripts/cite-check.mjs [--code <dir>] --exclude
    <mirror>... <files or directory>`, one `--exclude` per language mirror, per records directory, and for
    `<docs root>/derived/`, all left out at step 1. Its JSON is read as data; what each field means is below.
+   Every path it takes, the documents, `--code` and each `--exclude`, is relative to the working
+   directory, so it is run from the repository root; an `--exclude` or `--code` that does not exist
+   there, or an unknown flag, stops it with exit 2 rather than leaving the mirror in. On exit 2 the
+   run shows the one line the script wrote and asks for the path again, or, with nobody to ask,
+   stops with that line; it never goes on without the script.
 2. **One agent per batch of documents**, each document read alone, for the contradictions inside it
    and the two signals only reading finds. A batch is as many documents as fit the agent's context
    with room to spare; spawned as `references/safety.md` section 3 says.
@@ -42,6 +47,9 @@ Return one block per document, and nothing else.
 | `counts.withLine`, `counts.withoutLine` | Citations with and without a line. Few lines means the reader cannot check a claim quickly, and neither could the author |
 | `counts.outside`, `counts.unread` | Citations that leave the repository or name an unread file; listed in the report, not ranked |
 | `counts.lines` | Length, for the batch size; not a ranking signal, since cost does not follow length |
+| `unclosedFence` | The line of a code fence never closed, or `null`. Everything after it was read as code and no citation was taken from it, so the document's counts are short; named in the report |
+| A citation's status `ambiguous` | A partial path that more than one tracked file ends with. Listed, not counted as broken, since the citation may be right and the script cannot tell which file it means |
+| A status `unreadable` | A document, a directory or a cited file that exists but could not be read, or is not a regular file. Listed, not counted as broken, and the rest of the run goes on |
 
 A citation is a Markdown link target, or a span in backticks or a bare token shaped like a path:
 
@@ -50,9 +58,14 @@ A citation is a Markdown link target, or a span in backticks or a bare token sha
 - One with a slash but no line and no source-file extension counts only when it resolves, so a MIME
   type, a route or a date format is not one.
 - A link's label is not one. A link target resolves from the document's directory, as a code host
-  resolves it; a leading `/` resolves from the repository root.
+  resolves it; a leading `/` resolves from the repository root. A reference definition,
+  `[name]: <target>`, is a link, and a title after a target, in double or single quotes or in
+  parentheses, is not part of it.
+- Nothing inside a code fence or an HTML comment is one. A fence closes on a line of the same
+  character, at least as long as the one that opened it.
 - A partial path in a span, written relative to a module, is found by its ending when exactly one
-  tracked file has it.
+  tracked file has it, and is `ambiguous` when several do.
+- A directory cited with a line is `out-of-range`, since a directory has no lines.
 - An absolute path whose first segment is a directory at the repository root is a repository path,
   and `missing` when the rest is not there; any other absolute path is `outside`.
 
@@ -79,7 +92,9 @@ above everything on broken citations alone. A record named as a file is still au
 
 The session does what the script does, and the report says the citation check was done by hand:
 
-1. List every citation per the shape above, in each document, outside code fences.
+1. List every citation per the shape above, in each document, outside code fences and HTML
+   comments. The repository is the one `git rev-parse --show-toplevel` names for the documents; a
+   document in no git repository stops the run, per step 1 of `SKILL.md`.
 2. Before opening anything, refuse a path that leaves the repository, by `..`, an absolute path
    outside it per the shape above, or a link, and a path the unread-path table of
    `references/safety.md` names, matched without case.

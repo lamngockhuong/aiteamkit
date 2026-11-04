@@ -8,29 +8,37 @@
 // Usage: node cite-check.mjs [--code <dir>] [--exclude <dir>]... <file-or-dir>...
 //   A directory is walked for *.md files; --exclude leaves a directory out, the language mirrors
 //   among them. --code names the code root, inside the same repository, that a bare citation is
-//   resolved against before the repository root.
+//   resolved against before the repository root. Every path is relative to the working directory,
+//   and an --exclude or --code that does not exist there is refused, so a typo cannot leave a
+//   mirror in without a word.
 //
 // Output, one JSON object on standard output:
 //   { "repoRoot": path,
-//     "documents": [ { "path": path, "status": "read" | "unread" | "outside" | "missing",
+//     "documents": [ { "path": path, "status": "read" | "unread" | "outside" | "missing"
+//                                        | "unreadable",
+//                      "unclosedFence": n|null, "unclosedComment": n|null,
 //                      "citations": [ { "line": n, "target": path, "from": n|null, "to": n|null,
 //                                       "status": "ok" | "missing" | "out-of-range" | "stale"
-//                                                 | "outside" | "unread",
+//                                                 | "outside" | "unread" | "ambiguous"
+//                                                 | "unreadable",
 //                                       "directory": bool, "identifierNear": bool|null } ],
 //                      "counts": { "citations": n, "withLine": n, "withoutLine": n,
 //                                  "directories": n, "broken": n, "outside": n, "unread": n,
 //                                  "lines": n } } ],
 //     "summary": { "documents": n, "read": n, "citations": n, "broken": n } }
 //
-// What it never prints: a line of any file, the document's included. Only paths, line numbers,
-// booleans and counts leave this script, so a secret on a cited line cannot reach the session
-// through it. `identifierNear` is a boolean for the same reason: the identifier itself is not
+// What it never prints: a line of any file. Only paths, line numbers, booleans and counts leave
+// this script, so a secret on a cited line cannot reach the session through it. One exception: a
+// citation that does not resolve is printed as the document wrote it, which is text of the
+// document the person asked to audit, never of a file it cites. `identifierNear` is a boolean for the same reason: the identifier itself is not
 // printed.
 //
 // What it never opens: a path outside the repository, by `..`, an absolute path or a symbolic link,
 // is refused before anything is read; a path the unread-path table names is matched without case on
-// the path as cited and on its real path, and is never opened. Exit code 2 with one line on standard
-// error when no document is given or the first one is in no git repository.
+// the path as cited and on its real path, and is never opened. A file that exists but cannot be read,
+// or is not a regular file, is reported unreadable and the run goes on. Exit code 2 with one line on
+// standard error when no document is given, the first one is in no git repository, a flag is unknown
+// or has no value, or an --exclude or --code does not exist.
 
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, realpathSync, statSync } from 'node:fs';
@@ -72,9 +80,11 @@ const unread = (p, abs) => MATCHERS.some((m) => m(lower(p), abs));
 const args = process.argv.slice(2);
 const inputs = [], excludes = [];
 let code = null;
+const value = (i) => (i < args.length && !args[i].startsWith('--') ? args[i] : fail(`${args[i - 1]} needs a directory`));
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--code') code = args[++i];
-  else if (args[i] === '--exclude') excludes.push(args[++i]);
+  if (args[i] === '--code') code = value(++i);
+  else if (args[i] === '--exclude') excludes.push(value(++i));
+  else if (args[i].startsWith('--')) fail(`unknown flag ${args[i]}`);
   else inputs.push(args[i]);
 }
 if (!inputs.length) fail('no document given: node cite-check.mjs [--code <dir>] [--exclude <dir>]... <file-or-dir>...');
@@ -98,11 +108,12 @@ function real(abs) {
     rest.unshift(basename(p));
   }
 }
-const excluded = excludes.map((e) => real(resolve(e)));
+const excluded = excludes.map((e) => { const a = resolve(e); return existsSync(a) ? real(a) : fail(`--exclude ${e} does not exist`); });
 
 let codeRoot = repoRoot;
 if (code !== null) {
   const c = resolve(code);
+  if (!existsSync(c)) fail(`--code ${code} does not exist`);
   codeRoot = inside(c) && inside(real(c)) ? real(c) : fail(`--code ${code} leaves the repository`);
 }
 
@@ -110,7 +121,10 @@ if (code !== null) {
 const docs = [];
 function walk(dir) {
   if (excluded.some((e) => dir === e || dir.startsWith(e + sep))) return;
-  for (const ent of readdirSync(dir, { withFileTypes: true })) {
+  let ents;
+  // A directory that cannot be listed is reported as a document that cannot be read
+  try { ents = readdirSync(dir, { withFileTypes: true }); } catch { docs.push(dir); return; }
+  for (const ent of ents) {
     if (ent.name === '.git' || ent.name === 'node_modules') continue;
     const p = join(dir, ent.name);
     if (ent.isDirectory()) walk(p);
@@ -139,18 +153,31 @@ const KNOWN_EXT = new Set(['md', 'mdx', 'txt', 'rst', 'adoc', 'ts', 'tsx', 'js',
 const knownExt = (target) => KNOWN_EXT.has(target.match(/\.(\w+)$/)?.[1].toLowerCase());
 const strong = (target, from) => from !== null || knownExt(target);
 const SEG = String.raw`[\p{L}\p{N}_@.+%-]+`;
-const PATH = String.raw`(?:\.{1,2}\/|~\/|\/)?${SEG}(?:\/${SEG})*\/?`;
+const pathOf = (seg) => String.raw`(?:\.{1,2}\/|~\/|\/)?${seg}(?:\/${seg})*\/?`;
+const PATH = pathOf(SEG);
 const LINES = String.raw`(?::(\d+)(?:-(\d+))?|#L(\d+)(?:-L(\d+))?)?`;
 // A link target may sit in angle brackets, which allow spaces, and may carry a title after it
-const LINK = new RegExp(String.raw`\]\((?!\w+:|#)<?((?:${PATH})|[^<>)]+(?=>))>?${LINES}(?:#[^)\s]*)?(?:\s+"[^"]*")?\)`, 'gu');
+// A title after the target, in double or single quotes or in parentheses, is not part of it
+const TITLE = String.raw`(?:\s+(?:"[^"]*"|'[^']*'|\([^)]*\)))?`;
+const LINK = new RegExp(String.raw`\]\((?!\w+:|#)<?((?:${PATH})|[^<>)]+(?=>))>?${LINES}(?:#[^)\s]*)?${TITLE}\)`, 'gu');
+// A reference definition, [name]: target, is a link too, resolved as one
+// A footnote, [^1]: text, is not a definition
+const DEF = new RegExp(String.raw`^ {0,3}\[(?!\^)[^\]]+\]:\s*(?!\w+:|#)<?((?:${PATH})|[^<>\s]+(?=>))>?${LINES}(?:#\S*)?${TITLE}\s*$`, 'u');
 const TICK = new RegExp('`(' + PATH + ')' + LINES + '`', 'gu');
-const BARE = new RegExp(String.raw`(?<![\p{L}\p{N}_\/.:\x60-])(${PATH}\/${SEG}\.\w+|${SEG}\.\w+(?=:\d))${LINES}(?![\p{L}\p{N}_\/])`, 'gu');
+// A bare path has no delimiter, so in text written without spaces, Japanese or Chinese, it would run
+// on into the words before and after it. Its segments leave those scripts out, and those scripts may
+// stand right before or after it; a link or a span in backticks keeps them, since there the
+// delimiters say where the path ends
+const CJK = String.raw`\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}`;
+const BSEG = String.raw`(?:(?![${CJK}])[\p{L}\p{N}_@.+%-])+`;
+const BPATH = pathOf(BSEG);
+const BARE = new RegExp(String.raw`(?<!(?![${CJK}])[\p{L}\p{N}_\/.:\x60-])(${BPATH}\/${BSEG}\.\w+|${BSEG}\.\w+(?=:\d))${LINES}(?!(?![${CJK}])[\p{L}\p{N}_\/])`, 'gu');
 const IDENT = /`([A-Za-z_][\w.]*?)(?:\(\))?`/g;
 
 function citationsOf(line) {
   const found = [];
-  const take = (re, viaLink) => {
-    for (const m of line.matchAll(re)) {
+  const take = (matches, viaLink) => {
+    for (const m of matches) {
       let target = m[1];
       try { target = decodeURIComponent(target); } catch { /* not encoded: keep as written */ }
       const from = m[2] ?? m[4] ?? null, to = m[3] ?? m[5] ?? null;
@@ -167,12 +194,14 @@ function citationsOf(line) {
       found.push({ target, from: from && +from, to: to ? +to : from && +from, viaLink, weak: !viaLink && !strong(target, from) });
     }
   };
-  take(LINK, true);
+  const def = line.match(DEF);
+  if (def) { take([def], true); line = ' '.repeat(line.length); }
+  take(line.matchAll(LINK), true);
   // A link's label is what the reader sees, not what it cites: the target was taken above, so the
   // label is blanked before spans and bare tokens are looked for, or a label naming the file
   // relative to somewhere else reads as a missing citation.
   line = line.replace(/\[[^\]]*\]\([^)]*\)/g, (m) => ' '.repeat(m.length));
-  take(TICK, false); take(BARE, false);
+  take(line.matchAll(TICK), false); take(line.matchAll(BARE), false);
   return found;
 }
 
@@ -180,8 +209,10 @@ function identifiers(line, targets) {
   const out = [];
   for (const m of line.matchAll(IDENT)) {
     const id = m[1];
-    if (id.length < 3 || targets.some((t) => t.includes(id)) || /\.\w{1,4}$/.test(id) && !/[A-Z_]/.test(id)) continue;
-    out.push(id.split('.').pop());
+    // A file name is not an identifier, whatever its case: README.md would leave md to look for
+    if (id.length < 3 || targets.some((t) => t.includes(id)) || knownExt(id) || /\.\w{1,4}$/.test(id) && !/[A-Z_]/.test(id)) continue;
+    const last = id.split('.').pop();
+    if (last) out.push(last);
   }
   return out;
 }
@@ -223,7 +254,8 @@ function resolveOnce(target, docDir, viaLink, weak) {
     if (!inside(abs)) { lost ??= { status: 'outside' }; continue; }
     const r = check(abs);
     if (r.status !== 'missing') return r;
-    lost ??= r;
+    // Missing from a base that stays inside says more than leaving from another base
+    lost = r;
   }
   lost ??= { status: 'missing' };
   // Only a strong span, missing as written and not written relative to a document, is looked up by
@@ -233,6 +265,7 @@ function resolveOnce(target, docDir, viaLink, weak) {
   const hits = byName().get(basename(target.replace(/\/$/, ''))) || [];
   const suffix = '/' + target.replace(/\/$/, '');
   const match = hits.filter((f) => ('/' + f).endsWith(suffix));
+  if (match.length > 1) return { status: 'ambiguous' };
   if (match.length !== 1) return lost;
   const r = check(join(repoRoot, match[0]));
   return r.status === 'missing' ? lost : r;
@@ -244,7 +277,9 @@ let trackedByName = null;
 function byName() {
   if (!trackedByName) {
     trackedByName = new Map();
-    for (const f of execFileSync('git', ['ls-files', '-z'], { cwd: repoRoot, encoding: 'utf8', maxBuffer: 1 << 28 }).split('\0')) {
+    let list = '';
+    try { list = execFileSync('git', ['ls-files', '-z'], { cwd: repoRoot, encoding: 'utf8', maxBuffer: 1 << 28 }); } catch { /* no lookup by ending */ }
+    for (const f of list.split('\0')) {
       if (f) (trackedByName.get(basename(f)) ?? trackedByName.set(basename(f), []).get(basename(f))).push(f);
     }
   }
@@ -255,8 +290,9 @@ function byName() {
 const bodies = new Map();
 function body(abs) {
   if (!bodies.has(abs)) {
-    const b = readFileSync(abs, 'utf8').split('\n');
-    bodies.set(abs, { lines: b, n: b.length - (b[b.length - 1] === '' ? 1 : 0) });
+    let b = null;
+    try { if (statSync(abs).isFile()) b = readFileSync(abs, 'utf8').split('\n'); } catch { /* left null */ }
+    bodies.set(abs, b && { lines: b, n: b.length - (b[b.length - 1] === '' ? 1 : 0) });
   }
   return bodies.get(abs);
 }
@@ -265,34 +301,53 @@ const BUCKET = { missing: 'broken', 'out-of-range': 'broken', stale: 'broken', o
 const out = [];
 for (const abs of docs) {
   const rel = inside(abs) ? relative(repoRoot, abs) : abs;
-  const doc = { path: rel, status: 'read', citations: [], counts: { citations: 0, withLine: 0, withoutLine: 0, directories: 0, broken: 0, outside: 0, unread: 0, lines: 0 } };
+  const doc = { path: rel, status: 'read', unclosedFence: null, unclosedComment: null, citations: [], counts: { citations: 0, withLine: 0, withoutLine: 0, directories: 0, broken: 0, outside: 0, unread: 0, lines: 0 } };
   out.push(doc);
   if (!inside(abs)) { doc.status = 'outside'; doc.path = basename(abs); continue; }
   if (unread(rel, abs)) { doc.status = 'unread'; continue; }
   if (!existsSync(abs)) { doc.status = 'missing'; continue; }
-  const lines = readFileSync(abs, 'utf8').split('\n');
-  doc.counts.lines = lines.length;
+  const own = body(abs);
+  if (!own) { doc.status = 'unreadable'; continue; }
+  const { lines } = own;
+  doc.counts.lines = own.n;
   const dirs = new Set();
-  // A fence closes only on the character that opened it, so a ~~~ line inside a ``` block is text
-  let fence = null;
-  lines.forEach((text, i) => {
-    const f = text.match(/^\s*(```|~~~)/)?.[1];
-    if (f && (fence === null || fence === f)) { fence = fence === null ? f : null; return; }
-    if (fence !== null) return;
+  // A fence closes only on a line of the character that opened it, at least as long, so a ~~~ line
+  // inside a ``` block, or ``` inside ````, is text. An HTML comment is not read either; a <!-- inside
+  // a code span opens none, since it is text being quoted
+  let fence = null, fenceAt = 0, comment = false, commentAt = 0;
+  lines.forEach((raw, i) => {
+    const f = raw.match(/^\s*(`{3,}|~{3,})/)?.[1];
+    if (fence === null && !comment && f) { fence = f; fenceAt = i + 1; return; }
+    if (fence !== null) { if (f && f[0] === fence[0] && f.length >= fence.length && !raw.trim().slice(f.length)) fence = null; return; }
+    let text = '';
+    for (let rest = raw; rest.length;) {
+      if (comment) {
+        const end = rest.indexOf('-->');
+        if (end < 0) break;
+        comment = false; rest = rest.slice(end + 3);
+      } else {
+        const start = rest.replace(/`[^`]*`/g, (m) => ' '.repeat(m.length)).indexOf('<!--');
+        if (start < 0) { text += rest; break; }
+        text += rest.slice(0, start); comment = true; commentAt = i + 1; rest = rest.slice(start + 4);
+      }
+    }
     const cites = citationsOf(text);
     if (!cites.length) return;
     const ids = identifiers(text, cites.map((c) => c.target));
     for (const c of cites) {
       const r = resolveTarget(c.target, dirname(abs), c.viaLink, c.weak);
-      if (c.weak && (r.status === 'missing' || r.status === 'outside')) continue;
+      if (c.weak && (r.status === 'missing' || r.status === 'outside' || r.status === 'ambiguous')) continue;
       const entry = { line: i + 1, target: c.target, from: c.from, to: c.to, status: r.status, directory: false, identifierNear: null };
       if (r.status === 'ok') {
         entry.target = relative(repoRoot, r.abs) || '.';
         entry.directory = statSync(r.abs).isDirectory();
         dirs.add(entry.directory ? entry.target : dirname(entry.target));
-        if (c.from !== null && !entry.directory) {
-          const { lines: b, n } = body(r.abs);
-          if (c.from < 1 || c.to > n || c.to < c.from) entry.status = 'out-of-range';
+        if (c.from !== null && entry.directory) entry.status = 'out-of-range';
+        else if (c.from !== null) {
+          const cited = body(r.abs);
+          const { lines: b, n } = cited ?? {};
+          if (!cited) entry.status = 'unreadable';
+          else if (c.from < 1 || c.to > n || c.to < c.from) entry.status = 'out-of-range';
           else if (ids.length) {
             const near = b.slice(Math.max(0, c.from - 4), Math.min(n, c.to + 3)).join('\n');
             entry.identifierNear = ids.some((id) => near.includes(id));
@@ -307,6 +362,8 @@ for (const abs of docs) {
     }
   });
   doc.counts.directories = dirs.size;
+  if (fence !== null) doc.unclosedFence = fenceAt;
+  if (comment) doc.unclosedComment = commentAt;
 }
 
 const read = out.filter((d) => d.status === 'read');

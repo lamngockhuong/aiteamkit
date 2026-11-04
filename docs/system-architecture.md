@@ -111,8 +111,9 @@ This produces the size discipline in the kit:
 One agent ships beside the skills, `plugins/atk/agents/read-only-reviewer.md`. Claude Code loads its
 frontmatter with the plugin and namespaces it `atk:read-only-reviewer`; its body is read only when a
 skill spawns it: every agent of `atk:review` other than the band 1 reviewer, every lens of
-`atk:design-doc --challenge` and `atk:plan --challenge`, and the agent each of the seven read-heavy
-skills hands its wide reading to; where the type is missing, a general agent with the same prompt.
+`atk:design-doc --challenge` and `atk:plan --challenge`, the agent each of the seven read-heavy
+skills hands its wide reading to, and every agent of `atkx:doc-audit` where `atk` is installed beside
+it; where the type is missing, a general agent with the same prompt.
 Its tool list is Read, Grep and Glob. On Claude Code 2.1.296 an agent with that list had no Bash,
 Edit or Write tool to call, and a review and a plan challenge run there spawned it for every round
 and lens. A tool-list pattern allowing only `git diff`, `git log` and `git blame` let every other
@@ -133,7 +134,9 @@ harness, each read from its documentation on 2026-10-22 and none measured here: 
 both; Cursor lets the parent name a model when it launches a subagent, with two open forum reports
 of it not being respected; Codex takes a model in the spawn, which only a custom agent file setting
 its own would outrank, and the kit ships none. The band 1 reviewer and
-every agent that writes take no model line. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
+every agent that writes take no model line. The rule is `atk`'s: an `atkx` skill reads no model
+line, so `atkx:doc-audit` asks for no model even where the profile names one, which is deliberate.
+`docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
 records why the choice is the team's and why it is not in the agent file.
 
 ## The `shared/` layer

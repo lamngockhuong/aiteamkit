@@ -172,6 +172,52 @@
         "target": "data/small.sql",
         "status": "ok"
       }
+    ],
+    "docs/edge.md": [
+      {
+        "line": 1,
+        "target": "src/app.js",
+        "status": "ok",
+        "identifierNear": null
+      },
+      {
+        "line": 2,
+        "target": "src/app.js",
+        "status": "ok"
+      },
+      {
+        "line": 3,
+        "target": "../api/orders.md",
+        "status": "missing"
+      },
+      {
+        "line": 4,
+        "target": "./README.md",
+        "status": "missing"
+      },
+      {
+        "line": 5,
+        "target": "a/twin.js",
+        "status": "ambiguous"
+      },
+      {
+        "line": 6,
+        "target": "src",
+        "status": "out-of-range",
+        "directory": true
+      },
+      {
+        "line": 7,
+        "target": "README.md",
+        "status": "ok"
+      }
+    ],
+    "docs/comment.md": [
+      {
+        "line": 1,
+        "target": "src/app.js",
+        "status": "ok"
+      }
     ]
   },
   "counts": {
@@ -192,6 +238,26 @@
       "broken": 0,
       "outside": 3,
       "unread": 13
+    },
+    "docs/edge.md": {
+      "citations": 7,
+      "withLine": 4,
+      "withoutLine": 3,
+      "directories": 2,
+      "broken": 3,
+      "outside": 0,
+      "unread": 0,
+      "lines": 14
+    },
+    "docs/comment.md": {
+      "citations": 1,
+      "withLine": 1,
+      "withoutLine": 0,
+      "directories": 1,
+      "broken": 0,
+      "outside": 0,
+      "unread": 0,
+      "lines": 4
     }
   }
 }

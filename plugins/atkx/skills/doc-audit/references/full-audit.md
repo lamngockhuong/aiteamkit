@@ -23,8 +23,8 @@ goes into it, and nothing another agent returned.
 section 1 with the two paragraphs under it, and the kinds table of its section 2, quoted whole>
 
 You audit one document claim by claim. Document: <path>, lines <from>-<to>. Repository root:
-<repo root>. Code root: <code root>. Requirement sources you may read: <the --source paths, the
-sources file the session wrote, per step 1 of the skill, or "none">, and the plans and records
+<repo root>. Code root: <code root>. Requirement sources you may read: <the --source paths that
+passed step 1 of the skill, the sources file the session wrote, or "none">, and the plans and records
 inside the repository. You fetch nothing and run no command to read a source.
 
 <the sections "A checkable claim", "The two types" and "The three verdicts" of

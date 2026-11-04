@@ -24,20 +24,29 @@ text and people's names, so it never lands where git would stage it.
 5. **The fallback.** Where step 2 or 4 fails, or the project is not a git repository, run
    `node <this skill>/scripts/tally.mjs --report-dir`, which makes a directory readable by the user
    alone under the system's temporary directory and prints its path, and write there. Without Node,
-   the run writes no file and prints the report in the session in full, and says why.
+   or when `--report-dir` exits 2 because the directory it made was readable by others, the run
+   writes no file and prints the report in the session in full, and says why.
 6. **`--out`.** Changes the path and is held to steps 2 and 4 with no exception; no ignore file is
    created for it. It is refused when the report or either file beside it, below, already exists,
    so no file is ever replaced or deleted, an ignored one included, and so is a path the
-   unread-path table of `references/safety.md` names. A path
+   unread-path table of `references/safety.md` names, and a path that is an existing directory,
+   since `--out` names the report's file. A path
    that fails goes to the fallback of step 5, and the session says the path asked for was not used
    and why. A report that never lands where git would stage it is what keeps its quotes and names
    out of the repository.
 
 Two files go beside the report, under its name: the verdict table, `<same name>.table.md`, the
-file `tally.mjs` reads, and while the run lasts the sources file, `<same name>.sources.md`, the
-masked issue text and commit messages an agent reads, deleted when the run ends. Step 4 runs on
-each of the three paths, not only the report's, before it is written. Nothing else is written by
-the run.
+file `tally.mjs` reads, and the sources file, `<same name>.sources.md`, the masked issue text and
+commit messages an agent reads. Every run writes one where the documents have commit history or
+the run has a `--source` that is an issue, since step 1 reads commit messages on every run; a run
+with neither writes none. Besides the mask of `references/safety.md` section 2, an email address and
+a handle are masked in it as `<redacted: email>` and `<redacted: handle>`, since a commit trailer or
+an issue thread carries the team's own. The sources file is kept, by the decision of the skill's
+owner: it stays beside the report under the same ignore rule, and the closing message names it with
+the report. Step 4 runs on each of the three paths, not only the report's, before it is written.
+Nothing else is written by the run.
+A sources file found with no report beside it was left by a run that stopped before step 8; the
+next run in the same directory names it in its Notes and leaves it alone.
 
 ## The report
 
@@ -96,6 +105,10 @@ objections dropped as unfounded; without --red-team, "Not requested.">
 | Document | Line | Claim | Type | Verdict | Evidence | Settled by | Owner | Second read |
 ```
 
+A report of the cheap pass alone, under `--cheap` or in a run with nobody to ask, has no verdict
+table: it leaves out Counts, WRONG, UNVERIFIABLE and Full table, and the figures of `In short` and
+Ranking come from `scripts/cite-check.mjs`, or from the citation check done by hand.
+
 ### The statements in Notes
 
 Each is written where it applies, and left out where it does not:
@@ -111,6 +124,18 @@ Each is written where it applies, and left out where it does not:
   on the prompt; where there were no agents, that the session read in turn.
 - **Lines unaudited.** A document whose agent returned a table cut off twice: the line range no
   verdict covers.
+- **Citations the check could not settle.** Per document, from `cite-check.mjs`: the line of a code
+  fence or an HTML comment never closed, after which no citation was read, so its counts are short;
+  each `ambiguous` citation with the paths that end the same way; each `unreadable` document or
+  cited file.
+- **Second reads not returned.** Per document, how many claims became `UNVERIFIABLE` because the
+  second agent was cut off twice, per `references/re-verify.md`.
+- **Sources not read.** Each `--source` that leaves the repository, does not exist, or is a file the
+  unread-path table names, with what kept it unread.
+- **Owners not found in git.** Where a claim's lines were not committed, or the document is not
+  tracked, so its owner is the role of rule 3 in `references/claims.md`.
+- **A sources file left over.** A `.sources.md` in the report directory with no report beside it,
+  left by an earlier run that stopped; named, not opened, not removed.
 - **One agent at a time.** Where the host could not run agents in parallel, or the machine's memory
   held them to one at a time, which made the run slower and cost the same.
 - **`atk:spec --check`.** Once, where a document audited is an API, schema, feature or screen

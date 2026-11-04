@@ -102,7 +102,8 @@ below it.
 section 1 with the two paragraphs under it, and the kinds table of its section 2, quoted whole>
 
 You read one document cold, through one lens, and object to it. Document: <path>. Repository root:
-<repo root>. Requirement sources: <the --source paths, or "none">. Lens: <the lens and its question
+<repo root>. Requirement sources: <the sources file of
+references/report-format.md and the --source paths that passed step 1, or "none">. Lens: <the lens and its question
 from the table above>.
 
 You have not seen any verdict on this document, and you never will. Return at most five
