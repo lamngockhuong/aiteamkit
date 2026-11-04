@@ -19,9 +19,9 @@ run that writes a design, before its review. `--out`, `--options` and `--adr` ar
 line, since the mode edits a design that exists, compares no new set of options, and writes no ADR
 alone. For `--challenge` and `--adr` the line names the route by the design's status: at `DRAFT`,
 `atk:design-doc <design-path> --challenge` or `--adr`, per `SKILL.md`; at `IN REVIEW`, that the
-design goes back to `DRAFT` first, which its author does by editing the status and telling the
-approver named in it, since a reviewer who asks for an ADR or a challenge is asking for a draft step
-the design skipped. `--no-adr` is ignored, saying why: the mode edits the ADR the design links, and
+design goes back to `DRAFT` first, which its author does by editing the status, or by telling the
+agent to as the `IN REVIEW` line of `SKILL.md` allows, and telling the approver named in it, since a
+reviewer who asks for an ADR or a challenge is asking for a draft step the design skipped. `--no-adr` is ignored, saying why: the mode edits the ADR the design links, and
 writes none where there is none. `--lang` is ignored, saying why: answers go in the design's own
 language.
 

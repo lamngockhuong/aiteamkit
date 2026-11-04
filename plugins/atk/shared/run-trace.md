@@ -175,7 +175,7 @@ Six kinds, and no others, so a pattern across runs can be counted:
 | `step <n> <name>` | `ran`, `skipped` with the reason, or `failed` with what failed, by kind | each numbered step of the skill's `## Workflow` reaches an outcome. A step that runs only when a flag asks for it, and this invocation's flags never did, is `skipped (not requested)`; a step that runs when the person asks for it, by flag or by request, and nobody did, is the same. Steps a mode takes the place of share one line, `step <first>-<last> <mode> mode:` with an outcome like any step's, as `step 1-5 answer mode: ran` under `atk:design-doc --answer`, or `skipped` or `failed` with the reason where the mode stopped before any edit. A run that stops writes its `stop` or `end` and no line for the steps after it |
 | `gate <kind>` | who was asked, how long it waited, and `answered`, `unanswered`, or `refused`; for an answer the run did not ask for, `given in the prompt, no wait`, or `given in the prompt of <way>, no wait` where no person brought it, per the names below | the run asks a person for an approval, a confirmation, or an answer it cannot find on disk, an answer to an open question the run left included, or takes such an answer from the prompt that invoked it |
 | `stop` | the ceiling or the escalation, and the person named | a ceiling ends a loop, or the run stops and hands a decision to a person |
-| `review` | the counts by severity, and the round of the ceiling, or `closing read` for the read after the last round, per `shared/review-fix-loop.md` | a review returns, its own or one it called |
+| `review` | the counts by severity, and the round of the ceiling, or `closing read` for the read after the last round, per `shared/review-fix-loop.md`; for a challenge, whose objections carry no severity, the objections raised, merged, dropped, changed and open, and the lenses that ran, with no round | a review returns, its own or one it called, or the objections of a challenge per `shared/independent-challenge.md` are answered |
 | `corrected by hand` | what a person changed afterwards, in that person's words, through the mask | that person says so in the session: a change they made to the output, or a thing they told the run it got wrong. Never inferred from a diff, and never an answer the run asked for, which is a `gate` |
 | `end` | the artifact path, `no artifact:` and why, or `interrupted` | the run closes, or knows it is stopping before it closes |
 
@@ -185,13 +185,15 @@ closing message instead. The directory holds the ignore file and the traces, and
 other file there.
 
 `end` is always the last line, and opens with its time like every other event. A correction
-reported after the run closed is written above it. A trace whose last line is not an `end` line is a
-run that stopped without closing, and `atk:tailor` counts it as interrupted, the same as an `end`
+reported after the run closed is written above it, with the time it was reported, even on a later
+day. A trace whose last line is not an `end` line is a run that stopped without closing, and `atk:tailor` counts it as interrupted, the same as an `end`
 line that says `interrupted`. Both are read with or without the time before `end`, since traces
 written before the time was asked for carry none.
 
 One trace holds one session, or the part of it that falls on one day, so every time in it but a
-late `end` line, below, falls on the day its `<run-id>` names. A session is
+late `end` line, below, and a correction reported after the close, above, falls on the day its
+`<run-id>` names. That correction is the one line written out of time order: the `end` below it
+closed the run before it was reported. A session is
 one conversation with the harness, from the invocation to the close; a conversation resumed after it
 closed, or after the harness restarted, is a new one. A session still running at midnight cuts at
 its first event after midnight. Before writing that event, it writes
@@ -200,8 +202,8 @@ opens a new trace whose `<run-id>` carries the new day and that event's time, th
 with the same subject and with `start` the commit checked out at the cut, and that first event's
 line ending `, continued from <run-id>` with the old trace's name, so a second half whose first was
 deleted never reads as a complete short run. A session whose first event after midnight is its
-close does not cut: its `end` line goes into the old trace with its own time, the one line of a
-trace whose time falls on the next day, since a marker after an artifact path would break the
+close does not cut: its `end` line goes into the old trace with its own time, one of the two kinds of
+line whose time may fall on a later day, with a correction reported after the close, above, since a marker after an artifact path would break the
 path. A gate asked before
 midnight and answered after it is written in the new trace, with its whole wait. The two traces are
 a pair, read as one run and kept or removed together, per Retention below.
