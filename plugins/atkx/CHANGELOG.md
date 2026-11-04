@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.7](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.6...atkx-v0.0.7) (2026-11-04)
+
+
+### Features
+
+* add atkx:doc-audit, checking each claim of a document against its source ([#162](https://github.com/lamngockhuong/aiteamkit/issues/162)) ([1c592b4](https://github.com/lamngockhuong/aiteamkit/commit/1c592b42d1e692a5ff3a942fba7a30be9edb36aa))
+
 ## [0.0.6](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.5...atkx-v0.0.6) (2026-10-10)
 
 
