@@ -7,7 +7,7 @@ description: >
   Use for story points, hour or man-day estimates, and re-estimation after scope change.
   Triggers on: "estimate", "estimation", "story point", "man-day", "how long will this take",
   "ước lượng", "bao nhiêu point", "mất bao lâu", "見積", "工数", "何時間かかる", "/atk:estimate".
-argument-hint: "[backlog-path|epic|ticket-ids] [--points|--days] [--out <path>]"
+argument-hint: "[backlog-path|epic|ticket-ids] [--points|--days] [--lang <code>] [--out <path>]"
 ---
 
 # Estimation (`atk:estimate`)
@@ -40,6 +40,7 @@ folded silently into a Dev number. See `shared/team-roles.md`.
 /atk:estimate <epic-or-ticket-ids>      # Pull items from the detected tracker
 /atk:estimate --points                  # Story points alone, no time
 /atk:estimate --days                    # Time in person-days instead of hours
+/atk:estimate --lang vi                 # Write the sheet in Vietnamese
 /atk:estimate --out <path>              # Override the default output path
 ```
 
@@ -71,6 +72,12 @@ read the kit's `shared/run-trace.md` and do what it says before the file, at eac
 
 Read each item and reject what cannot be estimated. An item with no acceptance criteria, or with an
 open question that changes its size, is marked `NEEDS INTAKE` and excluded rather than guessed.
+
+Before marking one, look for the design the work already has: first the design or reference
+documents and pull requests the ticket and its comments link, then one search of the code host for
+pull requests, open or merged, that name any of the items' keys. Whatever one of these settles
+counts as part of the item. The basis names the source, and its status if it is not yet approved.
+A pull request closed without merging settles nothing.
 
 An estimate already on the ticket, in a comment or in the estimate field, is an opinion like any
 other and never a basis. Re-check each assumption it rests on. A number taken over without that

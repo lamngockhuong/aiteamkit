@@ -71,10 +71,15 @@ One row per main task, in priority order, and a total row:
 Under it, the same total by discipline, because the PM fills a sprint with people, and a person is
 a BE developer, an FE developer or a tester rather than a share of a task:
 
-| Discipline | Hours | Left | With buffer | Man-days |
-|------------|-------|------|-------------|----------|
+| Discipline | SP | Hours | Left | With buffer | Man-days |
+|------------|----|-------|------|-------------|----------|
 
-One row per discipline present in Appendix A, then a total row. **Hours** is whole size, like
+One row per discipline present in Appendix A, then a total row. **SP** gives each task's points,
+undivided, to one discipline (points size the task as a whole, per Units below): the discipline of
+its `Dev` line, or, for a task with none, the one discipline all its lines belong to. A task this
+rule leaves with two disciplines, from `Dev` lines in two or from no `Dev` line and lines in two, is
+given to none. It is named under the table with its points and its disciplines, and its points
+count only in the total row. A discipline given no task shows `0`. **Hours** is whole size, like
 section 1. **Left** takes off the time already spent on that discipline's lines of a task in
 progress, as the tracker records it; time the tracker records against the task alone is named under
 the table rather than split by guess. The PM plans on Left, so **With buffer** and **Man-days**
@@ -225,7 +230,8 @@ spends. Points size the task as a whole, and come from one of two places, which 
 Every total equals the sum of the rows above it, and a figure carried elsewhere is the same figure:
 each task's points in section 1 are its row in the points table of Appendix A, and the SP total
 their sum; each task's hours in section 1 is the sum of its lines in Appendix A, and so is each
-discipline's; the two tables of section 1 end on the same Hours total, while their `With buffer` totals differ
+discipline's; the two tables of section 1 end on the same SP and Hours totals, with the
+discipline table's SP total counting the tasks named under it, while their `With buffer` totals differ
 by the buffer on time already spent; the grand total of Appendix A
 is the base of Appendix D and the hours in the summary line, or under `--points` the SP total is.
 Check the sums before setting the status; a sheet whose columns do not add up is not ready for
