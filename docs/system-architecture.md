@@ -202,9 +202,10 @@ Sixteen are contracts between a named handful of skills rather than kit-wide rul
   several questions in a single prompt. It draws the line the kit had drawn only one way before: a
   capability the harness itself ships may be named and used, a command belonging to another kit may
   not, because the first is there for everyone who installed atk on that harness and the second is
-  not. Cited by `atk:run-cases` for browser automation, which is neither: it is named by what it does
-  and never by the plugin or server supplying it, and it is the one capability whose absence stops a
-  skill, since for that skill the browser is the work and doing it by hand is `atk:qa --record`.
+  not. Cited by `atk:run-cases` for browser automation and device automation, which are neither: each
+  is named by what it does and never by the plugin or server supplying it, and the one the run's
+  client needs is the one capability whose absence stops a skill, since for that skill the browser or
+  the app on a device is the work and doing it by hand is `atk:qa --record`.
   Its section on reading wide through an agent is cited by the seven skills that read most of a
   tree, `atk:init`, `atk:catchup`, `atk:spec`, `atk:convention`, `atk:security`, `atk:fix` and
   `atk:onboard`: the agent returns conclusions with `path:line`, never file bodies, so the session
@@ -308,8 +309,7 @@ Sixteen are contracts between a named handful of skills rather than kit-wide rul
   read without opening a file rule 9 keeps unread, the order of assertions, a field the hierarchy
   cannot name, the rules for a real device, and the status-bar check on screenshots and element
   lists. It holds the method both device clients use; which way each skill's target rule points
-  stays in that skill. No skill cites it yet: `atk:run-cases` and `atk:verify` take it up with
-  their device clients.
+  stays in that skill. Cited by `atk:run-cases` for its device client.
 
 The last two describe files that do not ship with the kit at all:
 

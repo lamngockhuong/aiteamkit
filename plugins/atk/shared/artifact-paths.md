@@ -314,7 +314,7 @@ record is a copy of what was filed with whoever owns the skill it is about, and 
 report is rebuilt by running `atk:onboard` again against the repository as it stands then. The
 triage report and the run log of `atk:run-cases` hold the detail behind a run record whose `In short`
 already lists what they would be needed for, except where no record followed them: a dry run, a
-harness with no browser automation, a run where no case ran, or a run that stopped before it wrote
+harness with no automation for the run's client, a run where no case ran, or a run that stopped before it wrote
 one. Then the triage report holds the only written copy of the agreed scope, and the run log the only
 list of what the run may have created on the environment, and both are kept until a person has acted
 on them. Screenshots under its `evidence/` directory are the only copy until the person who started

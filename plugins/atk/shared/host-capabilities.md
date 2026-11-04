@@ -10,7 +10,7 @@ for parallel reviewers, by `init`, and through it `tailor`, and by `plan --answe
 by `independent-challenge.md` for the agents a challenge spawns, by `review-fix-loop.md` for the
 stated total of a review, by `design-sources.md` for naming
 a connection to a design tool and for how one is read, by `catchup` for how a linked document is
-read in its document mode, by `run-cases` for browser automation, by `help` for what it may
+read in its document mode, by `run-cases` for browser automation and device automation, by `help` for what it may
 name, by `init`, `catchup`, `spec`, `convention`, `security`, `fix`, and `onboard` for reading
 wide through an agent, and by `orchestrate` for agents that write and for the parallel-agents policy
 its concurrency follows. What the tidy step looks for is in `shared/tidy-pass.md`, which is the same list whichever
@@ -111,7 +111,8 @@ owns; none of them is a precondition for it. That is the opposite of `.atk/profi
 absence does stop three skills, and the difference is that the profile carries facts nobody else can
 supply.
 
-Browser automation, below, is the one exception to this rule, for the reason that section gives.
+The automation `atk:run-cases` needs for its client, browser automation or device automation below,
+is the one exception to this rule, for the reason Browser automation gives.
 
 ## Browser automation
 
@@ -128,14 +129,15 @@ Resolve it the way a host capability is resolved: from what the harness lists at
 never carried from another session or machine. Where several are listed, use the one the person
 names, or ask.
 
-`atk:run-cases` is the only skill that requires it, because for that skill the browser is the work
-rather than an improvement to it: an execution run done without one is a person executing the cases,
-which is what `atk:qa --record` records. So the degradation is not to do the work by hand. Where the
-harness has no browser automation, the run stops after the scope question, writes no run record,
-keeps the triage report, and hands the agreed scope to `atk:qa --record` for a tester to execute,
-saying in the session that the harness offered none. That is the exception to "No skill stops for a
-missing host capability" above, and it stays the only one: a skill whose work a browser only
-improves degrades the usual way.
+`atk:run-cases` is the only skill that requires an automation, the one its client needs: browser
+automation for the browser client, device automation, below, for an app on a device. For that skill
+the client is the work rather than an improvement to it: an execution run done without one is a
+person executing the cases, which is what `atk:qa --record` records. So the degradation is not to do
+the work by hand. Where the harness has no automation for the run's client, the run stops after the
+scope question, writes no run record, keeps the triage report, and hands the agreed scope to
+`atk:qa --record` for a tester to execute, saying in the session that the harness offered none. That
+is the exception to "No skill stops for a missing host capability" above, and it stays the only one:
+a skill whose work a browser or a device only improves degrades the usual way.
 
 ## Device automation
 

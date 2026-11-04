@@ -198,10 +198,11 @@ Mười sáu file tiếp theo là hợp đồng giữa một nhóm skill có tê
   gửi được nhiều câu hỏi trong cùng một lần. Nó vạch một ranh giới mà trước đây kit chỉ vạch theo
   một chiều: khả năng do chính harness cung cấp thì được gọi tên và được dùng, còn lệnh thuộc về
   một kit khác thì không, vì thứ nhất có sẵn với mọi đội đã cài atk trên harness đó, còn thứ hai
-  thì không. `atk:run-cases` trích dẫn file này cho khả năng tự động hoá trình duyệt, thứ không thuộc loại nào ở
-  trên: nó được gọi theo việc nó làm, không bao giờ theo tên plugin hay server cung cấp nó, và là khả
-  năng duy nhất mà thiếu nó thì một skill phải dừng, vì với skill đó trình duyệt chính là công việc,
-  còn làm tay thì đã là `atk:qa --record`.
+  thì không. `atk:run-cases` trích dẫn file này cho khả năng tự động hoá trình duyệt và tự động hoá thiết
+  bị, những thứ không thuộc loại nào ở trên: mỗi thứ được gọi theo việc nó làm, không bao giờ theo tên
+  plugin hay server cung cấp nó, và thứ mà client của lần chạy cần là khả năng duy nhất mà thiếu nó thì
+  một skill phải dừng, vì với skill đó trình duyệt hay app trên thiết bị chính là công việc, còn làm
+  tay thì đã là `atk:qa --record`.
   Mục về giao phần đọc rộng cho một agent được bảy skill đọc nhiều nhất trong cây mã trích dẫn:
   `atk:init`, `atk:catchup`, `atk:spec`, `atk:convention`, `atk:security`, `atk:fix` và
   `atk:onboard`. Agent trả về kết luận kèm `path:line` chứ không trả nội dung file, nên phiên làm
@@ -305,9 +306,8 @@ Mười sáu file tiếp theo là hợp đồng giữa một nhóm skill có tê
   phiên bản của một bản build mà không mở file nào nguyên tắc 9 giữ không đọc, thứ tự các phép kiểm,
   một trường mà cây accessibility không gọi được tên, các quy tắc cho thiết bị thật, và phép kiểm
   thanh trạng thái trên ảnh chụp màn hình và danh sách phần tử. File giữ cách làm mà cả hai client
-  thiết bị dùng chung; quy tắc đích của mỗi skill hướng về phía nào thì vẫn nằm trong skill đó. Chưa
-  skill nào trích dẫn file này: `atk:run-cases` và `atk:verify` sẽ dùng nó cùng client thiết bị của
-  mình.
+  thiết bị dùng chung; quy tắc đích của mỗi skill hướng về phía nào thì vẫn nằm trong skill đó. `atk:run-cases`
+  trích dẫn file này cho client thiết bị của nó.
 
 Hai file cuối mô tả những file không đi kèm kit:
 

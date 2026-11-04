@@ -12,6 +12,13 @@ Every row of the cases table, except a row struck through as removed, whose `Exp
 with `Removed`, per `skills/qa/references/test-case-template.md`. Removed rows are skipped and counted
 in the triage report, never scored and never run.
 
+A row whose `Platform` cell names only platforms other than the run's client, `Android` on a browser
+run or `Web` on an Android one, is skipped the same way: counted in the triage report beside the
+removed rows, never scored and never run. An empty cell, or no such column, means every client, per
+The Platform column in `skills/qa/references/test-case-template.md`. A case with an empty cell whose steps name a control only one platform has, the
+Android system back control on a browser run, is `BLOCKED` with that reason, as a page grounding
+cannot find is.
+
 The table is read by the columns that template names. A file that lacks `Page` or `Priority`, or
 names them differently, is asked about once: which column holds the page, which the priority. With no
 priority column at all, the cut at the scope question falls back to case ID order alone, and the
@@ -42,6 +49,11 @@ build, a version on a page or an endpoint, the two are compared at recon, and a 
 the person before scoring: carry on, or check out what is deployed first. A string read from the wrong
 commit turns into a false `Failed`, or a false `BLOCKED`.
 
+On a device client, grounding also names each field the cases touch whose control carries no text,
+label or identifier the accessibility hierarchy would show, a field shown only by its hint among
+them. Such a field is reached by position, per `shared/device-sessions.md`; the triage report names
+it as a finding, with the field's name taken from the code.
+
 A `Page` that matches nothing in the code is a finding: the case targets work that is not built yet,
 or names the page wrongly. Its verdict is `BLOCKED`, and the triage report says which.
 
@@ -68,9 +80,11 @@ for the cases this run can reach, which under `--only` are the cases it names:
 4. **Check every `Pre-condition` against what was seen.** A case that needs a state no record is in,
    or an account that cannot log in unattended, is not `AUTO` as written.
 
-The browser session recon opens is the one the run keeps using, so each gated account is challenged
-once per run, not once at recon and again at execution. Where the harness refuses the browser tool
-at recon, the person is asked once to allow it; still refused, the run carries on as a dry run.
+The client session recon opens, a browser session or an app session on the device, is the one the
+run keeps using, so each gated account is challenged once per run, not once at recon and again at
+execution. On a device, recon logs in through the app, once. Where the harness refuses the
+automation's tool at recon, the person is asked once to allow it; still refused, the run carries on
+as a dry run.
 
 Under `--dry-run` there is no recon and no request to the environment. Every verdict is scored
 against the cases file and the code alone, and the triage report marks each one provisional.
@@ -91,6 +105,18 @@ implies.
 | 7 | It depends on nothing outside the application (higher is fewer) | The application and its database only | Touches an outside system without asserting on it | Asserts on the outside system: mail, SMS, a storage object, an outside API |
 | 8 | It is worth automating | A path re-tested every release: login, a guard, the main list, the main create | Run each release but narrow | Run once |
 
+Criteria 2 and 6 are stated for the browser client above. On a device client they read instead:
+
+| # | Criterion | 2 | 1 | 0 |
+|---|-----------|---|---|---|
+| 2 | The result can be observed on the device | In the app's accessibility hierarchy, or the screen reached | Reachable indirectly: another screen, a pull to refresh, the app relaunched | Out of reach: pixels, a file, a mail, a push notification's content the automation cannot read, a server log, a request's status or body, the app's log |
+| 6 | It can be driven on the device | Launch, tap, type, select, scroll | Swipe, long press, a system permission dialog, rotation, the system back control | Outside the app: another app, the camera or microphone with real input, biometrics on a real device, a phone call or SMS |
+
+Biometrics, a location and a push notification score 1 on criterion 6, not 0, on an emulator where
+the device automation can simulate them, and the triage report says the score depends on that. A
+case that reaches a field by position, per Ground the cases in the code above, scores criterion 3 no
+higher than 1, and its line in the triage report says why.
+
 Criterion 1 at 1 often rises to 2 through grounding, where the code states the exact message the
 case only describes and does not contradict it. Say so in the triage report and cite the file.
 
@@ -104,9 +130,10 @@ Apply in this order. The first two steps are absolute, and no later step or scor
 1. **`MANUAL`, unconditionally,** when criterion 4 is 0, or criterion 1, 2, 3, or 6 is 0. A case that
    changes data the run did not create, or submits wrong credentials, is never automated in part, per
    `references/environment-safety.md`. A case whose result is subjective or cannot be observed has
-   nothing to automate, and one that leaves the browser or depends on a flow that will not repeat
+   nothing to automate, and one that leaves the run's client, the browser or the app, or depends on a flow that will not repeat
    cannot be run to a result the run saw.
-2. **`BLOCKED`** when grounding found no page for it. It is never attempted.
+2. **`BLOCKED`** when grounding found no page for it, or its steps name a control the run's client
+   does not have, per The cases to triage. It is never attempted.
 3. **`SEMI-1`, `SEMI-2`, or `SEMI-3`** when one obstacle stands between the case and a run, per the
    table below. A blocker that no person's single step can clear makes the case `MANUAL` instead.
 4. **By total** for what is left: 13 to 16 `AUTO`; 9 to 12 a `SEMI` subtype by its obstacle, or
@@ -146,7 +173,8 @@ Written to `docs/derived/run-cases/<run-id>/triage.md` before the scope question
 `shared/artifact-paths.md`. It is derived output: nobody approves it, and the record cites it. It
 holds, with every section present and `None` where a section is empty:
 
-- the cases file, its `status`, whether it had uncommitted changes, and the removed rows skipped;
+- the cases file, its `status`, whether it had uncommitted changes, the removed rows skipped, and
+  the rows skipped because their `Platform` names another client;
 - the target row by name, its kind and who confirmed it, and the lock threshold or
   `TBD (ask <QA lead>)`;
 - the commit grounding read, and the build the environment shows where it shows one;

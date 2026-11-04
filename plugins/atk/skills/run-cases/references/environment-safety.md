@@ -25,7 +25,7 @@ From that row the run takes:
 |--------|----------|
 | `Environment` | The name written into the record's `Environment` header field |
 | `Kind` | Whether the run may proceed at all, per Acceptable targets below |
-| `URL or location` | The base URL; an empty cell is asked for, from the person the row names |
+| `URL or location` | The base URL, or on a device client the backend the build must talk to; an empty cell is asked for, from the person the row names |
 | `Data` | What recon expects to find, the test accounts by role, and the lock threshold; never a credential, per the last paragraph of Credentials below |
 | `Provided by` | The environment owner: the person a stop names, and the person who answers what the row leaves open |
 
@@ -47,7 +47,8 @@ The run proceeds only when both hold:
 1. The row's `Kind` is `staging` or `development`, or a term of the project's own with one of those
    two beside it.
 2. The person who started the run confirms it, in answer to a question that shows the row's name,
-   kind, and URL together. The same question asks whether another run or another tester is using the
+   kind, and URL together, and on a device client the build's variant and the backend it was read
+   to use, per On a device below. The same question asks whether another run or another tester is using the
    row's test accounts now, for The lock threshold below. The confirmation is asked once per run,
    before the first request.
 
@@ -62,6 +63,30 @@ It stops, and changes nothing, in each of these cases:
 
 A private-network address is not a local one: a development environment often lives on one. The
 question is whether the address is this machine, not whether it is public.
+
+### On a device
+
+Where the run's client is an app on a device, chosen at step 2 of the skill, the row is still the
+target, and every rule above applies to it. Four things are added, all checked before the run
+launches the app, so before its first request, and the methods they use are in
+`shared/device-sessions.md`.
+
+- **The device and the app are there.** No device answers under the confirmed serial, or the app's
+  identifier from the profile's `App` line is not installed on it: the run stops at step 2 and names
+  what is missing. It never installs the app itself.
+
+- **The client is not the target.** An emulator on this machine is not a local target, and does not
+  trigger the local refusal. The refusal applies to what the build talks to: a row of `Kind` `local`
+  stops the run as it does for a browser.
+- **The build must point at the confirmed row.** The backend each build variant uses is read per
+  Reading a build in `shared/device-sessions.md`, from the build configuration in the repository and
+  never from a file rule 9 of `shared/team-roles.md` keeps unread, and the variant installed on the
+  device is read as Which variant is installed in that file says. A variant whose backend is
+  production, local, or another row stops the run exactly as a production or local row stops it,
+  naming the row's owner. Where the repository does not say, the person confirms that the build
+  points at the row, and the run log records that the check rests on their confirmation.
+- **The build is identified.** Its version and build number, read in the order Reading a build
+  gives, go into the record's `Build`, and the run log says which source they came from.
 
 ### A row with no usable `Kind`
 
@@ -117,7 +142,8 @@ the account a whole team tests with.
 ## Credentials
 
 The run needs accounts, and often a gate in front of the application, such as HTTP Basic
-authentication, before the application's own login. Credentials come from one of two places, the
+authentication, before the application's own login. A gate of that kind sits in front of a browser;
+a native client does not meet it, and a sign-in screen inside the app is a login like any other. Credentials come from one of two places, the
 first preferred, since what is typed into a session stays in its transcript:
 
 1. **Read from a file the project keeps for this purpose**, when the person names one. A file inside
@@ -139,7 +165,7 @@ and repeated nowhere.
 A gate in front of the application is passed before the first page of the application is opened,
 the reachability check included: a `401` carrying a `WWW-Authenticate` header on the first request is
 the gate, not an environment that is down, so the gate's credentials are asked for, the gate is
-passed, and the check is made behind it. The gate is passed again whenever the browser session is
+passed, and the check is made behind it. The gate is passed again whenever the client session is
 reset. Where it is passed by putting the credentials in the first URL, the password is
 percent-encoded (`@` as `%40`, `#` as `%23`, `/` as `%2F`), since an unencoded `@` sends the
 navigation to another host. That URL is never logged and never captured in a screenshot. A `401`, or

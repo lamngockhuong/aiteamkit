@@ -711,6 +711,13 @@ record. Phía sau là một triage report và một run log trong `docs/derived/
 agent chạy phần việc lặp lại của một lượt regression thay cho người bấm tay từng bước. `--dry-run`
 dừng sau bước phân loại và câu hỏi phạm vi, không gửi gì tới môi trường.
 
+Lần chạy có một client, chọn cùng lúc với môi trường đích: trình duyệt, hoặc một app trên thiết bị
+Android mà người dùng mang tới, đang chạy và đã cài sẵn bản build. Trên thiết bị, bản build phải trỏ
+tới đúng dòng đã xác nhận, lần chạy không bao giờ khởi động, cài hay gỡ thứ gì, chỉ xoá dữ liệu của
+app trên emulator bằng lệnh xoá trong dòng `App` của profile, và case nào có `Platform` ghi client
+khác thì bị bỏ qua. Một file test case phủ cả web app lẫn mobile app được chạy một lần cho mỗi client,
+mỗi lần chạy viết record riêng.
+
 **Không dùng khi.** Môi trường đích là stack local: đó là việc của `atk:verify`, bước lập trình viên tự
 kiểm trước khi bàn giao cho QA. Hoặc tester đã chạy xong và đang cầm kết quả: đó là việc của
 `atk:qa --record`. Skill từ chối thẳng production, và một dòng trong test plan không ghi tên người phụ
@@ -730,8 +737,9 @@ Case chỉ được ghi `Passed` khi mọi phần của kết quả mong đợi 
 đụng tới thì được hoãn: có tên trong danh sách nhưng không được đếm, nên tỷ lệ trong record không bao giờ
 trộn case đã chạy với case chưa chạy. Ảnh chụp chỉ vào record sau khi người khởi động lần chạy xác nhận
 trong ảnh không có dữ liệu của người thật; sau đó record nằm ở `IN REVIEW` chờ QA lead, và
-`atk:qa --bug` đọc nó như record của bất kỳ tester nào. Trên harness không có khả năng tự động hoá trình
-duyệt, lần chạy dừng sau câu hỏi phạm vi và chuyển phạm vi đã thống nhất sang `atk:qa --record`.
+`atk:qa --bug` đọc nó như record của bất kỳ tester nào. Trên harness không có khả năng tự động hoá mà
+client của lần chạy cần, trình duyệt hay thiết bị, lần chạy dừng sau câu hỏi phạm vi và chuyển phạm vi
+đã thống nhất sang `atk:qa --record`.
 
 ---
 

@@ -702,6 +702,13 @@ triage report and a run log under `docs/derived/run-cases/`.
 wants the mechanical part of a regression pass run by the agent rather than clicked through by hand.
 `--dry-run` stops after the triage and the scope question, sending nothing to the environment.
 
+The run has one client, chosen with the target: the browser, or an app on an Android device that the
+person brings running with the build installed. On a device the build must point at the confirmed
+row, the run never boots, installs or uninstalls anything, it clears the app's data only on an
+emulator with the clear command of the profile's `App` line, and a case whose `Platform` names
+another client is skipped. A cases file covering a web app and a mobile app is run once per client,
+each run writing its own record.
+
 **Do not use when.** The target is the local stack: that is `atk:verify`, the developer's check before
 handing work to QA. Or a tester already executed the cases and has the results: that is
 `atk:qa --record`. The skill refuses production outright, and a test plan row with no named owner
@@ -721,8 +728,8 @@ is `Pending` with a reason a person can act on. Cases on offer that the run did 
 deferred: listed, never counted, so the record's shares never mix run and unrun cases. A screenshot
 reaches the record only after the person who started the run confirms it carries no real person's
 data; the record then waits at `IN REVIEW` for the QA lead, and `atk:qa --bug` reads it like any
-tester's record. Where the harness offers no browser automation, the run stops after the scope
-question and hands the agreed scope to `atk:qa --record`.
+tester's record. Where the harness offers no automation for the run's client, browser or device, the
+run stops after the scope question and hands the agreed scope to `atk:qa --record`.
 
 ---
 
