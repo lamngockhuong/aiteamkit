@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.19](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.18...atk-v0.1.19) (2026-11-04)
+
+
+### Features
+
+* add atkx:doc-audit, checking each claim of a document against its source ([#162](https://github.com/lamngockhuong/aiteamkit/issues/162)) ([1c592b4](https://github.com/lamngockhuong/aiteamkit/commit/1c592b42d1e692a5ff3a942fba7a30be9edb36aa))
+* estimate points and hours per task, by discipline, without sprint fit ([#158](https://github.com/lamngockhuong/aiteamkit/issues/158)) ([cb16052](https://github.com/lamngockhuong/aiteamkit/commit/cb160524dbcb10bae2e4537d8d19b4eadecc4dd8))
+* read atk:estimate comparables once per run, with a dated snapshot ([#161](https://github.com/lamngockhuong/aiteamkit/issues/161)) ([55481d2](https://github.com/lamngockhuong/aiteamkit/commit/55481d2e4ae3cec8e2050c160303c751bbf20173))
+
+
+### Bug Fixes
+
+* give atk:estimate points per discipline, list --lang, look for the design first ([#164](https://github.com/lamngockhuong/aiteamkit/issues/164)) ([adb3608](https://github.com/lamngockhuong/aiteamkit/commit/adb36086f4c0850295434bf594144bcd2f3bbdad))
+
 ## [0.1.18](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.17...atk-v0.1.18) (2026-10-24)
 
 
