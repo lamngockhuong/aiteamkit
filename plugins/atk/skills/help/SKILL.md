@@ -29,7 +29,7 @@ person who asked, and the next person asks again and gets the answer true for th
 
 Handles: reading the project state that decides which skill comes next, routing a question or a
 situation to one skill, explaining what one skill produces and what it needs first, naming the
-artifacts that are waiting on a person and who that person is, naming the companion `atkx` skill
+artifacts that are waiting on a person and who that person is, naming an `atkx` skill
 for a question no `atk` skill covers, and saying plainly when a request is outside this kit.
 
 Does NOT handle: running the skill it recommends, which the person asking does by typing the line;

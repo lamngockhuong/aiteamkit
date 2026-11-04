@@ -56,8 +56,9 @@ calling it.
 
 - `atkx` gains a second skill with scripts, `cite-check.mjs` and `tally.mjs`, on the terms of ADR 0002.
 - `atkx` carries copies of four parts of `atk` it needs at run time: the unread-path table of
-  `plugins/atk/shared/secret-scan.md`, the value mask of rule 9 in
-  `plugins/atk/shared/team-roles.md`, the agent prompt rules of
+  `plugins/atk/shared/secret-scan.md`, the value mask, from the kinds table of
+  `plugins/atk/skills/qa/references/test-run.md` and the masking line of What happens on a hit in
+  `plugins/atk/shared/secret-scan.md`, the agent prompt rules of
   `plugins/atk/shared/host-capabilities.md`, and the challenge rules of
   `plugins/atk/shared/independent-challenge.md`. Each copy names its origin by GitHub link, since
   `tests/verify.sh` refuses a plugin file naming another plugin's path, and a new check there fails

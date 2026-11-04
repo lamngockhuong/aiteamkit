@@ -144,3 +144,7 @@
 'skill: skill-eval':
 - changed-files:
   - any-glob-to-any-file: 'plugins/atkx/skills/skill-eval/**'
+
+'skill: doc-audit':
+- changed-files:
+  - any-glob-to-any-file: 'plugins/atkx/skills/doc-audit/**'

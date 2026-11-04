@@ -6,8 +6,8 @@ dùng, và khi nào không nên.
 Nên đọc phần này trước khi áp dụng bộ kit: mỗi skill chạy độc lập được, và team có thể bắt đầu chỉ
 với một skill.
 
-Plugin `atkx` nằm cạnh `atk` có thêm một skill không thuộc giai đoạn nào: `atkx:skill-eval`, được mô tả
-sau skill cuối cùng của `atk`.
+Plugin `atkx` nằm cạnh `atk` có thêm hai skill không thuộc giai đoạn nào, `atkx:skill-eval` và
+`atkx:doc-audit`, được mô tả sau skill cuối cùng của `atk`.
 
 ## Vị trí trong vòng đời
 
@@ -923,6 +923,37 @@ của `atk:review`.
 bị thay đổi gì. Cổng bảo mật là một danh sách mẫu, nên cổng sạch chỉ có nghĩa là không tìm thấy dạng
 nào trong danh sách, chứ không có nghĩa skill an toàn. Skill đến từ nguồn chưa tin được thì vẫn phải
 đọc trước khi cài.
+
+---
+
+## `atkx:doc-audit`
+
+**Tạo ra.** Một báo cáo trong `docs/derived/doc-audit/`, bị git bỏ qua: mọi khẳng định kiểm được
+của các tài liệu được kiểm, kèm dòng của nó và đúng một kết luận, `CORRECT` hoặc `WRONG` cùng
+`path:line` hay dòng trích dẫn quyết định nó, hoặc `UNVERIFIABLE` cùng nguồn có thể quyết định nó và
+tên người phải trả lời. Mọi kết luận `WRONG` và một mẫu các kết luận `CORRECT` được một agent khác
+đọc lại, agent này không thấy lập luận của agent đầu, và báo cáo in số kết luận bị lật. Mâu thuẫn
+trong một tài liệu và giữa các tài liệu được liệt kê riêng, tách khỏi các kết luận. Khi được giao một
+thư mục, một lượt rà rẻ không đọc code sẽ kiểm mọi trích dẫn bằng script, tìm mâu thuẫn trong từng
+tài liệu và xếp hạng chúng, bỏ qua bản dịch và bản ghi; người dùng chọn tài liệu nào được kiểm đầy
+đủ, kèm một khoảng chi phí: lấy từ hai lần chạy thử ở lần chạy đầu, và từ các báo cáo trước của dự
+án về sau. `--cheap` dừng sau bước xếp hạng đó. `--red-team` thêm phản biện từ các agent đọc tài liệu
+mà không biết gì trước, cho phần không nguồn nào quyết định được; `--source` chỉ ra nguồn yêu cầu để
+đối chiếu các khẳng định về mục đích; `--code` chỉ ra thư mục gốc của code khi nó không phải gốc của
+repository; `--out` ghi báo cáo vào chỗ khác, vẫn là nơi git bỏ qua.
+
+**Dùng khi.** Một tài liệu do agent hay người viết sắp được tin dùng, bởi tester viết case từ nó hay
+developer xây dựng theo nó, mà chưa ai đối chiếu với code; hoặc một thư mục tài liệu đã lớn nhanh
+hơn mức ai đọc kịp.
+
+**Không dùng khi.** Bạn muốn sửa tài liệu, việc của người sở hữu nó dựa trên báo cáo, hoặc của
+`atk:spec` với các tài liệu tham chiếu nó giữ; bạn muốn tài liệu được giải thích, việc của
+`atk:catchup`; hoặc thứ cần đọc là một pull request, việc của `atk:review`.
+
+**Thói quen quan trọng.** Một kết luận phải mang bằng chứng của nó, nếu không thì chưa phải kết
+luận. Một agent thứ hai đọc lại cùng văn bản không có gì để so, nên mọi khẳng định được kiểm với chính
+dòng quyết định nó, và khẳng định nào không có gì trong tầm với quyết định được thì được nói rõ như
+vậy, kèm người có thể trả lời.
 
 ---
 

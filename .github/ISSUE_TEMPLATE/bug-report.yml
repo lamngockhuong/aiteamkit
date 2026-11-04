@@ -59,6 +59,7 @@ body:
         - Agents (plugins/atk/agents/)
         - atkx (plugins/atkx/)
         - Skill - atkx:skill-eval
+        - Skill - atkx:doc-audit
         - Plugin manifest / installation
         - Documentation
         - Other / unsure

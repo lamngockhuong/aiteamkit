@@ -238,6 +238,166 @@ assert rows == folders, 'atkx-skills.md and plugins/atkx/skills/ differ: %s' % s
 assert 'references/atkx-skills.md' in open('plugins/atk/skills/help/SKILL.md').read(), 'help no longer reads atkx-skills.md'
 print('OK atk:help knows %d atkx skills' % len(rows))"
 
+# Every copy of an atk rule inside atkx is still its origin's words. An install copies one plugin, so
+# atkx keeps its own copy of what it must obey, between a line naming the origin by GitHub link and
+# an end line. Each block must appear in the origin section that link names, as one contiguous run,
+# after whitespace is folded and every citation, bare path or GitHub link, is reduced to its file
+# name. A block starts at the first line of its section, unless its marker says after and quotes the
+# words that come just before it there, and runs to the end of its section, unless its marker says
+# up to and quotes the words that follow it there. So a row added to the unread-path table, a rule
+# appended to a copied section, or a paragraph put in front of one, fails here until atkx follows,
+# and a marker the pattern cannot read fails as one, since every marker line must be a block
+python3 -c "
+import glob, re
+cite = re.compile(r'\x60?(?:https://github\.com/\S*?/)?(?:[\w.-]+/)*([\w.-]+\.(?:md|tsv))\x60?')
+norm = lambda s: ' '.join(cite.sub(r'\1', s).split())
+slug = lambda h: re.sub(r'[^\w\- ]', '', h.strip().lower()).replace(' ', '-')
+block = re.compile(r'^<!-- copied from https://github\.com/lamngockhuong/aiteamkit/blob/main/(plugins/atk/[\w./-]+\.md)#([\w-]+)(?:, after \x22([^\x22]+)\x22)?(?:, up to \x22([^\x22]+)\x22)? -->\n(.*?)\n<!-- end of copy -->$', re.S | re.M)
+def section(src, anchor):
+    lines, heads, fence = open(src).read().split(chr(10)), [], False
+    for i, l in enumerate(lines):
+        if l.startswith('\x60\x60\x60'): fence = not fence
+        elif not fence and re.match(r'#+ ', l): heads.append((i, len(l) - len(l.lstrip('#')), slug(l.lstrip('#'))))
+    hit = [(i, lv) for i, lv, h in heads if h == anchor]
+    if not hit: return None
+    i, lv = hit[0]
+    return norm(chr(10).join(lines[i + 1:next((j for j, l2, _ in heads if j > i and l2 <= lv), len(lines))]))
+bad, n, markers = [], 0, 0
+for f in sorted(glob.glob('plugins/atkx/**/*.md', recursive=True)):
+    text = open(f).read()
+    markers += len(re.findall(r'^<!-- copied from', text, re.M))
+    for m in block.finditer(text):
+        n += 1
+        src, anchor, after, upto, body = m.groups()
+        sec = section(src, anchor)
+        if sec is None: bad.append('%s: no section %s#%s' % (f, src, anchor)); continue
+        nb = norm(body); present = nb in sec
+        starts = norm(after) + ' ' + nb in sec if after else sec.startswith(nb)
+        ends = nb + ' ' + norm(upto) in sec if upto else sec.endswith(nb)
+        if present and not starts:
+            bad.append('%s: copy of %s#%s no longer starts %s' % (f, src, anchor, 'after ' + repr(after) if after else 'at the start of its section')); continue
+        if present and not ends:
+            bad.append('%s: copy of %s#%s no longer runs to %s' % (f, src, anchor, repr(upto) if upto else 'the end of its section')); continue
+        if not present:
+            first = next((l for l in body.split(chr(10)) if l.strip() and norm(l) not in sec), 'the lines are all there, out of order')
+            bad.append('%s: copy of %s#%s differs at: %s' % (f, src, anchor, first.strip()[:100]))
+assert n, 'no copy found in atkx'
+assert markers == n, '%d copied from lines but %d blocks read: a marker the pattern does not match is checked by nothing' % (markers, n)
+assert not bad, chr(10).join(bad)
+print('OK atkx copies match their atk origins, %d blocks' % n)"
+
+# atkx:doc-audit's citation check holds the unread-path patterns itself, since it cannot read a
+# reference at run time; its marked array must be the Pattern cells of the origin table, in order
+python3 -c "
+import re
+src = open('plugins/atkx/skills/doc-audit/scripts/cite-check.mjs').read()
+arr = re.search(r'// unread-paths: begin.*?\n(.*?)\n// unread-paths: end', src, re.S).group(1)
+got = re.findall(r'^  \x22(.*)\x22,$', arr, re.M)
+sec = open('plugins/atk/shared/secret-scan.md').read().split('## Paths that are a finding on their own')[1].split(chr(10) + '## ')[0]
+want = [r.split(' | ')[0][2:] for r in sec.split(chr(10)) if r.startswith('| \x60')]
+assert got == want, 'cite-check.mjs unread-path rows differ from the origin table: %s' % ([w for w in want if w not in got] + [g for g in got if g not in want])
+print('OK doc-audit unread-path array matches its origin, %d rows' % len(got))"
+
+# atkx:doc-audit's citation check on its fixture, copied into a scratch repository since the script
+# resolves citations against the repository holding the document. The cases that cannot be committed
+# are built there at run time: a .env and a .ENV, a key beside a .pub, a .sql over a megabyte, a link
+# to the .env, a link and a ../ path out of the repository, and a cited line holding a secret-shaped
+# value. No value of either kind, and no line of a cited file, may reach the output
+python3 -c "
+import json, os, shutil, subprocess, tempfile
+script = os.path.abspath('plugins/atkx/skills/doc-audit/scripts/cite-check.mjs')
+fx = 'tests/doc-audit-fixtures/cite'
+t = tempfile.mkdtemp()
+try:
+    r = os.path.join(t, 'repo'); shutil.copytree(fx, r)
+    def put(p, s):
+        os.makedirs(os.path.dirname(os.path.join(r, p)), exist_ok=True); open(os.path.join(r, p), 'w').write(s)
+    subprocess.run(['git', 'init', '-q'], cwd=r, check=True)
+    fake_value = 'ZZCITE' + 'SECRETVALUE123456'; envval = 'ZZENV' + 'VALUE987'
+    put('.env', 'X=' + envval + chr(10)); put('config/.ENV', 'X=' + envval + chr(10))
+    put('keys/deploy', envval + chr(10)); put('keys/deploy.pub', 'ssh-ed25519 AAAA' + chr(10))
+    put('data/dump.sql', 'x' * 1100000); put('data/small.sql', 'select 1;' + chr(10))
+    for p_ in ('certs/server.pem', 'config/serviceAccountKey.json', 'config/secrets.yml', '.netrc', 'home/.git-credentials',
+               'home/.aws/credentials', 'home/.kube/config', 'infra/terraform.tfstate'):
+        put(p_, envval + chr(10))
+    put('config/.env.example', 'X=' + chr(10))
+    put('src/config.js', '// config' + chr(10) + 'export const API_' + 'KEY' + chr(32) + chr(61) + chr(32) + chr(34) + fake_value + chr(34) + ';' + chr(10))
+    subprocess.run(['git', 'add', '-A'], cwd=r, check=True)
+    os.symlink('../.env', os.path.join(r, 'docs', 'env-link')); os.makedirs(os.path.join(t, 'outdir'))
+    os.symlink('../../outdir', os.path.join(r, 'docs', 'out-link'))
+    p = subprocess.run(['node', script, '--exclude', 'docs/vi', 'docs'], capture_output=True, text=True, cwd=r)
+    assert p.returncode == 0, 'cite-check failed: %s' % p.stderr
+    got = {d['path']: d for d in json.loads(p.stdout)['documents']}
+    want = json.load(open(fx + '/expected.json'))
+    assert set(got) == set(want['documents']), 'documents %s, expected %s: --exclude did not leave the mirror out' % (sorted(got), sorted(want['documents']))
+    for doc, rows in want['documents'].items():
+        cites = got[doc]['citations']
+        assert len(cites) == len(rows), '%s: %d citations, expected %d' % (doc, len(cites), len(rows))
+        for c, w in zip(cites, rows):
+            assert all(c.get(k) == v for k, v in w.items()), '%s: line %d gave %s, expected %s' % (doc, c['line'], c, w)
+        counts = {k: got[doc]['counts'][k] for k in want['counts'][doc]}
+        assert counts == want['counts'][doc], '%s: counts %s, expected %s' % (doc, counts, want['counts'][doc])
+    body = open(os.path.join(fx, 'src', 'app.js')).read().split(chr(10))
+    leak = [x for x in [fake_value, envval] + [l.strip() for l in body if len(l.strip()) > 8] if x in p.stdout + p.stderr]
+    assert not leak, 'cite-check printed a value or a line of a cited file: %s' % leak
+    p = subprocess.run(['node', script, '--code', 'src', 'docs/guide.md'], capture_output=True, text=True, cwd=r)
+    row = [c for c in json.loads(p.stdout)['documents'][0]['citations'] if c['line'] == 18]
+    assert row and row[0]['target'] == 'README.md', 'a root-relative link resolved from the code root: %s' % row
+    p = subprocess.run(['node', script, '--code', '../outdir', 'docs'], capture_output=True, text=True, cwd=r)
+    assert p.returncode == 2 and not p.stdout, 'a --code leaving the repository was not refused'
+    assert got['docs/edge.md']['unclosedFence'] == 13, 'an unclosed fence was not reported: %s' % got['docs/edge.md']['unclosedFence']
+    assert got['docs/comment.md']['unclosedComment'] == 3, 'an unclosed comment was not reported: %s' % got['docs/comment.md']['unclosedComment']
+    # A FIFO is neither read as a document nor as a cited file: both are reported unreadable, and the run goes on
+    os.mkfifo(os.path.join(r, 'docs', 'pipe.md')); os.mkfifo(os.path.join(r, 'src', 'pipe.js'))
+    put('docs/cites-pipe.md', 'The handler is in \x60src/pipe.js:1\x60.' + chr(10))
+    p = subprocess.run(['node', script, 'docs/pipe.md', 'docs/cites-pipe.md'], capture_output=True, text=True, cwd=r, timeout=20)
+    out = {d['path']: d for d in json.loads(p.stdout)['documents']}
+    assert out['docs/pipe.md']['status'] == 'unreadable', 'a FIFO document was not reported unreadable: %s' % out['docs/pipe.md']['status']
+    assert [c['status'] for c in out['docs/cites-pipe.md']['citations']] == ['unreadable'], 'a cited FIFO was not reported unreadable: %s' % out['docs/cites-pipe.md']['citations']
+    for bad_args, why in ((['--exclude', 'docs/vii', 'docs'], 'an --exclude that does not exist'), (['--code', 'nowhere', 'docs'], 'a --code that does not exist'),
+                          (['docs', '--code'], 'a --code with no value'), (['--bogus', 'docs'], 'an unknown flag')):
+        p = subprocess.run(['node', script] + bad_args, capture_output=True, text=True, cwd=r)
+        assert p.returncode == 2 and not p.stdout and 'Error' not in p.stderr, '%s was not refused with exit 2: %s' % (why, p.stderr[:200])
+finally:
+    shutil.rmtree(t)
+print('OK doc-audit cite-check fixture, %d documents' % len(got))"
+
+# atkx:doc-audit's tally on its sample tables: the counts of a valid table, with and without --final,
+# every malformed row refused by its document and line, --final refusing a table the second read has
+# not reached, a file named as an argument refused, and --report-dir making a directory readable by
+# the user alone, removed at the end
+python3 -c "
+import json, os, shutil, stat, subprocess
+script = 'plugins/atkx/skills/doc-audit/scripts/tally.mjs'; fx = 'tests/doc-audit-fixtures/tally'
+def run(name, *flags):
+    p = subprocess.run(['node', script] + list(flags), stdin=open(os.path.join(fx, name)), capture_output=True, text=True)
+    return p.returncode, json.loads(p.stdout)
+def refused(code, out, want):
+    got = [(e['row'], e['reason']) for e in out.get('errors', [])]
+    return code == 1 and len(got) == len(want) and all(r == wr and wt in t for (r, t), (wr, wt) in zip(got, want)), got
+expected = json.load(open(fx + '/expected.json'))
+for name, want in sorted(expected.items()):
+    if 'errors' in want:
+        ok, got = refused(*run(name), want['errors'])
+        assert ok, '%s: %s' % (name, got)
+        continue
+    code, out = run(name)
+    assert code == 0 and out['documents'] == want['documents'], '%s: %s' % (name, out)
+    code, out = run(name, '--final')
+    if want['final']:
+        assert code == 0 and out['documents'] == want['documents'], '%s --final: %s' % (name, out)
+    else:
+        ok, got = refused(code, out, want['finalErrors'])
+        assert ok, '%s --final: %s' % (name, got)
+p = subprocess.run(['node', script, 'table.md'], stdin=subprocess.DEVNULL, capture_output=True, text=True)
+assert p.returncode == 2 and not p.stdout, 'tally took a file argument instead of refusing it: %s' % p.stdout[:200]
+p = subprocess.run(['node', script, '--report-dir'], capture_output=True, text=True)
+d = json.loads(p.stdout)['path']
+mode = stat.S_IMODE(os.stat(d).st_mode)
+shutil.rmtree(d)
+assert p.returncode == 0 and (os.name == 'nt' or mode == 0o700), 'report directory mode %o, not 700' % mode
+print('OK doc-audit tally fixtures, %d tables, report directory 0700' % len(expected))"
+
 # Every agent a plugin ships is named for its file and holds the three reading tools and no other,
 # which is the whole of what keeps it from editing or running anything on Claude Code, and
 # says readonly, which is the line Cursor reads

@@ -27,7 +27,7 @@ aiteamkit/
     assets/*.svg                  icon và logo cho trang marketplace
     CHANGELOG.md                  do release-please viết cho plugin này
     LICENSE                       bản sao giấy phép ở gốc repo, vì bản cài không mang theo gì khác
-  plugins/atkx/                       plugin thứ hai, ba manifest, và skills/skill-eval/
+  plugins/atkx/                       plugin thứ hai, ba manifest, skills/skill-eval/ và skills/doc-audit/
     LICENSE                       cũng bản sao đó
   docs/, docs/vi/               tài liệu dự án song ngữ
   .atk/                         hồ sơ và file ghi đè của chính kit, để kit chạy skill lên chính mình
@@ -76,7 +76,7 @@ harness gắn namespace `atk:` lúc nạp dựa trên `plugin.json`.
 ## Plugin thứ hai: atkx
 
 `plugins/atkx/` nằm cạnh `plugins/atk/` trong cùng marketplace, có đủ ba thư mục manifest như vậy và
-một skill, `skill-eval`. Nó dành cho các skill tiện ích không phụ thuộc artifact nào
+hai skill, `skill-eval` và `doc-audit`. Nó dành cho các skill tiện ích không phụ thuộc artifact nào
 và không gắn với vòng đời giao hàng. Phụ thuộc chỉ đi một chiều: skill của `atkx` được gọi skill của
 `atk`, còn `atk` không bao giờ gọi skill nào của `atkx`, nên `atk` cài riêng vẫn đầy đủ. Chỗ duy
 nhất `atk` nhắc tới `atkx` là `atk:help`: với câu hỏi không skill `atk` nào lo được, nó gợi ý skill
@@ -110,8 +110,8 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 Bên cạnh các skill có một agent đi kèm, `plugins/atk/agents/read-only-reviewer.md`. Claude Code nạp
 frontmatter của nó cùng plugin và đặt tên `atk:read-only-reviewer`; phần thân chỉ được đọc khi một
 skill tạo agent đó: mọi agent của `atk:review` trừ reviewer band 1, mọi lăng kính của
-`atk:design-doc --challenge` và `atk:plan --challenge`, và agent mà mỗi skill trong bảy skill đọc
-nhiều giao phần đọc rộng; khi thiếu kiểu agent này thì dùng agent thường với cùng prompt. Danh sách
+`atk:design-doc --challenge` và `atk:plan --challenge`, agent mà mỗi skill trong bảy skill đọc
+nhiều giao phần đọc rộng, và mọi agent của `atkx:doc-audit` khi `atk` được cài cùng; khi thiếu kiểu agent này thì dùng agent thường với cùng prompt. Danh sách
 công cụ của nó là Read, Grep và Glob. Trên Claude Code 2.1.296, agent có danh sách đó không có
 công cụ Bash, Edit hay Write nào để gọi, và một lượt review cùng một lượt phản biện kế hoạch chạy ở
 đó đều tạo đúng kiểu agent này cho mọi vòng và mọi lăng kính. Một mẫu trong danh sách công cụ chỉ
@@ -132,7 +132,9 @@ Claude Code nhận tham số `model` trên công cụ `Agent`, được ưu tiê
 hai; Cursor cho agent cha nêu model khi khởi chạy subagent, kèm hai báo cáo trên diễn đàn vẫn mở về
 việc model đó không được tôn trọng; Codex nhận model khi tạo agent, chỉ thua một file agent tuỳ
 chỉnh tự đặt model, mà kit không mang file nào như vậy. Reviewer band 1 và mọi
-agent có quyền ghi không nhận dòng model nào. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
+agent có quyền ghi không nhận dòng model nào. Đây là quy tắc của `atk`: skill của `atkx` không đọc
+dòng model nào, nên `atkx:doc-audit` không yêu cầu model kể cả khi profile có ghi, và đó là chủ ý.
+`docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
 ghi lý do lựa chọn này thuộc về đội và vì sao nó không nằm trong file agent.
 
 ## Lớp `shared/`
@@ -452,12 +454,20 @@ tiêu đề + mở đầu   skill này sinh ra gì và thói quen nào làm nó 
 
 Một skill của `atk` gồm file đó, `references/` và `evals/`, và cũng được mang thêm `scripts/`, chỉ
 viết bằng Node, cho những phép kiểm tra cần ra cùng một kết quả mỗi lần; người duy trì kit đã cho
-phép ngày 2026-10-14, và hiện chưa skill nào của `atk` có. `atkx:skill-eval`
-là skill duy nhất có thêm thư mục `scripts/`, viết bằng Node như hook và cùng lý do. Các skill mẫu
-của nó phải nhận cùng một kết luận ở mọi lần chạy, trong khi che một credential, so một host với
-`SKILL.md`, hay cộng một điểm có trọng số thì mỗi lần agent làm lại ra một chút khác. Vì vậy phép
-kiểm tra nào cần ra kết quả lặp lại được viết thành script, còn phần cần đọc hiểu nằm trong
-`references/`. ADR 0002 ghi lại lựa chọn này.
+phép ngày 2026-10-14, và hiện chưa skill nào của `atk` có. Cả hai skill của `atkx` đều có thêm thư
+mục `scripts/`, viết bằng Node như hook và cùng lý do. Các skill mẫu của `atkx:skill-eval` phải nhận
+cùng một kết luận ở mọi lần chạy, trong khi che một credential, so một host với `SKILL.md`, hay cộng
+một điểm có trọng số thì mỗi lần agent làm lại ra một chút khác; trích dẫn mà `atkx:doc-audit` kiểm
+thì hoặc trỏ đúng hoặc không, và bảng kết luận của nó phải bị từ chối và được đếm giống nhau qua hai
+lần, trong khi agent của một pilot đã đếm sai chính bảng của nó. Vì vậy phép kiểm tra nào cần ra kết
+quả lặp lại được viết thành script, còn phần cần đọc hiểu nằm trong `references/`. ADR 0002 ghi lại
+lựa chọn này cho `skill-eval`, và ADR 0012 cho `doc-audit`.
+
+`atkx:doc-audit` còn giữ bản sao các quy tắc của `atk` mà nó phải tuân theo: các file không bao giờ
+mở, cách che giá trị, quy tắc cho agent và phần independent challenge, vì bản cài của `atkx` không
+đọc được file của `atk`. Mỗi bản sao được đánh dấu bằng link GitHub tới nguồn, và `tests/verify.sh`
+báo lỗi khi bản sao và nguồn khác nhau, nên một thay đổi ở các phần đó của `atk` phải tới `atkx`
+trong cùng thay đổi.
 
 ## Luồng dữ liệu lúc chạy
 

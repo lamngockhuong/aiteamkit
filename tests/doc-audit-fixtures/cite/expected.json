@@ -1,0 +1,263 @@
+{
+  "documents": {
+    "docs/guide.md": [
+      {
+        "line": 3,
+        "target": "src/app.js",
+        "status": "ok",
+        "identifierNear": true
+      },
+      {
+        "line": 4,
+        "target": "src/app.js",
+        "status": "stale",
+        "identifierNear": false
+      },
+      {
+        "line": 5,
+        "target": "src/app.js",
+        "status": "out-of-range"
+      },
+      {
+        "line": 6,
+        "target": "src/gone.js",
+        "status": "missing"
+      },
+      {
+        "line": 7,
+        "target": "src/config.js",
+        "status": "ok",
+        "identifierNear": true
+      },
+      {
+        "line": 8,
+        "target": "README.md",
+        "status": "ok"
+      },
+      {
+        "line": 9,
+        "target": "src",
+        "status": "ok",
+        "directory": true
+      },
+      {
+        "line": 10,
+        "target": "src/app.js",
+        "status": "ok"
+      },
+      {
+        "line": 13,
+        "target": "pkg/lib/util.js",
+        "status": "ok",
+        "identifierNear": true
+      },
+      {
+        "line": 14,
+        "target": "pkg/lib/util.js",
+        "status": "ok"
+      },
+      {
+        "line": 15,
+        "target": "src/app.js",
+        "status": "missing"
+      },
+      {
+        "line": 16,
+        "target": "src/app.js",
+        "status": "ok"
+      },
+      {
+        "line": 17,
+        "target": "/docs/old.md",
+        "status": "missing"
+      },
+      {
+        "line": 18,
+        "target": "README.md",
+        "status": "ok"
+      },
+      {
+        "line": 19,
+        "target": "docs/notes/仕様.txt",
+        "status": "ok"
+      },
+      {
+        "line": 19,
+        "target": "docs/notes/a b.txt",
+        "status": "ok"
+      },
+      {
+        "line": 19,
+        "target": "README.md",
+        "status": "ok"
+      },
+      {
+        "line": 20,
+        "target": "docs/notes/a b.txt",
+        "status": "ok"
+      }
+    ],
+    "docs/unread.md": [
+      {
+        "line": 3,
+        "status": "unread"
+      },
+      {
+        "line": 4,
+        "status": "unread"
+      },
+      {
+        "line": 5,
+        "status": "unread"
+      },
+      {
+        "line": 6,
+        "status": "unread"
+      },
+      {
+        "line": 7,
+        "status": "unread"
+      },
+      {
+        "line": 8,
+        "status": "outside"
+      },
+      {
+        "line": 9,
+        "status": "outside"
+      },
+      {
+        "line": 10,
+        "status": "outside"
+      },
+      {
+        "line": 11,
+        "status": "unread"
+      },
+      {
+        "line": 12,
+        "status": "unread"
+      },
+      {
+        "line": 13,
+        "status": "unread"
+      },
+      {
+        "line": 14,
+        "status": "unread"
+      },
+      {
+        "line": 15,
+        "status": "unread"
+      },
+      {
+        "line": 16,
+        "status": "unread"
+      },
+      {
+        "line": 17,
+        "status": "unread"
+      },
+      {
+        "line": 18,
+        "status": "unread"
+      },
+      {
+        "line": 19,
+        "target": "config/.env.example",
+        "status": "ok"
+      },
+      {
+        "line": 20,
+        "target": "data/small.sql",
+        "status": "ok"
+      }
+    ],
+    "docs/edge.md": [
+      {
+        "line": 1,
+        "target": "src/app.js",
+        "status": "ok",
+        "identifierNear": null
+      },
+      {
+        "line": 2,
+        "target": "src/app.js",
+        "status": "ok"
+      },
+      {
+        "line": 3,
+        "target": "../api/orders.md",
+        "status": "missing"
+      },
+      {
+        "line": 4,
+        "target": "./README.md",
+        "status": "missing"
+      },
+      {
+        "line": 5,
+        "target": "a/twin.js",
+        "status": "ambiguous"
+      },
+      {
+        "line": 6,
+        "target": "src",
+        "status": "out-of-range",
+        "directory": true
+      },
+      {
+        "line": 7,
+        "target": "README.md",
+        "status": "ok"
+      }
+    ],
+    "docs/comment.md": [
+      {
+        "line": 1,
+        "target": "src/app.js",
+        "status": "ok"
+      }
+    ]
+  },
+  "counts": {
+    "docs/guide.md": {
+      "citations": 18,
+      "withLine": 5,
+      "withoutLine": 13,
+      "directories": 4,
+      "broken": 5,
+      "outside": 0,
+      "unread": 0
+    },
+    "docs/unread.md": {
+      "citations": 18,
+      "withLine": 2,
+      "withoutLine": 16,
+      "directories": 2,
+      "broken": 0,
+      "outside": 3,
+      "unread": 13
+    },
+    "docs/edge.md": {
+      "citations": 7,
+      "withLine": 4,
+      "withoutLine": 3,
+      "directories": 2,
+      "broken": 3,
+      "outside": 0,
+      "unread": 0,
+      "lines": 14
+    },
+    "docs/comment.md": {
+      "citations": 1,
+      "withLine": 1,
+      "withoutLine": 0,
+      "directories": 1,
+      "broken": 0,
+      "outside": 0,
+      "unread": 0,
+      "lines": 4
+    }
+  }
+}

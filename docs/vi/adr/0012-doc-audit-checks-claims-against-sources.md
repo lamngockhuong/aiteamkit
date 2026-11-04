@@ -56,8 +56,9 @@ tạm mà chỉ người dùng đọc được. `--out` chịu đúng các bư�
 
 - `atkx` có thêm skill thứ hai có script, `cite-check.mjs` và `tally.mjs`, theo điều kiện của ADR 0002.
 - `atkx` mang bản sao của bốn phần trong `atk` mà nó cần lúc chạy: bảng path không được đọc của
-  `plugins/atk/shared/secret-scan.md`, quy tắc che giá trị của rule 9 trong
-  `plugins/atk/shared/team-roles.md`, các quy tắc prompt cho agent của
+  `plugins/atk/shared/secret-scan.md`, quy tắc che giá trị, lấy từ bảng các loại dữ liệu của
+  `plugins/atk/skills/qa/references/test-run.md` và dòng che giá trị trong mục What happens on a hit
+  của `plugins/atk/shared/secret-scan.md`, các quy tắc prompt cho agent của
   `plugins/atk/shared/host-capabilities.md`, và các quy tắc challenge của
   `plugins/atk/shared/independent-challenge.md`. Mỗi bản sao nêu nguồn gốc bằng link GitHub, vì
   `tests/verify.sh` từ chối một file plugin nêu path của plugin khác, và một bước kiểm mới ở đó báo

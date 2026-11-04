@@ -27,7 +27,7 @@ aiteamkit/
     assets/*.svg                  icon and logo for marketplace listings
     CHANGELOG.md                  written by release-please for this plugin
     LICENSE                       a copy of the root licence, since the install carries nothing else
-  plugins/atkx/                       a second plugin, three manifests, and skills/skill-eval/
+  plugins/atkx/                       a second plugin, three manifests, skills/skill-eval/ and skills/doc-audit/
     LICENSE                       the same copy
   docs/, docs/vi/               bilingual project documentation
   .atk/                         the kit's own profile and overrides, for running its skills on itself
@@ -77,7 +77,7 @@ There is no `commands/` layer. A skill is its own slash command, named from its 
 ## A second plugin: atkx
 
 `plugins/atkx/` sits beside `plugins/atk/` in the same marketplace, with the same three manifest
-folders and one skill, `skill-eval`. It is for utility skills that depend on no artifact and on
+folders and two skills, `skill-eval` and `doc-audit`. It is for utility skills that depend on no artifact and on
 no delivery lifecycle. The dependency runs one way: an `atkx` skill may call an `atk` skill, and
 `atk` never calls an `atkx` one, so `atk` installed alone stays whole. The one place `atk` names
 `atkx` is `atk:help`, which suggests an `atkx` skill, with its install commands, for a question no
@@ -111,8 +111,9 @@ This produces the size discipline in the kit:
 One agent ships beside the skills, `plugins/atk/agents/read-only-reviewer.md`. Claude Code loads its
 frontmatter with the plugin and namespaces it `atk:read-only-reviewer`; its body is read only when a
 skill spawns it: every agent of `atk:review` other than the band 1 reviewer, every lens of
-`atk:design-doc --challenge` and `atk:plan --challenge`, and the agent each of the seven read-heavy
-skills hands its wide reading to; where the type is missing, a general agent with the same prompt.
+`atk:design-doc --challenge` and `atk:plan --challenge`, the agent each of the seven read-heavy
+skills hands its wide reading to, and every agent of `atkx:doc-audit` where `atk` is installed beside
+it; where the type is missing, a general agent with the same prompt.
 Its tool list is Read, Grep and Glob. On Claude Code 2.1.296 an agent with that list had no Bash,
 Edit or Write tool to call, and a review and a plan challenge run there spawned it for every round
 and lens. A tool-list pattern allowing only `git diff`, `git log` and `git blame` let every other
@@ -133,7 +134,9 @@ harness, each read from its documentation on 2026-10-22 and none measured here: 
 both; Cursor lets the parent name a model when it launches a subagent, with two open forum reports
 of it not being respected; Codex takes a model in the spawn, which only a custom agent file setting
 its own would outrank, and the kit ships none. The band 1 reviewer and
-every agent that writes take no model line. `docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
+every agent that writes take no model line. The rule is `atk`'s: an `atkx` skill reads no model
+line, so `atkx:doc-audit` asks for no model even where the profile names one, which is deliberate.
+`docs/adr/0009-agent-model-chosen-by-the-team-in-the-profile.md`
 records why the choice is the team's and why it is not in the agent file.
 
 ## The `shared/` layer
@@ -464,11 +467,18 @@ title + intro      what this produces and the one habit that makes it work
 
 An `atk` skill is that file, its `references/` and its `evals/`, and it may carry `scripts/` as
 well, Node only, for the checks whose answer must repeat; the maintainer allowed it on 2026-10-14,
-and no `atk` skill carries one yet. `atkx:skill-eval` is the one skill with a `scripts/` directory beside them, Node like the hooks and
-for the same reason. Its sample skills must get the same verdict on every run, and a credential
-masked, a host matched against the `SKILL.md`, or a weighted score added up by an agent comes out
-slightly different each time. So the checks whose answer must repeat are scripts, and what needs
-reading stays in `references/`. ADR 0002 records the choice.
+and no `atk` skill carries one yet. Both `atkx` skills carry a `scripts/` directory beside them, Node
+like the hooks and for the same reason. `atkx:skill-eval`'s sample skills must get the same verdict on
+every run, and a credential masked, a host matched against the `SKILL.md`, or a weighted score added
+up by an agent comes out slightly different each time; `atkx:doc-audit`'s citations either resolve or
+they do not, and its verdict table must be refused and counted the same way twice, where a pilot's
+agent miscounted its own. So the checks whose answer must repeat are scripts, and what needs reading
+stays in `references/`. ADR 0002 records the choice for `skill-eval`, and ADR 0012 for `doc-audit`.
+
+`atkx:doc-audit` also keeps copies of `atk` rules it must obey, the files never opened, the value
+mask, the agent rules and the independent challenge, since an install of `atkx` cannot read `atk`'s
+files. Each copy is marked with its origin's GitHub link, and `tests/verify.sh` fails when a copy and
+its origin differ, so a change to one of those `atk` sections lands in `atkx` in the same change.
 
 ## Data flow at runtime
 

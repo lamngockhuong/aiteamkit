@@ -1,0 +1,147 @@
+{
+  "valid.md": {
+    "final": true,
+    "documents": {
+      "docs/a.md": {
+        "claims": 7,
+        "CORRECT": 3,
+        "WRONG": 2,
+        "UNVERIFIABLE": 2,
+        "BEHAVIOUR": 5,
+        "INTENT": 2,
+        "wrongRead": 2,
+        "wrongOverturned": 0,
+        "sampleRead": 3,
+        "sampleOverturned": 1,
+        "cannotTell": 1
+      },
+      "docs/b.md": {
+        "claims": 2,
+        "CORRECT": 2,
+        "WRONG": 0,
+        "UNVERIFIABLE": 0,
+        "BEHAVIOUR": 2,
+        "INTENT": 0,
+        "wrongRead": 0,
+        "wrongOverturned": 0,
+        "sampleRead": 2,
+        "sampleOverturned": 0,
+        "cannotTell": 0
+      }
+    }
+  },
+  "first-read.md": {
+    "final": false,
+    "documents": {
+      "docs/a.md": {
+        "claims": 3,
+        "CORRECT": 2,
+        "WRONG": 1,
+        "UNVERIFIABLE": 0,
+        "BEHAVIOUR": 3,
+        "INTENT": 0,
+        "wrongRead": 0,
+        "wrongOverturned": 0,
+        "sampleRead": 0,
+        "sampleOverturned": 0,
+        "cannotTell": 0
+      }
+    },
+    "finalErrors": [
+      [
+        "docs/a.md:9",
+        "not read a second time"
+      ],
+      [
+        "docs/a.md",
+        "at least 2 required"
+      ]
+    ]
+  },
+  "malformed.md": {
+    "errors": [
+      [
+        "docs/c.md:3",
+        "is not one of CORRECT, WRONG, UNVERIFIABLE"
+      ],
+      [
+        "docs/c.md:4",
+        "CORRECT without evidence"
+      ],
+      [
+        "docs/c.md:5",
+        "UNVERIFIABLE without an owner"
+      ],
+      [
+        "docs/c.md:6",
+        "not a name or a role"
+      ],
+      [
+        "docs/c.md:7",
+        "8 cells, not 9"
+      ],
+      [
+        "docs/c.md:8",
+        "holds, but the verdict is CORRECT"
+      ],
+      [
+        "docs/c.md:9",
+        "was overturned, but the verdict is still WRONG"
+      ],
+      [
+        "docs/c.md:10",
+        "could not tell, but the verdict is not UNVERIFIABLE"
+      ],
+      [
+        "docs/c.md:11",
+        "an UNVERIFIABLE verdict is not read a second time"
+      ],
+      [
+        "docs/c.md:12",
+        "is not \"<first verdict> holds|overturned|cannot tell\""
+      ],
+      [
+        "docs/c.md:14",
+        "CORRECT without evidence"
+      ],
+      [
+        "docs/c.md:0",
+        "not a number from 1"
+      ],
+      [
+        "docs/c.md:4",
+        "repeats the row at line 4"
+      ],
+      [
+        "docs/c.md:15",
+        "CORRECT without evidence"
+      ],
+      [
+        "docs/c.md:13",
+        "a row outside a table"
+      ]
+    ]
+  },
+  "empty.md": {
+    "final": true,
+    "documents": {}
+  },
+  "root-file.md": {
+    "final": true,
+    "documents": {
+      "docs/r.md": {
+        "claims": 1,
+        "CORRECT": 1,
+        "WRONG": 0,
+        "UNVERIFIABLE": 0,
+        "BEHAVIOUR": 1,
+        "INTENT": 0,
+        "wrongRead": 0,
+        "wrongOverturned": 0,
+        "sampleRead": 1,
+        "sampleOverturned": 0,
+        "cannotTell": 0
+      }
+    }
+  }
+}
