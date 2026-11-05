@@ -107,6 +107,11 @@ export function transcriptEvents(dir) {
   return out;
 }
 
+// The closing message of every turn, from the transcript, which was masked before it was written.
+// A step's account of its work sits in the turn that did the work; the last turn is often only the
+// answer to a consent.
+export const turnResults = (dir) => transcriptEvents(dir).filter((ev) => ev.type === 'result' && typeof ev.result === 'string' && ev.result.trim()).map((ev) => ev.result);
+
 // Every tool call of the session.
 const toolUses = (dir) => transcriptEvents(dir).filter((ev) => ev.type === 'assistant')
   .flatMap((ev) => (ev.message?.content || []).filter((part) => part.type === 'tool_use'));
@@ -378,6 +383,212 @@ export const judgedGateChecks = (gates) => Object.entries(gates || {}).map(([id,
   status: v.value === null ? 'unjudged' : v.value ? 'pass' : 'fail',
   detail: v.value === null ? `${id}: ${v.why || 'no verdict'}` : `${id}: ${v.votes.filter(Boolean).length} of ${v.votes.length} votes held` }));
 
+// The findings matcher. A review's text is cut into blocks, a block opening at a heading, a list item
+// at the start of a line, a table row, or a paragraph that opens in bold; a field of the finding above,
+// `- **File:**` or a row of a two-column table whose first cell is a label, continues that block, and
+// so does everything inside a fenced code block. A block that cites a file of the seed with a line is
+// one finding. Its severity is read in a stated order: its own first line, a kit identifier such as
+// `B1` or a word such as "critical" or "nit"; then a severity or priority field inside it; then the
+// nearest heading above it that names one, a line wholly in bold counting as a heading below every
+// Markdown level. It is mapped onto the kit's three: BLOCKING, SHOULD FIX, NIT.
+const SEVERITY_WORDS = [
+  ['BLOCKING', /\b(blocking|blockers?|critical|high|must[- ]fix)\b/i],
+  ['SHOULD FIX', /\b(should[- ]fix|medium|major|moderate)\b/i],
+  ['NIT', /\b(nits?|nitpicks?|low|minor|trivial|informational|suggestions?|cosmetic)\b/i],
+];
+// A negated severity says nothing, and words that hold the merge mean BLOCKING, which is what
+// BLOCKING means in the kit; "need not be fixed before merging" is a negation, so it is taken out first.
+const NEGATED = /\b(?:non[- ]?blocking|not\s+(?:a\s+)?block(?:ing|ers?)|(?:need|needs)\s+not\b[^.;|]*?\bbefore\s+(?:the\s+|a\s+)?merg\w*|not\s+required\s+before\s+(?:the\s+|a\s+)?merg\w*)/gi;
+const HOLDS_MERGE = /\bbefore\s+(?:the\s+|a\s+)?merg(?:e|ing)\b/i;
+const SEVERITY_ID = { B: 'BLOCKING', S: 'SHOULD FIX', N: 'NIT' };
+export function severityOf(line) {
+  const id = /^(?:#+\s*|[-*+]\s+|\d+[.)]\s+|\|\s*)?(?:\*\*)?`?([BSN])\d+\b/.exec(line.trim());
+  if (id) return SEVERITY_ID[id[1]];
+  const text = line.replace(NEGATED, ' ');
+  // A table cell holding a severity word alone is the row's severity, whatever its prose says.
+  if (/^\s*\|/.test(text)) {
+    for (const cell of text.split('|').map((c) => c.replace(/[*`]/g, '').trim())) {
+      const alone = SEVERITY_WORDS.find(([, re]) => new RegExp(`^${re.source}$`, 'i').test(cell));
+      if (alone) return alone[0];
+    }
+  }
+  if (HOLDS_MERGE.test(text)) return 'BLOCKING';
+  // Otherwise the word that comes first on the line.
+  const hits = SEVERITY_WORDS.map(([sev, re]) => ({ sev, at: text.search(re) })).filter((h) => h.at >= 0);
+  return hits.length ? hits.sort((a, b) => a.at - b.at)[0].sev : null;
+}
+
+// A path, then a line: `path:28`, `` `path`:28 ``, `path:L28`, `path L28-L32`, `path line 28`,
+// `` `path` (lines 27 to 32) ``. The path part is bounded, so a long token cannot make the pattern
+// backtrack over the whole text.
+const CITATION = /([\w./-]{1,200}\.[A-Za-z]{1,10})`?(?:(?::L?|#L|\s+L(?=\d)|,?\s*\(?\s*lines?\s+)(\d+)(?:\s*(?:[-–]|to|through)\s*L?(\d+))?)?/g;
+// A cited path is the seed's when it names one of its files, whole, by its unambiguous end, or with a
+// prefix before it, an absolute path among them. A citation with no line, or of a path two files
+// share, has `start` null: it names a file and locates nothing.
+function citationsIn(text, files) {
+  const out = [];
+  for (const m of text.matchAll(CITATION)) {
+    const p = m[1].replace(/^\.\//, '');
+    let hits = files.includes(p) ? [p] : files.filter((f) => f.endsWith(`/${p}`));
+    if (!hits.length) hits = files.filter((f) => p.endsWith(`/${f}`));
+    if (!hits.length) continue;
+    const start = hits.length === 1 && m[2] ? Number(m[2]) : null;
+    out.push({ path: hits[0], start, end: start === null ? null : Math.max(start, Number(m[3] || start)) });
+  }
+  return out;
+}
+
+// The labels a finding's fields carry, in the kit's formats and the usual free ones.
+const FIELD_LABEL = /^(?:files?|locations?|where|lines?|severity|priority|severity and verdict|verdict|category|evidence|checked against|issue|problem|impact|failure|trigger|what an actor does|what they gain|fix|suggested fix|suggested control|suggestion|recommendation|rule|decision|author|raised by|reach|settled by|status|field|content|details?|why)$/i;
+const labelOf = (t) => t.replace(/[*`]/g, '').replace(/:\s*$/, '').trim();
+
+// A text that has a findings section, a heading that opens with the word findings, is read from that
+// section alone, so its scope, assets and checks run, which cite lines too, are not counted as
+// findings. A section that holds no findings by its name, what was dropped or ruled out, what was
+// done well or reviewed against, and the open questions, is never read.
+const OPENS_FINDINGS = /^(?:\d+[.)]?\s*)?findings?\b/i;
+const NOT_FINDINGS = /\b(?:dropped|ruled out|does well|done well|reviewed against|open questions?)\b/i;
+export function findingsIn(text, files) {
+  const lines = text.split(/\r?\n/);
+  const headingOf = (line) => {
+    const md = /^(#{1,6})\s+(.*)$/.exec(line);
+    if (md) return { level: md[1].length, text: md[2] };
+    const bold = /^\*\*([^*]+)\*\*:?\s*$/.exec(line.trim());
+    return bold && !FIELD_LABEL.test(labelOf(bold[1])) ? { level: 7, text: bold[1] } : null;
+  };
+  // A heading opens a findings section, closes one, or neither.
+  const modeOf = (t) => (NOT_FINDINGS.test(t) ? 'out' : OPENS_FINDINGS.test(t.trim()) ? 'in' : null);
+  let fenced = false;
+  const hasSection = lines.some((l) => {
+    if (/^\s*(```|~~~)/.test(l)) fenced = !fenced;
+    const h = !fenced && headingOf(l);
+    return h && modeOf(h.text) === 'in';
+  });
+  fenced = false;
+  const sections = [];
+  const nearest = (k) => [...sections].reverse().find((x) => x[k])?.[k] ?? null;
+  const counted = () => (hasSection ? nearest('mode') === 'in' : nearest('mode') !== 'out');
+  const blocks = [];
+  let cur = null;
+  let blank = true;
+  for (const line of lines) {
+    if (/^\s*(```|~~~)/.test(line)) fenced = !fenced;
+    if (fenced || /^\s*(```|~~~)/.test(line)) {
+      if (cur) cur.text += `\n${line}`;
+      continue;
+    }
+    const heading = headingOf(line);
+    const item = /^(?:[-*+]|\d+[.)])\s+(.*)$/.exec(line);
+    const row = /^\|/.test(line) && !/^\|[\s:|-]+\|?\s*$/.test(line);
+    const cells = row ? line.trim().replace(/^\||\|$/g, '').split('|') : [];
+    const boldLed = /^\*\*([^*]+)\*\*/.exec(item ? item[1] : line.trim());
+    const field = cur && ((item && boldLed && FIELD_LABEL.test(labelOf(boldLed[1])))
+      || (row && cells.length === 2 && !citationsIn(cells[0], files).length)
+      || (!item && !row && boldLed && FIELD_LABEL.test(labelOf(boldLed[1]))));
+    const paragraph = !item && !row && blank && boldLed && !field;
+    if (heading) {
+      while (sections.length && sections[sections.length - 1].level >= heading.level) sections.pop();
+      sections.push({ level: heading.level, severity: severityOf(heading.text), mode: modeOf(heading.text) });
+      cur = { text: line, own: severityOf(heading.text), inherited: nearest('severity'), counted: counted() };
+      blocks.push(cur);
+    } else if ((item || row || paragraph) && !field) {
+      cur = { text: line, own: severityOf(line), inherited: nearest('severity'), counted: counted() };
+      blocks.push(cur);
+    } else if (cur) {
+      cur.text += `\n${line}`;
+      if (!cur.field && /\b(severity|priority)\b/i.test(line)) cur.field = severityOf(line.replace(/\b(severity|priority)\b/gi, ''));
+    }
+    blank = !line.trim();
+  }
+  const read = blocks.filter((b) => b.counted).map((b) => ({ severity: b.own ?? b.field ?? b.inherited, citations: citationsIn(b.text, files) }));
+  const located = (f) => f.citations.some((c) => c.start !== null);
+  return {
+    findings: read.filter(located).map((f) => ({ severity: f.severity, citations: f.citations.filter((c) => c.start !== null) })),
+    unlocated: read.filter((f) => f.citations.length && !located(f)).length,
+  };
+}
+
+// A citation spanning more than this many lines locates nothing in particular, so it matches no defect.
+const MAX_SPAN = 10;
+const overlaps = (c, loc) => c.path === loc.path && c.end - c.start <= MAX_SPAN && c.start <= loc.lines[1] && c.end >= loc.lines[0];
+
+// Recall over the key's defects, the security ones alone where the check says so; precision over the
+// distinct findings, a finding that matches any defect of the key being a true one, and findings that
+// match the same defects, or cite lines an earlier one cites, counted once, since a summary repeats its findings;
+// severity agreement over the defects found, against the severities the key accepts for each, a
+// finding with no severity disagreeing. A defect is credited from the finding about it alone before a
+// finding that matches several, and from one whose severity agrees before one whose does not.
+export function matchFindings(findings, key, { securityOnly = false } = {}) {
+  const defects = key.defects.filter((d) => !securityOnly || d.security);
+  const accepted = (d) => d.accepted || [d.severity];
+  const matches = (f) => key.defects.filter((d) => d.locations.some((loc) => f.citations.some((c) => overlaps(c, loc)))).map((d) => d.id);
+  // A finding outside the key is the same as an earlier one when every line it cites overlaps a line
+  // that one cites, as a summary that repeats part of a finding does.
+  const near = (a, b) => a.path === b.path && a.start <= b.end && a.end >= b.start;
+  const all = [];
+  for (const f of findings) {
+    const ids = matches(f).sort();
+    const same = all.find((x) => (ids.length ? x.ids.join() === ids.join()
+      : !x.ids.length && f.citations.every((c) => x.citations.some((y) => near(c, y)))));
+    if (!same) all.push({ ...f, ids });
+    else if (!same.severity && f.severity) same.severity = f.severity;
+  }
+  // A finding that matches several defects, each of which a finding of its own already names, is a
+  // summary of those findings, not one more.
+  for (let i = all.length - 1; i >= 0; i--) {
+    const x = all[i];
+    if (x.ids.length > 1 && x.ids.every((id) => all.some((y) => y !== x && y.ids.length === 1 && y.ids[0] === id))) all.splice(i, 1);
+  }
+  const rank = (d, x) => (x.ids.length === 1 ? 4 : 0) + (accepted(d).includes(x.severity) ? 2 : 0) + (x.severity ? 1 : 0);
+  const found = defects.map((d) => ({ d, f: all.filter((x) => x.ids.includes(d.id)).sort((a, b) => rank(d, b) - rank(d, a))[0] })).filter((x) => x.f);
+  const agree = found.filter(({ d, f }) => accepted(d).includes(f.severity));
+  const truths = all.filter((x) => x.ids.length).length;
+  return {
+    recall: defects.length ? found.length / defects.length : null,
+    precision: all.length ? truths / all.length : null,
+    severityAgreement: found.length ? agree.length / found.length : null,
+    found: found.map(({ d }) => d.id),
+    missed: defects.filter((d) => !found.some((x) => x.d === d)).map((d) => d.id),
+    falseFindings: all.filter((x) => !x.ids.length).map((x) => x.citations.map((c) => `${c.path}:${c.start}`).join(', ')),
+    severityDisagreements: found.filter((x) => !agree.includes(x)).map(({ d, f }) => `${d.id} ${accepted(d).join(' or ')}, found ${f.severity ?? 'no severity'}`),
+    counts: `${found.length}/${defects.length} found, ${truths}/${all.length} findings true, ${agree.length}/${found.length} severities agree`,
+  };
+}
+
+// The longest stretch of one file or message a reader of a run's text takes, the judge and the
+// findings check alike.
+export const MAX_TEXT_CHARS = 20_000;
+export const cutText = (t) => (t.length > MAX_TEXT_CHARS ? `${t.slice(0, MAX_TEXT_CHARS)}\n[... cut at ${MAX_TEXT_CHARS} characters]` : t);
+const plainFile = (p) => { try { return lstatSync(p).isFile(); } catch { return false; } };
+const CODE_FILE = /\.(?:m?js|cjs|ts)$/i;
+
+// The text a review's findings are read from, in both arms what the judge reads: every text file
+// readPaths names, the seed's own code excepted, then the closing message of every turn, or the last
+// message where the transcript holds none. A run with nothing to read measured nothing found. The
+// key's hash is kept, so a recheck can tell a key that has changed since.
+function findingsCheck({ dir, seed, before, run, fixtureDir, check, glob }) {
+  const keyText = readFileSync(join(fixtureDir, check.answer), 'utf8');
+  const key = JSON.parse(keyText);
+  const keySha = createHash('sha256').update(keyText).digest('hex').slice(0, 12);
+  const texts = [];
+  for (const f of readPaths({ seed, before, arm: run.arm, glob: check.file || glob })) {
+    if (CODE_FILE.test(f) || !plainFile(join(seed, f))) continue;
+    const buf = readFileSync(join(seed, f));
+    if (!buf.includes(0)) texts.push(cutText(buf.toString('utf8')));
+  }
+  const said = turnResults(dir);
+  texts.push(...(said.length ? said : [run.lastText || '']).map(cutText));
+  const files = allFiles(seed, new Set([...SEED_SKIP, 'node_modules', 'docs']));
+  const read = texts.filter((t) => t.trim()).map((t) => findingsIn(t, files));
+  const m = matchFindings(read.flatMap((r) => r.findings), key, { securityOnly: !!check.securityOnly });
+  const unlocated = read.reduce((n, r) => n + r.unlocated, 0);
+  const detail = [read.length ? m.counts : `no report and no closing message: ${m.counts}`,
+    unlocated ? `${unlocated} block${unlocated > 1 ? 's' : ''} naming a file with no line, not matched` : null, m.missed.length ? `missed ${m.missed.join(', ')}` : null,
+    m.falseFindings.length ? `not in the key: ${m.falseFindings.slice(0, 5).join('; ')}` : null,
+    m.severityDisagreements.length ? `severity: ${m.severityDisagreements.join('; ')}` : null].filter(Boolean).join('; ');
+  return { status: 'measured', ...m, unlocated, keySha, detail };
+}
+
 // The checks a step declares, beside the gates. `rubric` is the judge's, and `commits` is a gate.
 export function declaredChecks({ dir, run, scenario, fixtureDir }) {
   const seed = join(dir, 'seed');
@@ -403,6 +614,8 @@ export function declaredChecks({ dir, run, scenario, fixtureDir }) {
       out.push(attempt({ type: 'front-matter', kitOnly: true }, () => frontMatterCheck(seed, c.file)));
     } else if (c.type === 'citations') {
       out.push(attempt({ type: 'citations' }, () => citationCheck(seed, readPaths({ seed, before, arm: run.arm, glob: c.file || rubricGlob }).filter((f) => f.endsWith('.md')))));
+    } else if (c.type === 'findings') {
+      out.push(attempt({ type: 'findings' }, () => findingsCheck({ dir, seed, before, run, fixtureDir, check: c, glob: rubricGlob })));
     } else if (c.type === 'hidden-tests') {
       out.push(attempt({ type: 'hidden-tests', path: c.path }, () => {
         const r = runHidden({ seed, fixtureDir, path: c.path });

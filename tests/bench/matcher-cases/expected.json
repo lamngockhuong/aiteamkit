@@ -1,0 +1,80 @@
+{
+  "files": [
+    "README.md",
+    "package.json",
+    "src/orders.js",
+    "src/server.js",
+    "test/orders.test.mjs"
+  ],
+  "answer": "../fixtures/order-api/hidden/review-key.json",
+  "cases": [
+    {
+      "text": "kit-review.md",
+      "why": "Kit format: only the severity sections count, a refuted candidate and praised lines do not, a fence does not end the findings, a heading's identifier beats a priority word in its body.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2",
+          "D3"
+        ],
+        "precision": "3/4",
+        "severityDisagreements": [
+          "D3 SHOULD FIX, found NIT"
+        ],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "bare-free-text.md",
+      "why": "Free text with CRLF: a bold line naming the merge is BLOCKING, a non-blocking heading is not, backticked, L-prefixed, absolute and worded citations resolve, a span of forty lines matches nothing, a severity cell beats a word in the prose.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2",
+          "D3",
+          "D4",
+          "D5"
+        ],
+        "precision": "5/6",
+        "severityDisagreements": [
+          "D3 SHOULD FIX, found NIT",
+          "D4 SHOULD FIX, found NIT"
+        ],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "security-record.md",
+      "securityOnly": true,
+      "why": "Security record: only the Findings section counts, its field tables stay with their finding, Medium for D1 is accepted.",
+      "expect": {
+        "found": [
+          "D1",
+          "D3"
+        ],
+        "precision": "2/3",
+        "severityDisagreements": [
+          "D3 SHOULD FIX, found NIT"
+        ],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "bare-issues-and-minor.md",
+      "why": "A heading naming a severity does not shut out the findings under a heading that names none.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2",
+          "D5"
+        ],
+        "precision": "3/3",
+        "severityDisagreements": [
+          "D1 BLOCKING or SHOULD FIX, found no severity",
+          "D2 BLOCKING, found no severity"
+        ],
+        "unlocated": 0
+      }
+    }
+  ]
+}

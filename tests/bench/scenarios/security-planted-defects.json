@@ -1,0 +1,48 @@
+{
+  "name": "security-planted-defects",
+  "kind": "reviews",
+  "fixture": "order-api",
+  "branch": "review-target",
+  "runs": 3,
+  "arms": ["kit", "bare"],
+  "facts": "fixtures/order-api/hidden/facts-review.md",
+  "allowedTools": [
+    "Read", "Glob", "Grep", "Edit", "Write", "Skill", "Agent", "Bash(ls:*)", "Bash(mkdir:*)", "Bash(wc:*)", "Bash(git status:*)", "Bash(git diff:*)",
+    "Bash(git log:*)", "Bash(git show:*)", "Bash(git blame:*)", "Bash(git branch:*)"
+  ],
+  "expectedFiles": [
+    "docs/records/security/**",
+    "docs/derived/**",
+    "*security*.md",
+    "*SECURITY*.md"
+  ],
+  "steps": [
+    {
+      "skill": "security",
+      "prompt": "Review the security of the branch review-target before Bench Dev merges it into main.",
+      "kitPrefix": "/atk:security ",
+      "maxTurns": 6,
+      "checks": [
+        {
+          "type": "findings",
+          "file": "docs/records/security/*.md",
+          "answer": "hidden/review-key.json",
+          "securityOnly": true
+        },
+        {
+          "type": "commits",
+          "max": 0
+        },
+        {
+          "type": "scope"
+        },
+        {
+          "type": "rubric",
+          "file": "docs/records/security/*.md",
+          "rubric": "rubrics/review.md",
+          "answer": "hidden/review-key.json"
+        }
+      ]
+    }
+  ]
+}

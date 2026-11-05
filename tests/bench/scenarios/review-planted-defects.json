@@ -1,0 +1,46 @@
+{
+  "name": "review-planted-defects",
+  "kind": "reviews",
+  "fixture": "order-api",
+  "branch": "review-target",
+  "runs": 3,
+  "arms": ["kit", "bare"],
+  "facts": "fixtures/order-api/hidden/facts-review.md",
+  "allowedTools": [
+    "Read", "Glob", "Grep", "Edit", "Write", "Skill", "Agent", "Bash(ls:*)", "Bash(mkdir:*)", "Bash(wc:*)", "Bash(git status:*)", "Bash(git diff:*)",
+    "Bash(git log:*)", "Bash(git show:*)", "Bash(git blame:*)", "Bash(git branch:*)"
+  ],
+  "expectedFiles": [
+    "docs/derived/**",
+    "*review*.md",
+    "*REVIEW*.md"
+  ],
+  "steps": [
+    {
+      "skill": "review",
+      "prompt": "Review the branch review-target, which Bench Dev wants merged into main.",
+      "kitPrefix": "/atk:review ",
+      "maxTurns": 6,
+      "checks": [
+        {
+          "type": "findings",
+          "file": "docs/derived/reviews/*.md",
+          "answer": "hidden/review-key.json"
+        },
+        {
+          "type": "commits",
+          "max": 0
+        },
+        {
+          "type": "scope"
+        },
+        {
+          "type": "rubric",
+          "file": "docs/derived/reviews/*.md",
+          "rubric": "rubrics/review.md",
+          "answer": "hidden/review-key.json"
+        }
+      ]
+    }
+  ]
+}
