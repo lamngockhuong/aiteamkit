@@ -12,7 +12,30 @@
           "edits": [{ "path": "src/orders.js", "find": "return item.price * item.quantity;", "replace": "return item.price;" }]
         }
       ]
+    },
+    {
+      "name": "bug-2",
+      "from": "main",
+      "commits": [
+        {
+          "message": "refactor: name request fields in snake case",
+          "edits": [{ "path": "src/server.js", "find": "discountCode: order.discountCode", "replace": "discountCode: order.discount_code" }]
+        }
+      ]
+    },
+    {
+      "name": "bug-3",
+      "from": "main",
+      "commits": [
+        {
+          "message": "perf: keep tax in whole cents",
+          "edits": [{ "path": "src/orders.js", "find": "const tax = Math.round((taxed * TAX_PERCENT) / 100);", "replace": "const tax = Math.floor((taxed * TAX_PERCENT) / 100);" }]
+        }
+      ]
     }
   ],
-  "origin": true
+  "origin": true,
+  "assembled": [
+    { "path": ".env", "variable": "PAYMENT_API_KEY", "shape": "provider-live-secret-key" }
+  ]
 }

@@ -1,0 +1,37 @@
+{
+  "name": "intake-meeting-note",
+  "kind": "drafts-artifact",
+  "fixture": "order-api",
+  "branch": "main",
+  "runs": 3,
+  "arms": ["kit", "bare"],
+  "facts": "fixtures/order-api/hidden/facts-intake.md",
+  "allowedTools": [
+    "Read", "Glob", "Grep", "Edit", "Write", "Skill", "Agent", "Bash(ls:*)",
+    "Bash(mkdir:*)", "Bash(wc:*)", "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)",
+    "Bash(git blame:*)", "Bash(git branch:*)"
+  ],
+  "steps": [
+    {
+      "skill": "intake",
+      "prompt": "Turn the meeting note in docs/notes/261020-1400-gift-cards-meeting.md into requirements the team can review.",
+      "kitPrefix": "/atk:intake ",
+      "maxTurns": 6,
+      "checks": [
+        {
+          "type": "front-matter",
+          "file": "docs/records/requirements/*.md"
+        },
+        {
+          "type": "citations"
+        },
+        {
+          "type": "rubric",
+          "file": "docs/records/requirements/*.md",
+          "rubric": "rubrics/requirements.md",
+          "answer": "hidden/key-intake.md"
+        }
+      ]
+    }
+  ]
+}

@@ -18,13 +18,13 @@ import { randomUUID } from 'node:crypto';
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { TRACE_GRANTS, checksOf, declaredChecks, gateChecks, tips } from './lib/checks.mjs';
+import { KEPT_GIT, TRACE_GRANTS, checksOf, declaredChecks, gateChecks, judgedGateChecks, tips } from './lib/checks.mjs';
 import { DEFAULTS, MAX_RUNS, UsageError, parseArgs } from './lib/cli.mjs';
-import { credentials, gitEnv, newRunDir, secretsOf, sweepStale, PREFIX } from './lib/isolate.mjs';
-import { judgeRubric } from './lib/judge.mjs';
+import { credentials, gitEnv, kitCopy, newRunDir, secretsOf, sweepStale, PREFIX } from './lib/isolate.mjs';
+import { judgeRubric, unjudgedGates } from './lib/judge.mjs';
 import { write as writeReport, render } from './lib/report.mjs';
 import { answer, classify, consentTurn } from './lib/responder.mjs';
-import { buildSeed } from './lib/seed.mjs';
+import { assembledValues, buildSeed } from './lib/seed.mjs';
 import { turn } from './lib/session.mjs';
 
 const BENCH = dirname(fileURLToPath(import.meta.url));
@@ -100,15 +100,24 @@ function plan(scenarios, opts) {
   });
 }
 
+// The seed is kept without the files the builder assembled, and with its git directory under a name
+// git does not recognise, so nothing run inside docs/derived/bench/ reads the config the session wrote.
 function keep(run, out, before) {
   const assembled = new Set(before.assembled || []);
-  cpSync(run.seed, join(out, 'seed'), { recursive: true, verbatimSymlinks: true, filter: (src) => !assembled.has(relative(run.seed, src).split('\\').join('/')) });
+  const gitDir = join(run.seed, '.git');
+  cpSync(run.seed, join(out, 'seed'), { recursive: true, verbatimSymlinks: true,
+    filter: (src) => src !== gitDir && !assembled.has(relative(run.seed, src).split('\\').join('/')) });
+  if (existsSync(gitDir)) cpSync(gitDir, join(out, 'seed', KEPT_GIT), { recursive: true, verbatimSymlinks: true });
   if (existsSync(join(run.runDir, 'origin.git'))) cpSync(join(run.runDir, 'origin.git'), join(out, 'origin.git'), { recursive: true });
   cpSync(join(run.runDir, 'before.json'), join(out, 'before.json'));
 }
 
-async function score({ out, record, scenario, ctx }) {
-  record.checks = [...gateChecks({ dir: out, run: record, scenario }), ...declaredChecks({ dir: out, scenario, fixtureDir: scenario.fixtureDir })];
+async function score({ out, record, scenario, ctx, logins = ctx?.secrets || [] }) {
+  // The planted values are derived again from the fixture, and the login tokens are the ones this
+  // process knows; neither is stored with the results.
+  const planted = assembledValues(scenario.fixtureDir);
+  record.checks = [...gateChecks({ dir: out, run: record, scenario, planted, logins }),
+    ...declaredChecks({ dir: out, run: record, scenario, fixtureDir: scenario.fixtureDir })];
   for (const c of record.checks) if (c.file) c.file = rel(c.file);
   // The trace the report points at is the one the trace check read.
   record.trace = record.checks.find((c) => c.type === 'trace' && c.file)?.file ?? null;
@@ -116,6 +125,9 @@ async function score({ out, record, scenario, ctx }) {
   if (rubric && record.status === 'ok') {
     record.rubric = await judgeRubric({ dir: out, run: record, check: rubric, fixtureDir: scenario.fixtureDir, benchDir: BENCH, ctx });
     record.cost.helper += record.rubric.cost;
+    record.checks.push(...judgedGateChecks(record.rubric.gates));
+  } else if (rubric) {
+    record.checks.push(...judgedGateChecks(unjudgedGates({ check: rubric, benchDir: BENCH, why: `the run ended ${record.status}, so the judge did not read it` })));
   }
 }
 
@@ -134,13 +146,15 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
     const sessionId = randomUUID();
     let resumed = false;
     const allowed = [...new Set([...(scenario.allowedTools || []), ...(arm === 'kit' ? TRACE_GRANTS : [])])];
+    // The kit is loaded from a copy in the run directory, since the session is denied the repository.
+    const pluginDir = arm === 'kit' ? kitCopy(run, KIT) : null;
     for (const step of scenario.steps) {
       const stepBudget = step.stepBudgetUsd ?? DEFAULTS.stepBudgetUsd;
       let stepCost = 0;
       let turns = 0;
       const say = async (prompt) => {
         const t = await turn({ run, auth, secrets, prompt, sessionId, resume: resumed, model: opts.model, allowedTools: allowed,
-          pluginDir: arm === 'kit' ? KIT : null, budgetUsd: step.budgetUsd ?? DEFAULTS.budgetUsd, timeoutMs: opts.timeout * 1000, transcript });
+          pluginDir, budgetUsd: step.budgetUsd ?? DEFAULTS.budgetUsd, timeoutMs: opts.timeout * 1000, transcript });
         resumed = true;
         turns++;
         stepCost += t.cost;
@@ -304,12 +318,15 @@ async function recheck(opts) {
       auth = login(3600);
       ctx = { run: newRunDir(), auth, secrets: secretsOf(auth) };
     }
+    // With no judge to call, the login tokens are still looked for in what the run left; a saved
+    // login within five minutes of its expiry gives none, and the leak check then says so.
+    const logins = ctx?.secrets || secretsOf(credentials(0) || {});
     for (const r of sc.runs) {
       const out = join(dir, `${r.arm}-${r.n}`);
       if (!existsSync(join(out, 'run.json'))) continue;
       const record = JSON.parse(readFileSync(join(out, 'run.json'), 'utf8'));
       record.cost.helper = 0;
-      await score({ out, record, scenario, ctx });
+      await score({ out, record, scenario, ctx, logins });
       judgeCost += record.rubric?.cost || 0;
       if (r.rubric?.material !== record.rubric?.material && record.rubric) {
         process.stderr.write(`bench: ${sc.name} ${r.arm} ${r.n}: the judge now reads ${record.rubric.material}, the run was judged on ${r.rubric?.material || 'files and the last message only'}\n`);
