@@ -298,6 +298,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | `docs/adr/0011-run-cases-drives-a-device-as-a-second-client.md` | `atk:verify` and `atk:run-cases` drive a native Android app (iOS tracked in #155) on a device as a second client beside the browser, instead of handing every device case to a tester |
 | `docs/adr/0012-doc-audit-checks-claims-against-sources.md` | `atkx:doc-audit` checks each claim of a document against its source in the repository, rather than asking an agent whether the document reads well |
 | `docs/adr/0013-estimate-reads-comparables-once-and-keeps-a-snapshot.md` | `atk:estimate` reads its tracker comparables once per run, only closed items with an actual, filtered by the tracker where it can and not cut at a date, and keeps a dated snapshot per tracker and project under `<docs root>/derived/estimate/`, never staged, refreshed since its date and used, with its date on the sheet, only when the tracker is unreachable |
+| `docs/adr/0014-benchmark-runner-under-tests.md` | The kit's benchmark is a Node runner of its own under `tests/bench/`, Claude Code only to begin with, shipped to nobody: scenarios on a sample project built fresh per run, N runs in a kit arm and a bare arm, a responder answering from a fact sheet and the runner approving between steps, gates and hidden tests checked by code, artifacts by a judged rubric; run by hand, at most three runs, results for reference only |
 | `docs/vi/**/*.md` | Vietnamese mirror of the twenty-three files above, at the same relative paths |
 
 ## GitHub

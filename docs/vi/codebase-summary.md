@@ -299,6 +299,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | `docs/adr/0011-run-cases-drives-a-device-as-a-second-client.md` | `atk:verify` và `atk:run-cases` điều khiển một app Android native (iOS được theo dõi ở #155) trên device như client thứ hai bên cạnh browser, thay vì giao mọi case cần device cho tester |
 | `docs/adr/0012-doc-audit-checks-claims-against-sources.md` | `atkx:doc-audit` kiểm từng nhận định của một tài liệu với nguồn của nó trong repository, thay vì hỏi một agent xem tài liệu có đọc trôi không |
 | `docs/adr/0013-estimate-reads-comparables-once-and-keeps-a-snapshot.md` | `atk:estimate` đọc dữ liệu đối chiếu từ tracker một lần mỗi lần chạy, chỉ các item đã đóng có actual, do tracker lọc khi lọc được và không cắt theo ngày, và giữ một snapshot có ngày cho mỗi tracker và project dưới `<docs root>/derived/estimate/`, không bao giờ được stage, được làm mới kể từ ngày của nó và được dùng, kèm ngày trên sheet, chỉ khi không kết nối được tracker |
+| `docs/adr/0014-benchmark-runner-under-tests.md` | Benchmark của bộ kit là một bộ chạy Node riêng trong `tests/bench/`, ban đầu chỉ cho Claude Code, không cài cho ai: scenario trên một dự án mẫu dựng mới mỗi lần chạy, N lần ở nhánh kit và nhánh bare, một responder trả lời từ fact sheet và bộ chạy duyệt giữa các bước, gate và hidden test kiểm tra bằng code, artifact bằng rubric do judge chấm; chạy tay, tối đa ba lần, kết quả chỉ để tham khảo |
 | `docs/vi/**/*.md` | Bản tiếng Việt của hai mươi ba file trên, đặt ở cùng đường dẫn tương đối |
 
 ## GitHub
