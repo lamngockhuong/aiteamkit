@@ -1,0 +1,95 @@
+{
+  "branch": "review-target",
+  "base": "main",
+  "lines": "Line numbers are those of the files on review-target.",
+  "matching": "A finding is matched to a defect by the lines it cites, so a match credits the location, not the mechanism: a finding about something else on the same lines is credited too. Whether a finding names the planted failure is the judge's to read. `accepted` lists the severities a reviewer following its own rules may give a defect, where more than one is defensible.",
+  "defects": [
+    {
+      "id": "D1",
+      "severity": "BLOCKING",
+      "security": true,
+      "locations": [
+        {
+          "path": "src/server.js",
+          "lines": [
+            27,
+            32
+          ]
+        }
+      ],
+      "failure": "When ADMIN_TOKEN is not set, a request with no x-admin-token header compares undefined with undefined and passes, so anyone can add a discount code, a 100 percent one included.",
+      "accepted": [
+        "BLOCKING",
+        "SHOULD FIX"
+      ],
+      "acceptedWhy": "Whether ADMIN_TOKEN is set is configuration, so a reviewer may rate the bypass PLAUSIBLE, at SHOULD FIX or Medium and below, as atk:security must."
+    },
+    {
+      "id": "D2",
+      "severity": "BLOCKING",
+      "security": false,
+      "locations": [
+        {
+          "path": "src/orders.js",
+          "lines": [
+            18,
+            20
+          ]
+        }
+      ],
+      "failure": "The bulk discount applies only above ten units (quantity > BULK_MIN_QUANTITY), while the commit, the comment and the README promise it at ten units or more: a line of exactly ten is charged full price."
+    },
+    {
+      "id": "D3",
+      "severity": "SHOULD FIX",
+      "security": true,
+      "locations": [
+        {
+          "path": "src/server.js",
+          "lines": [
+            22,
+            24
+          ]
+        }
+      ],
+      "failure": "A bad request to POST /discount-codes answers with the error's stack trace, which exposes file paths and the code's structure to the caller."
+    },
+    {
+      "id": "D4",
+      "severity": "SHOULD FIX",
+      "security": false,
+      "locations": [
+        {
+          "path": "src/orders.js",
+          "lines": [
+            26,
+            28
+          ]
+        },
+        {
+          "path": "src/server.js",
+          "lines": [
+            19,
+            20
+          ]
+        }
+      ],
+      "failure": "The percent of a new code is never checked: 150 makes the discount larger than the subtotal and the total negative, and a string or a missing percent makes every total using the code NaN."
+    },
+    {
+      "id": "D5",
+      "severity": "NIT",
+      "security": false,
+      "locations": [
+        {
+          "path": "src/orders.js",
+          "lines": [
+            23,
+            23
+          ]
+        }
+      ],
+      "failure": "MAX_CODES is declared and never used, so it reads as a limit the code does not enforce."
+    }
+  ]
+}

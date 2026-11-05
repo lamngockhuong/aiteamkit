@@ -331,6 +331,10 @@ async function recheck(opts) {
       if (r.rubric?.material !== record.rubric?.material && record.rubric) {
         process.stderr.write(`bench: ${sc.name} ${r.arm} ${r.n}: the judge now reads ${record.rubric.material}, the run was judged on ${r.rubric?.material || 'files and the last message only'}\n`);
       }
+      const keyOf = (checks) => checks?.find((c) => c.type === 'findings')?.keySha;
+      if (keyOf(r.checks) !== keyOf(record.checks)) {
+        process.stderr.write(`bench: ${sc.name} ${r.arm} ${r.n}: the answer key has changed since this run was scored (${keyOf(r.checks) || 'no hash recorded'}, now ${keyOf(record.checks) || 'none'})\n`);
+      }
       Object.assign(r, { checks: record.checks, rubric: record.rubric });
     }
   }

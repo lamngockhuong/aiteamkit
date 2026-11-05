@@ -3,7 +3,8 @@
 // before a run failed is still crossed; gate adherence as all-runs; the judged gate, a rubric item
 // the judge returns as a gate check, kept out of the coded gates' adherence; the rubric mean with its lowest
 // and highest run, session and helper cost apart, wall time, and kit minus bare for every rate both
-// arms have.
+// arms have. A review's findings are given apart, as recall, precision and severity agreement, each a
+// mean over the measured runs with its lowest and highest.
 
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -12,6 +13,10 @@ const usd = (x) => `${(x || 0).toFixed(2)} USD`;
 const pct = (x) => `${Math.round(x * 100)}%`;
 const measured = (runs) => runs.filter((r) => r.status === 'ok');
 const checked = (runs) => runs.filter((r) => r.checks?.length);
+const mean = (a) => a.reduce((s, v) => s + v, 0) / a.length;
+const spread = (a) => ({ mean: mean(a), min: Math.min(...a), max: Math.max(...a) });
+const spreadCell = (v) => (v ? `${pct(v.mean)} (${pct(v.min)}, ${pct(v.max)})` : '-');
+const deltaCell = (d) => `${d >= 0 ? '+' : ''}${Math.round(d * 100)} points`;
 
 function checkTable(runs) {
   const table = new Map();
@@ -21,7 +26,7 @@ function checkTable(runs) {
       // not for the trace, which a run the bench stopped never got to close. A grant error and an
       // unjudged gate are counted beside the rate, never in it; a check that could not run counts as
       // not passed, since a gate nobody could check is not a held one.
-      if (c.status === 'skip' || (r.status !== 'ok' && (!c.gate || c.type === 'trace'))) continue;
+      if (c.type === 'findings' || c.status === 'skip' || (r.status !== 'ok' && (!c.gate || c.type === 'trace'))) continue;
       const key = c.type === 'trace' ? `trace (${c.skill})` : c.type === 'hidden-tests' ? `hidden-tests (${c.path})`
         : c.type === 'judged-gate' ? `judged gate (${c.id})` : c.type;
       const row = table.get(key) || { pass: 0, of: 0, gate: !!c.gate, judged: !!c.judged, kitOnly: !!c.kitOnly, grantErrors: 0, unjudged: 0, errors: 0 };
@@ -43,8 +48,20 @@ function rubricStats(runs, kitOnlyItems = []) {
     const vals = Object.entries(x.items).filter(([id]) => !kitOnlyItems.includes(id)).map(([, v]) => v.value);
     return vals.length ? vals.filter(Boolean).length / vals.length : 0;
   });
-  const mean = (a) => a.reduce((s, v) => s + v, 0) / a.length;
-  return { mean: mean(scores), min: Math.min(...scores), max: Math.max(...scores), sharedMean: mean(shared), n: scores.length };
+  return { ...spread(scores), sharedMean: mean(shared), n: scores.length };
+}
+
+// The findings measures of the runs that measured, each as mean, lowest and highest; none when no run
+// carried a findings check.
+const FINDINGS_MEASURES = [['recall', 'findings recall'], ['precision', 'findings precision'], ['severityAgreement', 'severity agreement']];
+function findingsStats(runs) {
+  const rows = measured(runs).map((r) => r.checks?.find((c) => c.type === 'findings' && c.status === 'measured')).filter(Boolean);
+  if (!rows.length) return null;
+  const unlocated = rows.reduce((n, c) => n + (c.unlocated || 0), 0);
+  return Object.fromEntries([['unlocated', unlocated], ['runs', rows.length], ...FINDINGS_MEASURES.map(([k]) => {
+    const vals = rows.map((c) => c[k]).filter((v) => typeof v === 'number');
+    return [k, vals.length ? spread(vals) : null];
+  })]);
 }
 
 export function summarise(scenario) {
@@ -65,6 +82,7 @@ export function summarise(scenario) {
       checked: checked(runs).length,
       gatesHeld: checked(runs).length > 0 && gates.every((g) => g.pass === g.of),
       rubric: rubricStats(runs, kitOnlyItems),
+      findings: findingsStats(runs),
       judgedCrossed: judged.length ? judged.reduce((n, row) => n + row.of - row.pass, 0) : null,
       cost: { session: runs.reduce((s, r) => s + (r.cost?.session || 0), 0), helper: runs.reduce((s, r) => s + (r.cost?.helper || 0), 0) },
       wallSeconds: Math.round(runs.reduce((s, r) => s + (r.wallMs || 0), 0) / 1000),
@@ -78,6 +96,11 @@ export function summarise(scenario) {
       if (!b || k.kitOnly || !k.of || !b.of) continue;
       delta[key] = k.pass / k.of - b.pass / b.of;
     }
+    for (const [k, label] of FINDINGS_MEASURES) {
+      const kv = arms.kit.findings?.[k];
+      const bv = arms.bare.findings?.[k];
+      if (kv && bv) delta[label] = kv.mean - bv.mean;
+    }
     if (arms.kit.rubric && arms.bare.rubric) delta.rubric = arms.kit.rubric.sharedMean - arms.bare.rubric.sharedMean;
   }
   return { arms, delta };
@@ -87,11 +110,11 @@ function line(name, s) {
   const part = (arm) => {
     const a = s.arms[arm];
     if (!a) return null;
-    const rub = a.rubric ? `, rubric ${pct(a.rubric.mean)}` : '';
+    const scores = `${a.findings?.recall ? `, recall ${pct(a.findings.recall.mean)}` : ''}${a.rubric ? `, rubric ${pct(a.rubric.mean)}` : ''}`;
     const gates = !a.checked ? 'had no run checked' : a.gatesHeld ? 'held every gate' : 'crossed a gate';
     const n = a.judgedCrossed;
     const judged = n === null ? '' : `, the judged gate ${n ? `crossed in ${n} run${n > 1 ? 's' : ''}` : 'held'}`;
-    return `${arm} ${gates} in ${a.checked}/${a.runs} checked runs${judged}${rub}`;
+    return `${arm} ${gates} in ${a.checked}/${a.runs} checked runs${judged}${scores}`;
   };
   const d = s.delta.rubric !== undefined ? `; kit minus bare on the shared rubric ${s.delta.rubric >= 0 ? '+' : ''}${Math.round(s.delta.rubric * 100)} points` : '';
   return `- **${name}**: ${[part('kit'), part('bare')].filter(Boolean).join('; ')}${d}`;
@@ -115,12 +138,22 @@ export function render(results) {
         if (!c) return '-';
         return `${c.pass}/${c.of}${c.judged ? ' (judged gate)' : c.gate ? ' (gate)' : ''}${c.grantErrors ? `, ${c.grantErrors} grant error` : ''}${c.unjudged ? `, ${c.unjudged} unjudged` : ''}${c.errors ? `, ${c.errors} could not run` : ''}`;
       });
-      const d = key in s.delta ? `${s.delta[key] >= 0 ? '+' : ''}${Math.round(s.delta[key] * 100)} points` : both ? 'n/a' : null;
+      const d = key in s.delta ? deltaCell(s.delta[key]) : both ? 'n/a' : null;
       out.push(`| ${key} | ${cells.join(' | ')} |${d === null ? '' : ` ${d} |`}`);
     }
     const row = (label, f) => `| ${label} | ${arms.map((a) => f(s.arms[a])).join(' | ')} |${both ? ' |' : ''}`;
     out.push(row('coded gates held, all runs', (a) => (!a.checked ? '-' : a.gatesHeld ? 'yes' : 'no')));
-    out.push(row('rubric mean (lowest, highest)', (a) => (a.rubric ? `${pct(a.rubric.mean)} (${pct(a.rubric.min)}, ${pct(a.rubric.max)})` : '-')));
+    if (arms.some((a) => s.arms[a].findings)) {
+      for (const [k, label] of FINDINGS_MEASURES) {
+        const d = label in s.delta ? deltaCell(s.delta[label]) : both ? 'n/a' : null;
+        out.push(`| ${label} (lowest, highest) | ${arms.map((a) => spreadCell(s.arms[a].findings?.[k])).join(' | ')} |${d === null ? '' : ` ${d} |`}`);
+      }
+      // A finding that names a file and no line cannot be matched, so a low recall beside a high
+      // count here is the citation's failure rather than a defect missed.
+      out.push(row('blocks naming a file with no line, not matched', (a) => (a.findings ? String(a.findings.unlocated) : '-')));
+      out.push(row('runs whose findings were measured', (a) => (a.findings ? `${a.findings.runs}/${a.measured}` : '-')));
+    }
+    out.push(row('rubric mean (lowest, highest)', (a) => spreadCell(a.rubric)));
     out.push(row('rubric, shared items', (a) => (a.rubric ? pct(a.rubric.sharedMean) : '-')));
     out.push(row('session cost', (a) => usd(a.cost.session)));
     out.push(row('helper cost', (a) => usd(a.cost.helper)));

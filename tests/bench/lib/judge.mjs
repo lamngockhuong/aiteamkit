@@ -6,10 +6,9 @@ import { randomBytes } from 'node:crypto';
 import { lstatSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DEFAULTS } from './cli.mjs';
-import { readPaths, transcriptEvents } from './checks.mjs';
+import { cutText, readPaths, turnResults } from './checks.mjs';
 import { firstJson, helper } from './session.mjs';
 
-const MAX_FILE_CHARS = 20_000;
 
 // An item marked `(kit-only)` asks for the kit's own format and is scored for the kit arm only; one
 // marked `(gate)` is the judged gate check, kept out of the score and reported apart from the coded
@@ -27,17 +26,10 @@ export function parseRubric(text) {
 // outside the seed.
 const isPlainFile = (p) => { try { return lstatSync(p).isFile(); } catch { return false; } };
 
-const cut = (t) => (t.length > MAX_FILE_CHARS ? `${t.slice(0, MAX_FILE_CHARS)}\n[... cut at ${MAX_FILE_CHARS} characters]` : t);
-
 function readText(path) {
   const buf = readFileSync(path);
-  return buf.includes(0) ? null : cut(buf.toString('utf8'));
+  return buf.includes(0) ? null : cutText(buf.toString('utf8'));
 }
-
-// The closing message of every turn, from the transcript, which was masked before it was written.
-// A step's account of its work sits in the turn that did the work; the last turn is often only the
-// answer to a consent.
-const turnResults = (dir) => transcriptEvents(dir).filter((ev) => ev.type === 'result' && typeof ev.result === 'string' && ev.result.trim()).map((ev) => ev.result);
 
 // What the judge reads, recorded on the rubric as MATERIAL: the files readPaths names, then, in both
 // arms, the closing message of each turn.
@@ -55,8 +47,8 @@ export function material({ dir, run, glob }) {
   // Both arms' closing messages, so an item both arms are scored on is judged on the same kind of
   // material; only a kit-only item asks for the kit's file.
   const said = turnResults(dir);
-  if (said.length) said.forEach((t, i) => parts.push(`=== the agent's closing message of turn ${i + 1} ===\n${cut(t)}`));
-  else if (run.lastText) parts.push(`=== the agent's last message ===\n${cut(run.lastText)}`);
+  if (said.length) said.forEach((t, i) => parts.push(`=== the agent's closing message of turn ${i + 1} ===\n${cutText(t)}`));
+  else if (run.lastText) parts.push(`=== the agent's last message ===\n${cutText(run.lastText)}`);
   return { paths, messages: said.length, text: parts.join('\n\n') };
 }
 

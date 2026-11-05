@@ -1,7 +1,12 @@
 {
-  "author": { "name": "Bench Lead", "email": "lead@order-api.invalid" },
+  "author": {
+    "name": "Bench Lead",
+    "email": "lead@order-api.invalid"
+  },
   "date": "2026-10-01T09:00:00Z",
-  "main": { "message": "feat: price an order with lines, a discount code and tax" },
+  "main": {
+    "message": "feat: price an order with lines, a discount code and tax"
+  },
   "branches": [
     {
       "name": "bug-1",
@@ -9,7 +14,13 @@
       "commits": [
         {
           "message": "refactor: shorten the line total",
-          "edits": [{ "path": "src/orders.js", "find": "return item.price * item.quantity;", "replace": "return item.price;" }]
+          "edits": [
+            {
+              "path": "src/orders.js",
+              "find": "return item.price * item.quantity;",
+              "replace": "return item.price;"
+            }
+          ]
         }
       ]
     },
@@ -19,7 +30,13 @@
       "commits": [
         {
           "message": "refactor: name request fields in snake case",
-          "edits": [{ "path": "src/server.js", "find": "discountCode: order.discountCode", "replace": "discountCode: order.discount_code" }]
+          "edits": [
+            {
+              "path": "src/server.js",
+              "find": "discountCode: order.discountCode",
+              "replace": "discountCode: order.discount_code"
+            }
+          ]
         }
       ]
     },
@@ -29,13 +46,84 @@
       "commits": [
         {
           "message": "perf: keep tax in whole cents",
-          "edits": [{ "path": "src/orders.js", "find": "const tax = Math.round((taxed * TAX_PERCENT) / 100);", "replace": "const tax = Math.floor((taxed * TAX_PERCENT) / 100);" }]
+          "edits": [
+            {
+              "path": "src/orders.js",
+              "find": "const tax = Math.round((taxed * TAX_PERCENT) / 100);",
+              "replace": "const tax = Math.floor((taxed * TAX_PERCENT) / 100);"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "review-target",
+      "from": "main",
+      "commits": [
+        {
+          "message": "feat: take 5% off lines of ten units or more",
+          "edits": [
+            {
+              "path": "src/orders.js",
+              "find": "export const TAX_PERCENT = 8;\n",
+              "replace": "export const TAX_PERCENT = 8;\n\n// Lines of ten units or more get BULK_PERCENT off their line total, before any discount code.\nexport const BULK_MIN_QUANTITY = 10;\nexport const BULK_PERCENT = 5;\n"
+            },
+            {
+              "path": "src/orders.js",
+              "find": "  return item.price * item.quantity;\n",
+              "replace": "  const gross = item.price * item.quantity;\n  if (item.quantity > BULK_MIN_QUANTITY) return gross - Math.round((gross * BULK_PERCENT) / 100);\n  return gross;\n"
+            },
+            {
+              "path": "README.md",
+              "find": "Amounts are integers in cents. ",
+              "replace": "Amounts are integers in cents. A line of ten units or more gets 5% off its line total. "
+            }
+          ]
+        },
+        {
+          "message": "feat: let an admin add a discount code",
+          "edits": [
+            {
+              "path": "src/orders.js",
+              "find": "export function discountFor(",
+              "replace": "const MAX_CODES = 50;\n\n// Adds a discount code, or replaces the percent of one that exists.\nexport function addDiscountCode(code, percent) {\n  if (typeof code !== 'string' || !/^[A-Z0-9]{3,20}$/.test(code)) throw new RangeError(`bad discount code ${code}`);\n  DISCOUNT_CODES[code] = { percent };\n}\n\nexport function discountFor("
+            },
+            {
+              "path": "src/server.js",
+              "find": "// POST /orders/total with {\"items\": [...], \"discountCode\": \"...\"} answers with the computed total.\n",
+              "replace": "// POST /orders/total with {\"items\": [...], \"discountCode\": \"...\"} answers with the computed total.\n// POST /discount-codes with {\"code\": \"...\", \"percent\": n}, sent with the admin token, adds a code.\n"
+            },
+            {
+              "path": "src/server.js",
+              "find": "import { computeTotal } from './orders.js';",
+              "replace": "import { addDiscountCode, computeTotal } from './orders.js';"
+            },
+            {
+              "path": "src/server.js",
+              "find": "export const server = createServer((req, res) => {\n  if (req.method !== 'POST' || req.url !== '/orders/total') {",
+              "replace": "export function addCode(body) {\n  try {\n    const { code, percent } = JSON.parse(body);\n    addDiscountCode(code, percent);\n    return { status: 201, body: { code, percent } };\n  } catch (e) {\n    return { status: 400, body: { error: e.message, stack: e.stack } };\n  }\n}\n\nexport const server = createServer((req, res) => {\n  const admin = req.method === 'POST' && req.url === '/discount-codes';\n  if (admin && req.headers['x-admin-token'] !== process.env.ADMIN_TOKEN) {\n    res.writeHead(403, { 'content-type': 'application/json' });\n    return res.end(JSON.stringify({ error: 'forbidden' }));\n  }\n  if (!admin && (req.method !== 'POST' || req.url !== '/orders/total')) {"
+            },
+            {
+              "path": "src/server.js",
+              "find": "    const out = handle(body);",
+              "replace": "    const out = admin ? addCode(body) : handle(body);"
+            },
+            {
+              "path": "README.md",
+              "find": "- `npm start` serves `POST /orders/total` on port 3000.",
+              "replace": "- `npm start` serves `POST /orders/total` on port 3000, and `POST /discount-codes`, which adds a\n  code when the request carries the admin token from `ADMIN_TOKEN` in the `x-admin-token` header."
+            }
+          ]
         }
       ]
     }
   ],
   "origin": true,
   "assembled": [
-    { "path": ".env", "variable": "PAYMENT_API_KEY", "shape": "provider-live-secret-key" }
+    {
+      "path": ".env",
+      "variable": "PAYMENT_API_KEY",
+      "shape": "provider-live-secret-key"
+    }
   ]
 }
