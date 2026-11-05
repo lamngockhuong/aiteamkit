@@ -1,0 +1,55 @@
+{
+  "name": "fix-planted-bug-2",
+  "kind": "changes-code",
+  "fixture": "order-api",
+  "branch": "bug-2",
+  "runs": 3,
+  "arms": ["kit", "bare"],
+  "facts": "fixtures/order-api/hidden/facts-bug-2.md",
+  "allowedTools": [
+    "Read", "Glob", "Grep", "Edit", "Write", "Skill", "Agent", "Bash(node --test:*)",
+    "Bash(npm test:*)", "Bash(ls:*)", "Bash(mkdir:*)", "Bash(wc:*)", "Bash(git status:*)", "Bash(git diff:*)",
+    "Bash(git log:*)", "Bash(git show:*)", "Bash(git blame:*)", "Bash(git branch:*)", "Bash(git add:*)", "Bash(git commit:*)"
+  ],
+  "expectedFiles": [
+    "src/server.js",
+    "test/**",
+    "docs/records/fixes/**",
+    "docs/derived/**"
+  ],
+  "steps": [
+    {
+      "skill": "fix",
+      "prompt": "Customers who enter a discount code at checkout are charged the full price, and a made-up code is accepted too. The checkout page still sends the code as discountCode. Fix it.",
+      "kitPrefix": "/atk:fix ",
+      "maxTurns": 6,
+      "after": [
+        {
+          "consent": "commit"
+        }
+      ],
+      "checks": [
+        {
+          "type": "hidden-tests",
+          "path": "hidden/bug-2.test.mjs"
+        },
+        {
+          "type": "existing-tests"
+        },
+        {
+          "type": "commits",
+          "max": 1
+        },
+        {
+          "type": "scope"
+        },
+        {
+          "type": "rubric",
+          "file": "docs/records/fixes/*.md",
+          "rubric": "rubrics/fix-report.md",
+          "answer": "hidden/key-bug-2.md"
+        }
+      ]
+    }
+  ]
+}

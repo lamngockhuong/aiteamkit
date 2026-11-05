@@ -5,32 +5,84 @@
 // no gh login and no SSH keys, a global git config naming only Bench Lead, and the settings file the
 // sweep of a dead runner finds its sessions by.
 //
-// That is the environment, not the filesystem. A session still runs as the maintainer, as the design
-// accepts, so a granted Read or cat given an absolute path reaches the maintainer's files, the real
-// ~/.claude and this repository's fixtures/*/hidden/ included, and code it writes runs when a granted
-// command runs it.
+// The filesystem is bounded by permission rules rather than by the operating system. settings.json
+// denies Read, Edit and Write on the maintainer's real home and on this repository, Read on /proc and
+// on the parts of any bench run directory a session has no business reading, and Edit and Write on
+// every part of its own run directory but the seed's working files: the kit copy it loads, its
+// settings, its config, its home and git configuration, the seed's git directory, the seed's own
+// Claude settings and origin. A deny rule never sees a shell command, so the same settings register
+// bash-guard.mjs, which lets a Bash call through only when it is one of the command shapes it lists,
+// with paths inside the seed, and refuses everything else. What stays open, and is stated in every report's design: a session
+// runs as the maintainer, so code it writes in the seed runs as the maintainer when a granted
+// command runs it, `node --test` and `npm test` among them, and reads whatever the maintainer can.
 
-import { mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { cpSync, mkdirSync, realpathSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   childEnv, credentials, killTree, makeRunDir, sweepStale, track,
 } from '../../../plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs';
+import { within } from '../../../plugins/atkx/skills/skill-eval/scripts/static-check.mjs';
 
 export { credentials, killTree, sweepStale, track };
 
 export const PREFIX = 'atk-bench-';
 export const BENCH_LEAD = { name: 'Bench Lead', email: 'lead@order-api.invalid' };
 
+const LIB = dirname(fileURLToPath(import.meta.url));
+const REPO = resolve(LIB, '..', '..', '..');
+const GUARD = join(LIB, 'bash-guard.mjs');
+
+// The directories no session may read or write by a file tool: the maintainer's home, where the
+// saved login and the SSH keys live, and this repository, whose fixtures hold the hidden tests and
+// answer keys and whose docs/derived/bench/ holds earlier runs. Real paths, so a link cannot name its
+// way around a rule.
+export function deniedRoots() {
+  return [...new Set([realpathSync(homedir()), realpathSync(REPO)])];
+}
+
+const rule = (tool, path) => `${tool}(/${path.split('\\').join('/')})`;
+
+// The rules Claude Code reads from settings.json; `//` opens an absolute path in a rule.
+export function denyRules(roots, runDir) {
+  const out = roots.flatMap((root) => ['Read', 'Edit', 'Write'].map((tool) => rule(tool, `${root}/**`)));
+  out.push(rule('Read', '/proc/**'));
+  // The copies the checks make to run a hidden test, and in any bench run directory, this one or
+  // another running beside it, the Claude configs holding the login and the scratch homes.
+  out.push(rule('Read', `${dirname(runDir)}/atk-check-*/**`));
+  for (const part of ['config', 'helper-config', 'home']) out.push(rule('Read', `${dirname(runDir)}/${PREFIX}*/${part}/**`));
+  // In this run directory, everything a session could edit to change what runs or what is measured.
+  for (const part of ['kit/**', 'settings.json', 'config/**', 'helper-config/**', 'helper/**', 'home/**', 'seed/.git/**', 'seed/.claude/**', 'origin.git/**', 'before.json', 'pid']) {
+    out.push(rule('Edit', `${runDir}/${part}`), rule('Write', `${runDir}/${part}`));
+  }
+  return out;
+}
+
+// The settings every call gets: the deny rules, and the guard on every Bash call of a session.
+function settingsOf(roots, runDir) {
+  const quote = (x) => `'${x.split("'").join("'\\''")}'`;
+  return {
+    permissions: { deny: denyRules(roots, runDir) },
+    hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: `node ${quote(GUARD)} ${quote(join(runDir, 'seed'))}` }] }] },
+  };
+}
+
 // One run directory per run: config/, seed/ and logs/ from makeRunDir, plus a scratch home, the
-// helpers' own config and working directory, and settings.json.
+// helpers' own config and working directory, and settings.json with the deny rules. A run directory
+// inside a denied root would deny the session its own seed, so it is refused.
 export function newRunDir() {
   const runDir = makeRunDir(PREFIX);
+  const roots = deniedRoots();
+  const real = realpathSync(runDir);
+  const inside = roots.find((root) => within(root, real));
+  if (inside) throw new Error(`the run directory ${real} is inside ${inside}, which every session is denied; set TMPDIR to a directory outside it`);
   const home = join(runDir, 'home');
   for (const d of [home, join(home, '.config'), join(runDir, 'helper'), join(runDir, 'helper-config')]) mkdirSync(d, { recursive: true, mode: 0o700 });
   const gitconfig = join(home, '.gitconfig');
   writeFileSync(gitconfig, `[user]\n\tname = ${BENCH_LEAD.name}\n\temail = ${BENCH_LEAD.email}\n[init]\n\tdefaultBranch = main\n`);
   const settings = join(runDir, 'settings.json');
-  writeFileSync(settings, '{}');
+  writeFileSync(settings, `${JSON.stringify(settingsOf(roots, real), null, 2)}\n`);
   return { runDir, home, gitconfig, settings, seed: join(runDir, 'seed'), config: join(runDir, 'config'), helperDir: join(runDir, 'helper'), helperConfig: join(runDir, 'helper-config') };
 }
 
@@ -47,6 +99,14 @@ function scratchHome(run) {
     GIT_CONFIG_NOSYSTEM: '1',
     GIT_TERMINAL_PROMPT: '0',
   };
+}
+
+// The kit a kit-arm session loads: a copy inside the run directory, so loading it reads nothing under
+// the denied roots.
+export function kitCopy(run, kitDir) {
+  const dest = join(run.runDir, 'kit');
+  cpSync(kitDir, dest, { recursive: true });
+  return dest;
 }
 
 // What git needs to build the seed: no login, the scratch home, nothing of the maintainer's config.
@@ -75,12 +135,15 @@ export function secretsOf(auth) {
   return [...new Set([auth.env?.CLAUDE_CODE_OAUTH_TOKEN, ...passed].filter((v) => typeof v === 'string' && v.length >= 8))];
 }
 
+// What a masked secret reads as; the leak check looks for it in the transcript.
+export const MASKED_LOGIN = '<redacted: login token>';
+
 // Each secret is masked as it is and as JSON writes it inside a string, the form stream-json and
 // the JSON output carry it in, so parsing the masked text can never restore it.
 export function mask(text, secrets) {
   let out = text;
   for (const s of secrets) {
-    for (const form of new Set([s, JSON.stringify(s).slice(1, -1)])) out = out.split(form).join('<redacted: login token>');
+    for (const form of new Set([s, JSON.stringify(s).slice(1, -1)])) out = out.split(form).join(MASKED_LOGIN);
   }
   return out;
 }

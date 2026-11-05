@@ -9,7 +9,7 @@
   "allowedTools": [
     "Read", "Glob", "Grep", "Edit", "Write", "Skill", "Agent",
     "Bash(node --test:*)", "Bash(npm test:*)",
-    "Bash(cat:*)", "Bash(ls:*)", "Bash(echo:*)", "Bash(date:*)", "Bash(mkdir:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(wc:*)", "Bash(grep:*)",
+    "Bash(ls:*)", "Bash(mkdir:*)", "Bash(wc:*)",
     "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git blame:*)",
     "Bash(git branch:*)", "Bash(git add:*)", "Bash(git commit:*)"
   ],
