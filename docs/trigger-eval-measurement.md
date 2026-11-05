@@ -102,6 +102,12 @@ separates nothing from noise, and a case that failed once deserves three runs be
 under one model can lose under another, and a suite score with no model named cannot be compared
 against the next one.
 
+**Reaching a skill is not doing its job.** A trigger result says which skill a request reaches,
+never what the skill then does, whether it stops where a person must decide, or whether the kit
+does better than the same model without it. The benchmark under `tests/bench/`, run by hand and at
+a cost, measures those, with and without the kit; its design is
+`docs/records/design/261105-0300-atk-benchmark.md`.
+
 ## What the first real measurement found
 
 Run on 2026-09-18, `atk:review`, one run per query, model sonnet: sixteen of the nineteen observable

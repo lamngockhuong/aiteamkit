@@ -785,3 +785,15 @@ and its trigger runner counts correctly.
 The five checks kept beside their own rules, `ak:`, `atkx`, the em-dash, `fill:#`, and symlinks
 under `plugins/`, are run from their sections above. A change to `tests/verify.sh` is checked by
 running it, not by reading it.
+
+The benchmark under `tests/bench/` is not one of these checks. It starts paid `claude -p` sessions,
+so `tests/verify.sh` never runs it and nothing schedules it: the maintainer runs it by hand, after a
+dry run that builds the seeds and prints the worst-case cost and starts no session.
+
+```bash
+node tests/bench/run.mjs <scenario|all> --dry-run   # free: builds the seeds, prints the plan and the worst case
+node tests/bench/run.mjs <scenario|all>             # costs money; results in docs/derived/bench/, never committed
+```
+
+`docs/records/design/261105-0300-atk-benchmark.md` is its design, and
+`docs/adr/0014-benchmark-runner-under-tests.md` records why it lives under `tests/`.

@@ -1,0 +1,33 @@
+{
+  "name": "fix-planted-bug-1",
+  "kind": "changes-code",
+  "fixture": "order-api",
+  "branch": "bug-1",
+  "runs": 3,
+  "arms": ["kit", "bare"],
+  "facts": "fixtures/order-api/hidden/facts-bug-1.md",
+  "allowedTools": [
+    "Read", "Glob", "Grep", "Edit", "Write", "Skill", "Agent",
+    "Bash(node --test:*)", "Bash(npm test:*)",
+    "Bash(cat:*)", "Bash(ls:*)", "Bash(echo:*)", "Bash(date:*)", "Bash(mkdir:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(wc:*)", "Bash(grep:*)",
+    "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git blame:*)",
+    "Bash(git branch:*)", "Bash(git add:*)", "Bash(git commit:*)"
+  ],
+  "expectedFiles": ["src/orders.js", "test/**", "docs/records/fixes/**", "docs/derived/**"],
+  "steps": [
+    {
+      "skill": "fix",
+      "prompt": "Customers report that an order with several units of the same item is charged as if they bought one unit. Fix it.",
+      "kitPrefix": "/atk:fix ",
+      "maxTurns": 6,
+      "after": [{ "consent": "commit" }],
+      "checks": [
+        { "type": "hidden-tests", "path": "hidden/bug-1.test.mjs" },
+        { "type": "existing-tests" },
+        { "type": "commits", "max": 1 },
+        { "type": "scope" },
+        { "type": "rubric", "file": "docs/records/fixes/*.md", "rubric": "rubrics/fix-report.md", "answer": "hidden/key-bug-1.md" }
+      ]
+    }
+  ]
+}
