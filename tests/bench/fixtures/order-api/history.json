@@ -1,0 +1,18 @@
+{
+  "author": { "name": "Bench Lead", "email": "lead@order-api.invalid" },
+  "date": "2026-10-01T09:00:00Z",
+  "main": { "message": "feat: price an order with lines, a discount code and tax" },
+  "branches": [
+    {
+      "name": "bug-1",
+      "from": "main",
+      "commits": [
+        {
+          "message": "refactor: shorten the line total",
+          "edits": [{ "path": "src/orders.js", "find": "return item.price * item.quantity;", "replace": "return item.price;" }]
+        }
+      ]
+    }
+  ],
+  "origin": true
+}

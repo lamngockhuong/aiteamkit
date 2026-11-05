@@ -30,6 +30,12 @@
 // Usage: node trigger-run.mjs <skill-dir> (--dry-run | --yes) [--read <digest>] [--runs <n>]
 //        [--model <id>] [--timeout <seconds>] [--parallel <n>]
 // Prints one JSON summary on standard output, and one progress line per session on standard error.
+//
+// It also exports the isolation helpers, for another runner in this repository to import:
+// credentials, childEnv, makeRunDir and sweepStale, which take a directory prefix of the importer's
+// own, killTree, track, which adds an importer's session to the cleanup, and installCleanup, which
+// registers the exit and signal handlers. Importing the file starts nothing, registers no handler and
+// exits nothing: a helper that cannot go on throws, and only the CLI prints and exits.
 
 import { spawn, spawnSync } from 'node:child_process';
 import {
@@ -42,7 +48,6 @@ import { fileURLToPath } from 'node:url';
 import { describeSkill, evaluate, evaluateHooks, findRoot, sha256, within } from './static-check.mjs';
 
 const PREFIX = 'skill-eval-run-';
-const RUN_DIR_NAME = /^skill-eval-run-[A-Za-z0-9]{6}$/;
 const GIT_DIR = '.' + 'git';
 const HOOK = fileURLToPath(new URL('./hook-log.mjs', import.meta.url));
 const IS_WINDOWS = process.platform === 'win32';
@@ -94,7 +99,21 @@ function print(obj) {
   process.stdout.write(JSON.stringify(obj, null, 2) + '\n');
 }
 
+// A helper never ends the process: it throws, and only the CLI entry at the bottom prints the summary
+// and exits, so a module that imports this file is not killed with this tool's output.
+class Stop extends Error {
+  constructor(status, detail, extra = {}) {
+    super(detail);
+    this.status = status;
+    this.extra = extra;
+  }
+}
+
 function fail(status, detail, extra = {}) {
+  throw new Stop(status, detail, extra);
+}
+
+function exitWith(status, detail, extra = {}) {
   print({ status, detail, ...extra });
   process.exit(status === 'usage' ? 2 : 3);
 }
@@ -108,11 +127,23 @@ function alive(pid) {
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-function sweepStale() {
+// A prefix is a name of its own ending in a separator, so the sweep below, which removes what matches
+// it, can never match a directory some other program made.
+function checkPrefix(prefix) {
+  if (typeof prefix !== 'string' || prefix.length < 4 || !/^[A-Za-z][A-Za-z0-9._-]*-$/.test(prefix)) {
+    throw new Error(`run directory prefix ${JSON.stringify(prefix)} is not a name of 4 or more characters ending in -`);
+  }
+  return prefix;
+}
+
+// `prefix` is the one makeRunDir was given, so an importer sweeps only the directories it makes.
+function sweepStale(prefix = PREFIX) {
+  // mkdtemp adds six characters to the prefix.
+  const pattern = new RegExp(`^${escapeRe(checkPrefix(prefix))}[A-Za-z0-9]{6}$`);
   let removed = 0;
   const uid = typeof process.getuid === 'function' ? process.getuid() : null;
   for (const name of readdirSync(tmpdir())) {
-    if (!RUN_DIR_NAME.test(name)) continue;
+    if (!pattern.test(name)) continue;
     const dir = join(tmpdir(), name);
     try {
       const st = lstatSync(dir);
@@ -142,40 +173,64 @@ function sweepStale() {
 // ---------------------------------------------------------------------------------------------
 // The run directory and its cleanup
 
-let runDir = null;
+// Every run directory and every session this process made, so one cleanup removes them all, for the
+// CLI's one directory and for an importer's several alike.
+const runDirs = new Set();
 const children = new Set();
 
+// A session is killed with its whole process group, which needs it spawned detached off Windows. One
+// that was not has no group of its own, and is killed alone rather than left running.
 function killTree(child) {
   if (child.exitCode !== null || child.signalCode !== null) return;
   try {
     if (IS_WINDOWS) spawnSync('taskkill', ['/pid', String(child.pid), '/t', '/f'], { stdio: 'ignore' });
     else process.kill(-child.pid, 'SIGKILL');
-  } catch { /* already gone */ }
+  } catch {
+    try { child.kill('SIGKILL'); } catch { /* already gone */ }
+  }
+}
+
+// An importer's own sessions join the cleanup through this, spawned detached as killTree needs.
+function track(child) {
+  installCleanup();
+  children.add(child);
+  child.once('exit', () => children.delete(child));
+  return child;
 }
 
 function cleanup() {
   for (const c of children) killTree(c);
   children.clear();
-  if (runDir) {
-    try { rmSync(runDir, { recursive: true, force: true }); } catch { /* the next run sweeps it */ }
-    runDir = null;
+  for (const dir of runDirs) {
+    try { rmSync(dir, { recursive: true, force: true }); } catch { /* the next run sweeps it */ }
+  }
+  runDirs.clear();
+}
+
+// Loading this file registers nothing; makeRunDir and track call this, so the handlers exist as soon
+// as there is something to clean up, and an importer never has to remember it.
+let cleanupInstalled = false;
+function installCleanup() {
+  if (cleanupInstalled) return;
+  cleanupInstalled = true;
+  process.on('exit', cleanup);
+  for (const [sig, code] of [['SIGINT', 130], ['SIGTERM', 143], ['SIGHUP', 129]]) {
+    process.on(sig, () => {
+      cleanup();
+      process.exit(code);
+    });
   }
 }
 
-process.on('exit', cleanup);
-for (const [sig, code] of [['SIGINT', 130], ['SIGTERM', 143], ['SIGHUP', 129]]) {
-  process.on(sig, () => {
-    cleanup();
-    process.exit(code);
-  });
-}
-
-function makeRunDir() {
-  runDir = mkdtempSync(join(tmpdir(), PREFIX));
-  chmodSync(runDir, 0o700);
-  writeFileSync(join(runDir, 'pid'), String(process.pid));
-  for (const d of ['config', 'seed', 'logs']) mkdirSync(join(runDir, d), { mode: 0o700 });
-  return runDir;
+function makeRunDir(prefix = PREFIX) {
+  checkPrefix(prefix);
+  installCleanup();
+  const dir = mkdtempSync(join(tmpdir(), prefix));
+  runDirs.add(dir);
+  chmodSync(dir, 0o700);
+  writeFileSync(join(dir, 'pid'), String(process.pid));
+  for (const d of ['config', 'seed', 'logs']) mkdirSync(join(dir, d), { mode: 0o700 });
+  return dir;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -346,7 +401,7 @@ function session({ query, log, args, cwd, env, timeout }) {
     const child = spawn('claude', IS_WINDOWS ? args.map(winQuote) : args, {
       cwd, env, stdio: ['pipe', 'pipe', 'pipe'], detached: !IS_WINDOWS, shell: IS_WINDOWS,
     });
-    children.add(child);
+    track(child);
     let timedOut = false;
     let stopped = false;
     let tail = '';
@@ -486,7 +541,7 @@ async function main() {
     return;
   }
 
-  makeRunDir();
+  const runDir = makeRunDir();
   const config = join(runDir, 'config');
   const seed = join(runDir, 'seed');
   const auth = credentials(worstCaseSeconds);
@@ -578,6 +633,17 @@ async function main() {
   });
 }
 
-// Any other failure still ends in the one JSON summary the agent reads, and the exit handler removes
-// the run directory.
-main().catch((e) => fail('error', `the runner stopped: ${e.code || e.message}`));
+export { credentials, childEnv, makeRunDir, sweepStale, killTree, track, installCleanup };
+
+// The CLI runs only when this file is the script node was started with, never when it is imported.
+// Any failure, a refusal or anything else, ends in the one JSON summary the agent reads, and the exit
+// handler removes the run directory.
+// Compared by real path on both sides, as static-check.mjs does: run through a linked directory,
+// argv[1] is the link and import.meta.url the target.
+const invoked = (() => { try { return realpathSync(process.argv[1]); } catch { return null; } })();
+if (invoked && invoked === realpathSync(fileURLToPath(import.meta.url))) {
+  installCleanup();
+  main().catch((e) => (e instanceof Stop
+    ? exitWith(e.status, e.message, e.extra)
+    : exitWith('error', `the runner stopped: ${e.code || e.message}`)));
+}

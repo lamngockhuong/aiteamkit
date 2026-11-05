@@ -1179,3 +1179,53 @@ nm = json.loads(subprocess.run(['node', runner, nsk, '--yes', '--runs', '1', '--
 assert nm['status'] == 'measured' and json.load(open(probe))['dirs'] == [np_], 'a plugin with no process outside the repository was copied: %s' % nm
 shutil.rmtree(t)
 print('OK trigger runner counts')"
+
+# trigger-run.mjs is also a module the benchmark under tests/bench/ imports: importing it starts,
+# registers and exits nothing, its run directories and tracked sessions all go on a signal, a prefix
+# that could sweep someone else's directories is refused, and the CLI still runs through a link.
+TRIGGER_RUN=$(pwd)/plugins/atkx/skills/skill-eval/scripts/trigger-run.mjs python3 - <<'PY'
+import json, os, signal, subprocess, tempfile, shutil, time
+runner = os.environ['TRIGGER_RUN']
+# Every directory the module makes or sweeps stays in this sandbox, so a regression of the prefix
+# check sweeps nothing of the machine's own temporary directory.
+box = os.path.realpath(tempfile.mkdtemp())
+def mod(code):
+    head = "import { pathToFileURL } from 'node:url'; const m = await import(pathToFileURL(process.env.TRIGGER_RUN).href);"
+    return subprocess.run(['node', '--input-type=module', '-e', head + code], capture_output=True, text=True, env=dict(os.environ, TMPDIR=box))
+r = mod("console.log(JSON.stringify({ keys: Object.keys(m).sort(), exit: process.listenerCount('exit'), term: process.listenerCount('SIGTERM') }));")
+assert r.returncode == 0 and len(r.stdout.splitlines()) == 1, 'importing the runner printed or exited: %r' % r
+got = json.loads(r.stdout)
+assert got == {'keys': ['childEnv', 'credentials', 'installCleanup', 'killTree', 'makeRunDir', 'sweepStale', 'track'], 'exit': 0, 'term': 0}, got
+r = mod("""
+import { spawn } from 'node:child_process';
+const a = m.makeRunDir('atk-verify-'), b = m.makeRunDir('atk-verify-');
+const c = spawn('sleep', ['300']); m.track(c);
+let refused = 0; for (const p of ['', 'bench', 'x-']) { try { m.makeRunDir(p); } catch { refused++; } }
+try { m.sweepStale(''); } catch { refused++; }
+console.log(JSON.stringify({ dirs: [a, b], pid: c.pid, refused }));
+setTimeout(() => process.kill(process.pid, 'SIGTERM'), 100); setTimeout(() => {}, 5000);
+""")
+assert r.returncode == 143, 'a signal did not end the importer through the cleanup: %r' % r
+got = json.loads(r.stdout)
+assert got['refused'] == 4, 'a prefix that could match another program\'s directories was accepted: %s' % got
+assert all(os.path.dirname(d) == box for d in got['dirs']), 'a run directory was made outside TMPDIR: %s' % got['dirs']
+assert not any(os.path.exists(d) for d in got['dirs']), 'a run directory outlived the signal: %s' % got['dirs']
+# A killed session can stay a zombie until it is reaped, and a zombie still answers signal 0.
+def gone(pid):
+    try: os.kill(pid, 0)
+    except ProcessLookupError: return True
+    try: return open('/proc/%d/stat' % pid).read().rsplit(')', 1)[1].split()[0] == 'Z'
+    except OSError: return False
+for _ in range(20):
+    if gone(got['pid']): break
+    time.sleep(0.1)
+alive = not gone(got['pid'])
+if alive: os.kill(got['pid'], signal.SIGKILL)
+assert not alive, 'a tracked session spawned without detached outlived the cleanup'
+shutil.rmtree(box)
+t = tempfile.mkdtemp(); os.symlink(os.path.dirname(runner), os.path.join(t, 'link'))
+r = subprocess.run(['node', os.path.join(t, 'link', 'trigger-run.mjs')], capture_output=True, text=True)
+shutil.rmtree(t)
+assert r.returncode == 2 and json.loads(r.stdout)['status'] == 'usage', 'the CLI did not run through a linked directory: %r' % r
+print('OK trigger runner imports')
+PY

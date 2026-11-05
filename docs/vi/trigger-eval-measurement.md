@@ -101,6 +101,12 @@ ai đó sửa `description` vì nó.
 thắng dưới model này có thể thua dưới model khác, và một điểm số không kèm tên model thì không đem
 so với lần đo sau được.
 
+**Gọi đúng skill chưa phải là làm đúng việc.** Kết quả đo trigger chỉ cho biết một yêu cầu tới được
+skill nào, không bao giờ cho biết skill đó làm gì tiếp theo, có dừng lại ở chỗ một người phải quyết
+định hay không, hay bộ kit có làm tốt hơn cùng model đó khi không có kit hay không. Benchmark trong
+`tests/bench/`, chạy tay và tốn tiền, đo những điều đó, có kit và không có kit; thiết kế của nó là
+`docs/records/design/261105-0300-atk-benchmark.md`.
+
 ## Lần đo thật đầu tiên cho thấy gì
 
 Chạy ngày 2026-09-18, skill `atk:review`, mỗi query một lượt, model sonnet: mười sáu trên mười chín
