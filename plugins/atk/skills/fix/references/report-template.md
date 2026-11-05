@@ -105,18 +105,26 @@ since it was written and which path never exercised it.
 
 ## 4b. Recorded intent, and the conflict when there is one
 
-What step 6 of the investigation found, or the sentence that nothing was found and where it was
-searched.
+It opens with the `Spec` line of the result block: the spec the bug was logged against, from step 1b
+of the investigation, with the clause quoted, whom the run asked and what they answered, or why no
+spec applies. Then
+what step 6 found and which of its four cases it makes, or the sentence that nothing was found and
+where it was searched.
 
-When it found a decision that contradicts the requested behaviour, this section carries the four
+When the decision conflict gate stopped the work, in either form, this section carries the four
 parts the gate demands and the report goes no further: the decision with its source as `path:line`,
-a test name, or a commit; the concern raised now; the trade-off; and the two to four options, each
-with its cost. The report then stops here and waits for the person who owns the decision.
+a test name, a commit, or an issue and its comment, and in the second form both decisions; the
+concern raised now; the trade-off; and the two to four options, each with its cost. The report then
+stops here and waits for the person who owns the decision, or for both owners in the second form.
+
+When the records said nothing on a choice and the work stopped for their owner, this section carries
+the question, the person it was put to, and whether they answered, and the report goes no further
+until they do.
 
 ## 5. The change
 
-**Skipped under `--investigate-only`, when the conflict gate stopped the work, and when the
-hypothesis ceiling did.** There is no change to describe, and a section with a plan in it reads like
+**Skipped under `--investigate-only`, when the intent check stopped the work, at the conflict gate
+or waiting on the owner of a silent record, and when the hypothesis ceiling did.** There is no change to describe, and a section with a plan in it reads like
 a change that was made.
 
 What changed, in one paragraph, and why this is the smallest change that removes the cause. Where a
