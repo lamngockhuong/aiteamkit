@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.20](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.19...atk-v0.1.20) (2026-11-05)
+
+
+### Features
+
+* let atk:run-cases and atk:verify drive an app on an Android device ([#168](https://github.com/lamngockhuong/aiteamkit/issues/168)) ([568f91a](https://github.com/lamngockhuong/aiteamkit/commit/568f91a795732a14a0284f8da60d6f7c4ebe16cd))
+
+
+### Bug Fixes
+
+* list a challenge's objections at its close, and give a trace a place for a late correction ([#165](https://github.com/lamngockhuong/aiteamkit/issues/165)) ([e334fc7](https://github.com/lamngockhuong/aiteamkit/commit/e334fc77ca62dab1c68bb34ae333c55e94a962ca))
+* make atk:fix quote the spec a bug was logged against, and stop on two records that disagree ([#170](https://github.com/lamngockhuong/aiteamkit/issues/170)) ([7296f62](https://github.com/lamngockhuong/aiteamkit/commit/7296f62f4f39c92c7e66986958b92209b398a825))
+
 ## [0.1.19](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.18...atk-v0.1.19) (2026-11-04)
 
 
