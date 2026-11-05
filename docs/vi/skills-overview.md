@@ -473,8 +473,9 @@ phát hiện.
 
 ## `atk:fix`
 
-**Sinh ra.** Lỗi được ghi lại nguyên văn, nguyên nhân được chứng minh chứ không phải đoán, và một
-lượt kiểm xem hành vi hiện tại có phải là quyết định ai đó đưa ra có chủ ý. Sau đó là thay đổi nhỏ
+**Sinh ra.** Lỗi được ghi lại nguyên văn, spec mà bug được log theo được tìm ra và trích lại,
+nguyên nhân được chứng minh chứ không phải đoán, và một lượt kiểm xem hành vi hiện tại có phải là
+quyết định ai đó đưa ra có chủ ý, hay hai quyết định đã ghi lại trái nhau. Sau đó là thay đổi nhỏ
 nhất gỡ được nguyên nhân, kiểm chứng theo tầng, gọi review team lên đúng thay đổi đó rồi sửa những
 gì nó chặn, và báo cáo nói rõ đã kiểm những gì và chưa kiểm những
 gì. Trong lúc chạy, một progress log trong `docs/derived/fix/` ghi từng giả thuyết đã được chứng minh

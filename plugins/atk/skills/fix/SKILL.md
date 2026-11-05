@@ -41,11 +41,11 @@ should change, which belongs to whoever owns that decision.
 
 ## Roles
 
-Dev investigates and fixes. Tech Lead reviews, and is the one who answers when the intent check
-stops the work and when the review loop hits its ceiling. The reviewer is never the author, so this
-skill calling `atk:review` on its own change does not replace the Tech Lead reading it. QA confirms
-the symptom is gone against the reproduction in the report, not against the developer's word. See
-`shared/team-roles.md`.
+Dev investigates and fixes. Tech Lead reviews, and answers when the review loop hits its ceiling.
+When the intent check stops the work, the decision's owner answers: the Tech Lead for a technical
+one, the spec's owner for a spec, both when two records disagree. The reviewer is never the author,
+so this skill's own `atk:review` call does not replace the Tech Lead reading it. QA confirms the fix
+against the report's reproduction, not the developer's word. See `shared/team-roles.md`.
 
 ## Invocation
 
@@ -96,22 +96,21 @@ changes step 7; the steps below take its fix set.
 
 `references/investigate.md` holds the steps and the shape of the result. In short: copy the failure
 verbatim before touching anything, restate the symptom as input, observed output, expected output,
-and environment, map the surface to code, trace back to the line that produces the wrong behaviour,
-answer why it broke now, prove it, and list everyone else who calls what is about to change. Tracing
-a surface back through several modules, and listing every caller, go to an agent, per
-Reading wide, through an agent in `shared/host-capabilities.md`; without one, read inline and say so in the
-report.
+and environment, find and quote the spec the bug was logged against, map the surface to code, trace
+back to the line that produces the wrong behaviour, answer why it broke now, prove it, and list
+everyone else who calls what is about to change. Tracing a surface back through several modules,
+and listing every caller, go to an agent, per Reading wide, through an agent in
+`shared/host-capabilities.md`; without one, read inline and say so in the report.
 
 Proof is one of exactly three things: a red test that reproduces it, a direct reproduction with its
 output, or the responsible lines quoted together with a specific check that shows they do it. A
 cause with no evidence block is not a cause, it is the first hypothesis.
 
 The step has a ceiling of three hypotheses per defect, counted across the whole run, a resume
-included, per Progress log in `shared/artifact-paths.md`. Past the third the
-investigation stops and hands over the four things `references/investigate.md` lists under the
-ceiling, the last of which is the name of the person who has to look. "Needs further investigation"
-is not a handover: rule 1 in `shared/team-roles.md` applies here as everywhere, and an owner is a
-person.
+included, per Progress log in `shared/artifact-paths.md`. Past the third the investigation stops
+and hands over the four things `references/investigate.md` lists under the ceiling, the last of
+which is the name of the person who has to look. "Needs further investigation" is not a handover:
+rule 1 in `shared/team-roles.md` applies here as everywhere, and an owner is a person.
 
 No file changes in this step other than the progress log, with one exception: the failing test may be
 written, because the test is the evidence. Under `--investigate-only` even that exception is off, and the test goes into the
@@ -119,14 +118,15 @@ report as a code block instead.
 
 ### 2. Intent check
 
-Before calling the current behaviour wrong, look for a record that says it is right: a line in a
-design document or an ADR, an assertion in a test, a commit message that explains the choice, a
-comment that names the constraint.
+Before calling the current behaviour wrong, look for a record that says it is right: the spec quoted
+in step 1, a line in a design document or an ADR, an assertion in a test, a commit message that
+explains the choice, a comment that names the constraint.
 
-When one exists and the requested behaviour contradicts it, stop. Change nothing and present four
-things: the decision with its source as a path and line, a test name, or a commit; the concern
-raised now; the trade-off between them; and two to four concrete options. Then wait for the person
-who owns that decision.
+When one exists and the requested behaviour contradicts it, or two of them contradict each other,
+stop. Change nothing and present four things: the decision, or both, with its source as a path and
+line, a test name, a commit, or an issue comment; the concern raised now; the trade-off between
+them; and two to four concrete options. Then wait for the owner of each decision. Records silent
+on a choice stop the work too, until their owner answers.
 
 This is rule 3 in `shared/team-roles.md` at its sharpest point.
 
@@ -236,11 +236,10 @@ and stops, per `shared/review-fix-loop.md`.
 
 ### `--investigate-only`
 
-Stop after the intent check and write the report with the cause, the evidence, the blast radius,
-and, when the intent check found a contradiction, its four parts and the options. Where the ceiling
-stopped the investigation before a cause was proven, the report carries what ruled the three
-hypotheses out and who has to look, in place of the cause. No change section, no verification
-section.
+Stop after the intent check and write the report with the cause, the spec, the evidence, the blast
+radius, and, when the intent check found a contradiction, its four parts and the options. Where the
+ceiling stopped the investigation before a cause was proven, the report carries what ruled the three
+hypotheses out and who has to look, in place of the cause. No change or verification section.
 
 The working tree must be exactly as it was found, including no new test file: show `git status` to
 prove it. A red test still counts as evidence here, written into the report as a code block that a
@@ -275,6 +274,7 @@ yes per `shared/finalize-steps.md`, which also holds what this skill must not do
       who has to look.
 - [ ] No code changed before the cause was proven, apart from a test that reproduces it.
 - [ ] "Why now" is answered with a commit, or explicitly with "broken since it was written".
+- [ ] The spec the bug was logged against is quoted, or the run asked where it is or said why none applies.
 - [ ] The intent check ran, and a contradiction stopped the work rather than being noted afterwards.
 - [ ] The change is the smallest one that removes the cause, and anything else found is listed, not
       done.

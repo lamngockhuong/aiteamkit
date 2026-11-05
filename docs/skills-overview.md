@@ -466,8 +466,9 @@ finding.
 
 ## `atk:fix`
 
-**Produces.** The failure captured verbatim, the cause proven rather than guessed, a check that the
-current behavior is not a decision somebody made on purpose, the smallest change that removes the
+**Produces.** The failure captured verbatim, the spec the bug was logged against found and quoted,
+the cause proven rather than guessed, a check that the current behavior is not a decision somebody
+made on purpose, or two recorded decisions that disagree, the smallest change that removes the
 cause, verification by layer, the team review called on that change with what it blocks on fixed,
 and a report saying what was checked and what was not. While it runs,
 a progress log under `docs/derived/fix/` records each hypothesis proved or ruled out, so a resumed

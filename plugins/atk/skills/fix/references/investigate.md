@@ -3,8 +3,8 @@
 Loaded by `atk:fix` while it proves the cause and checks intent. The steps below, then the gate that
 decides whether a fix is allowed to happen at all, then the shape the result takes.
 
-Step 5b carries a letter rather than a number because it is bookkeeping on what step 5 proved, not
-another thing to find out. The intent check stays at six, where every other file refers to it.
+Steps 1b and 5b carry a letter rather than a number so that the intent check stays at six, where
+every other file refers to it.
 
 The order is the content. Each step exists because skipping it produces a specific wrong answer, and
 the note under each one says which.
@@ -27,6 +27,25 @@ Input, observed output, expected output, environment. Four lines, no interpretat
 
 A symptom that cannot be stated this way is not yet a bug report. Go back to the reporter rather
 than investigating a guess about what they meant.
+
+## Step 1b: find the spec the bug was logged against
+
+The expected output in step 1 is the reporter's words, and the reporter tested against a
+specification. Find it before the code is traced: a link in the ticket, its parent issue or epic,
+and the place the Tracker section of `.atk/profile.md` names under `Spec lives in`. Read it through
+`shared/ticket-adapters.md`, comments included, since a spec on a tracker is often updated or settled
+in a comment; a spec kept in a wiki or a drive is read only through a ready connection, per Read
+through a connection in `shared/host-capabilities.md`. Quote the clause on the reported behaviour,
+with the issue or page and the comment it is in.
+
+When none is found, ask the person running the skill where it is, and write down the answer,
+"there is none" included. Ask only where the expected output is a behaviour a spec decides. A crash,
+an error or lost data with no ticket needs no spec, and a review finding under `--findings` has its
+review as its record: write why none applies, and ask nothing. Two comments that disagree, with nothing saying which one settled it, are
+two records, for step 6. This step only reads, so it runs under `--investigate-only` too.
+
+Skipping it produces an investigation that checks the code against what the reporter expected
+rather than against what was agreed, and a decision handed to someone who does not own the spec.
 
 ## Step 2: locate the surface
 
@@ -110,19 +129,35 @@ checked.
 
 Before the behaviour is called wrong, look for the record that says it is right:
 
+- the spec step 1b quoted;
 - a design document or an ADR under the docs root named in `.atk/profile.md`;
 - an assertion in a test, especially one whose name states the rule;
 - a commit message that explains the choice;
 - a comment naming the constraint that forced it.
 
-Found nothing is a real result, and it is written down as such.
+Then say which of four cases the records make, and write it into the result:
+
+- **The code contradicts them**: a defect. Go on.
+- **They say nothing**: where the expected output is a choice a spec could have made, ask the
+  owner of the requirement, by name, and stop until they answer, since a fix would settle what
+  nobody decided. A crash, an error or lost data needs no spec to be wrong, and a review finding
+  under `--findings` has the review and its author's answer as its record; go on.
+- **Two of them contradict each other**: the decision conflict gate, in its second form.
+- **They confirm the current behaviour**: the report was logged against something they do not say.
+  The decision conflict gate, in its first form.
+
+Found nothing is a real result, and it is written down with where the search went, each issue read
+included.
 
 ## The decision conflict gate
 
-When the expected behaviour in the bug report contradicts a decision found in step 6, stop. Change
-no code, and present these four:
+It has two forms. In the first, the expected behaviour in the bug report contradicts a decision
+found in step 6. In the second, two records found there contradict each other, a screen spec and a
+technical constraint, or two specs. Either way, stop. Change no code, and present these four:
 
-1. **The decision**, with its source: `path:line`, a test name, or a commit hash. Quote it.
+1. **The decision**, with its source: `path:line`, a test name, a commit hash, or an issue and its
+   comment. Quote it. In the second form, both, each with its source, and the sentence that they
+   contradict each other.
 2. **The concern raised now**: what the reporter expected and why.
 3. **The trade-off**: what each side gains and loses, in the team's terms rather than in code terms.
 4. **Two to four concrete options**, each with what it costs. The usual four: keep the behaviour and
@@ -130,7 +165,9 @@ no code, and present these four:
    this case only; treat it as a new requirement.
 
 Then wait for the person who owns the decision. Naming who that is comes from the Team section of
-`.atk/profile.md`, or is asked.
+`.atk/profile.md`, its Approves column, or is asked. In the second form each record has an owner,
+and they are often two people, a BrSE for the screen spec and a Tech Lead for the constraint: name
+both, and put the question to both.
 
 A skill that reverses a recorded decision because the newest report disagrees with it has made the
 team's call for them, quietly, in a commit. That is rule 3 in `shared/team-roles.md` broken in the
@@ -147,7 +184,8 @@ The steps above produce this, and it goes into the report unchanged:
 **Why now**: <commit hash and subject, or "broken since written">
 **Layer**: <the layer name from .atk/profile.md>
 **Blast radius**: <every other caller of the code that will change, as path:line>
-**Recorded intent**: <what step 6 found, or "nothing found; searched <where>">
+**Spec**: <the issue or page, the comment, and the clause quoted; "asked <name>: <answer>"; or "none needed: <why>">
+**Recorded intent**: <what step 6 found and which of its four cases, or "nothing found; searched <where>">
 ```
 
 An empty blast radius asserts that nothing else calls this, so it carries the search that
