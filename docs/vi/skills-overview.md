@@ -550,6 +550,18 @@ cũng dùng thì phải chờ người dùng trả lời, vì không danh sách 
 ghi. Lệnh start thất bại vì thiếu cấu hình cũng dừng lại và hỏi: run không tự điền giá trị nào, kể
 cả từ file mẫu của dự án.
 
+Khi thay đổi chạm vào thư mục app trong dòng `App` không bắt buộc của profile, run còn điều khiển app
+trên thiết bị Android. Run kiểm tra backend của bản build là máy này trước khi khởi động bất cứ thứ
+gì, khởi động emulator khi người dùng chọn dùng một emulator, build và cài bản thay đổi, đi qua tiêu chí chấp nhận
+bằng khả năng tự động hoá thiết bị của harness, rồi kiểm hiệu ứng phụ trong stack local như với mọi
+request. Thiết bị thật chỉ được dùng khi người dùng nêu tên nó, nó chỉ chứa tài khoản test, và người
+dùng đồng ý cài; nó tới được stack local qua port reverse trên USB, thứ run gỡ đi khi kết thúc, hoặc,
+khi người dùng đồng ý, qua địa chỉ của máy này trên mạng nội bộ, mà báo cáo ghi theo loại chứ không
+ghi chính địa chỉ. Bước
+dọn dẹp chỉ tắt emulator do chính run này khởi động và không bao giờ gỡ app khỏi thiết bị thật. Không
+có khả năng tự động hoá thiết bị thì stack và các phép kiểm request vẫn chạy, và báo cáo liệt kê các
+tiêu chí của app là chưa được thực thi.
+
 ---
 
 ## `atk:review`
@@ -666,8 +678,10 @@ checklist riêng, kể cả checklist của công ty, thì dùng checklist đó.
 Test case theo một template cố định: ba nhóm `ACCESSING`, `GUI` và `FUNCTION`, một loại test case, nguồn
 cho mọi kết quả mong đợi, ID không bao giờ dùng lại, các cột kết quả chạy để trống, và bản xuất CSV mở
 được trong bảng tính với mỗi bước trên một dòng. Case `GUI` lấy text từ spec màn hình trong
-`docs/screens/`, hoặc từ design khi chưa có spec. Team đã có template hoặc mẫu của công ty thì giữ nguyên
-mẫu đó.
+`docs/screens/`, hoặc từ design khi chưa có spec. Một tính năng giao trên nhiều client có thể điền cột
+`Platform` không bắt buộc, `Web`, `Android` hoặc `iOS`, cho case chỉ đúng trên một nền tảng; ô để
+trống, hoặc file không có cột này, nghĩa là mọi client. Team đã có template hoặc mẫu của công ty thì
+giữ nguyên mẫu đó.
 
 Khi requirement, tài liệu tham chiếu, spec màn hình hay design thay đổi, `--update` đưa file test case
 theo kịp thay vì viết lại từ đầu: case mới nhận ID mới, case bị đổi được viết lại và xóa các ô kết quả
@@ -709,6 +723,13 @@ record. Phía sau là một triage report và một run log trong `docs/derived/
 agent chạy phần việc lặp lại của một lượt regression thay cho người bấm tay từng bước. `--dry-run`
 dừng sau bước phân loại và câu hỏi phạm vi, không gửi gì tới môi trường.
 
+Lần chạy có một client, chọn cùng lúc với môi trường đích: trình duyệt, hoặc một app trên thiết bị
+Android mà người dùng mang tới, đang chạy và đã cài sẵn bản build. Trên thiết bị, bản build phải trỏ
+tới đúng dòng đã xác nhận, lần chạy không bao giờ khởi động, cài hay gỡ thứ gì, chỉ xoá dữ liệu của
+app trên emulator bằng lệnh xoá trong dòng `App` của profile, và case nào có `Platform` ghi client
+khác thì bị bỏ qua. Một file test case phủ cả web app lẫn mobile app được chạy một lần cho mỗi client,
+mỗi lần chạy viết record riêng.
+
 **Không dùng khi.** Môi trường đích là stack local: đó là việc của `atk:verify`, bước lập trình viên tự
 kiểm trước khi bàn giao cho QA. Hoặc tester đã chạy xong và đang cầm kết quả: đó là việc của
 `atk:qa --record`. Skill từ chối thẳng production, và một dòng trong test plan không ghi tên người phụ
@@ -728,8 +749,9 @@ Case chỉ được ghi `Passed` khi mọi phần của kết quả mong đợi 
 đụng tới thì được hoãn: có tên trong danh sách nhưng không được đếm, nên tỷ lệ trong record không bao giờ
 trộn case đã chạy với case chưa chạy. Ảnh chụp chỉ vào record sau khi người khởi động lần chạy xác nhận
 trong ảnh không có dữ liệu của người thật; sau đó record nằm ở `IN REVIEW` chờ QA lead, và
-`atk:qa --bug` đọc nó như record của bất kỳ tester nào. Trên harness không có khả năng tự động hoá trình
-duyệt, lần chạy dừng sau câu hỏi phạm vi và chuyển phạm vi đã thống nhất sang `atk:qa --record`.
+`atk:qa --bug` đọc nó như record của bất kỳ tester nào. Trên harness không có khả năng tự động hoá mà
+client của lần chạy cần, trình duyệt hay thiết bị, lần chạy dừng sau câu hỏi phạm vi và chuyển phạm vi
+đã thống nhất sang `atk:qa --record`.
 
 ---
 

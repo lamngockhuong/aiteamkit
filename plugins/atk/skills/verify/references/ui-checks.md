@@ -29,6 +29,10 @@ Check at the widths the project actually supports, which the design or the conve
 names. Where nothing names them, check three and say that the choice was the skill's: a narrow phone
 width, a tablet width, and a wide desktop width.
 
+On a device client, the screen size is the run's one confirmed device, in place of the three
+widths. Any other device the design, or the Compatibility section of the test plan, names is listed
+in Not verified; where neither names one, say that the choice of device was the skill's.
+
 The widths are checked for the same screen in the same state. Changing the data between widths turns
 a layout comparison into two unrelated screenshots.
 
@@ -77,7 +81,8 @@ means a fallback rendered, and the fallback is what was verified.
 ## Interaction
 
 Where the case is a flow rather than a screen, walk it: the real clicks, the real typing, the real
-submission. Then assert the side effect through `references/runtime-checks.md` like any other case. A
+submission, or on a device the real taps, typing and swipes through the harness's device
+automation. Then assert the side effect through `references/runtime-checks.md` like any other case. A
 flow that ends with the screen saying it worked has verified the message, not the outcome.
 
 ## Evidence
@@ -85,6 +90,10 @@ flow that ends with the screen saying it worked has verified the message, not th
 Screenshots go in the directory `shared/artifact-paths.md` names for them, which sits beside the
 report and carries the same slug. One file per screen per width per state, named so that a reader can
 tell which is which without opening it.
+
+On a device, a screenshot and an element list copied into the report follow every rule of
+Screenshots and element lists in `shared/device-sessions.md`, what is not the app kept out and the
+person's confirmation before anything links them, whether or not the run is under `--ui`.
 
 A UI finding is a screenshot plus a sentence. The sentence says what the difference is and which
 reference it is measured against. A screenshot with no sentence makes the reader do the comparison

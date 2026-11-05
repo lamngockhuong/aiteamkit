@@ -1,25 +1,26 @@
 ---
 name: run-cases
 description: >
-  Execute approved test cases against a deployed DEV or staging environment through the browser:
-  refuse production and the local stack, recon the accounts and data, triage every case as
-  automatable, semi-automatable, manual, or blocked, naming the person who clears any obstacle the
-  run cannot clear itself, agree the scope with the
-  person before any case runs, run in at most three rounds, and write only the results it observed
-  into a run record the QA lead approves and `atk:qa --bug` reads.
+  Execute approved test cases against a deployed DEV or staging environment, through the browser or
+  an app on an Android device: refuse production and the local stack, recon the accounts and data,
+  triage every case as automatable, semi-automatable, manual, or blocked, naming who clears each
+  obstacle, agree the scope with the person before any case runs, run in at most three rounds, and
+  write only the results it observed into a run record the QA lead approves and `atk:qa --bug` reads.
   Use when a cases file is approved, a non-production environment is deployed, and the team wants
-  an agent to execute the automatable part instead of a tester clicking through it.
+  an agent to execute the automatable part instead of a tester.
   Triggers on: "run the test cases", "execute test cases", "run these cases on staging",
-  "automate these test cases on DEV", "chạy test case", "thực thi test case",
-  "chạy test case trên STG", "chạy bộ test case trên môi trường DEV", "テストケース実行",
-  "テスト実施", "STGでテストケースを実行", "/atk:run-cases".
+  "automate these test cases on DEV", "run test cases on the mobile app", "chạy test case",
+  "thực thi test case", "chạy test case trên STG", "chạy bộ test case trên môi trường DEV",
+  "chạy test case trên app mobile", "テストケース実行", "テスト実施", "STGでテストケースを実行",
+  "モバイルアプリでテストケース実行", "/atk:run-cases".
 argument-hint: "<cases-path> [--env <name>] [--only <IDs>] [--dry-run] [--out <path>]"
 ---
 
 # Run Test Cases on a Deployed Environment (`atk:run-cases`)
 
 Takes the cases `atk:qa` wrote and runs the part of them an agent can run honestly, on a deployed
-environment that is not production, through the browser. What comes back is a run record in the shape
+environment that is not production, through one client: the browser, or an app on an Android device
+the person brings. What comes back is a run record in the shape
 `atk:qa` already defines: the results the agent observed and nothing else, a defect for each failure,
 and evidence beside it, waiting for the QA lead.
 
@@ -31,7 +32,8 @@ change data somebody else is using is never automated at all.
 ## Scope
 
 Handles: choosing the target from the test plan's environments and refusing production and the local
-stack, logging in and reading the environment before scoring, triage of every case, the scope
+stack, choosing the client, a browser or an app on an Android device, and checking that the app's
+build points at the target, logging in and reading the environment before scoring, triage of every case, the scope
 question, execution in at most three rounds, creating the data a case needs through the product and
 deleting it afterwards, the run record with its defects and evidence, and the triage report and run
 log behind it.
@@ -40,7 +42,8 @@ Does NOT handle: writing or updating the cases, or the test plan, which is `atk:
 tester executed by hand, which is `atk:qa --record`; raising the defects on the tracker or retesting a
 fix, which are `atk:qa --bug` and `atk:qa --retest` reading this skill's record; running the local
 stack, which is `atk:verify`, the developer's check before handing work to QA; writing permanent
-end-to-end test code (`atk:implement`); fixing what it finds (`atk:fix`); or deciding that the build
+end-to-end test code, web or mobile (`atk:implement`); booting, installing on, or erasing a device,
+which the person does; fixing what it finds (`atk:fix`); or deciding that the build
 passes, which is the QA lead's call on the record.
 
 The boundary with `atk:qa` is the one worth stating plainly. `atk:qa` never executes a case: it plans,
@@ -71,7 +74,8 @@ by a person named for it before the case enters the scope. See `shared/team-role
 in a spreadsheet of its own maps it with "Mapping to a spreadsheet form" in
 `skills/qa/references/test-case-template.md` first; this skill reads the Markdown table only.
 
-`.atk/profile.md` is read for its `Layers` and `Team` sections and is not required: without it the
+`.atk/profile.md` is read for its `Layers` and `Team` sections, and for the `App` line of its Verify
+section on a device client, and is not required: without it the
 skill continues, per the Required-soft group of `shared/project-profile.md`, and the triage report
 and the record's `In short` open with the sentence that group uses.
 
@@ -94,20 +98,34 @@ struck through as removed, per The cases to triage in `references/triage.md`. No
 `APPROVED` is asked about before anything else: the person may run it all the same, and the record
 says so, as `skills/qa/references/test-run.md` does under What the cases were.
 
-Check whether the harness offers browser automation, per Browser automation in
-`shared/host-capabilities.md`. Where it offers none, the run carries on as a dry run and ends after
-step 5, handing the agreed scope to `atk:qa --record`, and the session says so now rather than after
-the triage.
+Check which automations the harness offers, browser and device, per Browser automation and Device
+automation in `shared/host-capabilities.md`, and record the browser automation, and the device
+automation only where step 2 offers a device client. The client is chosen at step 2, and only a
+client whose automation is present can run. Where neither is offered, the run carries on as a
+dry run and ends after step 5, handing the agreed scope to `atk:qa --record`, and the session says so
+now rather than after the triage.
 
-Read the newest run log of an earlier run of this cases file, per The run log in
-`references/execution.md`: offer its deferred cases as `--only`, so a run split over several sessions
+Once step 2 has settled the client, read the newest run log of an earlier run of this cases file on
+that client, per The run log in `references/execution.md`: offer its deferred cases as `--only`, so a run split over several sessions
 picks up where it stopped, and name to the person any data it shows created with no record after it.
 
 ### 2. Target
 
+Settle the client before the target: the browser, the default, or an app on an Android device,
+offering the test plan's Compatibility rows where it has them. The device client is offered only
+where the profile has an `App` line or a Compatibility row names a native app; otherwise the browser
+is settled without a question about it, and device automation alone never raises one. A device
+client names the device and its kind, a real device only as Real devices in
+`shared/device-sessions.md` allows; the target's confirmation then shows the variant read from that
+device, or the person's answer. An iOS device is
+refused in one line, since this version drives Android alone. Where the client the person wants has no automation in the
+harness, say so here, before any triage: the run carries on as a dry run on that client, as step 1
+says for none.
+
 Choose and check the environment per `references/environment-safety.md`: the test plan's row, its
 `Kind`, the person's confirmation, the refusals for production and for the local stack, the owner
-by name, the reachability check, the lock threshold, and where credentials may come from. Every stop
+by name, the reachability check, the lock threshold, where credentials may come from, and on a
+device the build's backend and version. Every stop
 about the target happens here, before any login; the lock and credential rules in that file apply
 again at every login after it, which is why later steps reopen it. Under `--dry-run` the reachability
 check is skipped, since a dry run sends nothing.
@@ -128,7 +146,8 @@ so the person answering the scope question can open it.
 
 Ask the scope question in `references/triage.md`, and wait for the answer. No case runs before it, and
 no case is dropped on the skill's own judgement. The answer goes into the triage report and the run
-log. Under `--dry-run`, with no browser automation, or with a budget of zero, the run ends here: the
+log. Under `--dry-run`, with no automation for the run's client, or with a budget of zero, the run
+ends here: the
 triage report, with the agreed scope written into it, is the output, and the session names
 `atk:qa --record` as the way that scope gets executed by hand.
 
@@ -145,7 +164,7 @@ reached are deferred, not `Pending`.
 ### 7. Clean up
 
 Delete what the run created, by the identifiers the run log holds and never by pattern, keep what a
-defect needs to be reproduced, sign out, and close the browser session this run opened, per Clean-up
+defect needs to be reproduced, sign out, and close the client session this run opened, per Clean-up
 in `references/execution.md`. Every early stop from step 3 on runs this as far as it can, and the
 record is written after it, so it can say what the run left on the environment.
 
@@ -188,7 +207,8 @@ ticket into or out of testing is the QA lead's act, never this run's.
 ## Definition of done
 
 - [ ] The target was a test plan row whose kind is staging or development, confirmed by the person; a
-      production or local target, or a row with no named owner, stopped the run before any request.
+      production or local target, or a row with no named owner, stopped the run before any request;
+      on a device, so did a build pointing anywhere but that row.
 - [ ] No case that changes data the run did not create, and no case submitting wrong credentials, was
       automated; no account reached its lock threshold, and none was tried again after a failed
       login where the threshold is `TBD`.
@@ -209,5 +229,6 @@ ticket into or out of testing is the QA lead's act, never this run's.
 - [ ] Nothing about one project, its stack, its login provider, its thresholds, or its file formats,
       was taken from anywhere but the test plan, the profile, the code, or the person.
 - [ ] Every record the run created was deleted by its identifier or kept with the reason, and the
-      browser session this run opened is closed.
+      client session this run opened is closed; on a device, nothing was booted, installed or
+      uninstalled, and data was cleared only on an emulator with the profile's command.
 - [ ] A local target was refused and named as `atk:verify`'s.

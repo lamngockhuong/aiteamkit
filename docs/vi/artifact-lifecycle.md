@@ -80,7 +80,7 @@ của kit, bản tóm tắt của `atk:catchup` chạy lại là có, báo cáo 
 nếu đó là một file test case; còn báo cáo lỗi thiết lập thì chạy lại `atk:onboard` trên kho mã ở
 trạng thái lúc đó; triage report và run log của `atk:run-cases` thì đã được run record đứng trước
 chúng trích dẫn và tóm tắt. Điều đó chỉ đúng khi đã có record theo sau: sau một lần chạy thử, trên
-harness không có khả năng tự động hoá trình duyệt, hoặc sau một lần chạy không viết record, triage
+harness không có khả năng tự động hoá mà client của lần chạy cần, trình duyệt hay thiết bị, hoặc sau một lần chạy không viết record, triage
 report là bản duy nhất ghi phạm vi đã thống nhất và run log là danh sách duy nhất những gì lần chạy
 có thể đã để lại trên môi trường, nên giữ cả hai cho tới khi có người xử lý. Ảnh chụp trong thư mục
 `evidence/` của lần chạy ấy chờ người khởi động lần chạy xác nhận, là bản duy nhất cho tới lúc đó,

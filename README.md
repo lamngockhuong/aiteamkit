@@ -80,7 +80,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:verify` | The feature exercised against a running system, side effects asserted in the data rather than the status code, and escalation by name after three rounds. |
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences, written to a report and summarised in the session. |
 | `atk:qa` | The project's master test plan, a test plan per feature, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria; afterwards the record of a test run, its defects raised as bugs, and the retest of a fix. |
-| `atk:run-cases` | Approved test cases executed by the agent on a deployed DEV or staging environment, never production or the local stack: every case triaged first, the scope agreed with QA before anything runs, and a run record holding only what was observed, ready for the QA lead and for `atk:qa --bug`. |
+| `atk:run-cases` | Approved test cases executed by the agent on a deployed DEV or staging environment, through the browser or an app on an Android device, never production or the local stack: every case triaged first, the scope agreed with QA before anything runs, and a run record holding only what was observed, ready for the QA lead and for `atk:qa --bug`. |
 | `atk:security` | A security record a Tech Lead can sign and a client can read: assets and trust boundaries, the project's own scanners run, threats walked per boundary, every finding traced from entry point to impact, a client or company checklist answered item by item, and residual risk left for a named person to accept. Also the threat model of a feature, kept current. |
 | `atk:git` | Finished work carried into the repository: the diff read before anything is staged, a scan that stops on a credential, commits that revert one at a time, and push, pull request and merge each behind a yes given for that action. |
 | `atk:release` | Release notes per audience, a checklist with an owner per step, migration reversibility, and a rollback path written before the deploy. |
@@ -168,9 +168,10 @@ independent passes over a large diff when the host can run agents in parallel, a
 `atk:plan --challenge` one agent per lens over a written plan. None of it is
 required: on a harness without them the step runs by hand, against the same list in
 [plugins/atk/shared/tidy-pass.md](plugins/atk/shared/tidy-pass.md), and the artifact says which way it ran. The one
-exception is `atk:run-cases`, which drives the application through the harness's browser automation:
-the browser is its work rather than an improvement to it, so without one it stops after the scope
-question and hands the agreed cases to `atk:qa --record` for a tester. The rules are in
+exception is `atk:run-cases`, which drives the application through the automation its client needs,
+the harness's browser automation or its device automation for an app on an Android device: the
+client is its work rather than an improvement to it, so without that automation it stops after the
+scope question and hands the agreed cases to `atk:qa --record` for a tester. The rules are in
 [plugins/atk/shared/host-capabilities.md](plugins/atk/shared/host-capabilities.md).
 
 ## Installation

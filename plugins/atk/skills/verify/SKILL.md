@@ -2,13 +2,13 @@
 name: verify
 description: >
   Confirm a change works by running the real thing: start the app the way the project starts it,
-  exercise it with real requests, assert the side effect in the data rather than the status code,
+  exercise it with real requests or an app on an Android device, assert the side effect in the data rather than the status code,
   compare the screen against the design when asked, and stop after three rounds with a named person
   rather than patching indefinitely.
   Use when the suite is green and nobody has yet seen the feature work, before handing a ticket to
   QA, or before a release goes out.
   Triggers on: "verify", "verify this works", "kiểm chứng", "chạy thử thật", "test thực tế",
-  "đối chiếu thiết kế", "動作確認", "実機確認", "画面確認", "/atk:verify".
+  "đối chiếu thiết kế", "kiểm chứng trên app mobile", "verify the mobile app change", "動作確認", "実機確認", "画面確認", "モバイルアプリで動作確認", "/atk:verify".
 argument-hint: "[module|paths|ticket|pr] [--ui] [--report-only] [--out <path>]"
 ---
 
@@ -25,7 +25,7 @@ person by name: a failure that survives three fixes is usually a design question
 ## Scope
 
 Handles: starting the application the way `.atk/profile.md` says to start it, waiting for the
-readiness signal, exercising the change with real requests or real interaction, asserting the side
+readiness signal, exercising the change with real requests or real interaction, in a browser or in an app on a device it boots, builds and installs when the change touches the profile's `App` line, asserting the side
 effect in data, queue, and logs, comparing screens against the design under `--ui`, retrying at most
 three times, escalating by name past that, and stopping every process it started.
 
@@ -104,7 +104,7 @@ that would print more is not run; ask for it narrowed. A host that is not this m
 run: this skill sends real requests and writes real side effects, and doing that to a shared
 environment is a real outage rather than a failed test. Say what was found, and hand it to the
 person the `Team` section names for the environment. A role with no name attached reaches nobody,
-and a team that has no SRE deletes that row from its profile, so "tell SRE" can resolve to no one.
+and a team that has no SRE deletes that row from its profile, so "tell SRE" can resolve to no one. A change under the app's directory in the profile's `App` line settles the device client here too, per The build's backend, on a device in `references/runtime-checks.md`.
 
 Then the data store, per The data store before anything starts in `references/runtime-checks.md`:
 the read-only check from the profile's `Prepare` line tells whether the store matches the branch.
@@ -191,8 +191,8 @@ because that is what the next person needs in order to trust it.
 
 Where a round changed code, tidy it first, with the host's code clean-up capability, `/simplify` in
 Claude Code, per `shared/host-capabilities.md`. It covers only what the rounds changed, and the case
-that was failing is re-run after it: a clean-up that puts that case back to red is reverted rather
-than debugged, and the report says so. A run whose rounds changed nothing skips this.
+that was failing is re-run after it, on a device per Starting in `references/runtime-checks.md`: a
+clean-up that turns that case red again is reverted, not debugged, and the report says so. A run whose rounds changed nothing skips this.
 
 Then close it by handing off to `atk:git`, like any other change the kit makes: the reference
 documents the change owes, the branch, the commit, and the consent line that everything past the
@@ -217,15 +217,15 @@ person's word. Put it in the report, so the next run recognises what this one le
 with `lsof -i :PORT` or `ss -ltnp` on macOS and Linux, `netstat -ano` on Windows. An occupied port is
 answered by identifying and stopping the stale owner, or by reusing it when it is the same
 application. It is never answered by letting the application pick another port: that is how a machine
-ends up with six copies of one application and no way to tell which one the browser is talking to.
+ends up with six copies of one application and no way to tell which one the client is talking to.
 
 Where the application chooses a port at random and nothing fixes it, say so in the report and
 inventory by process instead. A port that changes every run cannot be used to recognise a leftover,
 and pretending otherwise produces a check that always passes.
 
 **Record what was started.** Command, PID, and port, for every process, in the report. A process
-nobody wrote down is a process nobody will stop. A resource the run created that is not a process, a
-database, a container, a bucket, is recorded the same way with the command that removes it.
+nobody wrote down is a process nobody will stop. An emulator the run booted is such a process. A resource the run created that is not a process, a
+database, a container, a bucket, a port reverse on a device, is recorded the same way with the command that removes it.
 
 **A shared store is treated like a port.** A cache or bucket another session reads gets an
 inventory before the first request, and at cleanup exactly the entries this run added are removed

@@ -94,11 +94,12 @@ The team table is one question covering every role, never one question per role.
 A question the repository can answer is a defect in step 1, not a question. If an answer is not
 available now, or the budget runs out, write `TBD` plus the name of the person who owes it and move
 on; `--audit` picks those up later. Never leave a field blank, and never invent a plausible value.
-Three exceptions, each a field whose absence already has a meaning, per `shared/project-profile.md`:
+Four exceptions, each a field whose absence already has a meaning, per `shared/project-profile.md`:
 the `Run trace` line, written only when the team turns traces off, since a missing line means on;
 the `Reading agent model` and `Review agent model` lines, never asked and written only when a person
-gives one, since a missing line means the harness's own choice; and a `Template` cell, written only
-for a kind the project has a template for, since an empty cell means the kit's template.
+gives one, since a missing line means the harness's own choice; the `App` line, written only for a
+project that builds an app on a device, never as `TBD` on a web project; and a `Template` cell,
+written only for a kind the project has a template for, since an empty cell means the kit's template.
 
 ### 4. Write
 

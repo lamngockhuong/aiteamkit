@@ -543,6 +543,17 @@ database other sessions use waits for an answer first, because no listing can sa
 this run's. A start that fails for missing configuration stops with a question too: the run never
 fills in values of its own, not even from the project's example file.
 
+Where the change touches the app's directory in the profile's optional `App` line, the run also
+drives the app on an Android device. It checks that the build's backend is this machine before
+anything starts, boots an emulator when the person chooses one, builds and installs the change, walks the
+acceptance criterion through the harness's device automation, and asserts the side effect in the
+local stack as for any request. A real device is used only when the person names it, holds test
+accounts only, and says yes to the install; it reaches the local stack through a port reverse over
+USB, which the run removes at the end, or, on the person's yes, through this machine's address on
+the local network, which the report writes by its kind rather than as the address. Cleanup shuts down only an emulator this run booted and never
+uninstalls from a real device. Without device automation the stack and the request checks still
+run, and the report lists the app's criteria as not exercised.
+
 ---
 
 ## `atk:review`
@@ -655,8 +666,10 @@ that keeps its own checklist, a company one included, uses that instead.
 Cases follow a fixed template: the sections `ACCESSING`, `GUI` and `FUNCTION`, a testcase type, a
 source for every expected result, an ID never reused, and empty execution columns, with a CSV export
 that opens in a spreadsheet with each step on its own line. `GUI` cases take their text from the
-screen spec in `docs/screens/`, or from the design when there is none. A team that already has its own
-template or company form keeps it.
+screen spec in `docs/screens/`, or from the design when there is none. A feature delivered on more
+than one client may fill an optional `Platform` column, `Web`, `Android` or `iOS`, for a case that
+holds on one platform alone; an empty cell, or a file without the column, means every client. A team
+that already has its own template or company form keeps it.
 
 When a requirement, a reference document, a screen spec, or a design changes, `--update` brings the
 cases file level with it instead of writing it again: new cases take new IDs, changed cases are
@@ -700,6 +713,13 @@ triage report and a run log under `docs/derived/run-cases/`.
 wants the mechanical part of a regression pass run by the agent rather than clicked through by hand.
 `--dry-run` stops after the triage and the scope question, sending nothing to the environment.
 
+The run has one client, chosen with the target: the browser, or an app on an Android device that the
+person brings running with the build installed. On a device the build must point at the confirmed
+row, the run never boots, installs or uninstalls anything, it clears the app's data only on an
+emulator with the clear command of the profile's `App` line, and a case whose `Platform` names
+another client is skipped. A cases file covering a web app and a mobile app is run once per client,
+each run writing its own record.
+
 **Do not use when.** The target is the local stack: that is `atk:verify`, the developer's check before
 handing work to QA. Or a tester already executed the cases and has the results: that is
 `atk:qa --record`. The skill refuses production outright, and a test plan row with no named owner
@@ -719,8 +739,8 @@ is `Pending` with a reason a person can act on. Cases on offer that the run did 
 deferred: listed, never counted, so the record's shares never mix run and unrun cases. A screenshot
 reaches the record only after the person who started the run confirms it carries no real person's
 data; the record then waits at `IN REVIEW` for the QA lead, and `atk:qa --bug` reads it like any
-tester's record. Where the harness offers no browser automation, the run stops after the scope
-question and hands the agreed scope to `atk:qa --record`.
+tester's record. Where the harness offers no automation for the run's client, browser or device, the
+run stops after the scope question and hands the agreed scope to `atk:qa --record`.
 
 ---
 

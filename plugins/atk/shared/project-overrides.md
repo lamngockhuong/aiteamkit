@@ -65,6 +65,9 @@ repository will not take the file", together with what it costs.
 The file is named after the skill, with no namespace prefix and no slug: `atk:review` reads
 `.atk/overrides/review.md` and nothing else. A skill with no file behaves exactly as shipped.
 
+An override written for `atk:verify` or `atk:run-cases` before either could drive a device keeps
+applying; one that mentions the browser reads as the browser client.
+
 One file rather than several, because the path is then derivable. A reviewer opening a pull request
 knows which file to read from the skill name alone, and `atk:tailor --audit` checks one file per
 skill rather than discovering how many exist.
@@ -198,7 +201,7 @@ open.
 | 5 | The stop after three ruled-out hypotheses | `skills/fix/SKILL.md` |
 | 6 | The stop after three verification rounds | `skills/verify/SKILL.md` |
 | 7 | The read-only boundary of drift checking | `skills/spec/SKILL.md` |
-| 8 | The limits of an agent-executed run: never against production or the local stack, never automating a case that changes data the run did not create or that submits wrong credentials, never recording a result it did not observe, and the stop after three rounds | `skills/run-cases/references/environment-safety.md` |
+| 8 | The limits of an agent-executed run: never against production or the local stack, never automating a case that changes data the run did not create or that submits wrong credentials, never recording a result it did not observe, and the stop after three rounds; and on a device, never booting, installing or uninstalling an app, never clearing data but on an emulator with the profile's command, and a real device only once the person says it holds test accounts only; for `atk:verify`, installing on a real device only on the person's yes | `skills/run-cases/references/environment-safety.md`, `skills/verify/references/runtime-checks.md`, `shared/device-sessions.md` |
 | 9 | The rule that a skill neither opens nor searches `.env` or a credential file without the person's permission, and masks a secret value in everything a run writes or relays | `shared/team-roles.md` rule 9 |
 | 10 | The run trace every run leaves, which only `Run trace: off` in `.atk/profile.md` turns off, for the whole project | `shared/team-roles.md` rule 10 |
 

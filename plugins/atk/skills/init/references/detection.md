@@ -323,6 +323,41 @@ than one worktree or session points at. Detection says which stores exist and re
 shared; the user corrects that in step 2 with every other detected value, so it costs no turn. An
 application with no data store records `none` for both.
 
+### The app on a device
+
+Only for a project that builds a mobile app, and optional: a profile with no `App` line is valid,
+and the skills that read it run as they did without one.
+
+An Android app shows as a Gradle module applying the Android application plugin,
+`com.android.application` or its `alias(libs.plugins...)` form in that module's build file, or as
+the `android/` project of a cross-platform app. The module's directory is `Directory`; for a
+cross-platform app, React Native or Flutter, it is the app's root, since most of its code sits
+outside `android/`, and `Install` runs the Gradle project in `android/`. `Id` is the package name
+the chosen variant installs: the module's `applicationId`, or the `namespace` where none is set,
+plus the `applicationIdSuffix` of the variant's build type and of its flavour, `com.example.debug`
+for one. It is the package `atk:verify` installs and drives; a run on a deployed build drives the
+package the person picks, per The device in `shared/device-sessions.md`. The build variants or
+product flavours of the module, and the build-config fields each sets, say which variant points at
+the local stack. What may be read of them, and how, is Reading a build in
+`shared/device-sessions.md`; the identifiers are found by the same narrowed search. Record the variant with its file
+and line as the source. Where step 2 shows the detected values back, any build-config field other
+than the backend's is masked.
+
+`Install` is the Gradle task that builds and installs that variant, run against the device by its
+serial, recorded in the form of each shell the team uses:
+`ANDROID_SERIAL='<serial>' ./gradlew :app:installLocalDebug` in a POSIX shell,
+`$env:ANDROID_SERIAL='<serial>'; .\gradlew.bat :app:installLocalDebug` in PowerShell, or one form
+every shell runs once it is confirmed against the platform's documentation. `Clear` and `Version`
+are the platform tool's commands for that identifier, `adb -s '<serial>' shell pm clear <id>` and
+`adb -s '<serial>' shell "dumpsys package <id> | grep version"`, narrowed to the version lines on
+the device rather than by a `grep` on the host, which a Windows shell lacks. Each keeps `<serial>`
+as a placeholder per The device in `shared/device-sessions.md`, quoted, since a serial is reported
+by the device, and `Clear` and `Version` keep `<id>` as one too, never the `Id` written in.
+
+Ask only for what no file holds: which variant is the local one where several could be, which
+shells the team runs the commands in, and whether the project wants `Clear` at all. An iOS project
+is recorded as found and left without an `App` line, since this version drives Android alone.
+
 ## What is never detectable
 
 Ask these, and nothing else:

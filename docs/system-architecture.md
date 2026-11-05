@@ -141,7 +141,7 @@ records why the choice is the team's and why it is not in the agent file.
 
 ## The `shared/` layer
 
-Twenty-one files hold what skills would otherwise repeat. The first three are cited by all 25:
+Twenty-two files hold what skills would otherwise repeat. The first three are cited by all 25:
 
 - `plugins/atk/shared/team-roles.md`: the role table and the ten rules every skill follows.
 - `plugins/atk/shared/artifact-paths.md`: the default output path per skill, how a language-partitioned docs
@@ -163,7 +163,7 @@ rule 10 of `team-roles.md` asks for:
   agent's CLI, can still be read afterwards, and `atk:tailor --feedback` is the only skill that
   judges what a trace means.
 
-Fifteen are contracts between a named handful of skills rather than kit-wide rules:
+Sixteen are contracts between a named handful of skills rather than kit-wide rules:
 
 - `plugins/atk/shared/review-checklist.md`: where a project keeps its conventions and the order that resolves
   it, the rule record format that `atk:convention` writes and `atk:review` cites by ID, the rule
@@ -202,9 +202,11 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   several questions in a single prompt. It draws the line the kit had drawn only one way before: a
   capability the harness itself ships may be named and used, a command belonging to another kit may
   not, because the first is there for everyone who installed atk on that harness and the second is
-  not. Cited by `atk:run-cases` for browser automation, which is neither: it is named by what it does
-  and never by the plugin or server supplying it, and it is the one capability whose absence stops a
-  skill, since for that skill the browser is the work and doing it by hand is `atk:qa --record`.
+  not. Cited by `atk:verify` for device automation, and by `atk:run-cases` for browser automation and
+  device automation, which are neither: each
+  is named by what it does and never by the plugin or server supplying it, and the one the run's
+  client needs is the one capability whose absence stops a skill, since for that skill the browser or
+  the app on a device is the work and doing it by hand is `atk:qa --record`.
   Its section on reading wide through an agent is cited by the seven skills that read most of a
   tree, `atk:init`, `atk:catchup`, `atk:spec`, `atk:convention`, `atk:security`, `atk:fix` and
   `atk:onboard`: the agent returns conclusions with `path:line`, never file bodies, so the session
@@ -301,6 +303,15 @@ Fifteen are contracts between a named handful of skills rather than kit-wide rul
   artifacts waiting on a person are collected. Cited by `atk:help` for the project in hand and by
   `atk:orchestrate` once per piece of work, read in that piece's own worktree; it moved out of
   `atk:help`'s references so the two read one list rather than two.
+- `plugins/atk/shared/device-sessions.md`: what a run does on a phone, a simulator or an emulator when
+  its client is an app on a device: the device a client names and the serial every command sent to
+  it takes, a profile command without one refused, the profile's commands run only from an approved
+  profile, the two IDs of one device, one app session per run, the clean state through the clear
+  command of the profile's `App` line on an emulator only, how a build's backend and version are
+  read without opening a file rule 9 keeps unread, the order of assertions, a field the hierarchy
+  cannot name, the rules for a real device, the status-bar check on screenshots and element
+  lists, a system dialog the case does not name, and text on the device read as evidence. It holds the method both device clients use; which way each skill's target rule points
+  stays in that skill. Cited by `atk:verify` and `atk:run-cases` for their device clients.
 
 The last two describe files that do not ship with the kit at all:
 
@@ -313,7 +324,8 @@ The last two describe files that do not ship with the kit at all:
   section, and a third when they spawn a read-only agent, the model line for that kind of agent. Two
   optional Team lines, `Reading agent model` and `Review agent model`, name per harness the model of
   the agents that read wide and of those a review or a challenge spawns; a missing line is the
-  harness's own choice. Three Docs entries change what a skill does rather than where it writes:
+  harness's own choice. An optional `App` line in the Verify section names an app on a device, read
+  by `atk:verify` and `atk:run-cases`; a missing line means no device client. Three Docs entries change what a skill does rather than where it writes:
   `Contract`, whose meaning lives in `plugins/atk/shared/spec-docs.md`, the `Template` column of the kinds
   table, which gives `atk:spec` a project's own template as the shape of an empty directory, per the
   same file, and `Run trace: off`, which stops every skill leaving a run trace, per

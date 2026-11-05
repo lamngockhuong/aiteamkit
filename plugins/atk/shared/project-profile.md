@@ -188,7 +188,7 @@ a section to delete.
 | Docs | Docs root, a docs root of its own for any member that keeps one, the language that root is authored in and the mirrors beside it, each recorded on its own line, where conventions live and which of those documents carries the review checklist, where designs live, whether the project writes its reference documents before the code or after it, the agent instruction file if any, and the reference-document kinds table from `shared/artifact-paths.md` when the project changes a row, adds one, or names a template of its own for a kind, with the front-matter map beside it | every skill that writes an artifact |
 | Tracker | Tracker in use, repository owner, where the incoming specification lives | intake, catchup, review, release; and every skill detecting a tracker, per `shared/ticket-adapters.md` |
 | Team | Role mapped to a real name and to the identifier its code host knows them by, who approves what, the language the team writes artifacts in, and, optionally, `Reading agent model` and `Review agent model`, the model of the agents a skill spawns to read wide and to review | all |
-| Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to bring the data store to the branch's state, which stores other sessions also read, how to clean up, how to be sure the target is local | verify |
+| Verify | How to start each app, how to know it is ready, where logs go, how to confirm a side effect, how to bring the data store to the branch's state, which stores other sessions also read, how to clean up, how to be sure the target is local, and, optionally, an `App` line per mobile platform: the app's directory, the command that builds it for the local stack and installs it on a named device, its identifier, and the commands that clear its data on an emulator and print its version, each command that acts on a device taking the confirmed device's serial | verify; run-cases, for the `App` line alone |
 
 The authored language in Docs is not the working language in Team, and a profile that fills one
 from the other will put a document in the wrong place. Team says which language a skill writes
@@ -269,12 +269,13 @@ because it has started explaining instead of linking is duplicating a document; 
 long because it is a list of short labelled fields, as Verify is, is fine.
 
 An answer nobody has yet is recorded as `TBD` plus the name of the person who owes it. Never blank,
-and never guessed. The exceptions are `Run trace`, `Reading agent model` and `Review agent model`,
-lines whose absence already has a meaning: with no answer each is left out rather than written
-`TBD`, since a missing `Run trace` is read as on and a missing model line as the harness's own
-choice, and a `TBD` there would read the same while looking like a question somebody still owes. For
-the same reason a re-run of `atk:init` never asks for `Run trace` again, its first run never asks for
-either model line, and `--audit` never reports any of the three as missing or drifted: its absence
+and never guessed. The exceptions are `Run trace`, `Reading agent model`, `Review agent model` and
+`App`, lines whose absence already has a meaning: with no answer each is left out rather than
+written `TBD`, since a missing `Run trace` is read as on, a missing model line as the harness's own
+choice and a missing `App` line as a project with no app on a device, a web project among them, and
+a `TBD` there would read the same while looking like a question somebody still owes. For the same
+reason a re-run of `atk:init` never asks for `Run trace` again, its first run never asks for either
+model line, and `--audit` never reports any of the first three as missing or drifted: its absence
 is an answer.
 
 ## The precondition rule

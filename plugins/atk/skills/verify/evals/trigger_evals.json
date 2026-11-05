@@ -1,6 +1,9 @@
 [
   { "query": "the tests pass but nobody has actually run this, verify it works", "should_trigger": true },
   { "query": "/atk:verify checkout-flow --ui", "should_trigger": true },
+  { "query": "I changed the Android app's login screen, run it on the emulator against my local backend and check the session row is written", "should_trigger": true },
+  { "query": "kiểm chứng thay đổi trên app mobile Android với backend chạy local", "should_trigger": true },
+  { "query": "モバイルアプリの変更をエミュレータでローカル環境に対して動作確認して", "should_trigger": true },
   { "query": "start the app and check the order really gets written to the database", "should_trigger": true },
   { "query": "kiểm chứng tính năng này trên app chạy thật trước khi giao cho QA", "should_trigger": true },
   { "query": "chạy thử thật xem đơn hàng có được ghi vào database không", "should_trigger": true },
@@ -31,5 +34,8 @@
   { "query": "PR 82 を実機確認して", "should_trigger": true },
   { "query": "execute the test cases file against the DEV environment", "should_trigger": false },
   { "query": "thực thi bộ test case này trên môi trường DEV", "should_trigger": false },
-  { "query": "STG環境でテストケースを実行して", "should_trigger": false }
+  { "query": "STG環境でテストケースを実行して", "should_trigger": false },
+  { "query": "run the written test cases on the Android app on my phone against the DEV environment", "should_trigger": false },
+  { "query": "chạy bộ test case đã viết trên app Android ở máy ảo, với môi trường DEV", "should_trigger": false },
+  { "query": "書いたテストケースをAndroidエミュレータのアプリでSTG環境に対して実行して", "should_trigger": false }
 ]

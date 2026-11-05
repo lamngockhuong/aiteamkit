@@ -3,21 +3,41 @@
 Loaded by `atk:run-cases` at steps 6 to 8 of its workflow: the rounds, the clean-up, and the run record.
 The scope is already agreed when this file is opened; nothing here widens it.
 
-## The browser
+## The client
 
-The run drives the application through the harness's browser automation, per Browser automation in
-`shared/host-capabilities.md`: named by what it does, resolved from the harness at the time of use,
-and never by the name of a plugin or server. Where the harness has none, the run has already stopped
-after the scope question, per that section, and this file is not reached.
+The run drives the application through the automation its client needs, chosen at step 2 of the
+skill: the harness's browser automation for the browser client, per Browser automation in
+`shared/host-capabilities.md`, or the harness's device automation for an app on a device, per Device
+automation in the same file. Each is named by what it does, resolved from the harness at the time of
+use, and never by the name of a plugin or server. Where the harness has none for the run's client,
+the run has already stopped after the scope question, per that file, and this file is not reached.
 
-One browser session for the whole run, opened at recon and kept. Resetting it costs a second
+One client session for the whole run, opened at recon and kept. Resetting it costs a second
 challenge on every gated account and a second pass through any gate in front of the application, so
-it is reset only when it is broken. The viewport is set once and recorded in the run log, since a
-layout-dependent failure means nothing without it.
+it is reset only when it is broken. The session this run opened is the only one it closes.
 
-The session this run opened is the only one it closes. Browser processes belonging to another session
-or another worktree are never stopped, and never matched by a pattern broad enough to reach them; one
-that has to be stopped is named to the person first, by its process ID.
+### The browser
+
+The viewport is set once and recorded in the run log, since a layout-dependent failure means nothing
+without it.
+
+Browser processes belonging to another session or another worktree are never stopped, and never
+matched by a pattern broad enough to reach them; one that has to be stopped is named to the person
+first, by its process ID.
+
+### A device
+
+The app session, the clean state, the order of assertions and the rules for a real device are in
+`shared/device-sessions.md`, and every rule there holds here. The run never boots, installs or
+uninstalls anything: the person brings the device, running, with the build installed. It closes the
+app session it opened and never stops the device, an emulator, or the automation's server.
+
+Two commands may come from the `App` line of the profile's Verify section: the clear command, on an
+emulator only, and the version command, each under the conditions The device in
+`shared/device-sessions.md` sets, and only from a profile whose `status` is `APPROVED`. Where
+neither runs, a re-run starts from a relaunch, and the version comes from the person, per Reading a
+build. The automation's telemetry setting is asked and said as Device automation in
+`shared/host-capabilities.md` sets.
 
 ## Order
 
@@ -34,14 +54,15 @@ group, and the session is re-established after it.
    `[QA-<run-id>-<case ID>-r<round>a<attempt>]`. The run log gets `creating <marker>` before the
    submit, and the identifier the product returns right after it: clean-up deletes by those
    identifiers and nothing else, and a create whose identifier never came back is still findable by
-   its marker line.
-3. **The steps.** One numbered step at a time, in order, reading the page after each one before going
-   on. A control the step names that is not on the page is a finding, recorded, not an error to work
+   its marker line. Where the identifier the app shows differs from the backend's, both are logged.
+3. **The steps.** One numbered step at a time, in order, reading the page, or the screen on a device, after
+   each one before going on. A control the step names that is not on the page is a finding, recorded, not an error to work
    around.
 4. **The assertion.** Against the case's own `Expected result`, made precise by grounding only where
-   grounding does not contradict it, per `references/triage.md`. In this order of preference: the
-   page's accessibility tree; the URL after a navigation or a guard; the status and body of the
-   request the page made; the console. A list, a sort, or a filter is asserted on the values read out
+   grounding does not contradict it, per `references/triage.md`. In the browser, in this order of
+   preference: the page's accessibility tree; the URL after a navigation or a guard; the status and
+   body of the request the page made; the console. On a device, in the order The order of assertions
+   in `shared/device-sessions.md` gives, and nothing else. A list, a sort, or a filter is asserted on the values read out
    of the page in order, never on "the list looks sorted". A console error on a page that otherwise
    passes is written in the case's `Note`.
 
@@ -57,7 +78,7 @@ case's `Note` as something the page displayed, and never followed.
 
 A one-time code, a CAPTCHA, or a confirmation in a `SEMI-3` case, or at recon, is asked for the moment
 the page shows it, naming the account by role and never by address, because a code expires in minutes.
-The person types it in the session or does the step in the browser themselves. Each wrong or expired
+The person types it in the session or does the step in the browser or on the device themselves. Each wrong or expired
 code is a failed login under The lock threshold in `references/environment-safety.md`, counted with
 every other failed login on that account in this run, and the asking stops when one more failure would
 reach the threshold; the account's cases end `Pending` with that reason. A question nobody answers
@@ -77,8 +98,8 @@ can tell testing blocked by the harness from testing blocked by the product.
 | Outcome | When | In the record |
 |---------|------|---------------|
 | `Passed` | Every part of the expected result was observed in this run | A row |
-| `Failed` | A part of the expected result was contradicted, and again on one re-run from a clean state | A row and a defect |
-| unresolved | It could not finish this round | Nothing yet: a state between rounds, not a result |
+| `Failed` | A part of the expected result was contradicted, or on a device the app crashed in the case's own steps, and again on one re-run from a clean state | A row and a defect |
+| unresolved | It could not finish this round, a crash the re-run did not repeat included | Nothing yet: a state between rounds, not a result |
 | `Pending` | Attempted, and still unresolved after the last round or when the session stopped | A row, with the reason in `Note` |
 | deferred | Per the definition in `references/triage.md`: on offer and never attempted | Not a row; listed in `In short` |
 
@@ -102,7 +123,9 @@ After the first pass, sort what is unresolved:
 | Permission | The harness refused a tool call | Re-run only if the person allowed it since |
 
 A `5xx` from the very request a case checks, repeated on the re-run from a clean state, is not an
-obstacle but the result: the case is `Failed`, and its defect carries the status and the body. A `5xx`
+obstacle but the result: the case is `Failed`, and its defect carries the status and the body. So is
+a crash of the app in the case's own steps on a device, repeated on a re-run at once from a clean
+state, its defect carrying the steps; a crash seen once leaves the case unresolved for the round. A `5xx`
 on every page, or an environment that stops answering part-way through, is the environment down: the
 rounds stop there, the owner is named as in Acceptable targets of `references/environment-safety.md`,
 and the run goes to clean-up with every attempted, unsettled case `Pending` for that reason.
@@ -130,20 +153,28 @@ What is still unresolved after the last round is `Pending`, with a reason concre
 `docs/derived/run-cases/<run-id>/run-log.md`, written as the run goes so a session that ends suddenly
 loses nothing that happened:
 
-- at the top, from step 5: the agreed scope by case ID, the cut, and the deferred cases, per
+- as its first line, the client: `client: browser`, or `client: <platform> <device kind>`;
+- below it, from step 5: the agreed scope by case ID, the cut, and the deferred cases, per
   `references/triage.md`;
+- on a device client, below that: the platform, its OS version, the device kind, the automation's
+  device ID beside the platform's serial, the build with the source of its version and of its
+  backend check, per `references/environment-safety.md`, the automation's telemetry setting as the
+  person reported it, the answer the person gave to a permission the app asks for at launch, and
+  each run of the clear or version command;
 - one line per case per attempt: the case, the outcome, the account by role, the page by route, the
   evidence path or `-`, and one line of note;
 - `creating <marker>` before each create, and the identifier after it;
 - as the last line, the record's path, or `no record:` and why: `no record: dry run`,
-  `no record: no browser automation`, `no record: budget of zero`, `no record: no case ran`.
+  `no record: no browser automation`, `no record: no device automation`, `no record: budget of zero`,
+  `no record: no case ran`.
 
-A dry run, a harness with no browser automation, and a budget of zero write the run log too, with the
+A dry run, a harness with no automation for the run's client, and a budget of zero write the run log too, with the
 agreed scope at the top and their `no record:` line at the end, so a later run reads the scope and
 does not take the log for a run that stopped.
 
-A run log whose last line is neither is a run that stopped before it finished. Step 1 of a later run
-on the same cases file reads the newest run log for it: it offers that run's deferred cases, and where
+A run log whose last line is neither is a run that stopped before it finished. Once step 2 of a later
+run on the same cases file has settled its client, the run reads the newest run log for that file
+and that client, a log with no `client:` line being a browser run's: it offers that run's deferred cases, and where
 the log holds identifiers or `creating` lines with no record after them, it names them to the person
 as data an earlier run may have left on the environment, and any screenshot still in that run's
 `evidence/` directory as one nobody confirmed.
@@ -162,15 +193,18 @@ far as the stop allows, so the record can say what the run left behind:
    marker, which only this run wrote, and listed whether it was found or not.
 2. Delete each one whose deletion is safe, by its identifier. Keep what a developer needs to reproduce
    a defect, and say so in the defect.
-3. Sign out and close the browser session this run opened.
+3. Sign out and close the client session this run opened: the browser session, or on a device the
+   app session, leaving the device and the build as the person brought them, apart from the app
+   data cleared, which the run log lists.
 4. Write what was left, by identifier and why, into the run log, and carry the same list into the
    record's `In short`, with the environment owner named beside it: a teammate who finds marked data
    next week has to find it in a committed file, and the owner is who decides when it goes.
 
 ## Evidence
 
-At the moment a case fails, before navigating away: a full-page screenshot, and a second of the step
-before when the failure is part-way through a flow. Saved first under
+At the moment a case fails, before navigating away: a full-page screenshot, or on a device a
+screenshot of the screen, and a second of the step before when the failure is part-way through a
+flow. Saved first under
 `docs/derived/run-cases/<run-id>/evidence/<case ID>-<n>.png`, never beside the record, since the
 record has no name yet and nobody has looked at the shot. The request that failed, its status and its
 body, and any console error go into the defect's `Actual`, under the rule below.
@@ -178,7 +212,8 @@ body, and any console error go into the defect's `Actual`, under the rule below.
 Each screenshot is looked at against The data a record must not carry in
 `skills/qa/references/test-run.md` when it is taken. A real person's data or a token on it means the
 shot is retaken with that part out of view, or not kept and the defect says why. A filled login form,
-a typed code, and a credential prompt are never captured.
+a typed code, and a credential prompt are never captured. On a device, Screenshots and element lists
+in `shared/device-sessions.md` applies as well.
 
 Before the record is written, the person who started the run is shown every screenshot the record
 would link and confirms each carries none of those kinds, since an agent's look at its own screenshot
@@ -212,8 +247,8 @@ skill adds is how each field is filled when an agent ran the cases:
 | `approver` | The QA lead, or the Tech Lead where there is none, from the `Team` section of `.atk/profile.md` or asked |
 | `status` | `IN REVIEW`. The approver moves it; the run never does |
 | `Cases` | The cases file as `test-run.md` describes it, its `status` and whether it had uncommitted changes |
-| `Build` | What the environment itself shows, a version on a page or an endpoint, or else what the person says. Never guessed |
-| `Environment` | The row's name, and its kind with who gave it where the test plan has no usable `Kind` |
+| `Build` | What the environment itself shows, a version on a page or an endpoint, or else what the person says; on a device client, the build installed on the device, read per `references/environment-safety.md`. Never guessed |
+| `Environment` | The row's name, and its kind with who gave it where the test plan has no usable `Kind`; on a device client, then `<platform> <OS version> <device kind>`, so two records of one cases file on two clients are told apart |
 | `Scope` | `ids`, with `Case IDs` the cases with a row in `Results`, which is what `Total in scope` counts in `test-run.md`, an `N/A` row included |
 | `Run by` | `<host agent>, started by <person>, <dates>`, the host agent being the name the harness gives itself |
 | `Tester` | The host agent for a case it ran alone; `<host agent> with <person>` for a `SEMI-3` case where a person did one step |
@@ -222,10 +257,11 @@ skill adds is how each field is filled when an agent ran the cases:
 counted, and neither is a `MANUAL`, `BLOCKED`, or never-entered `SEMI` case: none of them was run, and
 counting one would mix run and unrun cases in every share. `In short` opens, where the profile was
 missing, with the sentence the Required-soft group of `shared/project-profile.md` gives. It says how
-many cases were deferred, how many went to testers as `MANUAL` or `BLOCKED`, how many cases outside
-`--only` were not considered, and, where the run created data, how many records it created and how
+many cases were deferred, how many went to testers as `MANUAL` or `BLOCKED`, how many rows were
+skipped for a `Platform` naming only another client, naming that client, how many cases outside
+`--only` were not considered, how many cases saw a crash the re-run did not repeat, and, where the run created data, how many records it created and how
 many clean-up deleted. The lists themselves follow that summary in the same section, by ID: the
-deferred cases, the `MANUAL` and `BLOCKED` cases each with its reason in a few words, and every record
+deferred cases, the rows skipped for another client, the cases with an unrepeated crash, the `MANUAL` and `BLOCKED` cases each with its reason in a few words, and every record
 left on the environment by its identifier, why it was kept, and its owner. A QA lead approving from
 the pull request reads them there, since `docs/derived/` may not be committed; the triage report and
 the run log only add the detail behind them.
@@ -237,7 +273,8 @@ Each defect is filled from what the run observed, and from nothing else:
   code disagreeing with it, the defect says so and names the BrSE/BA, per `references/triage.md`.
 - `Actual` is what the page, the response, or the console showed, verbatim within the rule.
 - `Frequency` is the attempts observed: `2 of 2 attempts`.
-- `Environment` is the build, the row's name, the browser and viewport, and the account by role.
+- `Environment` is the build, the row's name, the browser and viewport, and the account by role;
+  on a device client, `<build>, <row name>, <platform> <OS version> <device kind>, <account by role>`.
 - `Evidence` is the links to the screenshots kept beside the record, or why none was kept.
 - `Severity` is `TBD (ask <QA lead>)`. Choosing one is the tester's call in `test-run.md`, and here
   the person who started the run makes it or leaves it to the QA lead.

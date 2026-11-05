@@ -79,7 +79,8 @@ running `atk:review` again, or `atk:plan --review` where what was reviewed was a
 `atk:qa --review` where it was a cases file, a setup-defect report by running `atk:onboard` again
 against the repository as it stands then, and the triage report and the run log of `atk:run-cases`
 are what the run record they stand behind already cites and summarises. That holds only where a
-record followed them: after a dry run, on a harness with no browser automation, or after a run that
+record followed them: after a dry run, on a harness with no automation for the run's client, browser
+or device, or after a run that
 wrote no record, the triage report is the only copy of the agreed scope and the run log the only
 list of what the run may have left on the environment, so keep both until a person has acted on
 them. Screenshots in its `evidence/` directory wait there for the person who started the run to
