@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.7...atkx-v0.0.8) (2026-11-06)
+
+
+### Bug Fixes
+
+* write skill triggers in English and keep the trigger evals in three languages ([#182](https://github.com/lamngockhuong/aiteamkit/issues/182)) ([96eea03](https://github.com/lamngockhuong/aiteamkit/commit/96eea034ca0a39e7acd9d93921dc2a67dfb7accb))
+
 ## [0.0.7](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.6...atkx-v0.0.7) (2026-11-04)
 
 
