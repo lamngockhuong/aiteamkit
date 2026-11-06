@@ -6,10 +6,12 @@ description: >
   purpose, make the smallest change that removes the cause, verify it by layer, stop after three
   ruled-out hypotheses with a named person rather than guessing, call the team review on its own
   change and fix what it blocks on, and write the report that shows what was checked and what was
-  not. Use for a bug report, a failing test, a broken endpoint or screen, or an investigation that
-  has to end in an explanation rather than a guess; with --findings, to go through an atk:review's
-  findings with their author, answer each, and fix the chosen ones on the pull request's branch.
-  Triggers on: "fix bug", "debug", "bug", "go through the review findings", "/atk:fix".
+  not. Use for a bug report, a test or CI check that passed before and now fails for no clear
+  reason, a broken endpoint or screen, or an investigation that has to end in an explanation rather
+  than a guess; with --findings, to go through an atk:review's findings with their author, answer
+  each, and fix the chosen ones on the pull request's branch. Triggers on: "fix bug", "debug",
+  "bug", "this test started failing", "why is this test failing", "flaky test",
+  "go through the review findings", "/atk:fix".
 argument-hint: "[issue-url|report-path|pr-url|description] [--findings] [--layer <name>] [--investigate-only] [--no-review] [--out <path>]"
 ---
 
