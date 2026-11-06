@@ -90,7 +90,15 @@ export function verdict(command, seed) {
   const ws = words(command.trim());
   if (!ws || !ws.length) return 'it is not one plain command: a separator, pipe, redirection, substitution, expansion or escape is not allowed';
   const name = [2, 1].map((n) => ws.slice(0, n).map((w) => w.text).join(' ')).find((k) => SHAPES[k]);
-  if (!name) return `${ws[0].text} is not a command the bench allows`;
+  // Name the form refused, not the program: "git is not allowed" for `git ls-files` reads as every
+  // git command refused, and a session then skips the ones it is granted.
+  if (!name) {
+    const program = ws[0].text;
+    if (ws.length > 1 && Object.keys(SHAPES).some((k) => k.startsWith(`${program} `))) {
+      return `${program} ${ws[1].text} is not a form of ${program} the bench allows`;
+    }
+    return `${program} is not a command the bench allows`;
+  }
   const shape = SHAPES[name];
   const rest = ws.slice(name.split(' ').length);
   if (shape.exact) return shape.exact.some((e) => e.length === rest.length && e.every((x, i) => x === rest[i].text)) ? null : `that form of ${name} is not allowed`;
