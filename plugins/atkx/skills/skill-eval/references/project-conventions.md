@@ -54,7 +54,7 @@ One row per rule:
 
 | Rule | Source | Status | Evidence |
 |------|--------|--------|----------|
-| `CONV-006`: under 300 lines, fixed section order, triggers in three languages | `CLAUDE.md:<line>` | pass | 299 lines; sections in order; triggers in English, Vietnamese and Japanese |
+| `CONV-006`: under 300 lines, fixed section order, triggers in English | `CLAUDE.md:<line>` | pass | 299 lines; sections in order; triggers in English only |
 
 `Source` is `<file>:<line>` of the rule itself, the line a reader opens to see what was asked. A
 rule cited by ID still gets its line: `grep -n` the ID in its file. A source with no line number is

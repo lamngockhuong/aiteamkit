@@ -3,10 +3,9 @@ name: onboard
 description: >
   Onboard a new member onto a project team: the access list, the environment setup verified by a
   command that actually runs, a map of the codebase by ownership, the team's working agreements, and
-  a first-week plan ending in a real contribution the team reviews.
-  Use when someone joins the project, moves between teams, or returns after a long absence.
-  Triggers on: "onboarding", "onboard", "người mới", "hướng dẫn thành viên mới", "new joiner",
-  "getting started for the team", "オンボーディング", "新メンバー", "ramp up", "/atk:onboard".
+  a first-week plan ending in a real contribution the team reviews. Use when someone joins the
+  project, moves between teams, or returns after a long absence. Triggers on: "onboarding",
+  "onboard", "new joiner", "getting started for the team", "ramp up", "/atk:onboard".
 argument-hint: "[--role dev|qa|sre|ba|<role>] [--refresh|--audit] [--lang <code>] [--out <path>]"
 ---
 

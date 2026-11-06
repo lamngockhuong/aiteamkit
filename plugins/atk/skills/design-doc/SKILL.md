@@ -6,14 +6,10 @@ description: >
   questions, and who signs off. Use before code that touches a schema, a public contract, a shared
   module, or several services. `--spike` first investigates, time-boxed, a question the design
   cannot choose without; `--challenge` puts one agent per signing role on the draft; `--answer`
-  records answers to its open questions.
-  Triggers on: "design doc", "technical design", "tech design", "thiết kế kỹ thuật", "tài liệu thiết kế",
-  "ADR", "architecture decision", "設計書", "detail design", "how should we build this",
-  "technical spike", "spike this", "nghiên cứu kỹ thuật", "spike kỹ thuật", "技術調査", "スパイク",
-  "pressure-test this design", "phản biện thiết kế", "設計の懸念を洗い出して",
-  "finish the draft design", "viết tiếp thiết kế nháp", "設計書の下書きの続き",
-  "record the design answers", "ghi câu trả lời vào thiết kế", "設計の回答を反映",
-  "/atk:design-doc".
+  records answers to its open questions. Triggers on: "design doc", "technical design", "tech
+  design", "ADR", "architecture decision", "detail design", "how should we build this", "technical
+  spike", "spike this", "pressure-test this design", "finish the draft design", "record the design
+  answers", "/atk:design-doc".
 argument-hint: "[requirement-path|topic|design-path] [--adr|--no-adr] [--options <n>] [--spike <question>] [--challenge] [--answer] [--lang <code>] [--out <path>]"
 ---
 

@@ -120,3 +120,29 @@ Of the three failures, one was lost to the built-in `code-review` on a bare Japa
 carrying no sign of a team, and two selected no skill at all, one of them because the seed project
 had no pull request for a query that asked about one. That last one is a fault in the seed, not in
 the description, which is the kind of distinction this document exists to keep straight.
+
+## English-only triggers, measured
+
+Run on 2026-11-06, model sonnet, Claude Code 2.1.319, two runs per case, to decide whether a
+`description` needs its Vietnamese and Japanese trigger phrases. The cases were the Vietnamese and
+Japanese ones already in the trigger evals of `review`, `qa`, and `fix`, plus twelve new phrasings,
+four per skill, that use none of the trigger words: 64 cases, 37 positive and 27 negative. They ran
+against three versions of all 25 descriptions, each in a clone of its own with the same branch,
+commit, and uncommitted change.
+
+| Version | Positive runs reaching the skill | Negative runs kept away |
+|---------|----------------------------------|-------------------------|
+| Triggers in English, Vietnamese, and Japanese | 68 of 74 | 54 of 54 |
+| Triggers in English only | 68 of 74 | 54 of 54 |
+| Three phrases per language, after the first sentence | 70 of 74 | 54 of 54 |
+
+No version lost a case to a wrong skill. English only missed one of two runs on two Japanese
+phrasings, and the three-language list missed one of two on two phrasings of a wrong total, one
+Vietnamese and one Japanese; each miss selected no skill at all. Two phrasings of a test that
+suddenly started failing, one Vietnamese and one Japanese, selected no skill in any version: the
+model went looking for the cause itself, which is a gap in the English description of `atk:fix`,
+not a matter of language.
+
+ADR 0015 records what the kit decided from this. The run measured one model and three skills, inside
+a configuration holding only this kit and Claude Code's built-in skills; it did not measure a
+configuration crowded enough to cut descriptions short.

@@ -5,8 +5,8 @@ description: >
   design, and the team conventions, with findings ranked by severity, each one citing a line and
   stating the failure it causes, and blocking issues separated from preferences. Use before
   approving a PR, when reviewing a colleague's branch, or when a review needs a second opinion.
-  Triggers on: "review PR", "code review", "review this branch", "review giúp", "duyệt code",
-  "check PR", "レビュー", "approve this", "is this ready to merge", "/atk:review".
+  Triggers on: "review PR", "code review", "review this branch", "check PR", "approve this", "is
+  this ready to merge", "/atk:review".
 argument-hint: "[pr-number|branch|commit|range|paths] [--against <design-path>] [--comment] [--strict] [--parallel <N>] [--out <path>]"
 ---
 

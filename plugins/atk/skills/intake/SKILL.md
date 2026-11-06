@@ -4,11 +4,9 @@ description: >
   Turn a raw stakeholder or client request into reviewable requirements: context, user stories,
   acceptance criteria, out-of-scope list, open questions, and the person who must answer each one.
   Use when a request arrives as a chat message, a meeting note, a mail, a one-line ticket, or a
-  Figma design, and the team cannot start work from it yet.
-  Triggers on: "intake", "requirement", "làm rõ yêu cầu", "phân tích yêu cầu", "user story",
-  "acceptance criteria", "要件定義", "要求整理", "clarify this request", "turn this into stories",
-  "requirement from Figma", "stories from this design", "phân tích yêu cầu từ Figma",
-  "Figmaから要件定義", "/atk:intake".
+  Figma design, and the team cannot start work from it yet. Triggers on: "intake", "requirement",
+  "user story", "acceptance criteria", "clarify this request", "turn this into stories",
+  "requirement from Figma", "stories from this design", "/atk:intake".
 argument-hint: "[request-file|ticket-id|text] [--design <figma-url|image-dir>] [--interview|--no-interview] [--lang <code>] [--out <path>]"
 ---
 

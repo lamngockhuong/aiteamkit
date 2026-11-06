@@ -2,13 +2,11 @@
 name: verify
 description: >
   Confirm a change works by running the real thing: start the app the way the project starts it,
-  exercise it with real requests or an app on an Android device, assert the side effect in the data rather than the status code,
-  compare the screen against the design when asked, and stop after three rounds with a named person
-  rather than patching indefinitely.
-  Use when the suite is green and nobody has yet seen the feature work, before handing a ticket to
-  QA, or before a release goes out.
-  Triggers on: "verify", "verify this works", "kiểm chứng", "chạy thử thật", "test thực tế",
-  "đối chiếu thiết kế", "kiểm chứng trên app mobile", "verify the mobile app change", "動作確認", "実機確認", "画面確認", "モバイルアプリで動作確認", "/atk:verify".
+  exercise it with real requests or an app on an Android device, assert the side effect in the data
+  rather than the status code, compare the screen against the design when asked, and stop after
+  three rounds with a named person rather than patching indefinitely. Use when the suite is green
+  and nobody has yet seen the feature work, before handing a ticket to QA, or before a release goes
+  out. Triggers on: "verify", "verify this works", "verify the mobile app change", "/atk:verify".
 argument-hint: "[module|paths|ticket|pr] [--ui] [--report-only] [--out <path>]"
 ---
 

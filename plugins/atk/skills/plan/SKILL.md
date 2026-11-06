@@ -6,13 +6,9 @@ description: >
   scope, and what is unclear with who must answer. Also reviews a written plan against the
   repository and the request, challenges it with one agent per way it can fail, and records the
   answers to its open questions. Use before starting work, on work somebody else designed, when work
-  needs stages but one owner, or when a plan needs checking before anyone builds on it.
-  Triggers on: "plan this ticket", "implementation plan", "plan this in phases", "lập kế hoạch",
-  "kế hoạch thực thi", "vạch bước", "chia giai đoạn", "làm ticket này thế nào", "実装計画",
-  "作業計画", "段階に分けて", "review this plan", "check this plan", "soát lại plan",
-  "review kế hoạch", "計画をレビュー", "challenge this plan", "phản biện kế hoạch",
-  "計画に反論して", "record the answers in the plan", "ghi câu trả lời vào plan",
-  "計画に回答を反映して", "/atk:plan".
+  needs stages but one owner, or when a plan needs checking before anyone builds on it. Triggers on:
+  "plan this ticket", "implementation plan", "plan this in phases", "review this plan", "check this
+  plan", "challenge this plan", "record the answers in the plan", "/atk:plan".
 argument-hint: "[ticket|design-path|description|plan-path] [--inline] [--challenge] [--answer] [--review] [--comment] [--layer <name>] [--out <path>]"
 ---
 

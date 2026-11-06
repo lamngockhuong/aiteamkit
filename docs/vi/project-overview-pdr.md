@@ -51,7 +51,9 @@ trong công ty gặp những kiểu hỏng khác, và chúng là hỏng về quy
    báo giá, tuân thủ và quyết định go hay no-go thuộc về một vai trò cụ thể.
 4. **Không phụ thuộc công cụ.** Markdown là nguồn sự thật. Tracker chỉ giữ một con trỏ trỏ tới nó.
 5. **Viết cho người vắng mặt.** Mọi artifact giả định người đọc đã bỏ lỡ cuộc họp.
-6. **Trigger đa ngôn ngữ.** Cụm từ tiếng Anh, tiếng Việt và tiếng Nhật đều gọi được cùng một skill.
+6. **Gọi được bằng ba ngôn ngữ.** Yêu cầu bằng tiếng Anh, tiếng Việt hay tiếng Nhật đều gọi được
+   cùng một skill. Description chỉ ghi trigger tiếng Anh, còn trigger eval giữ case ở cả ba ngôn ngữ
+   để điều đó luôn đúng (ADR 0015).
 
 ## Không nằm trong phạm vi
 

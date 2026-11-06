@@ -3,11 +3,9 @@ name: retro
 description: >
   Run a sprint retrospective on evidence rather than memory, and write the status report that goes
   up: what the data says about the sprint, what the team says, the few actions worth taking with an
-  owner each, and whether last retro's actions actually happened.
-  Use at the end of a sprint, a milestone, or a phase, and when a status report is due to a PM or a
-  client.
-  Triggers on: "retro", "retrospective", "họp retro", "tổng kết sprint", "sprint review",
-  "status report", "振り返り", "レトロスペクティブ", "weekly report", "/atk:retro".
+  owner each, and whether last retro's actions actually happened. Use at the end of a sprint, a
+  milestone, or a phase, and when a status report is due to a PM or a client. Triggers on: "retro",
+  "retrospective", "sprint review", "status report", "weekly report", "/atk:retro".
 argument-hint: "[sprint|date-range] [--data-only|--report] [--audience internal|client] [--lang <code>] [--out <path>]"
 ---
 

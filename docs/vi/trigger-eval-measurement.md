@@ -120,3 +120,28 @@ mang dấu hiệu nào của team, hai case còn lại không gọi skill nào, 
 không có pull request nào cho một query hỏi về pull request. Case cuối là lỗi của dự án mồi chứ
 không phải của description, và giữ cho sự phân biệt đó khỏi lẫn lộn chính là lý do tài liệu này tồn
 tại.
+
+## Đo trigger chỉ có tiếng Anh
+
+Chạy ngày 2026-11-06, model sonnet, Claude Code 2.1.319, mỗi case hai lần, để quyết định xem một
+`description` có cần cụm trigger tiếng Việt và tiếng Nhật hay không. Bộ case gồm các case tiếng Việt
+và tiếng Nhật có sẵn trong trigger eval của `review`, `qa` và `fix`, cộng thêm mười hai cách nói mới,
+bốn câu mỗi skill, không dùng từ trigger nào: tổng 64 case, 37 dương và 27 âm. Bộ case chạy với ba
+bản của cả 25 description, mỗi bản trong một clone riêng có cùng nhánh, cùng commit và cùng thay đổi
+chưa commit.
+
+| Bản | Lượt dương gọi đúng skill | Lượt âm tránh đúng |
+|-----|---------------------------|--------------------|
+| Trigger bằng tiếng Anh, tiếng Việt và tiếng Nhật | 68 trên 74 | 54 trên 54 |
+| Trigger chỉ tiếng Anh | 68 trên 74 | 54 trên 54 |
+| Ba cụm mỗi ngôn ngữ, đặt sau câu đầu tiên | 70 trên 74 | 54 trên 54 |
+
+Không bản nào để case rơi vào skill sai. Bản chỉ tiếng Anh trượt một trong hai lượt ở hai câu tiếng
+Nhật, còn bản ba ngôn ngữ trượt một trong hai lượt ở hai câu báo tổng tiền sai, một câu tiếng Việt và
+một câu tiếng Nhật; lần trượt nào cũng là không chọn skill nào. Hai câu nói một test đột nhiên bắt đầu
+fail, một tiếng Việt và một tiếng Nhật, không gọi skill nào ở cả ba bản: model tự đi tìm nguyên nhân.
+Đó là chỗ hở trong description tiếng Anh của `atk:fix`, không phải chuyện ngôn ngữ.
+
+ADR 0015 ghi lại điều kit quyết định từ kết quả này. Lần chạy chỉ đo một model và ba skill, trong cấu
+hình chỉ có kit này cùng các skill có sẵn của Claude Code; nó chưa đo cấu hình đông tới mức
+description bị cắt ngắn.

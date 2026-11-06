@@ -4,12 +4,9 @@ description: >
   Write the code for a piece of work the way a team will accept it: decide whether the work needs a
   plan before a line is written, follow the project's own conventions and reference modules, verify
   by layer with the project's own commands, then call the team review and fix what it blocks on
-  before handing the change over.
-  Use when a ticket, a plan, or a described requirement is ready to be built, and the question left
-  is how to build it rather than what to build.
-  Triggers on: "implement", "code this", "build this feature", "làm task này", "triển khai",
-  "viết code cho", "code tính năng này", "実装", "コード書いて", "この機能を作って",
-  "/atk:implement".
+  before handing the change over. Use when a ticket, a plan, or a described requirement is ready to
+  be built, and the question left is how to build it rather than what to build. Triggers on:
+  "implement", "code this", "build this feature", "/atk:implement".
 argument-hint: "[plan-path|ticket|description] [--layer <name>] [--tdd] [--no-review] [--out <path>]"
 ---
 

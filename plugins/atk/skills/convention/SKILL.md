@@ -6,13 +6,10 @@ description: >
   enforces each rule. Also drafts the collaboration files the project lacks, `CONTRIBUTING.md`, the
   pull request template, and `CODEOWNERS`, writing only the ones the team picks. Use when a team has
   no written convention, when the written one no longer matches the code, or when reviews keep
-  repeating the same comment.
-  Triggers on: "convention", "coding standard", "quy ước code", "coding rule", "style guide",
-  "branch strategy", "commit convention", "コーディング規約", "our team rules", "CONTRIBUTING.md",
-  "CODEOWNERS", "contribution guide", "set up a pull request template", "tạo CONTRIBUTING",
-  "file CODEOWNERS", "mẫu pull request cho dự án", "コントリビューションガイド",
-  "プルリクエストのテンプレートを作成", "standards per language", "coding standard for each technology",
-  "viết standard cho từng ngôn ngữ", "言語ごとのコーディング規約", "/atk:convention".
+  repeating the same comment. Triggers on: "convention", "coding standard", "coding rule", "style
+  guide", "branch strategy", "commit convention", "our team rules", "CONTRIBUTING.md", "CODEOWNERS",
+  "contribution guide", "set up a pull request template", "standards per
+  language", "coding standard for each technology", "/atk:convention".
 argument-hint: "[--audit|--init|--sync|--scaffold] [--suggest] [--scope <paths>] [--lang <code>] [--out <path>]"
 ---
 

@@ -2,11 +2,11 @@
 name: incident
 description: >
   Run a production incident and close it properly: a timeline built from evidence, impact and
-  severity, the proven root cause, the mitigation actually applied, a blameless postmortem, follow-up
-  actions with owners and dates, and the runbook that makes the next occurrence shorter.
-  Use during an outage, after one, or when writing the runbook for a recurring failure.
-  Triggers on: "incident", "outage", "sự cố", "postmortem", "RCA", "root cause", "production down",
-  "障害", "障害報告", "hotfix", "runbook", "/atk:incident".
+  severity, the proven root cause, the mitigation actually applied, a blameless postmortem,
+  follow-up actions with owners and dates, and the runbook that makes the next occurrence shorter.
+  Use during an outage, after one, or when writing the runbook for a recurring failure. Triggers on:
+  "incident", "outage", "postmortem", "RCA", "root cause", "production down", "hotfix", "runbook",
+  "/atk:incident".
 argument-hint: "[--live|--postmortem|--runbook] [severity] [--out <path>]"
 ---
 

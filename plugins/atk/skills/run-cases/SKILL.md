@@ -5,14 +5,11 @@ description: >
   an app on an Android device: refuse production and the local stack, recon the accounts and data,
   triage every case as automatable, semi-automatable, manual, or blocked, naming who clears each
   obstacle, agree the scope with the person before any case runs, run in at most three rounds, and
-  write only the results it observed into a run record the QA lead approves and `atk:qa --bug` reads.
-  Use when a cases file is approved, a non-production environment is deployed, and the team wants
-  an agent to execute the automatable part instead of a tester.
-  Triggers on: "run the test cases", "execute test cases", "run these cases on staging",
-  "automate these test cases on DEV", "run test cases on the mobile app", "chạy test case",
-  "thực thi test case", "chạy test case trên STG", "chạy bộ test case trên môi trường DEV",
-  "chạy test case trên app mobile", "テストケース実行", "テスト実施", "STGでテストケースを実行",
-  "モバイルアプリでテストケース実行", "/atk:run-cases".
+  write only the results it observed into a run record the QA lead approves and `atk:qa --bug`
+  reads. Use when a cases file is approved, a non-production environment is deployed, and the team
+  wants an agent to execute the automatable part instead of a tester. Triggers on: "run the test
+  cases", "execute test cases", "run these cases on staging", "automate these test cases on DEV",
+  "run test cases on the mobile app", "/atk:run-cases".
 argument-hint: "<cases-path> [--env <name>] [--only <IDs>] [--dry-run] [--out <path>]"
 ---
 

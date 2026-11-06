@@ -565,11 +565,22 @@ The `atk:` namespace is added automatically by the harness from `plugin.json`. T
 invocation identifier is `atk:design-doc`, but it is constructed at load time, not stored in the
 skill file.
 
-## Trigger phrases are multilingual on purpose
+## Trigger phrases are English; the trigger evals stay in three languages
 
-Every `description:` lists triggers in English, Vietnamese, and Japanese, because the target teams
-work across those languages. When editing a description, keep all three; dropping the Vietnamese or
-Japanese triggers silently breaks invocation for part of the audience.
+Every `description:` lists its triggers in English only. The target teams still ask in English,
+Vietnamese, and Japanese, and a request in any of the three has to reach the same skill; what carries
+it there is the meaning of the English description, not a phrase in the request's language. The
+maintainer chose this on 2026-11-06 after a measurement: on sonnet, the Vietnamese and Japanese cases
+of `review`, `qa`, and `fix` reached the right skill as often with English triggers alone as with the
+three-language list, and no case reached a wrong one. The longer list only lengthened every
+description, and the skill listing cuts a description short once many skills are installed, the
+trigger list at its end first. `docs/adr/0015-skill-triggers-in-english-evals-in-three-languages.md` records the decision and
+`docs/trigger-eval-measurement.md` the numbers.
+
+What stays in three languages is `evals/trigger_evals.json`: keep its Vietnamese and Japanese cases,
+since they are how a description edit is checked against the teams that ask in those languages. When
+a measurement shows such a case lost, sharpen the English description and measure again; adding the
+phrase back is not the fix.
 
 ## Em-dash policy
 
@@ -642,7 +653,7 @@ them, is made to both; from `APPROVED` neither is edited. The mirror check cover
 | `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup`, `0008` how `atk:review` weighs a gap in an agent rule, `0009` the model of the agents a skill spawns, chosen by the team, `0010` a review's findings explained from the repository and answered in `atk:fix`, `0011` `atk:verify` and `atk:run-cases` driving a device as a second client, `0012` `atkx:doc-audit` checking each claim of a document against its source, `0013` `atk:estimate` reading its comparables once per run and keeping a snapshot |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup`, `0008` how `atk:review` weighs a gap in an agent rule, `0009` the model of the agents a skill spawns, chosen by the team, `0010` a review's findings explained from the repository and answered in `atk:fix`, `0011` `atk:verify` and `atk:run-cases` driving a device as a second client, `0012` `atkx:doc-audit` checking each claim of a document against its source, `0013` `atk:estimate` reading its comparables once per run and keeping a snapshot, `0014` the benchmark runner kept under `tests/`, `0015` skill triggers written in English while the trigger evals keep three languages |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
 | `flow/project-flow.md` | The 25 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
@@ -734,7 +745,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` in that section | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` in that section | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the name check in `tests/verify.sh` | `BLOCKING` | "SKILL.md `name` field convention" |
-| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, opens its workflow with the override line and the two lines that start the run trace, and lists triggers in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the trace-line check in `tests/verify.sh` for the workflow lines; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are multilingual on purpose" |
+| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, opens its workflow with the override line and the two lines that start the run trace, and lists its triggers in English only, its trigger evals keeping their Vietnamese and Japanese cases | `REVIEWED` | `wc -l` for the length; the trace-line check in `tests/verify.sh` for the workflow lines; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are English; the trigger evals stay in three languages" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` in that section | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the parse, `.tsv`, version and marketplace checks in `tests/verify.sh` | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check in `tests/verify.sh` | `BLOCKING` | "`hooks/` never holds a rule" |

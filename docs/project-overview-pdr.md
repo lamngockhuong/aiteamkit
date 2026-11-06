@@ -52,7 +52,9 @@ different failure modes, and they are process failures, not coding failures:
    deadline, pricing, compliance, and go or no-go belong to a role.
 4. **Tool-agnostic.** Markdown is the source of truth. A tracker holds a pointer to it.
 5. **Readable by the absent reader.** Every artifact assumes its reader missed the meeting.
-6. **Multilingual triggers.** English, Vietnamese, and Japanese phrases invoke the same skill.
+6. **Reachable in three languages.** A request in English, Vietnamese, or Japanese invokes the same
+   skill. The descriptions carry English triggers only, and the trigger evals hold cases in all three
+   languages to keep that true (ADR 0015).
 
 ## Non-goals
 

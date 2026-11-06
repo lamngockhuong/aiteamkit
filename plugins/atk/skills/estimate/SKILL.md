@@ -3,10 +3,9 @@ name: estimate
 description: >
   Estimate how many points and how many hours a task, a feature, or a screen takes: size each item
   with a stated basis, mark the confidence, and add the risk buffer as a visible line, so the
-  numbers can be argued with in planning.
-  Use for story points, hour or man-day estimates, and re-estimation after scope change.
-  Triggers on: "estimate", "estimation", "story point", "man-day", "how long will this take",
-  "ước lượng", "bao nhiêu point", "mất bao lâu", "見積", "工数", "何時間かかる", "/atk:estimate".
+  numbers can be argued with in planning. Use for story points, hour or man-day estimates, and
+  re-estimation after scope change. Triggers on: "estimate", "estimation", "story point", "man-day",
+  "how long will this take", "/atk:estimate".
 argument-hint: "[backlog-path|epic|ticket-ids] [--points|--days] [--lang <code>] [--out <path>]"
 ---
 

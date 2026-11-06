@@ -1,16 +1,14 @@
 ---
 name: skill-eval
 description: >
-  Evaluate an agent skill a project has written, for Claude Code, Codex or Cursor: a static check
-  of its structure, metadata, size and safety, with a security gate for what the skill does and not
-  only what it holds, a check against the project's own written conventions, trigger measurement
-  on Claude Code, drafted trigger cases it lacks, a review of one run of it in this conversation,
-  and one composite score with a grade
-  above the figures behind it. Reads the skill and changes nothing in it. Use before a skill is
-  shared or installed, after its description changes, or when a skill keeps firing on the wrong
-  requests. Triggers on: "evaluate this skill", "eval skill", "check skill quality", "score this
-  skill", "optimise this skill", "đánh giá skill", "kiểm tra chất lượng skill", "chấm điểm skill",
-  "スキルを評価", "スキルの品質チェック", "/atkx:skill-eval".
+  Evaluate an agent skill a project has written, for Claude Code, Codex or Cursor: a static check of
+  its structure, metadata, size and safety, with a security gate for what the skill does and not
+  only what it holds, a check against the project's own written conventions, trigger measurement on
+  Claude Code, drafted trigger cases it lacks, a review of one run of it in this conversation, and
+  one composite score with a grade above the figures behind it. Reads the skill and changes nothing
+  in it. Use before a skill is shared or installed, after its description changes, or when a skill
+  keeps firing on the wrong requests. Triggers on: "evaluate this skill", "eval skill", "check skill
+  quality", "score this skill", "optimise this skill", "/atkx:skill-eval".
 argument-hint: "<skill-path> [--trigger [--runs <n>] [--model <id>]] [--draft-cases] [--review] [--out <path>]"
 ---
 
