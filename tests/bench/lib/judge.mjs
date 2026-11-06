@@ -6,7 +6,7 @@ import { randomBytes } from 'node:crypto';
 import { lstatSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DEFAULTS } from './cli.mjs';
-import { cutText, readPaths, turnResults } from './checks.mjs';
+import { cutText, stepFiles, turnResults } from './checks.mjs';
 import { firstJson, helper } from './session.mjs';
 
 
@@ -34,11 +34,11 @@ function readText(path) {
 // What the judge reads, recorded on the rubric as MATERIAL: the files readPaths names, then, in both
 // arms, the closing message of each turn.
 export const MATERIAL = 'files and the closing message of every turn';
-// In a chain, `step` keeps both to that step: the bare arm's files it changed and its session's messages.
+// In a chain, `step` keeps both to that step: its files as its session left them, in the bare arm
+// those it changed, and its session's messages.
 export function material({ dir, run, glob, step }) {
-  const seed = join(dir, 'seed');
   const before = JSON.parse(readFileSync(join(dir, 'before.json'), 'utf8'));
-  const paths = readPaths({ seed, before, arm: run.arm, glob, run, step });
+  const { seed, paths } = stepFiles({ dir, before, arm: run.arm, glob, run, step });
   const parts = [];
   for (const p of paths) {
     if (!isPlainFile(join(seed, p))) continue;
