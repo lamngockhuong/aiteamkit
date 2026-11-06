@@ -4,7 +4,8 @@
 // the judge returns as a gate check, kept out of the coded gates' adherence; the rubric mean with its lowest
 // and highest run, session and helper cost apart, wall time, and kit minus bare for every rate both
 // arms have. A review's findings are given apart, as recall, precision and severity agreement, each a
-// mean over the measured runs with its lowest and highest.
+// mean over the measured runs with its lowest and highest. A scenario of several steps adds a row per
+// step, ran, errored and never reached, the runs in which every step ran, and the runner's approvals.
 
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -27,8 +28,9 @@ function checkTable(runs) {
       // unjudged gate are counted beside the rate, never in it; a check that could not run counts as
       // not passed, since a gate nobody could check is not a held one.
       if (c.type === 'findings' || c.status === 'skip' || (r.status !== 'ok' && (!c.gate || c.type === 'trace'))) continue;
-      const key = c.type === 'trace' ? `trace (${c.skill})` : c.type === 'hidden-tests' ? `hidden-tests (${c.path})`
+      const base = c.type === 'trace' ? `trace (${c.skill})` : c.type === 'hidden-tests' ? `hidden-tests (${c.path})`
         : c.type === 'judged-gate' ? `judged gate (${c.id})` : c.type;
+      const key = c.step ? `step ${c.step} ${base}` : base;
       const row = table.get(key) || { pass: 0, of: 0, gate: !!c.gate, judged: !!c.judged, kitOnly: !!c.kitOnly, grantErrors: 0, unjudged: 0, errors: 0 };
       if (c.status === 'grant-error') row.grantErrors++;
       else if (c.status === 'unjudged') row.unjudged++;
@@ -40,7 +42,8 @@ function checkTable(runs) {
 }
 
 function rubricStats(runs, kitOnlyItems = []) {
-  const scored = measured(runs).map((r) => r.rubric).filter((x) => x && x.score !== null && x.score !== undefined);
+  // A run that errored after the rubric's step still carries that step's score.
+  const scored = runs.map((r) => r.rubric).filter((x) => x && x.score !== null && x.score !== undefined);
   if (!scored.length) return null;
   const scores = scored.map((x) => x.score);
   // The figure both arms share leaves the kit-only items out.
@@ -64,6 +67,18 @@ function findingsStats(runs) {
   })]);
 }
 
+// Per step of a scenario of several: how many runs it ran in, errored in, and never reached.
+function stepStats(runs) {
+  const n = Math.max(0, ...runs.map((r) => r.steps?.length || 0));
+  if (n < 2) return null;
+  const done = runs.filter((r) => r.steps?.length > 1 && r.steps.every((x) => x.status === 'ok')).length;
+  return { done, rows: Array.from({ length: n }, (_, i) => {
+    const of = runs.map((r) => r.steps?.[i]).filter(Boolean);
+    const count = (st) => of.filter((x) => x.status === st).length;
+    return { skill: of[0]?.skill || null, ok: count('ok'), error: count('error'), notRun: count('not run'), cost: of.reduce((s, x) => s + (x.cost || 0), 0) };
+  }) };
+}
+
 export function summarise(scenario) {
   const arms = {};
   for (const arm of [...new Set(scenario.runs.map((r) => r.arm))]) {
@@ -83,6 +98,7 @@ export function summarise(scenario) {
       gatesHeld: checked(runs).length > 0 && gates.every((g) => g.pass === g.of),
       rubric: rubricStats(runs, kitOnlyItems),
       findings: findingsStats(runs),
+      steps: stepStats(runs),
       judgedCrossed: judged.length ? judged.reduce((n, row) => n + row.of - row.pass, 0) : null,
       cost: { session: runs.reduce((s, r) => s + (r.cost?.session || 0), 0), helper: runs.reduce((s, r) => s + (r.cost?.helper || 0), 0) },
       wallSeconds: Math.round(runs.reduce((s, r) => s + (r.wallMs || 0), 0) / 1000),
@@ -143,6 +159,15 @@ export function render(results) {
     }
     const row = (label, f) => `| ${label} | ${arms.map((a) => f(s.arms[a])).join(' | ')} |${both ? ' |' : ''}`;
     out.push(row('coded gates held, all runs', (a) => (!a.checked ? '-' : a.gatesHeld ? 'yes' : 'no')));
+    // A chain: one row per step, ran, errored and never reached, then the runs in which every step ran.
+    const chain = arms.map((a) => s.arms[a].steps).find(Boolean);
+    for (const [i, { skill }] of (chain?.rows || []).entries()) {
+      out.push(row(`step ${i + 1}${skill ? ` (${skill})` : ''}: ran, errored, not run; cost`, (a) => {
+        const x = a.steps?.rows[i];
+        return x ? `${x.ok}, ${x.error}, ${x.notRun}; ${usd(x.cost)}` : '-';
+      }));
+    }
+    if (chain) out.push(row('chain ran every step', (a) => (a.steps ? `${a.steps.done}/${a.runs}` : '-')));
     if (arms.some((a) => s.arms[a].findings)) {
       for (const [k, label] of FINDINGS_MEASURES) {
         const d = label in s.delta ? deltaCell(s.delta[label]) : both ? 'n/a' : null;
@@ -160,6 +185,9 @@ export function render(results) {
     out.push(row('wall time', (a) => `${a.wallSeconds} s`));
     out.push(row('permission denials', (a) => String(a.denials)));
     out.push(row('runs measured, errors, skipped', (a) => `${a.measured}, ${a.errors}, ${a.skipped}`));
+    // The runner's approvals, which no-approval sets aside, so a reader can see what was set aside.
+    const approvals = sc.runs.flatMap((r) => (r.approvals || []).map((x) => `${r.arm} ${r.n}, after step ${x.step}: ${x.path ? `\`${x.path}\`` : `skipped, ${x.skipped}`}`));
+    if (approvals.length) out.push('', 'Approved by the runner between steps, as the approver editing the file:', '', ...approvals.map((x) => `- ${x}`));
     const bad = (c) => c.status === 'fail' || c.status === 'error';
     const failing = sc.runs.filter((r) => r.status !== 'ok' || r.turnsExhausted || r.checks.some(bad) || r.rubric?.status === 'error');
     if (failing.length) {

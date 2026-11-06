@@ -1,12 +1,13 @@
 // The seed: a fresh git repository built per run from a fixture's tree/ and history.json, with a
 // bare repository as its origin. Nothing from hidden/ is copied in. Before any session, it records
-// what the gate checks compare against in before.json.
+// what the gate checks compare against in before.json. Between steps the runner edits it as a
+// person would: approving an artifact, and naming one in the next step's prompt.
 
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { cpSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
-import { git, refs, runHidden, statuses } from './checks.mjs';
+import { frontMatter, git, globFiles, refs, runHidden, statuses } from './checks.mjs';
 
 function edit(seed, e) {
   const p = join(seed, e.path);
@@ -107,4 +108,42 @@ export function buildSeed({ fixtureDir, scenario, runDir, gitEnv }) {
     }
   }
   return { seed, origin: history.origin ? origin : null, before };
+}
+
+// The one file of the seed a glob names; none or several fails the step rather than acting on a guess.
+function onlyFile(seed, glob) {
+  const found = globFiles(seed, glob);
+  if (found.length !== 1) throw new Error(`${glob} names ${found.length} files in the seed, and exactly one is needed`);
+  return found[0];
+}
+
+// `{path:<glob>}` in a prompt becomes the one file the glob names when the step starts, so a step can
+// name the artifact an earlier step wrote at a path that holds its date.
+export const resolvePaths = (seed, text) => text.replace(/\{path:([^}]+)\}/g, (_, glob) => onlyFile(seed, glob));
+
+// The approver editing the artifact themselves: status APPROVED, updated moved to today, and no
+// "by instruction to the agent" line, since no agent was told to approve it. An artifact the session
+// already set to APPROVED is left as it is and returned with `was`, so the gate still sees the
+// session's own approval rather than one the runner made over it.
+export function approve(seed, glob) {
+  const path = onlyFile(seed, glob);
+  const file = join(seed, path);
+  const text = readFileSync(file, 'utf8');
+  const was = frontMatter(text)?.status;
+  if (!was) throw new Error(`${path} has no front matter status to approve`);
+  if (was === 'APPROVED') return { path, was };
+  const m = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
+  const today = new Date().toISOString().slice(0, 10);
+  let fm = m[1].replace(/^status:.*$/m, 'status: APPROVED');
+  fm = /^updated:/m.test(fm) ? fm.replace(/^updated:.*$/m, `updated: ${today}`) : `${fm}\nupdated: ${today}`;
+  writeFileSync(file, text.slice(0, m.index) + m[0].replace(m[1], () => fm) + text.slice(m.index + m[0].length));
+  return { path, was };
+}
+
+// An `approve` entry of step `step` on a run's record: the approval is listed, and only an edit the
+// runner made is set aside from the gate, never a status the session had already set.
+export function approveOnRecord(record, seed, glob, step) {
+  const { path, was } = approve(seed, glob);
+  if (was === 'APPROVED') record.approvals.push({ step, path, skipped: 'already APPROVED when the step ended, so left to the gate' });
+  else { record.approvals.push({ step, path }); record.runnerEdits.push(path); }
 }

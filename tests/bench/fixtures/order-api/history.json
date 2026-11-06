@@ -9,6 +9,11 @@
   },
   "branches": [
     {
+      "name": "gift-cards",
+      "from": "main",
+      "commits": []
+    },
+    {
       "name": "bug-1",
       "from": "main",
       "commits": [
