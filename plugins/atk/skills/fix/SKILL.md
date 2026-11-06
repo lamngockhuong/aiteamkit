@@ -9,9 +9,7 @@ description: >
   not. Use for a bug report, a failing test, a broken endpoint or screen, or an investigation that
   has to end in an explanation rather than a guess; with --findings, to go through an atk:review's
   findings with their author, answer each, and fix the chosen ones on the pull request's branch.
-  Triggers on: "fix bug", "debug", "bug", "go through the review findings", "sửa bug", "điều tra
-  lỗi", "tìm nguyên nhân", "lỗi này", "xử lý từng finding của review", "バグ修正", "不具合調査",
-  "原因調査", "レビュー指摘に対応", "/atk:fix".
+  Triggers on: "fix bug", "debug", "bug", "go through the review findings", "/atk:fix".
 argument-hint: "[issue-url|report-path|pr-url|description] [--findings] [--layer <name>] [--investigate-only] [--no-review] [--out <path>]"
 ---
 

@@ -7,11 +7,9 @@ description: >
   proposal, run the jobs side by side, each piece in its own git worktree, relaying every question
   and approval to the named person and ending code at a local commit with an `atk:review` report.
   Use when a team has requests, tickets, designs or plans to carry through atk, one or several at a
-  time, and wants one coordinator for them. Not for generic multi-agent work with no team artifact or approval.
-  Triggers on: "orchestrate these tickets", "run the atk pipeline for these requests",
-  "carry these pieces of work through atk", "điều phối nhiều việc qua atk",
-  "chạy song song các ticket theo quy trình atk", "điều phối các ticket này qua atk", "複数のチケットをatkで進めて",
-  "atkのワークフローを並行して回す", "/atk:orchestrate".
+  time, and wants one coordinator for them. Not for generic multi-agent work with no team artifact
+  or approval. Triggers on: "orchestrate these tickets", "run the atk pipeline for these requests",
+  "carry these pieces of work through atk", "/atk:orchestrate".
 argument-hint: "[requests|tickets|paths...] [--concurrency <n>] [--sequential] [--resume]"
 ---
 

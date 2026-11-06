@@ -6,13 +6,9 @@ description: >
   as its Figma design draws them. Also reports where they drift from the code, and a screen from its
   design. In a contract-first project, writes them from the design before the code exists. Use when
   a project has no written contract, when a merged change left one behind, or when the contract has
-  to exist before the code.
-  Triggers on: "spec", "api spec", "database spec", "feature spec", "đặc tả", "tài liệu API",
-  "tài liệu database", "spec bị lệch", "cập nhật tài liệu", "仕様書", "API仕様", "spec drift",
-  "document this endpoint", "is the doc still true", "api docs before the code", "contract first",
-  "viết tài liệu API trước khi code", "API docs cho FE làm trước", "実装前にAPI仕様を書く",
-  "screen spec", "screen spec from Figma", "spec màn hình", "viết spec màn hình từ Figma",
-  "画面仕様書", "Figmaから画面仕様書", "/atk:spec".
+  to exist before the code. Triggers on: "spec", "api spec", "database spec", "feature spec", "spec
+  drift", "document this endpoint", "is the doc still true", "api docs before the code", "contract
+  first", "screen spec", "screen spec from Figma", "/atk:spec".
 argument-hint: "[subject] [--kind api|db|feature|screen] [--from <design-path>] [--design <figma-url|image-dir>] [--sync] [--check] [--lang <code>] [--out <path>]"
 ---
 

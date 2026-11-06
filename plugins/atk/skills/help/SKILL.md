@@ -4,13 +4,11 @@ description: >
   Answer which atk skill to run. With no argument it reads the state of the project, meaning the
   profile, the artifacts on disk and their approval state, the plans, and the branch, then names the
   next skill with the line to type, the evidence behind it, what the skill needs first, and who
-  approves what it produces, plus what is waiting on which person. Given a question or a situation it
-  routes it to one skill; given a skill name it explains that skill.
-  Use when someone asks which skill fits, what to do next with the kit, or what a skill is for. It
-  answers questions about the kit, not requests for work: "help me fix this bug" is `atk:fix`.
-  Triggers on: "atk help", "which skill should I use", "what should I run next", "tôi cần skill nào",
-  "nên dùng skill gì", "bước tiếp theo với atk là gì", "atk có những skill nào",
-  "どのスキルを使えばいい", "次に何を実行すればいい", "/atk:help".
+  approves what it produces, plus what is waiting on which person. Given a question or a situation
+  it routes it to one skill; given a skill name it explains that skill. Use when someone asks which
+  skill fits, what to do next with the kit, or what a skill is for. It answers questions about the
+  kit, not requests for work: "help me fix this bug" is `atk:fix`. Triggers on: "atk help", "which
+  skill should I use", "what should I run next", "/atk:help".
 argument-hint: "[question|skill] [--lang <code>]"
 ---
 

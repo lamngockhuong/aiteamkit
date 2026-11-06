@@ -1,19 +1,15 @@
 ---
 name: qa
 description: >
-  Plan and write the team's testing: the project's master test plan, a plan per feature with
-  scope and exit criteria, test cases traced to acceptance criteria, a regression matrix, and the
-  handoff a developer owes QA. Afterwards, records a test run, raises its failures as bugs, and
-  records a fixed bug's retest, and brings existing cases level with a changed spec. Use when a
-  project starts testing, a feature reaches QA or has no written cases, a release needs a regression
-  pass, the spec changed under existing cases, results need recording, or cases need review before
-  approval.
-  Triggers on: "test plan", "master test plan", "test case", "QA", "kiểm thử", "viết test case",
-  "kế hoạch kiểm thử tổng thể", "regression", "update the test cases", "cập nhật test case",
-  "テストケース更新", "test results", "log the failed cases as bugs", "retest", "ghi kết quả test",
-  "review these test cases", "duyệt test case", "テスト計画", "マスターテスト計画",
-  "テストケース", "テストケースレビュー", "テスト結果", "不具合報告", "再テスト", "how do we test this", "QA handoff",
-  "/atk:qa".
+  Plan and write the team's testing: the project's master test plan, a plan per feature with scope
+  and exit criteria, test cases traced to acceptance criteria, a regression matrix, and the handoff
+  a developer owes QA. Afterwards, records a test run, raises its failures as bugs, and records a
+  fixed bug's retest, and brings existing cases level with a changed spec. Use when a project starts
+  testing, a feature reaches QA or has no written cases, a release needs a regression pass, the spec
+  changed under existing cases, results need recording, or cases need review before approval.
+  Triggers on: "test plan", "master test plan", "test case", "QA", "regression", "update the test
+  cases", "test results", "log the failed cases as bugs", "retest", "review these test cases", "how
+  do we test this", "QA handoff", "/atk:qa".
 argument-hint: "[requirement-path|feature|release|cases-path|run-path|issue] [--master|--plan|--cases|--regression|--update|--record|--bug|--retest|--review] [--lang <code>] [--out <path>]"
 ---
 

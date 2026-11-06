@@ -4,15 +4,12 @@ description: >
   Write down how this team wants a skill to behave, as a file in the project rather than an edit to
   the kit: read the shipped skill, ask what the team does differently and why, refuse the parts that
   would let a skill decide what a person owns, and write the override file with the person who
-  approved it named in it.
-  Use when a team keeps repeating the same correction to a skill's output, when a client or an
-  internal standard adds a step the kit does not know about, or when an override written earlier no
-  longer matches the skill it belongs to. Also reads the run traces a skill left behind and counts
-  what repeats across its runs.
-  Triggers on: "tailor", "customise a skill", "customize skill", "override a skill", "tùy biến
-  skill", "sửa skill theo đội", "thêm bước cho skill", "ghi đè skill", "スキルをカスタマイズ",
-  "チーム独自のルール", "our team does this differently", "make the skill always", "look at the
-  last runs of", "xem lại các lần chạy của skill", "スキルの実行履歴を分析", "/atk:tailor".
+  approved it named in it. Use when a team keeps repeating the same correction to a skill's output,
+  when a client or an internal standard adds a step the kit does not know about, or when an override
+  written earlier no longer matches the skill it belongs to. Also reads the run traces a skill left
+  behind and counts what repeats across its runs. Triggers on: "tailor", "customise a skill",
+  "customize skill", "override a skill", "our team does this differently", "make the skill always",
+  "look at the last runs of", "/atk:tailor".
 argument-hint: "[<skill>] [--audit|--feedback [--runs [<dir>]] [--since <YYYY-MM-DD>]] [--out <path>]"
 ---
 

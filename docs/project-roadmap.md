@@ -21,7 +21,7 @@ with one marketplace file per harness at the root.
 ## Phase 2: Skill coverage (done)
 
 Twenty-five skills, each a `SKILL.md` under 300 lines following one section contract: frontmatter
-with multilingual triggers, scope, roles, invocation, workflow, output, ticket, and a definition of
+with English triggers, scope, roles, invocation, workflow, output, ticket, and a definition of
 done.
 
 Twelve of them cover the process a team runs around the code. Eight were added afterwards so the kit
@@ -101,9 +101,9 @@ to 22 cases each; the eight written earlier range from 16 to 31, because they we
 time as each skill landed. The cases that earn
 their place are the near-misses between neighbours, and every pair now has a file on both sides:
 `intake` against `design-doc`, `plan` against `breakdown`, `fix` against `incident`, `review`
-against `qa`, `qa` against `verify`, `onboard` against `handover`. Each file also covers the three
-trigger languages, so dropping the Vietnamese or Japanese phrasings from a `description` fails a
-case rather than passing unnoticed.
+against `qa`, `qa` against `verify`, `onboard` against `handover`. Each file also holds cases in English,
+Vietnamese, and Japanese, so a `description` edit that stops reaching a request in one of them fails
+a case when someone runs the measurement; nothing runs it on its own.
 
 `atk` ships no runner on purpose: one more slash command with no artifact and no approver is not
 what that kit is for. The runner lives in `atkx`, the utility plugin beside it, as the trigger mode

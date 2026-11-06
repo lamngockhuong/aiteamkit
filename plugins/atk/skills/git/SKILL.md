@@ -1,17 +1,15 @@
 ---
 name: git
 description: >
-  Carry a finished piece of work into version control: read what changed, stage it after scanning for
-  anything that must never be committed, split it into commits that can be reverted one at a time,
-  branch and push on consent, open the pull request with the artifact as its body, and merge only
-  when a person asks for that merge and the pull request is ready. Also repairs a branch, through
-  rebase, conflict resolution and fixup, and drives stacked pull requests.
-  Use after a skill or a person has finished and verified work, when a branch has fallen behind or
-  a conflict is in the way, or when a stack of dependent pull requests needs moving.
-  Triggers on: "commit", "commit this", "push", "open a PR", "pull request", "merge the PR",
-  "rebase", "resolve the conflict", "stacked PRs", "branch", "tạo commit", "commit giúp", "đẩy code",
-  "mở pull request", "merge PR", "gỡ conflict", "rebase nhánh", "chia commit", "コミット",
-  "プルリクエスト", "マージ", "リベース", "コンフリクト解消", "/atk:git".
+  Carry a finished piece of work into version control: read what changed, stage it after scanning
+  for anything that must never be committed, split it into commits that can be reverted one at a
+  time, branch and push on consent, open the pull request with the artifact as its body, and merge
+  only when a person asks for that merge and the pull request is ready. Also repairs a branch,
+  through rebase, conflict resolution and fixup, and drives stacked pull requests. Use after a skill
+  or a person has finished and verified work, when a branch has fallen behind or a conflict is in
+  the way, or when a stack of dependent pull requests needs moving. Triggers on: "commit", "commit
+  this", "push", "open a PR", "pull request", "merge the PR", "rebase", "resolve the conflict",
+  "stacked PRs", "branch", "merge PR", "/atk:git".
 argument-hint: "[--commit|--pr|--merge <pr>|--rebase|--resolve|--stack] [--draft] [--lang <code>] [--out <path>]"
 ---
 

@@ -1,18 +1,15 @@
 ---
 name: security
 description: >
-  Review the security of a change, a release, or a feature the way a team has to answer for it:
-  the assets and trust boundaries in scope, the project's own scanners run, threats walked per
-  boundary, every finding verified against the code with the path from entry point to impact, a
-  checklist from the client or the company answered item by item with evidence, and the residual
-  risk left for a named person to accept. Also keeps the threat model of a feature current.
-  Use before a release that touches authentication, personal data, payments, or an external
-  integration, when a client asks for a security checklist, or when a design needs its threats
-  written down before anyone builds it.
-  Triggers on: "security review", "security audit", "security checklist", "threat model",
-  "STRIDE", "OWASP", "kiểm tra bảo mật", "đánh giá bảo mật", "checklist bảo mật",
-  "mô hình mối đe dọa", "セキュリティレビュー", "セキュリティチェックリスト", "脅威モデル",
-  "脆弱性診断", "is this secure enough to ship", "/atk:security".
+  Review the security of a change, a release, or a feature the way a team has to answer for it: the
+  assets and trust boundaries in scope, the project's own scanners run, threats walked per boundary,
+  every finding verified against the code with the path from entry point to impact, a checklist from
+  the client or the company answered item by item with evidence, and the residual risk left for a
+  named person to accept. Also keeps the threat model of a feature current. Use before a release
+  that touches authentication, personal data, payments, or an external integration, when a client
+  asks for a security checklist, or when a design needs its threats written down before anyone
+  builds it. Triggers on: "security review", "security audit", "security checklist", "threat model",
+  "STRIDE", "OWASP", "is this secure enough to ship", "/atk:security".
 argument-hint: "[branch|range|paths|feature|design-path] [--threat-model] [--checklist <path>] [--lang <code>] [--out <path>]"
 ---
 

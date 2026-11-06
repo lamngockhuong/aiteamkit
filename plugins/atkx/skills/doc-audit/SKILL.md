@@ -1,17 +1,16 @@
 ---
 name: doc-audit
 description: >
-  Audit a written document claim by claim against the source that can settle each claim: the code,
-  a requirement source, or another document. Every checkable claim gets exactly one verdict, correct
+  Audit a written document claim by claim against the source that can settle each claim: the code, a
+  requirement source, or another document. Every checkable claim gets exactly one verdict, correct
   with evidence, wrong with evidence, or unverifiable with the person who must answer; wrong
   verdicts and a sample of correct ones are read a second time; contradictions inside a document and
   between documents are listed apart; a directory gets a cheap pass and a ranking first, and a
   person picks what gets the full audit; `--red-team` adds objections to what no source settles.
-  Changes no document; its report stays out of git. Use on an API reference, a feature
-  description, a status flow, a requirement note or a runbook nobody checked. Triggers on: "audit
-  this document", "fact-check this doc", "is every claim in this doc true", "which sentences of
-  this doc are wrong", "kiểm chứng tài liệu", "soát từng ý trong tài liệu", "tài liệu này có câu
-  nào sai không", "ドキュメントを監査", "記述が正しいか検証", "/atkx:doc-audit".
+  Changes no document; its report stays out of git. Use on an API reference, a feature description,
+  a status flow, a requirement note or a runbook nobody checked. Triggers on: "audit this document",
+  "fact-check this doc", "is every claim in this doc true", "which sentences of this doc are wrong",
+  "/atkx:doc-audit".
 argument-hint: "<file>... | <dir> [--cheap] [--source <path-or-issue>...] [--red-team] [--code <dir>] [--out <path>]"
 ---
 

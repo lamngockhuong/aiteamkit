@@ -3,11 +3,9 @@ name: init
 description: >
   Set up atk in a project: read the repository to find the build, test, and lint commands, the layer
   layout, the tracker, and the docs root, confirm what was found, ask only for what no file can
-  answer, and write the profile every other skill reads.
-  Use once when a team first installs atk in a project, and again when the project has moved on from
-  what the profile says.
-  Triggers on: "init", "atk init", "setup atk", "khởi tạo", "cấu hình dự án", "thiết lập atk",
-  "初期設定", "セットアップ", "プロジェクト設定", "get atk working here", "/atk:init".
+  answer, and write the profile every other skill reads. Use once when a team first installs atk in
+  a project, and again when the project has moved on from what the profile says. Triggers on:
+  "init", "atk init", "setup atk", "get atk working here", "/atk:init".
 argument-hint: "[--audit] [--lang <code>] [--out <path>]"
 ---
 

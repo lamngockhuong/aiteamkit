@@ -33,9 +33,10 @@ The shape every skill's cases use:
 - **Positives**, about ten: requests this skill should take, phrased the way a person types them,
   with and without the trigger phrases. Two or three may begin with the skill's own slash command;
   the trigger mode records those as skipped, so they cannot be the only positives.
-- **Positives in every language of the description.** When the `description` lists triggers in
-  several languages, the draft has positives in each of them, and not as translations of one
-  sentence: each in the way a speaker of that language would ask.
+- **Positives in every language the skill is asked in.** That is each language the `description`
+  lists triggers in, and each language the project's conventions name for its trigger evals, which
+  may be more than the description carries. The draft has positives in each of them, and not as
+  translations of one sentence: each in the way a speaker of that language would ask.
 - **Negatives**, about as many: requests that sound close and belong to another skill. Each carries
   `belongs_to`, the full name of the skill that should take it. Find the neighbours among the skills
   beside the evaluated one, in the same `skills/` directory or plugin, and in other installed kits the

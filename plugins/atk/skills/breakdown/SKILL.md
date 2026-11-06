@@ -1,14 +1,13 @@
 ---
 name: breakdown
 description: >
-  Break an epic or a design document into owned, sequenced tasks: one deliverable each, an owner,
-  a dependency order, the parallel lanes that avoid two people editing the same file, and a
-  definition of done per task.
-  Use before a sprint starts, when work has to be shared across several developers, or when a piece
-  of work needs owners and parallel lanes. Work that stays with one person is planned with
-  `atk:plan` instead, however many days it takes.
-  Triggers on: "break down", "breakdown", "chia task", "phân chia công việc", "split this epic",
-  "task list", "WBS", "タスク分解", "who does what", "assign tasks", "/atk:breakdown".
+  Break an epic or a design document into owned, sequenced tasks: one deliverable each, an owner, a
+  dependency order, the parallel lanes that avoid two people editing the same file, and a definition
+  of done per task. Use before a sprint starts, when work has to be shared across several
+  developers, or when a piece of work needs owners and parallel lanes. Work that stays with one
+  person is planned with `atk:plan` instead, however many days it takes. Triggers on: "break down",
+  "breakdown", "split this epic", "task list", "WBS", "who does what", "assign tasks",
+  "/atk:breakdown".
 argument-hint: "[design-path|requirement-path|epic] [--members <names>] [--parallel] [--tdd] [--out <path>]"
 ---
 

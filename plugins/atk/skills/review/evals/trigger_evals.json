@@ -9,6 +9,10 @@
   { "query": "second opinion on this branch, the error handling looks off to me", "should_trigger": true },
   { "query": "check this diff against the requirement and our conventions", "should_trigger": true },
   { "query": "/atk:review --strict --parallel 3", "should_trigger": true },
+  { "query": "nhìn qua giúp mấy thay đổi đồng nghiệp đẩy lên trước khi mình bấm đồng ý", "should_trigger": true },
+  { "query": "同僚の変更、承認する前に問題がないか目を通してほしい", "should_trigger": true },
+  { "query": "xem giup PR nay da on de gop vao nhanh chinh chua", "should_trigger": true },
+  { "query": "これ、まーじしていいか みてもらえる？", "should_trigger": true },
 
   { "query": "write the test cases for this feature", "should_trigger": false },
   { "query": "viết test case cho tính năng này", "should_trigger": false },

@@ -4,12 +4,10 @@ description: >
   Run a team release: assemble the change list from the diff, write release notes for the audience
   that reads them, produce the pre-flight and post-deploy checklist with an owner per step, state
   the rollback path, audit the licenses of the dependencies it ships against the project's own
-  policy, and record who approved the go decision.
-  Use before deploying to staging or production, when cutting a version, when writing notes for a
-  client, or when the licenses of what a release ships need checking.
-  Triggers on: "release", "deploy checklist", "release note", "license audit", "phát hành",
-  "ghi chú phát hành", "kiểm tra license thư viện", "cut a version", "go live", "リリース",
-  "リリースノート", "ライセンスチェック", "ship this", "/atk:release".
+  policy, and record who approved the go decision. Use before deploying to staging or production,
+  when cutting a version, when writing notes for a client, or when the licenses of what a release
+  ships need checking. Triggers on: "release", "deploy checklist", "release note", "license audit",
+  "cut a version", "go live", "ship this", "/atk:release".
 argument-hint: "[version|tag-range] [--notes|--checklist] [--audience internal|client] [--env <name>] [--out <path>]"
 ---
 

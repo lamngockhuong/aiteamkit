@@ -3,11 +3,10 @@ name: handover
 description: >
   Hand work over to another person or team so nothing depends on the leaver's memory: the true state
   of each item, decisions and why they were made, the traps, the credentials and access to transfer,
-  the contacts, and the questions only the leaver can answer, asked before they go.
-  Use when a member leaves or rotates, when a phase ends, at a vendor-to-client handover, or before
-  a long absence.
-  Triggers on: "handover", "hand over", "bàn giao", "chuyển giao công việc", "takeover", "leaving",
-  "引き継ぎ", "引継ぎ資料", "knowledge transfer", "offboarding", "/atk:handover".
+  the contacts, and the questions only the leaver can answer, asked before they go. Use when a
+  member leaves or rotates, when a phase ends, at a vendor-to-client handover, or before a long
+  absence. Triggers on: "handover", "hand over", "takeover", "leaving", "knowledge transfer",
+  "offboarding", "/atk:handover".
 argument-hint: "[--from <name>] [--to <name>] [--scope <area>] [--phase|--offboard] [--lang <code>] [--out <path>]"
 ---
 
