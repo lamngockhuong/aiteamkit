@@ -12,6 +12,10 @@
   { "query": "不具合の原因を調査してほしい", "should_trigger": true },
   { "query": "find the root cause of this wrong value but do not change any code yet", "should_trigger": true },
   { "query": "the endpoint returns 403 for a user who should have access, work out why", "should_trigger": true },
+  { "query": "test này tự nhiên đỏ từ sáng nay, không ai sửa gì cả", "should_trigger": true },
+  { "query": "今朝から急にテストが落ちるようになった、誰も何も変えていないのに", "should_trigger": true },
+  { "query": "man hinh tong tien bi lech mot dong, xem giup tai sao", "should_trigger": true },
+  { "query": "きのうから けいさんが あわない、なぜか しらべて", "should_trigger": true },
 
   { "query": "production is down right now, the checkout is failing for everyone", "should_trigger": false },
   { "query": "site đang sập, khách không đặt hàng được", "should_trigger": false },

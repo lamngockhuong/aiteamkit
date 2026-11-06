@@ -8,8 +8,8 @@ description: >
   no written convention, when the written one no longer matches the code, or when reviews keep
   repeating the same comment. Triggers on: "convention", "coding standard", "coding rule", "style
   guide", "branch strategy", "commit convention", "our team rules", "CONTRIBUTING.md", "CODEOWNERS",
-  "contribution guide", "set up a pull request template", "standards per
-  language", "coding standard for each technology", "/atk:convention".
+  "contribution guide", "set up a pull request template",
+  "standards per language", "coding standard for each technology", "/atk:convention".
 argument-hint: "[--audit|--init|--sync|--scaffold] [--suggest] [--scope <paths>] [--lang <code>] [--out <path>]"
 ---
 

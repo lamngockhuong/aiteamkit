@@ -144,4 +144,18 @@ fail, một tiếng Việt và một tiếng Nhật, không gọi skill nào ở
 
 ADR 0015 ghi lại điều kit quyết định từ kết quả này. Lần chạy chỉ đo một model và ba skill, trong cấu
 hình chỉ có kit này cùng các skill có sẵn của Claude Code; nó chưa đo cấu hình đông tới mức
-description bị cắt ngắn.
+description bị cắt ngắn. 22 description `atk` còn lại và cả hai description `atkx` đã bỏ cụm tiếng
+Việt và tiếng Nhật mà không chạy eval của chính chúng, trong đó có các cặp kề nhau như `verify` và
+`review`, mà eval của chúng tách các yêu cầu "chạy thử thật"; một issue theo sau giữ lần đo đó, và
+cho tới khi có kết quả thì các description ấy chưa được đo.
+
+Mỗi case hai lần, thay vì ba lần như một case fail đáng được chạy ở trên, vì lần chạy so các bản
+description với nhau chứ không sửa một description theo một case fail. Chỗ hở của `atk:fix` mới là
+trường hợp đó, và sẽ được chạy ba lần trước khi description của nó đổi.
+
+Mười hai cách nói không được giữ lại từ lần chạy. Các kiểu câu của chúng giờ nằm trong eval, viết lại
+sau lần chạy chứ không chép, nên không phải đúng câu đã đo: trong `fix` là câu test đột nhiên bắt đầu
+fail, bằng tiếng Việt và tiếng Nhật, dự kiến vẫn trượt cho tới khi chỗ hở của `atk:fix` được đóng;
+trong `review` và `qa` là hai yêu cầu mỗi skill không có từ trigger nào. Bên cạnh đó, mỗi skill trong
+ba skill có một yêu cầu tiếng Việt gõ không dấu và một yêu cầu tiếng Nhật chỉ bằng kana. Một issue
+theo sau giữ chỗ hở của `atk:fix`.

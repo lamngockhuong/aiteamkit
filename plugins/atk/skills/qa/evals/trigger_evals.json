@@ -25,6 +25,10 @@
   { "query": "write the master test plan for this project: test levels, environments, severity", "should_trigger": true },
   { "query": "lập kế hoạch kiểm thử tổng thể cho dự án", "should_trigger": true },
   { "query": "このプロジェクトのマスターテスト計画を作って", "should_trigger": true },
+  { "query": "trước khi phát hành, liệt kê giúp những tình huống cần thử trên màn hình đăng ký", "should_trigger": true },
+  { "query": "新しい登録画面で確認すべきパターンを洗い出して", "should_trigger": true },
+  { "query": "liet ke giup cac truong hop can thu cho man hinh dang ky", "should_trigger": true },
+  { "query": "とうろくがめんで ためすべき ぱたーんを だして", "should_trigger": true },
 
   { "query": "start the app and confirm the whole flow works", "should_trigger": false },
   { "query": "chạy thử thật xem đơn hàng có vào database không", "should_trigger": false },

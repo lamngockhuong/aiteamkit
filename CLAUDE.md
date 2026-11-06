@@ -572,15 +572,22 @@ Vietnamese, and Japanese, and a request in any of the three has to reach the sam
 it there is the meaning of the English description, not a phrase in the request's language. The
 maintainer chose this on 2026-11-06 after a measurement: on sonnet, the Vietnamese and Japanese cases
 of `review`, `qa`, and `fix` reached the right skill as often with English triggers alone as with the
-three-language list, and no case reached a wrong one. The longer list only lengthened every
-description, and the skill listing cuts a description short once many skills are installed, the
-trigger list at its end first. `docs/adr/0015-skill-triggers-in-english-evals-in-three-languages.md` records the decision and
+three-language list, and no case reached a wrong one. That run measured those three skills only;
+the other 24 descriptions changed without one, and that run is left to a follow-up issue. The longer list only
+lengthened every description, and the skill listing cuts a description short once many skills are
+installed, the trigger list at its end first.
+`docs/adr/0015-skill-triggers-in-english-evals-in-three-languages.md` records the decision and
 `docs/trigger-eval-measurement.md` the numbers.
 
-What stays in three languages is `evals/trigger_evals.json`: keep its Vietnamese and Japanese cases,
-since they are how a description edit is checked against the teams that ask in those languages. When
-a measurement shows such a case lost, sharpen the English description and measure again; adding the
-phrase back is not the fix.
+What stays in three languages is `evals/trigger_evals.json`: every skill's evals, a new skill's
+included, hold positives in English, Vietnamese, and Japanese, since they are how a description edit
+is checked against the teams that ask in those languages. A wrong case is corrected like any other;
+what may not happen is a skill left with no positive in one of the three, which `tests/verify.sh`
+fails, as it fails a Vietnamese or Japanese letter in a `description:`. When a measurement shows such
+a case lost, sharpen the English description and measure again; adding the phrase back is not the
+first fix. Where no English wording reaches the case without taking a neighbour's positives, the
+Tech Lead decides between a phrase in that language in that one description and a narrower case, and
+the measurement section records which and why.
 
 ## Em-dash policy
 
@@ -745,7 +752,7 @@ not a second set of rules. The `source` column says where the prose lives.
 | `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` in that section | `SHOULD FIX` | "Em-dash policy" |
 | `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` in that section | `BLOCKING` | "The kit stands alone" |
 | `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the name check in `tests/verify.sh` | `BLOCKING` | "SKILL.md `name` field convention" |
-| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, opens its workflow with the override line and the two lines that start the run trace, and lists its triggers in English only, its trigger evals keeping their Vietnamese and Japanese cases | `REVIEWED` | `wc -l` for the length; the trace-line check in `tests/verify.sh` for the workflow lines; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are English; the trigger evals stay in three languages" |
+| `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, opens its workflow with the override line and the two lines that start the run trace, and lists its triggers in English only, its trigger evals holding positives in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the trace-line check in `tests/verify.sh` for the workflow lines; its eval-language check for the triggers and the evals; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are English; the trigger evals stay in three languages" |
 | `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` in that section | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `REVIEWED` | the parse, `.tsv`, version and marketplace checks in `tests/verify.sh` | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `REVIEWED` | the registration check in `tests/verify.sh` | `BLOCKING` | "`hooks/` never holds a rule" |
@@ -782,7 +789,7 @@ symlink out of `.atk/overrides/`; the two hook registrations agree; the marketpl
 plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matches the tree;
 `atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; every agent holds Read, Grep and Glob only; the secret
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
-hold; trigger evals parse; no trigger eval positive is claimed by two skills; every description
+hold; trigger evals parse; no trigger eval positive is claimed by two skills; every skill's evals hold a Vietnamese and a Japanese positive and no description carries either language; every description
 fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the
 run-trace example keeps its header order and event shape; `atk` names no model outside its two
 allowed lines; `atk:review` names both reach values in

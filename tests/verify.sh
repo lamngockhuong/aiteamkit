@@ -611,6 +611,27 @@ dup = {q: sorted(s) for q, s in seen.items() if len(s) > 1}
 assert not dup, 'a query is a positive of more than one skill: %s' % dup
 print('OK eval positives, each claimed by one skill')"
 
+# Triggers are written in English and the trigger evals keep three languages, per CLAUDE.md:
+# every skill's evals hold a Vietnamese and a Japanese positive, a Vietnamese one told by a letter
+# only Vietnamese marks (a tone-marked vowel, or one of ă đ ĩ ũ ơ ư), and no description, read as
+# the 1,024-character check below reads it, carries a Vietnamese or Japanese letter
+python3 -c "
+import glob, json, re
+VI = re.compile('[\u0103\u0111\u0129\u0169\u01a1\u01b0\u1ea0-\u1ef9]', re.I)
+JA = re.compile('[\u3040-\u30ff\u4e00-\u9fff]')
+bad = []
+for f in sorted(glob.glob('plugins/*/skills/*/evals/trigger_evals.json')):
+    pos = [q['query'] for q in json.load(open(f)) if q.get('should_trigger')]
+    if not any(VI.search(q) for q in pos): bad.append('%s has no Vietnamese positive' % f)
+    if not any(JA.search(q) for q in pos): bad.append('%s has no Japanese positive' % f)
+for f in sorted(glob.glob('plugins/*/skills/*/SKILL.md')):
+    head = open(f).read().replace('\r\n', '\n').split('\n---', 1)[0]
+    m = re.search(r'^description: [>|][-+0-9]* *\n((?:(?:  .*)?\n)+)', head, re.M) or re.search(r'^description: (.+)$', head, re.M)
+    assert m, 'no description found in %s' % f
+    if VI.search(m.group(1)) or JA.search(m.group(1)): bad.append('%s description carries Vietnamese or Japanese' % f)
+assert not bad, bad
+print('OK trigger evals in three languages, descriptions in English')"
+
 # Every description fits the 1,024 characters a harness reads, counted as atkx:skill-eval counts
 # them: the folded scalar joined with spaces, by code point. Only a hand run of that check caught
 # one over the limit before

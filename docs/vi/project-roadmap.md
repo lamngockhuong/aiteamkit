@@ -101,8 +101,8 @@ tương ứng ra đời. Những case đáng
 giá là các cặp dễ nhầm giữa skill kề nhau, và giờ cặp nào cũng có file ở cả hai phía: `intake` với
 `design-doc`, `plan` với `breakdown`, `fix` với `incident`, `review` với `qa`, `qa` với `verify`,
 `onboard` với `handover`. Mỗi file đều có case bằng tiếng Anh, tiếng Việt và tiếng Nhật, nên một lần sửa
-`description` khiến yêu cầu ở một trong ba ngôn ngữ không còn gọi tới skill sẽ làm rớt case chứ không
-trôi qua im lặng.
+`description` khiến yêu cầu ở một trong ba ngôn ngữ không còn gọi tới skill sẽ làm rớt case khi có người
+chạy phép đo; không có gì tự chạy nó.
 
 `atk` cố ý không kèm bộ chạy: thêm một slash command không sinh artifact, không có người duyệt, không
 phải thứ kit đó nhắm tới. Bộ chạy nằm trong `atkx`, plugin tiện ích đặt cạnh nó, dưới dạng chế độ đo

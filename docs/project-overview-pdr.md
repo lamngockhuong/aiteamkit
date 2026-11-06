@@ -54,7 +54,8 @@ different failure modes, and they are process failures, not coding failures:
 5. **Readable by the absent reader.** Every artifact assumes its reader missed the meeting.
 6. **Reachable in three languages.** A request in English, Vietnamese, or Japanese invokes the same
    skill. The descriptions carry English triggers only, and the trigger evals hold cases in all three
-   languages to keep that true (ADR 0015).
+   languages to check it: measured for `review`, `qa`, and `fix`, and caught for the rest only when
+   someone runs the measurement (ADR 0015).
 
 ## Non-goals
 

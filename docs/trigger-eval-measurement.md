@@ -145,4 +145,18 @@ not a matter of language.
 
 ADR 0015 records what the kit decided from this. The run measured one model and three skills, inside
 a configuration holding only this kit and Claude Code's built-in skills; it did not measure a
-configuration crowded enough to cut descriptions short.
+configuration crowded enough to cut descriptions short. The other 22 `atk` descriptions and both
+`atkx` descriptions lost their Vietnamese and Japanese phrases without a run of their own evals,
+among them neighbours such as `verify` and `review` whose evals separate "chạy thử thật" requests;
+a follow-up issue holds that run, and until it reports, those descriptions are unmeasured.
+
+Two runs per case, against the three runs a failed case deserves above, because the run compared
+versions of the descriptions rather than editing one over a failed case. The `atk:fix` gap is that
+case, and gets three runs before its description changes.
+
+The twelve phrasings were not kept from the run. Their kinds are in the evals now, written again
+after it rather than copied, so they are not the measured text: in `fix`, the test that suddenly
+started failing, in Vietnamese and Japanese, which is expected to miss until the `atk:fix` gap is
+closed, and in `review` and `qa`, two requests each without a trigger word. Beside them, each of
+the three holds a Vietnamese request typed without diacritics and a Japanese one in kana only. A
+follow-up issue holds the `atk:fix` gap.

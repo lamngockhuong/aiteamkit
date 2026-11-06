@@ -103,7 +103,7 @@ their place are the near-misses between neighbours, and every pair now has a fil
 `intake` against `design-doc`, `plan` against `breakdown`, `fix` against `incident`, `review`
 against `qa`, `qa` against `verify`, `onboard` against `handover`. Each file also holds cases in English,
 Vietnamese, and Japanese, so a `description` edit that stops reaching a request in one of them fails
-a case rather than passing unnoticed.
+a case when someone runs the measurement; nothing runs it on its own.
 
 `atk` ships no runner on purpose: one more slash command with no artifact and no approver is not
 what that kit is for. The runner lives in `atkx`, the utility plugin beside it, as the trigger mode

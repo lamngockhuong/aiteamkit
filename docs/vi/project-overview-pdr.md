@@ -53,7 +53,8 @@ trong công ty gặp những kiểu hỏng khác, và chúng là hỏng về quy
 5. **Viết cho người vắng mặt.** Mọi artifact giả định người đọc đã bỏ lỡ cuộc họp.
 6. **Gọi được bằng ba ngôn ngữ.** Yêu cầu bằng tiếng Anh, tiếng Việt hay tiếng Nhật đều gọi được
    cùng một skill. Description chỉ ghi trigger tiếng Anh, còn trigger eval giữ case ở cả ba ngôn ngữ
-   để điều đó luôn đúng (ADR 0015).
+   để kiểm điều đó: đã đo cho `review`, `qa` và `fix`, còn với các skill khác chỉ phát hiện được khi
+   có người chạy phép đo (ADR 0015).
 
 ## Không nằm trong phạm vi
 
