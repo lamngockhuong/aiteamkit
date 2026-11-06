@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.21](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.20...atk-v0.1.21) (2026-11-06)
+
+
+### Bug Fixes
+
+* make atk:fix reach a test that suddenly started failing ([#183](https://github.com/lamngockhuong/aiteamkit/issues/183)) ([cdeab5e](https://github.com/lamngockhuong/aiteamkit/commit/cdeab5e12d5aa912333dd4203ab819d0ab48ab85))
+* write skill triggers in English and keep the trigger evals in three languages ([#182](https://github.com/lamngockhuong/aiteamkit/issues/182)) ([96eea03](https://github.com/lamngockhuong/aiteamkit/commit/96eea034ca0a39e7acd9d93921dc2a67dfb7accb))
+
 ## [0.1.20](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.19...atk-v0.1.20) (2026-11-05)
 
 
