@@ -1,6 +1,6 @@
 // The atk benchmark runner. Runs a scenario's steps in a fresh seed of a sample project, with the kit
-// loaded and without it, plays the people between turns, checks the result by code and by a judged
-// rubric, and writes results.json and report.md under docs/derived/bench/, which git ignores.
+// loaded and without it, each step a session of its own, plays the people between turns, approves an
+// artifact between steps as its approver would, checks the result by code and by a judged rubric, and writes results.json and report.md under docs/derived/bench/, which git ignores.
 // docs/records/design/261105-0300-atk-benchmark.md is the design; ADR 0014 says why it lives here.
 //
 // It costs money: every session and helper call is a paid model call. It is run by hand only, never
@@ -18,13 +18,13 @@ import { randomUUID } from 'node:crypto';
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { KEPT_GIT, TRACE_GRANTS, checksOf, declaredChecks, gateChecks, judgedGateChecks, tips } from './lib/checks.mjs';
+import { KEPT_GIT, TRACE_GRANTS, checksOf, declaredChecks, gateChecks, judgedGateChecks, rubricStep, snapshot, tips } from './lib/checks.mjs';
 import { DEFAULTS, MAX_RUNS, UsageError, parseArgs } from './lib/cli.mjs';
 import { credentials, gitEnv, kitCopy, newRunDir, secretsOf, sweepStale, PREFIX } from './lib/isolate.mjs';
 import { judgeRubric, unjudgedGates } from './lib/judge.mjs';
 import { write as writeReport, render } from './lib/report.mjs';
 import { answer, classify, consentTurn } from './lib/responder.mjs';
-import { assembledValues, buildSeed } from './lib/seed.mjs';
+import { approveOnRecord, assembledValues, buildSeed, resolvePaths } from './lib/seed.mjs';
 import { turn } from './lib/session.mjs';
 
 const BENCH = dirname(fileURLToPath(import.meta.url));
@@ -49,6 +49,11 @@ function loadScenario(name) {
     throw new Refusal(`${name}: arms must be kit, bare or both, each once`);
   }
   // A step may ask a person something; with no fact sheet the responder could only invent.
+  for (const s of sc.steps) {
+    for (const e of s.after || []) {
+      if (!(['commit', 'push'].includes(e.consent) || (typeof e.approve === 'string' && e.approve))) throw new Refusal(`${name}: an after entry is a consent of commit or push, or an approve with a path`);
+    }
+  }
   const asks = sc.steps.some((s) => s.questions !== false);
   if (asks && !(sc.facts && existsSync(join(BENCH, sc.facts)))) throw new Refusal(`${name}: a step may ask questions and the scenario has no fact sheet`);
   return { ...sc, fixtureDir };
@@ -78,7 +83,8 @@ function dearestRun(kind) {
 }
 
 // The turns a step may take: its own limit, and one more for each consent it gives.
-const turnsOf = (step) => (step.maxTurns ?? DEFAULTS.maxTurns) + (step.after || []).length;
+const baseTurns = (step) => step.maxTurns ?? DEFAULTS.maxTurns;
+const turnsOf = (step) => baseTurns(step) + (step.after || []).filter((e) => e.consent).length;
 
 function plan(scenarios, opts) {
   return scenarios.map((sc) => {
@@ -122,12 +128,16 @@ async function score({ out, record, scenario, ctx, logins = ctx?.secrets || [] }
   // The trace the report points at is the one the trace check read.
   record.trace = record.checks.find((c) => c.type === 'trace' && c.file)?.file ?? null;
   const rubric = checksOf(scenario).find((c) => c.type === 'rubric');
-  if (rubric && record.status === 'ok') {
-    record.rubric = await judgeRubric({ dir: out, run: record, check: rubric, fixtureDir: scenario.fixtureDir, benchDir: BENCH, ctx });
+  // In a chain the rubric is its step's, judged when that step finished, whatever came after it.
+  const at = rubricStep(scenario);
+  const chain = scenario.steps.length > 1;
+  const judged = chain ? record.steps?.[at]?.status === 'ok' : record.status === 'ok';
+  if (rubric && judged) {
+    record.rubric = await judgeRubric({ dir: out, run: record, check: rubric, fixtureDir: scenario.fixtureDir, benchDir: BENCH, ctx, step: chain ? at : undefined });
     record.cost.helper += record.rubric.cost;
     record.checks.push(...judgedGateChecks(record.rubric.gates));
   } else if (rubric) {
-    record.checks.push(...judgedGateChecks(unjudgedGates({ check: rubric, benchDir: BENCH, why: `the run ended ${record.status}, so the judge did not read it` })));
+    record.checks.push(...judgedGateChecks(unjudgedGates({ check: rubric, benchDir: BENCH, why: chain ? `step ${at + 1} did not finish, so the judge did not read it` : `the run ended ${record.status}, so the judge did not read it` })));
   }
 }
 
@@ -135,7 +145,9 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
   const out = join(resultsDir, `${arm}-${n}`);
   mkdirSync(out, { recursive: true });
   const transcript = join(out, 'transcript.jsonl');
-  const record = { arm, n, status: 'ok', error: null, cost: { session: 0, helper: 0 }, wallMs: 0, turns: 0, denials: [], consents: [], toolCalls: {}, lastText: '' };
+  const record = { arm, n, status: 'ok', error: null, cost: { session: 0, helper: 0 }, wallMs: 0, turns: 0, denials: [], consents: [], toolCalls: {}, lastText: '',
+    steps: scenario.steps.map((s) => ({ skill: s.skill || null, status: 'not run', error: null, cost: 0, turns: 0 })),
+    stepStarts: [], approvals: [], runnerEdits: [] };
   const run = newRunDir();
   const ctx = { run, auth, secrets };
   const facts = scenario.facts ? readFileSync(join(BENCH, scenario.facts), 'utf8') : '';
@@ -143,28 +155,36 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
   let before = null;
   try {
     ({ before } = buildSeed({ fixtureDir: scenario.fixtureDir, scenario, runDir: run.runDir, gitEnv: gitEnv(run) }));
-    const sessionId = randomUUID();
-    let resumed = false;
     const allowed = [...new Set([...(scenario.allowedTools || []), ...(arm === 'kit' ? TRACE_GRANTS : [])])];
     // The kit is loaded from a copy in the run directory, since the session is denied the repository.
     const pluginDir = arm === 'kit' ? kitCopy(run, KIT) : null;
-    for (const step of scenario.steps) {
+    // Each step is a session of its own in the same seed, as a person invoking the next skill starts
+    // a new conversation. A step that ends in error stops the chain; the steps after it stay not run.
+    for (const [i, step] of scenario.steps.entries()) {
+      const st = record.steps[i];
+      st.status = 'running';
+      // Nothing has changed before the first step, so its snapshot is known without reading the seed.
+      record.stepStarts.push(i ? snapshot(run.seed, before) : {});
+      const sessionId = randomUUID();
+      st.sessionId = sessionId;
+      let resumed = false;
       const stepBudget = step.stepBudgetUsd ?? DEFAULTS.stepBudgetUsd;
-      let stepCost = 0;
-      let turns = 0;
+      // Calls made in this step; st.turns counts the model's own turns inside them.
+      let calls = 0;
       const say = async (prompt) => {
         const t = await turn({ run, auth, secrets, prompt, sessionId, resume: resumed, model: opts.model, allowedTools: allowed,
           pluginDir, budgetUsd: step.budgetUsd ?? DEFAULTS.budgetUsd, timeoutMs: opts.timeout * 1000, transcript });
         resumed = true;
-        turns++;
-        stepCost += t.cost;
+        calls++;
+        st.cost += t.cost;
+        st.turns += t.turns;
         record.cost.session += t.cost;
         record.turns += t.turns;
         record.denials.push(...t.denials);
         for (const u of t.toolUses) record.toolCalls[u.name] = (record.toolCalls[u.name] || 0) + 1;
         record.lastText = t.lastText;
         if (t.error) throw new Error(t.error);
-        if (stepCost > stepBudget) throw new Error(`the step spent ${stepCost.toFixed(2)} USD, over its budget of ${stepBudget} USD`);
+        if (st.cost > stepBudget) throw new Error(`the step spent ${st.cost.toFixed(2)} USD, over its budget of ${stepBudget} USD`);
       };
       const ask = async () => {
         const v = await classify(ctx, record.lastText);
@@ -176,7 +196,7 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
       // while the agent still waits is marked, so it never reads as one that finished.
       const converse = async (limit) => {
         if (step.questions === false) return;
-        while (turns < limit) {
+        while (calls < limit) {
           const v = await ask();
           if (!v.waiting) return;
           const a = await answer(ctx, facts, v);
@@ -186,14 +206,25 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
         }
         if ((await ask()).waiting) record.turnsExhausted = true;
       };
-      const maxTurns = step.maxTurns ?? DEFAULTS.maxTurns;
-      await say(`${arm === 'kit' ? step.kitPrefix || '' : ''}${step.prompt}`);
-      await converse(maxTurns);
-      for (const entry of step.after || []) {
-        if (!entry.consent) continue;
-        record.consents.push({ kind: entry.consent, refs: tips(run.seed, gitEnv(run)) });
-        await say(consentTurn(entry.consent));
-        await converse(turnsOf(step));
+      try {
+        await say(resolvePaths(run.seed, `${arm === 'kit' ? step.kitPrefix || '' : ''}${step.prompt}`));
+        await converse(baseTurns(step));
+        for (const entry of step.after || []) {
+          if (entry.approve) {
+            // The bare arm keeps no approval state, so there is nothing of its to approve.
+            if (arm !== 'kit') { record.approvals.push({ step: i + 1, glob: entry.approve, skipped: 'the bare arm keeps no approval state' }); continue; }
+            approveOnRecord(record, run.seed, entry.approve, i + 1);
+            continue;
+          }
+          record.consents.push({ kind: entry.consent, refs: tips(run.seed, gitEnv(run)) });
+          await say(consentTurn(entry.consent));
+          await converse(turnsOf(step));
+        }
+        st.status = 'ok';
+      } catch (e) {
+        st.status = 'error';
+        st.error = e.message;
+        throw scenario.steps.length > 1 ? new Error(`step ${i + 1}${step.skill ? ` (${step.skill})` : ''}: ${e.message}`) : e;
       }
     }
   } catch (e) {
@@ -244,7 +275,7 @@ function resultsDirFor(name, at) {
 function login(worstSeconds) {
   const auth = credentials(worstSeconds);
   if (!auth) throw new Refusal('no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY in the environment and no saved login');
-  if (auth.how === 'expiring') throw new Refusal(`the saved login expires in ${auth.minutesLeft} minutes; run any claude command to refresh it`);
+  if (auth.how === 'expiring') throw new Refusal(`the saved login expires in ${auth.minutesLeft} minutes, before this run could end (up to ${Math.ceil(worstSeconds / 60)}); set CLAUDE_CODE_OAUTH_TOKEN from claude setup-token, or wait for the saved login to be refreshed, then start again`);
   return auth;
 }
 
@@ -258,7 +289,7 @@ async function main() {
       const run = newRunDir();
       buildSeed({ fixtureDir: p.sc.fixtureDir, scenario: p.sc, runDir: run.runDir, gitEnv: gitEnv(run) });
       rmSync(run.runDir, { recursive: true, force: true });
-      process.stdout.write(`${p.sc.name}: seed of ${p.sc.fixture} built, ${p.runs} runs x ${p.arms.join(',')} = ${p.sessions} sessions of ${p.sc.steps.length} step(s); worst case ${p.worstUsd.toFixed(2)} USD (${p.basis})\n`);
+      process.stdout.write(`${p.sc.name}: seed of ${p.sc.fixture} built, ${p.runs} runs x ${p.arms.join(',')} = ${p.sessions} runs of ${p.sc.steps.length} step(s), a session each; worst case ${p.worstUsd.toFixed(2)} USD (${p.basis})\n`);
     }
     const total = planned.reduce((s, p) => s + p.worstUsd, 0);
     process.stdout.write(`total worst case ${total.toFixed(2)} USD${opts.maxCostUsd ? `, capped by --max-cost-usd at ${opts.maxCostUsd} USD for what is launched` : ''}; no session started\n`);

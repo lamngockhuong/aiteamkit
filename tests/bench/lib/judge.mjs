@@ -34,10 +34,11 @@ function readText(path) {
 // What the judge reads, recorded on the rubric as MATERIAL: the files readPaths names, then, in both
 // arms, the closing message of each turn.
 export const MATERIAL = 'files and the closing message of every turn';
-export function material({ dir, run, glob }) {
+// In a chain, `step` keeps both to that step: the bare arm's files it changed and its session's messages.
+export function material({ dir, run, glob, step }) {
   const seed = join(dir, 'seed');
   const before = JSON.parse(readFileSync(join(dir, 'before.json'), 'utf8'));
-  const paths = readPaths({ seed, before, arm: run.arm, glob });
+  const paths = readPaths({ seed, before, arm: run.arm, glob, run, step });
   const parts = [];
   for (const p of paths) {
     if (!isPlainFile(join(seed, p))) continue;
@@ -46,7 +47,7 @@ export function material({ dir, run, glob }) {
   }
   // Both arms' closing messages, so an item both arms are scored on is judged on the same kind of
   // material; only a kit-only item asks for the kit's file.
-  const said = turnResults(dir);
+  const said = turnResults(dir, step === undefined ? undefined : run.steps?.[step]?.sessionId);
   if (said.length) said.forEach((t, i) => parts.push(`=== the agent's closing message of turn ${i + 1} ===\n${cutText(t)}`));
   else if (run.lastText) parts.push(`=== the agent's last message ===\n${cutText(run.lastText)}`);
   return { paths, messages: said.length, text: parts.join('\n\n') };
@@ -68,12 +69,12 @@ Reply with one JSON object and nothing else, mapping every item ID to true or fa
 const unjudgedOf = (items, why) => Object.fromEntries(items.filter((i) => i.gate).map((i) => [i.id, { value: null, votes: [], why }]));
 export const unjudgedGates = ({ check, benchDir, why }) => unjudgedOf(parseRubric(readFileSync(join(benchDir, check.rubric), 'utf8')), why);
 
-export async function judgeRubric({ dir, run, check, fixtureDir, benchDir, ctx }) {
+export async function judgeRubric({ dir, run, check, fixtureDir, benchDir, ctx, step }) {
   const items = parseRubric(readFileSync(join(benchDir, check.rubric), 'utf8'));
   const unjudged = (why) => unjudgedOf(items, why);
   const scored = items.filter((i) => run.arm === 'kit' || !i.kitOnly);
   const base = { type: 'rubric', rubric: check.rubric, material: MATERIAL, kitOnlyItems: items.filter((i) => i.kitOnly).map((i) => i.id) };
-  const m = material({ dir, run, glob: check.file });
+  const m = material({ dir, run, glob: check.file, step });
   if (!m.text.trim()) {
     // With nothing to read, a gate item is left unjudged rather than counted held or crossed.
     return { ...base, status: 'fail', score: 0, cost: 0, detail: 'no file to judge and no closing message',

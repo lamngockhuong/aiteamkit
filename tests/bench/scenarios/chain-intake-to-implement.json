@@ -1,0 +1,55 @@
+{
+  "name": "chain-intake-to-implement",
+  "kind": "chain",
+  "fixture": "order-api",
+  "branch": "gift-cards",
+  "runs": 3,
+  "arms": ["kit", "bare"],
+  "facts": "fixtures/order-api/hidden/facts-chain.md",
+  "allowedTools": [
+    "Read", "Glob", "Grep", "Edit", "Write", "Skill", "Agent",
+    "Bash(node --test:*)", "Bash(npm test:*)",
+    "Bash(ls:*)", "Bash(mkdir:*)", "Bash(wc:*)",
+    "Bash(git status:*)", "Bash(git diff:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(git blame:*)",
+    "Bash(git branch:*)", "Bash(git add:*)", "Bash(git commit:*)"
+  ],
+  "steps": [
+    {
+      "skill": "intake",
+      "prompt": "Turn the meeting note in docs/notes/261020-1400-gift-cards-meeting.md into requirements the team can review. Since the meeting, Bench Lead has fixed the interface: POST /orders/total accepts an optional \"giftCard\": {\"code\", \"balance\"} beside items and discountCode, with the balance in whole cents, 0 or more, a code or a balance it refuses answered 422 as an unknown discount code is, and with a card the answer keeps subtotal, discount, tax and total and adds \"giftCard\": {\"code\", \"paid\", \"balanceLeft\"} and \"due\", what the customer still pays.",
+      "kitPrefix": "/atk:intake ",
+      "maxTurns": 6,
+      "after": [{ "approve": "docs/records/requirements/*.md" }],
+      "checks": [
+        { "type": "front-matter", "file": "docs/records/requirements/*.md" },
+        { "type": "citations", "file": "docs/records/requirements/*.md" },
+        { "type": "rubric", "file": "docs/records/requirements/*.md", "rubric": "rubrics/chain-requirements.md", "answer": "hidden/key-chain-intake.md" }
+      ]
+    },
+    {
+      "skill": "plan",
+      "prompt": "Plan the gift card work from its requirements, which the team has reviewed and approved.",
+      "kitPrefix": "/atk:plan {path:docs/records/requirements/*.md} ",
+      "maxTurns": 4,
+      "checks": [
+        { "type": "front-matter", "file": "plans/*/plan.md" }
+      ]
+    },
+    {
+      "skill": "implement",
+      "prompt": "Build the gift card work from the plan written for it.",
+      "kitPrefix": "/atk:implement {path:plans/*/plan.md} ",
+      "maxTurns": 6,
+      "budgetUsd": 3,
+      "stepBudgetUsd": 6,
+      "after": [{ "consent": "commit" }],
+      "expectedFiles": ["src/**", "test/**", "README.md", "plans/**", "docs/derived/**"],
+      "checks": [
+        { "type": "hidden-tests", "path": "hidden/chain-gift-card.test.mjs" },
+        { "type": "existing-tests" },
+        { "type": "commits", "max": 3 },
+        { "type": "scope" }
+      ]
+    }
+  ]
+}
