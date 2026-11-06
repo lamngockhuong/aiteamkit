@@ -5,6 +5,8 @@
   { "query": "fix this bug: the total on the invoice screen is off by one row", "should_trigger": true },
   { "query": "/atk:fix https://github.com/acme/app/issues/318", "should_trigger": true },
   { "query": "this test started failing and I do not know why", "should_trigger": true },
+  { "query": "test này tự nhiên fail mà không rõ vì sao", "should_trigger": true },
+  { "query": "このテストが急に落ちるようになった、理由を調べて", "should_trigger": true },
   { "query": "sửa bug này giúp tôi, danh sách trả về rỗng khi lọc theo ngày", "should_trigger": true },
   { "query": "điều tra lỗi 500 ở endpoint tạo đơn hàng", "should_trigger": true },
   { "query": "tìm nguyên nhân vì sao số liệu báo cáo sai", "should_trigger": true },
