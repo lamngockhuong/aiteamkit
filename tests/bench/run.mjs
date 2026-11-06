@@ -15,16 +15,16 @@
 //        node tests/bench/run.mjs --recheck <results-dir>
 
 import { randomUUID } from 'node:crypto';
-import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { KEPT_GIT, TRACE_GRANTS, checksOf, declaredChecks, gateChecks, judgedGateChecks, rubricStep, snapshot, tips } from './lib/checks.mjs';
+import { TRACE_GRANTS, checksOf, declaredChecks, gateChecks, judgedGateChecks, rubricJudged, snapshot, tips } from './lib/checks.mjs';
 import { DEFAULTS, MAX_RUNS, UsageError, parseArgs } from './lib/cli.mjs';
 import { credentials, gitEnv, kitCopy, newRunDir, secretsOf, sweepStale, PREFIX } from './lib/isolate.mjs';
 import { judgeRubric, unjudgedGates } from './lib/judge.mjs';
 import { write as writeReport, render } from './lib/report.mjs';
 import { answer, classify, consentTurn } from './lib/responder.mjs';
-import { approveOnRecord, assembledValues, buildSeed, resolvePaths } from './lib/seed.mjs';
+import { afterStep, assembledValues, buildSeed, keepResults, resolvePaths } from './lib/seed.mjs';
 import { turn } from './lib/session.mjs';
 
 const BENCH = dirname(fileURLToPath(import.meta.url));
@@ -50,9 +50,13 @@ function loadScenario(name) {
   }
   // A step may ask a person something; with no fact sheet the responder could only invent.
   for (const s of sc.steps) {
-    for (const e of s.after || []) {
+    const after = s.after || [];
+    for (const e of after) {
       if (!(['commit', 'push'].includes(e.consent) || (typeof e.approve === 'string' && e.approve))) throw new Refusal(`${name}: an after entry is a consent of commit or push, or an approve with a path`);
     }
+    // A step's files are kept before its first approval, so a consent turn after one would go unread.
+    const firstApproval = after.findIndex((e) => e.approve);
+    if (firstApproval >= 0 && after.slice(firstApproval).some((e) => e.consent)) throw new Refusal(`${name}: a consent comes before an approve in a step's after, never after it`);
   }
   const asks = sc.steps.some((s) => s.questions !== false);
   if (asks && !(sc.facts && existsSync(join(BENCH, sc.facts)))) throw new Refusal(`${name}: a step may ask questions and the scenario has no fact sheet`);
@@ -106,18 +110,6 @@ function plan(scenarios, opts) {
   });
 }
 
-// The seed is kept without the files the builder assembled, and with its git directory under a name
-// git does not recognise, so nothing run inside docs/derived/bench/ reads the config the session wrote.
-function keep(run, out, before) {
-  const assembled = new Set(before.assembled || []);
-  const gitDir = join(run.seed, '.git');
-  cpSync(run.seed, join(out, 'seed'), { recursive: true, verbatimSymlinks: true,
-    filter: (src) => src !== gitDir && !assembled.has(relative(run.seed, src).split('\\').join('/')) });
-  if (existsSync(gitDir)) cpSync(gitDir, join(out, 'seed', KEPT_GIT), { recursive: true, verbatimSymlinks: true });
-  if (existsSync(join(run.runDir, 'origin.git'))) cpSync(join(run.runDir, 'origin.git'), join(out, 'origin.git'), { recursive: true });
-  cpSync(join(run.runDir, 'before.json'), join(out, 'before.json'));
-}
-
 async function score({ out, record, scenario, ctx, logins = ctx?.secrets || [] }) {
   // The planted values are derived again from the fixture, and the login tokens are the ones this
   // process knows; neither is stored with the results.
@@ -128,16 +120,13 @@ async function score({ out, record, scenario, ctx, logins = ctx?.secrets || [] }
   // The trace the report points at is the one the trace check read.
   record.trace = record.checks.find((c) => c.type === 'trace' && c.file)?.file ?? null;
   const rubric = checksOf(scenario).find((c) => c.type === 'rubric');
-  // In a chain the rubric is its step's, judged when that step finished, whatever came after it.
-  const at = rubricStep(scenario);
-  const chain = scenario.steps.length > 1;
-  const judged = chain ? record.steps?.[at]?.status === 'ok' : record.status === 'ok';
+  const { judged, step, why } = rubricJudged(scenario, record);
   if (rubric && judged) {
-    record.rubric = await judgeRubric({ dir: out, run: record, check: rubric, fixtureDir: scenario.fixtureDir, benchDir: BENCH, ctx, step: chain ? at : undefined });
+    record.rubric = await judgeRubric({ dir: out, run: record, check: rubric, fixtureDir: scenario.fixtureDir, benchDir: BENCH, ctx, step });
     record.cost.helper += record.rubric.cost;
     record.checks.push(...judgedGateChecks(record.rubric.gates));
   } else if (rubric) {
-    record.checks.push(...judgedGateChecks(unjudgedGates({ check: rubric, benchDir: BENCH, why: chain ? `step ${at + 1} did not finish, so the judge did not read it` : `the run ended ${record.status}, so the judge did not read it` })));
+    record.checks.push(...judgedGateChecks(unjudgedGates({ check: rubric, benchDir: BENCH, why })));
   }
 }
 
@@ -160,6 +149,7 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
     const pluginDir = arm === 'kit' ? kitCopy(run, KIT) : null;
     // Each step is a session of its own in the same seed, as a person invoking the next skill starts
     // a new conversation. A step that ends in error stops the chain; the steps after it stay not run.
+    const chain = scenario.steps.length > 1;
     for (const [i, step] of scenario.steps.entries()) {
       const st = record.steps[i];
       st.status = 'running';
@@ -209,17 +199,11 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
       try {
         await say(resolvePaths(run.seed, `${arm === 'kit' ? step.kitPrefix || '' : ''}${step.prompt}`));
         await converse(baseTurns(step));
-        for (const entry of step.after || []) {
-          if (entry.approve) {
-            // The bare arm keeps no approval state, so there is nothing of its to approve.
-            if (arm !== 'kit') { record.approvals.push({ step: i + 1, glob: entry.approve, skipped: 'the bare arm keeps no approval state' }); continue; }
-            approveOnRecord(record, run.seed, entry.approve, i + 1);
-            continue;
-          }
-          record.consents.push({ kind: entry.consent, refs: tips(run.seed, gitEnv(run)) });
-          await say(consentTurn(entry.consent));
+        await afterStep({ record, seed: run.seed, out, before, step, i, arm, chain, consent: async (kind) => {
+          record.consents.push({ kind, refs: tips(run.seed, gitEnv(run)) });
+          await say(consentTurn(kind));
           await converse(turnsOf(step));
-        }
+        } });
         st.status = 'ok';
       } catch (e) {
         st.status = 'error';
@@ -236,7 +220,7 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
   // run as an error and never the runs beside it.
   try {
     if (before) {
-      keep(run, out, before);
+      keepResults(run.runDir, run.seed, out, before);
       writeFileSync(join(out, 'run.json'), `${JSON.stringify(record, null, 2)}\n`);
       await score({ out, record, scenario, ctx });
     }

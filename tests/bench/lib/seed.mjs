@@ -6,8 +6,8 @@
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { cpSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
-import { frontMatter, git, globFiles, refs, runHidden, statuses } from './checks.mjs';
+import { basename, join, relative } from 'node:path';
+import { KEPT_GIT, frontMatter, git, globFiles, refs, runHidden, statuses, stepSeedDir } from './checks.mjs';
 
 function edit(seed, e) {
   const p = join(seed, e.path);
@@ -146,4 +146,49 @@ export function approveOnRecord(record, seed, glob, step) {
   const { path, was } = approve(seed, glob);
   if (was === 'APPROVED') record.approvals.push({ step, path, skipped: 'already APPROVED when the step ended, so left to the gate' });
   else { record.approvals.push({ step, path }); record.runnerEdits.push(path); }
+}
+
+// A copy of the seed for the results, without the files the builder assembled, and with its git
+// directory under a name git does not recognise, so nothing run inside docs/derived/bench/ reads the
+// config the session wrote. The checks name that directory to git themselves.
+export function keepSeed(seed, to, before) {
+  const assembled = new Set(before.assembled || []);
+  const gitDir = join(seed, '.git');
+  cpSync(seed, to, { recursive: true, verbatimSymlinks: true,
+    filter: (src) => src !== gitDir && !assembled.has(relative(seed, src).split('\\').join('/')) });
+  if (existsSync(gitDir)) cpSync(gitDir, join(to, KEPT_GIT), { recursive: true, verbatimSymlinks: true });
+}
+
+// A run's results directory `out`: the seed as keepSeed keeps it, its origin, and before.json, all
+// read from the run directory `runDir` the seed was built in.
+export function keepResults(runDir, seed, out, before) {
+  keepSeed(seed, join(out, 'seed'), before);
+  if (existsSync(join(runDir, 'origin.git'))) cpSync(join(runDir, 'origin.git'), join(out, 'origin.git'), { recursive: true });
+  cpSync(join(runDir, 'before.json'), join(out, 'before.json'));
+}
+
+// Chain step `step`'s files as its session left them, kept in the results directory `out` before the
+// runner approves anything after the step and before the next step starts, so the judge and the
+// citation check read the step's work and not what came after it.
+export const keepStep = (seed, out, step, before) => keepSeed(seed, stepSeedDir(out, step), before);
+
+// What the runner does once step `i`'s session is done, in order: each entry of the step's `after`,
+// an approval made as the approver would make it, the bare arm's skipped, or a consent handed to
+// `consent`, which is a turn of the session; and in a chain, the step's files kept once, before its
+// first approval or at the end. loadScenario refuses a consent after an approval, so no turn of the
+// session comes after the copy.
+export async function afterStep({ record, seed, out, before, step, i, arm, chain, consent }) {
+  let kept = false;
+  const keepOwn = () => {
+    if (chain && !kept) keepStep(seed, out, i, before);
+    kept = true;
+  };
+  for (const entry of step.after || []) {
+    if (entry.consent) { await consent(entry.consent); continue; }
+    keepOwn();
+    // The bare arm keeps no approval state, so there is nothing of its to approve.
+    if (arm !== 'kit') record.approvals.push({ step: i + 1, glob: entry.approve, skipped: 'the bare arm keeps no approval state' });
+    else approveOnRecord(record, seed, entry.approve, i + 1);
+  }
+  keepOwn();
 }

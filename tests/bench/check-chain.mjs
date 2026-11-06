@@ -1,19 +1,20 @@
 // The runner's chain machinery on a seed built here, with no model call: the approval between steps
-// and what the gates make of it, `{path:<glob>}` in a prompt, the step-scoped `scope`, a step that
-// never ran, and the report's rows per step. Each case writes into the seed what a session would
-// have, then reads it back the way --recheck does. Run it after any change to approve, resolvePaths,
-// snapshot, changedSince, declaredChecks or the report's step rows: node tests/bench/check-chain.mjs
+// and what the gates make of it, `{path:<glob>}` in a prompt, the step-scoped `scope`, a step's files
+// kept as it left them, whether a chain's rubric is judged, a step that never ran, and the report's
+// rows per step. Each case writes into the seed what a session would have, then reads it back the way
+// --recheck does. Run it after any change to approve, resolvePaths, snapshot, changedSince, keepStep,
+// stepFiles, rubricJudged, declaredChecks or the report's step rows: node tests/bench/check-chain.mjs
 // Exit 0 when every case holds, 1 otherwise.
 
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { KEPT_GIT, declaredChecks, gateChecks, snapshot } from './lib/checks.mjs';
+import { declaredChecks, gateChecks, git, rubricJudged, snapshot } from './lib/checks.mjs';
 import { gitEnv, newRunDir } from './lib/isolate.mjs';
 import { material } from './lib/judge.mjs';
 import { render } from './lib/report.mjs';
-import { approve, approveOnRecord, buildSeed, resolvePaths } from './lib/seed.mjs';
+import { afterStep, approve, approveOnRecord, buildSeed, keepResults, keepStep, resolvePaths } from './lib/seed.mjs';
 
 const BENCH = dirname(fileURLToPath(import.meta.url));
 const scenario = { ...JSON.parse(readFileSync(join(BENCH, 'scenarios', 'chain-intake-to-implement.json'), 'utf8')), fixtureDir: join(BENCH, 'fixtures', 'order-api') };
@@ -31,27 +32,29 @@ function check(name, ok, got) {
 const put = (seed, path, text) => { mkdirSync(dirname(join(seed, path)), { recursive: true }); writeFileSync(join(seed, path), text); };
 const requirement = (status) => `---\ntitle: Gift cards\nstatus: ${status}\nowner: Bench Lead\napprover: Bench PM\nupdated: 2026-11-01\n---\n\n# Gift cards\n`;
 
-// A seed of the chain scenario and a run record as runOne starts it.
+// A seed of the chain scenario, a run record as runOne starts it, and the results directory runOne
+// writes into: step() starts the next step as runOne does, and end() keeps the current step's files
+// as runOne does once the step's session is done, before any approval.
 function start() {
   const run = newRunDir();
   scratch.push(run.runDir);
+  const out = mkdtempSync(join(tmpdir(), 'atk-check-chain-'));
+  scratch.push(out);
   const { seed, before } = buildSeed({ fixtureDir: scenario.fixtureDir, scenario, runDir: run.runDir, gitEnv: gitEnv(run) });
   const record = { arm: 'kit', n: 1, status: 'ok', denials: [], consents: [], approvals: [], runnerEdits: [], stepStarts: [],
     steps: scenario.steps.map((s) => ({ skill: s.skill, status: 'ok', cost: 0.1, turns: 1 })) };
-  return { run, seed, before, record, step: () => record.stepStarts.push(record.stepStarts.length ? snapshot(seed, before) : {}) };
+  return { run, seed, before, record, out,
+    step: () => record.stepStarts.push(record.stepStarts.length ? snapshot(seed, before) : {}),
+    end: () => keepStep(seed, out, record.stepStarts.length - 1, before) };
 }
 
 const approveAs = (record, seed, glob) => approveOnRecord(record, seed, glob, 1);
 
-// The results directory as keep() lays it out, without the assembled files.
-function kept({ run, seed }) {
-  const out = mkdtempSync(join(tmpdir(), 'atk-check-chain-'));
-  scratch.push(out);
-  const gitDir = join(seed, '.git');
-  cpSync(seed, join(out, 'seed'), { recursive: true, filter: (src) => src !== gitDir && src !== join(seed, '.env') });
-  cpSync(gitDir, join(out, 'seed', KEPT_GIT), { recursive: true });
-  cpSync(join(run.runDir, 'origin.git'), join(out, 'origin.git'), { recursive: true });
-  cpSync(join(run.runDir, 'before.json'), join(out, 'before.json'));
+// The results directory as runOne lays it out, beside the step copies.
+function kept({ run, seed, before, out }) {
+  // Kept again, a case reads the seed as it stands now.
+  for (const d of ['seed', 'origin.git']) rmSync(join(out, d), { recursive: true, force: true });
+  keepResults(run.runDir, seed, out, before);
   writeFileSync(join(out, 'transcript.jsonl'), '');
   return out;
 }
@@ -126,10 +129,13 @@ try {
     s.record.steps.forEach((x, i) => { x.sessionId = `session-${i + 1}`; });
     s.step();
     put(s.seed, 'docs/gift-cards.md', '# Gift cards requirements\n\nTotals are computed in `src/orders.js:24`.\n');
+    s.end();
     s.step();
     put(s.seed, 'PLAN.md', '# Plan\n\nSee `src/missing.js:3`.\n');
+    s.end();
     s.step();
     writeFileSync(join(s.seed, 'src/orders.js'), `${readFileSync(join(s.seed, 'src/orders.js'), 'utf8')}\n// gift cards\n`);
+    s.end();
     const out = kept(s);
     writeFileSync(join(out, 'transcript.jsonl'), [1, 2, 3].map((n) => JSON.stringify({ type: 'result', session_id: `session-${n}`, result: `closing message of step ${n}` })).join('\n') + '\n');
     const m = material({ dir: out, run: s.record, glob: 'docs/records/requirements/*.md', step: 0 });
@@ -141,6 +147,96 @@ try {
       rubric: { score: 0.5, items: { a: { value: true }, b: { value: false } }, kitOnlyItems: [] } };
     const report = render({ started: 'now', model: 'sonnet', mode: 'check', totals: { session: 1, helper: 0 }, scenarios: [{ name: scenario.name, kind: scenario.kind, runs: [errored] }] });
     check('a rubric scored before a later step errored is reported', report.includes('| rubric mean (lowest, highest) | 50% (50%, 50%) |'), report);
+  }
+  // A step's files are read as its session left them: not the runner's approval after it, and not a
+  // later step's edit of the same file, which here also breaks the citation the step wrote.
+  {
+    const s = start();
+    s.step();
+    put(s.seed, REQ, `${requirement('IN REVIEW')}\nTotals are computed in \`src/orders.js:24\`.\n`);
+    s.end();
+    approveAs(s.record, s.seed, 'docs/records/requirements/*.md');
+    s.step();
+    put(s.seed, PLAN, '---\nstatus: DRAFT\napprover: Bench Lead\n---\n');
+    s.end();
+    s.step();
+    put(s.seed, REQ, `${requirement('APPROVED')}\nTotals are computed in \`src/orders.js:999\`.\n\nedited by step 3\n`);
+    s.end();
+    const out = kept(s);
+    const m = material({ dir: out, run: s.record, glob: 'docs/records/requirements/*.md', step: 0 });
+    check('the rubric of step 1 reads its file as step 1 left it', m.paths.includes(REQ) && /^status: IN REVIEW$/m.test(m.text) && !m.text.includes('APPROVED') && !m.text.includes('edited by step 3'), m.text);
+    const cites = row(rows(out, s.record), 'citations', 1);
+    check('citations of step 1 read its file as step 1 left it', cites.status === 'pass' && cites.citations === 1, cites);
+    check('the seed as the run left it still holds the later edit', readFileSync(join(out, 'seed', REQ), 'utf8').includes('edited by step 3'), null);
+  }
+  // The runner's own order after a step, as runOne runs it: the step's files are kept before the
+  // approval edits them, and a consent turn before the copy is in it.
+  {
+    const s = start();
+    s.step();
+    put(s.seed, REQ, requirement('IN REVIEW'));
+    const turn = async () => { put(s.seed, 'docs/consent-turn.md', '# said yes\n'); };
+    await afterStep({ record: s.record, seed: s.seed, out: s.out, before: s.before, i: 0, arm: 'kit', chain: true, consent: turn,
+      step: { after: [{ consent: 'commit' }, { approve: 'docs/records/requirements/*.md' }] } });
+    const copy = join(s.out, 'steps', '1', 'seed');
+    check('afterStep keeps the step before the approval', /^status: IN REVIEW$/m.test(readFileSync(join(copy, REQ), 'utf8')) && /^status: APPROVED$/m.test(readFileSync(join(s.seed, REQ), 'utf8')), s.record.approvals);
+    check('afterStep keeps a consent turn before the copy', readFileSync(join(copy, 'docs/consent-turn.md'), 'utf8').includes('said yes'), null);
+    s.step();
+    put(s.seed, PLAN, '---\nstatus: DRAFT\napprover: Bench Lead\n---\n');
+    await afterStep({ record: s.record, seed: s.seed, out: s.out, before: s.before, i: 1, arm: 'kit', chain: true, consent: turn, step: {} });
+    const plan = join(s.out, 'steps', '2', 'seed', PLAN);
+    check('afterStep keeps a chain step with no approval at its end', existsSync(plan) && readFileSync(plan, 'utf8').includes('DRAFT'), null);
+    const bare = start();
+    bare.step();
+    await afterStep({ record: bare.record, seed: bare.seed, out: bare.out, before: bare.before, i: 0, arm: 'bare', chain: false, consent: turn, step: scenario.steps[0] });
+    check('afterStep keeps no copy of a single step and skips the bare arm approval', !existsSync(join(bare.out, 'steps')) && bare.record.approvals[0]?.skipped, bare.record.approvals);
+  }
+  // A chain kept before the step copies existed, or a step that errored before its copy, reads the
+  // seed as the run left it, each step's files still kept to that step.
+  {
+    const s = start();
+    s.record.arm = 'bare';
+    s.step();
+    put(s.seed, 'docs/gift-cards.md', '# Gift cards requirements\n\nTotals are computed in `src/orders.js:24`.\n');
+    s.step();
+    put(s.seed, 'PLAN.md', '# Plan\n\nSee `src/missing.js:3`.\n');
+    s.step();
+    const out = kept(s);
+    const m = material({ dir: out, run: s.record, glob: 'docs/records/requirements/*.md', step: 0 });
+    check('with no step copy the rubric of step 1 reads step 1 files only', JSON.stringify(m.paths) === JSON.stringify(['docs/gift-cards.md']), m.paths);
+    const cites = row(rows(out, s.record), 'citations', 1);
+    check('with no step copy citations of step 1 read step 1 files only', cites.status === 'pass' && cites.citations === 1, cites);
+  }
+  // A commit only a step's copy still holds is a leak: a later step can prune the seed's history.
+  {
+    const s = start();
+    const planted = [{ variable: 'BENCH_PLANTED', path: '.env', value: 'bench-planted-value-in-a-commit' }];
+    const env = { ...gitEnv(s.run), GIT_AUTHOR_NAME: 'Bench', GIT_AUTHOR_EMAIL: 'bench@example.invalid', GIT_COMMITTER_NAME: 'Bench', GIT_COMMITTER_EMAIL: 'bench@example.invalid' };
+    s.step();
+    put(s.seed, 'notes.md', `${planted[0].value}\n`);
+    git(s.seed, ['add', 'notes.md'], env);
+    git(s.seed, ['commit', '-q', '-m', 'notes'], env);
+    git(s.seed, ['rm', '-q', 'notes.md'], env);
+    git(s.seed, ['commit', '-q', '-m', 'drop notes'], env);
+    s.end();
+    s.step();
+    rmSync(join(s.seed, '.git'), { recursive: true, force: true });
+    git(s.seed, ['init', '-q', '-b', 'main'], env);
+    const leak = gateChecks({ dir: kept(s), run: s.record, scenario, planted }).find((c) => c.type === 'secret-not-leaked');
+    check('the leak gate reads the history of a step copy', leak.status === 'fail' && leak.detail.includes('steps/1/seed'), leak);
+  }
+  // A chain's rubric is judged when its own step finished ok, whatever a later step did; a single step
+  // when the run did.
+  {
+    const steps = (...st) => st.map((status) => ({ status }));
+    const single = { steps: [scenario.steps[0]] };
+    const later = rubricJudged(scenario, { status: 'error', steps: steps('ok', 'ok', 'error') });
+    check('a chain whose later step errored has its rubric judged', later.judged && later.step === 0, later);
+    const own = rubricJudged(scenario, { status: 'error', steps: steps('error', 'not run', 'not run') });
+    check('a chain whose rubric step errored is not judged', !own.judged && own.step === 0 && own.why.includes('step 1'), own);
+    check('a single step that errored is not judged', !rubricJudged(single, { status: 'error', steps: steps('error') }).judged, null);
+    const ok = rubricJudged(single, { status: 'ok', steps: steps('ok') });
+    check('a single step that finished is judged on the whole run', ok.judged && ok.step === undefined, ok);
   }
   // A step that never ran: its checks are skipped, and the report counts it as not run.
   {
