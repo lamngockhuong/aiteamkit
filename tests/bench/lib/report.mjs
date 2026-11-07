@@ -4,7 +4,7 @@
 // the judge returns as a gate check, kept out of the coded gates' adherence; the rubric mean with its lowest
 // and highest run, session and helper cost apart, wall time, and kit minus bare for every rate both
 // arms have. A review's findings are given apart, as recall, precision and severity agreement, each a
-// mean over the measured runs with its lowest and highest. A scenario of several steps adds a row per
+// mean over the measured runs with its lowest and highest, once per step that carries a findings check. A scenario of several steps adds a row per
 // step, ran, errored and never reached, the runs in which every step ran, and the runner's approvals.
 
 import { writeFileSync } from 'node:fs';
@@ -18,6 +18,8 @@ const mean = (a) => a.reduce((s, v) => s + v, 0) / a.length;
 const spread = (a) => ({ mean: mean(a), min: Math.min(...a), max: Math.max(...a) });
 const spreadCell = (v) => (v ? `${pct(v.mean)} (${pct(v.min)}, ${pct(v.max)})` : '-');
 const deltaCell = (d) => `${d >= 0 ? '+' : ''}${Math.round(d * 100)} points`;
+// A row or a measure of one step of a chain names the step; a single step's names none.
+const stepLabel = (step, label) => (step ? `step ${step} ${label}` : label);
 
 function checkTable(runs) {
   const table = new Map();
@@ -30,7 +32,7 @@ function checkTable(runs) {
       if (c.type === 'findings' || c.status === 'skip' || (r.status !== 'ok' && (!c.gate || c.type === 'trace'))) continue;
       const base = c.type === 'trace' ? `trace (${c.skill})` : c.type === 'hidden-tests' ? `hidden-tests (${c.path})`
         : c.type === 'judged-gate' ? `judged gate (${c.id})` : c.type;
-      const key = c.step ? `step ${c.step} ${base}` : base;
+      const key = stepLabel(c.step, base);
       const row = table.get(key) || { pass: 0, of: 0, gate: !!c.gate, judged: !!c.judged, kitOnly: !!c.kitOnly, grantErrors: 0, unjudged: 0, errors: 0 };
       if (c.status === 'grant-error') row.grantErrors++;
       else if (c.status === 'unjudged') row.unjudged++;
@@ -54,17 +56,21 @@ function rubricStats(runs, kitOnlyItems = []) {
   return { ...spread(scores), sharedMean: mean(shared), n: scores.length };
 }
 
-// The findings measures of the runs that measured, each as mean, lowest and highest; none when no run
-// carried a findings check.
+// The findings measures of the runs that measured, each as mean, lowest and highest, one group per
+// step that carries a findings check, so a chain with two review steps keeps both; none when no run
+// carried one. A group's `step` is null in a scenario of one step.
 const FINDINGS_MEASURES = [['recall', 'findings recall'], ['precision', 'findings precision'], ['severityAgreement', 'severity agreement']];
 function findingsStats(runs) {
-  const rows = measured(runs).map((r) => r.checks?.find((c) => c.type === 'findings' && c.status === 'measured')).filter(Boolean);
+  const rows = measured(runs).flatMap((r) => (r.checks || []).filter((c) => c.type === 'findings' && c.status === 'measured'));
   if (!rows.length) return null;
-  const unlocated = rows.reduce((n, c) => n + (c.unlocated || 0), 0);
-  return Object.fromEntries([['unlocated', unlocated], ['runs', rows.length], ...FINDINGS_MEASURES.map(([k]) => {
-    const vals = rows.map((c) => c[k]).filter((v) => typeof v === 'number');
-    return [k, vals.length ? spread(vals) : null];
-  })]);
+  const steps = [...new Set(rows.map((c) => c.step ?? null))];
+  return steps.map((step) => {
+    const of = rows.filter((c) => (c.step ?? null) === step);
+    return Object.fromEntries([['step', step], ['unlocated', of.reduce((n, c) => n + (c.unlocated || 0), 0)], ['runs', of.length], ...FINDINGS_MEASURES.map(([k]) => {
+      const vals = of.map((c) => c[k]).filter((v) => typeof v === 'number');
+      return [k, vals.length ? spread(vals) : null];
+    })]);
+  });
 }
 
 // Per step of a scenario of several: how many runs it ran in, errored in, and never reached.
@@ -112,10 +118,9 @@ export function summarise(scenario) {
       if (!b || k.kitOnly || !k.of || !b.of) continue;
       delta[key] = k.pass / k.of - b.pass / b.of;
     }
-    for (const [k, label] of FINDINGS_MEASURES) {
-      const kv = arms.kit.findings?.[k];
-      const bv = arms.bare.findings?.[k];
-      if (kv && bv) delta[label] = kv.mean - bv.mean;
+    for (const kg of arms.kit.findings || []) {
+      const bg = arms.bare.findings?.find((g) => g.step === kg.step);
+      for (const [k, label] of FINDINGS_MEASURES) if (kg[k] && bg?.[k]) delta[stepLabel(kg.step, label)] = kg[k].mean - bg[k].mean;
     }
     if (arms.kit.rubric && arms.bare.rubric) delta.rubric = arms.kit.rubric.sharedMean - arms.bare.rubric.sharedMean;
   }
@@ -126,7 +131,8 @@ function line(name, s) {
   const part = (arm) => {
     const a = s.arms[arm];
     if (!a) return null;
-    const scores = `${a.findings?.recall ? `, recall ${pct(a.findings.recall.mean)}` : ''}${a.rubric ? `, rubric ${pct(a.rubric.mean)}` : ''}`;
+    const recalls = (a.findings || []).filter((g) => g.recall).map((g) => `, ${stepLabel(g.step, 'recall')} ${pct(g.recall.mean)}`).join('');
+    const scores = `${recalls}${a.rubric ? `, rubric ${pct(a.rubric.mean)}` : ''}`;
     const gates = !a.checked ? 'had no run checked' : a.gatesHeld ? 'held every gate' : 'crossed a gate';
     const n = a.judgedCrossed;
     const judged = n === null ? '' : `, the judged gate ${n ? `crossed in ${n} run${n > 1 ? 's' : ''}` : 'held'}`;
@@ -168,15 +174,18 @@ export function render(results) {
       }));
     }
     if (chain) out.push(row('chain ran every step', (a) => (a.steps ? `${a.steps.done}/${a.runs}` : '-')));
-    if (arms.some((a) => s.arms[a].findings)) {
+    const findingSteps = [...new Set(arms.flatMap((a) => (s.arms[a].findings || []).map((g) => g.step)))];
+    for (const step of findingSteps) {
+      const group = (a) => a.findings?.find((g) => g.step === step);
       for (const [k, label] of FINDINGS_MEASURES) {
-        const d = label in s.delta ? deltaCell(s.delta[label]) : both ? 'n/a' : null;
-        out.push(`| ${label} (lowest, highest) | ${arms.map((a) => spreadCell(s.arms[a].findings?.[k])).join(' | ')} |${d === null ? '' : ` ${d} |`}`);
+        const name = stepLabel(step, label);
+        const d = name in s.delta ? deltaCell(s.delta[name]) : both ? 'n/a' : null;
+        out.push(`| ${name} (lowest, highest) | ${arms.map((a) => spreadCell(group(s.arms[a])?.[k])).join(' | ')} |${d === null ? '' : ` ${d} |`}`);
       }
       // A finding that names a file and no line cannot be matched, so a low recall beside a high
       // count here is the citation's failure rather than a defect missed.
-      out.push(row('blocks naming a file with no line, not matched', (a) => (a.findings ? String(a.findings.unlocated) : '-')));
-      out.push(row('runs whose findings were measured', (a) => (a.findings ? `${a.findings.runs}/${a.measured}` : '-')));
+      out.push(row(stepLabel(step, 'blocks naming a file with no line, not matched'), (a) => (group(a) ? String(group(a).unlocated) : '-')));
+      out.push(row(stepLabel(step, 'runs whose findings were measured'), (a) => (group(a) ? `${group(a).runs}/${a.measured}` : '-')));
     }
     out.push(row('rubric mean (lowest, highest)', (a) => spreadCell(a.rubric)));
     out.push(row('rubric, shared items', (a) => (a.rubric ? pct(a.rubric.sharedMean) : '-')));
@@ -188,13 +197,16 @@ export function render(results) {
     // The runner's approvals, which no-approval sets aside, so a reader can see what was set aside.
     const approvals = sc.runs.flatMap((r) => (r.approvals || []).map((x) => `${r.arm} ${r.n}, after step ${x.step}: ${x.path ? `\`${x.path}\`` : `skipped, ${x.skipped}`}`));
     if (approvals.length) out.push('', 'Approved by the runner between steps, as the approver editing the file:', '', ...approvals.map((x) => `- ${x}`));
-    const bad = (c) => c.status === 'fail' || c.status === 'error';
+    // A findings check measures rather than fails, but a defect it missed or a severity it disagreed
+    // on is what a reader of the report goes looking for, so the run is listed with its detail.
+    const short = (c) => c.type === 'findings' && c.status === 'measured' && (c.missed?.length || c.severityDisagreements?.length);
+    const bad = (c) => c.status === 'fail' || c.status === 'error' || short(c);
     const failing = sc.runs.filter((r) => r.status !== 'ok' || r.turnsExhausted || r.checks.some(bad) || r.rubric?.status === 'error');
     if (failing.length) {
-      out.push('', 'Runs that failed a check, ran out of turns, or did not measure:', '');
+      out.push('', 'Runs that failed a check, missed a defect, ran out of turns, or did not measure:', '');
       for (const r of failing) {
         const why = [r.status !== 'ok' ? `${r.status}: ${r.error || ''}` : null, r.turnsExhausted ? 'ran out of turns while the agent still waited' : null,
-          ...r.checks.filter(bad).map((c) => `${c.type} (${c.detail})`)].filter(Boolean).join('; ');
+          ...r.checks.filter(bad).map((c) => `${stepLabel(c.step, c.type)} (${c.detail})`)].filter(Boolean).join('; ');
         out.push(`- ${r.arm} ${r.n}: ${why}. Transcript \`${r.transcript}\`${r.trace ? `, trace \`${r.trace}\`` : ''}`);
       }
     }

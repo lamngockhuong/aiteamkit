@@ -49,9 +49,9 @@ export function buildSeed({ fixtureDir, scenario, runDir, gitEnv }) {
   const seed = join(runDir, 'seed');
   const origin = join(runDir, 'origin.git');
   cpSync(join(fixtureDir, 'tree'), seed, { recursive: true });
-  const { name, email } = history.author;
   let tick = Date.parse(history.date);
-  const env = () => {
+  // A branch may name its own author, as the branch a fact sheet says somebody else wrote does.
+  const env = ({ name, email } = history.author) => {
     const at = new Date(tick += 60_000).toISOString();
     return { ...gitEnv, GIT_AUTHOR_NAME: name, GIT_AUTHOR_EMAIL: email, GIT_COMMITTER_NAME: name, GIT_COMMITTER_EMAIL: email,
       GIT_AUTHOR_DATE: at, GIT_COMMITTER_DATE: at };
@@ -59,12 +59,19 @@ export function buildSeed({ fixtureDir, scenario, runDir, gitEnv }) {
   git(seed, ['init', '-q', '-b', 'main'], gitEnv);
   git(seed, ['add', '-A'], gitEnv);
   git(seed, ['commit', '-q', '-m', history.main.message], env());
-  for (const b of history.branches || []) {
+  // Only the scenario's branch and the branches it grows from: a seed carrying every scenario's
+  // branch would show a session another scenario's planted defects, and would change whenever a
+  // branch is added for someone else.
+  const byName = new Map((history.branches || []).map((b) => [b.name, b]));
+  const needed = new Set();
+  for (let b = byName.get(branch); b && !needed.has(b.name); b = byName.get(b.from)) needed.add(b.name);
+  if (branch !== 'main' && !needed.size) throw new Error(`history.json has no branch ${branch}`);
+  for (const b of (history.branches || []).filter((x) => needed.has(x.name))) {
     git(seed, ['checkout', '-q', '-b', b.name, b.from], gitEnv);
     for (const c of b.commits) {
       for (const e of c.edits) edit(seed, e);
       git(seed, ['add', '-A'], gitEnv);
-      git(seed, ['commit', '-q', '-m', c.message], env());
+      git(seed, ['commit', '-q', '-m', c.message], env(b.author));
     }
   }
   git(seed, ['checkout', '-q', branch], gitEnv);
@@ -100,6 +107,11 @@ export function buildSeed({ fixtureDir, scenario, runDir, gitEnv }) {
     for (const c of step.checks || []) {
       // An injection check compares a status the file had before the session; a path with none would
       // compare nothing with nothing and pass every run.
+      // A findings key gives the lines of one branch; read against another, it scores the wrong code.
+      if (c.type === 'findings') {
+        const keyBranch = JSON.parse(readFileSync(join(fixtureDir, c.answer), 'utf8')).branch;
+        if (keyBranch && keyBranch !== branch) throw new Error(`${c.answer} gives the lines of ${keyBranch}, and the scenario checks out ${branch}; the fixture is refused`);
+      }
       if (c.type === 'injection-ignored' && !before.statuses[c.path]) throw new Error(`${c.path} has no status in the seed, so injection-ignored would measure nothing; the fixture is refused`);
       if (c.type !== 'hidden-tests' && c.type !== 'behaviour-kept') continue;
       const pass = runHidden({ seed, fixtureDir, path: c.path }).pass;

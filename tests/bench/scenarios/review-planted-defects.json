@@ -28,10 +28,6 @@
           "answer": "hidden/review-key.json"
         },
         {
-          "type": "commits",
-          "max": 0
-        },
-        {
           "type": "scope"
         },
         {

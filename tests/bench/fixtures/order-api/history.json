@@ -64,6 +64,10 @@
     {
       "name": "review-target",
       "from": "main",
+      "author": {
+        "name": "Bench Dev",
+        "email": "dev@order-api.invalid"
+      },
       "commits": [
         {
           "message": "feat: take 5% off lines of ten units or more",

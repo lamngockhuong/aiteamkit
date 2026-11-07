@@ -75,6 +75,244 @@
         ],
         "unlocated": 0
       }
+    },
+    {
+      "text": "summary-then-detail.md",
+      "why": "A summary row ahead of the detailed finding of the same defect does not set its severity: the severity that agrees with the key is chosen among every one seen.",
+      "expect": {
+        "found": [
+          "D2"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "two-column-table.md",
+      "why": "A two-column table whose first cell is not a field label is one finding per row, so the false one at :41 is counted and each row keeps its severity.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2",
+          "D3"
+        ],
+        "precision": "3/4",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "title-words.md",
+      "why": "A finding whose title holds a section word, dropped or open questions, is read: the words close a section only at the start of a heading that has no identifier and is not nested in a findings section.",
+      "expect": {
+        "found": [
+          "D1",
+          "D3",
+          "D4"
+        ],
+        "precision": "3/3",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "severity-in-prose.md",
+      "why": "A severity in parentheses wins over the first word on the line, and a merge named in a question holds nothing.",
+      "expect": {
+        "found": [
+          "D1",
+          "D5"
+        ],
+        "precision": "2/2",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "worded-citations.md",
+      "why": "`line 29 of src/server.js` and `src/server.js (L19)` locate their line.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2"
+        ],
+        "precision": "2/2",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "summary-then-detail.md",
+      "turns": [
+        "question-turn.md",
+        "closing-turn.md"
+      ],
+      "why": "A turn whose last paragraph asks a question is a question to a person, not a finding, though it cites D1's line; a turn that states a finding is still read.",
+      "expect": {
+        "found": [
+          "D2",
+          "D5"
+        ],
+        "precision": "2/2",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "near-the-planted-line.md",
+      "why": "D1 is credited at its planted line, the token comparison at 29, alone: a finding about the server two lines above names another problem and is not in the key.",
+      "expect": {
+        "found": [],
+        "precision": "0/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "summary-then-detail.md",
+      "turns": [
+        "offer-turn.md"
+      ],
+      "why": "A turn that lists findings and ends offering a next step loses only its closing question, so its findings are still read.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2"
+        ],
+        "precision": "2/2",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "stated-severity.md",
+      "why": "A severity that opens the line before a colon is stated, and a parenthetical counts only when it holds the severity alone, so (low effort) and (critical path) change nothing.",
+      "expect": {
+        "found": [
+          "D4",
+          "D5"
+        ],
+        "precision": "2/2",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "field-value-table.md",
+      "why": "Under a Field | Value header every row is a field of the finding above, a label outside the known list included, so the Mitigation row's :31 is no finding of its own.",
+      "expect": {
+        "found": [
+          "D1"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "does-well.md",
+      "why": "A section that praises or rules out is never read, wherever its name stands in the heading, in a report with no findings section.",
+      "expect": {
+        "found": [
+          "D2"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "nested-sections.md",
+      "why": "A heading that is a section name and nothing else, numbered or not, closes the findings at any depth: 4. Open questions nested under a Findings heading is not read, nor Verified and dropped under a Findings H1.",
+      "expect": {
+        "found": [
+          "D1"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "kit-format-titles.md",
+      "why": "In the kit's format, with no findings section: a title under a severity heading is read whatever its words, and a heading that opens with an identifier is read on its own.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2",
+          "D4"
+        ],
+        "precision": "3/3",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "detail-then-summary.md",
+      "why": "Of two severities given one defect, the detailed finding's counts over a summary row's, even when the summary row is the one that agrees with the key.",
+      "expect": {
+        "found": [
+          "D2"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [
+          "D2 BLOCKING, found NIT"
+        ],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "summary-then-detail.md",
+      "turns": [
+        "offer-no-blank.md"
+      ],
+      "why": "A closing question written on the line right under the findings list is left out alone, and the list above it is read.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2"
+        ],
+        "precision": "2/2",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "longer-section-names.md",
+      "why": "Under a findings heading, a heading that opens with a section name and goes on, or praises, still closes the findings.",
+      "expect": {
+        "found": [
+          "D1"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "findings-set-aside.md",
+      "why": "A heading that names findings set aside, ruled out or dropped, closes rather than opens a findings section, so the findings above it still count.",
+      "expect": {
+        "found": [
+          "D1"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "section-opens.md",
+      "why": "With no findings section, a heading that opens with a section name and goes on is that section, and is not read; a bare Dropped opening one counts as a section outside findings.",
+      "expect": {
+        "found": [
+          "D4"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
     }
   ]
 }

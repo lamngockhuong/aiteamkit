@@ -2,7 +2,7 @@
   "branch": "review-target",
   "base": "main",
   "lines": "Line numbers are those of the files on review-target.",
-  "matching": "A finding is matched to a defect by the lines it cites, so a match credits the location, not the mechanism: a finding about something else on the same lines is credited too. Whether a finding names the planted failure is the judge's to read. `accepted` lists the severities a reviewer following its own rules may give a defect, where more than one is defensible.",
+  "matching": "A finding is matched to a defect by the lines it cites, so a match credits the location, not the mechanism: a finding about something else on the same lines is credited too. Each defect's lines are kept to the planted ones for that reason, and whether the finding credited for a defect names its failure is the judge's to read, under the rubric item named-failure. `accepted` lists the severities a reviewer following its own rules may give a defect, where more than one is defensible.",
   "defects": [
     {
       "id": "D1",
@@ -12,8 +12,8 @@
         {
           "path": "src/server.js",
           "lines": [
-            27,
-            32
+            29,
+            29
           ]
         }
       ],
@@ -74,7 +74,7 @@
           ]
         }
       ],
-      "failure": "The percent of a new code is never checked: 150 makes the discount larger than the subtotal and the total negative, and a string or a missing percent makes every total using the code NaN."
+      "failure": "The percent of a new code is never checked: 150 makes the discount larger than the subtotal and the total negative, and a non-numeric string or a missing percent makes every total using the code NaN."
     },
     {
       "id": "D5",

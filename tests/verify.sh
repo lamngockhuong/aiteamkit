@@ -1250,3 +1250,7 @@ shutil.rmtree(t)
 assert r.returncode == 2 and json.loads(r.stdout)['status'] == 'usage', 'the CLI did not run through a linked directory: %r' % r
 print('OK trigger runner imports')
 PY
+
+# The benchmark's findings matcher on its sample reports, with no model call and no seed: free, unlike
+# the benchmark itself, so it runs here and a change to the matcher cannot skip its expected counts.
+out=$(node tests/bench/check-matcher.mjs 2>&1) && echo "OK bench findings matcher" || { echo "FAIL bench findings matcher"; printf '%s\n' "$out" | grep -v '^OK ' | sed 's/^/  /'; }
