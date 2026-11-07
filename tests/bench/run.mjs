@@ -346,9 +346,11 @@ async function recheck(opts) {
       if (r.rubric?.material !== record.rubric?.material && record.rubric) {
         process.stderr.write(`bench: ${sc.name} ${r.arm} ${r.n}: the judge now reads ${record.rubric.material}, the run was judged on ${r.rubric?.material || 'files and the last message only'}\n`);
       }
-      const keyOf = (checks) => checks?.find((c) => c.type === 'findings')?.keySha;
-      if (keyOf(r.checks) !== keyOf(record.checks)) {
-        process.stderr.write(`bench: ${sc.name} ${r.arm} ${r.n}: the answer key has changed since this run was scored (${keyOf(r.checks) || 'no hash recorded'}, now ${keyOf(record.checks) || 'none'})\n`);
+      // Every findings check of the run, one per step in a chain, compared with the one of its step.
+      const keysOf = (checks) => (checks || []).filter((c) => c.type === 'findings').map((c) => [c.step ?? null, c.keySha]);
+      const was = new Map(keysOf(r.checks));
+      for (const [step, now] of keysOf(record.checks)) {
+        if (was.get(step) !== now) process.stderr.write(`bench: ${sc.name} ${r.arm} ${r.n}${step ? ` step ${step}` : ''}: the answer key has changed since this run was scored (${was.get(step) || 'no hash recorded'}, now ${now || 'none'})\n`);
       }
       Object.assign(r, { checks: record.checks, rubric: record.rubric });
     }

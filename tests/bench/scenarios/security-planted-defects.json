@@ -30,10 +30,6 @@
           "securityOnly": true
         },
         {
-          "type": "commits",
-          "max": 0
-        },
-        {
           "type": "scope"
         },
         {

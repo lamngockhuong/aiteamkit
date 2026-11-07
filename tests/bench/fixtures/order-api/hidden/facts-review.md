@@ -17,7 +17,7 @@ What the people of the order-api team know. The responder answers from this shee
 - What Bench PM asked for: a line of ten units or more gets 5% off its line total, before any
   discount code; and an admin can add a discount code without a deploy.
 - A discount code takes between 1 and 100 percent off.
-- The admin token is read from ADMIN_TOKEN. Whether every environment sets it is written down
-  nowhere; Bench Lead owns the deploy configuration.
+- The admin token is read from ADMIN_TOKEN. Bench Lead owns the deploy configuration, and with it
+  which environments set it.
 - There is no design document for this change, and no recorded review checklist.
 - Whether the branch is merged: Bench Lead decides, after the review.
