@@ -7,8 +7,8 @@ severities, the redaction rule, and the shape of the two artifacts the skill wri
 
 | Verdict | The candidate | What happens to it |
 |---------|---------------|--------------------|
-| `CONFIRMED` | Names the entry point, the path to the sink with `path:line`, the control that is missing, and what an actor gains | A finding, at any severity |
-| `PLAUSIBLE` | Names the mechanism, but whether it is reachable depends on configuration, deployment, or a caller the code cannot show | A finding at Medium or below, carrying the one check that would settle it and who can run it |
+| `CONFIRMED` | Names the entry point, the path to the sink with `path:line`, the control that is missing, and what an actor gains. For a finding in what the project installs, a malicious package or a vulnerable one, the `path:line` is the lockfile or manifest line that pulls it in, and a scanner the record names is the evidence | A finding, at any severity |
+| `PLAUSIBLE` | Names the mechanism, but whether it is reachable depends on configuration, deployment, or a caller the code cannot show. Says which half was traced: the sink, with no entry shown reaching it; the entry, with no sink shown behind it; or the mechanism only, neither end traced | A finding at Medium or below, carrying the one check that would settle the rest and who can run it |
 | `REFUTED` | Rests on something the code does not do | A non-issue: one line with the line of code or the control that rules it out |
 
 Refute on evidence only: the value is bound, the handler checks the owner, the route is not
@@ -34,9 +34,31 @@ Every finding also says what kind of evidence carries it:
 Keeping the non-issues is the difference from a code review, where a refuted candidate is dropped: a
 client asking whether a threat was considered wants to see that it was, and why it does not apply.
 
+## Reachability
+
+Every finding states the least access an actor needs to reach it, as one value from this list,
+drawn from the actors of step 1:
+
+| Reachable by | The actor needs |
+|--------------|-----------------|
+| Anonymous | Nothing: no account, no session, no action by anyone else |
+| Anonymous, with a victim's action | Nothing of their own, but a signed-in victim has to open a link, a page, or a file the actor controls |
+| Any signed-in user | An ordinary account, of the kind anyone can register or be given |
+| One account's credential | The credential of one particular account, theirs or one they took |
+| An administrator | A role that may already change what the finding exposes |
+| A configuration or a second flaw | A setting the project does not ship, or another weakness first; the finding names which |
+| Whoever controls a dependency | No access to the system at all: they publish or control a package, an action, or an image the project installs, and the install runs what they wrote |
+| Anyone who can read the repository | Read access to the code or its history, and nothing else: a secret committed there is theirs to use, whoever they are |
+
+The value is the least access, not the most likely attacker: a flaw an administrator can reach and an
+anonymous caller can too is `Anonymous`. Where the path is not traced to an entry, a `PLAUSIBLE`
+finding with only its sink traced, the value is the least access the mechanism would need, and the
+settling check says so.
+
 ## Severities
 
-Decided against the assets of step 1, not against how alarming the category sounds.
+Decided against the assets of step 1 and the Reachable by field of the finding, not against how
+alarming the category sounds.
 
 | Severity | Meaning |
 |----------|---------|
@@ -45,7 +67,8 @@ Decided against the assets of step 1, not against how alarming the category soun
 | Medium | Limited impact, or a condition outside the actor's control, or a missing layer where another control still holds |
 | Low | Defence in depth; nothing is reachable through it today |
 
-An open Critical or High finding is a blocking item for `atk:release`. Whether the release goes
+An open Critical or High finding, or an open chain ranked Critical or High, is a blocking item for
+`atk:release`. Whether the release goes
 anyway is the go decision, which the PM owns; this record states the finding, not the verdict.
 
 ## Redaction
@@ -63,8 +86,9 @@ echoed into any of them is a secret in a second place.
 
 Front matter per `shared/artifact-paths.md`, then `In short` per The opening summary in
 `shared/plain-writing.md`: what was reviewed, what was found with the counts by severity, the worst
-finding told as what an actor does and gains, what was not checked, and who has to fix or accept
-what. Then these sections in order, their prose following the same file:
+finding told as what an actor does and gains, a chain when a chain is worse than any finding of
+it, what was not checked, and who has to fix or accept what. Then these sections in order, their
+prose following the same file:
 
 1. **Scope.** What was reviewed: the branch, the range, the version, or the paths, and the commit it
    was read at. What was left out and why.
@@ -73,11 +97,17 @@ what. Then these sections in order, their prose following the same file:
    leaves.
 3. **Checks run.** One row per automated check: the command, whose it was (the project's gate, a
    project script, or this skill's choice), the result, and any check not run with the reason.
-4. **Findings.** One block per finding, ranked Critical first, with an ID `SF1`, `SF2` in that order:
+4. **Findings.** One block per finding, ranked Critical first, with an ID `SF1`, `SF2` in that order.
+   Each block opens with a title that names the weakness and the feature it sits in, such as
+   `SF1: Order history readable by another customer`. The title never holds a path, a line, a
+   backtick, or a name copied from the code, because it is what travels into a ticket and the
+   session summary, where the code is not shown and the next reader may be outside the team. The
+   fields below carry the code.
 
    | Field | Content |
    |-------|---------|
    | Severity and verdict | `High`, `CONFIRMED` |
+   | Reachable by | One value of Reachability above |
    | Category | The STRIDE question and the OWASP ID with its edition, such as `A01:2025` |
    | Evidence | `tool`, `spec`, or `judgment`, per Verdicts |
    | Checked against | The control checked, with `path:line`, per Verdicts |
@@ -85,7 +115,26 @@ what. Then these sections in order, their prose following the same file:
    | What an actor does | The input or the request, in one or two sentences |
    | What they gain | The impact, against a named asset |
    | Suggested control | What would close it, as a suggestion for whoever fixes it |
-   | Settled by | For `PLAUSIBLE` only: the check and who can run it |
+   | Settled by | For `PLAUSIBLE` only: which half was traced, the sink, the entry, or the mechanism only, per Verdicts; the check that settles the rest; and who can run it |
+
+   **Chains.** After the findings, one block per chain: findings that together reach an impact
+   none of them reaches alone, such as a disclosed identifier that makes a guessable reset link
+   usable. Drawn only from findings already ranked above, never from a candidate that was refuted.
+   A chain with a `PLAUSIBLE` link is no stronger than that link, per its Severity field.
+
+   | Field | Content |
+   |-------|---------|
+   | ID | `CH1`, `CH2`, ranked by their own severity |
+   | Title | As for a finding: the weakness and the feature, nothing copied from the code |
+   | Findings | The finding IDs it needs, in the order an actor uses them |
+   | How they combine | Each enables the next, or all of them together. Where several findings could each serve at one step, they are alternatives at that step, written `SF2 \| SF5`, never a chain of their own |
+   | Reachable by | One value of Reachability above: at a step with alternatives, the least access among them; across the steps, the most access any step needs that an earlier step does not already give |
+   | What they gain | The impact, against a named asset |
+   | Severity | Ranked on its own against its Reachable by and the assets of step 1, as a finding is. A chain with a `PLAUSIBLE` link is ranked Medium or below, like that link, and the check that settles that link is the chain's too |
+
+   A chain's severity never changes the severities of its findings: each stays as ranked, so a fix
+   that closes the chain, per Residual risk below, is visible without the finding's own rank moving.
+   A record with no chain says so in one line.
 
 5. **Considered and ruled out.** The `REFUTED` candidates, one line each with the evidence.
 6. **Boundaries with nothing found.** Each boundary that was walked and produced no candidate.
@@ -97,7 +146,11 @@ what. Then these sections in order, their prose following the same file:
    |---------|----------|--------------|-------------|------|
 
    `Accepted by` and `Date` are left empty for the person who accepts it. The skill writes the first
-   three columns only.
+   three columns only. Every open chain takes a row of its own, `CH1` with the chain's severity,
+   because accepting it is accepting what the chain reaches, which no finding's row shows. A finding
+   that belongs to a chain names the chain ID in its `Finding` cell, `SF3 (CH1)`. A chain closes
+   only when some step of it is left with no route: every alternative at that step fixed. Until
+   then it keeps its row, and a fixed alternative is named beside the chain ID as no longer one.
 
    A finding fixed before the record is committed takes no row. It takes a line under the table
    instead, naming the finding ID and the fix, a commit or a pull request, while its block under

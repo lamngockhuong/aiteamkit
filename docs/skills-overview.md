@@ -770,7 +770,14 @@ Before it looks for a finding, the skill names the controls the project already 
 request, each with its `path:line` and the narrow gap it leaves, and every verdict says which of them
 it checked and why it does not cover the case. A vulnerable dependency counts as shipped when the
 production dependency tree of a deployable holds it, not when the audit tool's development flag
-says so.
+says so. A package with a malicious-package advisory is Critical wherever it sits in the lockfile,
+and every credential on the machines that installed it is treated as exposed.
+
+Each finding says who can reach it, from anonymous to only under a second flaw, beside its severity,
+and carries a title that names the weakness and the feature with nothing copied from the code, the
+title a ticket takes. A `PLAUSIBLE` finding says which half of its path was traced. Findings that
+together reach an impact none reaches alone are drawn as a chain, ranked on its own while each
+finding keeps its severity.
 
 **Use when.** A release touches authentication, personal data, payments, or an external integration;
 a client or the company hands over a security checklist to fill; or a design needs its threats
