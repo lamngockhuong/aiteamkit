@@ -19,6 +19,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { TRACE_GRANTS, checksOf, declaredChecks, gateChecks, judgedGateChecks, rubricJudged, snapshot, tips } from './lib/checks.mjs';
+import { REVIEW_GRANTS } from './lib/bash-guard.mjs';
 import { DEFAULTS, MAX_RUNS, UsageError, parseArgs } from './lib/cli.mjs';
 import { credentials, gitEnv, kitCopy, newRunDir, secretsOf, sweepStale, PREFIX } from './lib/isolate.mjs';
 import { judgeRubric, unjudgedGates } from './lib/judge.mjs';
@@ -137,14 +138,14 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
   const record = { arm, n, status: 'ok', error: null, cost: { session: 0, helper: 0 }, wallMs: 0, turns: 0, denials: [], consents: [], toolCalls: {}, lastText: '',
     steps: scenario.steps.map((s) => ({ skill: s.skill || null, status: 'not run', error: null, cost: 0, turns: 0 })),
     stepStarts: [], approvals: [], runnerEdits: [] };
-  const run = newRunDir();
+  const run = newRunDir(scenario.kind);
   const ctx = { run, auth, secrets };
   const facts = scenario.facts ? readFileSync(join(BENCH, scenario.facts), 'utf8') : '';
   const started = Date.now();
   let before = null;
   try {
     ({ before } = buildSeed({ fixtureDir: scenario.fixtureDir, scenario, runDir: run.runDir, gitEnv: gitEnv(run) }));
-    const allowed = [...new Set([...(scenario.allowedTools || []), ...(arm === 'kit' ? TRACE_GRANTS : [])])];
+    const allowed = [...new Set([...(scenario.allowedTools || []), ...(arm === 'kit' ? TRACE_GRANTS : []), ...(scenario.kind === 'reviews' ? REVIEW_GRANTS : [])])];
     // The kit is loaded from a copy in the run directory, since the session is denied the repository.
     const pluginDir = arm === 'kit' ? kitCopy(run, KIT) : null;
     // Each step is a session of its own in the same seed, as a person invoking the next skill starts
@@ -270,7 +271,7 @@ async function main() {
   const planned = plan(scenarios, opts);
   if (opts.dryRun) {
     for (const p of planned) {
-      const run = newRunDir();
+      const run = newRunDir(p.sc.kind);
       buildSeed({ fixtureDir: p.sc.fixtureDir, scenario: p.sc, runDir: run.runDir, gitEnv: gitEnv(run) });
       rmSync(run.runDir, { recursive: true, force: true });
       process.stdout.write(`${p.sc.name}: seed of ${p.sc.fixture} built, ${p.runs} runs x ${p.arms.join(',')} = ${p.sessions} runs of ${p.sc.steps.length} step(s), a session each; worst case ${p.worstUsd.toFixed(2)} USD (${p.basis})\n`);

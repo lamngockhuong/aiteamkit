@@ -59,19 +59,23 @@ export function denyRules(roots, runDir) {
   return out;
 }
 
-// The settings every call gets: the deny rules, and the guard on every Bash call of a session.
-function settingsOf(roots, runDir) {
+// The settings every call gets: the deny rules, and the guard on every Bash call of a session. The
+// guard is told the scenario's kind, since a review scenario is granted the forms atk:review runs
+// before it spawns its agents; a run directory made for no scenario passes none and gets none of them.
+function settingsOf(roots, runDir, kind) {
   const quote = (x) => `'${x.split("'").join("'\\''")}'`;
+  const args = [GUARD, join(runDir, 'seed'), ...(kind ? [kind] : [])].map(quote).join(' ');
   return {
     permissions: { deny: denyRules(roots, runDir) },
-    hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: `node ${quote(GUARD)} ${quote(join(runDir, 'seed'))}` }] }] },
+    hooks: { PreToolUse: [{ matcher: 'Bash', hooks: [{ type: 'command', command: `node ${args}` }] }] },
   };
 }
 
 // One run directory per run: config/, seed/ and logs/ from makeRunDir, plus a scratch home, the
 // helpers' own config and working directory, and settings.json with the deny rules. A run directory
-// inside a denied root would deny the session its own seed, so it is refused.
-export function newRunDir() {
+// inside a denied root would deny the session its own seed, so it is refused. `kind` is the kind of the
+// scenario the directory is made for, which the guard reads.
+export function newRunDir(kind) {
   const runDir = makeRunDir(PREFIX);
   const roots = deniedRoots();
   const real = realpathSync(runDir);
@@ -82,7 +86,7 @@ export function newRunDir() {
   const gitconfig = join(home, '.gitconfig');
   writeFileSync(gitconfig, `[user]\n\tname = ${BENCH_LEAD.name}\n\temail = ${BENCH_LEAD.email}\n[init]\n\tdefaultBranch = main\n`);
   const settings = join(runDir, 'settings.json');
-  writeFileSync(settings, `${JSON.stringify(settingsOf(roots, real), null, 2)}\n`);
+  writeFileSync(settings, `${JSON.stringify(settingsOf(roots, real, kind), null, 2)}\n`);
   return { runDir, home, gitconfig, settings, seed: join(runDir, 'seed'), config: join(runDir, 'config'), helperDir: join(runDir, 'helper'), helperConfig: join(runDir, 'helper-config') };
 }
 

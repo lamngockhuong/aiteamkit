@@ -1254,3 +1254,7 @@ PY
 # The benchmark's findings matcher on its sample reports, with no model call and no seed: free, unlike
 # the benchmark itself, so it runs here and a change to the matcher cannot skip its expected counts.
 out=$(node tests/bench/check-matcher.mjs 2>&1) && echo "OK bench findings matcher" || { echo "FAIL bench findings matcher"; printf '%s\n' "$out" | grep -v '^OK ' | sed 's/^/  /'; }
+# The benchmark's Bash guard on fixed commands and through a run directory's hook, free as well. The
+# scan grant of a review scenario is read from plugins/atk/shared/secret-scan.md, so an edit there
+# that changes the block's shape fails here rather than in a paid run.
+out=$(node tests/bench/check-guard.mjs 2>&1) && echo "OK bench bash guard" || { echo "FAIL bench bash guard"; printf '%s\n' "$out" | grep -v '^OK ' | sed 's/^/  /'; }

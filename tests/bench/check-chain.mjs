@@ -36,7 +36,7 @@ const requirement = (status) => `---\ntitle: Gift cards\nstatus: ${status}\nowne
 // writes into: step() starts the next step as runOne does, and end() keeps the current step's files
 // as runOne does once the step's session is done, before any approval.
 function start() {
-  const run = newRunDir();
+  const run = newRunDir(scenario.kind);
   scratch.push(run.runDir);
   const out = mkdtempSync(join(tmpdir(), 'atk-check-chain-'));
   scratch.push(out);
