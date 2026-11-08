@@ -424,7 +424,8 @@ tell a run that stopped from one still going. Every offer has the same three ans
   same processes on the same ports.
 
 `atk:orchestrate` is the one exception to the same subject: a run of it carries several pieces, and
-its log stays open while chains wait on people. So it offers its unfinished logs whatever the inputs:
+its log stays open while chains wait on people, or while an entry of its decision queue under
+`--unattended` is unanswered. So it offers its unfinished logs whatever the inputs:
 the newest alone, or where there are several, each with its pieces and the people its chains wait
 on, for the person to pick one. A fourth answer, **Run separately**, leaves them as they are,
 waiting chains included, and starts this run with a `<run-id>` of its own.

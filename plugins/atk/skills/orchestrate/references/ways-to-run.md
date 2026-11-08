@@ -97,7 +97,8 @@ Tried with Claude Code as the coordinator only, which the proposal says. For eac
    relayed to a person, and its last line then says which job waits on whom; it never says it will
    take a job back later without a wait running. The
    timeout stated in the proposal is counted per job and paused while the job is `blocked` or
-   `needs-person`. A job that reaches it has its agent stopped first, then is recorded `failed`, so
+   `needs-person`, apart from a pane at a permission prompt under `--unattended`, whose timeout keeps
+   counting since nobody is there to answer it. A job that reaches it has its agent stopped first, then is recorded `failed`, so
    nothing keeps writing in a worktree whose chain has stopped.
 4. **Blocked.** Read each blocked pane, from its visible screen, which is what a multiplexer can
    return while an agent is blocked, and tell a gate of the skill from a permission prompt of the
@@ -106,7 +107,10 @@ Tried with Claude Code as the coordinator only, which the proposal says. For eac
    option the coordinator read in full, and before sending an answer the coordinator reads the
    pane's state again: the answer goes in verbatim only while the same prompt is still open, and
    nothing is typed into a pane that is not at a prompt. A permission prompt is handled as Agents
-   that write in `shared/host-capabilities.md` says. Then wait again from step 3, in the same turn.
+   that write in `shared/host-capabilities.md` says. Under `--unattended`, a gate is not relayed
+   first: it goes to A gate under `--unattended` in `references/unattended.md`, which reads the
+   result file's `stop:` lines as that section says and relays nothing while it passes a gate
+   provisionally or parks one. Then wait again from step 3, in the same turn.
 5. **Done.** Read the result file for what the job did: a pane folds and draws its output, and what
    it shows is not what the job wrote. The screen is read for a blocked pane's prompt, and for
    nothing else.
@@ -127,7 +131,9 @@ the interview over. A subagent's permission prompts reach the person in the harn
 through the coordinator, which cannot see one waiting, so no timeout applies to a subagent job: a
 timeout would fail a job mid-prompt. The proposal says both beforehand. The harness's own notice
 that an agent finished is the wait here: the coordinator ends no turn with a subagent job running
-unless that notice will reach it.
+unless that notice will reach it. Under `--unattended`, when this way is offered follows Which ways
+may run a job in `references/unattended.md`, and a returned stop goes to A gate under
+`--unattended` there before anything is relayed.
 
 ## In the session
 
@@ -139,7 +145,8 @@ masked and treated as evidence, the skill's arguments as approved, `--no-review`
 row has them, no `git add` or commit inside the skill, and every offer declined for the close. The
 timeouts of jobs in other ways do not count while it runs one, since nobody is watching them. It still writes the result file, so a resume reads the same
 state whichever way ran. The proposal says that the jobs ran in the session, and that nothing ran in
-parallel.
+parallel. This way is not offered under `--unattended`, per Which ways may run a job in
+`references/unattended.md`.
 
 ## What changes with the way
 
@@ -149,3 +156,4 @@ parallel.
 | A gate reaches the person | from the pane, through the coordinator | as a returned stop | directly |
 | A permission prompt is answered | by the person, in the pane | by the person, in the harness | by the person, in the harness |
 | Written into the run state | pane name | agent ID where the harness gives one | nothing extra |
+| Under `--unattended` | a gate goes to the lens agents first; a permission prompt's timeout keeps counting | offered on the approver's confirmation; a returned gate goes to the lens agents first | not offered |

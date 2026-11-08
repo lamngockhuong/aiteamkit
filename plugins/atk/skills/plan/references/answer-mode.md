@@ -85,8 +85,10 @@ stays open there like any other.
 A settled question leaves the open list it was in, in the index or in its phase file; one left open
 above stays there. Every record goes into an `Answered` subsection at the end of section 5 of the
 index, in the table that file names, so no section is renumbered and every answer to the plan sits
-in one place. When the person does not say who answered, ask: a record with no answerer is the chat
-thread again.
+in one place. A question carrying a `Provisional:` line, left by a run that went on without its
+answer, keeps that line above the answer in the Question cell, so the record shows what was built on
+before the person answered. When the person does not say who answered, ask: a record with no
+answerer is the chat thread again.
 
 An answer to an objection from the person who settles it, or the approver's ruling on it, also
 replaces its `Open` in section 7 with `Settled by <name>, <date>`, and the row goes into the same

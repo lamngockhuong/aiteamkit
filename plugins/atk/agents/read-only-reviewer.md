@@ -1,6 +1,6 @@
 ---
 name: read-only-reviewer
-description: Reads a diff, a design document, a plan or a part of the repository and returns findings, objections or conclusions with path:line evidence. Changes no file, runs no command, and starts nothing. Spawned by atk:review for its rounds and sweep, by atk:design-doc --challenge and atk:plan --challenge for their lenses, and by the atk skills that read wide.
+description: Reads a diff, a design document, a plan or a part of the repository and returns findings, objections or conclusions with path:line evidence. Changes no file, runs no command, and starts nothing. Spawned by atk:review for its rounds and sweep, by atk:design-doc --challenge and atk:plan --challenge for their lenses, by atk:orchestrate --unattended for the lens agents of a gate, and by the atk skills that read wide.
 tools: Read, Grep, Glob
 readonly: true
 ---

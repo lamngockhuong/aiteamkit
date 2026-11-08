@@ -120,8 +120,9 @@ The reviewer bullet first, since the section after it points back to it:
   On Claude Code the kit backs this with an agent of its own, `atk:read-only-reviewer`, in the
   plugin's `agents/` directory. Its only tools are Read, Grep and Glob, so it has no tool that edits,
   runs or starts anything. Every agent a review spawns, rounds, copies and the sweep, under
-  `--parallel` too, every lens agent of a challenge, and every agent that reads wide per the section
-  below is spawned as that type. The band 1 reviewer is the one exception: it writes the report and
+  `--parallel` too, every lens agent of a challenge, every lens agent of a gate under
+  `atk:orchestrate --unattended`, and every agent that reads wide per the section below is spawned
+  as that type. The band 1 reviewer is the one exception: it writes the report and
   runs the whole skill. The same split decides the model: rounds, copies, the sweep and lenses take
   `Review agent model`, an agent that reads wide takes `Reading agent model`, and the band 1
   reviewer and every agent that writes take none, since they do the session's own work.

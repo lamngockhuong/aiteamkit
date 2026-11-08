@@ -7,7 +7,9 @@ which is `../../shared/independent-challenge.md` relative to a skill file.
 
 Cited by `design-doc` through `skills/design-doc/references/role-challenge.md`, where the lenses are
 the roles that sign a design, and by `plan` through `skills/plan/references/plan-challenge.md`, where
-the lenses are the ways a plan fails. One file rather than two, because the half below is the half
+the lenses are the ways a plan fails. `orchestrate` reads What each agent gets alone, through
+`skills/orchestrate/references/unattended.md`, for the lens agents it puts on one gate under
+`--unattended`. One file rather than two, because the half below is the half
 that makes a challenge worth running, and two copies of it would drift until one of the two passes
 let its agents read the author's reasoning.
 
