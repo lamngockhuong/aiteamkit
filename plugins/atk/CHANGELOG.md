@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.22](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.21...atk-v0.1.22) (2026-11-08)
+
+
+### Bug Fixes
+
+* let only a refused trace command show that a run lacks git for its trace ([#194](https://github.com/lamngockhuong/aiteamkit/issues/194)) ([2a82fa6](https://github.com/lamngockhuong/aiteamkit/commit/2a82fa6f6933b9ba3b590ba5447f0b0575582912)), closes [#186](https://github.com/lamngockhuong/aiteamkit/issues/186)
+* make atk:fix and atk:implement call the review after stating its cost, without waiting for a yes ([#191](https://github.com/lamngockhuong/aiteamkit/issues/191)) ([c1042f7](https://github.com/lamngockhuong/aiteamkit/commit/c1042f775745c99c6bd193f6eb2074fd9497e63f))
+* make atk:review spawn a general agent for band 1 with no diff, and count every refusal a bench turn reports ([#198](https://github.com/lamngockhuong/aiteamkit/issues/198)) ([a7f9b61](https://github.com/lamngockhuong/aiteamkit/commit/a7f9b61d2ebd3a5b5d9c3f4ae9766ad16467e697))
+
 ## [0.1.21](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.20...atk-v0.1.21) (2026-11-06)
 
 
