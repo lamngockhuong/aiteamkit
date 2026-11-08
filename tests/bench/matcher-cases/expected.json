@@ -313,6 +313,32 @@
         "severityDisagreements": [],
         "unlocated": 0
       }
+    },
+    {
+      "text": "set-aside-words-later.md",
+      "why": "Only findings followed at once by ruled out, dropped, refuted, rejected or set aside are set aside: a count of refuted findings in a findings heading, or dropped in a finding's title, leaves the findings read.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2",
+          "D4"
+        ],
+        "precision": "3/3",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "numbered-section-opens.md",
+      "why": "Under a findings heading, a numbered heading that opens with a section name and goes on, 4. Open questions for Bench PM, closes the findings: the number does not make it a finding's title.",
+      "expect": {
+        "found": [
+          "D1"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
     }
   ]
 }

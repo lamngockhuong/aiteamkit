@@ -539,21 +539,24 @@ const VALUE_HEADER = /^(?:value|details?|content)$/i;
 // section alone, so its scope, assets and checks run, which cite lines too, are not counted as
 // findings. A section that holds no findings by its name, what was dropped or ruled out, what was
 // done well or reviewed against, and the open questions, is never read. A heading that is such a name
-// and nothing else closes the findings at any depth. Otherwise a finding's own title may hold the same
-// words, so a heading that opens with an identifier or a number is never a section's name. Otherwise
-// praise or ruling out anywhere in a heading names a section, and so does a section name opening it,
-// a bare "dropped" only outside a findings or a severity heading. Findings named as ruled out or
-// dropped are such a section, not a findings section.
+// and nothing else closes the findings at any depth, and so does a section name opening a heading,
+// after its number if it has one. Otherwise a finding's own title may hold the same words, so a
+// heading that opens with an identifier or a number is never a section's name. Otherwise praise or
+// ruling out anywhere in a heading names a section, and a bare "dropped" opening it does only outside
+// a findings or a severity heading. Findings named as ruled out or dropped, the word right after
+// them, are such a section, not a findings section.
 const OPENS_FINDINGS = /^(?:\d+[.)]?\s*)?findings?\b/i;
 const SECTION_NAMES = '(?:verified and )?dropped(?: candidates)?|(?:considered and |candidates )?ruled out|(?:what (?:this|it) was )?reviewed against|open questions?|questions? (?:still )?open|what (?:the|this) change does well|(?:what was )?done well';
 const SECTION_ALONE = new RegExp(`^(?:\\d+[.)]?\\s*)?(?:${SECTION_NAMES})\\s*:?$`, 'i');
 // A heading that opens with one of these and goes on is still that section, inside findings too; a
 // bare "dropped" opens a finding's title as often as a section's, so it counts only outside them.
-const SECTION_OPENS = /^(?:open questions?|questions? (?:still )?open|verified and dropped|(?:considered and |candidates )?ruled out|(?:what (?:this|it) was )?reviewed against)\b/i;
+const SECTION_OPENS = /^(?:\d+[.)]?\s*)?(?:open questions?|questions? (?:still )?open|verified and dropped|(?:considered and |candidates )?ruled out|(?:what (?:this|it) was )?reviewed against)\b/i;
 const DROPPED_OPENS = /^dropped\b/i;
 const SECTION_ANYWHERE = /\b(?:does well|done well|ruled out|questions? (?:still )?open)\b/i;
-// Findings named as set aside are a section of what is not a finding.
-const FINDINGS_SET_ASIDE = /^(?:\d+[.)]?\s*)?findings?\b.*\b(?:ruled out|dropped|refuted|rejected)\b/i;
+// Findings named as set aside, the word right after the plural or after were, that were, considered
+// and, or verified and, are a section of what is not a finding. The same words later in a heading are a count, (4 confirmed, 1 refuted), or a finding's
+// own title, Finding 1: the check is dropped, and leave it a findings heading.
+const FINDINGS_SET_ASIDE = /^(?:\d+[.)]?\s*)?findings\s+(?:that were\s+|were\s+|considered and\s+|verified and\s+)?(?:ruled out|dropped|refuted|rejected|set aside)\b/i;
 const TITLED = /^(?:\*\*)?`?(?:[BSN]\d+|\d+)\b/;
 export function findingsIn(text, files) {
   const lines = text.split(/\r?\n/);
@@ -568,8 +571,9 @@ export function findingsIn(text, files) {
     const h = t.trim().replace(/[*`]/g, '');
     if (SECTION_ALONE.test(h) || FINDINGS_SET_ASIDE.test(h)) return 'out';
     if (OPENS_FINDINGS.test(h)) return 'in';
+    if (SECTION_OPENS.test(h)) return 'out';
     if (TITLED.test(h)) return null;
-    if (SECTION_ANYWHERE.test(h) || SECTION_OPENS.test(h)) return 'out';
+    if (SECTION_ANYWHERE.test(h)) return 'out';
     return !underFindings && DROPPED_OPENS.test(h) ? 'out' : null;
   };
   let fenced = false;
