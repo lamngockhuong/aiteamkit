@@ -61,8 +61,8 @@ run, and the tree is left as it is. A stop between the commit and the switch is 
    | Agent | the agent kind and its permission mode, chosen per job |
    | Way | pane, subagent, or session |
    | Answers | who answers its questions, by kind where the skill asks several people: the requester, the artifact's approver, the person running the skill; from the Team section, or `TBD (ask <person>)` |
-   | Waits for | nothing, a job ID, or an artifact `APPROVED` by the approver its front matter names |
-   | Approval | `this record`, or `re-confirm` |
+   | Waits for | nothing, a job ID, or an artifact `APPROVED` by the approver its front matter names; for a job marked `provisional`, that artifact `APPROVED` or passed provisionally, per `references/unattended.md` |
+   | Approval | `this record`, `re-confirm`, or under `--unattended` `provisional`, per An unattended run below |
 
 4. **The cost.** The concurrency, the number of jobs and of the review runs that follow code jobs,
    with the fix jobs those reviews may add, up to two per code job, per Fix jobs below, the timeout
@@ -81,6 +81,34 @@ run, and the tree is left as it is. A stop between the commit and the switch is 
    the close as a widening. Where the classifier mode is proposed, its limit as Agents that write
    in `shared/host-capabilities.md` words it, so a test the job edited runs unseen.
 5. **Decisions.** Who approved, when, and what they changed, written by that person or on their word.
+
+## An unattended run
+
+Under `--unattended`, the record holds five things more, each carrying out a rule of
+`references/unattended.md` rather than restating it:
+
+- **A `Mode: unattended` line** under the title.
+- **A Provisional gates section**: the eligibility table of that file and its never-eligible list,
+  the two ceilings, the lens agents each kind of gate would take and the model they take, from the
+  `Review agent model` line or none, and the worst-case count of lens agents, three per gate for
+  eight provisional gates, 24, plus three for every gate that ends parked, a number with no ceiling
+  of its own since parking is never capped, so the approver approves the mode with
+  the cost in view, per the parallel-agents policy of `shared/host-capabilities.md`.
+- **The reach.** The jobs marked `provisional`, per How far an approval reaches below.
+- **The pieces refused for the mode.** Each piece whose chain rests on no `APPROVED` requirement, per
+  The flag and the proposal in `references/unattended.md`, with whom it waits on; the rest of the run
+  goes on.
+- **Ways and permission prompts, per job.** Whether its way can raise a permission prompt and
+  whether its commit parks, per Which ways may run a job in `references/unattended.md`, with the
+  approver's confirmation by name where a subagent job needs it.
+
+A follow-up record of an unattended run, the one a rejected entry or a re-confirmation writes, also
+carries a **Decision queue** section: every entry of the run, its gate, the option continued on, the
+lens recommendations in one line, and who accepted, rejected, answered or closed it, or `unanswered`, per Answering the
+queue in `references/unattended.md`. It is the durable account of the queue, which lives under
+`docs/derived/` and is never committed, so the section is copied from the masked entries of
+`decisions.md`, each lens recommendation with its evidence as `path:line` only, never as a quoted
+line.
 
 ## When the profile is not ready
 
@@ -144,7 +172,10 @@ file changed, and the chain is `escalated` to the Tech Lead as The ceiling in
 Approving a record covers each chain up to and including its first job that produces a gating
 artifact, per Which artifacts gate in `shared/state-signals.md`. The jobs after it are shown, marked
 `re-confirm`, because the artifact may change them: a design may call the work large, or split it
-into a breakdown.
+into a breakdown. Under `--unattended`, the jobs past it up to the depth ceiling are marked
+`provisional` instead and run while the artifact waits, per The ceilings in
+`references/unattended.md`; past that ceiling, and in every attended run, `re-confirm` holds as
+written here.
 
 When that artifact is `APPROVED`, the coordinator reads the piece again and writes a **new** record
 for the rest of the chain, with a `Follows: <path of the record before>` line under its title. It

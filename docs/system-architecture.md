@@ -111,7 +111,8 @@ This produces the size discipline in the kit:
 One agent ships beside the skills, `plugins/atk/agents/read-only-reviewer.md`. Claude Code loads its
 frontmatter with the plugin and namespaces it `atk:read-only-reviewer`; its body is read only when a
 skill spawns it: every agent of `atk:review` other than the band 1 reviewer, every lens of
-`atk:design-doc --challenge` and `atk:plan --challenge`, the agent each of the seven read-heavy
+`atk:design-doc --challenge` and `atk:plan --challenge`, every lens of a gate under
+`atk:orchestrate --unattended`, the agent each of the seven read-heavy
 skills hands its wide reading to, and every agent of `atkx:doc-audit` where `atk` is installed beside
 it; where the type is missing, a general agent with the same prompt.
 Its tool list is Read, Grep and Glob. On Claude Code 2.1.296 an agent with that list had no Bash,
@@ -222,6 +223,8 @@ Sixteen are contracts between a named handful of skills rather than kit-wide rul
   Its section on agents that write is cited by `atk:orchestrate`, the one skill that runs other
   skills as jobs: the job's worktree as the boundary that is never widened, a terminal multiplexer
   named by what it does like browser automation, a gate relayed to its person and never answered,
+  apart from the gates `atk:orchestrate --unattended` passes provisionally, on unanimous lens agents
+  agreeing with the skill's own recommendation, or a fixed one for an approval wait, and kept open for that person in a decision queue,
   and every commit left to the calling skill, so the kit's first agent that edits is bound by a rule
   written once.
 - `plugins/atk/shared/tidy-pass.md`: what tidying a change looks for, in three lenses, with what may be changed
@@ -286,7 +289,8 @@ Sixteen are contracts between a named handful of skills rather than kit-wide rul
 - `plugins/atk/shared/independent-challenge.md`: how a draft is put before agents that read it cold, what
   each is given and never given, what an objection must name, and how the calling agent answers each
   one `Changed` or `Open`. Cited by `atk:design-doc --challenge`, whose lenses are the roles that
-  sign a design, and by `atk:plan --challenge`, whose lenses are the ways a plan fails. Each keeps its
+  sign a design, and by `atk:plan --challenge`, whose lenses are the ways a plan fails;
+  `atk:orchestrate --unattended` reads its What each agent gets for the lens agents of one gate. Each keeps its
   lenses in a reference of its own; the shared half is the one that would drift into a challenge
   whose agents had read the author's reasoning.
 - `plugins/atk/shared/secret-scan.md`: the secret scan, one `sh` block in four modes, and its table of

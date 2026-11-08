@@ -9,17 +9,16 @@ description: >
   Use when a team has requests, tickets, designs or plans to carry through atk, one or several at a
   time, and wants one coordinator for them. Not for generic multi-agent work with no team artifact
   or approval. Triggers on: "orchestrate these tickets", "run the atk pipeline for these requests",
-  "carry these pieces of work through atk", "/atk:orchestrate".
-argument-hint: "[requests|tickets|paths...] [--concurrency <n>] [--sequential] [--resume]"
+  "carry these pieces of work through atk", "run this unattended", "/atk:orchestrate".
+argument-hint: "[requests|tickets|paths...] [--concurrency <n>] [--sequential] [--unattended] [--resume]"
 ---
 
 # Carry Pieces of Work Through the Kit (`atk:orchestrate`)
 
 Today a person carries every piece of work through the kit by hand, one skill and one piece at a
 time: a raw request through `atk:intake`, an approved requirement through `atk:design-doc` or
-`atk:plan`, a plan through `atk:implement`. This skill is the coordinator for one or several of them. It
-reads where each piece stands, proposes the jobs each still needs, and once a person approves, runs
-them side by side.
+`atk:plan`, a plan through `atk:implement`. This skill coordinates one or several of them: it reads
+where each piece stands, proposes the jobs each still needs, and once a person approves, runs them.
 
 It coordinates and decides nothing a role owns. Every question a job's skill asks reaches the person
 it is for, word for word; every artifact a job writes stops at the state its skill gives it and waits
@@ -55,19 +54,19 @@ may hold all of these; the approval is still their act. See `shared/team-roles.m
 /atk:orchestrate "<request>" <ticket> <plan-path>   # Any mix: requests, tickets, an epic, paths
 /atk:orchestrate --concurrency 2                     # At most two pieces run at once
 /atk:orchestrate --sequential                        # One job at a time, whatever else was asked
+/atk:orchestrate <requirement-path> --unattended     # Eligible gates pass provisionally, then queue
 /atk:orchestrate --resume                            # Offer the unfinished runs, with no new input
 ```
 
 `--concurrency` takes a whole number of 1 or more, and is reduced to what the machine allows, saying
 so. `--sequential` wins over it. `--resume` takes no inputs, and is this skill's resume form, the one
-`atk:help` names for an unfinished run of it: given inputs, the run asks which was meant; with no
-unfinished run, it says so and stops.
+`atk:help` names for an unfinished run of it: given inputs, the run asks which was meant; with none
+unfinished, it says so and stops. `--unattended` is refused with it, which keeps the recorded mode.
 
-The project is one repository: one whose profile names member repositories, or a workspace, is refused
-at the proposal, per One repository in `references/worktrees.md`. `.atk/profile.md` is wanted, not
-required: this skill is in the Required-soft group of `shared/project-profile.md`, and without one it
-runs `atk:init` in the session before any worktree is made, per When the profile is not ready in
-`references/proposal.md`.
+The project is one repository: a profile naming member repositories, or a workspace, is refused at
+the proposal, per One repository in `references/worktrees.md`. `.atk/profile.md` is wanted, not
+required, per the Required-soft group of `shared/project-profile.md`: without one, `atk:init` runs in
+the session before any worktree is made, per When the profile is not ready in `references/proposal.md`.
 
 ## Workflow
 
@@ -108,8 +107,7 @@ run, not per piece; row 13's master plan job follows The master test plan in `re
   are not a piece's artifacts and never gate it, per Which artifacts gate in `shared/state-signals.md`.
 - **Nothing of its own.** A raw request, a ticket holding only a request, or a piece for which none
   of those places holds an artifact naming its ticket or path starts at `atk:intake`, ahead of every
-  row; a Figma link starts at
-  `atk:intake --design <link>`, and a defect report at `atk:fix`.
+  row; a Figma link at `atk:intake --design <link>`, and a defect report at `atk:fix`.
 - **Reading stops at row 3, not before.** Row 1 above it still becomes an `atk:spec` job, and row 2
   is named in the proposal as the read a person owes, `atk:qa --review` by the BrSE/BA or the QA
   lead, never a job. Then a gating artifact at `DRAFT` or `IN REVIEW` waits for the approver its
@@ -132,7 +130,8 @@ The record is written at `DRAFT`, and nothing runs until it is `APPROVED`: edite
 moved on their explicit word, per rule 2. A record the approver edits is checked again; a first record
 they reject ends the run, a later one stops its own chain, per How far an approval reaches in
 `references/proposal.md`. Approval reaches each chain's first job that produces a gating artifact;
-the jobs after it are marked `re-confirm`.
+the jobs after it are `re-confirm`, or `provisional` under `--unattended` within its ceilings, whose
+record also carries An unattended run of `references/proposal.md`, per `references/unattended.md`.
 
 ### 3. Prepare worktrees
 
@@ -163,13 +162,14 @@ per Agents that write in `shared/host-capabilities.md`. A job ends `done`, `need
   profile or the front matter, and the person running the skill. A permission prompt of its CLI is
   the person's to answer where it shows, never the coordinator's, per `references/ways-to-run.md`.
   Independent questions from several jobs go to the person in one turn; one for a person not in the
-  session parks its chain, per States in `references/proposal.md`.
-- **`failed`.** It timed out, its agent ended without a final state, it wrote outside its worktree, or
-  its agent refused a flag, which is probed again, never guessed. Its chain stops; a stopped chain
-  blocks only its own later jobs.
+  session parks its chain, per States in `references/proposal.md`. Under `--unattended` a gate first
+  goes to A gate under `--unattended` in `references/unattended.md`, which passes or parks it.
+- **`failed`.** A timeout, an agent ended with no final state, a write outside its worktree, or a
+  refused flag, probed again and never guessed. Its chain stops, blocking only its own later jobs.
 
 A chain waits in `needs-approval` while an artifact a job wrote sits at the state its skill gave it,
-named with its absolute path in the worktree and the approver its front matter names. The coordinator
+named with its absolute path in the worktree and the approver its front matter names, unless an
+unattended run builds on it within its ceilings, per `references/unattended.md`. The coordinator
 never moves the artifact's state: an approver who tells the coordinator so is told to edit that file.
 Once they say it is edited, the coordinator reads its front matter there and, on their word, commits
 the edit through `atk:git --commit` in that worktree, before step 6 reads the piece again. A
@@ -195,8 +195,8 @@ ceiling, mark the chain `escalated`. The loop's record lines go to the run state
 
 When a gating artifact a chain waited on is `APPROVED`, read the piece again and propose the rest of
 its chain as a new proposal record linking the one before, per How far an approval reaches in
-`references/proposal.md`. It runs only once that record is approved. An approved breakdown turns its
-tasks into new pieces, per A breakdown's tasks in that file.
+`references/proposal.md`. It runs only once that record is approved, apart from jobs an unattended
+run marked `provisional`. An approved breakdown's tasks become pieces, per A breakdown's tasks there.
 
 ### 7. Clean up and close
 
@@ -222,13 +222,15 @@ run's first proposal record. One entry per job: piece, its base, worktree, branc
 file, the child skill's progress log, and the review round; the child paths are required, since a child's log
 is invisible from the main tree. While any chain waits, the close writes one `<time> waiting:` entry
 per chain, naming the piece and the person, and leaves the log open so that `atk:help` sends people
-back; once none waits, the last line is the newest proposal record's path.
+back, as it does while a decision-queue entry is unanswered, per `references/unattended.md`; once
+neither holds, the last line is the newest proposal record's path.
 
 A later run offers Resume, Start fresh, Stop, or Run separately, as Progress log says, and
-`--resume` is how a person asks for that offer. On Resume it checks every recorded worktree, branch
-and agent, and its own `HEAD` against `branch:`, asks the person about one that is gone or differs,
-reads each piece again, and re-dispatches only interrupted jobs. Start fresh first stops and removes
-what the old run started, per `## Process management`, so nothing is left to a superseded log.
+`--resume` is how a person asks for that offer; a log whose state records `mode: unattended` is
+offered and read per `references/unattended.md`. On Resume it checks every recorded worktree, branch
+and agent, and its own `HEAD` against `branch:`, asks the person about one gone or different, reads
+each piece again, and re-dispatches only interrupted jobs. Start fresh first stops and removes what
+the old run started, per `## Process management`, so nothing is left to a superseded log.
 
 ## Process management
 
@@ -264,9 +266,8 @@ The closing message lists, per piece: its branch, the artifacts and their states
 review report and its round, and what it waits on and for whom; then the worktrees kept, the
 inventory after cleanup, and the `atk:verify` runs proposed.
 
-Putting the proposal records where the team can see them is `atk:git`, which follows the artifact
-section of `shared/finalize-steps.md`. Whether they are committed at all is the persistence group they
-fall into, per `shared/artifact-paths.md`.
+Putting the proposal records where the team sees them is `atk:git`, per the artifact section of
+`shared/finalize-steps.md`; whether they are committed is their group in `shared/artifact-paths.md`.
 
 ## Ticket
 
@@ -279,11 +280,12 @@ for `atk:git` or a person. Done is the approver's word.
 - [ ] Every piece was read in its own worktree or on its branch, front matter only, and the
       coordinator's own records were left out.
 - [ ] A project of several repositories was refused at the proposal.
-- [ ] The proposal record was approved before any job started, with the concurrency, the timeout and
-      the job count stated first.
-- [ ] No job ran past its chain's first gating artifact without a second, approved proposal record.
+- [ ] The proposal record was approved before any job, concurrency, timeout and job count stated first.
+- [ ] No job ran past its chain's first gating artifact without a second, approved proposal record,
+      or as `provisional` within the ceilings of `references/unattended.md`.
 - [ ] Every question, approval prompt and confirmation reached the named person word for word, its
-      recipient checked, and no answer came from the coordinator.
+      recipient checked, and no answer came from the coordinator; under `--unattended`, a gate was
+      passed provisionally only per `references/unattended.md`, and stayed open in its queue.
 - [ ] No keystroke reached a CLI permission prompt, and no widening was passed on.
 - [ ] No artifact's state was moved by the coordinator or a job past what its skill gives it.
 - [ ] No job staged or committed; every change was committed by the coordinator through `atk:git`,

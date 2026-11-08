@@ -69,6 +69,9 @@ Do not invent a role that the team does not have: ask who plays it, or mark the 
    answer. Where that person is not in the session, the run records the case as an open question
    carrying their name, per rule 1, in its artifact or its closing message, and goes on with what
    does not depend on it; nothing reaches them past the consent line of `shared/finalize-steps.md`.
+   That default is not widened by the one case where a run goes on provisionally with what does
+   depend on a person's answer: a gate `atk:orchestrate --unattended` lists, per A gate passed
+   provisionally in `shared/host-capabilities.md`.
    A run that can do neither stops, and names the case in its closing message and on its trace's
    `end` line.
 6. **Language.** Artifacts follow the team's working language, and three sources can name it, in

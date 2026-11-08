@@ -11,6 +11,9 @@
   { "query": "この3件の要求をatkで要件定義からレビューまで回して", "should_trigger": true },
   { "query": "take ticket ABC-12 through atk from intake to a reviewed local commit, and ask me at every approval", "should_trigger": true },
   { "query": "điều phối các ticket này qua atk, mỗi ticket một nhánh riêng", "should_trigger": true },
+  { "query": "run this unattended: carry these two tickets through atk while I am away tonight and queue the decisions for me to answer tomorrow", "should_trigger": true },
+  { "query": "chạy unattended giúp tôi hai ticket này qua atk khi tôi vắng mặt, gặp câu hỏi nào thì đưa vào hàng đợi quyết định để sáng mai tôi trả lời", "should_trigger": true },
+  { "query": "不在の間にこの二つのチケットを atk で無人実行して、判断が要るところは決定キューに溜めておいて", "should_trigger": true },
 
   { "query": "spin up five agents to refactor this codebase in parallel, no tickets or approvals needed", "should_trigger": false },
   { "query": "set up a multi-agent pipeline with LangGraph that calls a search tool and a summariser", "should_trigger": false },
@@ -34,5 +37,9 @@
   { "query": "エージェントを5つ同時に動かしてテストを全部書き直して、承認はいらない", "should_trigger": false },
   { "query": "chia epic này thành các task có người phụ trách", "should_trigger": false },
   { "query": "triển khai plan này giúp tôi", "should_trigger": false },
-  { "query": "resume the implementation that stopped yesterday", "should_trigger": false }
+  { "query": "resume the implementation that stopped yesterday", "should_trigger": false },
+  { "query": "run the test suite unattended overnight and tell me in the morning whether it passed", "should_trigger": false },
+  { "query": "run these approved QA cases on staging unattended while I am in meetings", "should_trigger": false },
+  { "query": "implement this one plan unattended overnight, no need to ask me anything", "should_trigger": true },
+  { "query": "implement this plan, I am here to answer its questions", "should_trigger": false }
 ]

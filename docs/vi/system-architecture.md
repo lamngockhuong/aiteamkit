@@ -110,7 +110,8 @@ người dùng. Phần thân `SKILL.md` chỉ được đọc sau khi skill đã
 Bên cạnh các skill có một agent đi kèm, `plugins/atk/agents/read-only-reviewer.md`. Claude Code nạp
 frontmatter của nó cùng plugin và đặt tên `atk:read-only-reviewer`; phần thân chỉ được đọc khi một
 skill tạo agent đó: mọi agent của `atk:review` trừ reviewer band 1, mọi lăng kính của
-`atk:design-doc --challenge` và `atk:plan --challenge`, agent mà mỗi skill trong bảy skill đọc
+`atk:design-doc --challenge` và `atk:plan --challenge`, mọi lăng kính của một cổng dưới
+`atk:orchestrate --unattended`, agent mà mỗi skill trong bảy skill đọc
 nhiều giao phần đọc rộng, và mọi agent của `atkx:doc-audit` khi `atk` được cài cùng; khi thiếu kiểu agent này thì dùng agent thường với cùng prompt. Danh sách
 công cụ của nó là Read, Grep và Glob. Trên Claude Code 2.1.296, agent có danh sách đó không có
 công cụ Bash, Edit hay Write nào để gọi, và một lượt review cùng một lượt phản biện kế hoạch chạy ở
@@ -219,7 +220,9 @@ Mười sáu file tiếp theo là hợp đồng giữa một nhóm skill có tê
   Mục về agent có quyền ghi được `atk:orchestrate` trích dẫn, skill duy nhất chạy các skill khác
   thành từng job. Mục này giữ bốn điều: worktree của job là ranh giới không bao giờ được nới rộng;
   công cụ chia màn hình dòng lệnh được gọi theo việc nó làm, giống tự động hoá trình duyệt; một cổng
-  duyệt được chuyển tới đúng người và không bao giờ được trả lời thay; và mọi commit đều do skill gọi
+  duyệt được chuyển tới đúng người và không bao giờ được trả lời thay, trừ những cổng mà
+  `atk:orchestrate --unattended` đi qua tạm khi mọi lens agent đều đồng ý với đề xuất của chính
+  skill, hoặc với một đề xuất cố định khi chờ duyệt, câu hỏi vẫn để mở cho người đó trong một hàng đợi quyết định; và mọi commit đều do skill gọi
   job thực hiện. Nhờ
   vậy agent đầu tiên của kit có quyền sửa file bị ràng buộc bởi một quy tắc chỉ viết một lần.
 - `plugins/atk/shared/tidy-pass.md`: dọn một thay đổi thì tìm những gì, theo ba lăng kính, kèm phần được sửa và
@@ -282,7 +285,8 @@ Mười sáu file tiếp theo là hợp đồng giữa một nhóm skill có tê
   mà không biết gì trước, mỗi agent được đưa gì và không bao giờ được đưa gì, một phản biện phải nêu
   những gì, và agent gọi trả lời từng phản biện bằng `Changed` hay `Open` ra sao. `atk:design-doc
   --challenge` trích dẫn file này với mỗi vai trò ký duyệt thiết kế là một góc nhìn, `atk:plan
-  --challenge` cũng vậy với mỗi kiểu một kế hoạch có thể hỏng là một góc nhìn. Mỗi skill giữ các góc
+  --challenge` cũng vậy với mỗi kiểu một kế hoạch có thể hỏng là một góc nhìn; `atk:orchestrate
+  --unattended` đọc phần What each agent gets của nó cho các lens agent của một cổng. Mỗi skill giữ các góc
   nhìn của mình trong một reference riêng; phần dùng chung là phần sẽ trôi dần, cho tới khi một lượt
   phản biện để agent đọc cả lập luận của tác giả.
 - `plugins/atk/shared/secret-scan.md`: phần quét giá trị bí mật, một khối `sh` với bốn chế độ, cùng

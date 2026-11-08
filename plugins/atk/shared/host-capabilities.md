@@ -265,8 +265,9 @@ What stays here is the policy the procedure may not overrule:
   On Claude Code the kit backs this with an agent of its own, `atk:read-only-reviewer`, in the
   plugin's `agents/` directory. Its only tools are Read, Grep and Glob, so it has no tool that edits,
   runs or starts anything. Every agent a review spawns, rounds, copies and the sweep, under
-  `--parallel` too, every lens agent of a challenge, and every agent that reads wide per the section
-  below is spawned as that type. The band 1 reviewer is the one exception: it writes the report and
+  `--parallel` too, every lens agent of a challenge, every lens agent of a gate under
+  `atk:orchestrate --unattended`, and every agent that reads wide per the section below is spawned
+  as that type. The band 1 reviewer is the one exception: it writes the report and
   runs the whole skill. The same split decides the model: rounds, copies, the sweep and lenses take
   `Review agent model`, an agent that reads wide takes `Reading agent model`, and the band 1
   reviewer and every agent that writes take none, since they do the session's own work.
@@ -417,6 +418,14 @@ mechanics, in its own references, which cite this section rather than restate it
   is relayed as reported by its job, and only after the person it names is checked against the people
   that job's skill asks and the stop against what that skill asks: a mismatch is reported to
   the person as found, not relayed as a gate.
+- **A gate passed provisionally, under `atk:orchestrate --unattended` and nowhere else.** A gate the
+  eligibility table of `skills/orchestrate/references/unattended.md` lists may be passed provisionally,
+  and only when every lens agent of the roles that own it picks, cold, the option the job's skill
+  recommends, or for the wait on an approval the fixed recommendation that file names. It is never answered: the job is continued with the fixed provisional sentence of that
+  file, the question stays open under its owner's name, and the gate becomes an entry of the run's
+  decision queue for that person to accept or reject. The calling skill still never picks an option
+  of its own, never moves an artifact's state, and never crosses the consent line; every other gate
+  is relayed or parked as above.
 - **A permission prompt of the agent's own CLI is answered by the person, where the agent shows
   it.** It is not a gate of the skill, and it is never relayed for an answer: the person answers it
   in the job's pane, as they answer a subagent's in the harness. The calling skill never sends a

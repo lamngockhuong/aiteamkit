@@ -86,6 +86,18 @@ person running each skill by hand. A breakdown whose owners are confirmed turns 
 `--concurrency <n>` caps how many pieces run at once, `--sequential` runs one job at a time, and
 `--resume` offers the runs that stopped before their end, for you to pick one.
 
+`--unattended` keeps building while nobody is there to answer. A gate of a short, fixed list, an
+option choice inside a draft design or plan that changes no story or criterion, the medium plan
+confirmation of a fix job, or the wait for a draft's approval one artifact deep, is passed
+provisionally only when every read-only lens agent of the roles that own it picks, cold, the option
+the job's skill recommends, or for the wait on a draft's approval the fixed option of building on it
+as written. The question stays open in the artifact under its owner's name, and
+every gate the run met, passed or parked, becomes an entry of one decision queue that `--resume`
+asks first, each accepted or rejected by its person, a parked one answered, and one whose owner cannot answer closed by the run's approver. It never answers a gate, never approves an
+artifact, never crosses the consent line, and passes at most eight gates per run; every other gate
+parks its chain as before, and a rejected entry's work is redone from its base on the person's
+option.
+
 **Do not use when.** There is one piece of work and you want the next step for it, which is
 `atk:help`; you want an epic split into owned tasks, which is `atk:breakdown`; or the work has no
 team artifact and no approver, which is outside this kit; or the project spans several

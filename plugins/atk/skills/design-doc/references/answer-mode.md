@@ -147,7 +147,10 @@ When the person does not say who answered, ask: a record with no answerer is the
 ## Where it goes
 
 A settled question leaves the open questions section, and every record goes into an `Answered`
-subsection at its end, in the table above, so every answer to the design sits in one place. An
+subsection at its end, in the table above, so every answer to the design sits in one place. A
+question carrying a `Provisional:` line, left by a run that went on without its answer, keeps that
+line above the answer in the Question cell, so the record shows what was built on before the person
+answered. An
 answer to an objection from the person who holds its role, or the approver's ruling on it, also
 replaces its `Open for <role>` with `Settled by <name>, <date>`, and its row goes into the same
 table with the objection's ID as the question, so nothing reads open in one place and answered in

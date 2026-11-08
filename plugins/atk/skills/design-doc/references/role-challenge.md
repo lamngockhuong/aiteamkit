@@ -1,6 +1,7 @@
 # Role challenge
 
-Loaded by `atk:design-doc` under `--challenge`, in step 5, before the design is set to `IN REVIEW`.
+Loaded by `atk:design-doc` under `--challenge`, in step 5, before the design is set to `IN REVIEW`;
+its role table is also read by `atk:orchestrate --unattended`, for the lens agents of a gate.
 One agent per role that must sign the design reads the draft cold and raises what that role would
 raise, so the objections a reviewer brings to the meeting reach the author first.
 

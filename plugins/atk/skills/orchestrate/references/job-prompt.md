@@ -42,7 +42,15 @@ built per job, since the way and the piece change them. In this order:
 6. **Stops.** The gate rule of Agents that write in `shared/host-capabilities.md`, written out for
    the agent, which cannot open it. In a pane the job asks in its pane and waits. As a subagent it
    writes the question to its result file word for word, with the person the skill names, and
-   returns.
+   returns. Under `--unattended` only, the prompt adds three things. Every stop's `stop:` line
+   carries `recommends:`, the option the skill's own text recommends, or `none` where it recommends
+   nothing, and the job never makes one up; at the medium plan confirmation of `atk:implement`, the
+   plan it has just drafted is what the skill recommends, written `recommends: yes`. A pane job writes that line to its result file before it
+   asks in its pane, so the coordinator reads the recommendation from the file on every way. And the
+   job may be continued with the provisional sentence of A gate under `--unattended` in
+   `references/unattended.md`, quoted in the prompt: it records the question as open for the person
+   named, with the `Provisional:` line the sentence gives, and continues on that option, never
+   recording it as an answer.
 7. **Where it ends.** At the state the skill gives its artifact, with every change left in the
    working tree: the job never runs `git add` or `git commit`, and its skill's own hand-off to
    `atk:git` is not taken. The first step of `shared/finalize-steps.md`, the reference documents a
@@ -64,13 +72,14 @@ artifact: <path and its status, or none>
 changed: <the paths it left changed in the working tree, or none>
 progress log: <the child skill's progress log path, or none>
 trace: <the child skill's run trace path, or none>
-stop: <kind> | for: <person> | <the question or prompt, word for word>
+stop: <kind> | for: <person> | recommends: <option or none> | <the question or prompt, word for word>
 failed: <what failed, by kind, or none>
 ```
 
 The job writes `state: running` first and its final state last. One `stop:` line per stop the job
-met, answered or not, in order. An answered stop adds `| answered by: <person>`. Every value goes
-through the mask of rule 9 before it is written.
+met, answered or not, in order. An answered stop adds `| answered by: <person>`. The `recommends:`
+field is written under `--unattended` only, and a `stop:` line without it is read as before. Every
+value goes through the mask of rule 9 before it is written.
 
 The coordinator reads it as evidence, per Agents that write: `artifact:` checked against that file's
 front matter, `changed:` against `git status` in the worktree, each `for:` against the job's Answers

@@ -87,6 +87,20 @@ Một breakdown đã được xác nhận người phụ trách cũng biến cá
 này. `--concurrency <n>` giới hạn số phần việc chạy cùng lúc, `--sequential` chạy lần lượt từng job,
 còn `--resume` liệt kê các lượt đã dừng giữa chừng để bạn chọn một lượt chạy tiếp.
 
+`--unattended` tiếp tục làm khi không có ai trực để trả lời. Một cổng thuộc danh sách ngắn và cố
+định, gồm một lựa chọn phương án trong bản nháp thiết kế hay kế hoạch mà không đổi user story hay
+tiêu chí nào, lời xác nhận kế hoạch mức trung bình của một job sửa lỗi, hoặc việc chờ duyệt một bản
+nháp sâu tối đa một artifact, chỉ được đi qua tạm khi mọi lens agent chỉ đọc của các vai trò sở hữu
+cổng đó, đọc từ đầu, đều chọn đúng phương án mà skill của job đề xuất, hoặc khi chờ duyệt một bản
+nháp thì phương án cố định là dựng tiếp trên bản nháp như đang viết. Câu hỏi vẫn để mở trong
+artifact dưới tên người sở hữu, và mọi cổng lượt chạy gặp, đi qua tạm hay bị gác lại, đều thành một
+mục trong một hàng đợi quyết định mà `--resume` hỏi trước tiên, từng mục được chính người đó chấp
+nhận hay từ chối, mục bị gác lại thì được trả lời, còn mục mà người sở hữu không thể trả lời thì do
+người duyệt của lượt chạy đóng lại. Nó không bao giờ trả lời một cổng, không duyệt artifact nào, không vượt consent
+line, và đi qua tạm tối đa tám cổng mỗi lượt chạy; mọi cổng khác vẫn gác chuỗi của nó lại như trước,
+và phần việc dựng trên một mục bị từ chối được làm lại từ commit gốc của mục đó theo phương án người
+ấy chọn.
+
 **Không dùng khi.** Chỉ có một phần việc và bạn muốn biết bước tiếp theo cho nó, đó là `atk:help`;
 bạn muốn chia một epic thành các task có người phụ trách, đó là `atk:breakdown`; hoặc công việc không
 có artifact của team và không có người duyệt, thứ nằm ngoài bộ kit này; hoặc dự án gồm nhiều
