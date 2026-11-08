@@ -40,8 +40,14 @@ takes that list and what it reaches, per Called again after a fix in
 Say what the review will cost before calling it: the band the change falls in, and the round runs
 and agents that band asks for, per `skills/review/references/review-rounds.md` and the stated-total
 rule in `shared/host-capabilities.md`. Add what the tidy step already spent. A person who sees the
-number can take it, ask for a deeper review under `--parallel`, or say the change is small enough to
-read by hand; a person who does not see it finds out when the session stops halfway through.
+number can let it run, interrupt it to ask for a deeper review under `--parallel`, or say the change
+is small enough to read by hand; a person who does not see it finds out when the session stops
+halfway through.
+
+Stating the cost is not asking for it. The statement and the call go in the same turn, and the run
+does not stop to wait for a yes: the review is a step of the calling skill, not a gate, and the
+person who invoked that skill without `--no-review` has already asked for it. A person who wants
+another course interrupts the run.
 
 A change that alters a public contract moves its reference document before the first call, per the
 first step of `shared/finalize-steps.md`, rather than at the finalize step. The review then reads
@@ -72,7 +78,7 @@ through Read, outside the masked diff, so once it is written run `mask --worktre
 `shared/secret-scan.md`: a line of the draft that `masked.txt` names is masked in the draft itself,
 per rule 9 of `shared/team-roles.md`.
 
-A person who declines the review once its cost is stated, and a call that ends without writing a
+A person who stops the review once its cost is stated, and a call that ends without writing a
 report, leave the record where `--no-review` leaves it, below. Neither counts as a round.
 
 Do not pass `--strict`. That flag widens the review to stylistic findings, and this loop deliberately
