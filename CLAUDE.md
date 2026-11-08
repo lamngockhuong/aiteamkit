@@ -799,13 +799,13 @@ documents; `atk:fix --findings` and the page it walks name the same layer fields
 template carries a ticket line; each release package agrees on its version;
 `atkx:skill-eval` judges its fixtures as `expected.json` says, holds its behaviours outside them,
 and its trigger runner counts correctly; the benchmark's findings matcher gives the counts its
-sample reports expect.
+sample reports expect, and its Bash guard gives each fixed command the verdict it expects.
 
 The five checks kept beside their own rules, `ak:`, `atkx`, the em-dash, `fill:#`, and symlinks
 under `plugins/`, are run from their sections above. A change to `tests/verify.sh` is checked by
 running it, not by reading it.
 
-The benchmark under `tests/bench/` is not one of these checks, its free matcher check apart. It
+The benchmark under `tests/bench/` is not one of these checks, its free matcher and guard checks apart. It
 starts paid `claude -p` sessions, so `tests/verify.sh` never runs it and nothing schedules it: the
 maintainer runs it by hand, after a dry run that builds the seeds and prints the worst-case cost and
 starts no session.

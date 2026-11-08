@@ -9,12 +9,22 @@
 // It fails closed: an error inside the hook refuses the call rather than letting it through, since
 // Claude Code runs a tool whose hook exited with anything but 2.
 //
-// Usage, as a hook command: node bash-guard.mjs <seed-dir>. Reads the hook's JSON on standard input;
-// exit 2 with a reason on standard error refuses the call, exit 0 lets it through.
+// A scenario of kind `reviews` is granted three forms more, the ones atk:review runs before it spawns
+// its reviewer agents: `git ls-files` with the options the scan block uses, `git rev-parse` naming a
+// path in the git directory, and the scan block of plugins/atk/shared/secret-scan.md with its `mask`
+// lines. The block is matched against the file as it is when the call is made, so a command written
+// from an older copy of it is refused rather than let through. Every other kind is refused all three,
+// and so is a run that names no kind.
+//
+// Usage, as a hook command: node bash-guard.mjs <seed-dir> [<scenario-kind>]. Reads the hook's JSON
+// on standard input; exit 2 with a reason on standard error refuses the call, exit 0 lets it through.
 
-import { readFileSync, realpathSync } from 'node:fs';
-import { isAbsolute, relative, resolve } from 'node:path';
+import { existsSync, readFileSync, realpathSync } from 'node:fs';
+import { dirname, isAbsolute, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+const SCAN_FILE = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'plugins', 'atk', 'shared', 'secret-scan.md');
+const REVIEWS = 'reviews';
 
 // Splits a command into words the way a shell would for plain words and quotes, and refuses every
 // character that would make the shell do more than that: a separator, a pipe, a redirection, a
@@ -70,6 +80,53 @@ const SHAPES = {
   'npm test': { exact: [[], ['--silent']] },
 };
 
+// The shapes only a review scenario is granted.
+const REVIEW_SHAPES = {
+  'git ls-files': { flags: ['-z', '--others', '--exclude-standard'], max: 99 },
+};
+const REVIEW_TABLE = { ...SHAPES, ...REVIEW_SHAPES };
+
+// The permission rules a review scenario's session needs for the same forms. The guard only refuses
+// or lets a call go on to Claude Code's own permission check, which in `-p` refuses a command no
+// `--allowedTools` rule covers, so each form the guard grants needs its rule as well: `mkdir` and
+// `git rev-parse` are granted to every run already, and the scan's `sh` is named to its mode.
+export const REVIEW_GRANTS = ['Bash(git ls-files:*)', 'Bash(sh -s -- mask:*)'];
+const GIT_PATH = ['--path-format=absolute', '--git-path'];
+
+// The scan as Masking a diff in secret-scan.md writes it for an agent: its two lines, the second
+// carrying the block as a here-document, its opener right after the argument as the block's own
+// first line has it or at the end of the line, the block byte for byte as the file holds it. `<skill>` is
+// review, `<run-id>` a plain name, and `<base>...HEAD` one of the arguments that section lists: a
+// range of plain revisions, `--cached` or `--worktree`. Null when the file does not hold both parts in
+// the shape this reads, which refuses the form.
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const REV = '[A-Za-z0-9_][A-Za-z0-9_./~^-]*';
+export function scanForm(text) {
+  const open = "```bash\nsh -s -- staged <<'SCAN'\n";
+  const at = text.indexOf(open);
+  const close = text.indexOf('\nSCAN\n```', at);
+  const lines = text.match(/```bash\n(d=\$\(git rev-parse [^\n]*\n[^\n]*)\n```/);
+  if (at < 0 || close < 0 || !lines) return null;
+  const two = lines[1];
+  if (!['<skill>', '<run-id>', '<base>...HEAD'].every((p) => two.split(p).length === 2)) return null;
+  const head = esc(two).replace(esc('<skill>'), 'review').replace(esc('<run-id>'), '[A-Za-z0-9][A-Za-z0-9._-]*')
+    .replace(esc('<base>...HEAD'), `(?:--cached|--worktree|${REV}\\.\\.\\.?${REV})(?<opener> <<'SCAN')?`);
+  const form = new RegExp(`^${head}(?<tail> <<'SCAN')?\\n${esc(text.slice(at + open.length, close))}\\nSCAN$`);
+  return { test: (command) => { const m = form.exec(command); return Boolean(m && !m.groups.opener !== !m.groups.tail); } };
+}
+
+const SCAN_NAME = 'the scan block of shared/secret-scan.md';
+const NOT_THE_BLOCK = "the scan is allowed only as the two lines of Masking a diff in shared/secret-scan.md with its block as the here-document, opened by <<'SCAN' once, after the argument or at the end of the second line, byte for byte as the file holds them now";
+const onlyReviews = (form) => `${form} is allowed only in a review scenario`;
+
+// A call that reads as the scan block: its here-document opener, or the first of its two lines.
+function scanVerdict(command, kind, scanFile) {
+  if (kind !== REVIEWS) return onlyReviews(SCAN_NAME);
+  let form = null;
+  try { form = scanForm(readFileSync(scanFile, 'utf8')); } catch { form = null; }
+  return form && form.test(command) ? null : NOT_THE_BLOCK;
+}
+
 // Values checked by shape, where a value could name a file: a count is a number, and a line range
 // for blame is numbers, never a `:<file>` form. Messages, formats and dates are text git never opens.
 const VALUE = { '-n': /^\d+$/, '--max-count': /^\d+$/, '-L': /^\d+(,[+-]?\d+)?$/ };
@@ -86,20 +143,32 @@ function inside(text, seed) {
   return true;
 }
 
-export function verdict(command, seed) {
-  const ws = words(command.trim());
+export function verdict(command, seed, kind, { scanFile = SCAN_FILE } = {}) {
+  const trimmed = command.trim();
+  if (trimmed.includes("<<'SCAN'") || trimmed.startsWith('d=$(git rev-parse')) return scanVerdict(trimmed, kind, scanFile);
+  const ws = words(trimmed);
   if (!ws || !ws.length) return 'it is not one plain command: a separator, pipe, redirection, substitution, expansion or escape is not allowed';
-  const name = [2, 1].map((n) => ws.slice(0, n).map((w) => w.text).join(' ')).find((k) => SHAPES[k]);
+  const first = ws.slice(0, 2).map((w) => w.text).join(' ');
+  if (REVIEW_SHAPES[first] && kind !== REVIEWS) return onlyReviews(first);
+  if (first === 'git rev-parse' && ws.slice(2).some((w) => w.text === '--git-path' || w.text.startsWith('--path-format'))) {
+    const rest = ws.slice(2).map((w) => w.text);
+    const exact = rest.length === 3 && GIT_PATH.every((x, i) => rest[i] === x);
+    if (exact && kind !== REVIEWS) return onlyReviews(`git rev-parse ${GIT_PATH.join(' ')}`);
+    if (exact) return inside(rest[2], seed) ? null : `${rest[2]} is not a path inside the git directory`;
+    if (kind === REVIEWS) return `git rev-parse takes ${GIT_PATH.join(' ')} <path>, in that order and nothing else`;
+  }
+  const shapes = kind === REVIEWS ? REVIEW_TABLE : SHAPES;
+  const name = [2, 1].map((n) => ws.slice(0, n).map((w) => w.text).join(' ')).find((k) => shapes[k]);
   // Name the form refused, not the program: "git is not allowed" for `git ls-files` reads as every
   // git command refused, and a session then skips the ones it is granted.
   if (!name) {
     const program = ws[0].text;
-    if (ws.length > 1 && Object.keys(SHAPES).some((k) => k.startsWith(`${program} `))) {
+    if (ws.length > 1 && Object.keys(shapes).some((k) => k.startsWith(`${program} `))) {
       return `${program} ${ws[1].text} is not a form of ${program} the bench allows`;
     }
     return `${program} is not a command the bench allows`;
   }
-  const shape = SHAPES[name];
+  const shape = shapes[name];
   const rest = ws.slice(name.split(' ').length);
   if (shape.exact) return shape.exact.some((e) => e.length === rest.length && e.every((x, i) => x === rest[i].text)) ? null : `that form of ${name} is not allowed`;
   let positional = 0;
@@ -133,11 +202,19 @@ export function verdict(command, seed) {
   return null;
 }
 
+// The copy of secret-scan.md the session's kit was loaded from, beside its seed, where the run has
+// one: that is the block the session read, since it is denied this repository. A run with no kit
+// copy, the bare arm, falls back to this repository's file.
+function scanFileOf(seed) {
+  const copy = resolve(seed, '..', 'kit', 'shared', 'secret-scan.md');
+  return existsSync(copy) ? copy : SCAN_FILE;
+}
+
 function main() {
   const seed = realpathSync(process.argv[2]);
   let input = {};
   try { input = JSON.parse(readFileSync(0, 'utf8')); } catch { input = {}; }
-  const why = verdict(String(input?.tool_input?.command || ''), seed);
+  const why = verdict(String(input?.tool_input?.command || ''), seed, process.argv[3], { scanFile: scanFileOf(seed) });
   if (why) {
     process.stderr.write(`The bench refused this command: ${why}. Run one plain command, with paths relative to the working directory.\n`);
     process.exit(2);
