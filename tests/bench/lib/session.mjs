@@ -48,8 +48,21 @@ export async function turn({ run, auth, secrets, prompt, sessionId, resume, mode
   // Masked once, before anything is read from it, so no field the run keeps can carry a secret.
   const stdout = mask(r.stdout, secrets);
   appendFileSync(transcript, mask(JSON.stringify({ type: 'bench_prompt', resume: !!resume, prompt }), secrets) + '\n' + stdout);
-  const out = { cost: 0, turns: 0, wallMs: Date.now() - started, error: null, denials: [], toolUses: [], lastText: '' };
-  let result = null;
+  const { result, failed, ...read } = readStream(stdout);
+  const out = { wallMs: Date.now() - started, error: null, ...read };
+  if (r.timedOut) out.error = `timed out after ${Math.round(timeoutMs / 1000)} s`;
+  else if (!result) out.error = mask(r.stderr.trim().split('\n').pop() || `exit ${r.code}, no result`, secrets);
+  else if (failed) out.error = `session ended with ${failed}`;
+  return out;
+}
+
+// What one call's stream-json output holds for the run: its cost, turns, denials, tool uses and last
+// text, and the result event the call ended on, or null. A call can end in more than one result
+// event: a background agent's notification ends the turn again, with a denials list of its own, so
+// denials come from every result event, each tool call once, and `failed` names the first that failed.
+export function readStream(stdout) {
+  const out = { cost: 0, turns: 0, denials: [], toolUses: [], lastText: '', result: null, failed: null };
+  const denials = new Map();
   for (const line of stdout.split('\n')) {
     let ev;
     try { ev = JSON.parse(line); } catch { continue; }
@@ -59,17 +72,19 @@ export async function turn({ run, auth, secrets, prompt, sessionId, resume, mode
         if (part.type === 'text' && part.text.trim()) out.lastText = part.text;
       }
     }
-    if (ev.type === 'result') result = ev;
+    if (ev.type === 'result') {
+      out.result = ev;
+      if (!out.failed && (ev.is_error || ev.subtype !== 'success')) out.failed = ev.subtype || 'an error';
+      for (const d of ev.permission_denials || []) denials.set(d.tool_use_id, d);
+    }
   }
+  out.denials = [...denials.values()];
+  const { result } = out;
   if (result) {
     out.cost = Number(result.total_cost_usd) || 0;
     out.turns = Number(result.num_turns) || 0;
-    out.denials = result.permission_denials || [];
     if (typeof result.result === 'string' && result.result.trim()) out.lastText = result.result;
   }
-  if (r.timedOut) out.error = `timed out after ${Math.round(timeoutMs / 1000)} s`;
-  else if (!result) out.error = mask(r.stderr.trim().split('\n').pop() || `exit ${r.code}, no result`, secrets);
-  else if (result.is_error || result.subtype !== 'success') out.error = `session ended with ${result.subtype || 'an error'}`;
   return out;
 }
 

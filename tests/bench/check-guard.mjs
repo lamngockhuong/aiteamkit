@@ -2,8 +2,9 @@
 // reason verdict() must give, or null where the guard lets it through, and the scenario kind the
 // session runs under where it matters. A refusal names the form refused, so a session never reads the
 // refusal of one git command as a refusal of all of git.
-// Run it after any change to bash-guard.mjs or to the scan block of plugins/atk/shared/secret-scan.md:
-// node tests/bench/check-guard.mjs
+// It also holds that a refusal reaches the run's denials, read by readStream in lib/session.mjs.
+// Run it after any change to bash-guard.mjs, to readStream, or to the scan block of
+// plugins/atk/shared/secret-scan.md: node tests/bench/check-guard.mjs
 // Exit 0 when every case holds, 1 otherwise.
 
 import { spawnSync } from 'node:child_process';
@@ -13,6 +14,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { verdict } from './lib/bash-guard.mjs';
 import { newRunDir } from './lib/isolate.mjs';
+import { readStream } from './lib/session.mjs';
 
 const PLAIN = 'it is not one plain command: a separator, pipe, redirection, substitution, expansion or escape is not allowed';
 
@@ -107,6 +109,17 @@ const hook = (run, command) => {
   const r = spawnSync('sh', ['-c', settings.hooks.PreToolUse[0].hooks[0].command], { input: JSON.stringify({ tool_input: { command } }), encoding: 'utf8' });
   return r.status === 0 ? null : r.stderr.replace(/^The bench refused this command: (.*)\. Run one plain command, with paths relative to the working directory\.\n$/s, '$1');
 };
+// A second result event, as a background agent's notification adds, must not drop the first one's denials.
+const refusal = (id) => ({ tool_name: 'Bash', tool_use_id: id });
+const stream = [[refusal('t1'), refusal('t2')], [refusal('t2')]]
+  .map((d) => JSON.stringify({ type: 'result', subtype: 'success', permission_denials: d })).join('\n');
+const ids = readStream(stream).denials.map((d) => d.tool_use_id);
+const want = ['t1', 't2'];
+report('denials: every result event of a call, each refusal once', ids.join() === want.join(), want, ids);
+const firstFailed = readStream([{ type: 'result', subtype: 'error_max_budget_usd', is_error: true }, { type: 'result', subtype: 'success' }]
+  .map((e) => JSON.stringify(e)).join('\n')).failed;
+report('failure: an earlier result event that failed is kept', firstFailed === 'error_max_budget_usd', 'error_max_budget_usd', firstFailed);
+
 const runs = [];
 try {
   const review = newRunDir('reviews');

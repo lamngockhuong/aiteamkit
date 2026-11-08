@@ -57,9 +57,10 @@ session is the calling agent says so in the report.
 Before step 1, read `.atk/overrides/review.md` when it exists, per rule 7 of `shared/team-roles.md`.
 Then, before anything else, create this run's trace, `<docs root>/derived/traces/review/<run-id>.md`:
 read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
-Then count the changed lines per step 3. In band 1 without `--parallel`, spawn the reviewer agent at
-once with the target and the paths: it runs steps 1 to 6 and spawns no reviewer, and this session
-writes the trace for it, per `shared/run-trace.md`.
+Then count the changed lines per step 3 without printing them. In band 1 without `--parallel`, spawn a
+general agent at once as the reviewer, never `atk:read-only-reviewer`, with the target and the paths and
+no diff, which it reads through Masking a diff in `shared/secret-scan.md`: it runs steps 1 to 6 and
+spawns no reviewer, and this session writes the trace for it, per `shared/run-trace.md`.
 
 ### 1. Establish intent
 
@@ -76,10 +77,9 @@ a cache not invalidated.
 ### 3. Choose the rounds
 
 The review runs as nine rounds, one job each, using the host's ability to run agents in parallel per
-`shared/host-capabilities.md`. `references/review-rounds.md` holds the round list, how many copies
-each round runs, which rounds may share an agent, the memory cap, what each agent is given, how the
-calling agent drives them, and how the findings become one list. Three questions settle the shape of
-a run:
+`shared/host-capabilities.md`. `references/review-rounds.md` holds the round list, how many copies each
+round runs, which rounds may share an agent, the memory cap, what each agent is given, how the calling
+agent drives them, and how the findings become one list. Three questions settle the shape of a run:
 
 **Which rounds run.** All nine, minus the ones whose subject the diff does not contain: no deleted
 lines, no signature change, no behavior change. That is different from a round that ran and found
