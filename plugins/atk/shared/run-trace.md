@@ -80,7 +80,12 @@ An override cannot turn the trace off, per the list of what an override may neve
   for the two checks and for `git config user.name` when a gate's name is taken from it, below. An
   interactive session may ask the person for each once. A run lacking the file write or `git` for
   the checks writes no trace and says which one it lacked; a headless run is given them by the flags
-  it was started with. A run lacking `user.name` takes the name as given, and still writes the trace.
+  it was started with. A run lacks `git` only when one of the three commands itself,
+  `git rev-parse --show-toplevel`, `git check-ignore` or `git config user.name`, was refused or could
+  not be run at all; a refusal or an error of any other `git` command is no evidence, and the run
+  still runs the three itself. One of the first two answering no is the check failing, per The check
+  above, and `git config user.name` with no value is a run lacking `user.name`. A run lacking
+  `user.name` takes the name as given, and still writes the trace.
   No other command is run for the trace, the harness's version command included.
 
 A trace is never staged, whatever the project does with `docs/derived/`: the ignore file holds that
