@@ -4,7 +4,7 @@ status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-09-17
-updated: 2026-10-22
+updated: 2026-11-09
 ticket: none
 ---
 
@@ -57,7 +57,8 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
 - Setup: none
 
 <!-- source: tests/verify.sh, described in CLAUDE.md -> "Common verification commands"; Extra: run on 2026-10-01 against a clone, Cursor's routes left out because none was run -->
-<!-- No package scripts and no test CI; .github/workflows/ carries release-please and the labeler.
+<!-- No package scripts. CI is the verify job of .github/workflows/verify.yml, a required check of main
+     since 2026-11-09, running `bash tests/verify.sh`; release-please and the labeler check no content.
      That script is what stands in for a test suite, and it is the single copy of
      the checks on purpose: an earlier profile pasted four of them inline and went stale when the repo
      gained hooks and trigger evals. Run the script, do not transcribe it. -->
