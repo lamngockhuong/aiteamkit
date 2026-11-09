@@ -35,8 +35,9 @@
 // failing, or --max-seconds reached, with `complete: false`; 2 with one line on standard error when
 // it could not run: not a repository, no `git`, or an argument it does not take.
 
-import { readBlobs, remotesWithLastFetch, runner, stream, unquote } from './lib/git-history-stream.mjs';
-import { BLOCK_BEGIN, BLOCK_END, DUMP_BYTES, keyBlocks, EXCLUDE_PATHSPECS, MOVES, REASON, TEMPLATE_PATHSPECS, isCredentialFile, isDump, isTemplate, shapesOf } from './lib/secret-shapes.mjs';
+import { blobReader, remotesWithLastFetch, runner, stream, unquote } from './lib/git-history-stream.mjs';
+import { readKeyVersions, touchesBlock } from './lib/private-key-versions.mjs';
+import { BLOCK_BEGIN, BLOCK_END, DUMP_BYTES, EXCLUDE_PATHSPECS, MOVES, REASON, TEMPLATE_PATHSPECS, isCredentialFile, isDump, isTemplate, shapesOf } from './lib/secret-shapes.mjs';
 
 const refuse = (msg) => { process.stderr.write('history-scan: ' + msg + '\n'); process.exit(2); };
 const argv = process.argv.slice(2);
@@ -126,20 +127,20 @@ if (refs.length && !partial) {
     const extra = literal.join('').length < 16000 ? literal : []; // the rest are dropped below
     const seen = new Set();
     const record = (hit, key) => { if (!seen.has(key)) { seen.add(key); hits.push(hit); } };
-    // A private key is read from the whole blob of each version of a file that ever held a BEGIN
-    // line, below, since a key whose body alone was replaced has no BEGIN line in the diff.
-    const keyPaths = new Set(); const keyBlobs = new Map(); const begins = [];
+    // A private key is read from the whole blob of the versions of a file that ever held a BEGIN
+    // line which ./lib/private-key-versions.mjs says can hold one, below.
+    const keyPaths = new Set(); const versions = []; const begins = [];
     for (const spec of templates ? [['.', ...EXCLUDE_PATHSPECS], TEMPLATE_PATHSPECS] : [['.', ...EXCLUDE_PATHSPECS]]) {
-      let file = null; let header = false; let ln = 0; let blob = null; let at = null;
+      let file = null; let header = false; let ln = 0; let blob = null; let old = null; let at = null; let touched = false;
       const closeFile = () => {
-        if (file && blob && keyPaths.has(file) && !keyBlobs.has(blob + '\0' + file)) keyBlobs.set(blob + '\0' + file, { blob, path: file, commit: at });
-        file = null; blob = null;
+        if (file && blob && keyPaths.has(file)) versions.push({ blob, old, path: file, commit: at, touched });
+        file = null; blob = null; touched = false;
       };
       await walk(['--no-renames', '-p', '-U0', '--full-index', '--inter-hunk-context=0', '--src-prefix=a/', '--dst-prefix=b/', '--', ...spec, ...extra], (l, commit) => {
         if (l.startsWith('diff --git ')) { closeFile(); header = true; return; }
         if (header) {
-          const ix = /^index [0-9a-f]+\.\.([0-9a-f]+)/.exec(l);
-          if (ix) blob = /^0+$/.test(ix[1]) ? null : ix[1];
+          const ix = /^index ([0-9a-f]+)\.\.([0-9a-f]+)/.exec(l);
+          if (ix) { old = ix[1]; blob = /^0+$/.test(ix[2]) ? null : ix[2]; }
           else if (l.startsWith('+++ ')) {
             // git ends the name with a tab when it holds a space, so the end of it can be told apart.
             const p = l.slice(4).replace(/\t$/, ''); header = false; at = commit;
@@ -150,6 +151,7 @@ if (refs.length && !partial) {
         }
         if (!file) return;
         if (l.startsWith('@@ ')) { ln = Number(/\+(\d+)/.exec(l)[1]); return; }
+        touched ||= touchesBlock(l);
         if (!l.startsWith('+')) return;
         const text = l.slice(1); const line = ln++;
         const shape = shapesOf(text);
@@ -161,32 +163,30 @@ if (refs.length && !partial) {
     }
     // Each complete block is one hit, at the first commit that held it at that path, compared whole
     // with HEAD; a BEGIN line in no complete block stays a hit of its own line.
-    let texts = new Map();
-    try { texts = readBlobs(run, [...new Set([...keyBlobs.values()].map((k) => k.blob))]); } catch { stop('git could not read the files that held a private key'); }
-    const starts = new Set();
-    for (const { blob, path, commit } of keyBlobs.values()) {
-      for (const b of keyBlocks(texts.get(blob) ?? '')) {
+    const starts = new Set(); const reader = versions.length ? blobReader(top, deadline) : null;
+    try {
+      await readKeyVersions(versions, reader?.read, ({ blob, path, commit }, b) => {
         starts.add(blob + '\0' + b.line);
         record({ kind: 'secret', shape: 'private key block', commit, path, line: b.line, at_head: null, block: b.lines }, path + '\0' + b.lines.join('\n'));
-      }
-    }
+      });
+    } catch (e) { stop(e.message === 'time limit' ? 'time limit' : 'git could not read the files that held a private key'); } finally { reader?.end(); }
     for (const { hit, blob } of begins) if (!starts.has(blob + '\0' + hit.line)) record(hit, hit.path + '\0' + hit.block[0]);
   }
 }
 
-// at_head, decided here from HEAD's tree and the blobs of the paths hit, read in one git process,
-// never a blob of a file rule 9 names, and not at all in a partial clone, whose trees may be missing.
+// at_head, decided here from HEAD's tree and the blob of each path hit, one file at a time and with no
+// time limit, since a hit left unread would read as removed; never a blob of a file rule 9 names, and
+// not at all in a partial clone, whose trees may be missing.
 let headPaths = new Set();
-if (headSha && !partial) {
-  try { headPaths = new Set(run(['ls-tree', '-r', '-z', '--name-only', 'HEAD']).split('\0').filter(Boolean)); } catch { stop('git could not list HEAD'); }
-}
-const secretPaths = [...new Set(hits.filter((h) => h.kind === 'secret' && headPaths.has(h.path)).map((h) => h.path))];
-let headText = new Map();
-try { headText = readBlobs(run, secretPaths.map((p) => 'HEAD:' + p)); } catch { stop('git could not read HEAD to compare the hits with'); }
+if (headSha && !partial) try { headPaths = new Set(run(['ls-tree', '-r', '-z', '--name-only', 'HEAD']).split('\0').filter(Boolean)); } catch { stop('git could not list HEAD'); }
+const secrets = hits.filter((h) => h.kind === 'secret' && headPaths.has(h.path)).sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
+const head = secrets.length ? blobReader(top, Infinity) : null; let at = null; let text = '';
+try { for (const h of secrets) { if (h.path !== at) text = '\n' + ((await head.read('HEAD:' + (at = h.path))) ?? '') + '\n'; h.at_head = text.includes('\n' + h.block.join('\n') + '\n') ? 'present' : 'removed'; } }
+catch { stop('git could not read HEAD to compare the hits with'); } finally { head?.end(); }
 for (const h of hits) {
   if (!headPaths.has(h.path)) h.at_head = 'path-gone';
   else if (h.kind === 'credential-file') h.at_head = 'present';
-  else h.at_head = ('\n' + (headText.get('HEAD:' + h.path) ?? '') + '\n').includes('\n' + h.block.join('\n') + '\n') ? 'present' : 'removed';
+  else h.at_head ??= 'removed';
   delete h.block;
 }
 

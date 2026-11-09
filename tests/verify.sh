@@ -673,6 +673,80 @@ finally:
     shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
 print('OK security history scan, %d hits, settings change nothing, shallow and partial clones exit 3' % len(want))"
 
+# atk:security's history scan on a bundle that names the private key marker in its code, about
+# 1.2 MB, in 1100 versions built here with fast-import: more than a gigabyte in all, which the scan
+# must not hold at once. It reads a version only when one could hold a key, so it finishes, exit 0,
+# with the marker line one hit; it reads only the versions that can hold a key, and its reader of
+# whole files stops at the deadline the scan gives it
+python3 -c "
+import json, os, pathlib, shutil, stat, subprocess, sys, tempfile
+script = os.path.abspath('plugins/atk/skills/security/scripts/history-scan.mjs')
+nl, q, e = chr(10), chr(34), chr(61)
+begin, end = '-----BEGIN RSA PRIV' + 'ATE KEY-----', '-----END RSA PRIV' + 'ATE KEY-----'
+def writable(fn, path, _):
+    os.chmod(path, stat.S_IWRITE); fn(path)
+t = tempfile.mkdtemp(); r = os.path.join(t, 'repo')
+try:
+    subprocess.run(['git', 'init', '-q', r], check=True)
+    base = ['var f%05d %s %s%s%s;' % (i, e, q, 'x' * 79, q) for i in range(12600)]
+    base[0] = 'var marker ' + e + ' ' + q + begin + q + ';'
+    p = subprocess.Popen(['git', '-C', r, 'fast-import', '--quiet'], stdin=subprocess.PIPE)
+    for v in range(1100):
+        lines = list(base); k = 1 + v % 12599
+        lines[k] = 'var f%05d %s %sv%05d%s%s;' % (k, e, q, v, 'y' * 73, q)
+        data = (nl.join(lines) + nl).encode()
+        head = 'commit refs/heads/main' + nl + 'committer p <p@x> %d +0000' % (1700000000 + v) + nl + 'data 1' + nl + 'c' + nl
+        p.stdin.write((head + 'M 100644 inline dist/bundle.js' + nl + 'data %d' % len(data) + nl).encode() + data + nl.encode())
+    p.stdin.close(); assert p.wait() == 0, 'fast-import failed'
+    subprocess.run(['git', '-C', r, 'symbolic-ref', 'HEAD', 'refs/heads/main'], check=True)
+    # a block a later version completes with its END line, and one a later version makes by removing
+    # a line that held both markers, each read although that version added no BEGIN line
+    def g(*x): subprocess.run(['git', '-C', r, '-c', 'user.name' + e + 'p', '-c', 'user.email' + e + 'p@x', '-c', 'commit.gpgsign' + e + 'false'] + list(x), check=True, capture_output=True)
+    def put(p, s): open(os.path.join(r, p), 'w', encoding='utf-8').write(s)
+    body = ('ZZHALF' + 'H' * 58 + nl) * 3
+    g('reset', '-q', '--hard'); put('half.js', begin + nl + body); put('mid.js', begin + nl + body + begin + ' ' + end + nl + end + nl); g('add', '-A'); g('commit', '-qm', 'k1')
+    put('half.js', begin + nl + body + end + nl); put('mid.js', begin + nl + body + end + nl); g('commit', '-qam', 'k2')
+    s = subprocess.run(['node', script], cwd=r, capture_output=True, text=True, encoding='utf-8')
+    out = json.loads(s.stdout) if s.stdout else {}
+    assert s.returncode == 0 and out.get('complete'), 'a large file naming the key marker in many versions stopped the scan: exit %s, %s' % (s.returncode, out.get('incomplete_reason'))
+    got = sorted((h['path'], h['line'], h['at_head'], 'private key' in h['shape']) for h in out['hits'])
+    want = [('dist/bundle.js', 1, 'present', True), ('half.js', 1, 'present', True), ('half.js', 1, 'present', True),
+            ('mid.js', 1, 'present', True), ('mid.js', 1, 'present', True), ('mid.js', 5, 'removed', True)]
+    assert got == want, 'hits %s, expected %s' % (got, want)
+    k2 = subprocess.run(['git', '-C', r, 'rev-parse', 'HEAD'], capture_output=True, text=True, check=True).stdout.strip()
+    assert sorted(h['path'] for h in out['hits'] if h['commit'] == k2) == ['half.js', 'mid.js'], 'a block made without a new BEGIN line was missed: %s' % out['hits']
+    assert 'ZZHALF' not in s.stdout + s.stderr, 'a value reached the output'
+    # the reader of whole files stops at the deadline, and reads whole otherwise
+    lib = pathlib.Path('plugins/atk/skills/security/scripts/lib/git-history-stream.mjs').resolve().as_uri()
+    a = chr(39); js = os.path.join(t, 'reader.mjs')
+    open(js, 'w').write(nl.join(['import { blobReader } from ' + a + lib + a + ';', 'const say = (x) => console.log(x);',
+        'const late = blobReader(process.argv[2], Date.now() - 1);', 'await late.read(' + a + 'HEAD:dist/bundle.js' + a + ').then(() => say(' + a + 'read' + a + '), (x) => say(x.message));',
+        'const r = blobReader(process.argv[2], Infinity);', 'say((await r.read(' + a + 'HEAD:dist/bundle.js' + a + ')).length);', 'say(await r.read(' + a + 'HEAD:nothing' + a + '));', 'r.end();']))
+    s = subprocess.run(['node', js, r], capture_output=True, text=True, encoding='utf-8')
+    said = s.stdout.splitlines()
+    assert s.returncode == 0 and said[0:1] == ['time limit'] and int(said[1]) > 1000000 and said[2] == 'null', 'the reader of whole files: %s %s' % (said, s.stderr[-300:])
+    # which versions are read: one that adds a marker line, and one whose version before held a block
+    kv = pathlib.Path('plugins/atk/skills/security/scripts/lib/private-key-versions.mjs').resolve().as_uri()
+    vs = [dict(blob=b, old=o, path='p', commit='c', touched=t1) for b, o, t1 in (('a', '0', True), ('b', 'a', False), ('c', 'b', False), ('x', 'c', True), ('y', 'x', False), ('z', 'y', False))]
+    open(js, 'w').write(nl.join(['import { readKeyVersions } from ' + a + kv + a + ';', 'const reads = []; const blk = ' + json.dumps(begin + nl + 'b' + nl + end) + ';',
+        'await readKeyVersions(' + json.dumps(vs) + ', async (b) => { reads.push(b); return b ' + e * 3 + ' ' + a + 'x' + a + ' ? blk : ' + a + 'plain' + a + '; }, () => {});', 'console.log(reads.join(' + a + ',' + a + '));']))
+    s = subprocess.run(['node', js], capture_output=True, text=True, encoding='utf-8')
+    assert s.returncode == 0 and s.stdout.strip() == 'a,x,y', 'versions read: %s %s' % (s.stdout.strip(), s.stderr[-300:])
+    # the scan gives its reader of whole files the deadline: a git whose cat-file --batch is slow to
+    # start stops the key read at --max-seconds. A shell script stands in for git, so not on Windows
+    shim = os.name != 'nt'
+    if shim:
+        d, bindir, k = chr(36), os.path.join(t, 'bin'), os.path.join(t, 'k'); os.makedirs(bindir)
+        open(os.path.join(bindir, 'git'), 'w').write('#!/bin/sh' + nl + 'for x in ' + q + d + '@' + q + '; do [ ' + q + d + 'x' + q + ' ' + e + ' --batch ] && sleep 4; done' + nl + 'exec ' + q + shutil.which('git') + q + ' ' + q + d + '@' + q + nl)
+        os.chmod(os.path.join(bindir, 'git'), 0o755)
+        r = k; subprocess.run(['git', 'init', '-q', k], check=True); put('key.js', begin + nl + body + end + nl); g('add', '-A'); g('commit', '-qm', 'k')
+        s = subprocess.run(['node', script, '--max-seconds', '2'], cwd=k, capture_output=True, text=True, encoding='utf-8', env=dict(os.environ, PATH=bindir + os.pathsep + os.environ['PATH']))
+        out = json.loads(s.stdout) if s.stdout else {}
+        assert s.returncode == 3 and out.get('incomplete_reason') == 'time limit of 2 seconds reached', 'the key read did not stop at --max-seconds: exit %s, %s' % (s.returncode, out.get('incomplete_reason'))
+finally:
+    shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
+print('OK security history scan reads a large file naming the key marker in 1100 versions and finishes, reads only the versions that can hold a key' + (', stops its key read at --max-seconds' if shim else '; the --max-seconds check needs a POSIX shell and was not run'))"
+
 # The git behaviour atk:orchestrate's checks after a job rest on, in plugins/atk/skills/orchestrate/
 # references/worktrees.md: an ignored directory is one listing line, so the run directory is hashed
 # on its own; a nested repository is one line ending in /, so it is named rather than compared; a

@@ -748,9 +748,14 @@ move the flags into the other package's block and drop them from the top.
 ## Review checklist
 
 This is the section `atk:review` reads and cites by ID, in the record format from
-`plugins/atk/shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks, because this
-repository has no CI that runs anything. `.github/workflows/` carries release-please and the
-labeler, and neither checks content, so no rule here is `ENFORCED` and none is enforced by a tool failing a build.
+`plugins/atk/shared/review-checklist.md`. It holds `REVIEWED` rules only: rules a person checks.
+`.github/workflows/verify.yml` runs `bash tests/verify.sh` on every pull request and every push to
+`main`, and fails on any line that does not start with `OK`; release-please and the labeler check no
+content. Since 2026-11-09 the job is a required check of `main`, in the repository's `protect branch`
+ruleset, so a pull request merges only with it green; a repository admin may bypass it, which is how
+a release-please pull request merges, since GitHub runs no workflow on a pull request its own token
+opened. The rows below stay `REVIEWED` until `atk:convention` moves the ones a check of
+`tests/verify.sh` holds to `ENFORCED`.
 
 Every rule below is already stated in prose somewhere above; this table is the checkable form of it,
 not a second set of rules. The `source` column says where the prose lives.
@@ -774,13 +779,14 @@ not a second set of rules. The `source` column says where the prose lives.
 Numbers are sequential and never reused. A rule that stops applying is struck through rather than
 deleted, so a review that cited it stays readable.
 
-Three things worth automating, proposed and not installed. A CI job running `bash tests/verify.sh` would
-move most of this table to `ENFORCED` and stop a reviewer spending attention on it. `CONV-001` is the
+Three things worth automating. The first is installed: the `verify` job runs `bash tests/verify.sh`
+as a required check, so most of this table can move to `ENFORCED` and stop a reviewer spending
+attention on it. The other two are proposed and not installed. `CONV-001` is the
 one that would need writing rather than wiring: a check that a diff touching `plugins/atk/skills/` also touches
 the twelve groups. The third is a profile check, and it belongs to a project rather than to this
 repository: that a `.atk/profile.md` whose `Shape` names members carries a Repositories table, that
 one whose shape does not carries none, and that every path and every `Repository` cell elsewhere in
-the file resolves to a row of it. None is done here, and all three belong to whoever owns the
+the file resolves to a row of it. Neither is done here, and both belong to whoever owns the
 repository's tooling.
 
 ## Common verification commands
