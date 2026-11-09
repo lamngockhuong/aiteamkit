@@ -1,6 +1,6 @@
 ---
 title: "Fix: atk:security history scan always exits 3 on a large file that names the private key marker in many versions"
-status: IN REVIEW
+status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-11-09
