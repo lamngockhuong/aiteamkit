@@ -783,7 +783,14 @@ Trước khi tìm phát hiện, skill nêu tên các cơ chế kiểm soát mà 
 chế kèm `path:line` và khe hở hẹp nó còn để lại, và mọi kết luận đều nói đã đối chiếu với cơ chế nào
 và vì sao cơ chế đó không phủ được trường hợp này. Một phụ thuộc có lỗ hổng được tính là được phát
 hành khi cây phụ thuộc production của một thành phần triển khai chứa nó, chứ không phải khi cờ
-development của công cụ audit nói vậy.
+development của công cụ audit nói vậy. Một gói dính cảnh báo gói độc hại là mức Critical dù nằm ở đâu
+trong lockfile, và mọi thông tin đăng nhập trên các máy đã cài nó đều coi như đã lộ.
+
+Mỗi phát hiện ghi ai chạm tới được nó, từ người ẩn danh tới chỉ khi có thêm một lỗi thứ hai, đặt cạnh
+mức nghiêm trọng, và có một tiêu đề nêu điểm yếu và tính năng mà không chép gì từ mã, chính là tiêu
+đề mà ticket dùng. Một phát hiện `PLAUSIBLE` nói rõ đã lần được nửa nào của đường đi. Những phát hiện
+gộp lại mới tới được một tác động mà riêng từng cái không tới được thì được vẽ thành một chuỗi, chuỗi
+được xếp mức riêng còn mỗi phát hiện giữ nguyên mức của nó.
 
 **Dùng khi.** Một bản release đụng tới xác thực, dữ liệu cá nhân, thanh toán, hoặc một tích hợp bên
 ngoài; khách hàng hoặc công ty giao một checklist bảo mật cần điền; hoặc một bản thiết kế cần ghi ra

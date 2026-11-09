@@ -114,7 +114,8 @@ order to look for each command in and the checks to run when the project has non
   gate. Never install a scanner without asking. An audit command sends the dependency list to its
   registry; say so in the record, and skip it where the project's override forbids that. Whether a
   vulnerable package ships is decided from the production tree of each deployable, per the
-  Dependency audit row of `references/threat-checklist.md`.
+  Dependency audit row of `references/threat-checklist.md`; a malicious-package advisory, by its
+  kind rather than its ID prefix, is ranked per the Malicious packages row beside it.
 - **Secrets.** The `tree` scan and the path list of `shared/secret-scan.md`, over the
   tracked files rather than the staged diff, plus whether an
   environment file is tracked at all. Its procedure on a hit belongs to `atk:git`: here a hit is a
@@ -141,11 +142,17 @@ line in the record reads the same as one nobody walked.
 
 Every candidate gets one verdict against the code, with the rules in `references/record-template.md`:
 `CONFIRMED` names the entry point, the path to the sink, the missing control, and the impact;
-`PLAUSIBLE` names the mechanism and the one check that would settle it; `REFUTED` is recorded as a
-non-issue with the line that refutes it, because a client checklist asks for what was ruled out as
-well as what was found. Each verdict also names the control it was checked against and its kind of
-evidence, per Verdicts in the same file. Then rank what is left Critical, High, Medium, or Low against the assets of
-step 1.
+`PLAUSIBLE` names the mechanism, which half of the path was traced, and the one check that would
+settle the rest; `REFUTED` is recorded as a non-issue with the line that refutes it, because a
+client checklist asks for what was ruled out as well as what was found. Each verdict also names the
+control it was checked against and its kind of evidence, per Verdicts in the same file. Then state
+who can reach each finding, per Reachability there, and rank what is left Critical, High, Medium, or
+Low against that and the assets of step 1.
+
+After ranking, draw the chains: findings that together reach an impact none reaches alone, each
+ranked on its own while its findings keep their severities, per Chains in the same file. Give every
+finding and chain the title that file describes, naming the weakness and the feature and nothing
+copied from the code.
 
 Secret values are redacted everywhere they are printed, per the same file. A credential found is
 never used to authenticate, not even to see whether it still works.
@@ -158,7 +165,8 @@ without one. Each item is `PASS`, `FAIL`, `N/A`, or `NOT VERIFIED`, with the evi
 it; `NOT VERIFIED` names what would verify it and who can. A checklist in a format the harness
 cannot read, a spreadsheet most often, is asked for as CSV or pasted text rather than guessed at.
 
-Every finding not fixed before the release goes into the residual risk table with an empty
+Every finding not fixed and every chain not closed before the release, a chain closing as Residual
+risk in `references/record-template.md` says, goes into the residual risk table with an empty
 `Accepted by` cell. Leave it empty: filling it is the decision rule 3 of `shared/team-roles.md`
 keeps with a person. Set `status: IN REVIEW` and name the approver.
 
@@ -178,8 +186,9 @@ feature changes, and its front matter goes back to `IN REVIEW` when an update ch
 claims. Its `Covers` list names the paths it models, which is how `atk:help` tells that it has
 drifted. `references/record-template.md` holds the shape of both.
 
-The session gets the summary: findings per severity, the Critical and High ones in one line each,
-the checklist items that failed or were not verified, and the path to the file.
+The session gets the summary: findings per severity, the Critical and High ones and any chain in
+one line each, by its ID and title, the checklist items that failed or were not verified, and the
+path to the file.
 
 Putting it where the team can see it is `atk:git`, which follows the artifact section of
 `shared/finalize-steps.md`. A record naming an unfixed vulnerability is itself sensitive: before it
@@ -191,7 +200,7 @@ where it lives.
 Follow `shared/ticket-adapters.md`. Show the list before filing anything. A finding is never filed
 as an issue on a tracker the public can read: name the private channel instead, the code host's
 private security advisory or the team's private tracker, and let the approver choose. Each ticket
-links the record and the finding ID.
+takes the finding's title as its own and links the record and the finding ID.
 
 ## Definition of done
 
@@ -201,10 +210,14 @@ links the record and the finding ID.
 - [ ] The global controls in scope are named with `path:line` and the narrow gap each leaves.
 - [ ] Every trust boundary has a result, including "checked, nothing found".
 - [ ] Every `CONFIRMED` finding traces an entry point to an impact; every `PLAUSIBLE` one names the
-      check that would settle it; every `REFUTED` one cites the line that refutes it.
+      half it traced and the check that would settle the rest; every `REFUTED` one cites the line
+      that refutes it.
 - [ ] Every verdict names the control it was checked against and its kind of evidence.
+- [ ] Every finding states who can reach it and carries a title with nothing copied from the code;
+      findings that combine are drawn as chains, ranked without changing their own severities.
 - [ ] No secret value appears in the record, the session, or a ticket.
 - [ ] Every checklist item has a status and evidence, and a supplied checklist keeps its own IDs.
-- [ ] Every unfixed finding is in the residual risk table with `Accepted by` left for a person.
+- [ ] Every unfixed finding and open chain is in the residual risk table with `Accepted by` left for
+      a person.
 - [ ] No finding was fixed, no credential used or rotated, and no request sent outside the local
       environment by this skill.

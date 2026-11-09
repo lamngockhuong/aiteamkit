@@ -37,7 +37,7 @@ the one recognised by its title and headings wherever it sits, since `--out` may
 
 | Kind | Recognised by | A finding is | Fields the page reads |
 |------|---------------|--------------|-----------------------|
-| `security-record` | `records/security/`, a `Findings` section of `SF<n>` blocks and a `Residual risk` section | each `SF<n>` block | Severity and verdict, Category, What an actor does, What they gain, Suggested control, Settled by, its residual risk row |
+| `security-record` | `records/security/`, a `Findings` section of `SF<n>` blocks and a `Residual risk` section | each `SF<n>` block, and each `CH<n>` block under Chains | the title, Severity and verdict, Reachable by, Category, What an actor does, What they gain, Suggested control, Settled by, its residual risk row; for a chain, its title, Findings, How they combine, Reachable by, What they gain, Severity, and its residual risk row |
 | `threat-model` | `security/threat-model-<slug>.md`, with `Covers` and `Threats` sections | each threat row, grouped by boundary | boundary, STRIDE question, threat, the control or `none` with its finding ID, Assumptions |
 | `review-report` | a `# Review:` title followed by its `base` and `head` line, with findings `B<n>`, `S<n>`, `N<n>` under their severity sections, in `derived/reviews/` or wherever `--out` put it | each `B<n>`, `S<n>`, `N<n>` | severity section, File, Issue, Fix, Author, Decision; the page adds The repository layer below |
 | `fix-report` | `records/fixes/`, with `Symptom as captured` and `Root cause` | the defect, as one finding | Symptom as captured, Root cause, The change, Not verified |

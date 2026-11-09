@@ -73,8 +73,8 @@ downtime. List every new or changed config key and secret, and where it must be 
 Flag anything that cannot be rolled back, because that changes the go decision.
 
 Where a security record under `docs/records/security/` that is not `SUPERSEDED` covers this range,
-link it, and carry each open Critical or High finding into the checklist as a blocking item by its
-ID, its severity, and its `Accepted by` cell as the record has it, never by its description. A
+link it, and carry each open Critical or High finding, and each open chain ranked Critical or High,
+into the checklist as a blocking item by its ID, its severity, and its `Accepted by` cell as the record has it, never by its description. A
 release record reaches the client, and an unfixed vulnerability described there is disclosed to
 everyone who reads it. An empty `Accepted by` cell is an unchecked item, not an accepted risk.
 
