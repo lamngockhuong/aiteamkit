@@ -5,12 +5,14 @@ description: >
   assets and trust boundaries in scope, the project's own scanners run, threats walked per boundary,
   every finding verified against the code with the path from entry point to impact, a checklist from
   the client or the company answered item by item with evidence, and the residual risk left for a
-  named person to accept. Also keeps the threat model of a feature current. Use before a release
-  that touches authentication, personal data, payments, or an external integration, when a client
-  asks for a security checklist, or when a design needs its threats written down before anyone
-  builds it. Triggers on: "security review", "security audit", "security checklist", "threat model",
-  "STRIDE", "OWASP", "is this secure enough to ship", "/atk:security".
-argument-hint: "[branch|range|paths|feature|design-path] [--threat-model] [--checklist <path>] [--lang <code>] [--out <path>]"
+  named person to accept. Also keeps the threat model of a feature current, and checks a repository
+  before its whole history is handed to a client. Use before a release that touches authentication,
+  personal data, payments, or an external integration, when a client asks for a security checklist,
+  when a design needs its threats written down before anyone builds it, or before a repository is
+  delivered. Triggers on: "security review", "security audit", "security checklist", "threat model",
+  "STRIDE", "OWASP", "is this secure enough to ship", "is the repo safe to hand to the client",
+  "/atk:security".
+argument-hint: "[branch|range|paths|feature|design-path] [--threat-model] [--checklist <path>] [--delivery] [--lang <code>] [--out <path>]"
 ---
 
 # Security Review (`atk:security`)
@@ -27,8 +29,9 @@ project's own dependency audit, the secret scan over tracked files, the history 
 every ref the clone holds, and the supply-chain scan of the CI workflows, manifests and lockfiles;
 walking the threats per
 boundary against `references/threat-checklist.md`; verifying each candidate against the code;
-answering a supplied security checklist item by item; and writing or updating the threat model of a
-feature.
+answering a supplied security checklist item by item; writing or updating the threat model of a
+feature; and, under `--delivery`, checking a repository before it is handed to a client for secrets,
+credential files, staff emails and internal hosts anywhere in its history.
 
 Does NOT handle: fixing a finding, which is `atk:fix` for a defect and `atk:implement` for a missing
 control; rotating a credential or rewriting git history, which the owner of the credential and the
@@ -45,7 +48,9 @@ officer, who approves instead: ask who plays that role rather than assuming it, 
 `shared/team-roles.md`. Accepting a finding that ships unfixed is a compliance call, so it is
 recorded with the person who made it, the PM, or the Stakeholder where the contract gives the client
 that decision. SRE reviews findings in configuration, infrastructure, and secret handling. QA reads
-the record at release sign-off.
+the record at release sign-off. Under `--delivery`, the repository's owner answers every question the
+mode asks: the Tech Lead by default, or the PM or the Stakeholder where the contract gives them the
+handover, asked rather than assumed, and never the person running the skill for having run it.
 
 ## Invocation
 
@@ -56,6 +61,7 @@ the record at release sign-off.
 /atk:security v1.3.0..HEAD                    # Review the scope of a release
 /atk:security --checklist <path>              # Answer a client or company checklist, item by item
 /atk:security --threat-model <feature|design> # Write or update the threat model of a feature
+/atk:security --delivery                      # Check the repository before it is handed to a client
 /atk:security --lang ja                       # Write the artifact in Japanese
 /atk:security --out <path>                    # Override the default output path
 ```
@@ -72,6 +78,15 @@ read the kit's `shared/run-trace.md` and do what it says before the file, at eac
 
 This skill is in the Required-soft group of `shared/project-profile.md`: without a profile it
 continues, and the record says which commands it had to infer.
+
+Under `--delivery`, `references/delivery-readiness.md` governs the run: before step 1, the run asks,
+in a project of several repositories, which one is handed over, then who the repository's owner is;
+the internal domains are proposed from the history and confirmed by the owner in one question; and
+the report directory is made ignored and checked, the run writing nothing and stopping when the
+check fails. Step 1 takes the whole repository as its scope without asking; step 2 runs the `tree`
+scan, the supply-chain scan and the history scan with `--identities`; and the verdict of that file,
+`READY` or `NOT READY`, with the owner's options listed and none of them run, takes the place of
+steps 3 to 5.
 
 ### 1. Scope and assets
 
@@ -132,7 +147,9 @@ order to look for each command in and the checks to run when the project has non
   nothing in it read as a result. Each hit is triaged per the Secrets in history row of
   `references/threat-checklist.md`. The record names the refs walked, and the remotes by name with
   their last fetch, never a remote's URL, since a ref the clone never fetched was not walked.
-  Without Node, history is not scanned, and the record says so.
+  Under `--delivery` it also takes `--identities`, `--internal` and `--detail`, per that mode's
+  reference, and the session never opens the detail file. Without Node, history is not scanned,
+  and the record says so.
 - **Supply chain.** `node <this skill>/scripts/supply-chain-scan.mjs` from the root of each
   repository in scope, once per member, over the workflows, local actions, manifests, lockfiles and
   registry settings the index holds, which is not the scope where the scope's tip is not checked
@@ -209,6 +226,13 @@ feature changes, and its front matter goes back to `IN REVIEW` when an update ch
 claims. Its `Covers` list names the paths it models, which is how `atk:help` tells that it has
 drifted. `references/record-template.md` holds the shape of both.
 
+Under `--delivery`, the report at `<docs root>/derived/security/delivery/<run-id>-report.md` and
+the detail file beside it, per `references/delivery-readiness.md`: never committed, in a directory
+git is confirmed to ignore, and named in the session with the verdict and the counts by kind only.
+No security record is written unless the person asks; one written carries the verdict, the counts
+and the report's path, and no commit, path, domain or host. `--out` moves that record alone, never
+the report.
+
 The session gets the summary: findings per severity, the Critical and High ones and any chain in
 one line each, by its ID and title, the checklist items that failed or were not verified, and the
 path to the file.
@@ -227,11 +251,15 @@ takes the finding's title as its own and links the record and the finding ID.
 
 ## Definition of done
 
+Under `--delivery`, the items on steps 3 to 5, the trust boundaries, the verdicts, the chains, the
+checklist and the residual risk table, do not apply, and the `--delivery` item does.
+
 - [ ] The scope names its assets, actors, entry points, and trust boundaries, each cited to a path.
 - [ ] Every automated check says which command ran and whose it was, and one that could not run is
       reported as not run.
 - [ ] The history scan walked every ref the clone holds, or the record says history was scanned in
-      part, or not scanned, and why; each hit cites commit, path, line and shape.
+      part, or not scanned, and why; each hit cites commit, path, line and shape, or, for an
+      identity or a message, its commit and where it was found.
 - [ ] The supply-chain scan ran over the tracked tree, or the record says what it did not read and
       why; each candidate in scope was triaged, any outside it listed as such, and every
       `not_scanned` entry is named.
@@ -247,5 +275,11 @@ takes the finding's title as its own and links the record and the finding ID.
 - [ ] Every checklist item has a status and evidence, and a supplied checklist keeps its own IDs.
 - [ ] Every unfixed finding and open chain is in the residual risk table with `Accepted by` left for
       a person.
+- [ ] Under `--delivery`: the owner was asked for, not assumed; the internal domains were confirmed
+      by a named person, or their line is open with the owner named; the report and the detail file
+      were written only after `git check-ignore -q` passed on both, or nothing was written; the
+      verdict follows `references/delivery-readiness.md`, every open line names who answers it, and
+      the refs were confirmed or their line is open; no value, local part or full host reached the
+      session; and no history was rewritten and nothing pushed.
 - [ ] No finding was fixed, no credential used or rotated, and no request sent outside the local
       environment by this skill.

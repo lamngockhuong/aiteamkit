@@ -19,5 +19,8 @@
   { "query": "review the branch before I go", "should_trigger": false },
   { "query": "hand this coding session over to another AI agent", "should_trigger": false },
   { "query": "viết postmortem cho sự cố tuần trước", "should_trigger": false },
-  { "query": "ước lượng phần việc còn lại", "should_trigger": false }
+  { "query": "ước lượng phần việc còn lại", "should_trigger": false },
+  { "query": "check the repository for leaked secrets and staff emails in its history before we hand it to the client", "should_trigger": false },
+  { "query": "quét lịch sử git xem còn secret hay email nội bộ không trước khi bàn giao repo cho khách", "should_trigger": false },
+  { "query": "納品前にgit履歴に秘密情報や社内メールが残っていないか調べて", "should_trigger": false }
 ]
