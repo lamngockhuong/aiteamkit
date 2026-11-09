@@ -12,10 +12,12 @@ for f in package.json .claude-plugin/marketplace.json .cursor-plugin/marketplace
   python3 -c "import json,sys; json.load(open('$f'))" && echo "OK $f"
 done
 
-# Every skill folder has a SKILL.md, and the name matches the folder
+# Every skill folder has a SKILL.md, and the name matches the folder and is lowercase letters,
+# numbers and single hyphens (CONV-005), so a name the harness would reject cannot pass by matching
 for d in plugins/*/skills/*/; do
   n=$(basename "$d")
-  grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"
+  if ! printf '%s\n' "$n" | grep -qE '^[a-z0-9]+(-[a-z0-9]+)*$'; then echo "BAD NAME $n"
+  else grep -q "^name: $n$" "$d/SKILL.md" && echo "OK $n" || echo "MISMATCH $n"; fi
 done
 
 # Every atk skill starts its run trace from its workflow, naming its own folder, in both lines and
@@ -39,6 +41,31 @@ print('OK trace lines, %d skills' % len(files))"
 # No SKILL.md below skills/<name>/: Codex would list it as a skill of its own
 x=$(find plugins/*/skills -mindepth 3 -name SKILL.md)
 test -z "$x" && echo "OK no nested SKILL.md" || echo "FAIL nested SKILL.md: $x"
+
+# The checks CLAUDE.md keeps beside their own rules, over the tracked files, so the required job holds
+# them: no em-dash in authored content (CONV-003), no other kit's ak: command (CONV-004), no
+# hardcoded fill in a diagram (CONV-007), no atkx in plugins/atk/ outside atk:help and no symlink
+# under plugins/ (CONV-011). Each prints the lines it finds, as the grep in CLAUDE.md would
+python3 - <<'PY'
+import os, re, subprocess
+files = subprocess.run(['git', 'ls-files', '-z'], capture_output=True, check=True).stdout.decode('utf-8').split('\0')
+def lines(f):
+    if not os.path.isfile(f) or os.path.islink(f): return []
+    b = open(f, 'rb').read()
+    return [] if b'\0' in b else b.decode('utf-8', 'replace').split('\n')
+def check(name, pattern, keep):
+    hits = ['%s:%d: %s' % (f, i, l.strip()[:120]) for f in files if f and keep(f) for i, l in enumerate(lines(f), 1) if re.search(pattern, l)]
+    print('OK ' + name if not hits else 'FAIL ' + name + ':\n  ' + '\n  '.join(hits))
+base = lambda f: f.rsplit('/', 1)[-1]
+records = re.compile(r'^docs/(vi/)?(records|derived)/')
+check('no em-dash (CONV-003)', chr(0x2014), lambda f: base(f) not in ('CLAUDE.md', 'CHANGELOG.md') and not records.match(f))
+authored = lambda f: (f.startswith(('plugins/', 'docs/')) or f == 'README.md') and base(f) != 'CHANGELOG.md'
+check('no command of another kit (CONV-004)', r'\bak:', lambda f: authored(f) and not re.match(r'^docs/(records|derived)/', f))
+check('no hardcoded diagram fill (CONV-007)', r'style .* fill:#', lambda f: authored(f) and f != 'plugins/atk/shared/diagram-conventions.md')
+check('atk names atkx only in atk:help (CONV-011)', r'\batkx\b', lambda f: f.startswith('plugins/atk/') and base(f) != 'CHANGELOG.md' and not f.startswith('plugins/atk/skills/help/'))
+links = [os.path.join(r, n) for r, ds, fs in os.walk('plugins') for n in ds + fs if os.path.islink(os.path.join(r, n))]
+print('OK no symlink under plugins/ (CONV-011)' if not links else 'FAIL symlinks under plugins/: %s' % links)
+PY
 
 # docs/ and docs/vi/ are mirrored; of the records, only the designs are
 diff <(cd docs && find . -name '*.md' -not -path './vi/*' -not -path './derived/*' \

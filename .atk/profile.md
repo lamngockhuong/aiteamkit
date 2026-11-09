@@ -63,7 +63,9 @@ next person on the team inherits it. Re-check it with `/atk:init --audit`.
      the checks on purpose: an earlier profile pasted four of them inline and went stale when the repo
      gained hooks and trigger evals. Run the script, do not transcribe it. -->
 
-Four further checks live outside that section, each beside the rule it enforces:
+Four further checks are written beside the rule each enforces, and since 2026-11-09 also run inside
+`tests/verify.sh`, so the required `verify` job holds them; their sections keep the commands for a
+quick run by hand:
 
 - No em-dash: `CLAUDE.md`, section "Em-dash policy"
 

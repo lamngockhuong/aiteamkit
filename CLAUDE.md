@@ -765,13 +765,11 @@ not a second set of rules. The `source` column says where the prose lives.
 |----|------|--------|------|----------|--------|
 | `CONV-001` | Adding, renaming, or removing an `atk` skill touches all twelve groups of file listed for it | `REVIEWED` | none for ten groups; the skill-lifecycle counts check in `tests/verify.sh` for part of group 10, the labeler check for group 12 | `BLOCKING` | "Adding or changing a skill touches several files" |
 | `CONV-002` | Every `docs/**/*.md` has a `docs/vi/**/*.md` counterpart at the same relative path, with the same content, `docs/derived/` and `docs/records/` excepted, `docs/records/design/` included | `REVIEWED` | the mirror `diff` in `tests/verify.sh` | `BLOCKING` | "Docs are bilingual" |
-| `CONV-003` | No em-dash in user-authored content | `REVIEWED` | the `grep` in that section | `SHOULD FIX` | "Em-dash policy" |
-| `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `grep` in that section | `BLOCKING` | "The kit stands alone" |
-| `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `REVIEWED` | the name check in `tests/verify.sh` | `BLOCKING` | "SKILL.md `name` field convention" |
+| `CONV-004` | No skill, shared file, README, or doc names a command belonging to another kit, `docs/derived/` and `docs/records/` excepted | `REVIEWED` | the `ak:` check in `tests/verify.sh` for that one kit; a command of any other kit by reading | `BLOCKING` | "The kit stands alone" |
 | `CONV-006` | A `SKILL.md` stays under 300 lines, keeps the fixed section order, opens its workflow with the override line and the two lines that start the run trace, and lists its triggers in English only, its trigger evals holding positives in English, Vietnamese, and Japanese | `REVIEWED` | `wc -l` for the length; the trace-line check in `tests/verify.sh` for the workflow lines; its eval-language check for the triggers and the evals; the rest by reading | `BLOCKING` | "Skill folder layout", "Trigger phrases are English; the trigger evals stay in three languages" |
-| `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `grep` in that section | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
+| `CONV-007` | A diagram is Mermaid, except the `## Workflow` pipeline and directory trees, and carries no hardcoded fill colour | `REVIEWED` | the `fill:#` check in `tests/verify.sh` for the colour; that a diagram is Mermaid by reading | `SHOULD FIX` | "Diagrams are Mermaid, except where they are not" |
 | `CONV-010` | No record, commit message, or pull request body names a client project, its tickets, its custom fields or internal tools, or its people | `REVIEWED` | none; read, since a check would have to list the names | `BLOCKING` | "A record here names no client" |
-| `CONV-011` | `atk` never invokes `atkx`, and only `atk:help` names it, where no `atk` skill handles the request and with the install commands when it is not installed; no symlink crosses from one plugin to the other | `REVIEWED` | the `grep` and the `find` in that section | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
+| `CONV-011` | `atk` never invokes `atkx`, and only `atk:help` names it, where no `atk` skill handles the request and with the install commands when it is not installed; no symlink crosses from one plugin to the other | `REVIEWED` | the `atkx` and symlink checks in `tests/verify.sh` for where the word appears and for links; whether `atk:help` names it only where it should, with the install commands, by reading | `BLOCKING` | "`atkx` sits beside `atk`, and the dependency runs one way" |
 | `CONV-013` | Adding, renaming, or removing an `atkx` skill touches every group of the `atkx` list | `REVIEWED` | none for seven groups; the labeler check in `tests/verify.sh` for the label group; its `atkx-skills.md` check for group 9 | `BLOCKING` | "Adding or changing a skill touches several files" |
 
 Numbers are sequential and never reused, across both tables. A rule that stops applying is struck
@@ -783,20 +781,24 @@ became required; a repository admin can still bypass it, as the release-please p
 
 | id | rule | bucket | tool | severity | source |
 |----|------|--------|------|----------|--------|
+| `CONV-003` | No em-dash in user-authored content | `ENFORCED` | the em-dash check in `tests/verify.sh`, run by the required `verify` job, over every tracked file but `CLAUDE.md`, a `CHANGELOG.md`, and the records under `docs/` and `docs/vi/` | `SHOULD FIX` | "Em-dash policy" |
+| `CONV-005` | Each `SKILL.md` frontmatter `name:` is lowercase, hyphen-only, and matches its folder | `ENFORCED` | the name check in `tests/verify.sh`, run by the required `verify` job | `BLOCKING` | "SKILL.md `name` field convention" |
 | `CONV-008` | Every manifest, every marketplace file, and every `evals/*.json` parse, every `references/*.tsv` line carries its header's field count and a valid `checked` date or none, a checklist's IDs are unique and its dimensions and techniques valid, the version-bearing files of each release package agree, and every plugin is listed by all three marketplaces and released as a package of its own, with no manifest path leaving it | `ENFORCED` | the parse, `.tsv`, version and marketplace checks in `tests/verify.sh`, run by the required `verify` job | `BLOCKING` | "Release flow", "Common verification commands" |
 | `CONV-009` | `plugins/atk/hooks/hooks.json` keeps both hooks in exec form with `"command": "node"`, `plugins/atk/hooks/codex-hooks.json` keeps the same two in string form with `${PLUGIN_ROOT}` and no `args`, both stay Node, the two files register the same events and matchers, and every script they name exists | `ENFORCED` | the registration check in `tests/verify.sh`, run by the required `verify` job | `BLOCKING` | "`hooks/` never holds a rule" |
 | `CONV-012` | A plugin reads nothing outside its own directory: every `shared/` or `references/` file a plugin file cites exists inside that plugin, and no plugin file names one of this repository's documents except as a GitHub link | `ENFORCED` | the citation check in `tests/verify.sh`, run by the required `verify` job | `BLOCKING` | "Multi-manifest layout (non-obvious)" |
 
-Two `REVIEWED` rules are held by a check only in part, which is why they stay above: the mirror
-`diff` of `CONV-002` compares the two file lists and not their content, and the name check of
-`CONV-005` compares `name:` with its folder without checking that either is lowercase and
-hyphenated.
+`CONV-003` and `CONV-005` joined on 2026-11-09, when their checks moved into the script and the name
+check gained the folder pattern. Four `REVIEWED` rules are held by a check only in part, which is
+why they stay above, and a reviewer reads them for the part no check holds: the mirror `diff` of
+`CONV-002` compares the two file lists and not their content; `CONV-004` is checked for `ak:`
+alone, since a check cannot list every other kit; `CONV-007` is checked for a hardcoded fill and not
+for a diagram drawn in something other than Mermaid; and `CONV-011` is checked for where `atkx`
+appears, while whether `atk:help` names it only where no `atk` skill handles the request, with the
+install commands, is read.
 
 Three things worth automating. The first is installed: the `verify` job runs `bash tests/verify.sh`
-as a required check, which made `CONV-008`, `CONV-009` and `CONV-012` `ENFORCED`. Five more could
-follow by moving a check into the script rather than writing one: the `grep` of `CONV-003`,
-`CONV-004`, `CONV-007` and `CONV-011` and the `find` of `CONV-011` each print nothing when the rule
-holds, and `CONV-005` needs one more pattern on the folder name. The other two are proposed and not installed. `CONV-001` is the
+as a required check, which made `CONV-003`, `CONV-005`, `CONV-008`, `CONV-009` and `CONV-012`
+`ENFORCED`. The other two are proposed and not installed. `CONV-001` is the
 one that would need writing rather than wiring: a check that a diff touching `plugins/atk/skills/` also touches
 the twelve groups. The third is a profile check, and it belongs to a project rather than to this
 repository: that a `.atk/profile.md` whose `Shape` names members carries a Repositories table, that
@@ -813,7 +815,8 @@ bash tests/verify.sh   # every line should start with OK; any other line is a fa
 ```
 
 In order: every manifest, marketplace file and registration parses; `SKILL.md` names match their
-folders; every `atk` skill carries the two run-trace lines under its override sentence; no nested
+folders, each lowercase with single hyphens; the em-dash, `ak:`, `fill:#`, `atkx` and symlink
+checks of the sections above, over the tracked files; every `atk` skill carries the two run-trace lines under its override sentence; no nested
 `SKILL.md`; `docs/` and `docs/vi/` are mirrored; the hook scripts are valid Node, `check-profile`
 walks to the right profile, and `load-overrides` answers only for `atk:` skills and refuses a
 symlink out of `.atk/overrides/`; the two hook registrations agree; the marketplaces and the
@@ -833,7 +836,9 @@ and its trigger runner counts correctly; the benchmark's findings matcher gives 
 sample reports expect, and its Bash guard gives each fixed command the verdict it expects.
 
 The five checks kept beside their own rules, `ak:`, `atkx`, the em-dash, `fill:#`, and symlinks
-under `plugins/`, are run from their sections above. A change to `tests/verify.sh` is checked by
+under `plugins/`, also run inside the script, over the tracked files, so the required job holds
+them; the commands in their sections stay for a quick run by hand, the em-dash one there skipping
+`docs/` that the script checks outside its records. A change to `tests/verify.sh` is checked by
 running it, not by reading it.
 
 The benchmark under `tests/bench/` is not one of these checks, its free matcher and guard checks apart. It
