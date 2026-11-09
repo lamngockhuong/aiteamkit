@@ -150,11 +150,12 @@ export function pythonCandidates(files, paths, popular, add, note) {
         if (x) { extra(path, n, x[1]); continue; }
         // a file `-r` or `-c` reaches is read where its own name is a requirements file's, named otherwise
         const inc = /^(?:-r|-c|--requirement|--constraint)(?:\s*=\s*|\s+)(\S+)/.exec(l);
-        if (inc && /^[a-z][a-z0-9+.-]*:/i.test(inc[1])) {
-          // a URL, which can carry a login: named by its host alone, and never as written
-          note('a requirements file reached by -r or -c from a URL, not read', hostOf(inc[1]) ?? 'a host the scan could not name');
+        const to = inc && inc[1].replace(/^["']|["']$/g, ''); // pip reads the option through shlex
+        if (inc && (/^([a-z][a-z0-9+.-]*:|\/\/)/i.test(to) || to.includes('@'))) {
+          // a URL, or anything holding `@`, which can carry a login: named by its host alone, never as written
+          note('a requirements file reached by -r or -c from a URL, not read', hostOf(to) ?? 'a host the scan could not name');
         } else if (inc) {
-          const target = posix.normalize(posix.join(posix.dirname(path), inc[1]));
+          const target = posix.normalize(posix.join(posix.dirname(path), to));
           if (!(paths.has(target) && isRequirements(target))) note('a requirements file reached by -r or -c, not read', target);
         }
         if (l.startsWith('-')) continue;

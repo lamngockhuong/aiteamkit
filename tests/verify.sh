@@ -813,7 +813,7 @@ try:
     put('app/.npmrc', 'registry' + e + 'https://' + user + ':' + pw + '@npm.corp.example/' + chr(10) + '//npm.corp.example/:_authToken' + e + tok + chr(10))
     put('tool/package.json', '{ ' + chr(34) + 'dependencies' + chr(34) + ': { ' + chr(34) + 'chalk' + chr(34) + ': ' + chr(34) + '^5' + chr(34) + ' } }' + chr(10))
     put('web/package.json', '{ ' + chr(34) + 'dependencies' + chr(34) + ': { ' + chr(34) + 'react' + chr(34) + ': ' + chr(34) + '^19' + chr(34) + ' } }' + chr(10)); put('web/pnpm-lock.yaml', 'lockfileVersion: 9' + chr(10))
-    put('svc/requirements.txt', '--extra-index-url https://' + user + ':' + pw + '@pypi.corp.example/simple' + chr(10) + 'flask' + e + e + '3.0' + chr(10) + 'reqeusts' + e + e + '2.0  # a comment' + chr(10) + 'git+https://host.example/org/pkg.git#egg' + e + 'pkg' + chr(10) + '-r ../shared/base.in' + chr(10) + '-c https://' + user + ':' + pw + '@h.example/c.txt' + chr(10))
+    put('svc/requirements.txt', '--extra-index-url https://' + user + ':' + pw + '@pypi.corp.example/simple' + chr(10) + 'flask' + e + e + '3.0' + chr(10) + 'reqeusts' + e + e + '2.0  # a comment' + chr(10) + 'git+https://host.example/org/pkg.git#egg' + e + 'pkg' + chr(10) + '-r ../shared/base.in' + chr(10) + '-c https://' + user + ':' + pw + '@h.example/c.txt' + chr(10) + '-r //' + user + ':' + pw + '@h2.example/r.txt' + chr(10) + '-r ' + chr(34) + 'https://' + user + ':' + pw + '@h3.example/q.txt' + chr(34) + chr(10))
     put('svc2/requirements-prod.txt', 'flask' + e + e + '3.0 ' + chr(92) + chr(10) + '    --hash' + e + 'sha256:' + 'a' * 64 + chr(10))
     put('svc3/pip.conf', '[global]' + chr(10) + 'extra-index-url ' + e + chr(10) + '    https://' + user + '@mirror2.corp.example/simple' + chr(10) + '    https://pypi.org/simple' + chr(10) + '    ' + user + ':' + pw + chr(10))
     copy('pyproject.toml.txt', 'svc3/pyproject.toml'); put('svc4/requirements/base.txt', 'reqeusts' + chr(10))
@@ -857,7 +857,7 @@ try:
     assert ns == {'GitLab CI': ['.gitlab-ci.yml'], 'Go modules': ['go.mod'], 'container images (Dockerfile)': ['Dockerfile'],
                   'install scripts in pnpm-lock.yaml': ['web/pnpm-lock.yaml'], 'tracked node_modules': ['vendor/node_modules'],
                   'a file rule 9 names, not opened': ['.github/workflows/secrets.yml'], 'a symbolic link, not followed': ['link/package.json'], 'a requirements file reached by -r or -c, not read': ['shared/base.in'],
-                  'a requirements file reached by -r or -c from a URL, not read': ['h.example']}, 'not_scanned %s' % ns
+                  'a requirements file reached by -r or -c from a URL, not read': ['h.example', 'h2.example', 'h3.example']}, 'not_scanned %s' % ns
     pop = out['scanned']['popular_names']
     rows = [x.split(chr(9)) for x in open('plugins/atk/skills/security/references/popular-packages.tsv', encoding='utf-8').read().split(chr(10))[1:] if x]
     dates = sorted(x[2] for x in rows if x[2])
