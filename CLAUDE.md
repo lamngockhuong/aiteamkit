@@ -123,7 +123,9 @@ A reference is Markdown, with one exception: a list that grows one record at a t
 check can count. `convention` keeps its standard sources in `references/standard-sources.tsv` for
 that reason, and `references/standard-sources.md` beside it says what each field means and what a
 run may do with a line. `qa` does the same with its component checklist, `references/checklists.tsv`
-beside `references/checklists.md`. The rules stay in Markdown; only the records move. Tabs rather than commas,
+beside `references/checklists.md`, and `security` with the package names its supply-chain scan
+measures typosquats against, `references/popular-packages.tsv`, governed by
+`references/supply-chain.md`. The rules stay in Markdown; only the records move. Tabs rather than commas,
 because a free-text field routinely holds a comma and a quote forgotten by hand shifts every field
 after it.
 
@@ -142,7 +144,9 @@ with a design and an ADR of its own as `skill-eval`'s had:
 `docs/adr/0017-security-scripts-for-history-and-supply-chain.md`. Its `scripts/history-scan.mjs`
 walks every ref of the history for secrets, and its `scripts/lib/secret-shapes.mjs` restates the
 shapes and the file lists of `shared/secret-scan.md`, held to them by `tests/verify.sh`, since a
-history built to test it holds values no committed file may.
+history built to test it holds values no committed file may. Its `scripts/supply-chain-scan.mjs`
+reads the workflows, manifests and lockfiles of the tracked tree for supply-chain candidates, its
+safe inputs in `tests/security-fixtures/`.
 
 No file named `SKILL.md` sits deeper than `skills/<name>/SKILL.md` in either plugin. Codex lists a
 `SKILL.md` found at any depth under `skills/` as a skill of its own, so a sample skill kept inside a
@@ -821,7 +825,7 @@ checks of the sections above, over the tracked files; every `atk` skill carries 
 walks to the right profile, and `load-overrides` answers only for `atk:` skills and refuses a
 symlink out of `.atk/overrides/`; the two hook registrations agree; the marketplaces and the
 plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matches the tree;
-`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds; every agent holds Read, Grep and Glob only; the secret
+`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds, and on a tree built at test time each supply-chain candidate, with no login and no line of a manifest in the output; every agent holds Read, Grep and Glob only; the secret
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
 hold; trigger evals parse; no trigger eval positive is claimed by two skills; every skill's evals hold a Vietnamese and a Japanese positive and no description carries either language; every description
 fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the

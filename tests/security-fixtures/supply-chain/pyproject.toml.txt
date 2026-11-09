@@ -1,0 +1,17 @@
+[project]
+name = "fixture-service"
+dependencies = [
+  "requests>=2",
+  "uvicorn[standard]>=0.30",
+  "numpyy>=1",
+]
+
+[tool.uv]
+extra-index-url = ["https://mirror.corp.example/simple"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pandsa = "^2"
+
+[dependency-groups]
+dev = ["pytset"]

@@ -23,8 +23,9 @@ finding, and the record keeps the two apart.
 ## Scope
 
 Handles: resolving the scope into assets, actors, entry points, and trust boundaries; running the
-project's own dependency audit, the secret scan over tracked files, and the history scan over
-every ref the clone holds; walking the threats per
+project's own dependency audit, the secret scan over tracked files, the history scan over
+every ref the clone holds, and the supply-chain scan of the CI workflows, manifests and lockfiles;
+walking the threats per
 boundary against `references/threat-checklist.md`; verifying each candidate against the code;
 answering a supplied security checklist item by item; and writing or updating the threat model of a
 feature.
@@ -132,6 +133,16 @@ order to look for each command in and the checks to run when the project has non
   `references/threat-checklist.md`. The record names the refs walked, and the remotes by name with
   their last fetch, never a remote's URL, since a ref the clone never fetched was not walked.
   Without Node, history is not scanned, and the record says so.
+- **Supply chain.** `node <this skill>/scripts/supply-chain-scan.mjs` from the root of each
+  repository in scope, once per member, over the workflows, local actions, manifests, lockfiles and
+  registry settings the index holds, which is not the scope where the scope's tip is not checked
+  out. Its exit codes read as the history scan's do, and each
+  candidate is triaged against the assets of step 1 per `references/supply-chain.md`, which also
+  names what the script cannot see and asks it of whoever administers the repository. The record
+  names every `not_scanned` entry and the oldest date of the popular names list it used, and cites a
+  candidate by rule, path and line, never the line itself; a registry setting checked by hand is
+  found by its key and its host asked of the file's owner, never read, per that file. Without Node, the supply chain is not
+  scanned, and the record says so.
 - **Configuration.** Debug flags, permissive cross-origin rules, and default credentials in the
   configuration the scope ships.
 
@@ -221,6 +232,9 @@ takes the finding's title as its own and links the record and the finding ID.
       reported as not run.
 - [ ] The history scan walked every ref the clone holds, or the record says history was scanned in
       part, or not scanned, and why; each hit cites commit, path, line and shape.
+- [ ] The supply-chain scan ran over the tracked tree, or the record says what it did not read and
+      why; each candidate in scope was triaged, any outside it listed as such, and every
+      `not_scanned` entry is named.
 - [ ] The global controls in scope are named with `path:line` and the narrow gap each leaves.
 - [ ] Every trust boundary has a result, including "checked, nothing found".
 - [ ] Every `CONFIRMED` finding traces an entry point to an impact; every `PLAUSIBLE` one names the

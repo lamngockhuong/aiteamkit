@@ -1,0 +1,12 @@
+{
+  "name": "fixture-app",
+  "private": true,
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "expresss": "^4.0.0",
+    "@corp/internal-ui": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -774,6 +774,134 @@ finally:
     shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
 print('OK security history scan reads a large file naming the key marker in 1100 versions and finishes, reads only the versions that can hold a key' + (', stops its key read at --max-seconds' if shim else '; the --max-seconds check needs a POSIX shell and was not run'))"
 
+# atk:security's supply-chain scan on a repository built here from tests/security-fixtures/supply-chain/,
+# with every login it must keep out assembled from parts: each candidate of fork 3 of the design at
+# its rule, path and line; an action in a flow mapping, at its key's indent, quoted, a local one and an
+# image; an expression inside a block scalar, after a shell comment included, and on a continued line;
+# a host with its login taken out, an scp address and a raw password among them; an ecosystem and a CI
+# system it does not read named under not_scanned; the index read rather than the working tree, with
+# the user's settings and pathspec variables changing nothing; an anchor, a flow sequence past its line
+# and a manifest that is not JSON each named and exit 3, the other candidates unchanged; no login and no
+# line of a manifest in either stream; and a bad argument or a directory outside a repository exit 2
+python3 -c "
+import json, os, pathlib, shutil, stat, subprocess, sys, tempfile
+script = os.path.abspath('plugins/atk/skills/security/scripts/supply-chain-scan.mjs')
+fx = os.path.abspath('tests/security-fixtures/supply-chain')
+e, a = chr(61), chr(39)
+user, pw, tok = 'zzus' + 'er1', 'zzpa' + 'ss1', 'ZZNPM' + 'TOKEN' + 'X' * 20
+logins = [user, pw, tok, user + ':' + pw]
+t = tempfile.mkdtemp(); r = os.path.join(t, 'repo'); os.makedirs(r)
+# no GIT_DIR, GIT_INDEX_FILE or other GIT_ variable a hook exports may point git at another repository
+env0 = {k: v for k, v in os.environ.items() if not k.startswith('GIT_')}
+def g(*x):
+    return subprocess.run(['git', '-C', r] + list(x), check=True, capture_output=True, text=True, encoding='utf-8', env=env0).stdout
+def put(p, s, enc='utf-8'):
+    os.makedirs(os.path.dirname(os.path.join(r, p)), exist_ok=True)
+    open(os.path.join(r, p), 'w', encoding=enc, newline='').write(s)
+def copy(src, dst):
+    put(dst, open(os.path.join(fx, src), encoding='utf-8').read())
+def scan(cwd, *args, env=None):
+    p = subprocess.run(['node', script] + list(args), capture_output=True, text=True, encoding='utf-8', cwd=cwd, env=env or env0, timeout=120)
+    return p, (json.loads(p.stdout) if p.stdout else None)
+def writable(fn, path, _):
+    os.chmod(path, stat.S_IWRITE); fn(path)
+try:
+    g('init', '-q'); g('config', 'user.email', 'p@x'); g('config', 'user.name', 'p'); g('config', 'commit.gpgsign', 'false')
+    copy('workflow-pr-target.yml', '.github/workflows/pr-target.yml'); copy('workflow-flow-and-lists.yml', '.github/workflows/flow.yml')
+    copy('action-composite.yml', '.github/actions/build/action.yml')
+    copy('npm-app-package.json', 'app/package.json'); copy('npm-app-package-lock.json', 'app/package-lock.json')
+    put('app/.npmrc', 'registry' + e + 'https://' + user + ':' + pw + '@npm.corp.example/' + chr(10) + '//npm.corp.example/:_authToken' + e + tok + chr(10))
+    put('tool/package.json', '{ ' + chr(34) + 'dependencies' + chr(34) + ': { ' + chr(34) + 'chalk' + chr(34) + ': ' + chr(34) + '^5' + chr(34) + ' } }' + chr(10))
+    put('web/package.json', '{ ' + chr(34) + 'dependencies' + chr(34) + ': { ' + chr(34) + 'react' + chr(34) + ': ' + chr(34) + '^19' + chr(34) + ' } }' + chr(10)); put('web/pnpm-lock.yaml', 'lockfileVersion: 9' + chr(10))
+    put('svc/requirements.txt', '--extra-index-url https://' + user + ':' + pw + '@pypi.corp.example/simple' + chr(10) + 'flask' + e + e + '3.0' + chr(10) + 'reqeusts' + e + e + '2.0  # a comment' + chr(10) + 'git+https://host.example/org/pkg.git#egg' + e + 'pkg' + chr(10) + '-r ../shared/base.in' + chr(10) + '-c https://' + user + ':' + pw + '@h.example/c.txt' + chr(10))
+    put('svc2/requirements-prod.txt', 'flask' + e + e + '3.0 ' + chr(92) + chr(10) + '    --hash' + e + 'sha256:' + 'a' * 64 + chr(10))
+    put('svc3/pip.conf', '[global]' + chr(10) + 'extra-index-url ' + e + chr(10) + '    https://' + user + '@mirror2.corp.example/simple' + chr(10) + '    https://pypi.org/simple' + chr(10) + '    ' + user + ':' + pw + chr(10))
+    copy('pyproject.toml.txt', 'svc3/pyproject.toml'); put('svc4/requirements/base.txt', 'reqeusts' + chr(10))
+    put('go.mod', 'module x' + chr(10)); put('.gitlab-ci.yml', 'a: 1' + chr(10)); put('Dockerfile', 'FROM alpine' + chr(10))
+    put('vendor/node_modules/x/package.json', '{}' + chr(10))
+    # a workflow named for what rule 9 keeps unread, one whose name git would quote, and one with a
+    # tab on a blank and a comment line, an image behind a login and an image pinned to a digest
+    put('.github/workflows/secrets.yml', 'on: push' + chr(10)); wq = '.github/workflows/' + chr(233) + '-build.yml'
+    put(wq, 'on: push' + chr(10) + 'permissions: {}' + chr(10) + 'jobs:' + chr(10) + '  a:' + chr(10) + '    steps:' + chr(10) + '      - uses: actions/cache@v4' + chr(10))
+    put('.github/workflows/docker.yml', 'on: push' + chr(10) + 'permissions: {}' + chr(10) + chr(9) + chr(10) + 'jobs:' + chr(10) + '  a:' + chr(10) + chr(9) + '# note' + chr(10) + '    steps:' + chr(10)
+        + '      - uses: docker://' + user + ':pa/' + pw + '@reg.example/img:1' + chr(10) + '      - uses: docker://alpine@sha256:' + 'a' * 64 + chr(10))
+    put('bom/package.json', chr(65279) + '{ ' + chr(34) + 'dependencies' + chr(34) + ': { ' + chr(34) + 'chalk' + chr(34) + ': ' + chr(34) + '^5' + chr(34) + ' } }' + chr(10))
+    blob = subprocess.run(['git', '-C', r, 'hash-object', '-w', '--stdin'], input='../app/package.json', capture_output=True, text=True, check=True, env=env0).stdout.strip()
+    g('add', '-A'); g('update-index', '--add', '--cacheinfo', '120000,' + blob + ',link/package.json'); g('commit', '-qm', '1')
+    p, out = scan(r)
+    assert p.returncode == 0 and out['complete'], 'the scan did not finish: %s %s %s' % (p.returncode, p.stderr, out and out['incomplete_reason'])
+    got = sorted((h['rule'], h['path'], h['line']) for h in out['hits'])
+    pr, fl, ac = '.github/workflows/pr-target.yml', '.github/workflows/flow.yml', '.github/actions/build/action.yml'
+    want = sorted([('pull-request-target', pr, 5), ('no-permissions', pr, 9), ('action-not-pinned', pr, 12), ('pull-request-target-checks-out-head', pr, 14),
+                   ('event-in-run', pr, 20), ('event-in-run', pr, 21), ('no-permissions', pr, 23), ('action-not-pinned', pr, 24), ('secrets-inherit', pr, 25),
+                   ('event-in-run', pr, 31), ('pull-request-target-checks-out-head', pr, 31),
+                   ('pull-request-target-checks-out-head', pr, 39), ('pull-request-target-checks-out-head', pr, 40), ('event-in-run', pr, 40),
+                   ('action-not-pinned', wq, 6), ('action-not-pinned', '.github/workflows/docker.yml', 8), ('no-lockfile', 'bom/package.json', None),
+                   ('typosquat', 'svc4/requirements/base.txt', 1), ('no-hashes', 'svc4/requirements/base.txt', None),
+                   ('action-not-pinned', fl, 10), ('action-not-pinned', fl, 11), ('action-not-pinned', fl, 13), ('event-in-run', fl, 16),
+                   ('action-not-pinned', ac, 7), ('event-in-run', ac, 9),
+                   ('install-script', 'app/package-lock.json', 12), ('private-registry-unscoped', 'app/package.json', 5), ('private-registry-unscoped', 'app/package.json', 6),
+                   ('typosquat', 'app/package.json', 6), ('private-registry-unscoped', 'app/package.json', 10), ('no-lockfile', 'tool/package.json', None),
+                   ('extra-index-url', 'svc/requirements.txt', 1), ('typosquat', 'svc/requirements.txt', 3), ('no-hashes', 'svc/requirements.txt', None),
+                   ('extra-index-url', 'svc3/pip.conf', 3), ('extra-index-url', 'svc3/pip.conf', 4),
+                   ('typosquat', 'svc3/pyproject.toml', 6), ('extra-index-url', 'svc3/pyproject.toml', 10), ('typosquat', 'svc3/pyproject.toml', 14),
+                   ('typosquat', 'svc3/pyproject.toml', 17)])
+    assert got == want, 'candidates %s, expected %s' % (got, want)
+    by = {(h['rule'], h['path'], h['line']): h for h in out['hits']}
+    assert (by[('action-not-pinned', pr, 12)]['action'], by[('action-not-pinned', pr, 12)]['ref']) == ('actions/checkout', 'v4'), 'an action or its ref was wrong'
+    assert by[('action-not-pinned', '.github/workflows/docker.yml', 8)]['action'] == 'docker://reg.example/img:1', 'an image kept its login'
+    assert by[('typosquat', 'app/package.json', 6)]['like'] == 'express' and by[('typosquat', 'svc/requirements.txt', 3)]['like'] == 'requests', 'a typosquat named the wrong package'
+    hosts = sorted(h['host'] for h in out['hits'] if 'host' in h)
+    assert hosts == ['mirror.corp.example', 'mirror2.corp.example', 'npm.corp.example', 'npm.corp.example', 'npm.corp.example', 'pypi.corp.example', 'pypi.org'], 'hosts %s' % hosts
+    ns = {n['name']: n['paths'] for n in out['not_scanned']}
+    assert ns == {'GitLab CI': ['.gitlab-ci.yml'], 'Go modules': ['go.mod'], 'container images (Dockerfile)': ['Dockerfile'],
+                  'install scripts in pnpm-lock.yaml': ['web/pnpm-lock.yaml'], 'tracked node_modules': ['vendor/node_modules'],
+                  'a file rule 9 names, not opened': ['.github/workflows/secrets.yml'], 'a symbolic link, not followed': ['link/package.json'], 'a requirements file reached by -r or -c, not read': ['shared/base.in'],
+                  'a requirements file reached by -r or -c from a URL, not read': ['h.example']}, 'not_scanned %s' % ns
+    pop = out['scanned']['popular_names']
+    rows = [x.split(chr(9)) for x in open('plugins/atk/skills/security/references/popular-packages.tsv', encoding='utf-8').read().split(chr(10))[1:] if x]
+    dates = sorted(x[2] for x in rows if x[2])
+    assert (pop['npm'], pop['pypi']) == (sum(x[0] == 'npm' for x in rows), sum(x[0] == 'pypi' for x in rows)) and pop['oldest_checked'] == (dates[0] if dates else None) and pop['unchecked'] == len(rows) - len(dates), 'the popular names were miscounted: %s' % pop
+    assert not any(v in p.stdout + p.stderr for v in logins), 'a login reached the output'
+    for f in ('app/.npmrc', 'svc/requirements.txt', 'svc3/pip.conf', 'svc3/pyproject.toml'):
+        for line in open(os.path.join(r, f), encoding='utf-8').read().split(chr(10)):
+            assert len(line.strip()) < 8 or line.strip() not in p.stdout, 'a line of %s reached the output' % f
+    # the index is read, not the working tree, whatever the user configured
+    put(fl, open(os.path.join(r, fl), encoding='utf-8').read() + '    - uses: evil/unstaged@v1' + chr(10)); os.remove(os.path.join(r, 'app/.npmrc'))
+    for k, v in (('core.quotePath', 'true'), ('color.ui', 'always'), ('diff.noprefix', 'true')):
+        g('config', k, v)
+    p2, out2 = scan(os.path.join(r, 'svc'), env=dict(env0, GIT_LITERAL_PATHSPECS='1', GIT_ICASE_PATHSPECS='1'))
+    assert p2.returncode == 0 and out2 == out, 'the working tree or the user settings changed the result'
+    # a workflow the line reader cannot read, without hanging on it, and a manifest, a lockfile or a
+    # requirements file it cannot read, each leave the scan incomplete
+    g('checkout', '--', fl, 'app/.npmrc'); copy('workflow-anchor.yml', '.github/workflows/anchor.yml'); copy('workflow-multiline-flow.yml', '.github/workflows/multiline.yml')
+    put('.github/workflows/flowbad.yml', 'on: push' + chr(10) + 'jobs:' + chr(10) + '  a:' + chr(10) + '    runs-on: [self-hosted, ' + chr(36) + '{{ matrix.os }}]' + chr(10))
+    put('bad/package.json', '{ not json' + chr(10)); put('bad/package-lock.json', '{' + chr(10)); put('svc5/requirements.txt', 'flask' + chr(10), 'utf-16')
+    g('add', '-A'); g('commit', '-qm', '2')
+    p3, out3 = scan(r)
+    why = out3['incomplete_reason'] or ''
+    assert p3.returncode == 3 and not out3['complete'], 'an unreadable file did not exit 3: %s' % p3.returncode
+    for f in ('.github/workflows/anchor.yml: the line reader could not read it: an anchor', '.github/workflows/multiline.yml: the line reader could not read it: a flow sequence runs past its line',
+              '.github/workflows/flowbad.yml: the line reader could not read it: a flow collection it cannot read', 'bad/package.json: not valid JSON', 'bad/package-lock.json: not valid JSON',
+              'svc5/requirements.txt: not UTF-8 text, not read'):
+        assert f in why, 'not named as unread: %s in %s' % (f, why)
+    assert sorted((h['rule'], h['path'], h['line']) for h in out3['hits']) == want,'an unread file changed the other candidates'
+    outside = os.path.join(t, 'outside'); os.makedirs(outside)
+    for cwd, args in ((r, ['--bogus']), (r, ['.']), (outside, [])):
+        p, _ = scan(cwd, *args)
+        assert p.returncode == 2 and not p.stdout and p.stderr.startswith('supply-chain-scan: '), 'not refused with exit 2: %s %s' % (args, p.stderr)
+    lib = pathlib.Path('plugins/atk/skills/security/scripts/lib/package-candidates.mjs').resolve().as_uri()
+    cases = [('git@github.com:org/x.git', 'github.com'), ('https://u:' + 'p@H.example:8443/x', 'h.example:8443'), ('u:' + 'p@h.example/simple', 'h.example'),
+             ('ssh://git@h.example/x', 'h.example'), ('https://u:pa/ss@h.example/x', None), (chr(36) + '{REGISTRY}', None), ('https://h.example/@scope/x', None),
+             ('https://u:' + 'pw/@h.example/x', None), ('name:' + 'secret', None), ('h.example:8080', 'h.example:8080'),
+             ('https://user:' + '1234/x@h.example/', None), ('https://ab/' + 'cd@h.example/x', None), ('https://u:' + 'a@b/c@h.example/', None)]
+    js = 'import { hostOf } from ' + a + lib + a + '; console.log(JSON.stringify(' + json.dumps([c[0] for c in cases]) + '.map(hostOf)))'
+    h = subprocess.run(['node', '--input-type' + e + 'module', '-e', js], capture_output=True, text=True, encoding='utf-8')
+    assert h.returncode == 0 and json.loads(h.stdout) == [c[1] for c in cases], 'hostOf: %s %s' % (h.stdout, h.stderr)
+finally:
+    shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
+print('OK security supply-chain scan, %d candidates, reads the index whatever the user configured, an unreadable workflow or manifest exits 3, no login or line in the output' % len(want))"
+
 # The git behaviour atk:orchestrate's checks after a job rest on, in plugins/atk/skills/orchestrate/
 # references/worktrees.md: an ignored directory is one listing line, so the run directory is hashed
 # on its own; a nested repository is one line ending in /, so it is named rather than compared; a

@@ -1,0 +1,40 @@
+# Copied by tests/verify.sh to .github/workflows/pr-target.yml in a repository built at test time.
+name: pr target
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: pinned
+        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
+      - name: title
+        run: |
+          echo "building"
+          echo "${{ github.event.pull_request.title }}"
+          # uses: evil/inside-a-script@v1 is not a step; ${{ github.event.comment.body }} is expanded even here
+      - run: echo done
+  call:
+    uses: some-org/workflows/.github/workflows/deploy.yml@main
+    secrets: inherit
+  scoped:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh pr checkout ${{ github.event.number }}
+  merge:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+      - run: git fetch origin pull/${{ github.event.number }}/head

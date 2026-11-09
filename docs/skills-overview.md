@@ -760,7 +760,8 @@ run stops after the scope question and hands the agreed scope to `atk:qa --recor
 ## `atk:security`
 
 **Produces.** A security record: the assets, actors, entry points and trust boundaries in scope, the
-project's own dependency audit, a secret scan over tracked files and a history scan over every ref, by a script the
+project's own dependency audit, a secret scan over tracked files, a history scan over every ref and a
+supply-chain scan of the CI workflows, manifests and lockfiles, each of the last two by a script the
 skill carries, the six STRIDE questions asked
 at every boundary and mapped to the current edition of the OWASP Top 10, each finding traced from entry point to impact,
 the candidates ruled out with the line that rules them out, a checklist answered item by item, and a
@@ -772,7 +773,10 @@ request, each with its `path:line` and the narrow gap it leaves, and every verdi
 it checked and why it does not cover the case. A vulnerable dependency counts as shipped when the
 production dependency tree of a deployable holds it, not when the audit tool's development flag
 says so. A package with a malicious-package advisory is Critical wherever it sits in the lockfile,
-and every credential on the machines that installed it is treated as exposed.
+and every credential on the machines that installed it is treated as exposed. The supply-chain scan
+reports candidates, an action not pinned to a commit, a `pull_request_target` workflow that checks
+out the pull request, an extra package index, a name one or two letters from a popular package, and
+the skill judges each against what the workflow or the install can reach.
 
 Each finding says who can reach it, from anonymous to only under a second flaw, beside its severity,
 and carries a title that names the weakness and the feature with nothing copied from the code, the
