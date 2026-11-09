@@ -6,8 +6,10 @@
 // of shared/secret-scan.md asks for, plus what a history walk adds: merges diffed against each parent
 // whatever log.diffMerges says, the root commit shown whatever log.showRoot says. The environment
 // stops a partial clone fetching a missing blob from its remote, a credential prompt, `git replace`
-// showing another commit's content under a sha, and the user's pathspec variables turning the
-// pathspecs that keep files unread into literal names.
+// showing another commit's content under a sha, the user's pathspec variables turning the
+// pathspecs that keep files unread into literal names, and the variables git exports to a hook, or
+// a shell keeps from one, pointing it at another repository, index or object store than the one
+// the script was started in.
 
 import { constants } from 'node:buffer';
 import { execFileSync, spawn } from 'node:child_process';
@@ -18,7 +20,9 @@ import { createInterface } from 'node:readline';
 export const G = ['-c', 'core.quotePath=false', '-c', 'log.showSignature=false', '-c', 'diff.noprefix=false',
   '-c', 'log.diffMerges=separate', '-c', 'log.showRoot=true'];
 export const ENV = { ...process.env, GIT_NO_LAZY_FETCH: '1', GIT_TERMINAL_PROMPT: '0', GIT_NO_REPLACE_OBJECTS: '1' };
-for (const k of ['GIT_LITERAL_PATHSPECS', 'GIT_GLOB_PATHSPECS', 'GIT_NOGLOB_PATHSPECS', 'GIT_ICASE_PATHSPECS']) delete ENV[k];
+for (const k of ['GIT_LITERAL_PATHSPECS', 'GIT_GLOB_PATHSPECS', 'GIT_NOGLOB_PATHSPECS', 'GIT_ICASE_PATHSPECS',
+  'GIT_DIR', 'GIT_WORK_TREE', 'GIT_INDEX_FILE', 'GIT_OBJECT_DIRECTORY', 'GIT_ALTERNATE_OBJECT_DIRECTORIES',
+  'GIT_COMMON_DIR', 'GIT_NAMESPACE']) delete ENV[k];
 
 // git in the given directory: its output, or a throw when it fails.
 export function runner(cwd) {

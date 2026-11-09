@@ -870,7 +870,10 @@ try:
     put(fl, open(os.path.join(r, fl), encoding='utf-8').read() + '    - uses: evil/unstaged@v1' + chr(10)); os.remove(os.path.join(r, 'app/.npmrc'))
     for k, v in (('core.quotePath', 'true'), ('color.ui', 'always'), ('diff.noprefix', 'true')):
         g('config', k, v)
-    p2, out2 = scan(os.path.join(r, 'svc'), env=dict(env0, GIT_LITERAL_PATHSPECS='1', GIT_ICASE_PATHSPECS='1'))
+    # and whatever a hook exports: another repository and another index named in the environment
+    other = os.path.join(t, 'other'); subprocess.run(['git', 'init', '-q', other], check=True, capture_output=True, env=env0)
+    p2, out2 = scan(os.path.join(r, 'svc'), env=dict(env0, GIT_LITERAL_PATHSPECS='1', GIT_ICASE_PATHSPECS='1',
+                    GIT_DIR=os.path.join(other, '.git'), GIT_INDEX_FILE=os.path.join(t, 'no-index')))
     assert p2.returncode == 0 and out2 == out, 'the working tree or the user settings changed the result'
     # a workflow the line reader cannot read, without hanging on it, and a manifest, a lockfile or a
     # requirements file it cannot read, each leave the scan incomplete
