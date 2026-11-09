@@ -82,6 +82,12 @@ characters, never the password segment of a connection string. An environment va
 never its value. The same rule applies to the session, the record, and any ticket, because a secret
 echoed into any of them is a secret in a second place.
 
+A secret in the history is cited by its commit, path, line and shape, as the history scan prints
+it, and a file the scan names without reading by its commit and path, with the path it was renamed
+or copied from where the scan gives one, since that is the file whose values are rotated. The commit is the
+location: the line is not shown with `git show` or opened at that commit in the session, for the
+same reason the `tree` scan's lines are not.
+
 ## The security record
 
 Front matter per `shared/artifact-paths.md`, then `In short` per The opening summary in

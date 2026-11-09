@@ -128,15 +128,21 @@ because a free-text field routinely holds a comma and a quote forgotten by hand 
 after it.
 
 A skill of either plugin may also carry `scripts/`, Node only, for the checks whose answer must be
-the same on every run, and only those; judgment stays in `references/`. Both `atkx` skills do.
+the same on every run, and only those; judgment stays in `references/`. Both `atkx` skills do,
+and one `atk` skill, `security`.
 `atkx:skill-eval` for the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records:
 its sample skills in `tests/skill-eval-fixtures/` must get the same verdict every time.
 `atkx:doc-audit` for the reason `docs/adr/0012-doc-audit-checks-claims-against-sources.md` records: a
 citation resolves or it does not, and a verdict table is refused and counted the same way twice; its
-sample documents and tables are in `tests/doc-audit-fixtures/`. No `atk` skill
-carries one yet. That was a description of the kit when ADR 0002 was written, never a decision, and
-the maintainer said on 2026-10-14 that an `atk` skill may carry `scripts/` on the same terms. The
-first one comes with a design and an ADR of its own, as `skill-eval`'s did.
+sample documents and tables are in `tests/doc-audit-fixtures/`. That no `atk` skill carried one
+was a description of the kit when ADR 0002 was written, never a decision, and the maintainer said on
+2026-10-14 that an `atk` skill may carry `scripts/` on the same terms. `atk:security` is the first,
+with a design and an ADR of its own as `skill-eval`'s had:
+`docs/records/design/261108-2243-security-scripts.md` and
+`docs/adr/0017-security-scripts-for-history-and-supply-chain.md`. Its `scripts/history-scan.mjs`
+walks every ref of the history for secrets, and its `scripts/lib/secret-shapes.mjs` restates the
+shapes and the file lists of `shared/secret-scan.md`, held to them by `tests/verify.sh`, since a
+history built to test it holds values no committed file may.
 
 No file named `SKILL.md` sits deeper than `skills/<name>/SKILL.md` in either plugin. Codex lists a
 `SKILL.md` found at any depth under `skills/` as a skill of its own, so a sample skill kept inside a
@@ -185,7 +191,7 @@ ambiguous to the harnesses' skill discovery. The table names them as skills cite
 | `shared/feature-types.md` | The one classification of features: each type with the extra questions an understanding check adds and the QA risk an estimate reads, and the rule that a row is added with both filled | `catchup` (through `understanding-check.md`), `estimate` (through `complexity-drivers.md`) |
 | `shared/plain-writing.md` | How the prose of a run's report is written for a reader who has opened none of the files it cites: the `In short` section that opens it, five rules for the prose around the evidence, and what never changes, the evidence itself above all | the report templates of `fix`, `verify`, `review`, `security`, `qa --record`, and `run-cases` through that same record shape; `## Output` of `incident`; document mode of `catchup`, through `references/document-explainer.md` |
 | `shared/independent-challenge.md` | How a draft is put before agents that read it cold: what each agent gets and never gets, up to five objections it may return and what each must name, how the calling agent checks, merges, and answers them `Changed` or `Open`, and the `Pre-review objections` section that says it is not a review | `design-doc` (through `role-challenge.md`), `plan` (through `plan-challenge.md`), `orchestrate` (through `unattended.md`, What each agent gets alone), `atkx:doc-audit` (copied, three sections, held by `tests/verify.sh`) |
-| `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `spec`, `help`, `host-capabilities.md`, `team-roles.md`, `ticket-adapters.md`, `tidy-pass.md`, `review-rounds.md`, `independent-challenge.md`, `review-fix-loop.md`, `project-profile.md`, `job-prompt.md` and `unattended.md` of `orchestrate`, `document-explainer.md` of `catchup`, `read-only-reviewer` (restated), `atkx:doc-audit` (copied, two sections, held by `tests/verify.sh`), and `atkx:skill-eval`'s `static-check.mjs` (restated, not checked) |
+| `shared/secret-scan.md` | The secret scan, one `sh` block in four modes, `staged` and `commit` for what is committed, `tree` for every tracked file, and `mask` for a diff read in the session or handed to an agent, and its table of paths that are a finding on their own, which is the list of files rule 9 of `shared/team-roles.md` keeps unread | `git`, `security`, `spec`, `help`, `host-capabilities.md`, `team-roles.md`, `ticket-adapters.md`, `tidy-pass.md`, `review-rounds.md`, `independent-challenge.md`, `review-fix-loop.md`, `project-profile.md`, `job-prompt.md` and `unattended.md` of `orchestrate`, `document-explainer.md` of `catchup`, `read-only-reviewer` (restated), `atkx:doc-audit` (copied, two sections, held by `tests/verify.sh`), `atk:security`'s `scripts/lib/secret-shapes.mjs` (restated, held by `tests/verify.sh`), and `atkx:skill-eval`'s `static-check.mjs` (restated, not checked) |
 | `shared/review-fix-loop.md` | The loop that runs `atk:review` on a skill's own change before it reaches a person: what the call is given, which severities are fixed, the narrowest of three forms a fix to a rule an agent follows takes, a disputed finding, re-verifying each round, the two-round ceiling and the five-part escalation, the closing read of what the second round fixed, with nothing fixed after it, and the line `--no-review` leaves | `implement`, `fix`, `orchestrate`, `git` (through `references/pr-body.md`), `artifact-paths.md`, `finalize-steps.md`, `run-trace.md` |
 | `shared/state-signals.md` | Which artifacts gate the next skill while they wait for approval, the evidence on disk that names that skill, in the order to check it, and how the artifacts waiting on a person are collected | `help`, `orchestrate` |
 | `shared/run-trace.md` | The run trace every run leaves under `docs/derived/traces/<skill>/`: its path and `<run-id>`, the ignore file inside its directory and the check that must pass before it is written, the header with the `way` a run was started and no command run for the harness version, the six event kinds and no others, with the `provisional` outcome of a `gate` line under `atk:orchestrate --unattended`, the names on `gate` lines from the Team section, a partial match confirmed, a run past midnight cut into a pair, a session that takes up an earlier one's steps or artifact, what it never holds, the twenty kept per skill, a pair kept or removed together, which only `tailor --runs` removes and only on a yes, and that `Run trace: off` in the profile is the only switch | all, through the two lines at the top of every `## Workflow` that carry out rule 10 of `shared/team-roles.md`; `tailor` reads what it holds |
@@ -264,11 +270,14 @@ alone, through `unattended.md`, for the lens agents it puts on one gate rather t
 `secret-scan.md` began in `atk:git`'s references and moved here once `security`, the masked diff of
 `host-capabilities.md`, and rule 9 itself all read it. Its table of paths is the one list of files
 rule 9 keeps unread, so a prompt that names those files quotes the table rather than its own memory
-of it. Three places restate it, since none can open a file of the kit: the read-only agent, run in
-a target project; `atkx:doc-audit`, whose `references/safety.md` copies the table and whose
+of it. Four places restate it. Three because none can open a file of the kit: the read-only agent,
+run in a target project; `atkx:doc-audit`, whose `references/safety.md` copies the table and whose
 `scripts/cite-check.mjs` holds its rows as an array, both held to the table by `tests/verify.sh`;
 and `atkx:skill-eval`, whose `scripts/static-check.mjs` holds its own pattern for the rows a name
-can decide, which no check holds yet.
+can decide, which no check holds yet. The fourth, `atk:security`'s `scripts/lib/secret-shapes.mjs`,
+sits in the kit beside the file, and restates the block's shapes and its lists of files because a
+Node script cannot run a `sh` block written in Markdown; `tests/verify.sh` holds the shapes to the
+block by behaviour and the lists as text.
 
 `review-fix-loop.md` began in `atk:implement`'s references and moved here once `atk:fix` called the
 review on its own change too. A fix that alters a public contract carries the risk an implementation
@@ -788,7 +797,7 @@ folders; every `atk` skill carries the two run-trace lines under its override se
 walks to the right profile, and `load-overrides` answers only for `atk:` skills and refuses a
 symlink out of `.atk/overrides/`; the two hook registrations agree; the marketplaces and the
 plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matches the tree;
-`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; every agent holds Read, Grep and Glob only; the secret
+`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds; every agent holds Read, Grep and Glob only; the secret
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
 hold; trigger evals parse; no trigger eval positive is claimed by two skills; every skill's evals hold a Vietnamese and a Japanese positive and no description carries either language; every description
 fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the

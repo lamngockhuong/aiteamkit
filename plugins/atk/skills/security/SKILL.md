@@ -23,7 +23,8 @@ finding, and the record keeps the two apart.
 ## Scope
 
 Handles: resolving the scope into assets, actors, entry points, and trust boundaries; running the
-project's own dependency audit and the secret scan over tracked files; walking the threats per
+project's own dependency audit, the secret scan over tracked files, and the history scan over
+every ref the clone holds; walking the threats per
 boundary against `references/threat-checklist.md`; verifying each candidate against the code;
 answering a supplied security checklist item by item; and writing or updating the threat model of a
 feature.
@@ -120,6 +121,17 @@ order to look for each command in and the checks to run when the project has non
   tracked files rather than the staged diff, plus whether an
   environment file is tracked at all. Its procedure on a hit belongs to `atk:git`: here a hit is a
   finding, redacted, and nothing is unstaged.
+- **History.** `node <this skill>/scripts/history-scan.mjs`, run beside the `tree` scan from the
+  root of each repository in scope, once per member where the profile names members, over every
+  commit of every ref the clone holds. Start it in the background where the harness can run a
+  command that way, so a host's limit on one command does not cut a long walk short, and wait for
+  it before the record is written; otherwise in the foreground with `--max-seconds` under that
+  limit. Exit `0` is a finished walk, `3` a partial one, reported with its reason, and `2` or any
+  other outcome, a killed process or output that is not one complete JSON object, is not run, with
+  nothing in it read as a result. Each hit is triaged per the Secrets in history row of
+  `references/threat-checklist.md`. The record names the refs walked, and the remotes by name with
+  their last fetch, never a remote's URL, since a ref the clone never fetched was not walked.
+  Without Node, history is not scanned, and the record says so.
 - **Configuration.** Debug flags, permissive cross-origin rules, and default credentials in the
   configuration the scope ships.
 
@@ -207,6 +219,8 @@ takes the finding's title as its own and links the record and the finding ID.
 - [ ] The scope names its assets, actors, entry points, and trust boundaries, each cited to a path.
 - [ ] Every automated check says which command ran and whose it was, and one that could not run is
       reported as not run.
+- [ ] The history scan walked every ref the clone holds, or the record says history was scanned in
+      part, or not scanned, and why; each hit cites commit, path, line and shape.
 - [ ] The global controls in scope are named with `path:line` and the narrow gap each leaves.
 - [ ] Every trust boundary has a result, including "checked, nothing found".
 - [ ] Every `CONFIRMED` finding traces an entry point to an impact; every `PLAUSIBLE` one names the

@@ -472,7 +472,10 @@ tiêu đề + mở đầu   skill này sinh ra gì và thói quen nào làm nó 
 
 Một skill của `atk` gồm file đó, `references/` và `evals/`, và cũng được mang thêm `scripts/`, chỉ
 viết bằng Node, cho những phép kiểm tra cần ra cùng một kết quả mỗi lần; người duy trì kit đã cho
-phép ngày 2026-10-14, và hiện chưa skill nào của `atk` có. Cả hai skill của `atkx` đều có thêm thư
+phép ngày 2026-10-14, và `atk:security` là skill đầu tiên có: phần quét lịch sử của nó phải cho
+cùng các kết quả với cùng một lịch sử ở mọi lần chạy, và các dạng giá trị bí mật nó viết lại từ
+`shared/secret-scan.md` được một phép kiểm giữ khớp với khối lệnh đó, thay vì để agent gõ lại. ADR
+0017 ghi lại lựa chọn này. Cả hai skill của `atkx` đều có thêm thư
 mục `scripts/`, viết bằng Node như hook và cùng lý do. Các skill mẫu của `atkx:skill-eval` phải nhận
 cùng một kết luận ở mọi lần chạy, trong khi che một credential, so một host với `SKILL.md`, hay cộng
 một điểm có trọng số thì mỗi lần agent làm lại ra một chút khác; trích dẫn mà `atkx:doc-audit` kiểm
