@@ -9,6 +9,7 @@
 // showing another commit's content under a sha, and the user's pathspec variables turning the
 // pathspecs that keep files unread into literal names.
 
+import { constants } from 'node:buffer';
 import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -19,31 +20,56 @@ export const G = ['-c', 'core.quotePath=false', '-c', 'log.showSignature=false',
 export const ENV = { ...process.env, GIT_NO_LAZY_FETCH: '1', GIT_TERMINAL_PROMPT: '0', GIT_NO_REPLACE_OBJECTS: '1' };
 for (const k of ['GIT_LITERAL_PATHSPECS', 'GIT_GLOB_PATHSPECS', 'GIT_NOGLOB_PATHSPECS', 'GIT_ICASE_PATHSPECS']) delete ENV[k];
 
-// git in the given directory: its output, or a throw when it fails. raw returns a Buffer.
+// git in the given directory: its output, or a throw when it fails.
 export function runner(cwd) {
-  return (args, input, raw = false) => execFileSync('git', [...G, ...args], {
-    cwd, env: ENV, encoding: raw ? undefined : 'utf8', maxBuffer: 1 << 30, input,
+  return (args, input) => execFileSync('git', [...G, ...args], {
+    cwd, env: ENV, encoding: 'utf8', maxBuffer: 1 << 30, input,
     stdio: [input === undefined ? 'ignore' : 'pipe', 'pipe', 'ignore'],
   });
 }
 
-// The content of each object named, `<blob sha>` or `HEAD:<path>`, read in one `cat-file --batch`
-// and held in memory only, as a map from the name to its text with `\r\n` made `\n`. A name git does
-// not find is left out. Throws when git fails.
-export function readBlobs(run, names) {
-  const out = new Map();
-  if (!names.length) return out;
-  const buf = run(['cat-file', '--batch'], names.join('\n') + '\n', true);
-  let at = 0;
-  for (const name of names) {
-    const nl = buf.indexOf(10, at);
-    if (nl < 0) break;
-    const head = /^[0-9a-f]+ \w+ (\d+)$/.exec(buf.toString('utf8', at, nl)); at = nl + 1;
-    if (!head) continue;
-    const size = Number(head[1]);
-    out.set(name, buf.toString('utf8', at, at + size).replace(/\r\n/g, '\n')); at += size + 1;
-  }
-  return out;
+// One `cat-file --batch` kept open for a whole pass and asked for one object at a time, `<blob sha>`
+// or `HEAD:<path>`, so memory holds one file however many are read. read(name) resolves to the text
+// with `\r\n` made `\n`, or null when git does not find it, and rejects with 'time limit' at the
+// deadline, or with why git failed; once failed it stays failed. end() lets git exit.
+export function blobReader(cwd, deadline) {
+  const p = spawn('git', [...G, 'cat-file', '--batch'], { cwd, env: ENV, stdio: ['pipe', 'pipe', 'ignore'] });
+  let head = Buffer.alloc(0); let body = null; let filled = 0; let want = null; let failed = null;
+  const fail = (why) => {
+    failed ||= why; clearTimeout(timer); p.kill();
+    const w = want; want = null; w?.reject(new Error(failed));
+  };
+  const timer = deadline < Infinity ? setTimeout(() => fail('time limit'), Math.max(0, deadline - Date.now())) : null;
+  const finish = (value) => { const w = want; want = null; body = null; w.resolve(value); };
+  p.stdout.on('data', (c) => {
+    while (c.length && want) {
+      if (!body) {
+        const nl = c.indexOf(10);
+        if (nl < 0) { head = Buffer.concat([head, c]); return; }
+        const line = Buffer.concat([head, c.subarray(0, nl)]).toString('utf8'); head = Buffer.alloc(0); c = c.subarray(nl + 1);
+        const m = /^[0-9a-f]+ \w+ (\d+)$/.exec(line);
+        if (!m) { finish(null); continue; } // `<name> missing`, or ambiguous
+        // a text longer than a JavaScript string can hold would throw here, outside the caller's try
+        if (Number(m[1]) >= constants.MAX_STRING_LENGTH) return fail('git returned a file too large to read');
+        body =Buffer.allocUnsafe(Number(m[1]) + 1); filled = 0; // the object and the newline after it
+      }
+      const n = Math.min(c.length, body.length - filled);
+      c.copy(body, filled, 0, n); filled += n; c = c.subarray(n);
+      if (filled === body.length) finish(body.toString('utf8', 0, body.length - 1).replace(/\r\n/g, '\n'));
+    }
+  });
+  p.stdin.on('error', () => fail('git stopped reading the objects asked for'));
+  p.on('error', () => fail('git could not be started'));
+  p.on('close', (code) => fail(`git exited ${code} reading the files`));
+  return {
+    read: (name) => new Promise((resolve, reject) => {
+      if (failed) return reject(new Error(failed));
+      want = { resolve, reject };
+      if (Date.now() >= deadline) return fail('time limit');
+      p.stdin.write(name + '\n');
+    }),
+    end: () => { clearTimeout(timer); if (!failed) { failed = 'ended'; p.stdin.end(); } },
+  };
 }
 
 // Streams one git command line by line, so no history is held whole, handing each line on with the
