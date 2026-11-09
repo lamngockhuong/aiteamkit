@@ -784,10 +784,20 @@ title a ticket takes. A `PLAUSIBLE` finding says which half of its path was trac
 together reach an impact none reaches alone are drawn as a chain, ranked on its own while each
 finding keeps its severity.
 
+With `--delivery`, the skill checks a repository before it is handed to a client, who receives its
+whole history. It proposes the company's domains from the commit identities and the remote, asks the
+repository's owner to confirm them, and runs the history scan for staff emails and internal hosts as
+well as secrets and credential files. The answer is `READY` or `NOT READY`, with each open item and
+who has to answer it, and the owner's options, rotating first, a fresh history, a rewrite, mapping
+identities, listed and none of them run. The report goes to `docs/derived/security/delivery/`, in a
+directory git is confirmed to ignore, because a list of what leaks must not be delivered with the
+leak; the full emails and hosts are in a detail file beside it that the session never opens.
+
 **Use when.** A release touches authentication, personal data, payments, or an external integration;
-a client or the company hands over a security checklist to fill; or a design needs its threats
-written down before anyone builds it. `--checklist <path>` answers the supplied checklist with its
-own IDs and wording, so the answers paste back into the sheet it came from.
+a client or the company hands over a security checklist to fill; a design needs its threats
+written down before anyone builds it; or a repository is about to be delivered to a client
+(`--delivery`). `--checklist <path>` answers the supplied checklist with its own IDs and wording, so
+the answers paste back into the sheet it came from.
 
 **Do not use when.** You want the finding fixed, which is `atk:fix` or `atk:implement`, or a deployed
 environment tested from outside, which is work for whoever the client authorises to do it. The skill
@@ -913,6 +923,8 @@ open questions, and a validation checklist the receiver signs.
 about to be away for a long time.
 
 **Do not use when.** The receiver is new to the project entirely; run `atk:onboard` first, then this.
+Checking a repository's history for secrets, staff emails and internal hosts before it goes to a
+client is `atk:security --delivery`.
 
 **The habit that matters.** The receiver is the approver. A handover is accepted by the person taking
 it, never declared complete by the person leaving.

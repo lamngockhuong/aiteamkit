@@ -146,7 +146,7 @@ flowchart TD
 | 6. Test | `atk:qa` | QA | QA lead or TL; PM for the exit criteria and a severity scale the plan carries; TL for the environments it carries or adds | `IN REVIEW` to `APPROVED` |
 | 6. Test | `atk:qa --record`, `--retest` | QA who ran the cases | QA lead or TL | `IN REVIEW` to `APPROVED` |
 | 6. Test | `atk:run-cases` | QA who started the run | QA lead or TL | `IN REVIEW` to `APPROVED` |
-| Any time: scheduled, or before or after a release | `atk:security` | Dev or TL | TL, or the security officer where the team has one; each unfixed finding accepted by the PM or the Stakeholder | `IN REVIEW` to `APPROVED` |
+| Any time: scheduled, or before or after a release; under `--delivery`, before a repository is handed to a client | `atk:security` | Dev or TL | TL, or the security officer where the team has one; each unfixed finding accepted by the PM or the Stakeholder; under `--delivery`, the repository's owner answers each open line | `IN REVIEW` to `APPROVED`; under `--delivery`, a derived report with no approval state |
 | 7. Release | `atk:release` | PM with SRE | Stakeholder or PM gives the go decision | `IN REVIEW` to `APPROVED` |
 | 8. Operate | `atk:incident` | Incident Commander | TL and PM on the follow-up actions | `IN REVIEW` to `APPROVED` |
 | 8. Learn | `atk:retro` | PM or the team | The team, on the three actions | `IN REVIEW` to `APPROVED` |

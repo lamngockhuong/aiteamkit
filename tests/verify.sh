@@ -774,6 +774,143 @@ finally:
     shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
 print('OK security history scan reads a large file naming the key marker in 1100 versions and finishes, reads only the versions that can hold a key' + (', stops its key read at --max-seconds' if shim else '; the --max-seconds check needs a POSIX shell and was not run'))"
 
+# atk:security's history scan under --identities, on a history built here, every email and host
+# assembled from parts: an author and a tagger in a confirmed domain are hits, one in a domain that
+# only ends with the same letters is not; in content, an email and a host of the confirmed domain,
+# the private ranges with their edges (172.15 and 172.32 are not private, 172.16 and 172.31 are),
+# fc00::/7, a loopback name other than localhost, and the four suffixes where they stand as a host,
+# not as a property in code; localhost, 127.0.0.1 and public addresses are not hits; a host in an
+# environment file is never read. A commit message trailer and a tag message are read; a login in a
+# URL is taken out, its password nowhere, and an scp address is a host, not an email; a suffix host
+# in XML, a directive and a list is a host, and a Python import or an indented assignment is not; a
+# host on a line edited later is still present at HEAD; a non-ASCII local part hides nothing; a path
+# that is itself a host is a hit and is printed redacted, in its own hit and in every other. Standard
+# output and standard error hold no local part, no full host and no value, only the redacted forms;
+# the --detail file holds them, and is written only where git ignores it. --domains folds each domain
+# to what a company registers and prints a machine name, a name with no dot and an address with no
+# domain by their class only, and names the remote's without its login; a graft file or
+# GIT_GRAFT_FILE cutting history off changes nothing; a wrong argument exits 2. The developer's own
+# git configuration is kept out, so a global exclude cannot hide what the fixture commits
+python3 -c "
+import json, os, shutil, stat, subprocess, sys, tempfile
+script = os.path.abspath('plugins/atk/skills/security/scripts/history-scan.mjs')
+nl, e = chr(10), chr(61)
+dom = 'zzcorp' + '.com'; evil = 'evil-' + dom
+la, lb, lc, lt, lm, lj = 'zzalice' + 'local', 'zzbob' + 'local', 'zzcarol' + 'local', 'zztagger' + 'local', 'zzmallory' + 'local', 'jos' + chr(233) + 'zz'
+host = 'db1.' + dom; envhost = 'db9.' + dom; lan, svc, mac, lo = 'build01' + '.lan', 'svc' + '.internal', 'mac' + '.local', 'app' + '.localhost'
+xml, ngx, pa, pb, msgh = 'db2' + '.lan', 'backend' + '.internal', 'a' + '.internal', 'b' + '.internal', 'build7' + '.lan'
+gitlab, db3, pathhost, machine = 'gitlab.' + dom, 'db3.' + dom, 'db01.' + dom, 'zzbox-mbp' + '.local'
+urlip, tagip, peerip = '10.9' + '.8.7', '10.4' + '.4.4', '10.5' + '.5.5'
+pwv, secretv = 'ZZURL' + 'PW42', 'ZZDBPASS' + 'WORD7'
+priv = ['10.1' + '.2.3', '172.16' + '.0.9', '172.31' + '.255.1', '192.168' + '.1.1', 'fd12:3456' + '::1']
+public = ['172.15' + '.0.1', '172.32' + '.0.1', '8.8' + '.8.8', '127.0' + '.0.1', 'fe80' + '::1', 'api.' + evil]
+full = [la, lb, lc, lt, lm, lj, host, envhost, lan, svc, mac, lo, 'ip6-' + 'localhost', 'usr' + 'zz', 'pw' + 'zz9', xml, ngx, pa, pb, msgh, gitlab, db3, pathhost,
+        machine, urlip, tagip, peerip, pwv, secretv, 'ci.' + dom, 'nodomain' + 'zz'] + priv
+ssh3, env4, li5, d6, d7, msg2 = 'deploy3' + '.corp', 'db4' + '.internal', 'db5' + '.lan', 'db6.' + dom, 'db7.' + dom, 'build8' + '.lan'
+oldip, dumpip, sufip, refip, idip = '10.8' + '.8.8', '10.6' + '.6.6', '10.3' + '.3.3', '10.7' + '.7.7', '10.2' + '.2.2'
+pwat, pwv2, msgsecret = 'pa' + '@ss', 'ZZDSN' + 'PW43', 'ghp' + '_ZZMSGSECRET123'
+keyuser, d2, d4, sufdir, mbox = 'zzkey' + 'user', 'db02.' + dom, 'db04.' + dom, 'build02' + '.lan', 'zzbox2' + '.localdomain'
+full += [ssh3, env4, li5, d6, d7, msg2, oldip, dumpip, sufip, refip, idip, pwv2, msgsecret, keyuser, d2, d4, sufdir, mbox, 'ss@']
+base_env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM='1')
+def writable(fn, path, _):
+    os.chmod(path, stat.S_IWRITE); fn(path)
+t = tempfile.mkdtemp(); r = os.path.join(t, 'repo'); os.makedirs(r)
+def g(*x, env=None):
+    return subprocess.run(['git', '-C', r] + list(x), check=True, capture_output=True, text=True, encoding='utf-8', env=env or base_env).stdout
+def put(p, s):
+    os.makedirs(os.path.dirname(os.path.join(r, p)) or r, exist_ok=True); open(os.path.join(r, p), 'w', encoding='utf-8').write(s)
+def scan(*args, env=None, cwd=None):
+    p = subprocess.run(['node', script] + list(args), capture_output=True, text=True, encoding='utf-8', cwd=cwd or r, env=env or base_env)
+    return p, (json.loads(p.stdout) if p.stdout else None)
+def who(name, mail):
+    return dict(base_env, GIT_AUTHOR_NAME=name, GIT_AUTHOR_EMAIL=mail, GIT_COMMITTER_NAME='p', GIT_COMMITTER_EMAIL='p@x')
+try:
+    g('init', '-q'); g('config', 'user.email', 'p@x'); g('config', 'user.name', 'p'); g('config', 'commit.gpgsign', 'false'); g('config', 'tag.gpgsign', 'false')
+    lines = ['db: ' + host, 'contact: ' + lc + '@' + dom, 'lan: ' + lan, 'svc: http://' + svc + ':8080/x', 'mac: ' + chr(34) + mac + chr(34), 'lo: ' + lo,
+             'six: ip6-' + 'localhost', 'loop: localhost', 'url: postgres://app:' + pwv + '@' + urlip + '/db', 'git: git@' + gitlab + ':team/r.git',
+             'xml: <host>' + xml + '</host>', 'nginx: server ' + ngx + ':8080;', 'proxy: NO_PROXY' + e + pa + ',' + pb, 'uni: ' + lj + '@' + dom,
+             'DB_PASS' + 'WORD' + e + secretv + ' # ' + db3, 'cmd: ssh ' + ssh3 + ' -p 22', 'env: DB_HOST' + e + env4 + ' DB_PORT' + e + '5432', '  - ' + li5,
+             'url2: https://u:' + pwat + '@' + d6 + '/x', 'dsn: app:' + pwv2 + '@' + d7 + ':5432/x', 'old: ' + oldip]
+    lines += ['p%d: %s' % (i, x) for i, x in enumerate(priv)] + ['q%d: %s' % (i, x) for i, x in enumerate(public)]
+    put('config.yml', nl.join(lines) + nl)
+    put('app.js', 'const x ' + e + ' obj.local;' + nl + 'if (cfg.internal) {}' + nl + 'from settings.local import *' + nl + '    self.local ' + e + ' x' + nl
+        + 'import settings.local' + nl + 'return obj.local;' + nl)
+    put('host_vars/' + pathhost + '.yml', 'peer: ' + peerip + nl)
+    put('keys/' + keyuser + '@' + dom + '.pub', 'ssh-ed25519 AAAA' + nl); put('backup/' + d2 + '.tar.gz', 'x' + nl)
+    put('dumps/' + dumpip + '-dump.txt', 'x' + nl); put('deploy/' + sufdir + '/run.sh', 'peer: ' + sufip + nl)
+    put('.env', 'DB_HOST' + e + envhost + nl); g('add', '-A'); g('commit', '-qm', '1', env=who('a', la + '@' + dom))
+    put('b.txt', 'b' + nl); g('add', '-A')
+    g('commit', '-qm', '2' + nl + nl + 'deployed to http://' + msgh + '/' + nl + nl + 'Co-authored-by: M <' + lm + '@' + dom + '>', env=who('b', lb + '@' + evil))
+    put('m.txt', 'm' + nl); g('add', '-A')
+    g('commit', '-qm', 'm' + nl + nl + '#commit zz' + nl + 'see http://' + msg2 + '/' + nl + 'token ' + msgsecret, env=who('c', 'zzbox@' + machine))
+    put('n.txt', 'n' + nl); g('add', '-A'); g('commit', '-qm', 'n', env=who('d', 'nodomain' + 'zz'))
+    put('o.txt', 'o' + nl); g('add', '-A'); g('commit', '-qm', 'o', env=who('e', 'zzu@[' + idip + ']'))
+    put('q.txt', 'q' + nl); g('add', '-A'); g('commit', '-qm', 'q', env=who('f', 'zzu2@' + mbox))
+    edited = [('db: ' + host + ':5433' if x.startswith('db: ') else 'old: 1' + oldip + '0' if x.startswith('old: ') else x) for x in lines if lan not in x]
+    put('config.yml', nl.join(edited) + nl); g('commit', '-qam', '3')
+    g('-c', 'user.email' + e + lt + '@ci.' + dom, 'tag', '-a', 'v1', '-m', 'v1 on ' + tagip)
+    g('branch', 'fix-' + d4 + '-timeout'); g('branch', 'hotfix/' + refip)
+    g('remote', 'add', 'origin', 'https://' + 'usr' + 'zz:' + 'pw' + 'zz9@git.' + dom + '/t/r.git')
+    d = os.path.join(r, 'docs', 'derived', 'security', 'delivery'); os.makedirs(d); put('docs/derived/security/delivery/.gitignore', '*' + nl)
+    det = 'docs/derived/security/delivery/run-detail.tsv'
+    p, out = scan('--identities', '--internal', dom, '--detail', det)
+    assert p.returncode == 0 and out['complete'], 'the identities scan did not finish: %s %s' % (p.returncode, p.stderr)
+    got = sorted((h['kind'], h['class'], h['shown'], h['shape'], h['path'] or '', h['at_head'] or '') for h in out['hits'] if h['kind'] in ('email', 'host'))
+    R, P = '<redacted: email>@', '<redacted: host>'
+    hp = 'host_vars/' + P + '.' + dom + '.yml'
+    def c(kind, cls, shown, n=1, path='config.yml', at='present', shape='content'):
+        return [(kind, cls, shown, shape, path, at)] * n
+    want = sorted(c('email', 'confirmed domain', R + dom, shape='author', path='', at='') + c('email', 'confirmed domain', R + P + '.' + dom, shape='tagger', path='', at='')
+                  + c('email', 'internal suffix', R + P, shape='author', path='', at='') + c('email', 'confirmed domain', R + dom, shape='message', path='', at='')
+                  + c('host', 'internal suffix', P, shape='message', path='', at='') + c('host', 'private address', P, shape='tag message', path='', at='')
+                  + c('email', 'confirmed domain', R + dom, 2) + c('host', 'confirmed domain', P + '.' + dom, 3)
+                  + c('host', 'internal suffix', P, at='removed') + c('host', 'internal suffix', P, 6) + c('host', 'loopback name', P, 2)
+                  + c('host', 'private address', P, len(priv) + 1) + c('host', 'confirmed domain', P + '.' + dom, path=hp, shape='path')
+                  + c('host', 'private address', P, path=hp))
+    hr = lambda n: 'refs/heads/' + n
+    want = sorted(want + c('email', 'private address', R + P, shape='author', path='', at='') + c('host', 'internal suffix', P, shape='message', path='', at='')
+                  + c('host', 'internal suffix', P, 3) + c('host', 'confirmed domain', P + '.' + dom, 2) + c('host', 'private address', P, at='removed')
+                  + c('email', 'confirmed domain', R + dom, path='keys/' + R + dom + '.pub', shape='path')
+                  + c('host', 'confirmed domain', P + '.' + dom, path='backup/' + P + '.' + dom + '.tar.gz', shape='path')
+                  + c('host', 'private address', P, path='dumps/' + P + '-dump.txt', shape='path') + c('host', 'private address', P, path='deploy/' + P + '/run.sh')
+                  + c('host', 'confirmed domain', P + '.' + dom, path=hr(P + '.' + dom + '-timeout'), shape='ref', at='')
+                  + c('host', 'private address', P, path=hr('hotfix/' + P), shape='ref', at=''))
+    assert got == want, 'identity hits %s, expected %s' % (got, want)
+    assert all(h['commit'] is None or (len(h['commit']) == 40 and set(h['commit']) <= set('0123456789abcdef')) for h in out['hits']), 'a message line set a commit field'
+    assert any(h['kind'] == 'secret' and h['path'] is None for h in out['hits']), 'a secret in a commit message was not found'
+    assert hr(P + '.' + dom + '-timeout') in out['scanned']['refs'] and hr('hotfix/' + P) in out['scanned']['refs'], 'a ref naming a host was printed whole: %s' % out['scanned']['refs']
+    assert not any(h['path'] in ('.env', 'app.js') for h in out['hits'] if h['kind'] in ('email', 'host')), 'an environment file was read, or code was taken for a host'
+    assert any(h['kind'] == 'credential-file' and h['path'] == '.env' for h in out['hits']), 'the environment file was never committed, so nothing was tested'
+    assert out['detail']['count'] == len(want) and out['detail']['path'] == det, 'detail: %s' % out['detail']
+    text = (p.stdout + p.stderr).lower()
+    leaked = [x for x in full + public if x.lower() in text]
+    assert not leaked, 'a local part, a value or a full host reached the output: %d of them' % len(leaked)
+    tsv = open(os.path.join(r, det), encoding='utf-8').read()
+    assert all(x in tsv for x in (la + '@' + dom, lt + '@ci.' + dom, lm + '@' + dom, lj + '@' + dom, host, lan, svc, mac, lo, msgh, tagip, gitlab, urlip, 'host_vars/' + pathhost + '.yml') + tuple(priv)), 'the detail file is not what was found'
+    assert envhost not in tsv and lb not in tsv and pwv not in tsv and secretv not in tsv, 'the detail file holds what was never to be read or written'
+    assert all(x in tsv for x in ('keys/' + keyuser + '@' + dom + '.pub', 'fix-' + d4 + '-timeout', d6, d7, oldip)) and not any(x in tsv for x in ('ss@', pwv2, msgsecret)), 'the detail file is not what was found, or holds a password'
+    # a graft file, then GIT_GRAFT_FILE, cutting the history off at HEAD changes nothing
+    head = g('rev-parse', 'HEAD').strip(); base = [(h['kind'], h['path'], h['commit']) for h in out['hits']]
+    os.makedirs(os.path.join(r, '.git', 'info'), exist_ok=True); open(os.path.join(r, '.git', 'info', 'grafts'), 'w', encoding='utf-8').write(head + nl)
+    p2, o2 = scan('--identities', '--internal', dom)
+    os.remove(os.path.join(r, '.git', 'info', 'grafts')); gf = os.path.join(t, 'grafts'); open(gf, 'w', encoding='utf-8').write(head + nl)
+    p3, o3 = scan('--identities', '--internal', dom, env=dict(base_env, GIT_GRAFT_FILE=gf))
+    for pp, oo in ((p2, o2), (p3, o3)):
+        assert pp.returncode == 0 and [(h['kind'], h['path'], h['commit']) for h in oo['hits']] == base and oo['scanned']['commits'] == out['scanned']['commits'], 'a graft cut the history: %s' % oo['scanned']
+    p, out = scan('--domains')
+    ds = {x['domain']: x['count'] for x in out['domains']['identities']}
+    want_ds = {dom: 2, evil: 1, P + ' (internal suffix)': 1, P + ' (no dot)': 1, '<redacted: address with no domain>': 1, P + ' (address)': 1, P + ' (machine name)': 1}
+    assert p.returncode == 0 and ds == want_ds and out['domains']['remotes'] == [dom] and not out['hits'] and out['not_scanned'], 'domains: %s' % out.get('domains')
+    assert not any(x.lower() in (p.stdout + p.stderr).lower() for x in full), 'a local part, a login or a full host reached the --domains output'
+    for args in (['--detail', 'loose.tsv', '--identities'], ['--identities', '--detail', det], ['--identities', '--detail', '../out.tsv'], ['--identities', '--detail', 'no/such/dir/x.tsv'],
+                 ['--internal', dom], ['--identities', '--internal', 'a..' + dom], ['--identities', '--internal'], ['--domains', '--identities'], ['--detail', det]):
+        pp, _ = scan(*args)
+        assert pp.returncode == 2 and not pp.stdout and pp.stderr.startswith('history-scan: '), 'not refused with exit 2: %s %s' % (args, pp.stderr)
+    assert not os.path.exists(os.path.join(r, 'loose.tsv')), 'a detail file git would track was written'
+finally:
+    shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
+print('OK security history scan under --identities, %d email and host hits, the private ranges at their edges, no local part or full host in the output, the detail file only where git ignores it, grafts change nothing' % len(want))"
+
 # atk:security's supply-chain scan on a repository built here from tests/security-fixtures/supply-chain/,
 # with every login it must keep out assembled from parts: each candidate of fork 3 of the design at
 # its rule, path and line; an action in a flow mapping, at its key's indent, quoted, a local one and an

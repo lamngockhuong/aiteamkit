@@ -34,7 +34,7 @@ flowchart TB
 |------|--------------|--------|------------|------------|
 | Tham chiếu | `docs/api/`, `docs/database/`, `docs/features/`, `docs/screens/`, `docs/qa/`, `docs/security/`, `docs/standards/` và `docs/conventions.md`, các tài liệu onboarding, `docs/runbooks/`, `.atk/profile.md`, `.atk/overrides/` | Có, trừ hình dạng `workspace`, nơi gốc dự án không thuộc repository nào nên không gì theo dõi chúng | Luôn luôn, sửa tại chỗ | Không. Đây là lời khẳng định duy nhất về việc hệ thống hôm nay làm gì, hoặc, khi `Contract: first`, đã được thống nhất sẽ làm gì |
 | Bản ghi | mọi thứ dưới `docs/records/`, cộng `docs/adr/` | Có | Không. Cho nó nghỉ thay vì sửa. Thiết kế và ADR đi kèm được sửa tại chỗ cho tới khi `APPROVED`, và một kế hoạch đã `APPROVED` được sửa tại chỗ cho tới khi có phase bắt đầu. Record của một lần chạy test chỉ được đổi `status`, các ô `Ticket`, và phần che dữ liệu có ghi lại, không gì khác | Chỉ khi có người quyết cho từng file, không bao giờ bằng một luật quét |
-| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội, trừ progress log, run trace, trang document mode của `atk:catchup` trong `docs/derived/catchup/documents/`, và snapshot việc tương tự của `atk:estimate` trong `docs/derived/estimate/`, bốn thứ không bao giờ được stage | Chạy lại skill | Được, thoải mái, trừ progress log chưa xong: xóa nó là mất phần việc đã loại trừ, và snapshot việc tương tự: xóa nó thì lần ước lượng sau phải đọc lại toàn bộ tracker một lượt, và khi tracker sập thì mất chỗ dựa |
+| Dẫn xuất | mọi thứ dưới `docs/derived/` | Tùy đội, trừ progress log, run trace, trang document mode của `atk:catchup` trong `docs/derived/catchup/documents/`, snapshot việc tương tự của `atk:estimate` trong `docs/derived/estimate/`, và báo cáo kiểm tra trước bàn giao của `atk:security` trong `docs/derived/security/delivery/`, năm thứ không bao giờ được stage | Chạy lại skill | Được, thoải mái, trừ progress log chưa xong: xóa nó là mất phần việc đã loại trừ, và snapshot việc tương tự: xóa nó thì lần ước lượng sau phải đọc lại toàn bộ tracker một lượt, và khi tracker sập thì mất chỗ dựa; báo cáo kiểm tra trước bàn giao thì phải xóa trước khi bàn giao bằng cách copy hay nén thư mục |
 
 ## Ba file không thuộc nhóm nào
 
@@ -73,7 +73,7 @@ khắc phục; người bàn giao đã đi sáu tháng trước và file bàn gi
 không ai nhớ đã mở đến từ một yêu cầu của khách, và chỉ bản đề xuất điều phối đã chạy nó mới cho
 biết là yêu cầu nào.
 
-**Dẫn xuất.** Không mất gì, trừ progress log, run trace và snapshot việc tương tự nói ở dưới. Bản ghi triển khai và bản ghi chuyển giao
+**Dẫn xuất.** Không mất gì, trừ progress log, run trace, snapshot việc tương tự và báo cáo kiểm tra trước bàn giao nói ở dưới. Bản ghi triển khai và bản ghi chuyển giao
 đều là bản sao của thứ nằm trên pull request, bản ghi phản hồi là bản sao của thứ đã gửi lên repo
 của kit, bản tóm tắt của `atk:catchup` chạy lại là có, báo cáo review cũng vậy: chạy lại
 `atk:review`, hoặc `atk:plan --review` nếu thứ được soát là một bản kế hoạch, hoặc `atk:qa --review`
@@ -101,8 +101,13 @@ phiên, nên xóa một trang chỉ tốn công chạy lại skill. Snapshot vi�
 `docs/derived/estimate/`, mỗi tracker và dự án một file, là loại thứ mười hai: được giữ ngoài git bằng
 file ignore trong chính thư mục của nó, không bao giờ được stage, và được lần chạy sau của
 `atk:estimate` đọc để cập nhật từ những gì đã đổi và dùng thay tracker khi tracker sập, nên xóa nó
-thì lần chạy ấy phải đọc lại toàn bộ tracker một lượt, và khi tracker sập thì mất chỗ dựa. Có mười một
-skill đọc một trong mười hai loại: progress log, run log của `atk:run-cases`, báo cáo review, run
+thì lần chạy ấy phải đọc lại toàn bộ tracker một lượt, và khi tracker sập thì mất chỗ dựa. Báo cáo
+mà `atk:security --delivery` viết trong `docs/derived/security/delivery/`, cùng file chi tiết của
+lượt quét lịch sử nằm cạnh, là loại thứ mười ba: được giữ ngoài git bằng file ignore trong chính thư
+mục của nó, được xác nhận bằng `git check-ignore -q` trước khi ghi, và không lượt chạy nào sau đó
+đọc, nên xóa nó thì phải hỏi lại chủ repo những câu đã trả lời; phải xóa nó trước khi bàn giao repo
+bằng cách copy hay nén thư mục làm việc, vì bản copy sẽ mang nó theo. Có mười một
+skill đọc một trong mười ba loại: progress log, run log của `atk:run-cases`, báo cáo review, run
 trace, và snapshot việc tương tự. Bốn skill ghi progress log, trước khi bắt đầu,
 mỗi skill đọc progress log chưa xong mới nhất của mình và đề nghị chạy tiếp, nhưng hỏi người dùng
 trước, khi branch hoặc commit khởi đầu của log không còn khớp. `atk:run-cases` đọc run log của lần
@@ -139,10 +144,11 @@ quyết định đã biến mất mà không để lại dòng nào nói nó t�
 `docs/derived/` là phần duy nhất của cây thư mục mà kit nói dự án có thể không đưa vào git. Một dòng
 trong `.gitignore` là các bản sao thôi dồn lại. Không mắt xích nào trong chuỗi skill đứt, vì mọi bản
 gốc vẫn nằm trên pull request hoặc chỉ cách một câu lệnh. Dự án có commit thư mục này thì vẫn để
-progress log, run trace, các trang document mode của `atk:catchup` và các snapshot việc tương tự
-của `atk:estimate` ở ngoài, vì mỗi log là trạng thái làm việc của một người, mỗi trace là bản tường
-thuật một lượt chạy, mỗi trang là một bản giải thích tạm, mỗi snapshot là bản chép tracker của riêng
-một cây làm việc mà đồng đội sẽ tưởng là mới nhất, và git không bao giờ nhận cả bốn, dù dự án làm gì.
+progress log, run trace, các trang document mode của `atk:catchup`, các snapshot việc tương tự
+của `atk:estimate` và các báo cáo kiểm tra trước bàn giao của `atk:security` ở ngoài, vì mỗi log là trạng thái làm
+việc của một người, mỗi trace là bản tường thuật một lượt chạy, mỗi trang là một bản giải thích tạm,
+mỗi snapshot là bản chép tracker của riêng một cây làm việc mà đồng đội sẽ tưởng là mới nhất, mỗi
+báo cáo là danh sách những gì sẽ lộ ra cho khách, và git không bao giờ nhận cả năm, dù dự án làm gì.
 
 Đừng nối dòng đó sang `docs/records/`, vì hai lý do không liên quan gì tới dung lượng đĩa:
 

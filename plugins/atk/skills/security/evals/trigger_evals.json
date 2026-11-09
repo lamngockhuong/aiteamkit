@@ -12,6 +12,10 @@
   { "query": "リリース前にセキュリティレビューをお願いします", "should_trigger": true },
   { "query": "お客様のセキュリティチェックリストに回答して", "should_trigger": true },
   { "query": "この機能の脅威モデルを作って", "should_trigger": true },
+  { "query": "before we deliver the repo to the client, check its history for secrets and internal emails", "should_trigger": true },
+  { "query": "/atk:security --delivery", "should_trigger": true },
+  { "query": "kiểm tra repo trước khi bàn giao cho khách: secret trong lịch sử, email và host nội bộ", "should_trigger": true },
+  { "query": "納品前にリポジトリの履歴に秘密情報や社内のメールアドレスが残っていないか確認して", "should_trigger": true },
 
   { "query": "review this pull request before I approve it", "should_trigger": false },
   { "query": "duyệt code nhánh feature/export giúp tôi", "should_trigger": false },
@@ -25,5 +29,6 @@
   { "query": "本番で障害が発生、インシデント対応を始めて", "should_trigger": false },
   { "query": "write the release checklist and rollback plan for v2.4.0", "should_trigger": false },
   { "query": "technical design for moving sessions to Redis", "should_trigger": false },
-  { "query": "check that the licenses of our dependencies are allowed before we release", "should_trigger": false }
+  { "query": "check that the licenses of our dependencies are allowed before we release", "should_trigger": false },
+  { "query": "write the handover document for the client team taking over the project", "should_trigger": false }
 ]

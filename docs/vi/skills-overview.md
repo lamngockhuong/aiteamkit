@@ -797,10 +797,20 @@ mức nghiêm trọng, và có một tiêu đề nêu điểm yếu và tính n�
 gộp lại mới tới được một tác động mà riêng từng cái không tới được thì được vẽ thành một chuỗi, chuỗi
 được xếp mức riêng còn mỗi phát hiện giữ nguyên mức của nó.
 
+Với `--delivery`, skill kiểm tra một repo trước khi bàn giao cho khách, người sẽ nhận toàn bộ lịch
+sử của nó. Skill đề xuất các domain của công ty từ identity của commit và remote, nhờ chủ repo xác
+nhận, rồi chạy lượt quét lịch sử để tìm cả email nhân viên và host nội bộ, bên cạnh secret và file
+chứa thông tin đăng nhập. Kết quả là `READY` hoặc `NOT READY`, kèm từng mục còn mở và người phải trả
+lời mục đó, cùng các lựa chọn của chủ repo: rotate trước, bàn giao lịch sử mới, viết lại lịch sử, map
+identity. Skill liệt kê, không chạy lựa chọn nào. Báo cáo nằm trong `docs/derived/security/delivery/`,
+một thư mục đã xác nhận là git bỏ qua, vì danh sách những gì bị lộ không được đi cùng chính thứ bị
+lộ; email và host đầy đủ nằm trong một file chi tiết bên cạnh mà phiên làm việc không bao giờ mở.
+
 **Dùng khi.** Một bản release đụng tới xác thực, dữ liệu cá nhân, thanh toán, hoặc một tích hợp bên
-ngoài; khách hàng hoặc công ty giao một checklist bảo mật cần điền; hoặc một bản thiết kế cần ghi ra
-các mối đe dọa trước khi ai đó bắt tay xây. `--checklist <path>` trả lời checklist được cung cấp bằng
-chính ID và câu chữ của nó, để câu trả lời dán ngược lại được vào bảng tính gốc.
+ngoài; khách hàng hoặc công ty giao một checklist bảo mật cần điền; một bản thiết kế cần ghi ra
+các mối đe dọa trước khi ai đó bắt tay xây; hoặc một repo sắp được bàn giao cho khách (`--delivery`).
+`--checklist <path>` trả lời checklist được cung cấp bằng chính ID và câu chữ của nó, để câu trả lời
+dán ngược lại được vào bảng tính gốc.
 
 **Không dùng khi.** Bạn muốn phát hiện được sửa, đó là `atk:fix` hoặc `atk:implement`, hoặc muốn kiểm
 thử một môi trường đã deploy từ bên ngoài, đó là việc của người được khách hàng ủy quyền làm. Skill
@@ -931,7 +941,8 @@ nhiệm vụ định kỳ, danh bạ liên hệ, câu hỏi còn treo, và check
 hoặc ai đó sắp vắng dài ngày.
 
 **Không dùng khi.** Người nhận hoàn toàn mới với dự án; chạy `atk:onboard` trước, rồi mới tới skill
-này.
+này. Kiểm tra lịch sử của repo xem còn secret, email nhân viên hay host nội bộ trước khi giao repo
+cho khách là `atk:security --delivery`.
 
 **Thói quen tạo ra khác biệt.** Người nhận mới là người phê duyệt. Một cuộc bàn giao được chấp nhận
 bởi người tiếp quản, không bao giờ do người rời đi tự tuyên bố là đã xong.

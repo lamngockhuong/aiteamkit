@@ -147,7 +147,7 @@ flowchart TD
 | 6. Kiểm thử | `atk:qa` | QA | QA Leader hoặc TL; PM cho tiêu chí ra và thang severity mà test plan tự mang; TL cho các môi trường test plan tự mang hoặc thêm vào | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm thử | `atk:qa --record`, `--retest` | QA đã chạy các case | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
 | 6. Kiểm thử | `atk:run-cases` | QA đã khởi động lần chạy | QA Leader hoặc TL | `IN REVIEW` sang `APPROVED` |
-| Bất cứ lúc nào: định kỳ, hoặc trước hay sau khi phát hành | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận | `IN REVIEW` sang `APPROVED` |
+| Bất cứ lúc nào: định kỳ, hoặc trước hay sau khi phát hành; với `--delivery`, trước khi bàn giao repo cho khách | `atk:security` | Dev hoặc TL | TL, hoặc người phụ trách bảo mật nếu đội có; mỗi phát hiện chưa sửa được PM hoặc Stakeholder chấp nhận; với `--delivery`, chủ repo trả lời từng mục còn mở | `IN REVIEW` sang `APPROVED`; với `--delivery`, một báo cáo dẫn xuất không có trạng thái duyệt |
 | 7. Phát hành | `atk:release` | PM cùng SRE | Stakeholder hoặc PM ra quyết định phát hành | `IN REVIEW` sang `APPROVED` |
 | 8. Vận hành | `atk:incident` | Incident Commander | TL và PM, về các hành động tiếp theo | `IN REVIEW` sang `APPROVED` |
 | 8. Rút kinh nghiệm | `atk:retro` | PM hoặc cả đội | Cả đội, về ba hành động chọn ra | `IN REVIEW` sang `APPROVED` |

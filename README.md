@@ -81,7 +81,7 @@ read to learn this project's test, build and lint commands, its layer layout, an
 | `atk:review` | A pull request reviewed against requirement, design, and conventions, with blocking findings separated from preferences, written to a report and summarised in the session. |
 | `atk:qa` | The project's master test plan, a test plan per feature, test cases traced to acceptance criteria, negative and boundary coverage, a justified regression matrix, and entry and exit criteria; afterwards the record of a test run, its defects raised as bugs, and the retest of a fix. |
 | `atk:run-cases` | Approved test cases executed by the agent on a deployed DEV or staging environment, through the browser or an app on an Android device, never production or the local stack: every case triaged first, the scope agreed with QA before anything runs, and a run record holding only what was observed, ready for the QA lead and for `atk:qa --bug`. |
-| `atk:security` | A security record a Tech Lead can sign and a client can read: assets and trust boundaries, the project's own scanners run, threats walked per boundary, every finding traced from entry point to impact, a client or company checklist answered item by item, and residual risk left for a named person to accept. Also the threat model of a feature, kept current. |
+| `atk:security` | A security record a Tech Lead can sign and a client can read: assets and trust boundaries, the project's own scanners run, threats walked per boundary, every finding traced from entry point to impact, a client or company checklist answered item by item, and residual risk left for a named person to accept. Also the threat model of a feature, kept current, and a `READY` or `NOT READY` check of a repository before its whole history is handed to a client. |
 | `atk:git` | Finished work carried into the repository: the diff read before anything is staged, a scan that stops on a credential, commits that revert one at a time, and push, pull request and merge each behind a yes given for that action. |
 | `atk:release` | Release notes per audience, a checklist with an owner per step, migration reversibility, and a rollback path written before the deploy. |
 | `atk:incident` | A timestamped incident timeline, a root cause supported by evidence, a blameless postmortem, follow-up actions with owners, and the runbook. |
@@ -112,7 +112,7 @@ Every skill is its own slash command, namespaced `atk:`. There is no separate co
 /atk:review <pr|branch|range|paths>        # --against --comment --strict --parallel --out
 /atk:qa <requirement|feature|cases|run|issue> # --master|--plan|--cases|--regression|--update|--record|--bug|--retest|--review --lang --out
 /atk:run-cases <cases-path>                # --env --only --dry-run --out
-/atk:security [branch|range|paths]         # --threat-model --checklist --lang --out
+/atk:security [branch|range|paths]         # --threat-model --checklist --delivery --lang --out
 /atk:git                                   # --commit|--pr|--merge|--rebase|--resolve|--stack --draft --lang --out
 /atk:release <version|range>               # --notes|--checklist --audience --env --out
 /atk:incident                              # --live|--postmortem|--runbook --out

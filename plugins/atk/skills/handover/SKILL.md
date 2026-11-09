@@ -23,7 +23,9 @@ listing traps and workarounds, planning the access and credential transfer, nami
 extracting the knowledge that exists nowhere else.
 
 Does NOT handle: transferring credentials itself, which is a human action through the team's secret
-manager; onboarding the receiver onto the project (`atk:onboard`); or approving the handover.
+manager; onboarding the receiver onto the project (`atk:onboard`); checking a repository's history
+for secrets, staff emails and internal hosts before it is delivered to a client
+(`atk:security --delivery`); or approving the handover.
 
 ## Roles
 

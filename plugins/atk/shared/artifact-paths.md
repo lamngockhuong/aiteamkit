@@ -4,10 +4,11 @@ Shared output convention for every `atk` skill. Referenced from `skills/<name>/S
 `shared/artifact-paths.md`, which is `../../shared/artifact-paths.md` relative to a skill file.
 
 Every skill that writes a file writes Markdown into the **target project**, never into the atk kit
-itself; `atk:help` writes none, its run trace aside, which is not an artifact. Three exceptions write
+itself; `atk:help` writes none, its run trace aside, which is not an artifact. Four exceptions write
 a file that is not Markdown: `atk:convention`, which may also write the project's own collaboration
 files, one of which is not Markdown, as the paragraph after the table says; `atk:qa`, whose cases
-may be exported as CSV; and `atk:estimate`, whose comparables snapshot is tab-separated.
+may be exported as CSV; `atk:estimate`, whose comparables snapshot is tab-separated; and
+`atk:security`, whose `--delivery` detail file is tab-separated.
 
 ## Root
 
@@ -154,7 +155,7 @@ to `docs/adr/` as well.
 | `review` | `docs/derived/reviews/<pr>-<date>.md`, written on every run, `<pr>` replaced as `## Output` of `atk:review` says where the target is not a pull request; under `--comment` the findings also go to the pull request |
 | `qa` | `docs/qa/master-test-plan.md`, one per project, under `--master`; `docs/qa/test-plan-<slug>.md`, `docs/qa/test-cases-<slug>.md`, and `docs/qa/test-cases-<slug>.csv` beside it when a CSV is exported; the CSV is committed with its source and regenerated with it, never edited; under `--record` and `--retest`, a run record at `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-<scope>.md`, never written over, whose content changes once committed only in its `status`, the `Ticket` cells `--bug` sets, and a recorded redaction; under `--review`, no cases file is written at all, and a report at `docs/derived/reviews/qa-cases-<slug>-<date>.md` |
 | `run-cases` | A run record at the path `qa` uses for one, `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids.md`, under the same rules, with its evidence in `docs/records/test-runs/<YYMMDD-HHMM>-<ticket-or-slug>-ids/` beside it; the triage report and the run log at `docs/derived/run-cases/<run-id>/` |
-| `security` | `docs/records/security/<date>-<ticket>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md` |
+| `security` | `docs/records/security/<date>-<ticket>-<slug>.md`, or `docs/records/security/<version>.md` for a release scope; under `--threat-model`, `docs/security/threat-model-<slug>.md`; under `--delivery`, a report at `docs/derived/security/delivery/<run-id>-report.md` and the history scan's detail file beside it at `<run-id>-detail.tsv`, held out of git by an ignore file holding `*` in that directory, confirmed with `git check-ignore -q` before either is written and never offered to be committed, with no record unless the person asks for one, per `skills/security/references/delivery-readiness.md` |
 | `git` | No document of its own: the commits and the pull request. An optional shipping record goes to `docs/derived/shipping/<date>-<slug>.md` |
 | `release` | `docs/records/releases/<version>.md` |
 | `incident` | `docs/records/incidents/<date>-<slug>.md`, runbook at `docs/runbooks/<slug>.md` |
@@ -265,7 +266,7 @@ merged and which directory it goes in.
 |-------|-------|-----------|-----------------|
 | Reference | the `spec` kinds, `docs/qa/`, `docs/security/`, `docs/standards/` and `docs/conventions.md`, the onboarding documents, `docs/runbooks/<slug>.md`, `.atk/profile.md`, `.atk/overrides/<skill>.md` | the top level of the docs root, and `.atk/` for the profile and the overrides | Updated in place. It claims to describe what the project does today, or for a `spec` kind under `Contract: first` what it is agreed to do, so a stale line in it is wrong rather than old |
 | Record | requirements, planning, design, orchestration proposals, fixes, verification, test runs, security reviews, releases, incidents, retros, handover, and the ADR | `docs/records/<kind>/`, the ADR excepted | Left alone. It describes a moment, and rewriting it destroys the only account of what was true then. A design and its ADR are edited in place until `APPROVED`, and an `APPROVED` plan while no phase has started, per Before writing |
-| Derived | the implementation record, the review report, the catchup brief and its document-mode page, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify`, `implement` and `orchestrate`, with the job result files beside the last, the run trace of every skill, the comparables snapshot of `estimate` | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, the trace of a finished run, never staged either, whose deletion costs only the evidence it held, or a snapshot of the tracker, never staged, whose deletion costs the next run one full read and, while the tracker is down, its fallback |
+| Derived | the implementation record, the review report, the catchup brief and its document-mode page, the skill feedback record, the shipping record, the onboarding setup-defect report, the `run-cases` triage report and run log, the progress log of `fix`, `verify`, `implement` and `orchestrate`, with the job result files beside the last, the run trace of every skill, the comparables snapshot of `estimate`, the delivery report of `security` and its detail file | `docs/derived/<kind>/` | Safe to delete. Everything here is either a copy of something else, rebuilt by running the skill again, the working state of a run in progress, which is never staged and whose deletion costs only the work it had ruled out, the trace of a finished run, never staged either, whose deletion costs only the evidence it held, or a snapshot of the tracker, never staged, whose deletion costs the next run one full read and, while the tracker is down, its fallback. The delivery report is rebuilt by running `atk:security --delivery` again, the owner's answers asked again with it, and is deleted before a handover by copy or archive, per its row above |
 
 Three questions place a kind, in this order. Does something else already hold the original, or does
 re-running the skill reproduce it? Then it is derived. Otherwise, does it describe a moment, which
@@ -349,13 +350,16 @@ report costs a set of identifiers, unless a `--comment` run posted them, a list 
 review raises again, and the walk of `atk:fix --findings` on a review never posted, rather than a
 step in the chain. A team that
 wants a smaller repository adds one line to `.gitignore`; a team that
-wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Four derived
+wants the copies keeps them. The kit writes no other artifact meant to stay untracked. Five derived
 kinds are never staged whatever the project does with the directory: the progress log, held out by
 a line in the local exclude file, the rest of its run directory by the staging rule of
 `shared/finalize-steps.md`, or for `atk:orchestrate`'s whole run directory by its own ignore file;
 the run trace, held out by an ignore file in its own directory, per the two subsections below; the
-document-mode page of `atk:catchup`, held out as its row above says; and the comparables snapshot of `atk:estimate`, held out by an ignore file in its own
-directory, per `skills/estimate/references/comparables-pool.md`.
+document-mode page of `atk:catchup`, held out as its row above says; the comparables snapshot of `atk:estimate`, held out by an ignore file in its own
+directory, per `skills/estimate/references/comparables-pool.md`; and the delivery report of
+`atk:security` with its detail file, held out by an ignore file in their own directory, per
+`skills/security/references/delivery-readiness.md`, since a list of what leaks must not be delivered
+with the leak.
 
 The split is why `docs/records/design/<date>-<ticket>-<slug>.md` and `docs/api/<resource>.md` are two
 documents rather than one. A design argues for a change and cites the code as it stood before it;

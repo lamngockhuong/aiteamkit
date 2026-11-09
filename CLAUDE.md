@@ -142,7 +142,8 @@ was a description of the kit when ADR 0002 was written, never a decision, and th
 with a design and an ADR of its own as `skill-eval`'s had:
 `docs/records/design/261108-2243-security-scripts.md` and
 `docs/adr/0017-security-scripts-for-history-and-supply-chain.md`. Its `scripts/history-scan.mjs`
-walks every ref of the history for secrets, and its `scripts/lib/secret-shapes.mjs` restates the
+walks every ref of the history for secrets, and under `--identities` for staff emails and internal
+hosts, and its `scripts/lib/secret-shapes.mjs` restates the
 shapes and the file lists of `shared/secret-scan.md`, held to them by `tests/verify.sh`, since a
 history built to test it holds values no committed file may. Its `scripts/supply-chain-scan.mjs`
 reads the workflows, manifests and lockfiles of the tracked tree for supply-chain candidates, its
@@ -825,7 +826,7 @@ checks of the sections above, over the tracked files; every `atk` skill carries 
 walks to the right profile, and `load-overrides` answers only for `atk:` skills and refuses a
 symlink out of `.atk/overrides/`; the two hook registrations agree; the marketplaces and the
 plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matches the tree;
-`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds, and on a tree built at test time each supply-chain candidate, with no login and no line of a manifest in the output; every agent holds Read, Grep and Glob only; the secret
+`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds, staff emails and internal hosts under `--identities` with no local part or full host in the output and a graft file changing nothing, and on a tree built at test time each supply-chain candidate, with no login and no line of a manifest in the output; every agent holds Read, Grep and Glob only; the secret
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
 hold; trigger evals parse; no trigger eval positive is claimed by two skills; every skill's evals hold a Vietnamese and a Japanese positive and no description carries either language; every description
 fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the

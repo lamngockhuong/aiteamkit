@@ -7,17 +7,19 @@
 // the shapes and the file lists come from ./lib/secret-shapes.mjs, held to that `sh` scan by
 // tests/verify.sh, and how git is started from ./lib/git-history-stream.mjs.
 //
-// Usage: node history-scan.mjs [--max-seconds <n>], from anywhere inside the repository.
+// Usage: node history-scan.mjs [--max-seconds <n>] [--domains | --identities [--internal <list>]
+// [--detail <path>]] from anywhere inside the repository, each flag per ./lib/history-scan-options.mjs.
 //
 // Output, one JSON object on standard output:
 //   { "tool": "history-scan", "version": 1, "complete": bool, "incomplete_reason": text|null,
 //     "scanned": { "refs": [refname], "commits": n, "binary_skipped": n },
 //     "remotes": [ { "name": text, "last_fetched": ISO time|null } ],
 //     "hits": [ { "kind": "secret", "shape": labels, "commit": sha, "path": path, "line": n,
-//                 "at_head": "present" | "removed" | "path-gone" }
+//                 "at_head": "present" | "removed" | "path-gone" | null where HEAD was not compared }
 //             | { "kind": "credential-file", "shape": why, "from": path|null, "commit": sha,
-//                 "path": path, "line": null, "at_head": "present" | "path-gone" } ],
-//     "not_scanned": [] }
+//                 "path": path, "line": null, "at_head": "present" | "path-gone" }
+//             | an "email" or "host" hit, per ./lib/identity-hosts.mjs ],
+//     "not_scanned": [], and "domains" and "detail" under those flags, per the same file }
 //   A secret is reported once, at the commit that first added that line at that path, so a line a
 //   merge only carries over from a parent is not reported again; a private key is one hit, its
 //   whole block compared. `at_head` is decided here: the line, or any hash of it, is never printed.
@@ -38,20 +40,20 @@
 import { blobReader, remotesWithLastFetch, runner, stream, unquote } from './lib/git-history-stream.mjs';
 import { readKeyVersions, touchesBlock } from './lib/private-key-versions.mjs';
 import { BLOCK_BEGIN, BLOCK_END, DUMP_BYTES, EXCLUDE_PATHSPECS, MOVES, REASON, TEMPLATE_PATHSPECS, isCredentialFile, isDump, isTemplate, shapesOf } from './lib/secret-shapes.mjs';
+import { readOptions } from './lib/history-scan-options.mjs';
+import { decideAtHead } from './lib/head-at-hit-compare.mjs';
+import { contentHits } from './lib/host-classes.mjs';
+import { detailPath, finishHits, identityPass, pathHitsFor } from './lib/identity-hosts.mjs';
 
 const refuse = (msg) => { process.stderr.write('history-scan: ' + msg + '\n'); process.exit(2); };
-const argv = process.argv.slice(2);
-let maxSeconds = null;
-for (let i = 0; i < argv.length; i++) {
-  // 2147483 seconds is the longest delay a Node timer holds.
-  if (argv[i] === '--max-seconds' && /^[1-9][0-9]{0,6}$/.test(argv[i + 1] || '') && Number(argv[i + 1]) <= 2147483) maxSeconds = Number(argv[++i]);
-  else refuse('unknown or incomplete argument ' + JSON.stringify(argv[i]) + '; takes only --max-seconds <n>, at most 2147483');
-}
-let top;
+let opt; try { opt = readOptions(process.argv.slice(2)); } catch (e) { refuse(e.message); }
+const { maxSeconds } = opt; let top;
 try { top = runner(process.cwd())(['rev-parse', '--show-toplevel']).trim(); } catch (e) {
   refuse(e.code === 'ENOENT' ? 'git is not on the PATH' : 'not inside a git repository');
 }
 const run = runner(top);
+let detail = null; // checked before anything is walked, so a path git would track exits 2
+if (opt.detail) try { detail = detailPath(top, run, opt.detail); } catch (e) { refuse(e.message); }
 const git = (args, input) => { try { return run(args, input); } catch { return ''; } }; // a failure reads as nothing
 const deadline = maxSeconds ? Date.now() + maxSeconds * 1000 : Infinity;
 let incomplete = null;
@@ -81,20 +83,28 @@ function fileHit(path, commit, shape, from = null) {
   unread.set(path, hit); hits.push(hit);
 }
 
+// Identities, raw: per ./lib/identity-hosts.mjs, a hit under --identities, a count under --domains.
+let domains = null;
+if ((opt.identities || opt.domains) && refs.length && !partial) {
+  const ids = await identityPass(top, run, deadline, opt, stop); hits.push(...ids.hits); domains = ids.domains;
+}
+
 let binarySkipped = 0;
-if (refs.length && !partial) {
+if (refs.length && !partial && !opt.domains) {
   // Pass 1, names only: every file ever added, with its blob, for the files rule 9 names, the files
   // beside a .pub, and the dumps over a megabyte at every path they were ever at; and whether passes
   // 2, 3 and 5 can find anything, so a history that never held what they look for is not walked for it.
   const added = new Map(); const pubs = new Set(); const dumps = []; const credBlobs = new Set();
   let renamable = false; let copied = false; let templates = false;
   let namesFailed = false; // a shallow clone is still walked; a names pass that failed is not
+  const onPath = pathHitsFor(opt, hits); // under --identities, a path that is itself a host
   namesFailed ||= !!await walk(['--no-renames', '--raw', '--no-abbrev'], (l, commit) => {
     const m = /^:\d+ \d+ [0-9a-f]+ ([0-9a-f]+) ([A-Z])\d*\t(.*)$/.exec(l);
     if (!m) return;
     const [, blob, status] = m; const path = unquote(m[3]); const cred = isCredentialFile(path);
     if (status === 'D') { renamable ||= cred; return; }
     if (status !== 'A' && status !== 'M') return;
+    if (status === 'A') onPath(path, commit);
     if (cred) { credBlobs.add(blob); if (status === 'A') fileHit(path, commit, REASON.named); } else if (isTemplate(path)) templates = true;
     else if (status === 'A' && credBlobs.has(blob)) copied = true;
     if (/\.pub$/.test(path)) pubs.add(path.slice(0, -4));
@@ -154,6 +164,7 @@ if (refs.length && !partial) {
         touched ||= touchesBlock(l);
         if (!l.startsWith('+')) return;
         const text = l.slice(1); const line = ln++;
+        if (opt.identities) for (const h of contentHits(text, opt.internal)) record({ ...h, shape: 'content', commit, path: file, line, at_head: null, block: [text] }, h.kind + '\0' + file + '\0' + h.full);
         const shape = shapesOf(text);
         if (!shape) return;
         const hit = { kind: 'secret', shape, commit, path: file, line, at_head: null, block: [text] };
@@ -174,27 +185,16 @@ if (refs.length && !partial) {
   }
 }
 
-// at_head, decided here from HEAD's tree and the blob of each path hit, one file at a time and with no
-// time limit, since a hit left unread would read as removed; never a blob of a file rule 9 names, and
-// not at all in a partial clone, whose trees may be missing.
-let headPaths = new Set();
-if (headSha && !partial) try { headPaths = new Set(run(['ls-tree', '-r', '-z', '--name-only', 'HEAD']).split('\0').filter(Boolean)); } catch { stop('git could not list HEAD'); }
-const secrets = hits.filter((h) => h.kind === 'secret' && headPaths.has(h.path)).sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
-const head = secrets.length ? blobReader(top, Infinity) : null; let at = null; let text = '';
-try { for (const h of secrets) { if (h.path !== at) text = '\n' + ((await head.read('HEAD:' + (at = h.path))) ?? '') + '\n'; h.at_head = text.includes('\n' + h.block.join('\n') + '\n') ? 'present' : 'removed'; } }
-catch { stop('git could not read HEAD to compare the hits with'); } finally { head?.end(); }
-for (const h of hits) {
-  if (!headPaths.has(h.path)) h.at_head = 'path-gone';
-  else if (h.kind === 'credential-file') h.at_head = 'present';
-  else h.at_head ??= 'removed';
-  delete h.block;
-}
-
+await decideAtHead(hits, { top, run, headSha, partial, stop });
+// Full emails, hosts and paths go to the --detail file alone, per ./lib/identity-hosts.mjs.
 const remotes = remotesWithLastFetch(top, git);
+const detailOut = finishHits(hits, { opt, detail, refs, remotes, stop });
 
 const commits = Number(git(['rev-list', '--all', '--count']).trim()) || 0;
 process.stdout.write(JSON.stringify({
   tool: 'history-scan', version: 1, complete: !incomplete, incomplete_reason: incomplete,
-  scanned: { refs, commits, binary_skipped: binarySkipped }, remotes, hits, not_scanned: [],
+  scanned: { refs, commits, binary_skipped: binarySkipped }, remotes, hits,
+  not_scanned: opt.domains ? ['secrets, credential files and content: --domains reads the identities and the remotes only'] : opt.identities ? [] : ['commit and tag messages: read under --identities only'],
+  ...(domains && { domains }), ...(detailOut && { detail: detailOut }),
 }, null, 2) + '\n');
 process.exitCode = incomplete ? 3 : 0;
