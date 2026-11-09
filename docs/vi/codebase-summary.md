@@ -316,6 +316,7 @@ Bản tiếng Anh là nguồn sự thật; `docs/vi/` mirror theo từng file.
 | File | Mục đích |
 |------|----------|
 | `.github/workflows/release-please.yml` | Chạy release-please khi push lên `main` |
+| `.github/workflows/verify.yml` | Chạy `bash tests/verify.sh` trên mọi pull request và mỗi lần push lên `main`, báo lỗi khi có dòng không bắt đầu bằng `OK` |
 | `.github/workflows/labeler.yml` | Gắn label cho từng pull request theo đường dẫn file nó thay đổi, dựa trên `.github/labeler.yml` |
 | `.github/labeler.yml` | Quy tắc đường dẫn cho labeler: mỗi phần của kit một label `area:`, mỗi skill của cả hai plugin một label `skill:`, gồm 25 skill của `atk` và từng skill của `atkx` |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Hướng dẫn Conventional Commit, harness bị ảnh hưởng, và checklist kiểm tra gồm cả các mục đồng bộ chéo |

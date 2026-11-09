@@ -315,6 +315,7 @@ English is the source of truth; `docs/vi/` mirrors it file-for-file.
 | File | Purpose |
 |------|---------|
 | `.github/workflows/release-please.yml` | Runs release-please on push to `main` |
+| `.github/workflows/verify.yml` | Runs `bash tests/verify.sh` on every pull request and push to `main`, failing on any line that does not start with `OK` |
 | `.github/workflows/labeler.yml` | Labels each pull request from the paths it changes, using `.github/labeler.yml` |
 | `.github/labeler.yml` | Path rules for the labeler: one `area:` label per part of the kit and one `skill:` label per skill of either plugin: the 25 of `atk` and each `atkx` skill |
 | `.github/PULL_REQUEST_TEMPLATE.md` | Conventional Commit guidance, affected harnesses, and the verification checklist including the cross-file sync items |
