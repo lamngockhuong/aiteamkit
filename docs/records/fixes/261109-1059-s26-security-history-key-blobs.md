@@ -138,7 +138,7 @@ Every check below was run from `tests/verify.sh` on Windows with `PYTHONUTF8=1`,
 
 **The standalone checks of CLAUDE.md:** clean. These are the em-dash, `ak:`, `atkx`, `fill:#` and symlink checks.
 
-**The gate:** the Linux run of the whole script, in Docker `node:22` (Python 3.11.2, Node 22.23.4, git 2.39.5), on a copy of the working tree with file modes taken from the git index: 90 lines, every one OK, the new check's line among them with its `--max-seconds` part. From this pull request on, the `verify` job of `.github/workflows/verify.yml` runs the same script on `ubuntu-latest` and fails on any line that does not start with OK. It is not yet a required check.
+**The gate:** the Linux run of the whole script, in Docker `node:22` (Python 3.11.2, Node 22.23.4, git 2.39.5), on a copy of the working tree with file modes taken from the git index: 90 lines, every one OK, the new check's line among them with its `--max-seconds` part. From this pull request on, the `verify` job of `.github/workflows/verify.yml` runs the same script on `ubuntu-latest` and fails on any line that does not start with OK. Since 2026-11-09 it is a required check of `main`, with a repository admin able to bypass it for release-please pull requests, which no workflow runs on.
 
 ## 6b. Reviewed
 
@@ -160,7 +160,6 @@ There was no closing read: round 2 fixed nothing, and the `N3` rename is a test-
 
 ## 7. Not verified
 
-- **The CI job itself.** It has not run yet; its first run is on this pull request.
 - **The `S2` size check.** No fixture exercises it, because that would need a text blob over about 512 MB with `core.bigFileThreshold` raised.
 - **Merge histories.** The new selection has not been run against a history with merges. Its correctness there rests on the walk going parents first; see section 9.
 
@@ -177,5 +176,5 @@ There was no closing read: round 2 fixed nothing, and the `N3` rename is a test-
 ## 9. Left for later
 
 - A merge fixture for the private-key pass. The question raised in round 1, that `keyBlocks` (unchanged here) treats code between a BEGIN line and a later END line as a key block, so a bundle naming both markers is read in every version and each edit between them is a new hit, was set aside by Lam Ngoc Khuong on 2026-11-09. Whether a version is read depends on whether its parent version, the old blob in the diff, held a block. That only works because `walk` passes `--reverse --topo-order`, so parents come first. The new fixtures are linear histories, so a merge case would pin that order down. A comment in `history-scan.mjs` naming the dependence was skipped because the file is at its 200-line ceiling; `lib/private-key-versions.mjs` states it.
-- Making the `verify` job a required check, a repository setting Lam Ngoc Khuong owns. Until then `CLAUDE.md` keeps every rule `REVIEWED`.
+- Moving the `CONV` rows that a check of `tests/verify.sh` holds from `REVIEWED` to `ENFORCED`, now that the `verify` job is required. That reclassification is `atk:convention`'s, and Lam Ngoc Khuong approves it.
 - The new fixture takes about 13 to 20 seconds on Windows, because it builds 1100 versions of 1.2 MB. It reproduces S26 itself. Which versions are read is now pinned separately by a fast check of `readKeyVersions`, so the large fixture could be dropped later if its cost matters more than the reproduction.
