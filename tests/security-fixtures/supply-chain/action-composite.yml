@@ -1,0 +1,9 @@
+# Copied by tests/verify.sh to .github/actions/build/action.yml, a local composite action.
+name: build
+description: a local composite action
+runs:
+  using: composite
+  steps:
+    - uses: actions/github-script@v7
+    - shell: bash
+      run: echo "${{ github.event.issue.body }}"

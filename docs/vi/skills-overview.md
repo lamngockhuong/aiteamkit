@@ -773,8 +773,9 @@ client của lần chạy cần, trình duyệt hay thiết bị, lần chạy d
 ## `atk:security`
 
 **Sinh ra.** Một bản ghi bảo mật: tài sản, tác nhân, lối vào và ranh giới tin cậy trong phạm vi, lệnh
-audit phụ thuộc của chính dự án, một lượt quét secret trên các file được theo dõi và một lượt quét lịch sử
-qua mọi ref bằng script đi kèm skill, sáu câu hỏi
+audit phụ thuộc của chính dự án, một lượt quét secret trên các file được theo dõi, một lượt quét lịch sử
+qua mọi ref và một lượt quét chuỗi cung ứng trên workflow CI, manifest và lockfile, hai lượt sau đều
+bằng script đi kèm skill, sáu câu hỏi
 STRIDE đặt ra ở mọi ranh giới và ánh xạ sang phiên bản hiện hành của OWASP Top 10, mỗi phát hiện được lần từ lối vào tới tác
 động, các ứng viên bị loại kèm dòng mã loại chúng, một checklist trả lời từng mục, và một bảng rủi ro
 còn lại. Với `--threat-model`, là mô hình mối đe dọa của một tính năng, được giữ cập nhật trong
@@ -785,7 +786,10 @@ chế kèm `path:line` và khe hở hẹp nó còn để lại, và mọi kết 
 và vì sao cơ chế đó không phủ được trường hợp này. Một phụ thuộc có lỗ hổng được tính là được phát
 hành khi cây phụ thuộc production của một thành phần triển khai chứa nó, chứ không phải khi cờ
 development của công cụ audit nói vậy. Một gói dính cảnh báo gói độc hại là mức Critical dù nằm ở đâu
-trong lockfile, và mọi thông tin đăng nhập trên các máy đã cài nó đều coi như đã lộ.
+trong lockfile, và mọi thông tin đăng nhập trên các máy đã cài nó đều coi như đã lộ. Lượt quét chuỗi
+cung ứng báo các ứng viên, như action không pin vào một commit, workflow `pull_request_target` có
+checkout pull request, một index gói bổ sung, hay tên gói chỉ lệch một hai chữ so với một gói phổ
+biến, rồi skill đánh giá từng ứng viên theo những gì workflow hay lượt cài đặt đó chạm tới được.
 
 Mỗi phát hiện ghi ai chạm tới được nó, từ người ẩn danh tới chỉ khi có thêm một lỗi thứ hai, đặt cạnh
 mức nghiêm trọng, và có một tiêu đề nêu điểm yếu và tính năng mà không chép gì từ mã, chính là tiêu

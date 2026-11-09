@@ -1,0 +1,10 @@
+# Copied by tests/verify.sh to .github/workflows/multiline.yml: a flow sequence that runs past its
+# line, which the line reader reports rather than reads.
+name: multiline
+on: push
+jobs:
+  one:
+    runs-on: ubuntu-latest
+    steps: [
+      { uses: actions/checkout@v4 }
+    ]

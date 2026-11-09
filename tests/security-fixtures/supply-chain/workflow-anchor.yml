@@ -1,0 +1,10 @@
+# Copied by tests/verify.sh to .github/workflows/anchor.yml: an anchor the line reader does not
+# resolve, so the scan reports the file as not read rather than guessing at the second job.
+name: anchor
+on: push
+jobs:
+  one: &job
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+  two: *job

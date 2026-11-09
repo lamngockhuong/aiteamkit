@@ -16,7 +16,9 @@ Cited by:
   this file is how that is checked. Its `skills/git/references/commit-craft.md` reads the staged
   diff through the `mask --cached` form.
 - `atk:security` in its step 2 for The scan, in its `tree` mode over every tracked file, and Paths
-  that are a finding on their own. What happens on a hit is `atk:git`'s procedure, not its.
+  that are a finding on their own, which its history and supply-chain scripts leave unread as well,
+  through the copy in `scripts/lib/secret-shapes.mjs`. What happens on a hit is `atk:git`'s
+  procedure, not its.
 - The reviewer rule in `shared/host-capabilities.md`, which uses its `mask` mode for every diff handed
   to an agent, by `atk:review` and by any run that hands an agent a change to read, and for every
   diff a skill reads in the session.

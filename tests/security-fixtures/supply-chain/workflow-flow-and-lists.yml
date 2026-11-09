@@ -1,0 +1,17 @@
+# Copied by tests/verify.sh to .github/workflows/flow.yml: flow collections, a sequence at its key's
+# indent, quoted values, a plain scalar continued on the next line, a local action and an image.
+name: "flow and lists"
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - { uses: actions/setup-python@v5, with: { python-version: "3.12" } }
+    - uses: "actions/cache@v4"
+    - uses: './.github/actions/build'
+    - uses: docker://alpine:3.20
+    - name: branch
+      run: echo building
+        ${{ github.head_ref }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
