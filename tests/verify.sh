@@ -425,10 +425,12 @@ for f in sorted(glob.glob('plugins/*/agents/*.md')):
 # copy of a rule 9 file is named and left unread in every mode, a plain mv in the working tree and a
 # path git quotes included, the staged mask shows no deleted or removed value, a dump and a file
 # beside a .pub stay out of the masked diff, a file git treats as binary is named, a path holding a
-# colon is split where it ends, and the working-tree mask works before the first commit. Values are
-# built from pieces, so this file is not itself a hit
+# colon is split where it ends, and the working-tree mask works before the first commit. atk:security's
+# scripts/lib/secret-shapes.mjs, which restates this block, gives every line the labels the tree
+# mode gives it, and keeps the block's lists of files, word for word, and its rules for the files it
+# never reads. Values are built from pieces, so this file is not itself a hit
 python3 -c "
-import os, re, shutil, subprocess, tempfile
+import json, os, pathlib, re, shutil, subprocess, tempfile
 block = re.search(r'sh -s -- staged <<.SCAN.\n(.*?)\nSCAN\n', open('plugins/atk/shared/secret-scan.md').read(), re.S).group(1)
 q, e, a, d = chr(34), chr(61), chr(39), chr(36)
 hit = ['GITHUB_TO' + 'KEN' + e + 'abcdef123', 'DB_PA' + 'SS' + e + 'x', 'Authorization: Bea' + 'rer opaque123',
@@ -439,7 +441,8 @@ hit = ['GITHUB_TO' + 'KEN' + e + 'abcdef123', 'DB_PA' + 'SS' + e + 'x', 'Authori
        'spring.datasource.pass' + 'word' + e + 'P@ssZZrd!', 'db.pass' + 'word: S3cr#ZZ99', 'PASS' + 'WORD' + e + 'test1234',
        'CACHE_KE' + 'Y_PREFIX' + e + 'app:v2', 'apiKe' + 'yHeader: ' + a + 'X-Api-Key' + a,
        '//registry.npmjs.org/:_authTo' + 'ken' + e + 'npm_ZZTOK123', 'url ' + e + ' https://u:ZZGITPW' + '@gitlab.com/x',
-       '//registry.npmjs.org/:_au' + 'th' + e + 'ZZNPMAUTH64', 'cache ' + e + ' rediss://:ZZRPW' + '@host:6380']
+       '//registry.npmjs.org/:_au' + 'th' + e + 'ZZNPMAUTH64', 'cache ' + e + ' rediss://:ZZRPW' + '@host:6380',
+       'const pass' + 'word ' + e + ' ' + q + chr(0x79d8) + chr(0x5bc6) + chr(0x9375) + q]
 ok = ['DB_PASSWORD' + e + '<redacted: password>', chr(96) + 'DB_PASSWORD' + e + '<redacted: password>' + chr(96),
       'DB_PASSWORD' + e + '<redacted: password> npm start', 'postgres://u:<redacted: password>@host', 'TOKEN' + e + '<REDACTED>',
       'postgres://localhost/dev', 'type A ' + e + ' { token: string }', '<li key' + e + '{item.id} />', 'if (token ' + e + e + ' null) {}',
@@ -448,7 +451,7 @@ ok = ['DB_PASSWORD' + e + '<redacted: password>', chr(96) + 'DB_PASSWORD' + e + 
       'TOKEN_MODE' + e + 'strict', 'CACHE_KEY_ENABLED' + e + 'true', 'curl -H ' + q + 'Authorization: Bearer ' + d + 'TOKEN' + q,
       'postgres://u:' + d + '{DB_PASS}@db/x', 'token_limit: 10000000', 'PASSWORD' + e + 'none', 'token: Optional[str]',
       'apiKey: this.config.apiKey', 'https://registry.npmjs.org/@scope/pkg', 'https://host:8080/a@b', 'ssh://git@github.com/o/r',
-      'fmt ' + e + ' ' + q + '%s://%s:%s@%s' + q, 'GIT_AUTHOR_NAME' + e + 'Jane']
+      'fmt ' + e + ' ' + q + '%s://%s:%s@%s' + q, 'GIT_AUTHOR_NAME' + e + 'Jane', 'const pass' + 'word ' + e + ' ' + q + chr(233) + chr(233) + q]
 tmp = []
 def repo():
     t = tempfile.mkdtemp(); tmp.append(t)
@@ -479,7 +482,7 @@ put(t, 'keys/deploy.pub', 'ssh-ed25519 AAAA' + chr(10)); put(t, 'small.sql', 'in
 g('add', '-A', '-f'); g('config', 'diff.external', 'cat'); g('config', 'diff.noprefix', 'true'); g('config', 'log.showSignature', 'true')
 named = ['.env', 'similarity-svc/secrets.json', 'renamer/.env', 'keys/deploy', 'id_ecdsa', 'dump.sql'] + stores
 values = ['abcdef123', 'opaque123', 'ZZFAKE', 'ZZPW', 'hunter22x', 'c2lnbmF0', 'ZZENV', 'ZZLIVE', 'ZZ24', 'Hunter', 'ZZrd', 'ZZ99', 'ZZTOK', 'ZZGITPW',
-          'ZZNPMAUTH', 'ZZRPW']
+          'ZZNPMAUTH', 'ZZRPW', chr(0x79d8) + chr(0x5bc6) + chr(0x9375)]
 for mode in ('staged', 'tree', 'commit'):
     if mode == 'commit': g('config', '--unset', 'diff.external'); g('commit', '-qm', 'x')
     r = scan(mode, os.path.join(t, 'sub'))
@@ -489,6 +492,20 @@ for mode in ('staged', 'tree', 'commit'):
     assert not any(p + ': ' in r.stdout for p in ('small.sql', 'keys/deploy.pub', 'src/secrets.ts')), mode + ': ' + r.stdout
     assert colon[0] + ':1: ' in r.stdout, mode + ': a path holding a colon was split at the wrong place: ' + r.stdout
     assert not any(v in r.stdout + r.stderr for v in values), mode + ': a value reached the output'
+    if mode == 'tree': labels = {int(l.split(':')[1]): l.split(':', 2)[2].strip() for l in r.stdout.splitlines() if l.startswith('f.txt:')}
+lib = 'plugins/atk/skills/security/scripts/lib/secret-shapes.mjs'
+code = ('import {shapesOf} from ' + json.dumps(pathlib.Path(lib).resolve().as_uri()) + '; import {readFileSync} from ' + json.dumps('node:fs')
+        + '; console.log(JSON.stringify(JSON.parse(readFileSync(0, ' + json.dumps('utf8') + ')).map(shapesOf)));')
+js = json.loads(subprocess.run(['node', '--input-type' + e + 'module', '-e', code], input=json.dumps(hit + ok), capture_output=True, text=True).stdout)
+diff = [(i + 1, labels.get(i + 1, ''), js[i]) for i in range(len(hit + ok)) if labels.get(i + 1, '') != js[i]]
+assert not diff, 'secret-shapes.mjs labels differ from the tree mode (line, sh, module): %s' % diff
+src = open(lib).read()
+marked = lambda name: re.findall(r'\x27([^\x27]+)\x27', re.search('// ' + name + r': begin.*?\n(.*?)\n// ' + name + ': end', src, re.S).group(1))
+F = re.search(r'\nF=.(.*?).\nT=', block, re.S).group(1).split(); T = re.search(r'\nT=.(.*?).\n', block).group(1).split()
+assert marked('credential-files') == F and marked('credential-file-templates') == T, 'secret-shapes.mjs lists of files differ from F and T'
+for rule in ('1048576', '-M20%', '-C100%', '--find-copies-harder', 'a file rule 9 names, not read', 'a file beside a .pub of the same name',
+             'a .sql or .csv over a megabyte, ask whether it holds real data'):
+    assert rule in block and rule in src, 'a rule for unread files is no longer in both the block and secret-shapes.mjs: ' + rule
 m = scan('mask', t, 'HEAD~1..HEAD')
 assert m.stdout.count('<redacted: a line holding') == len(hit) + len(templates) + len(colon) and not any(v in m.stdout for v in values), 'mask left a value'
 g('rm', '-q', '--cached', '.env')
@@ -545,7 +562,116 @@ put(t, 'a.txt', 'x' + chr(10))
 m = scan('mask', t, '--worktree')
 assert m.returncode == 0 and '+x' in m.stdout, 'the working-tree mask failed in a repository with no commit: ' + m.stderr
 for t in tmp: shutil.rmtree(t)
-print('OK secret scan, %d shapes found, %d clean lines passed, four modes' % (len(hit), len(ok)))"
+print('OK secret scan, %d shapes found, %d clean lines passed, four modes, secret-shapes.mjs agrees' % (len(hit), len(ok)))"
+
+# atk:security's history scan on a history built here, since every value it must find is one no
+# committed file may hold: a secret committed then deleted is removed, one still there is present,
+# a template's secret is read; a credential file ever committed, one renamed and one copied to a name
+# the list does not hold, a key beside a .pub, and a dump over a megabyte at each path it was ever at
+# are named and never read; a private key is one hit, a key replaced in place is a second one, and a
+# certificate hides nothing after it; a path git quotes is unquoted; a secret a merge only carries is
+# reported once, at its own commit, and one added in a conflict resolution once, at the merge; a
+# git replace object changes nothing. The same hits come back with the user's diff, merge, root,
+# hunk, quoting, colour and textconv settings, no value and no remote URL reaches either stream, a
+# shallow clone exits 3 and a partial clone exits 3 without walking, and a bad argument or a
+# directory outside any repository exits 2 with nothing on standard output. No script of the skill
+# imports a network module or calls fetch, and every process it starts is git
+python3 -c "
+import glob, json, os, re, shutil, stat, subprocess, sys, tempfile
+for f in glob.glob('plugins/atk/skills/security/scripts/**/*.mjs', recursive=True):
+    src = open(f).read()
+    bad = re.findall(r'(?:from|import)[ (]*[\x27\x22](?:node:)?(?:http|https|http2|net|tls|dgram|dns)[\x27\x22]|[^a-zA-Z_.]fetch *[(]|require *[(]', src)
+    bad += [c for c in re.findall(r'(?<![.\w])(?:spawn|execFileSync|execSync|exec|execFile|fork)[(][^,)]*', src) if not c.endswith(chr(39) + 'git' + chr(39))]
+    assert not bad, '%s reaches the network or starts something other than git: %s' % (f, bad)
+script = os.path.abspath('plugins/atk/skills/security/scripts/history-scan.mjs')
+q, e, a = chr(34), chr(61), chr(39)
+aws = 'AK' + 'IA' + 'ZZHISTGONE00000A'; gh = 'ghp' + '_ZZHISTKEEP12345'; pw = 'ZZMERGE' + 'PW77'; envv = 'ZZHISTENV' + 'VAL1'
+bodya = 'ZZBODYA' + 'A' * 57; bodyb = 'ZZBODYB' + 'B' * 57; dumpv = 'ZZDUMP' + 'HIST99'; pubv = 'ZZPUB' + 'FILE88'
+qv = 'sk_' + 'live_ZZQUOTED1'; tmplv = 'ZZTEMPLATE' + 'VAL2'; sidev = 'ghp' + '_ZZSIDEKEEP1234'; certpw = 'ZZCERT' + 'PW55'
+notepw = 'ZZNOTE' + 'PW66'; first = 'ZZFIRST' + 'F' * 57; bodyc = 'ZZBODYC' + 'C' * 57; bodyd = 'ZZBODYD' + 'D' * 57
+values = [aws, gh, pw, envv, bodya, bodyb, dumpv, pubv, qv, tmplv, sidev, certpw, notepw, first, bodyc, bodyd]
+t = tempfile.mkdtemp(); r = os.path.join(t, 'repo'); os.makedirs(r)
+def g(*x, check=True):
+    return subprocess.run(['git', '-C', r] + list(x), check=check, capture_output=True, text=True, encoding='utf-8').stdout
+def put(p, s):
+    os.makedirs(os.path.dirname(os.path.join(r, p)), exist_ok=True); open(os.path.join(r, p), 'w', encoding='utf-8').write(s)
+def scan(cwd, *args):
+    p = subprocess.run(['node', script] + list(args), capture_output=True, text=True, encoding='utf-8', cwd=cwd)
+    return p, (json.loads(p.stdout) if p.stdout else None)
+def writable(fn, path, _):
+    os.chmod(path, stat.S_IWRITE); fn(path)
+pem = lambda body, head=None: '-----BEGIN RSA PRIV' + 'ATE KEY-----' + chr(10) + ((head or body) + chr(10)) + (body + chr(10)) * 3 + '-----END RSA PRIVATE KEY-----' + chr(10) + 'const after ' + e + ' 1;' + chr(10)
+try:
+    g('init', '-q'); g('config', 'user.email', 'p@x'); g('config', 'user.name', 'p'); g('config', 'commit.gpgsign', 'false')
+    put('a.js', 'const k ' + e + ' ' + a + aws + a + ';' + chr(10)); put('b.js', 'x ' + e + ' 1' + chr(10)); g('add', '-A'); g('commit', '-qm', '1')
+    put('a.js', 'x ' + e + ' 2' + chr(10)); g('commit', '-qam', '2'); c2 = g('rev-parse', 'HEAD').strip()
+    put('b.js', 'x ' + e + ' 1' + chr(10) + 't ' + e + ' ' + a + gh + a + chr(10)); g('commit', '-qam', '3'); c3 = g('rev-parse', 'HEAD').strip()
+    put('.env', 'API_TOKEN' + e + envv + chr(10)); put('.env.example', 'API_TOKEN' + e + tmplv + chr(10)); g('add', '-A'); g('commit', '-qm', '4')
+    shutil.copy(os.path.join(r, '.env'), os.path.join(r, 'envcopy.txt')); g('add', 'envcopy.txt'); g('commit', '-qm', '4b')
+    g('mv', '.env', 'env.bak'); g('commit', '-qm', '5'); g('rm', '-q', 'env.bak'); g('commit', '-qm', '6')
+    put('keys/deploy', 'API_TOKEN' + e + pubv + chr(10)); put('keys/deploy.pub', 'ssh-ed25519 AAAA' + chr(10))
+    put('data/d.sql', 'PASSWORD' + e + dumpv + chr(10) + ('-- filler ' + 'x' * 100 + chr(10)) * 11000); put('pem.js', pem(bodya))
+    put('ca.js', '-----BEGIN CERTIFICATE-----' + chr(10) + ('MIIB' + 'C' * 60 + chr(10)) * 3 + '-----END CERTIFICATE-----' + chr(10) + 'DB_PA' + 'SS' + e + certpw + chr(10))
+    put('notes.md', 'A key starts with -----BEGIN RSA PRIV' + 'ATE KEY----- in a PEM file.' + chr(10) + 'more' + chr(10) + 'DB_PA' + 'SS' + e + notepw + chr(10))
+    put('ed.js', pem(bodyc, first))
+    g('add', '-A'); g('commit', '-qm', '7'); c7 = g('rev-parse', 'HEAD').strip()
+    put('pem.js', pem(bodyb)); put('ed.js', pem(bodyd, first)); g('mv', 'data', 'data2'); g('add', '-A'); g('commit', '-qm', '8'); c8 = g('rev-parse', 'HEAD').strip()
+    g('checkout', '-qb', 'side'); put('c.js', 'y ' + e + ' 1' + chr(10)); put('s.js', 's ' + e + ' ' + a + sidev + a + chr(10)); g('add', '-A'); g('commit', '-qm', 's1')
+    s1 = g('rev-parse', 'HEAD').strip()
+    g('checkout', '-q', '-'); put('c.js', 'y ' + e + ' 2' + chr(10)); g('add', 'c.js'); g('commit', '-qm', 'm1')
+    g('merge', '-q', 'side', check=False); put('c.js', 'DB_PA' + 'SS' + e + pw + chr(10)); g('add', 'c.js'); g('commit', '-qm', 'merge')
+    merge = g('rev-parse', 'HEAD').strip()
+    # a name git quotes, holding a quote, put straight into the index, since Windows cannot make the file
+    odd = 'odd dir/n' + chr(228) + q + 'me.js'
+    blob = subprocess.run(['git', '-C', r, 'hash-object', '-w', '--stdin'], input='const k ' + e + ' ' + a + qv + a + ';' + chr(10), capture_output=True, text=True, check=True).stdout.strip()
+    g('-c', 'core.protectNTFS' + e + 'false', 'update-index', '--add', '--cacheinfo', '100644,' + blob + ',' + odd); g('commit', '-qm', 'odd')
+    g('replace', c3, c2)
+    p, out = scan(r)
+    assert p.returncode == 0 and out['complete'], 'the scan did not finish: %s %s' % (p.returncode, p.stderr)
+    got = sorted((h['kind'], h['path'], h['at_head']) for h in out['hits'])
+    want = sorted([('secret', 'a.js', 'removed'), ('secret', 'b.js', 'present'), ('credential-file', '.env', 'path-gone'), ('secret', '.env.example', 'present'),
+                   ('credential-file', 'envcopy.txt', 'present'), ('credential-file', 'env.bak', 'path-gone'), ('credential-file', 'keys/deploy', 'present'),
+                   ('credential-file', 'data/d.sql', 'path-gone'), ('credential-file', 'data2/d.sql', 'present'), ('secret', 'pem.js', 'removed'),
+                   ('secret', 'pem.js', 'present'), ('secret', 'ca.js', 'present'), ('secret', 'ed.js', 'removed'), ('secret', 'ed.js', 'present'),
+                   ('secret', 'notes.md', 'present'), ('secret', 'notes.md', 'present'), ('secret', 's.js', 'present'), ('secret', 'c.js', 'present'), ('secret', odd, 'present')])
+    assert got == want, 'hits %s, expected %s' % (sorted(out['hits'], key=str), want)
+    by = {(h['path'], h['at_head']): h for h in out['hits']}
+    assert by[('a.js', 'removed')]['shape'] == 'AWS access key' and by[('a.js', 'removed')]['line'] == 1, 'a shape or a line was wrong'
+    assert by[('b.js', 'present')]['commit'] == c3 and by[('b.js', 'present')]['line'] == 2, 'a git replace object moved a hit to another commit'
+    assert [by[('pem.js', s)]['commit'] for s in ('removed', 'present')] == [c7, c8] and by[('pem.js', 'removed')]['line'] == 1, 'a key replaced in place was not a second hit'
+    assert [by[('ed.js', s)]['commit'] for s in ('removed', 'present')] == [c7, c8], 'a key whose first body line stayed was not a second hit when replaced'
+    notes = sorted((h['line'], h['shape']) for h in out['hits'] if h['path'] == 'notes.md')
+    assert [n[0] for n in notes] == [1, 3] and 'private key' not in notes[1][1], 'a line naming the marker hid the line after it: %s' % notes
+    assert by[('ca.js', 'present')]['line'] == 6 and 'private key' not in by[('ca.js', 'present')]['shape'], 'a certificate was read as a key, or hid the line after it'
+    assert by[('env.bak', 'path-gone')]['from'] == '.env' and by[('envcopy.txt', 'present')]['from'] == '.env', 'a rename or a copy lost its origin'
+    assert by[('s.js', 'present')]['commit'] == s1 and by[('c.js', 'present')]['commit'] == merge, 'a merge reported a carried line, or missed its resolution'
+    total = int(g('--no-replace-objects', 'rev-list', '--all', '--count'))
+    assert 'refs/heads/side' in out['scanned']['refs'] and out['scanned']['commits'] == total, 'refs or commits miscounted: %s' % out['scanned']
+    assert not any(v in p.stdout + p.stderr for v in values), 'a value reached the output'
+    with open(os.path.join(r, '.git', 'info', 'attributes'), 'w') as f: f.write('*.js diff' + e + 'hide' + chr(10) + '*.sql diff' + e + 'hide' + chr(10))
+    for k, v in (('diff.noprefix', 'true'), ('core.quotePath', 'true'), ('color.ui', 'always'), ('log.showSignature', 'true'), ('diff.hide.textconv', 'true'),
+                 ('diff.renames', 'false'), ('log.diffMerges', 'combined'), ('log.showRoot', 'false'), ('diff.interHunkContext', '5')):
+        g('config', k, v)
+    p2, out2 = scan(os.path.join(r, 'keys'))
+    assert p2.returncode == 0 and out2['hits'] == out['hits'], 'the user settings changed the hits: %s' % out2['hits']
+    sh = os.path.join(t, 'shallow')
+    subprocess.run(['git', 'clone', '-q', '--no-checkout', '--depth', '1', 'file://' + r, sh], check=True, capture_output=True)
+    subprocess.run(['git', '-C', sh, 'fetch', '-q', '--depth', '1'], check=True, capture_output=True)
+    p, out = scan(sh)
+    assert p.returncode == 3 and not out['complete'] and out['incomplete_reason'] == 'shallow clone', 'a shallow clone did not exit 3: %s' % p.returncode
+    assert len(out['remotes']) == 1 and sorted(out['remotes'][0]) == ['last_fetched', 'name'] and out['remotes'][0]['name'] == 'origin' and out['remotes'][0]['last_fetched'], 'remotes: %s' % out['remotes']
+    assert not any(x in p.stdout for x in (r, json.dumps(r)[1:-1])) and not any(v in p.stdout + p.stderr for v in values), 'a remote URL or a value reached the output'
+    g('config', 'uploadpack.allowFilter', 'true'); pc = os.path.join(t, 'partial')
+    subprocess.run(['git', 'clone', '-q', '--no-checkout', '--filter' + e + 'blob:none', 'file://' + r, pc], check=True, capture_output=True)
+    p, out = scan(pc)
+    assert p.returncode == 3 and out['incomplete_reason'].startswith('partial clone') and not out['hits'], 'a partial clone was walked: %s' % p.returncode
+    outside = os.path.join(t, 'outside'); os.makedirs(outside)
+    for cwd, args in ((r, ['--max-seconds']), (r, ['--max-seconds', '0']), (r, ['--max-seconds', '2147484']), (r, ['--bogus']), (outside, [])):
+        p, _ = scan(cwd, *args)
+        assert p.returncode == 2 and not p.stdout and p.stderr.startswith('history-scan: '), 'not refused with exit 2: %s %s' % (args, p.stderr)
+finally:
+    shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
+print('OK security history scan, %d hits, settings change nothing, shallow and partial clones exit 3' % len(want))"
 
 # The git behaviour atk:orchestrate's checks after a job rest on, in plugins/atk/skills/orchestrate/
 # references/worktrees.md: an ignored directory is one listing line, so the run directory is hashed

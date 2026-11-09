@@ -760,7 +760,8 @@ run stops after the scope question and hands the agreed scope to `atk:qa --recor
 ## `atk:security`
 
 **Produces.** A security record: the assets, actors, entry points and trust boundaries in scope, the
-project's own dependency audit and a secret scan over tracked files, the six STRIDE questions asked
+project's own dependency audit, a secret scan over tracked files and a history scan over every ref, by a script the
+skill carries, the six STRIDE questions asked
 at every boundary and mapped to the current edition of the OWASP Top 10, each finding traced from entry point to impact,
 the candidates ruled out with the line that rules them out, a checklist answered item by item, and a
 residual risk table. With `--threat-model`, the threat model of a feature, kept current in

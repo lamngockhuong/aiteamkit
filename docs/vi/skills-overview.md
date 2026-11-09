@@ -773,7 +773,8 @@ client của lần chạy cần, trình duyệt hay thiết bị, lần chạy d
 ## `atk:security`
 
 **Sinh ra.** Một bản ghi bảo mật: tài sản, tác nhân, lối vào và ranh giới tin cậy trong phạm vi, lệnh
-audit phụ thuộc của chính dự án và một lượt quét secret trên các file được theo dõi, sáu câu hỏi
+audit phụ thuộc của chính dự án, một lượt quét secret trên các file được theo dõi và một lượt quét lịch sử
+qua mọi ref bằng script đi kèm skill, sáu câu hỏi
 STRIDE đặt ra ở mọi ranh giới và ánh xạ sang phiên bản hiện hành của OWASP Top 10, mỗi phát hiện được lần từ lối vào tới tác
 động, các ứng viên bị loại kèm dòng mã loại chúng, một checklist trả lời từng mục, và một bảng rủi ro
 còn lại. Với `--threat-model`, là mô hình mối đe dọa của một tính năng, được giữ cập nhật trong

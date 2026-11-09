@@ -96,7 +96,7 @@ case $mode in
   tree)   rev=:; names $g ls-files; pair grep -I -n --null --no-color -e '' ;;
   mask)   case $2 in --worktree) r=$base rev= ;; --cached) r=--cached rev=: ;; *) r=$2 rev=${2##*..}: ;; esac
           moved diff "$r"; names $g diff --name-only --diff-filter=d "$r"; pair diff $o "$r" ;;
-esac | tr '\000' '\001' | awk -v mode="$mode" '
+esac | tr '\000' '\001' | LC_ALL=C awk -v mode="$mode" '
 function rep(c, n,   s) { s = ""; while (n-- > 0) s = s c; return s }
 function ci(s,   i, c, r) { r = ""; for (i = 1; i <= length(s); i++) { c = substr(s, i, 1); r = r (c ~ /[a-z]/ ? "[" toupper(c) c "]" : c) } return r }
 function note(s) { if (mode == "mask") print s > "/dev/stderr"; else print s }
@@ -184,6 +184,8 @@ It prints, per line that matched, the path, the line number and the shapes, neve
 output lands in the session, and a value printed there is a secret in a second place. It ends with a
 count of the lines it read, so a scan that read nothing says so, and exits 1 on a hit, 0 when clean,
 and 2 when git failed or the mode is not one of the four: a failed scan is never reported as a pass.
+Its awk runs with `LC_ALL=C`, so a length in a shape is counted in bytes and only ASCII letters
+change case, the same on every awk and every locale.
 
 It runs from the root of the repository wherever it is started, and asks for the diff in the one
 form the parser reads, whatever the user has configured: no external diff tool, no text conversion,
@@ -371,7 +373,9 @@ because the run after that is the one that ships the key.
 ## What this does not prove
 
 The scan reads the diff, or the tracked tree under `atk:security`. It does not know that a value is
-live, and it does not see a secret already in the history from before this change. It does not read
+live, and it does not see a secret already in the history from before this change; `atk:security`
+reads the history with a script of its own, `skills/security/scripts/history-scan.mjs`, whose shapes
+and list of files are this block's, held to it by a check in the kit's repository. It does not read
 a file git treats as binary, one with a NUL byte near its start or marked `-diff` in
 `.gitattributes`: in a diff such a file is named as not scanned, and under `tree` it is passed over
 without a word.

@@ -483,7 +483,9 @@ title + intro      what this produces and the one habit that makes it work
 
 An `atk` skill is that file, its `references/` and its `evals/`, and it may carry `scripts/` as
 well, Node only, for the checks whose answer must repeat; the maintainer allowed it on 2026-10-14,
-and no `atk` skill carries one yet. Both `atkx` skills carry a `scripts/` directory beside them, Node
+and `atk:security` is the first to: its history scan must give the same hits for the same history
+on every run, and its secret shapes, restated from `shared/secret-scan.md`, are held to that block by
+a check rather than retyped by an agent. ADR 0017 records the choice. Both `atkx` skills carry a `scripts/` directory beside them, Node
 like the hooks and for the same reason. `atkx:skill-eval`'s sample skills must get the same verdict on
 every run, and a credential masked, a host matched against the `SKILL.md`, or a weighted score added
 up by an agent comes out slightly different each time; `atkx:doc-audit`'s citations either resolve or
