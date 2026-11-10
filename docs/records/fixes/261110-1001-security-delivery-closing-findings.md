@@ -1,6 +1,6 @@
 ---
 title: "Fix: atk:security --delivery misses, misreports or prints what the closing read of #210 named, and pyName leaves - beside . or _"
-status: IN REVIEW
+status: APPROVED
 owner: Lam Ngoc Khuong
 approver: Lam Ngoc Khuong
 created: 2026-11-10

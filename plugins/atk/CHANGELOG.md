@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.23](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.22...atk-v0.1.23) (2026-11-10)
+
+
+### Features
+
+* give atk:security a --delivery mode that checks a repository before its history goes to a client ([#210](https://github.com/lamngockhuong/aiteamkit/issues/210)) ([96e3eca](https://github.com/lamngockhuong/aiteamkit/commit/96e3eca90033d009994f8643f1c5481ec1c1ab80))
+* give atk:security a git history scan that reports commit, path, line and shape, never the value ([#204](https://github.com/lamngockhuong/aiteamkit/issues/204)) ([a765694](https://github.com/lamngockhuong/aiteamkit/commit/a7656947c9454854776ad8c362318a0be9c6f178))
+* give atk:security a supply-chain scan that reports candidates by rule, path and line, never a manifest line ([#208](https://github.com/lamngockhuong/aiteamkit/issues/208)) ([cfc9dba](https://github.com/lamngockhuong/aiteamkit/commit/cfc9dba31ccaf224660974d66136eedccc60d523))
+* give atk:security findings a reach, a ticket-safe title and chains, and rank malicious packages Critical ([#202](https://github.com/lamngockhuong/aiteamkit/issues/202)) ([1e26ffc](https://github.com/lamngockhuong/aiteamkit/commit/1e26ffced88041c244dc3cf6c1a45f7f2cf5697f))
+* let atk:orchestrate --unattended pass a short list of gates provisionally and queue every gate for its person ([#199](https://github.com/lamngockhuong/aiteamkit/issues/199)) ([dd1c1b3](https://github.com/lamngockhuong/aiteamkit/commit/dd1c1b32f75a35bc2b7e4a4b69029c95c965b1fb))
+
+
+### Bug Fixes
+
+* close what the closing read of atk:security --delivery left, and pyName's - beside . or _ ([#212](https://github.com/lamngockhuong/aiteamkit/issues/212)) ([bb7a8d7](https://github.com/lamngockhuong/aiteamkit/commit/bb7a8d7374d82c4f311b22c34df663d171bcbac4)), closes [#209](https://github.com/lamngockhuong/aiteamkit/issues/209)
+* read atk:security history-scan key versions one at a time and stop at --max-seconds ([#205](https://github.com/lamngockhuong/aiteamkit/issues/205)) ([d603574](https://github.com/lamngockhuong/aiteamkit/commit/d603574db9d1521a89e3f794f275fe3617572821))
+
 ## [0.1.22](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.21...atk-v0.1.22) (2026-11-08)
 
 
