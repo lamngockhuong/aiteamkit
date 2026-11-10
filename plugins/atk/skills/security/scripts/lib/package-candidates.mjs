@@ -67,7 +67,7 @@ function typosquat(name, names) {
   }
   return seen.get(name);
 }
-const pyName = (n) => n.toLowerCase().replace(/[._]+/g, '-');
+const pyName = (n) => n.toLowerCase().replace(/[-_.]+/g, '-');
 
 // Every JSON key with the first line from `from` on that holds it, so a lookup is one pass over the
 // file rather than one per name; a one-line file gives every key line 1.

@@ -14,6 +14,10 @@
 // class otherwise; never a local part and never a host in full. `full` is kept for the --detail file
 // alone, and the scan deletes it from every hit before it prints.
 
+import { withoutLogins } from './line-login-removal.mjs';
+import { endsInPublicLabel } from './public-tld-labels.mjs';
+import { isCredentialFile } from './secret-shapes.mjs';
+
 const CLASS = { domain: 'confirmed domain', private: 'private address', suffix: 'internal suffix', loopback: 'loopback name' };
 const SUFFIX = /\.(?:internal|local|corp|lan)$/;
 const LOOPBACK = /^(?:ip6-localhost|ip6-loopback|localhost\.localdomain|.+\.localhost)$/;
@@ -25,13 +29,6 @@ const LOCAL = "[\\p{L}\\p{M}\\p{N}._%+'-]";
 const EMAIL = new RegExp('(?<!' + LOCAL + ')' + LOCAL + '+@' + LABEL + '(?:\\.' + LABEL + ')+' + END, 'gu');
 const NAME = new RegExp('(?<![A-Za-z0-9.@_-])(?:ip6-localhost|ip6-loopback|' + LABEL + '(?:\\.' + LABEL + ')+)' + END, 'gi');
 const V6 = /(?<![0-9A-Za-z:.])[fF][cCdD][0-9a-fA-F]{0,2}(?::[0-9a-fA-F]{0,4}){1,7}(?![0-9A-Za-z:.])/g;
-// A login is taken out before any address is read, so a password is never read as a local part and
-// the host behind it is a host: in a URL up to the last `@` of its authority, as in
-// `scheme://<user>:<password>@<host>`; with no scheme, as in a DSN `<user>:<password>@<host>`; and
-// the user of an scp address, `git@host:path`, which is rewritten as a URL so it stands as one.
-const USERINFO = /([a-z][a-z0-9+.-]*:\/\/)[^\s/?#]*@/gi;
-const DSN = /(^|[\s"'`=(,[])(?!mailto:)[\w.%+-]+:[^\s@/:]*@(?=[A-Za-z0-9[])/gi;
-const SCP = /(^|[\s"'`=(,[])[\w.-]+@(?=[\w.-]+:(?!\/\/|\d+(?:\D|$))[\w.~-]*\/)/g;
 const MACHINE = /\.(?:localdomain|home|test|example|invalid|intranet|private|arpa)$/;
 
 // The confirmed domains of --internal, lowercased, longest first so the narrowest one names a host;
@@ -81,10 +78,10 @@ export function emailHit(addr, domains) {
   return c && { kind: 'email', class: c.cls, shown: '<redacted: email>@' + hostShown(c), full: addr.toLowerCase() };
 }
 
-// What --domains prints for the domain of an address or a remote: an address, a private, loopback,
-// internal-suffix or machine host, a name that is no domain, or one with no dot, by its class alone;
-// any other folded to the part a company registers, the last two labels or three under a two-letter
-// country code such as `co.jp`, so a machine or a host is never named.
+// What --domains prints for the domain of an address or a remote: an address, a private, loopback or
+// internal-suffix host, no domain, no dot, or a machine name, its last label no public one, by its
+// class alone; any other folded to the part a company registers, the last two labels or three under
+// a two-letter country code such as `co.jp`, so a machine or a host is never named.
 export function proposable(d) {
   const h = d.toLowerCase().replace(/\.$/, '').replace(/^\[(?:ipv6:)?(.*)\]$/, '$1');
   if (h.includes(':') || /^[\d.]+$/.test(h)) return '<redacted: host> (address)';
@@ -92,20 +89,27 @@ export function proposable(d) {
   if (c) return '<redacted: host> (' + c.cls + ')';
   if (!DOMAIN.test(h)) return '<redacted: host> (not a domain)';
   if (!h.includes('.')) return '<redacted: host> (no dot)';
-  if (MACHINE.test(h)) return '<redacted: host> (machine name)';
+  if (!endsInPublicLabel(h)) return '<redacted: host> (machine name)';
   const l = h.split('.');
   const keep = l.length > 2 && l.at(-1).length === 2 && /^(?:co|com|ac|ne|or|go|net|org|edu|gov)$/.test(l.at(-2)) ? 3 : 2;
   return l.slice(-keep).join('.');
 }
+
+// Whether a name of two labels in a path or a ref is a host --domains folds: one of a class
+// hostClass() reports, or one under a suffix kept for machines. A file name such as `package.json`
+// is not, which is why a path is not judged by the public labels proposable() uses.
+export const namesMachine = (n) => MACHINE.test(n.toLowerCase()) || !!hostClass(n, []);
 
 // A name that ends in a suffix, or a loopback name, is reported from a line only where it stands as a
 // host: after `://`; quoted, or as an element's text, with only a port or a path after it; as a value
 // after `=` with no space, followed by a space, a comma or nothing; as a value after `=` or `:` and a
 // space, with nothing after it but a port or a comment; as a list item, or in a list after a comma or
 // an opening bracket; or as a directive's argument after a word, followed by anything but a call.
-// Never after `import`, `from`, `return` and the like, so `obj.local;`, `if (cfg.internal)`,
-// `from settings.local import` and `return obj.local` are not hosts.
-const KEYWORD = /(?:^|[^\w.])(?:import|from|return|await|yield|new|typeof|delete|throw|in|of|as|is|not|and|or)\s*$/;
+// Never after `import`, `from`, `return`, a control word and the like, nor a common receiver after a
+// spaced `=`: `obj.local;`, `if (cfg.internal)`, `from settings.local import`, `return obj.local`,
+// `if self.local:` and `x = obj.local` are not hosts.
+const KEYWORD = /(?:^|[^\w.])(?:import|from|return|await|yield|new|typeof|delete|throw|in|of|as|is|not|and|or|if|elif|else|while|until|unless|assert|case|when|print|echo)\s*$/;
+const RECEIVER = /^(?:self|this|cfg|config|settings|obj|opts|env)\./i;
 function standsAsHost(line, i, end) {
   const before = line.slice(Math.max(0, i - 300), i); const after = line.slice(end);
   if (/:\/\/$/.test(before)) return true;
@@ -113,6 +117,7 @@ function standsAsHost(line, i, end) {
   if (KEYWORD.test(before) || /^(?::\d{1,5})?\s*\(/.test(after)) return false;
   const b = before.replace(/\s+$/, ''); const c = b.slice(-1); const spaced = b.length < before.length;
   if (c === '=' && !spaced) return /^(?::\d{1,5})?(?:[\s,;]|$)/.test(after);
+  if (c === '=' && RECEIVER.test(line.slice(i, end))) return false;
   if (c === '' || c === '=' || c === ':' || /^\s*[-*+]$/.test(b)) return /^(?::\d{1,5})?\s*(?:#.*)?$/.test(after);
   if (c === ',' || (c === '[' && /(?:^|[\s:=])\[$/.test(b))) return /^(?::\d{1,5})?\s*(?:[,\]]|#.*$|$)/.test(after);
   return spaced && /\w/.test(c);
@@ -134,7 +139,7 @@ function gateFor(domains) {
 export function contentHits(line, domains) {
   const out = [];
   if (!gateFor(domains).test(line)) return out;
-  let rest = line.includes('@') ? line.replace(USERINFO, '$1').replace(DSN, '$1').replace(SCP, '$1ssh://') : line;
+  let rest = line.includes('@') ? withoutLogins(line) : line;
   // each email is blanked once read, so its local part is not taken for a host
   if (rest.includes('@')) rest = rest.replace(EMAIL, (m) => { const h = emailHit(m, domains); if (h) out.push(h); return ' '.repeat(m.length); });
   for (const re of [NAME, V6]) {
@@ -149,9 +154,10 @@ export function contentHits(line, domains) {
 
 // A path or a ref name, redacted, and the hosts and emails it names as hits. Every local part is
 // redacted, whatever its domain; a name in a confirmed domain, wherever it sits in a segment,
-// `db01.<domain>.tar.gz` and `fix-db01.<domain>-timeout` among them, and a private address are
-// redacted and reported; a name ending in a suffix or `localhost` is redacted and not reported, since
+// `db01.<domain>.tar.gz`, `fix-db01.<domain>-timeout` and `.db01.<domain>` among them, and a
+// private address are redacted and reported; a name ending in a suffix or `localhost` is redacted and not reported, since
 // `settings.local.py` names a file more often than a host. Matching ignores case.
+const DOTENV_MODE = /^(?:development|production|test|staging)\.local$/i;
 const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 export function pathHosts(path, domains) {
   const hits = [];
@@ -165,7 +171,7 @@ export function pathHosts(path, domains) {
     return '<redacted: email>@' + rest;
   });
   for (const d of domains) {
-    shown = shown.replace(new RegExp('(?<![A-Za-z0-9.-])(?:[A-Za-z0-9-]+\\.)*' + esc(d) + '(?![A-Za-z0-9])', 'gi'), (h, at, s) => {
+    shown = shown.replace(new RegExp('(?<![A-Za-z0-9-])(?:[A-Za-z0-9-]+\\.)*' + esc(d) + '(?![A-Za-z0-9])', 'gi'), (h, at, s) => {
       const c = { cls: CLASS.domain, domain: d, sub: h.toLowerCase() !== d };
       // the domain of an address was reported with the address
       if (s[at - 1] !== '@') add({ kind: 'host', class: c.cls, shown: hostShown(c), full: h.toLowerCase() });
@@ -177,6 +183,14 @@ export function pathHosts(path, domains) {
     add({ kind: 'host', class: CLASS.private, shown: '<redacted: host>', full: h });
     return '<redacted: host>';
   });
-  shown = shown.replace(/(?<![A-Za-z0-9.-])(?:ip6-(?:localhost|loopback)|(?:[A-Za-z0-9-]+\.)+(?:internal|local|corp|lan|localhost))(?![A-Za-z0-9])/gi, '<redacted: host>');
+  shown = shown.replace(/(?<![A-Za-z0-9-])(?:ip6-(?:localhost|loopback)|(?:[A-Za-z0-9-]+\.)+(?:internal|local|corp|lan|localhost))(?![A-Za-z0-9])/gi, (h, at, s) => {
+    // a dot-led name whose first label is itself a file rule 9 names, `.env`, keeps that stem, and
+    // `.env.local` and a dotenv mode file such as `.env.production.local` their names; any other
+    // name after the stem, `.env.db01.lan`, and one with no such stem, `.db01.lan.pem`, is redacted
+    const stem = h.slice(0, h.indexOf('.'));
+    if (s[at - 1] !== '.' || !isCredentialFile('.' + stem)) return '<redacted: host>';
+    const rest = h.slice(stem.length + 1);
+    return !rest.includes('.') || DOTENV_MODE.test(rest) ? h : stem + '.<redacted: host>';
+  });
   return { hits, shown };
 }

@@ -7,7 +7,9 @@
 //   "shape": "author, committer, tagger", the roles an identity held, or "message", "tag message",
 //   "content", "path" or "ref", "commit": sha | null, "path": path | null, redacted where it names a
 //   host, "line": n | null, "at_head": as a secret's, or null for an identity, a message or a ref }.
-//   A secret in a message is a "secret" hit at no path. Under --domains: "domains": { "identities":
+//   A hit read from a message also carries "from": "message", or "tag message <ref of the tag>" with
+//   the ref redacted as a path is, since its "commit" is the commit the tag points at. A secret in a
+//   message is a "secret" hit at no path, its "shape" the secret's labels. Under --domains: "domains": { "identities":
 //   [ { "domain", "count" } ], "remotes": [domain] }, each domain as ./host-classes.mjs proposable()
 //   gives it, the count being of addresses. Under --detail: "detail": { "path", "count" }, the path
 //   relative to the repository, the count of rows below the file's header.
@@ -22,7 +24,7 @@
 import { existsSync, realpathSync, writeFileSync } from 'node:fs';
 import { basename, dirname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { stream } from './git-history-stream.mjs';
-import { contentHits, emailHit, pathHosts, proposable } from './host-classes.mjs';
+import { contentHits, emailHit, namesMachine, pathHosts, proposable } from './host-classes.mjs';
 import { shapesOf } from './secret-shapes.mjs';
 
 // Under --identities, a function that hears each path the names pass sees added and pushes a host hit
@@ -45,8 +47,9 @@ export function pathHitsFor(opt, hits) {
 // domain confirmed yet. Returns the `detail` field, or null.
 export function finishHits(hits, { opt, detail, refs, remotes, stop }) {
   if (!opt.identities && !opt.domains) { for (const h of hits) { delete h.block; delete h.full; } return null; }
-  // with no domain confirmed yet, a name of three labels or more is folded as proposable() folds one
-  const fold = (p) => p.replace(/(?<![A-Za-z0-9.-])[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z][A-Za-z0-9-]*(?![A-Za-z0-9.-])/g, (n) => (n.split('.').length > 2 ? proposable(n) : n));
+  // with no domain confirmed yet, a name of three labels or more is folded as proposable() folds one,
+  // and one of two labels when it names a machine
+  const fold = (p) => p.replace(/(?<![A-Za-z0-9.-])[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z][A-Za-z0-9-]*(?![A-Za-z0-9.-])/g, (n) => (n.split('.').length > 2 || namesMachine(n) ? proposable(n) : n));
   const red = (p) => (!p ? p : opt.domains ? fold(pathHosts(p, []).shown) : pathHosts(p, opt.internal).shown);
   if (opt.identities) {
     for (const ref of refs) for (const h of pathHosts(ref, opt.internal).hits) hits.push({ ...h, shape: 'ref', commit: null, path: ref, line: null, at_head: null });
@@ -72,12 +75,13 @@ async function readIdentities(top, run, deadline, opt, stop) {
     e.roles.add(role);
   };
   // a secret in a message is a hit of the line's shapes, the line itself never kept past the run
-  const read = (text, shape, commit) => {
+  const read = (text, shape, commit, ref) => {
     if (!opt.identities) return;
+    const from = ref ? shape + ' ' + ref : shape;
     const found = contentHits(text, opt.internal).map((h) => [h.kind + '\0' + h.full, h]);
     const s = shapesOf(text);
     if (s) found.push(['secret\0' + text, { kind: 'secret', shape: s }]);
-    for (const [k, h] of found) if (!messages.has(k)) messages.set(k, { ...h, shape: h.kind === 'secret' ? h.shape : shape, commit, path: null, line: null, at_head: null });
+    for (const [k, h] of found) if (!messages.has(k)) messages.set(k, { ...h, shape: h.kind === 'secret' ? h.shape : shape, from, commit, path: null, line: null, at_head: null });
   };
   // %w indents every line of the message by one space, so no line of it can start with the walk's
   // `#commit ` header or the identity line's \x01; it also cuts its output at a NUL byte, so the two
@@ -88,12 +92,12 @@ async function readIdentities(top, run, deadline, opt, stop) {
     const [a, c] = l.slice(1).split('\x02'); note(a, 'author', commit); note(c, 'committer', commit);
   }));
   try {
-    const fmt = '--format=%(objecttype)%00%(*objectname)%00%(taggeremail)%00%(contents)%02';
+    const fmt = '--format=%(objecttype)%00%(refname)%00%(*objectname)%00%(taggeremail)%00%(contents)%02';
     for (const rec of run(['for-each-ref', fmt, 'refs/tags']).split('\x02')) {
-      const [type, commit, addr, body] = rec.replace(/^\n/, '').split('\0');
+      const [type, ref, commit, addr, body] = rec.replace(/^\n/, '').split('\0');
       if (type !== 'tag') continue; // a lightweight tag: no tagger, no message of its own
       note((addr || '').replace(/^<|>$/g, ''), 'tagger', commit || null);
-      for (const l of (body || '').split('\n')) read(l, 'tag message', commit || null);
+      for (const l of (body || '').split('\n')) read(l, 'tag message', commit || null, ref);
     }
   } catch { stop('git could not read the tags'); }
   return { addresses: seen, messages: [...messages.values()] };
@@ -151,12 +155,13 @@ export function detailPath(top, run, given) {
   return { abs, rel: posix };
 }
 
-// The detail file, one tab-separated line per email or host hit with its full value and full path;
-// written once, readable by its owner alone where the system allows it, a cell that a spreadsheet
-// would read as a formula opened with a quote. Returns how many lines it holds.
+// The detail file, one tab-separated line per email or host hit with its full value and full path,
+// and per other hit given with a path, the value cell empty; written once, readable by its owner
+// alone where the system allows it, a cell that a spreadsheet would read as a formula opened with a
+// quote. Returns how many lines it holds.
 export function writeDetail(abs, hits) {
   const cell = (v) => String(v ?? '').replace(/[\t\r\n]/g, ' ').replace(/^[=+\-@]/, "'$&");
-  const rows = hits.filter((h) => h.full).map((h) => [h.kind, h.class, h.shape, h.full, h.commit, h.path, h.line, h.at_head].map(cell).join('\t'));
+  const rows = hits.filter((h) => h.full || h.path).map((h) => [h.kind, h.class, h.shape, h.full, h.commit, h.path, h.line, h.at_head].map(cell).join('\t'));
   writeFileSync(abs, ['kind\tclass\twhere\tvalue\tcommit\tpath\tline\tat_head', ...rows].join('\n') + '\n', { flag: 'wx', mode: 0o600 });
   return rows.length;
 }

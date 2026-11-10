@@ -911,6 +911,138 @@ finally:
     shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
 print('OK security history scan under --identities, %d email and host hits, the private ranges at their edges, no local part or full host in the output, the detail file only where git ignores it, grafts change nothing' % len(want))"
 
+# atk:security's history scan on the inputs the closing review of #210 named, on a history built here
+# with every email, host and value assembled from parts: a lone carriage return in a commit message,
+# before a line that looks like the walk's header and before a private address, and as a file's line
+# end; a secret at a path named for a host, which the detail file keeps a row for; a host and an email
+# put in single quotes at HEAD, still present; a secret in a tag message, said to come from the tag,
+# and one in a commit message; a password holding a slash, a question mark, a hash or an @, none of
+# it read as an address; minified JSON; sip: and email: addresses; a path segment starting with a dot;
+# a property after a control word or a receiver, not a host; a host repeated in one path in two cases,
+# and two hosts in one path; an annotated tag with no tagger; a two-label machine name and a ref
+# naming one under --domains, and a push URL; an unborn HEAD with refs, and a HEAD that cannot be
+# listed, neither compared. Every failure is collected and named, and no local part, full host or
+# value reaches either stream of any run
+python3 -c "
+import json, os, shutil, stat, subprocess, sys, tempfile
+script = os.path.abspath('plugins/atk/skills/security/scripts/history-scan.mjs')
+nl, e, q, cr, dq = chr(10), chr(61), chr(39), chr(13), chr(34)
+dom = 'zzcorp' + '.com'; R, P = '<redacted: email>@', '<redacted: host>'
+crhost, crip, cfip, dotip, tagip = 'db11.' + dom, '10.11' + '.1.1', '10.12' + '.2.2', '10.14' + '.4.4', '10.13' + '.3.3'
+crsec, tagsec, msgsec, pathsec = 'ghp' + '_ZZCRSEC1', 'ghp' + '_ZZTAGSEC2', 'ghp' + '_ZZMSGSEC3', 'ghp' + '_ZZPATHSEC4'
+sufdir, qhost, qlocal, taghost = 'build03' + '.lan', 'db12.' + dom, 'zzquote' + 'local', 'rel-db13.' + dom
+dothost, dotsuf, mach, machlocal, nas = 'db14.' + dom, 'build04' + '.lan', 'build01' + '.lab', 'zzci' + 'local', 'nas' + '.home'
+pw = ['db2%d.' % i + dom for i in range(1, 6)]; urluser, urlpw, dcname, envlocal = 'zzurl' + 'local', 'zzurl' + 'pw5', 'build05' + '.dc', '.env' + '.local'; siplocal, emlocal, jlocal, jhost = 'zzsip' + 'local', 'zzem' + 'local', 'zzjson' + 'local', 'x1.' + dom
+b6a, b6b = 'db05.' + dom, 'db06.' + dom; pushdom = 'zzpush' + '.org'; afterip = '10.15' + '.5.5'; envhostname = 'db07' + '.lan'
+pemhost, keyhost, envmode = 'db08' + '.lan', 'build06' + '.corp', '.env.production' + '.local'
+full = [crhost, crip, cfip, dotip, tagip, afterip, crsec, tagsec, msgsec, pathsec, sufdir, qhost, qlocal, 'db13', dothost, dotsuf, mach, machlocal,
+        siplocal, emlocal, jlocal, jhost, 'db05', 'db06', 'cd@', 'ss@', urluser, urlpw, dcname, envhostname, pemhost, keyhost] + pw
+base_env = dict(os.environ, GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM='1')
+def writable(fn, path, _):
+    os.chmod(path, stat.S_IWRITE); fn(path)
+t = tempfile.mkdtemp(); r = os.path.join(t, 'repo'); os.makedirs(r)
+def g(*x, env=None):
+    return subprocess.run(['git', '-C', r] + list(x), check=True, capture_output=True, text=True, encoding='utf-8', env=env or base_env).stdout
+def put(p, s):
+    os.makedirs(os.path.dirname(os.path.join(r, p)) or r, exist_ok=True); open(os.path.join(r, p), 'w', encoding='utf-8', newline='').write(s)
+def scan(*args):
+    p = subprocess.run(['node', script] + list(args), capture_output=True, text=True, encoding='utf-8', cwd=r, env=base_env)
+    return p, (json.loads(p.stdout) if p.stdout else None)
+def who(mail):
+    return dict(base_env, GIT_AUTHOR_NAME='a', GIT_AUTHOR_EMAIL=mail, GIT_COMMITTER_NAME='p', GIT_COMMITTER_EMAIL='p@x')
+bad = []
+def check(ok, label):
+    if not ok: bad.append(label)
+def clean(p, extra=()):
+    text = (p.stdout + p.stderr).lower(); return not [x for x in full + list(extra) if x.lower() in text]
+try:
+    g('init', '-q'); g('config', 'user.email', 'p@x'); g('config', 'user.name', 'p'); g('config', 'commit.gpgsign', 'false'); g('config', 'tag.gpgsign', 'false')
+    put('cr.txt', 'a' + cr + 'token ' + crsec + cr + 'peer: ' + cfip + nl)
+    put('deploy/' + sufdir + '/run.sh', 'token ' + pathsec + nl)
+    put('q.yml', 'host: ' + qhost + nl + 'mail: ' + qlocal + '@' + dom + nl)
+    put('app.py', 'if self.local:' + nl + '    x ' + e + ' obj.local' + nl + 'while node.local:' + nl + 'assert x.lan' + nl)
+    put('min.json', '{' + dq + 'homepage' + dq + ':' + dq + 'https://' + jhost + dq + ',' + dq + 'author' + dq + ':' + dq + jlocal + '@' + dom + dq + '}' + nl)
+    pg = 'postgres://' + 'app:'
+    put('pw.txt', 'a: ' + pg + 'ab/cd@' + pw[0] + '/x' + nl + 'b: ' + pg + 'ab?cd@' + pw[1] + '/x' + nl
+        + 'c: ' + pg + 'ab#cd@' + pw[2] + '/x' + nl + 'd: app:p@ss@' + pw[3] + ':5432/x' + nl
+        + 'e: https://' + urluser + '@' + dom + ':' + urlpw + '@' + pw[4] + '/r.git' + nl)
+    put(envlocal, 'X' + e + '1' + nl); put('.env.' + envhostname, 'X' + e + '1' + nl); put(envmode, 'X' + e + '1' + nl)
+    put('.' + pemhost + '.pem', 'x' + nl); put('certs/.' + keyhost + '.key', 'x' + nl)
+    put('addr.txt', 'sip:' + siplocal + '@' + dom + nl + 'email:' + emlocal + '@' + dom + nl)
+    put('cfg/.' + dothost + '/a.txt', 'a' + nl); put('cfg/.' + dotsuf + '.yml', 'peer: ' + dotip + nl)
+    b6 = 'b6/' + b6a.upper() + '/b-' + b6b + '/' + b6a + '.txt'; put(b6, 'a' + nl)
+    g('add', '-A'); g('commit', '-qm', '1', env=who('p@x'))
+    put('q.yml', 'host: ' + q + qhost + q + nl + 'mail: ' + q + qlocal + '@' + dom + q + nl); g('add', '-A')
+    g('commit', '-q', '--cleanup' + e + 'verbatim', '-m', 'fix' + cr + '#commit ' + crhost + nl + 'x' + cr + crip + nl + 'peer ' + afterip + nl, env=who('p@x'))
+    put('m.txt', 'm' + nl); g('add', '-A'); g('commit', '-qm', 'm' + nl + nl + 'token ' + msgsec, env=who(machlocal + '@' + mach))
+    put('m2.txt', 'm' + nl); g('add', '-A'); g('commit', '-qm', 'm2', env=who(machlocal + '@' + dcname))
+    g('tag', '-a', taghost, '-m', 'release token ' + tagsec)
+    head = g('rev-parse', 'HEAD').strip()
+    # bytes, so Windows does not turn each newline into two characters; --no-strict, since git refuses
+    # a tag with no tagger unless told to take it
+    tag = subprocess.run(['git', '-C', r, 'mktag', '--no-strict'], input=('object ' + head + nl + 'type commit' + nl + 'tag notagger' + nl + nl + 'note on ' + tagip + nl).encode('utf-8'),
+                         capture_output=True, check=True, env=base_env).stdout.decode('utf-8').strip()
+    g('update-ref', 'refs/tags/notagger', tag); g('branch', 'fix/' + nas)
+    g('remote', 'add', 'origin', 'https://git.' + dom + '/t/r.git'); g('config', 'remote.origin.pushurl', 'https://git.' + pushdom + '/t/r.git')
+    os.makedirs(os.path.join(r, 'docs', 'derived', 'security', 'delivery')); put('docs/derived/security/delivery/.gitignore', '*' + nl)
+    det = 'docs/derived/security/delivery/run-detail.tsv'
+    p, out = scan('--identities', '--internal', dom, '--detail', det)
+    check(p.returncode == 0 and out and out['complete'], 'the identities scan did not finish')
+    hits = out['hits'] if out else []
+    at = lambda path: [h for h in hits if h['path'] == path]
+    check(all(h['commit'] is None or (len(h['commit']) == 40 and set(h['commit']) <= set('0123456789abcdef')) for h in hits), 'S31 a message line set a commit field')
+    check(len([h for h in hits if h['kind'] == 'host' and h['class'] == 'private address' and h['shape'] == 'message']) == 2, 'S31 a private address after a carriage return in a message was missed')
+    check(any(h['kind'] == 'host' and h['class'] == 'confirmed domain' and h['shape'] == 'message' for h in hits), 'S31 a host after a carriage return in a message was missed')
+    check(any(h['kind'] == 'secret' for h in at('cr.txt')) and any(h['kind'] == 'host' for h in at('cr.txt')), 'S31 what follows a carriage return in a file was dropped')
+    raw = open(os.path.join(r, det), encoding='utf-8').read() if os.path.exists(os.path.join(r, det)) else ''
+    rows = [x.split(chr(9)) for x in raw.split(nl)[1:-1]]
+    check(any(x[0] == 'secret' and x[5] == 'deploy/' + sufdir + '/run.sh' and x[3] == '' for x in rows), 'S25 no detail row for a secret at a path naming a host')
+    check(out and out.get('detail', {}).get('count') == len(rows), 'S25 the detail count is not the rows it holds')
+    check(at('deploy/' + P + '/run.sh') and all(h['kind'] == 'secret' for h in at('deploy/' + P + '/run.sh')), 'S25 the secret path was not printed redacted')
+    check(at('q.yml') and all(h['at_head'] == 'present' for h in at('q.yml')), 'S33 a value in single quotes at HEAD read as removed')
+    froms = [h.get('from') for h in hits if h['kind'] == 'secret' and h['path'] is None]
+    check('message' in froms, 'S32 a secret in a commit message is not said to come from the message')
+    check(any((f or '').startswith('tag message refs/tags/') and 'db13' not in f for f in froms), 'S32 a secret in a tag message is not said to come from the tag, redacted')
+    notagger = [h for h in hits if h['kind'] == 'host' and h['class'] == 'private address' and h['shape'] == 'tag message']
+    check(notagger, 'S23 the message of a tag with no tagger was not read')
+    check(notagger and notagger[0].get('from') == 'tag message refs/tags/notagger', 'S32 a host in a tag message is not said to come from the tag')
+    check(not [h for h in at('pw.txt') if h['kind'] == 'email'] and len([h for h in at('pw.txt') if h['kind'] == 'host']) == 5, 'S20 or S38 a password fragment read as an address, or a host missed')
+    check(any(h['kind'] == 'credential-file' and h['path'] == envlocal for h in hits), 'S37 a credential file named for a suffix was printed as a host')
+    check(any(h['kind'] == 'credential-file' and h['path'] == '.env.' + P for h in hits), 'S39 a credential file named for a machine printed the machine, or lost its stem')
+    creds = [h['path'] for h in hits if h['kind'] == 'credential-file']
+    check('.' + P + '.pem' in creds and 'certs/.' + P + '.key' in creds, 'S40 a dot-led key named for a machine printed the machine')
+    check(envmode in creds, 'S41 a dotenv mode file was printed as a host')
+    tsv = raw.lower()
+    check('cd@' not in tsv and 'ss@' not in tsv, 'S20 a password fragment reached the detail file')
+    check(len([h for h in at('min.json') if h['kind'] == 'email']) == 1 and any(h['shown'] == P + '.' + dom for h in at('min.json')), 'S34 a pathless URL swallowed the address after it')
+    check(len([h for h in at('addr.txt') if h['kind'] == 'email']) == 2, 'N31 a sip: or email: address taken for a login')
+    check(any(h['shape'] == 'path' for h in at('cfg/.' + P + '.' + dom + '/a.txt')) and at('cfg/.' + P + '.yml'), 'S35 a segment starting with a dot was not redacted')
+    check(not [h for h in at('app.py') if h['kind'] in ('host', 'email')], 'S21 a property after a control word or a receiver taken for a host')
+    b6shown = 'b6/' + P + '.' + dom + '/' + P + '.' + dom + '/' + P + '.' + dom + '.txt'
+    check(len([h for h in at(b6shown) if h['kind'] == 'host']) == 2, 'B6 a host repeated in two cases or two hosts in one path miscounted')
+    check(clean(p), 'a local part, a full host or a value reached the --identities output')
+    p, out = scan('--domains')
+    ds = [x['domain'] for x in out['domains']['identities']] if out else []
+    check(p.returncode == 0 and P + ' (machine name)' in ds, 'S19 a two-label machine name under an unlisted suffix was not printed by class')
+    check(out and [x['count'] for x in out['domains']['identities'] if x['domain'] == P + ' (machine name)'] == [2], 'S36 a machine name under two letters that are no country code was not printed by class')
+    check(out and out['domains']['remotes'] == sorted([dom, pushdom]), 'S24 the push URL was not read')
+    check(clean(p, [nas]), 'a local part, a machine name or a full host reached the --domains output')
+    br = g('symbolic-ref', '--short', 'HEAD').strip()
+    g('checkout', '-q', '--orphan', 'zzunborn')
+    p, out = scan('--identities', '--internal', dom)
+    check(p.returncode == 0 and out and [h for h in out['hits'] if h['path']] and all(h['at_head'] is None for h in out['hits']), 'S27 an unborn HEAD with refs was compared')
+    check(clean(p), 'a local part, a full host or a value reached the output with an unborn HEAD')
+    g('checkout', '-q', '-f', br); tree = g('rev-parse', 'HEAD^{tree}').strip()
+    obj = os.path.join(r, '.git', 'objects', tree[:2], tree[2:]); os.chmod(obj, stat.S_IWRITE); os.remove(obj)
+    p, out = scan('--identities', '--internal', dom)
+    check(p.returncode == 3 and out and 'git could not list HEAD' in (out['incomplete_reason'] or '') and [h for h in out['hits'] if h['path']]
+          and all(h['at_head'] is None for h in out['hits']), 'B8 a HEAD that could not be listed was compared')
+    check(clean(p), 'a local part, a full host or a value reached the output with HEAD unlisted')
+finally:
+    shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
+assert not bad, 'failed: ' + '; '.join(bad)
+print('OK security history scan on the inputs of the closing review of #210, each named on failure, no local part, full host or value in any output')"
+
 # atk:security's supply-chain scan on a repository built here from tests/security-fixtures/supply-chain/,
 # with every login it must keep out assembled from parts: each candidate of fork 3 of the design at
 # its rule, path and line; an action in a flow mapping, at its key's indent, quoted, a local one and an
@@ -1038,6 +1170,12 @@ try:
     js = 'import { hostOf } from ' + a + lib + a + '; console.log(JSON.stringify(' + json.dumps([c[0] for c in cases]) + '.map(hostOf)))'
     h = subprocess.run(['node', '--input-type' + e + 'module', '-e', js], capture_output=True, text=True, encoding='utf-8')
     assert h.returncode == 0 and json.loads(h.stdout) == [c[1] for c in cases], 'hostOf: %s %s' % (h.stdout, h.stderr)
+    # a Python name is compared with each run of ., _ and - as one -, whatever the mix
+    js = ('import { pythonCandidates } from ' + a + lib + a + '; const out = []; pythonCandidates(new Map([[' + a + 'requirements.txt' + a + ', '
+          + json.dumps('Reqe-_sts' + e + e + '1' + chr(10) + 'Flask.-_Login' + e + e + '1' + chr(10)) + ']]), new Set([' + a + 'requirements.txt' + a + ']), '
+          + '{ pypi: new Set([' + a + 'requests' + a + ', ' + a + 'flask-loginx' + a + ']) }, (c) => out.push(c), () => {}); console.log(JSON.stringify(out.filter((c) => c.rule ' + e + e + e + ' ' + a + 'typosquat' + a + ').map((c) => c.package)))')
+    h = subprocess.run(['node', '--input-type' + e + 'module', '-e', js], capture_output=True, text=True, encoding='utf-8')
+    assert h.returncode == 0 and json.loads(h.stdout) == ['reqe-sts', 'flask-login'], 'pyName: %s %s' % (h.stdout, h.stderr)
 finally:
     shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
 print('OK security supply-chain scan, %d candidates, reads the index whatever the user configured, an unreadable workflow or manifest exits 3, no login or line in the output' % len(want))"

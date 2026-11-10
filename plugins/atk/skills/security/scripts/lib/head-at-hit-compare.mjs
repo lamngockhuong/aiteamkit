@@ -7,11 +7,16 @@
 import { blobReader } from './git-history-stream.mjs';
 
 // Whether a lowercased text holds a value at its own edges, so `10.1.2.3` is not found inside
-// `110.1.2.30`, nor `a@b.com` inside `xa@b.com`.
+// `110.1.2.30`, nor `a@b.com` inside `xa@b.com`. A quote before an email is part of its local part
+// only after a letter, as in `o'brien`, so `'a@b.com'` holds it; a host never takes one.
 function holds(low, value) {
+  const email = value.includes('@');
   for (let i = low.indexOf(value); i >= 0; i = low.indexOf(value, i + 1)) {
     const before = low[i - 1] || ''; const after = low.slice(i + value.length, i + value.length + 2);
-    if (!/[a-z0-9._%+'-]/.test(before) && !/^(?:[a-z0-9_-]|\.[a-z0-9])/.test(after)) return true;
+    const joined = email
+      ? /[a-z0-9._%+-]/.test(before) || (before === "'" && /\p{L}/u.test(low[i - 2] || ''))
+      : /[a-z0-9.-]/.test(before);
+    if (!joined && !/^(?:[a-z0-9_-]|\.[a-z0-9])/.test(after)) return true;
   }
   return false;
 }

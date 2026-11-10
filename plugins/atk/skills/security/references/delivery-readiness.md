@@ -41,8 +41,13 @@ owner naming that person, and carries the repository's owner's name until they d
   delivery check has no reason to do. The report names both as not run under this mode. A path the
   `tree` or the supply-chain scan prints is shown, in the session and the report, in the form the
   history scan printed the same path in, with every host and local part redacted; a path the history
-  scan did not print is shown with each segment that ends in a confirmed domain, is a private
-  address, or holds an `@` replaced by `<redacted: host>` or `<redacted: email>`.
+  scan did not print is redacted by the rule the scan applies to a path: every local part, as
+  `<redacted: email>`, and as `<redacted: host>` every name in a confirmed domain and every private
+  address wherever it sits in a segment, `db02.<domain>.tar.gz` and a segment starting with a dot
+  among them, and every name ending in `.internal`, `.local`, `.corp`, `.lan` or `localhost`, except
+  the stem of a dot-led name that is itself a file rule 9 names: `.env.local` and a dotenv mode file
+  such as `.env.production.local` are shown as they are, `.env.db01.lan` as `.env.<redacted: host>`,
+  and `.db01.lan.pem` as `.<redacted: host>.pem`.
 - **No threat walk.** Steps 3 to 5 do not run: the mode answers whether the repository may be
   handed over, not whether the code is secure, which is a run of its own. A supply-chain candidate is
   listed in the report for its owner and triaged per `references/supply-chain.md`; it does not
@@ -58,8 +63,9 @@ the list. Otherwise the run proposes one before the walk:
    identities and the remotes only, and prints each domain the author, committer and tagger
    addresses use, with how many addresses use it, and the domain of each fetch and push URL of each
    remote: each folded to the part a company registers, `ci.example.com` printed as `example.com`,
-   and an address, a machine name, a private or internal host, a name with no dot or an address with
-   no domain printed by its class alone. Refs and remote names are printed with any host in them
+   and an address, a machine name, one whose last label is not a public one such as `.com` or a
+   country code the root zone delegates, a private or internal host, a name with no dot or an address with no
+   domain printed by its class alone. Refs and remote names are printed with any host in them
    redacted. It prints no address, no host and no URL. Its exit codes read as the walk's.
 2. The proposal is every domain it printed except a class and the public ones: a domain anyone can
    sign up to, a mail provider (`gmail.com`, `googlemail.com`, `outlook.com`, `hotmail.com`,
@@ -104,7 +110,8 @@ only a security record the person asked for.
 
 The history scan checks the `--detail` path again and exits `2` where git would track it. The detail
 file holds each email and host in full, with its commit, its full path and line, and a row for every
-other hit whose path names a host, with that full path; the session never opens it, and takes from
+other hit whose path names a host, a secret or a credential file, with that full path and the value
+cell empty; the session never opens it, and takes from
 the script's output only its path and how many rows it holds. It is for the owner, who has to find
 each one.
 
@@ -127,7 +134,7 @@ the state of every line until the owner, or the person the last column names, an
 | Hit | Judge it by | Open until | Who answers |
 |-----|-------------|------------|-------------|
 | `secret`, `at_head: present` | The Secrets in tracked files row of `references/threat-checklist.md`, cited once with the `tree` scan's hit | The credential is rotated and the line removed, or its owner confirms a placeholder | The credential's owner |
-| `secret`, `removed`, `path-gone` or `null`, or at no path, in a message | The Secrets in history row of the same file: Critical, since the client receives the commit; `null` is a hit HEAD could not be compared with, ranked as `removed` | The credential is rotated, or its owner confirms a placeholder | The credential's owner |
+| `secret`, `removed`, `path-gone` or `null`, or at no path, in a message | The Secrets in history row of the same file: Critical, since the client receives the commit; `null` is a hit HEAD could not be compared with, ranked as `removed`. A message hit's `from` says where to look: `message` is the commit's own, `tag message` and the tag's ref the tag's, whose `commit` is the commit the tag points at and does not hold it, so rewriting commits alone leaves it in the tag | The credential is rotated, or its owner confirms a placeholder | The credential's owner |
 | `credential-file`, any shape but the dump one | Never read: the owner says what it held | Every credential it held is rotated, or the owner confirms it held none; and the owner confirms it names no internal host or address, or a new run over a rewritten history no longer finds it | The file's owner |
 | `credential-file`, shape `a .sql or .csv over a megabyte` | Never read: the owner says whether it holds real data | The owner answers | The file's owner |
 | `email`, an identity or a message | The address's domain is a confirmed one, or an internal host: the client learns who worked on the project and how to reach them | The owner confirms it may go, or a new run over a rewritten history no longer finds it | The owner |
