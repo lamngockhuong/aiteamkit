@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.9](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.8...atkx-v0.0.9) (2026-11-10)
+
+
+### Features
+
+* let atk:orchestrate --unattended pass a short list of gates provisionally and queue every gate for its person ([#199](https://github.com/lamngockhuong/aiteamkit/issues/199)) ([dd1c1b3](https://github.com/lamngockhuong/aiteamkit/commit/dd1c1b32f75a35bc2b7e4a4b69029c95c965b1fb))
+
 ## [0.0.8](https://github.com/lamngockhuong/aiteamkit/compare/atkx-v0.0.7...atkx-v0.0.8) (2026-11-06)
 
 
