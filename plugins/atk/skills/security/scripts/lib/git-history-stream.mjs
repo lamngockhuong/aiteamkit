@@ -19,7 +19,7 @@ import { execFileSync, spawn } from 'node:child_process';
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { devNull } from 'node:os';
 import { resolve } from 'node:path';
-import { createInterface } from 'node:readline';
+import { StringDecoder } from 'node:string_decoder';
 
 export const G = ['-c', 'core.quotePath=false', '-c', 'log.showSignature=false', '-c', 'diff.noprefix=false',
   '-c', 'log.diffMerges=separate', '-c', 'log.showRoot=true'];
@@ -82,17 +82,29 @@ export function blobReader(cwd, deadline) {
 
 // Streams one git command line by line, so no history is held whole, handing each line on with the
 // commit it belongs to, from a `#commit <sha>` line; onCommit, when given, hears each new commit.
-// Resolves to null when git finished, or to the reason it did not: killed at the deadline, an exit
-// status, or git not starting.
+// A line ends at `\n` alone, as git ends one, its `\r` before it dropped: a lone `\r` inside a
+// message or a file stays in its line, so it can neither start a line that passes for the header
+// nor hide what follows it. Resolves to null when git finished, or to the reason it did not: killed
+// at the deadline, an exit status, or git not starting.
 export function stream(cwd, args, deadline, onLine, onCommit) {
   return new Promise((done) => {
     if (Date.now() >= deadline) return done('time limit');
     const p = spawn('git', [...G, ...args], { cwd, env: ENV, stdio: ['ignore', 'pipe', 'ignore'] });
-    let cut = false; let commit = null;
+    let cut = false; let commit = null; let rest = '';
     const timer = deadline < Infinity ? setTimeout(() => { cut = true; p.kill(); }, deadline - Date.now()) : null;
-    createInterface({ input: p.stdout, crlfDelay: Infinity }).on('line', (l) => {
+    const line = (l) => {
+      if (l.endsWith('\r')) l = l.slice(0, -1);
       if (l.startsWith('#commit ')) { commit = l.slice(8); onCommit?.(); } else onLine(l, commit);
+    };
+    // a decoder keeps a character cut between two chunks whole
+    const text = new StringDecoder('utf8');
+    p.stdout.on('data', (c) => {
+      // only the new chunk is searched, so a long line is not scanned again with every chunk
+      const s = text.write(c); let from = 0;
+      for (let nl = s.indexOf('\n'); nl >= 0; nl = s.indexOf('\n', from)) { line(rest + s.slice(from, nl)); rest = ''; from = nl + 1; }
+      rest += s.slice(from);
     });
+    p.stdout.on('end', () => { const s = rest + text.end(); if (s) line(s); });
     p.on('error', () => { clearTimeout(timer); done('git could not be started'); });
     p.on('close', (code) => {
       clearTimeout(timer);

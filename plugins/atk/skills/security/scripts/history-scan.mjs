@@ -14,11 +14,11 @@
 //   { "tool": "history-scan", "version": 1, "complete": bool, "incomplete_reason": text|null,
 //     "scanned": { "refs": [refname], "commits": n, "binary_skipped": n },
 //     "remotes": [ { "name": text, "last_fetched": ISO time|null } ],
-//     "hits": [ { "kind": "secret", "shape": labels, "commit": sha, "path": path, "line": n,
+//     "hits": [ { "kind": "secret", "shape": labels, "commit": sha, "path": path|null, "line": n|null,
 //                 "at_head": "present" | "removed" | "path-gone" | null where HEAD was not compared }
 //             | { "kind": "credential-file", "shape": why, "from": path|null, "commit": sha,
-//                 "path": path, "line": null, "at_head": "present" | "path-gone" }
-//             | an "email" or "host" hit, per ./lib/identity-hosts.mjs ],
+//                 "path": path, "line": null, "at_head": "present" | "path-gone" | null, as a secret's }
+//             | an "email" or "host" hit, or a secret in a message, per ./lib/identity-hosts.mjs ],
 //     "not_scanned": [], and "domains" and "detail" under those flags, per the same file }
 //   A secret is reported once, at the commit that first added that line at that path, so a line a
 //   merge only carries over from a parent is not reported again; a private key is one hit, its
