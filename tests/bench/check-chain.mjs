@@ -2,18 +2,20 @@
 // and what the gates make of it, `{path:<glob>}` in a prompt, the step-scoped `scope`, a step's files
 // kept as it left them, whether a chain's rubric is judged, a step that never ran, the report's rows
 // per step, the seed's branch filter and its two refusals, and a findings check on each of two steps,
-// with its fallback to the step's own last message and the report's findings rows and missed defects.
+// with its fallback to the step's own last message and the report's findings rows and missed defects,
+// the last message a chain kept before steps had their own gives each step, and the answer keys a
+// recheck reports as changed.
 // Each case writes into the seed what a session would have, then reads it back the way --recheck does.
 // Run it after any change to approve, resolvePaths, snapshot, changedSince, keepStep, buildSeed,
-// stepFiles, rubricJudged, declaredChecks, findingsCheck, lastTextOf or the report's step and findings
-// rows: node tests/bench/check-chain.mjs
+// stepFiles, rubricJudged, declaredChecks, findingsCheck, lastTextOf, changedKeys or the report's step
+// and findings rows: node tests/bench/check-chain.mjs
 // Exit 0 when every case holds, 1 otherwise.
 
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { declaredChecks, gateChecks, git, rubricJudged, snapshot } from './lib/checks.mjs';
+import { changedKeys, declaredChecks, gateChecks, git, lastTextOf, rubricJudged, snapshot } from './lib/checks.mjs';
 import { gitEnv, newRunDir } from './lib/isolate.mjs';
 import { material } from './lib/judge.mjs';
 import { render } from './lib/report.mjs';
@@ -305,6 +307,29 @@ try {
     const report = render({ started: 'now', model: 'sonnet', mode: 'check', totals: { session: 1, helper: 0 }, scenarios: [{ name: reviews.name, kind: reviews.kind, runs: [ran] }] });
     check('the report gives a findings group per step', report.includes('| step 1 findings recall (lowest, highest) | 40% (40%, 40%) |') && report.includes('| step 2 findings recall (lowest, highest) | 40% (40%, 40%) |'), report);
     check('the report lists the defects each step missed', report.includes('step 1 findings (') && report.includes('missed D2, D4, D5') && report.includes('missed D1, D3, D4'), report);
+  }
+
+  // A chain kept before each step had its own last message holds the run's alone, the last started
+  // step's: that step still reads it, and no other step reads it as its own.
+  {
+    const old = { lastText: 'the last words', steps: [{ status: 'ok' }, { status: 'error' }, { status: 'not run' }] };
+    check('an old chain gives its last message to the last step that started', lastTextOf(old, 1) === 'the last words', lastTextOf(old, 1));
+    check('an old chain gives no other step its last message', lastTextOf(old, 0) === '' && lastTextOf(old, 2) === '', [lastTextOf(old, 0), lastTextOf(old, 2)]);
+    const now = { lastText: 'step 2', steps: [{ status: 'ok', lastText: 'step 1' }, { status: 'ok', lastText: 'step 2' }] };
+    check('a chain kept with each step\'s last message reads that step\'s', lastTextOf(now, 0) === 'step 1' && lastTextOf(now, 1) === 'step 2', [lastTextOf(now, 0), lastTextOf(now, 1)]);
+    check('a single run reads its own last message', lastTextOf({ lastText: 'one' }) === 'one', lastTextOf({ lastText: 'one' }));
+  }
+
+  // A recheck warns of each findings check whose answer key differs from the one the run was scored
+  // with, matched by step, and of one the run recorded no hash for.
+  {
+    const f = (step, keySha) => ({ type: 'findings', step, keySha });
+    const chain = changedKeys([f(1, 'aaa'), f(2, 'bbb'), { type: 'scope' }], [f(1, 'aaa'), f(2, 'ccc')]);
+    check('a recheck names the step whose key changed, with both hashes', JSON.stringify(chain) === JSON.stringify([{ step: 2, was: 'bbb', now: 'ccc' }]), chain);
+    const single = changedKeys([f(undefined, 'aaa')], [f(undefined, 'aaa')]);
+    check('a recheck with the same key warns of nothing', single.length === 0, single);
+    const unhashed = changedKeys([f(undefined, undefined)], [f(undefined, 'ddd')]);
+    check('a recheck warns of a run scored with no hash recorded', JSON.stringify(unhashed) === JSON.stringify([{ step: null, was: null, now: 'ddd' }]), unhashed);
   }
 } finally {
   for (const d of scratch) rmSync(d, { recursive: true, force: true });

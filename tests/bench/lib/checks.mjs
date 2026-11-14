@@ -732,8 +732,21 @@ export function measureTexts({ reports = [], turns = [], files, key, securityOnl
 
 // The last message of a run, or in a chain of the step `step`, what the judge and the findings check
 // read where the transcript holds no closing message. A chain kept before each step had its own
-// has none for a step, since the run's is the last step's.
-export const lastTextOf = (run, step) => (step === undefined ? run.lastText : run.steps?.[step]?.lastText) || '';
+// holds the run's alone, which is the last started step's, so that step reads it and the others none.
+export function lastTextOf(run, step) {
+  if (step === undefined) return run.lastText || '';
+  const steps = run.steps || [];
+  if (!steps.some((s) => 'lastText' in s)) return step === steps.findLastIndex((s) => s.status !== 'not run') ? run.lastText || '' : '';
+  return steps[step]?.lastText || '';
+}
+
+// The findings checks of a recheck whose answer key is not the one the run was scored with, one per
+// step in a chain, matched by step, each with the hash the run recorded and the hash now.
+export function changedKeys(was, now) {
+  const keysOf = (checks) => (checks || []).filter((c) => c.type === 'findings').map((c) => [c.step ?? null, c.keySha || null]);
+  const before = new Map(keysOf(was));
+  return keysOf(now).filter(([step, sha]) => before.get(step) !== sha).map(([step, sha]) => ({ step, was: before.get(step) || null, now: sha }));
+}
 
 const FALSE_KEPT = 5;
 // The text a review's findings are read from, in both arms what the judge reads: every text file
