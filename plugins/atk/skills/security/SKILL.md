@@ -105,6 +105,13 @@ the proposal and why in one question, offering the other of the two and a set of
 alternatives, and continue once it is answered. The Scope section of the record says which was
 chosen and by whom.
 
+The whole repository means every boundary read at `HEAD` by this run. Where an earlier record of
+it exists, the same question may offer a narrower scope: read again only what changed since that
+record's commit, naming the record, and carry its conclusions for the rest, except a boundary
+whose global control or shared code changed since then, which is read again. The run takes it only
+when the person picks it. Under it, `In short` names what was not read again and the record it
+came from.
+
 Then name what the scope protects, with `path:line` citations: the assets (credentials, personal
 data, money, anything an administrator alone may change), the actors who reach it (anonymous,
 signed-in, another tenant, an administrator, a job, a third party calling back), the entry points,

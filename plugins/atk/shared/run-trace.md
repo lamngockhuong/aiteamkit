@@ -191,7 +191,11 @@ other file there.
 
 `end` is always the last line, and opens with its time like every other event. A correction
 reported after the run closed is written above it, with the time it was reported, even on a later
-day. A trace whose last line is not an `end` line is a run that stopped without closing, and `atk:tailor` counts it as interrupted, the same as an `end`
+day. `end` is written when the workflow closes, with its artifact. An event of the same session
+after it, an approver deciding what the artifact left open among them, is written with the kind the
+table above gives it, above `end`, and `end` moves below it with that event's time and the same
+text.
+A trace whose last line is not an `end` line is a run that stopped without closing, and `atk:tailor` counts it as interrupted, the same as an `end`
 line that says `interrupted`. Both are read with or without the time before `end`, since traces
 written before the time was asked for carry none.
 

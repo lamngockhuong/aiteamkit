@@ -106,6 +106,13 @@ short still reads the places most likely to hold one.
 | Secrets in history | `scripts/history-scan.mjs` of this skill over every ref the clone holds, beside any history scanner the project already runs, which is named as well. It prints commit, path, line, shape and whether `HEAD` still holds the line, never the line or a hash of it. A file the path list of `shared/secret-scan.md` names, one renamed or copied from such a file, a file beside a `.pub`, and a `.sql` or `.csv` over a megabyte are reported by path, from the commit that added them, and never read | A secret hit whose `at_head` is `removed` or `path-gone`, or `null` because `HEAD` could not be compared, is Critical until its owner rotates the credential: every clone and fork still holds it, and taking it out of `HEAD` took it from nobody. One that is `present` is the same finding as Secrets in tracked files, cited once. A credential-file hit counts the same, whatever it held, and one `present` is the Tracked environment file finding; a `.sql` or `.csv` over a megabyte is a question to its owner, as `shared/secret-scan.md` asks it, and a finding only once they say it holds real data. The line is never opened at that commit in the session: the person who owns the file says whether the value was live, and a placeholder they confirm is not a finding. A commit no remote branch holds, one only under `refs/stash` or a branch never pushed, which `git branch -r --contains <commit>` answering nothing shows, is in this clone as far as it knows, and the finding says so. `Reachable by` is anyone who can read the repository or a clone of it, per `references/record-template.md`. Never claimed as clean on any exit but `0`, or when the script did not run: the record says history was scanned in part, with the reason, or not scanned, and a `binary_skipped` above zero is named as that many file versions not read |
 | Shipped configuration | Read the configuration the scope deploys | Debug mode on, a wildcard origin with credentials, a default password, a verbose error page in a production profile |
 
+An owner's word that a secret hit is a placeholder carries to a later run only for a hit that
+matches exactly: for the `tree` scan the same path, line and shape in a file unchanged since the
+earlier record's commit, which `git diff --quiet <commit> -- <path>` answers without printing a
+line; for the history scan the same commit, path, line and shape. Any other hit is asked about
+again, even when the counts by shape are unchanged, since a new hit can take an old one's place
+without changing a count. The record cites the record each carried answer came from.
+
 ## STRIDE per boundary
 
 Ask all six at every trust boundary step 1 named. The answer is a line of the record either way.
