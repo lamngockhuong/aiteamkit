@@ -532,7 +532,8 @@ function citationsIn(text, files) {
 const FIELD_LABEL = /^(?:files?|locations?|where|lines?|severity|priority|severity and verdict|verdict|category|evidence|checked against|issue|problem|impact|failure|trigger|what an actor does|what they gain|fix|suggested fix|suggested control|suggestion|recommendation|remediation|description|risk|cwe|affected|rule|decision|author|raised by|reach|settled by|status|field|content|details?|why)$/i;
 const labelOf = (t) => t.replace(/[*`]/g, '').replace(/:\s*$/, '').trim();
 // A table whose header reads Field | Value holds the fields of the finding above it, every row of it.
-const FIELD_TABLE = /^(?:field|attribute|property|key|item)$/i;
+// `Item` is left out: a findings table headed Item | Details lists one finding per row.
+const FIELD_TABLE = /^(?:field|attribute|property|key)$/i;
 const VALUE_HEADER = /^(?:value|details?|content)$/i;
 
 // A text that has a findings section, a heading that opens with the word findings, is read from that
@@ -543,20 +544,23 @@ const VALUE_HEADER = /^(?:value|details?|content)$/i;
 // after its number if it has one. Otherwise a finding's own title may hold the same words, so a
 // heading that opens with an identifier or a number is never a section's name. Otherwise praise or
 // ruling out anywhere in a heading names a section, and a bare "dropped" opening it does only outside
-// a findings or a severity heading. Findings named as ruled out or dropped, the word right after
-// them, are such a section, not a findings section.
-const OPENS_FINDINGS = /^(?:\d+[.)]?\s*)?findings?\b/i;
+// a findings or a severity heading. Findings named as set aside, in the words FINDINGS_SET_ASIDE
+// below gives, are such a section, not a findings section.
+// The number a heading may open with, `4.`, `4)` or `4.1`, before a section's name or "findings".
+const NUMBER = '(?:\\d+(?:\\.\\d+)*[.)]?\\s*)?';
+const OPENS_FINDINGS = new RegExp(`^${NUMBER}findings?\\b`, 'i');
 const SECTION_NAMES = '(?:verified and )?dropped(?: candidates)?|(?:considered and |candidates )?ruled out|(?:what (?:this|it) was )?reviewed against|open questions?|questions? (?:still )?open|what (?:the|this) change does well|(?:what was )?done well';
-const SECTION_ALONE = new RegExp(`^(?:\\d+[.)]?\\s*)?(?:${SECTION_NAMES})\\s*:?$`, 'i');
+const SECTION_ALONE = new RegExp(`^${NUMBER}(?:${SECTION_NAMES})\\s*:?$`, 'i');
 // A heading that opens with one of these and goes on is still that section, inside findings too; a
 // bare "dropped" opens a finding's title as often as a section's, so it counts only outside them.
-const SECTION_OPENS = /^(?:\d+[.)]?\s*)?(?:open questions?|questions? (?:still )?open|verified and dropped|(?:considered and |candidates )?ruled out|(?:what (?:this|it) was )?reviewed against)\b/i;
+const SECTION_OPENS = new RegExp(`^${NUMBER}(?:open questions?|questions? (?:still )?open|verified and dropped|(?:considered and |candidates )?ruled out|(?:what (?:this|it) was )?reviewed against)\\b`, 'i');
 const DROPPED_OPENS = /^dropped\b/i;
 const SECTION_ANYWHERE = /\b(?:does well|done well|ruled out|questions? (?:still )?open)\b/i;
 // Findings named as set aside, the word right after the plural or after were, that were, considered
-// and, or verified and, are a section of what is not a finding. The same words later in a heading are a count, (4 confirmed, 1 refuted), or a finding's
-// own title, Finding 1: the check is dropped, and leave it a findings heading.
-const FINDINGS_SET_ASIDE = /^(?:\d+[.)]?\s*)?findings\s+(?:that were\s+|were\s+|considered and\s+|verified and\s+)?(?:ruled out|dropped|refuted|rejected|set aside)\b/i;
+// and, or verified and, are a section of what is not a finding. The same words later in a heading
+// are a count, (4 confirmed, 1 refuted), or a finding's own title, Finding 1: the check is dropped,
+// and leave it a findings heading.
+const FINDINGS_SET_ASIDE = new RegExp(`^${NUMBER}findings\\s+(?:that were\\s+|were\\s+|considered and\\s+|verified and\\s+)?(?:ruled out|dropped|refuted|rejected|set aside)\\b`, 'i');
 const TITLED = /^(?:\*\*)?`?(?:[BSN]\d+|\d+)\b/;
 export function findingsIn(text, files) {
   const lines = text.split(/\r?\n/);
@@ -718,10 +722,6 @@ export const cutText = (t) => (t.length > MAX_TEXT_CHARS ? `${t.slice(0, MAX_TEX
 const plainFile = (p) => { try { return lstatSync(p).isFile(); } catch { return false; } };
 const CODE_FILE = /\.(?:m?js|cjs|ts)$/i;
 
-// The text a review's findings are read from, in both arms what the judge reads: every text file
-// readPaths names, the seed's own code excepted, then the closing message of every turn, or the last
-// message where the transcript holds none, a turn that ends asking a person a question left out. A run with nothing to read measured nothing found. The
-// key's hash is kept, so a recheck can tell a key that has changed since.
 // What a run's texts measure against a key: the reports as they are, the closing messages of its
 // turns through readableTurns, each cut at MAX_TEXT_CHARS. The findings check and check-matcher.mjs
 // both measure through it, so the sample cases hold the pipeline the benchmark runs.
@@ -730,8 +730,18 @@ export function measureTexts({ reports = [], turns = [], files, key, securityOnl
   return { read, m: matchFindings(read.flatMap((r) => r.findings), key, { securityOnly }), unlocated: read.reduce((n, r) => n + r.unlocated, 0) };
 }
 
+// The last message of a run, or in a chain of the step `step`, what the judge and the findings check
+// read where the transcript holds no closing message. A chain kept before each step had its own
+// has none for a step, since the run's is the last step's.
+export const lastTextOf = (run, step) => (step === undefined ? run.lastText : run.steps?.[step]?.lastText) || '';
+
 const FALSE_KEPT = 5;
-// In a chain, `step` names the step, whose own files and session alone are read, as the judge reads them.
+// The text a review's findings are read from, in both arms what the judge reads: every text file
+// readPaths names, the seed's own code excepted, then the closing message of every turn, or the last
+// message where the transcript holds none, the closing question of a turn left out. A run with
+// nothing to read measured nothing found. The key's hash is kept, so a recheck can tell a key that
+// has changed since. In a chain, `step` names the step, whose own files and session alone are read,
+// as the judge reads them.
 function findingsCheck({ dir, before, run, fixtureDir, check, glob, step }) {
   const keyText = readFileSync(join(fixtureDir, check.answer), 'utf8');
   const key = JSON.parse(keyText);
@@ -745,11 +755,14 @@ function findingsCheck({ dir, before, run, fixtureDir, check, glob, step }) {
   }
   const said = turnResults(dir, step === undefined ? undefined : run.steps?.[step]?.sessionId);
   const files = allFiles(seed, new Set([...SEED_SKIP, 'node_modules', 'docs']));
-  const { read, m, unlocated } = measureTexts({ reports: texts, turns: said.length ? said : [run.lastText || ''], files, key, securityOnly: !!check.securityOnly });
+  const turns = said.length ? said : [lastTextOf(run, step)];
+  const { read, m, unlocated } = measureTexts({ reports: texts, turns, files, key, securityOnly: !!check.securityOnly });
   // A run can cite hundreds of lines outside the key; results.json keeps the first few and the count.
   const kept = m.falseFindings.slice(0, FALSE_KEPT);
   const more = m.falseFindings.length - kept.length;
-  const detail = [read.length ? m.counts : `no report and no closing message: ${m.counts}`,
+  const nothing = turns.some((t) => t.trim()) ? 'no report, and every closing message was left out as a question to a person'
+    : 'no report and no closing message';
+  const detail = [read.length ? m.counts : `${nothing}: ${m.counts}`,
     unlocated ? `${unlocated} block${unlocated > 1 ? 's' : ''} naming a file with no line, not matched` : null, m.missed.length ? `missed ${m.missed.join(', ')}` : null,
     kept.length ? `not in the key: ${kept.join('; ')}${more ? ` and ${more} more` : ''}` : null,
     m.severityDisagreements.length ? `severity: ${m.severityDisagreements.join('; ')}` : null].filter(Boolean).join('; ');

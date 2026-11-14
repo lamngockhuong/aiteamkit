@@ -6,7 +6,7 @@ import { randomBytes } from 'node:crypto';
 import { lstatSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { DEFAULTS } from './cli.mjs';
-import { cutText, stepFiles, turnResults } from './checks.mjs';
+import { cutText, lastTextOf, stepFiles, turnResults } from './checks.mjs';
 import { firstJson, helper } from './session.mjs';
 
 
@@ -48,8 +48,9 @@ export function material({ dir, run, glob, step }) {
   // Both arms' closing messages, so an item both arms are scored on is judged on the same kind of
   // material; only a kit-only item asks for the kit's file.
   const said = turnResults(dir, step === undefined ? undefined : run.steps?.[step]?.sessionId);
+  const last = lastTextOf(run, step);
   if (said.length) said.forEach((t, i) => parts.push(`=== the agent's closing message of turn ${i + 1} ===\n${cutText(t)}`));
-  else if (run.lastText) parts.push(`=== the agent's last message ===\n${cutText(run.lastText)}`);
+  else if (last) parts.push(`=== the agent's last message ===\n${cutText(last)}`);
   return { paths, messages: said.length, text: parts.join('\n\n') };
 }
 

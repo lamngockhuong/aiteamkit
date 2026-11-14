@@ -174,6 +174,7 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
         record.denials.push(...t.denials);
         for (const u of t.toolUses) record.toolCalls[u.name] = (record.toolCalls[u.name] || 0) + 1;
         record.lastText = t.lastText;
+        st.lastText = t.lastText;
         if (t.error) throw new Error(t.error);
         if (st.cost > stepBudget) throw new Error(`the step spent ${st.cost.toFixed(2)} USD, over its budget of ${stepBudget} USD`);
       };
@@ -235,6 +236,7 @@ async function runOne({ scenario, arm, n, opts, auth, secrets, resultsDir }) {
   record.trace ??= null;
   record.checks ??= [];
   const { lastText, ...kept } = record;
+  kept.steps = kept.steps.map(({ lastText: _, ...st }) => st);
   return kept;
 }
 
