@@ -1891,3 +1891,6 @@ out=$(node tests/bench/check-matcher.mjs 2>&1) && echo "OK bench findings matche
 # scan grant of a review scenario is read from plugins/atk/shared/secret-scan.md, so an edit there
 # that changes the block's shape fails here rather than in a paid run.
 out=$(node tests/bench/check-guard.mjs 2>&1) && echo "OK bench bash guard" || { echo "FAIL bench bash guard"; printf '%s\n' "$out" | grep -v '^OK ' | sed 's/^/  /'; }
+# The benchmark's chain machinery on a seed it builds and on hand-built records, free as well: the seed
+# builder's refusals, the approval between steps, and each step's findings and judge material.
+out=$(node tests/bench/check-chain.mjs 2>&1) && echo "OK bench chain machinery" || { echo "FAIL bench chain machinery"; printf '%s\n' "$out" | grep -v '^OK ' | sed 's/^/  /'; }

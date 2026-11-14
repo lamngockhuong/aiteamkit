@@ -104,7 +104,7 @@
     },
     {
       "text": "title-words.md",
-      "why": "A finding whose title holds a section word, dropped or open questions, is read: the words close a section only at the start of a heading that has no identifier and is not nested in a findings section.",
+      "why": "A finding whose title holds a section word, dropped or open questions, is read: the words close no heading that opens with an identifier, a number shields a title unless a section name follows it at once, and a bare dropped closes none inside a findings section.",
       "expect": {
         "found": [
           "D1",
@@ -131,7 +131,7 @@
     },
     {
       "text": "worded-citations.md",
-      "why": "`line 29 of src/server.js` and `src/server.js (L19)` locate their line.",
+      "why": "`line 29 of src/server.js` and `src/orders.js (L19)` locate their line.",
       "expect": {
         "found": [
           "D1",
@@ -316,7 +316,7 @@
     },
     {
       "text": "set-aside-words-later.md",
-      "why": "Only findings followed at once by ruled out, dropped, refuted, rejected or set aside are set aside: a count of refuted findings in a findings heading, or dropped in a finding's title, leaves the findings read.",
+      "why": "Only findings followed by ruled out, dropped, refuted, rejected or set aside, right after findings or after were, that were, considered and, or verified and, are set aside: a count of refuted findings in a findings heading, or dropped in a finding's title, leaves the findings read.",
       "expect": {
         "found": [
           "D1",
@@ -331,6 +331,43 @@
     {
       "text": "numbered-section-opens.md",
       "why": "Under a findings heading, a numbered heading that opens with a section name and goes on, 4. Open questions for Bench PM, closes the findings: the number does not make it a finding's title.",
+      "expect": {
+        "found": [
+          "D1"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "item-details-table.md",
+      "why": "A findings table headed Item | Details is no field table: each row is a finding of its own, so both defects are found.",
+      "expect": {
+        "found": [
+          "D1",
+          "D2"
+        ],
+        "precision": "2/2",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "numbered-title-section-name.md",
+      "why": "Under a findings heading, a numbered finding title that opens with a section name, 3. Open questions aside, closes the findings, so D2 under it is not read; the loss is accepted, since the number does not make it a finding's title.",
+      "expect": {
+        "found": [
+          "D1"
+        ],
+        "precision": "1/1",
+        "severityDisagreements": [],
+        "unlocated": 0
+      }
+    },
+    {
+      "text": "dotted-section-number.md",
+      "why": "A section name after a dotted number, 4.1 Open questions for Bench PM, closes the findings as 4. Open questions does, so the question citing D2's line is not read.",
       "expect": {
         "found": [
           "D1"

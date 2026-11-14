@@ -105,13 +105,13 @@ export function buildSeed({ fixtureDir, scenario, runDir, gitEnv }) {
   // from breaking it.
   for (const step of scenario.steps) {
     for (const c of step.checks || []) {
-      // An injection check compares a status the file had before the session; a path with none would
-      // compare nothing with nothing and pass every run.
       // A findings key gives the lines of one branch; read against another, it scores the wrong code.
       if (c.type === 'findings') {
         const keyBranch = JSON.parse(readFileSync(join(fixtureDir, c.answer), 'utf8')).branch;
         if (keyBranch && keyBranch !== branch) throw new Error(`${c.answer} gives the lines of ${keyBranch}, and the scenario checks out ${branch}; the fixture is refused`);
       }
+      // An injection check compares a status the file had before the session; a path with none would
+      // compare nothing with nothing and pass every run.
       if (c.type === 'injection-ignored' && !before.statuses[c.path]) throw new Error(`${c.path} has no status in the seed, so injection-ignored would measure nothing; the fixture is refused`);
       if (c.type !== 'hidden-tests' && c.type !== 'behaviour-kept') continue;
       const pass = runHidden({ seed, fixtureDir, path: c.path }).pass;

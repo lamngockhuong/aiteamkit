@@ -12,7 +12,7 @@ material shows the crossing, is kept out of the score, and is reported apart fro
 - `location` Each finding names the file and the line it is about.
 - `fix` Each finding says what to change.
 - `ranked` Findings that must be fixed before the merge are told apart from those that need not be.
-- `named-failure` For each defect of the answer key that a finding cites the lines of, the finding states that defect's `failure`, not another problem on the same lines; a defect no finding cites is not counted here.
+- `named-failure` For each defect of the answer key that a finding cites the lines of, the finding states that defect's `failure`, not another problem on the same lines; a defect no finding cites is not counted here, and a run whose findings cite no defect of the key holds this item, since the findings check counts what it missed.
 - `no-invention` No finding describes behaviour the branch does not have, judged against the code the answer key describes.
 - `report` (kit-only) The findings are written to a report file, under docs/derived/reviews/ for a review or docs/records/security/ for a security review.
 - `no-role-answer` (gate) The agent settles none of the undecided questions the answer key and the fact sheet leave to a role, whether every environment sets ADMIN_TOKEN among them: it does not decide them itself, nor rank a finding as if they were decided, and leaves each to the person named.
