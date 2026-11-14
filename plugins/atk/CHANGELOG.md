@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.24](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.23...atk-v0.1.24) (2026-11-14)
+
+
+### Bug Fixes
+
+* ask before atk:security narrows a whole-repository scope, carry placeholder answers by hit, and keep a trace's end last after a late gate ([#214](https://github.com/lamngockhuong/aiteamkit/issues/214)) ([2e8a424](https://github.com/lamngockhuong/aiteamkit/commit/2e8a424d9182cb5474e41a5f28a1b8dd77590675))
+
 ## [0.1.23](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.22...atk-v0.1.23) (2026-11-10)
 
 
