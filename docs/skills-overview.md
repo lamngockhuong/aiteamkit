@@ -583,7 +583,13 @@ request thread, and a second review of the same pull request reads the first rep
 the first posted on the pull request, to keep those identifiers pointing at the same findings. It
 reads the author's replies on the thread too: a finding the author deferred, declined or disputed
 gets no new inline comment, the summary answers it visibly with why it is closed or kept, and new
-evidence against the answer goes into that finding's existing thread. The
+evidence against the answer goes into that finding's existing thread. A person who reviews a
+target that already has a report is asked first which scope to read, what changed since the head
+that report records or the whole change, and the report names the scope and the newest review that
+read the whole change, so a verdict on a delta never reads as covering more than it opened; the
+review and fix loop of `atk:implement` and `atk:fix` names its first report and is asked nothing.
+The requirement is read where the profile says the spec lives, ticket comments included, and a
+decision recorded there outranks an acceptance list the author wrote into the pull request. The
 report has a fixed shape rather than one rebuilt per run, and it carries no score of any kind,
 because the reviewer is not the approver. `--out` moves the file, `--comment` posts the findings as
 inline PR comments, with one summary comment that lists every finding the review kept and every open

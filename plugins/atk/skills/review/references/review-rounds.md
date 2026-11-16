@@ -390,7 +390,19 @@ wall clock to reach one answer. Under this model each hoisted thing also has a n
 makes the step worth more than it was, not less:
 
 - Step 1 of the workflow, the requirement and design and acceptance criteria, feeds `criteria`. An
-  agent with no stated intent performs a style check.
+  agent with no stated intent performs a style check. The requirement is read where the Tracker
+  section of `.atk/profile.md` says the spec lives, and on a tracker that means the ticket and its
+  comments, per `shared/ticket-adapters.md`, since a decision is often settled in a comment after the
+  description was written; its parent epic and that epic's comments too, where the ticket points to
+  it or leaves its criteria open. A decision recorded there outranks an acceptance
+  list the pull request's author wrote into its description, where its writer is matched, in the
+  Team section of `.atk/profile.md`, to the role that owns that decision per rule 3 of
+  `shared/team-roles.md`, as a ruling is matched in `references/report-format.md`; a comment whose
+  writer is not matched is an open question to that owner, by name, and the list stands for that
+  item meanwhile. The list is measured only where it agrees, or where no matched decision exists. A reference document that contradicts a later decision is drift,
+  per Drift is not an unanswered question in `shared/spec-docs.md`, and neither `criteria` nor
+  `contract` picks the side that stands: both raise it the same way, asking the decision's owner and
+  the document's approver, by name.
 - The resolved convention rules, with their IDs and text, per `shared/review-checklist.md`, feed
   `rules`. Resolving them once is also what stops several agents quoting several readings of one rule.
 - Any compile or type check over the changed tree feeds `callers`. It is a function of the tree,
@@ -569,13 +581,45 @@ this is what that person reads before they start.
 
 ## Called again after a fix
 
-A caller that fixed findings and calls the review again, `atk:implement` and `atk:fix` in their review and fix
-loop above all, gets a review of the fix. Not the one round that raised the finding, because a fix to a
-document can break the test that asserts what it says, and a fix to a guard can move a contract. Not
-the whole change from the start either, because what did not change since the first review has
-already had its rounds.
+Two callers reach a target that already has a report. A skill's review and fix loop names the
+first report in its prompt as the earlier report, per `shared/review-fix-loop.md`: it gets a review
+of the fix, as below, and is asked nothing.
 
-The subject is what changed since the first review, plus what that change reaches: the callers of
+Any other call that finds an earlier report on the same target, or an `atk:review` summary on the
+pull request, through `## Output` of the skill, a person typing `/atk:review <target>` among them,
+settles its scope first: before the lines are counted, so before the band-1 reviewer or any round is
+spawned. The run states two scopes and asks which one:
+
+- **The delta**: what changed since the head the earlier report records, plus what it reaches, as
+  below.
+- **The whole change**, from its base, as a first review reads it; identifiers still carry forward,
+  per `references/report-format.md`, and each earlier finding is still checked by its identifier as
+  below.
+
+Each with its counted lines, and with the newest review on the target that read the whole change, by
+path, date and head, since that is all the coverage a delta inherits: the earlier report names it
+when it was a delta, so it is one read away. An earlier review that records no scope, a report
+written before the scope fields or a summary posted before its opening carried one, is named in the
+question as `scope not recorded`, never taken as a full read, unless it is a first review: a report
+that says its numbering started at 1, or the oldest `atk:review` summary on the pull request; where
+every earlier review is so, the question says no full read is known. The answer is a `gate` line of
+the trace, per `shared/run-trace.md`, and goes into the report. A run with nobody to ask reviews the
+whole change and says why, since a narrower scope chosen by nobody is how a delta's verdict gets
+read as covering what it never opened.
+
+The delta is offered only where it can be computed. An earlier head that can no longer be read, a
+force-push having removed it, leaves the whole change alone, said so. One that is readable but not
+an ancestor of the current head means the history was rewritten: the delta is then the diff between
+the two heads, which also carries whatever a new base brought in, and the question says so. On a
+working tree the delta exists only as the files the person names as changed since.
+
+Where the scope is the delta, a fix loop's always is, a review of the fix is not the one round that
+raised the finding, because a fix to a document can break the test that asserts what it says, and a
+fix to a guard can move a contract. Nor is it the whole change from the start, because what did not
+change since the first review has already had the rounds of the review that read it, and nothing
+more than those.
+
+The delta is what changed since the first review, plus what that change reaches: the callers of
 anything it changed, and the tests and reference documents that describe it. What changed is found
 two ways. On a committed target it is the diff from the head the first report records. On a working
 tree, where both reviews sit on the same head and git holds no trace of the tree the first one read,
@@ -587,10 +631,12 @@ fix set out to close is then checked by its identifier, and the report says of e
 closed or still open, and, where the author answered it on the pull request thread, carries that
 answer per *What the author answered is read with it* in `references/report-format.md`.
 
-The first report is the one the caller names in its prompt, not the newest found by name: a
-working-tree report is named after a slug of its paths, and a fix touches fewer paths than the
-change did. The report says it is a second pass, names the first report by its path, and lists the
-rounds that ran this time. A finding the fix closed goes in `## Closed since the first review`, per
+For a fix loop, the first report is the one the caller names in its prompt, not the newest found by
+name: a working-tree report is named after a slug of its paths, and a fix touches fewer paths than
+the change did. For any other call it is the earlier report the scope question named. The report
+says it is a second pass, names the first report by its path, carries the scope fields
+`references/report-format.md` lists under What this was reviewed against, and lists the rounds that
+ran this time. A finding the fix closed goes in `## Closed since the first review`, per
 `references/report-format.md`. A finding that stayed open keeps its identifier and a new one takes
 the next number, per Finding identifiers in `references/report-format.md`, so the caller can tell a
 finding that survived the fix from one the fix introduced.
