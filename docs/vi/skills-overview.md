@@ -594,7 +594,13 @@ cùng pull request đọc lại báo cáo đầu, hoặc bản tóm tắt lượ
 mã ấy vẫn trỏ đúng vào các phát hiện cũ. Lượt ấy cũng đọc các trả lời của tác giả trên thread: một
 phát hiện tác giả đã hoãn, từ chối hay phản đối thì không bị đăng lại thành comment inline mới, bản
 tóm tắt trả lời nó ở phần nhìn thấy được, nói vì sao phát hiện được đóng hay giữ lại, và bằng chứng
-mới chống lại câu trả lời ấy được đăng ngay trong thread sẵn có của phát hiện. Báo cáo có hình dạng cố định chứ không phải mỗi lần chạy
+mới chống lại câu trả lời ấy được đăng ngay trong thread sẵn có của phát hiện. Một người review lại
+một mục tiêu đã có báo cáo được hỏi trước phạm vi muốn đọc, phần thay đổi kể từ head mà báo cáo ấy
+ghi lại hay toàn bộ thay đổi, và báo cáo ghi rõ phạm vi cùng lượt review gần nhất đã đọc toàn bộ thay
+đổi, để kết luận trên một phần delta không bao giờ bị hiểu là phủ nhiều hơn những gì nó đã mở; vòng
+review và sửa của `atk:implement` và `atk:fix` nêu báo cáo đầu của nó nên không bị hỏi gì. Yêu cầu
+được đọc ở nơi profile ghi là chứa spec, kể cả comment trên ticket, và một quyết định ghi ở đó xếp
+trên danh sách tiêu chí chấp nhận mà tác giả tự viết vào pull request. Báo cáo có hình dạng cố định chứ không phải mỗi lần chạy
 dựng lại một kiểu, và không mang điểm số nào, vì người review không phải người duyệt. Cờ `--out` đổi
 chỗ file, cờ `--comment` đăng phát hiện thành comment inline trên PR, kèm một comment tóm tắt liệt
 kê, ở dạng thu gọn, mọi phát hiện mà lượt review giữ lại và mọi câu hỏi mở, nên người đọc pull

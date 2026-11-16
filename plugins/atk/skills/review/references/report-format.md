@@ -235,9 +235,14 @@ of nothing else, and `references/review-rounds.md` names the rounds that still o
 carries them, and the evidence that the file is generated, so a reader who disagrees with an
 exclusion can see what it rested on instead of re-deriving it.
 
-**What this was reviewed against.** The requirement and design from step 1, by identifier, or the
-statement that neither exists and the review ran against the pull request description alone. The
-conventions document resolved per `shared/review-checklist.md` belongs here too, by path.
+**What this was reviewed against.** The requirement and design from step 1, by identifier, the
+ticket comments read among them by their dates, or the statement that neither exists and the review
+ran against the pull request description alone. Where the description carries an acceptance list and
+a recorded decision outranks it, per `references/review-rounds.md`, say which one `criteria`
+measured. The conventions document resolved per `shared/review-checklist.md` belongs here too, by
+path. Then the scope fields, on every report, a first review writing `whole`: the scope, who chose
+it, and the newest review that read the whole change, by path, date and head, per Called again after
+a fix in `references/review-rounds.md`.
 
 **What the change does well.** One line at least. A review of only negatives teaches nothing about
 what to repeat.
@@ -250,8 +255,8 @@ alone exceeds the cap, all of it is carried and the report says so, since that c
 Lead's call, not a quiet trimming decision. This section names, by identifier, the findings the cap
 left out, so a reader knows those are not the whole review. `None.` when the cap cut nothing.
 
-**Rounds.** The band and the count that put the change in it, the cost line with any model asked
-for under the `Review agent model` line, then one row per round:
+**Rounds.** The band and the count that put the change in it, on a second pass naming its scope,
+the cost line with any model asked for under the `Review agent model` line, then one row per round:
 
 ```markdown
 Band **2**, `--parallel 3`: 1,349 counted lines across 43 counted files. 16 round runs in 13
@@ -341,9 +346,10 @@ finding's existing thread, the inline comment that opens with its ID, with the r
 in a general comment rather than in that thread, the new evidence goes in the finding's visible line
 instead.
 
-The summary comment opens with `atk:review`, the target and the head commit it reviewed, as
-`atk:review #88 @ 3f2c1ab`, so a later run can tell it from any other comment and knows what code
-its `file:line` citations point at. It then carries the counts per severity and the blocking titles with their IDs. Below them, in a
+The summary comment opens with `atk:review`, the target, the head commit it reviewed and the scope
+it read, as `atk:review #88 @ 3f2c1ab, whole` or `atk:review #88 @ 3f2c1ab, delta since 1a2b3c4`,
+so a later run can tell it from any other comment, knows what code its `file:line` citations point
+at, and knows whether it read the whole change. It then carries the counts per severity and the blocking titles with their IDs. Below them, in a
 `<details>` block the reader opens on purpose, it lists every finding the review kept, one line each:
 the ID, the title, and the `file:line` it cites, plus the failure in one sentence for a finding the
 cap kept off the thread. The same block lists each open question with the person who must answer

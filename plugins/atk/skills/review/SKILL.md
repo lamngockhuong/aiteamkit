@@ -57,16 +57,18 @@ session is the calling agent says so in the report.
 Before step 1, read `.atk/overrides/review.md` when it exists, per rule 7 of `shared/team-roles.md`.
 Then, before anything else, create this run's trace, `<docs root>/derived/traces/review/<run-id>.md`:
 read the kit's `shared/run-trace.md` and do what it says before the file, at each step, and at the close.
-Then count the changed lines per step 3 without printing them. In band 1 without `--parallel`, spawn a
-general agent at once as the reviewer, never `atk:read-only-reviewer`, with the target and the paths and
-no diff, which it reads through Masking a diff in `shared/secret-scan.md`: it runs steps 1 to 6 and
-spawns no reviewer, and this session writes the trace for it, per `shared/run-trace.md`.
+Where the target has an earlier report, ask its scope first, or take the files a fix loop names, per
+Called again after a fix in `references/review-rounds.md`. Then count the changed lines in that scope
+per step 3 without printing them. In band 1 without `--parallel`, spawn a general agent at once as the
+reviewer, never `atk:read-only-reviewer`, with the target, the scope and the paths and no diff, which it
+reads through Masking a diff in `shared/secret-scan.md`: it runs steps 1 to 6 and spawns no reviewer,
+and this session writes the trace for it, per `shared/run-trace.md`.
 
 ### 1. Establish intent
 
-Find the requirement and design behind the change. Without them, say so in the review and review
-against the PR description alone; a review with no stated intent is a style check. A finding whose
-fix reverses a decision they record keeps its severity, per `references/report-format.md`.
+Find the requirement and design behind the change, per `references/review-rounds.md`. Without them, say
+so and review against the PR description alone; a review with no stated intent is a style check. A
+finding whose fix reverses a decision they record keeps its severity, per `references/report-format.md`.
 
 ### 2. Read the diff in context
 
@@ -83,8 +85,7 @@ agent drives them, and how the findings become one list. Three questions settle 
 
 **Which rounds run.** All nine, minus the ones whose subject the diff does not contain: no deleted
 lines, no signature change, no behavior change. That is different from a round that ran and found
-nothing, and the report keeps the two apart. The list comes from step 4 below. Called again after a
-fix, the subject is the fix and what it reaches, per `references/review-rounds.md`.
+nothing, and the report keeps the two apart. The list comes from step 4 below.
 
 **Where they run, and how many copies.** Every round runs once. The size of the change decides only
 where, measured in changed lines and never in files: 500 lines or fewer run all nine rounds and the
@@ -242,12 +243,11 @@ needs to know whether they are blocked and where to read the rest; the argument 
 `references/report-format.md` holds what that file looks like, its identifiers, labels, round table
 and sections; this section decides only where it goes and what reaches the session.
 
-Read the newest earlier report on the same target first, and on a pull request its newest
-`atk:review` summary. A second review reuses the first's identifiers, so `B1` stays `B1`;
-`references/report-format.md` holds what happens when a finding changes severity, and what to do when
-no earlier report exists. The kit reads this report again, here, in `atk:plan --review` and
-`atk:qa --review` for their own, and in step 1 of `atk:convention`, which takes its `Convention gaps`
-section; `shared/artifact-paths.md` lists every derived kind the kit reads, and who reads it.
+Read the newest earlier report on the same target first, and on a pull request its newest `atk:review`
+summary: a second review reuses its identifiers, so `B1` stays `B1`. `references/report-format.md` holds
+what a severity change and a missing earlier report do. `atk:plan --review` and `atk:qa --review` read
+their own the same way, and step 1 of `atk:convention` takes its `Convention gaps`;
+`shared/artifact-paths.md` lists every derived kind the kit reads.
 
 `--out <path>` moves the file. It no longer decides whether one is written.
 
