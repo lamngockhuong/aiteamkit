@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.25](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.24...atk-v0.1.25) (2026-11-16)
+
+
+### Bug Fixes
+
+* ask a person which scope a re-review reads, and take criteria from the ticket's decisions ([#217](https://github.com/lamngockhuong/aiteamkit/issues/217)) ([8b01a52](https://github.com/lamngockhuong/aiteamkit/commit/8b01a528d6e7e90fb269d074a19c4f5b0677f592))
+
 ## [0.1.24](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.23...atk-v0.1.24) (2026-11-14)
 
 
