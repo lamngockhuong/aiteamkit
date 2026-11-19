@@ -148,7 +148,9 @@ subject: #15 | branch: feat/15-export | start: 6dfab99 | profile: present | over
   An agent a skill spawns to do part of that skill's run, the band 1 reviewer of `atk:review`, a
   lens agent of a `--challenge`, an agent that reads wide, is not a run of its own: it writes no
   trace, and the session that spawned it writes the `step` lines from what the agent reports.
-- `flags`: the flags passed, each value through the mask below, or `none`.
+- `flags`: the flags passed in the invocation, each value through the mask below, or `none`. A
+  flag a person gives in a later turn is never written in afterwards: it is the answer on the
+  `gate` line of the question it settles.
 - `subject`: written as a progress log writes it, per Progress log in `shared/artifact-paths.md`: a
   ticket key, a pull request number in its host's form, a plan path, or the slug of a description,
   or `none` when the invocation names no subject, per `<run-id>` above. A run that takes up an

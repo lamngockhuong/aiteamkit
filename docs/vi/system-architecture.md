@@ -476,7 +476,10 @@ phép ngày 2026-10-14, và `atk:security` là skill đầu tiên có: phần qu
 cùng các kết quả với cùng một lịch sử ở mọi lần chạy, phần quét chuỗi cung ứng phải cho cùng các
 ứng viên với cùng một cây, và các dạng giá trị bí mật nó viết lại từ
 `shared/secret-scan.md` được một phép kiểm giữ khớp với khối lệnh đó, thay vì để agent gõ lại. ADR
-0017 ghi lại lựa chọn này. Cả hai skill của `atkx` đều có thêm thư
+0017 ghi lại lựa chọn này. `atk:review` là skill thứ hai: một dòng inline comment có nằm trong diff
+của pull request hay không chỉ có một đáp án cho một base và một head, nên
+`scripts/post-review.mjs` của nó kiểm từng dòng và đăng review trong một lần gọi, như ADR 0018 ghi
+lại. Cả hai skill của `atkx` đều có thêm thư
 mục `scripts/`, viết bằng Node như hook và cùng lý do. Các skill mẫu của `atkx:skill-eval` phải nhận
 cùng một kết luận ở mọi lần chạy, trong khi che một credential, so một host với `SKILL.md`, hay cộng
 một điểm có trọng số thì mỗi lần agent làm lại ra một chút khác; trích dẫn mà `atkx:doc-audit` kiểm

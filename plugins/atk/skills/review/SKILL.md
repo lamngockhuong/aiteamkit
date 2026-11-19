@@ -253,11 +253,11 @@ their own the same way, and step 1 of `atk:convention` takes its `Convention gap
 
 ## Ticket
 
-Follow `shared/ticket-adapters.md`. Under `--comment`, post the findings the cap in step 6 allows as
-inline comments, except one the author already answered, and one review comment that answers those
-and lists every finding, collapsed, per `references/report-format.md`. Post nothing before showing
-the list. In band 1 the reviewer agent only writes the report; the session shows the list from it
-and posts on consent. A `BLOCKING` finding requests changes; `NIT` findings never do.
+Follow `shared/ticket-adapters.md`, whose script posts the review. Under `--comment`, post inline
+the findings the cap in step 6 allows, except one the author answered, and one review comment that
+answers those and lists every finding, collapsed, per `references/report-format.md`, which says what
+the reviewer decides on each answer first. Post nothing before the list is shown and the person says
+yes; band 1's reviewer agent posts nothing. Only a posted `BLOCKING` finding requests changes.
 
 ## Definition of done
 

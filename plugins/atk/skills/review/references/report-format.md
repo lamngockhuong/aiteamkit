@@ -256,7 +256,8 @@ Lead's call, not a quiet trimming decision. This section names, by identifier, t
 left out, so a reader knows those are not the whole review. `None.` when the cap cut nothing.
 
 **Rounds.** The band and the count that put the change in it, on a second pass naming its scope,
-the cost line with any model asked for under the `Review agent model` line, then one row per round:
+on a pull request where the head was read from, per `shared/ticket-adapters.md`, the cost line with any model asked for under the `Review agent model`
+line, then one row per round:
 
 ```markdown
 Band **2**, `--parallel 3`: 1,349 counted lines across 43 counted files. 16 round runs in 13
@@ -345,6 +346,24 @@ finding's existing thread, the inline comment that opens with its ID, with the r
 `shared/ticket-adapters.md`, and never as a new comment on another line. Where the author answered
 in a general comment rather than in that thread, the new evidence goes in the finding's visible line
 instead.
+
+**The reviewer decides on each answer before anything is posted.** The person running the review
+is shown every finding the author answered, the answer with its reason and what the code at the
+head reviewed shows, and picks one per finding: accept, which closes it into `## Closed since the
+first review`; ask for evidence, which keeps it and replies in its thread asking for what would
+close it; or keep, which keeps it with its `Author` line. Only what they pick is posted. Two kinds
+of answer are not put to them as a choice. A ruling, per *What the author answered is read with
+it*, already closed or kept the finding. An answer the head does not bear out, `fixed` with no fix
+in the code reviewed, stays open as a fact, its `Author` line saying what the head shows, never as a
+dispute. The band 1 reviewer agent reads no thread and no conversation, so the session hands it the
+answers as a file, per `references/review-rounds.md`, and the choice is put to the person once the
+agent's report is back.
+
+**In the trace.** The choice above is one `gate answers` line and the question to post one
+`gate post` line, per `shared/run-trace.md`, the second answered with the event, the number of
+inline comments and the review id the script printed, or `refused`. Both are written above `end`,
+which moves below them. A `--comment` given in a later turn is the answer of the `gate post` line,
+per `flags` in `shared/run-trace.md`.
 
 The summary comment opens with `atk:review`, the target, the head commit it reviewed and the scope
 it read, as `atk:review #88 @ 3f2c1ab, whole` or `atk:review #88 @ 3f2c1ab, delta since 1a2b3c4`,

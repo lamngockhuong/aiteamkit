@@ -161,19 +161,40 @@ A skill that has to read a pull request rather than write to one, which `atk:rev
 
 ```bash
 gh pr view <number> --json files,baseRefName,headRefName,headRepository,baseRepository   # which files, which refs
-gh pr checkout <number>                     # the head, which the mask reads as HEAD
+gh pr checkout <number>                     # the head, which the mask reads as HEAD; or the worktree below
 git remote -v                               # the remote whose URL is baseRepository
 git fetch <base remote> <baseRefName>
 sh -s -- mask <base remote>/<baseRefName>...HEAD   # the block of shared/secret-scan.md, as its masking section runs it
 ```
 
-The checkout comes first, every time, and not only to open whole files: the mask reads `HEAD`, and
+The head is checked out first, every time, here or in the run's own worktree below, and not only to
+open whole files: the mask reads `HEAD`, and
 without the checkout it masks whatever branch the reviewer happened to be on. That diff is not
 empty, so no guard catches it, and the wrong change is reviewed without an error. The base remote is
 the one whose URL names `baseRepository`: `origin` in a clone of the repository itself, usually
 `upstream` in a clone of a fork, where `origin/<baseRefName>` is the fork's own copy of the base and
 may be months behind. Where no remote names it, fetch it by URL,
 `git fetch https://github.com/<owner>/<name> <baseRefName>`, and mask `FETCH_HEAD...HEAD`.
+
+The checkout moves the person's own working tree, and with it their branch, their uncommitted work
+and anything running from it. Where they are not already at the pull request's head with a clean
+tree, the head is read from a worktree of the run's own instead, in the run directory the mask
+writes to, so `HEAD` there is still the head under review and the person's checkout never moves:
+
+```bash
+d=$(git rev-parse --path-format=absolute --git-path atk/<skill>/<run-id>) && mkdir -p "$d"   # once, in the person's tree
+git fetch <base remote> pull/<number>/head        # the head, a fork's included, into FETCH_HEAD
+git worktree add --detach "$d/head" FETCH_HEAD
+git fetch <base remote> <baseRefName> && b=$(git rev-parse FETCH_HEAD)   # the base, as a sha
+(cd "$d/head" && sh -s -- mask "$b"...HEAD) > "$d/diff.patch" 2> "$d/masked.txt"
+git worktree remove --force "$d/head"              # at the close, the run's own worktree and nothing else
+```
+
+`d` is computed once, in the person's tree, and reused: inside a worktree `--git-path` and
+`FETCH_HEAD` name that worktree's own copies, which the close deletes. Every file the run opens is
+read from `"$d/head"`, and every agent is pointed there; the report, the trace and `review.json` are
+written in the person's tree, never under `"$d/head"`. The base goes into `review.json` as the sha
+`b`, never as `FETCH_HEAD`. The report says which of the two the head was read from.
 
 The hunks come from that scan, never from `gh pr diff <number>`: that prints every file the pull
 request adds, a `.env` included, into the session before anything masked it, against rule 9 of
@@ -198,6 +219,26 @@ reply goes into a finding's thread with:
 ```bash
 gh api -X POST repos/{owner}/{repo}/pulls/<number>/comments/<comment-id>/replies -F body=@<file>
 ```
+
+`atk:review --comment` posts its review as one review, carrying the summary, the inline comments
+and the event at once, through the script the skill ships, never a payload built in the session:
+
+```bash
+node <atk:review's skill dir>/scripts/post-review.mjs "$d/review.json"          # checks every line, sends nothing
+node <atk:review's skill dir>/scripts/post-review.mjs "$d/review.json" --post   # after the person's yes
+```
+
+`review.json` is written with the harness's file write, never through shell quoting, in the run
+directory above, and holds the repository, the pull request, the base the mask diffed against, the
+commit reviewed, the event, the summary and the inline comments; the script's header gives the
+shape. Every inline line has to sit inside the pull request's diff against its base, the whole
+pull request rather than the delta a later review read, or GitHub refuses the whole review. The
+script checks that first and sends nothing while a line is outside it, naming the nearest added
+line of the same file: the finding moves to that line where it is about that line, and otherwise
+stays in the summary alone, with its `file:line` there. After posting, it reads each comment back
+and says whether it landed on its line. GitHub refuses `REQUEST_CHANGES` on a pull request the
+poster opened; the script says so, and the person is asked whether to post it as `COMMENT`, the
+summary still counting the `BLOCKING` findings.
 
 `atk:verify` reads a pull request for its acceptance criteria rather than its files, so it needs a
 different line, and never the checkout above, because the application it exercises runs from the

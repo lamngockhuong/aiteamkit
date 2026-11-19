@@ -177,7 +177,10 @@ the whole session, and a review makes dozens of them. A fresh agent starts with 
 
 It is given the target, the paths to the requirement, plan or design, the conventions document, and
 the newest earlier report on the same target, found per `references/report-format.md`, when there
-is one, and nothing from the conversation. It runs
+is one, and nothing from the conversation. On a pull request it is also given, as a file in the run
+directory, what the session read from the thread: the earlier summary's identifiers and every answer
+and ruling with its finding's ID, since its tools read no thread, and a finding it raised again
+against an answer it never saw would read as a reviewer that ignored the author. It runs
 the skill from step 1 to step 6 as the calling agent of this file: it finds the intent from those
 paths, runs the rounds in order, takes the sweep and the verdicts itself, and writes the report. It
 returns the session summary of the skill's `## Output` and the report path, and the session that
