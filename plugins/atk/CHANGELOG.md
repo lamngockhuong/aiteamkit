@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.26](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.25...atk-v0.1.26) (2026-11-19)
+
+
+### Bug Fixes
+
+* post an atk:review review through a script, record the posting gate, and read a pull request from its own worktree ([#219](https://github.com/lamngockhuong/aiteamkit/issues/219)) ([e16d60b](https://github.com/lamngockhuong/aiteamkit/commit/e16d60b4056a7ead85731f25d26637cbfd9ccdc1))
+
 ## [0.1.25](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.24...atk-v0.1.25) (2026-11-16)
 
 
