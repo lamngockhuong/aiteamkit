@@ -130,7 +130,8 @@ because a free-text field routinely holds a comma and a quote forgotten by hand 
 after it.
 
 A skill of either plugin may also carry `scripts/`, Node only, for the checks whose answer must be
-the same on every run, and only those; judgment stays in `references/`. Both `atkx` skills do,
+the same on every run, and for the one call such a check guards, made in the same run; only those,
+and judgment stays in `references/`. Both `atkx` skills do,
 and two `atk` skills, `security` and `review`.
 `atkx:skill-eval` for the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records:
 its sample skills in `tests/skill-eval-fixtures/` must get the same verdict every time.
