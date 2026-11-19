@@ -1180,6 +1180,79 @@ finally:
     shutil.rmtree(t, **({'onexc': writable} if sys.version_info >= (3, 12) else {'onerror': writable}))
 print('OK security supply-chain scan, %d candidates, reads the index whatever the user configured, an unreadable workflow or manifest exits 3, no login or line in the output' % len(want))"
 
+# atk:review's post-review on a repository built here, with a stand-in for gh on the PATH that
+# records what it was sent and sends nothing: a context line and a changed line anchored, a line
+# outside every hunk and a file the diff does not touch refused with the nearest added line and
+# nothing sent; one review created with the commit, the event, side RIGHT and a body whose backticks,
+# quotes and details block arrive intact; a comment read back on another line, and GitHub refusing
+# the review, each exit 3; and a spec that does not hold, B1 against a body opening B10 among them,
+# exit 2
+python3 -c "
+import json, os, shutil, stat, subprocess, sys, tempfile
+script = os.path.abspath('plugins/atk/skills/review/scripts/post-review.mjs')
+t = tempfile.mkdtemp(); r = os.path.join(t, 'repo'); os.makedirs(r); fake = os.path.join(t, 'fake'); os.makedirs(fake); bin_ = os.path.join(t, 'bin'); os.makedirs(bin_)
+env0 = {k: v for k, v in os.environ.items() if not k.startswith('GIT_')}
+def g(*x):
+    return subprocess.run(['git', '-C', r] + list(x), check=True, capture_output=True, text=True, env=env0).stdout.strip()
+def put(p, lines):
+    open(os.path.join(r, p), 'w').write(''.join(l + chr(10) for l in lines))
+gh = ['#!' + sys.executable, 'import json, os, sys', 'd = os.environ[' + repr('FAKE_GH') + ']; a = sys.argv[1:]',
+      'open(os.path.join(d, ' + repr('calls') + '), ' + repr('a') + ').write(json.dumps(a) + chr(10))',
+      'if ' + repr('--input') + ' in a:',
+      '    p = json.load(open(a[a.index(' + repr('--input') + ') + 1]))',
+      '    if os.environ.get(' + repr('FAKE_GH_REFUSE') + '): print(json.dumps({' + repr('message') + ': ' + repr('Unprocessable Entity') + ', ' + repr('errors') + ': [' + repr('Can not request changes on your own pull request') + ']})); sys.stderr.write(' + repr('gh: Unprocessable Entity (HTTP 422)') + ' + chr(10)); sys.exit(1)',
+      '    json.dump(p, open(os.path.join(d, ' + repr('payload.json') + '), ' + repr('w') + ')); print(json.dumps({' + repr('id') + ': 7, ' + repr('html_url') + ': ' + repr('https://github.example/r/7') + '}))',
+      'else:',
+      '    p = json.load(open(os.path.join(d, ' + repr('payload.json') + ')))',
+      '    s = int(os.environ.get(' + repr('FAKE_GH_SHIFT') + ', ' + repr('0') + '))',
+      '    print(json.dumps([{' + repr('path') + ': c[' + repr('path') + '], ' + repr('line') + ': c[' + repr('line') + '] + s, ' + repr('body') + ': c[' + repr('body') + ']} for c in p[' + repr('comments') + ']]))']
+open(os.path.join(bin_, 'gh'), 'w').write(chr(10).join(gh) + chr(10)); os.chmod(os.path.join(bin_, 'gh'), 0o755)
+def run(spec, *extra, **envx):
+    sp = os.path.join(t, 'spec.json'); json.dump(spec, open(sp, 'w'))
+    if os.path.exists(os.path.join(fake, 'calls')): os.remove(os.path.join(fake, 'calls'))
+    e = dict(env0, PATH=bin_ + os.pathsep + env0['PATH'], FAKE_GH=fake, **envx)
+    p = subprocess.run(['node', script, sp] + list(extra), cwd=r, capture_output=True, text=True, env=e)
+    return p, (json.loads(p.stdout) if p.stdout else None), os.path.exists(os.path.join(fake, 'calls'))
+bad = []
+def check(ok, msg):
+    if not ok: bad.append(msg)
+try:
+    g('init', '-q', '-b', 'main'); g('config', 'user.email', 't@example.invalid'); g('config', 'user.name', 't')
+    put('a.txt', ['line %d' % i for i in range(1, 31)]); put('b.txt', ['same']); g('add', '-A'); g('commit', '-qm', 'base'); base = g('rev-parse', 'HEAD')
+    put('a.txt', ['line %d' % i if i != 15 else 'changed' for i in range(1, 31)] + ['added 31']); g('add', '-A'); g('commit', '-qm', 'head'); head = g('rev-parse', 'HEAD')
+    body = 'B1 ' + chr(96) + 'x' + chr(96) + ' ' + chr(34) + 'q' + chr(34) + ' ' + chr(39) + 's' + chr(39) + ' <details><summary>a</summary>' + chr(36) + '(no)</details>'
+    spec = {'repo': 'o/n', 'pr': 5, 'base': base, 'commit': head, 'event': 'REQUEST_CHANGES', 'body': 'atk:review #5 @ x, whole',
+            'comments': [{'id': 'B1', 'path': 'a.txt', 'line': 15, 'body': body}, {'id': 'S1', 'path': 'a.txt', 'line': 12, 'body': 'S1 context line'},
+                         {'id': 'N1', 'path': 'a.txt', 'line': 2, 'body': 'N1 far'}, {'id': 'N2', 'path': 'b.txt', 'line': 1, 'body': 'N2 untouched'}]}
+    p, out, called = run(spec, '--post')
+    check(p.returncode == 3 and not called and not out['posted'], 'an unanchored line did not stop the post: %s %s' % (p.returncode, called))
+    check([(a['id'], a['anchored'], a['nearest']) for a in out['anchors']] == [('B1', True, 15), ('S1', True, 15), ('N1', False, 15), ('N2', False, None)], 'anchors: %s' % out['anchors'])
+    spec['comments'] = spec['comments'][:2]
+    p, out, called = run(spec)
+    check(p.returncode == 0 and not called and out['mode'] == 'check', 'a check sent something or failed: %s %s' % (p.returncode, p.stderr))
+    p, out, called = run(spec, '--post')
+    sent = json.load(open(os.path.join(fake, 'payload.json')))
+    check(p.returncode == 0 and out['posted'] and out['review_id'] == 7 and all(l['landed'] for l in out['landed']), 'post: %s %s %s' % (p.returncode, out, p.stderr))
+    check(sent['commit_id'] == head and sent['event'] == 'REQUEST_CHANGES' and sent['comments'][0] == {'path': 'a.txt', 'line': 15, 'side': 'RIGHT', 'body': body}, 'payload: %s' % sent)
+    p, out, _ = run(spec, '--post', FAKE_GH_SHIFT='1')
+    check(p.returncode == 3 and out['posted'] and not any(l['landed'] for l in out['landed']), 'a comment on another line read as landed: %s' % out)
+    p, out, _ = run(spec, '--post', FAKE_GH_REFUSE='1')
+    check(p.returncode == 3 and not out['posted'] and 'own pull request' in out['error'], 'a refused review read as posted: %s' % out)
+    one = lambda **kw: dict(spec, **kw)
+    c0 = spec['comments'][0]
+    for name, s, extra in (('no spec', None, []), ('APPROVE', one(event='APPROVE'), []), ('unknown commit', one(commit='0' * 40), []),
+                           ('bad id', one(comments=[dict(c0, id='X1')]), []), ('B1 body opening B10', one(comments=[dict(c0, body='B10 other')]), []),
+                           ('path leaves', one(comments=[dict(c0, path='../a.txt')]), []), ('extra argument', spec, ['--bogus'])):
+        if s is None:
+            p = subprocess.run(['node', script], cwd=r, capture_output=True, text=True, env=env0)
+        else:
+            p, _, _ = run(s, *extra)
+        check(p.returncode == 2 and not p.stdout and p.stderr.startswith('post-review: '), 'not refused with exit 2: %s %s' % (name, p.stderr))
+finally:
+    shutil.rmtree(t, ignore_errors=True)
+assert not bad, 'failed: ' + '; '.join(bad)
+print('OK review post-review checks every line against the diff, sends nothing when one is outside it, posts one review intact, and reads each comment back')"
+
 # The git behaviour atk:orchestrate's checks after a job rest on, in plugins/atk/skills/orchestrate/
 # references/worktrees.md: an ignored directory is one listing line, so the run directory is hashed
 # on its own; a nested repository is one line ending in /, so it is named rather than compared; a

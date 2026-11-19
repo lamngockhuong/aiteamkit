@@ -131,7 +131,7 @@ after it.
 
 A skill of either plugin may also carry `scripts/`, Node only, for the checks whose answer must be
 the same on every run, and only those; judgment stays in `references/`. Both `atkx` skills do,
-and one `atk` skill, `security`.
+and two `atk` skills, `security` and `review`.
 `atkx:skill-eval` for the reason `docs/adr/0002-skill-eval-scripts-for-repeatable-checks.md` records:
 its sample skills in `tests/skill-eval-fixtures/` must get the same verdict every time.
 `atkx:doc-audit` for the reason `docs/adr/0012-doc-audit-checks-claims-against-sources.md` records: a
@@ -147,7 +147,10 @@ hosts, and its `scripts/lib/secret-shapes.mjs` restates the
 shapes and the file lists of `shared/secret-scan.md`, held to them by `tests/verify.sh`, since a
 history built to test it holds values no committed file may. Its `scripts/supply-chain-scan.mjs`
 reads the workflows, manifests and lockfiles of the tracked tree for supply-chain candidates, its
-safe inputs in `tests/security-fixtures/`.
+safe inputs in `tests/security-fixtures/`. `atk:review` is the second, for the reason
+`docs/adr/0018-review-posts-through-a-script.md` records: its `scripts/post-review.mjs` checks every
+inline line of a review against the pull request's diff and posts the review in one call, tested in
+`tests/verify.sh` with a stand-in for `gh`.
 
 No file named `SKILL.md` sits deeper than `skills/<name>/SKILL.md` in either plugin. Codex lists a
 `SKILL.md` found at any depth under `skills/` as a skill of its own, so a sample skill kept inside a
@@ -675,7 +678,7 @@ them, is made to both; from `APPROVED` neither is edited. The mirror check cover
 | `system-architecture.md` | Multi-harness layout, the `plugins/atk/shared/` layer, and the load model |
 | `codebase-summary.md` | File-by-file reference of every tracked file (goes stale on any file add or remove) |
 | `project-roadmap.md` | Phase plan and status |
-| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup`, `0008` how `atk:review` weighs a gap in an agent rule, `0009` the model of the agents a skill spawns, chosen by the team, `0010` a review's findings explained from the repository and answered in `atk:fix`, `0011` `atk:verify` and `atk:run-cases` driving a device as a second client, `0012` `atkx:doc-audit` checking each claim of a document against its source, `0013` `atk:estimate` reading its comparables once per run and keeping a snapshot, `0014` the benchmark runner kept under `tests/`, `0015` skill triggers written in English while the trigger evals keep three languages, `0016` an unattended run of `atk:orchestrate` passing eligible gates provisionally, `0017` the Node scripts `atk:security` carries for the history and supply-chain scans |
+| `adr/*.md` | Architecture decision records, one decision each; `0001` records `atk` and `atkx` as sibling plugins, `0002` the scripts of `atkx:skill-eval`, `0003` `atk:orchestrate` and the ways it runs jobs, `0004` to `0006` the run trace, `0007` the document mode of `atk:catchup`, `0008` how `atk:review` weighs a gap in an agent rule, `0009` the model of the agents a skill spawns, chosen by the team, `0010` a review's findings explained from the repository and answered in `atk:fix`, `0011` `atk:verify` and `atk:run-cases` driving a device as a second client, `0012` `atkx:doc-audit` checking each claim of a document against its source, `0013` `atk:estimate` reading its comparables once per run and keeping a snapshot, `0014` the benchmark runner kept under `tests/`, `0015` skill triggers written in English while the trigger evals keep three languages, `0016` an unattended run of `atk:orchestrate` passing eligible gates provisionally, `0017` the Node scripts `atk:security` carries for the history and supply-chain scans, `0018` the script `atk:review` posts a review through |
 | `trigger-eval-measurement.md` | How to get a true reading out of `evals/trigger_evals.json`, and why a generic eval harness returns a number that is not one |
 | `flow/project-flow.md` | The 25 skills placed in delivery phases, with the author and approver of each artifact |
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
@@ -826,7 +829,7 @@ checks of the sections above, over the tracked files; every `atk` skill carries 
 walks to the right profile, and `load-overrides` answers only for `atk:` skills and refuses a
 symlink out of `.atk/overrides/`; the two hook registrations agree; the marketplaces and the
 plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matches the tree;
-`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds, staff emails and internal hosts under `--identities` with no local part or full host in the output and a graft file changing nothing, and on a tree built at test time each supply-chain candidate, with no login and no line of a manifest in the output; every agent holds Read, Grep and Glob only; the secret
+`atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds, staff emails and internal hosts under `--identities` with no local part or full host in the output and a graft file changing nothing, and on a tree built at test time each supply-chain candidate, with no login and no line of a manifest in the output; `atk:review`'s post-review sends nothing while a line is outside the diff, posts one review intact and reads each comment back, against a stand-in for `gh`; every agent holds Read, Grep and Glob only; the secret
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
 hold; trigger evals parse; no trigger eval positive is claimed by two skills; every skill's evals hold a Vietnamese and a Japanese positive and no description carries either language; every description
 fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the
