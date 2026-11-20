@@ -114,7 +114,7 @@ footer { margin-top: clamp(32px, 6vw, 64px); padding-top: 16px; border-top: 1px 
     "title": { "en": "Introducing atk and atkx", "vi": "Giới thiệu atk và atkx" },
     "summary": {
       "en": "A walkthrough for a project team: the problems the kit answers, its team principles, the skills along the delivery lifecycle, who writes and who approves each artifact, the two atkx skills, and the first two commands to run.",
-      "vi": "Buổi giới thiệu cho team dự án: kit giải quyết vấn đề gì, các nguyên tắc làm việc kiểu team, các skill theo vòng đời giao hàng, ai viết và ai duyệt từng artifact, hai skill của atkx, và hai lệnh đầu tiên nên chạy."
+      "vi": "Buổi giới thiệu cho team dự án: kit giải quyết vấn đề gì, các nguyên tắc làm việc kiểu team, các skill theo từng giai đoạn của dự án, ai viết và ai duyệt từng tài liệu, hai skill của atkx, và hai lệnh đầu tiên nên chạy."
     }
   }
 ]
@@ -146,12 +146,12 @@ footer { margin-top: clamp(32px, 6vw, 64px); padding-top: 16px; border-top: 1px 
     vi: {
       eyebrow: "AI Team Kit",
       title: "Bộ skill AI cho cả team dự án",
-      lead: "atk phủ vòng đời phát triển phần mềm của một team dự án trong công ty. Mỗi skill coi công việc là có người viết và người review riêng, quyết định có người nắm quyền, và artifact được đọc bởi người không có mặt trong cuộc hội thoại tạo ra nó. Chạy trên Claude Code, Cursor và OpenAI Codex CLI.",
-      atk: "Bộ kit giao hàng: từ biến một yêu cầu thành tài liệu yêu cầu, qua ước lượng, thiết kế, kế hoạch, code, review và QA, tới release, sự cố và retro. Mỗi skill là một lệnh riêng, và artifact của nó là Markdown trong docs của dự án.",
-      atkx: "Skill tiện ích nằm cạnh atk, không cần profile dự án: skill-eval chấm một skill do dự án tự viết, doc-audit kiểm từng khẳng định của một tài liệu với nguồn của nó. atkx gọi được atk; atk không bao giờ cần atkx.",
+      lead: "atk phủ trọn vòng đời phát triển phần mềm của một team dự án trong công ty. Skill nào cũng làm theo cách của một team: việc nào cũng có người viết và người duyệt riêng, quyết định nào cũng có người chịu trách nhiệm, và tài liệu nào cũng phải đọc hiểu được với người không dự buổi trao đổi. Chạy trên Claude Code, Cursor và OpenAI Codex CLI.",
+      atk: "Bộ kit chính, đi cùng cả dự án: từ lúc nhận yêu cầu và viết thành tài liệu, qua ước lượng, thiết kế, lập kế hoạch, viết code, review và kiểm thử, tới phát hành, xử lý sự cố và retro. Mỗi skill là một lệnh riêng, kết quả là file Markdown trong thư mục docs của dự án.",
+      atkx: "Các skill tiện ích đi kèm atk, không cần profile dự án: skill-eval chấm chất lượng một skill do dự án tự viết, doc-audit đối chiếu từng khẳng định trong tài liệu với nguồn của nó. atkx gọi được atk, còn atk không bao giờ phụ thuộc atkx.",
       installTitle: "Cài đặt",
       installNote: "# Claude Code",
-      installMore: "Codex CLI và Cursor có các bước riêng, xem trong",
+      installMore: "Codex CLI và Cursor cài theo cách khác, xem hướng dẫn trong",
       decksEyebrow: "Slide",
       decksTitle: "Các bộ slide",
       empty: "Chưa có bộ slide nào cho đối tượng này.",
@@ -159,10 +159,10 @@ footer { margin-top: clamp(32px, 6vw, 64px); padding-top: 16px; border-top: 1px 
       slides: "slide",
       deckLang: { en: "Tiếng Anh", vi: "Tiếng Việt" },
       audience: { all: "Mọi người", dev: "Dev", qa: "QA", pm: "PM", brse: "BrSE/BA", tl: "Tech Lead" },
-      docsEn: "Tổng quan skill (tiếng Anh)",
-      docsVi: "Tổng quan skill (tiếng Việt)",
+      docsEn: "Tổng quan các skill (tiếng Anh)",
+      docsVi: "Tổng quan các skill (tiếng Việt)",
       license: "Giấy phép MIT",
-      metaDescription: "atk là bộ skill AI cho team dự án trong công ty: mỗi artifact có người viết, người review riêng và trạng thái phê duyệt. atkx thêm các skill tiện ích bên cạnh."
+      metaDescription: "atk là bộ skill AI cho team dự án trong công ty: mỗi tài liệu đều có người viết, người duyệt riêng và trạng thái phê duyệt. atkx bổ sung các skill tiện ích đi kèm."
     }
   };
   var AUDIENCES = ["all", "dev", "qa", "pm", "brse", "tl"];
@@ -177,6 +177,7 @@ footer { margin-top: clamp(32px, 6vw, 64px); padding-top: 16px; border-top: 1px 
   function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
   function formatDate(iso, lang) {
     var p = iso.split("-").map(Number);
+    if (lang === "vi") return String(p[2]).padStart(2, "0") + "/" + String(p[1]).padStart(2, "0") + "/" + p[0];
     var d = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
     try { return new Intl.DateTimeFormat(lang === "vi" ? "vi-VN" : "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(d); } catch (e) { return iso; }
   }
