@@ -685,6 +685,27 @@ them, is made to both; from `APPROVED` neither is edited. The mirror check cover
 | `flow/skill-chain.md` | What each skill consumes and produces, and where a chain breaks |
 | `flow/skill-lifecycle.md` | The anatomy of a skill, the shape of a run, and the five kinds of edge between one skill and another |
 
+## `site/` is the public page, and its decks are dated snapshots
+
+`site/` holds the page served at `https://atk.khuong.dev`: `index.html`, in English and Vietnamese,
+and one slide deck per file under `site/slides/`. `.github/workflows/pages.yml` deploys it on a push
+to `main` that changes it. It sits at the root on purpose: under `plugins/` an install would copy it
+to every user's machine, and under `docs/` the mirror rule would ask for a Vietnamese copy of a page
+that already carries both languages.
+
+The JSON block `<script type="application/json" id="decks">` in `site/index.html` is the one list
+of the decks; the page renders its cards from it, and `tests/verify.sh` fails when its files and the
+decks tracked under `site/slides/` differ, or when a record lacks a field the page renders.
+
+A deck is a dated snapshot: its cover names the `atk` version and the date it describes, and it is
+not one of the groups a skill change has to touch. A deck that has gone stale is replaced by a new
+one, or its record removed with its file, rather than edited to follow the kit. A deck keeps the
+language it was written in, and its record says which.
+
+Adding a deck is two edits in one commit: the file, named `site/slides/<topic>.html` or
+`site/slides/<audience>-<topic>.html` in kebab-case, and its record in the JSON block. The row in
+`docs/codebase-summary.md` covers every deck, so it does not change.
+
 ## A record here names no client
 
 This repository is public, and the kit is tried on client projects before a change lands here. A
@@ -833,7 +854,8 @@ plugins agree; a plugin reads nothing outside itself; `.github/labeler.yml` matc
 `atkx-skills.md` lists every `atkx` skill; every `atkx` copy of an `atk` rule still matches its origin, and `atkx:doc-audit`'s unread-path array, citation check and tally hold on their fixtures; `atk:security`'s scripts send nothing, share the secret scan's shapes and lists of files, and find on a history built at test time what it holds, staff emails and internal hosts under `--identities` with no local part or full host in the output and a graft file changing nothing, and on a tree built at test time each supply-chain candidate, with no login and no line of a manifest in the output; `atk:review`'s post-review sends nothing while a line is outside the diff, posts one review intact and reads each comment back, against a stand-in for `gh`; every agent holds Read, Grep and Glob only; the secret
 scan finds every shape in all four modes and leaks no value; the git premises of `atk:orchestrate`
 hold; trigger evals parse; no trigger eval positive is claimed by two skills; every skill's evals hold a Vietnamese and a Japanese positive and no description carries either language; every description
-fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the
+fits 1,024 characters; every `references/*.md` has its row in both codebase summaries; the site's deck catalogue
+matches `site/slides/`; the
 run-trace example keeps its header order and event shape; `atk` names no model outside its two
 allowed lines; `atk:review` names both reach values in
 its three files, its five protected consequences and its three fix forms, and rule 5 keeps the

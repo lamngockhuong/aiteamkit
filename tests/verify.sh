@@ -1366,6 +1366,33 @@ for doc in ('docs/codebase-summary.md', 'docs/vi/codebase-summary.md'):
     assert not miss, '%s has no row for %s' % (doc, miss)
 print('OK every reference and ADR has a summary row in both languages')"
 
+# The deck catalogue of the public page, the JSON block in site/index.html, is the one list of the
+# decks: each record carries every field the page renders, and its files are exactly the decks
+# tracked under site/slides/, so a deck without a record, or a record without a deck, fails here
+python3 -c "
+import json, re, subprocess
+s = open('site/index.html', encoding='utf-8').read()
+m = re.search(r'<script\b[^>]*\bid=\"decks\"[^>]*>(.*?)</script>', s, re.S)
+assert m, 'site/index.html has no <script id=\"decks\"> block'
+decks = json.loads(m.group(1))
+assert isinstance(decks, list) and decks, 'the deck catalogue is not a non-empty list'
+aud = {'all', 'dev', 'qa', 'pm', 'brse', 'tl'}
+bad = []
+for i, d in enumerate(decks):
+    ok = (isinstance(d, dict) and isinstance(d.get('file'), str) and d.get('lang') in ('en', 'vi')
+          and isinstance(d.get('audience'), list) and d['audience'] and set(d['audience']) <= aud
+          and re.fullmatch(r'\d+\.\d+\.\d+', str(d.get('atk', ''))) is not None
+          and re.fullmatch(r'\d{4}-\d{2}-\d{2}', str(d.get('date', ''))) is not None
+          and type(d.get('slides')) is int and d['slides'] > 0
+          and all(isinstance(d.get(k), dict) and all(isinstance(d[k].get(l), str) and d[k][l].strip() for l in ('en', 'vi')) for k in ('title', 'summary')))
+    if not ok: bad.append(d.get('file', i) if isinstance(d, dict) else i)
+assert not bad, 'deck records missing or with an invalid field: %s' % bad
+listed = ['site/' + d['file'] for d in decks]
+tracked = set(subprocess.run(['git', 'ls-files', 'site/slides/*.html'], capture_output=True, text=True, check=True).stdout.split())
+assert len(listed) == len(set(listed)), 'a deck is listed twice: %s' % listed
+assert set(listed) == tracked, 'catalogue and site/slides/ differ: no deck for %s, no record for %s' % (sorted(set(listed) - tracked), sorted(tracked - set(listed)))
+print('OK site deck catalogue matches site/slides/')"
+
 # The trace example in plugins/atk/shared/run-trace.md is the shape every run copies: after its two
 # header lines, each line opens with its time and one of the six event kinds
 python3 -c "

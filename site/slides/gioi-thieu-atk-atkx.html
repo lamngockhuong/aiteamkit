@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Giới thiệu atk và atkx</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+:root {
+  --bg-outer: #2d2d2d;
+  --bg-page: #f8f6f1;
+  --text-primary: #1a1a1a;
+  --text-muted: #5b5853;
+  --rule: #e4dfd4;
+  --tab-1: #98d4bb; /* Tổng quan */
+  --tab-2: #c7b8ea; /* Vòng đời */
+  --tab-3: #f4b8c5; /* Vai trò */
+  --tab-4: #a8d8ea; /* atkx */
+  --tab-5: #ffe6a7; /* Áp dụng */
+  --accent: var(--tab-1);
+  --font-display: "Playfair Display", serif;
+  --font-body: "Be Vietnam Pro", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-normal: 0.6s;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===== viewport-base.css ===== */
+html, body { height: 100%; overflow-x: hidden; }
+html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+.slide { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; scroll-snap-align: start; display: flex; flex-direction: column; position: relative; }
+.slide-content { flex: 1; display: flex; flex-direction: column; justify-content: center; max-height: 100%; overflow: hidden; padding: var(--slide-padding); }
+:root {
+  --title-size: clamp(1.5rem, 5vw, 4rem);
+  --h2-size: clamp(1.25rem, 3.2vw, 2.4rem);
+  --h3-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  --body-size: clamp(0.72rem, 1.25vw, 1.02rem);
+  --small-size: clamp(0.66rem, 1.12vw, 0.95rem);
+  --slide-padding: clamp(1rem, 4vw, 4rem);
+  --content-gap: clamp(0.5rem, 2vw, 2rem);
+  --element-gap: clamp(0.25rem, 1vw, 1rem);
+}
+.card, .container, .content-box { max-width: min(90vw, 1000px); max-height: min(80vh, 700px); }
+.feature-list, .bullet-list { gap: clamp(0.4rem, 1vh, 1rem); }
+.feature-list li, .bullet-list li { font-size: var(--body-size); line-height: 1.4; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: clamp(0.5rem, 1.5vw, 1rem); }
+img, .image-container { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+@media (max-height: 700px) { :root { --slide-padding: clamp(0.75rem, 3vw, 2rem); --content-gap: clamp(0.4rem, 1.5vw, 1rem); --title-size: clamp(1.25rem, 4.5vw, 2.5rem); --h2-size: clamp(1rem, 3vw, 1.75rem); } }
+@media (max-height: 600px) { :root { --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem); --content-gap: clamp(0.3rem, 1vw, 0.75rem); --title-size: clamp(1.1rem, 4vw, 2rem); --body-size: clamp(0.7rem, 1.2vw, 0.95rem); } .nav-dots, .keyboard-hint, .decorative { display: none; } }
+@media (max-height: 500px) { :root { --slide-padding: clamp(0.4rem, 2vw, 1rem); --title-size: clamp(1rem, 3.5vw, 1.5rem); --h2-size: clamp(0.9rem, 2.5vw, 1.25rem); --body-size: clamp(0.65rem, 1vw, 0.85rem); } }
+@media (max-width: 600px) { :root { --title-size: clamp(1.25rem, 7vw, 2.5rem); } .grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; } html { scroll-behavior: auto; } }
+
+/* ===== Reveal ===== */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo); }
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.reveal.d1 { transition-delay: 0.05s; } .reveal.d2 { transition-delay: 0.14s; } .reveal.d3 { transition-delay: 0.24s; }
+.reveal.d4 { transition-delay: 0.34s; } .reveal.d5 { transition-delay: 0.44s; } .reveal.d6 { transition-delay: 0.54s; }
+
+/* ===== Notebook Tabs ===== */
+body { background: var(--bg-outer); font-family: var(--font-body); color: var(--text-primary); }
+.slide { align-items: center; justify-content: center; padding: clamp(0.75rem, 2.5vw, 2.5rem) clamp(2rem, 4vw, 4rem) clamp(0.75rem, 2.5vw, 2.5rem) clamp(0.75rem, 2.5vw, 2.5rem); }
+.slide[data-sec="1"] { --accent: var(--tab-1); }
+.slide[data-sec="2"] { --accent: var(--tab-2); }
+.slide[data-sec="3"] { --accent: var(--tab-3); }
+.slide[data-sec="4"] { --accent: var(--tab-4); }
+.slide[data-sec="5"] { --accent: var(--tab-5); }
+.paper { position: relative; background: var(--bg-page); width: min(94vw, 1280px); height: min(90vh, 780px); border-radius: 6px; box-shadow: 0 20px 60px rgba(0,0,0,.45); display: flex; flex-direction: column; }
+.paper .slide-content { padding: clamp(1.2rem, 3.5vw, 3.2rem) clamp(2.2rem, 5.5vw, 5.5rem); justify-content: center; gap: clamp(0.5rem, 1.6vh, 1.2rem); }
+.holes { position: absolute; left: clamp(.7rem, 1.4vw, 1.4rem); top: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-evenly; }
+.holes i { width: clamp(9px, 1.1vw, 15px); height: clamp(9px, 1.1vw, 15px); border-radius: 50%; background: var(--bg-outer); opacity: .85; }
+.tabs { position: absolute; right: calc(-1 * clamp(1.5rem, 2.4vw, 2.2rem)); top: 8%; display: flex; flex-direction: column; gap: 5px; }
+.tabs span { writing-mode: vertical-rl; padding: clamp(.5rem, 1.3vh, .9rem) clamp(.3rem, .55vw, .45rem); border-radius: 0 6px 6px 0; font-size: clamp(.5rem, 1vh, .7rem); font-weight: 600; letter-spacing: .08em; opacity: .55; transition: opacity .3s, transform .3s; color: #1a1a1a; }
+.tabs span.on { opacity: 1; transform: translateX(4px); }
+.pageno { position: absolute; right: clamp(1rem, 2vw, 1.8rem); bottom: clamp(.6rem, 1.4vh, 1rem); font-size: var(--small-size); color: var(--text-muted); font-family: var(--font-mono); }
+
+/* Typography */
+.eyebrow { font-size: var(--small-size); letter-spacing: .18em; text-transform: uppercase; color: var(--text-muted); display: flex; align-items: center; gap: .6em; }
+.eyebrow::before { content: ""; width: clamp(14px, 2vw, 28px); height: 4px; background: var(--accent); border-radius: 2px; }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: var(--title-size); line-height: 1.04; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: var(--h2-size); line-height: 1.12; }
+h3 { font-size: var(--h3-size); font-weight: 700; line-height: 1.25; }
+p, li, td, th { font-size: var(--body-size); line-height: 1.5; }
+.lead { font-size: clamp(.85rem, 1.5vw, 1.2rem); max-width: 60ch; color: #2e2c29; line-height: 1.55; }
+.muted { color: var(--text-muted); }
+.small { font-size: var(--small-size); }
+code, .mono { font-family: var(--font-mono); font-size: .9em; white-space: nowrap; }
+.sk { font-family: var(--font-mono); font-size: .86em; background: #fff; border: 1px solid var(--rule); border-bottom: 2px solid var(--accent); padding: .05em .4em; border-radius: 4px; white-space: nowrap; }
+a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--accent) 45%, #1a1a1a); text-decoration-thickness: 2px; text-underline-offset: 3px; transition: background .2s; }
+a:hover { background: var(--accent); }
+.term a { text-decoration-thickness: 1px; }
+.term a:hover { color: #1a1a1a; }
+mark { background: linear-gradient(transparent 55%, var(--accent) 55%); color: inherit; padding: 0 .1em; }
+
+/* Cards */
+.cards { display: grid; gap: clamp(.5rem, 1.3vw, 1rem); }
+.c2 { grid-template-columns: repeat(2, 1fr); }
+.c3 { grid-template-columns: repeat(3, 1fr); }
+.c4 { grid-template-columns: repeat(4, 1fr); }
+.box { background: #fff; border: 1px solid var(--rule); border-top: 5px solid var(--accent); border-radius: 6px; padding: clamp(.6rem, 1.4vw, 1.2rem); display: flex; flex-direction: column; gap: clamp(.25rem, .7vh, .55rem); }
+.box p, .box li { font-size: var(--small-size); line-height: 1.5; color: #2e2c29; }
+.box ul { padding-left: 1.1em; display: flex; flex-direction: column; gap: .2em; }
+.box .who { font-size: var(--small-size); color: var(--text-muted); margin-top: auto; padding-top: .3em; border-top: 1px dashed var(--rule); }
+.num { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.3rem, 2.6vw, 2.2rem); line-height: 1; color: #1a1a1a; opacity: .85; }
+.note { border-left: 4px solid var(--accent); padding: .3em 0 .3em .9em; font-size: var(--body-size); color: #2e2c29; }
+
+/* Lists */
+.list { list-style: none; display: flex; flex-direction: column; gap: clamp(.3rem, 1vh, .7rem); }
+.list li { display: grid; grid-template-columns: clamp(7rem, 13vw, 11rem) 1fr; gap: clamp(.5rem, 1.5vw, 1.2rem); align-items: baseline; padding-bottom: clamp(.3rem, .9vh, .6rem); border-bottom: 1px solid var(--rule); }
+.list li:last-child { border-bottom: none; }
+.list li > span:last-child { font-size: var(--small-size); color: #2e2c29; line-height: 1.5; }
+
+/* Flow */
+.flow { display: flex; align-items: stretch; gap: clamp(.2rem, .6vw, .5rem); flex-wrap: wrap; }
+.flow .step { flex: 1 1 0; min-width: 0; background: #fff; border: 1px solid var(--rule); border-radius: 6px; padding: clamp(.45rem, 1vw, .9rem); display: flex; flex-direction: column; gap: .35em; }
+.flow .step h3 { font-size: clamp(.78rem, 1.3vw, 1.1rem); }
+.flow .step .chips { display: flex; flex-wrap: wrap; gap: .3em; }
+.flow .arrow { align-self: center; font-size: clamp(.9rem, 1.6vw, 1.3rem); color: var(--text-muted); }
+.chips .sk { font-size: clamp(.55rem, .85vw, .78rem); }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; border: 1px solid var(--rule); }
+th { text-align: left; background: var(--accent); font-weight: 700; padding: clamp(.3rem, .8vh, .55rem) clamp(.5rem, 1vw, .9rem); font-size: var(--small-size); }
+td { padding: clamp(.25rem, .7vh, .5rem) clamp(.5rem, 1vw, .9rem); border-top: 1px solid var(--rule); font-size: var(--small-size); vertical-align: top; }
+td:first-child { font-weight: 700; white-space: nowrap; }
+
+/* Terminal block */
+.term { background: #1f1e1c; color: #ece8df; border-radius: 6px; padding: clamp(.6rem, 1.4vw, 1.1rem) clamp(.8rem, 1.6vw, 1.3rem); font-family: var(--font-mono); font-size: clamp(.6rem, .95vw, .85rem); line-height: 1.7; overflow: hidden; }
+.term .c { color: #9a958b; }
+.term .p { color: var(--accent); }
+
+/* State pills */
+.states { display: flex; align-items: center; gap: clamp(.3rem, 1vw, .8rem); flex-wrap: wrap; }
+.pill { font-family: var(--font-mono); font-weight: 600; font-size: clamp(.65rem, 1.1vw, .95rem); padding: .35em .9em; border-radius: 999px; border: 2px solid #1a1a1a; background: #fff; }
+.pill.fill { background: var(--accent); }
+
+/* Divider */
+.divider .slide-content { justify-content: center; }
+.divider .big { font-family: var(--font-display); font-weight: 800; font-size: clamp(4rem, 14vw, 11rem); line-height: .85; color: var(--accent); -webkit-text-stroke: 2px #1a1a1a; }
+.divider h2 { font-size: clamp(1.6rem, 4.5vw, 3.6rem); }
+.divider .lead { margin-top: .3em; }
+
+/* Timeline */
+.timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(.5rem, 1.2vw, 1rem); position: relative; }
+.timeline .box { border-top-width: 0; border-left: 5px solid var(--accent); }
+.timeline .when { font-family: var(--font-mono); font-size: var(--small-size); font-weight: 600; color: var(--text-muted); }
+
+.row { display: flex; gap: clamp(.8rem, 2vw, 1.6rem); align-items: stretch; }
+.row > * { flex: 1; min-width: 0; }
+
+@media (max-width: 760px) {
+  .c3, .c4, .timeline { grid-template-columns: repeat(2, 1fr); }
+  .row { flex-direction: column; }
+  .flow .arrow { display: none; }
+  .flow .step { flex: 1 1 calc(50% - .5rem); }
+  .list li { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .tabs { display: none; }
+  .slide { padding-right: clamp(0.75rem, 2.5vw, 2.5rem); }
+  code, .mono { white-space: normal; }
+  .paper .slide-content { padding-top: clamp(.8rem, 2vh, 1.2rem); padding-bottom: clamp(.8rem, 2vh, 1.2rem); }
+  .cards { gap: .4rem; }
+  .box { padding: .5rem .65rem; gap: .2rem; }
+}
+@media (max-width: 480px) { .c2, .c3, .c4, .timeline { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="progress-bar" style="position:fixed;top:0;left:0;height:3px;background:#98d4bb;width:0%;z-index:100;transition:width 0.2s;"></div>
+<nav class="nav-dots" style="position:fixed;left:.35rem;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:0.4rem;"></nav>
+
+<!-- 1. Cover -->
+<section class="slide" data-sec="1"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">AI Team Kit · Buổi giới thiệu cho team dự án</div>
+  <h1 class="reveal d2">atk &amp; atkx<br>bộ skill AI cho cả team</h1>
+  <p class="lead reveal d3">25 skill phủ trọn quy trình phát triển dự án, từ nhận yêu cầu tới retro, cộng 2 skill tiện ích. Mỗi artifact có người viết, người duyệt và trạng thái phê duyệt. Chạy trên Claude Code, Cursor và Codex CLI.</p>
+  <p class="small muted mono reveal d4">atk 0.1.26 · 20/11/2026</p>
+  <div class="states reveal d4" style="margin-top:.6em"><span class="sk">/atk:init</span><span class="sk">/atk:help</span><span class="sk">/atk:intake</span><span class="sk">/atk:review</span><span class="sk">/atkx:doc-audit</span></div>
+</div></div></section>
+
+<!-- 2. Problem -->
+<section class="slide" data-sec="1"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Vì sao cần atk</div>
+  <h2 class="reveal d2">Team dự án thường vấp ở quy trình, không phải ở code</h2>
+  <div class="cards c3 reveal d3">
+    <div class="box"><h3>Yêu cầu là ba câu chat</h3><p>Tới tay dev mà không có tiêu chí nghiệm thu.</p></div>
+    <div class="box"><h3>Ước lượng không căn cứ</h3><p>Không ai phản biện được, làm xong cũng chẳng rút ra bài học gì.</p></div>
+    <div class="box"><h3>Quyết định chìm trong chat</h3><p>Sáu tháng sau chẳng ai nhớ vì sao lại thiết kế như vậy.</p></div>
+    <div class="box"><h3>Review lẫn lộn</h3><p>Lỗi mất dữ liệu nằm chung danh sách với góp ý đặt tên.</p></div>
+    <div class="box"><h3>Release không có phương án rollback</h3><p>Lên production mà chưa ai viết trước cách rollback.</p></div>
+    <div class="box"><h3>Kiến thức nằm trong đầu một người</h3><p>Một người nghỉ là mang theo luôn cách deploy mà chỉ họ biết.</p></div>
+  </div>
+  <p class="note reveal d4">atk biến các bước này thành quy trình lặp lại được, có bằng chứng và có người chịu trách nhiệm.</p>
+</div></div></section>
+
+<!-- 3. What -->
+<section class="slide" data-sec="1"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Hai plugin, một marketplace</div>
+  <h2 class="reveal d2">atk là gì, atkx là gì</h2>
+  <div class="cards c2 reveal d3">
+    <div class="box">
+      <div class="num">atk · 25 skill</div>
+      <ul>
+        <li>Phủ vòng đời giao hàng: yêu cầu, ước lượng, thiết kế, làm, kiểm thử, phát hành, vận hành.</li>
+        <li>Mỗi skill là một lệnh: <code>/atk:intake</code>, <code>/atk:review</code>, ...</li>
+        <li>Output là Markdown ghi vào <code>docs/</code> của dự án. File Markdown là bản gốc, tracker chỉ giữ link tới nó.</li>
+        <li>Cùng một bộ nội dung dùng chung cho Claude Code, Cursor và Codex CLI.</li>
+      </ul>
+    </div>
+    <div class="box" style="border-top-color:var(--tab-4)">
+      <div class="num">atkx · 2 skill</div>
+      <ul>
+        <li>Skill tiện ích: không cần profile dự án, không tạo tài liệu bắt team phải duyệt.</li>
+        <li><code>skill-eval</code>: chấm chất lượng một skill do team tự viết.</li>
+        <li><code>doc-audit</code>: kiểm từng khẳng định trong tài liệu với code và nguồn.</li>
+        <li>Phụ thuộc một chiều: atkx gọi được atk, atk không bao giờ cần atkx.</li>
+      </ul>
+    </div>
+  </div>
+</div></div></section>
+
+<!-- 4. Principles -->
+<section class="slide" data-sec="1"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Tiền đề của cả bộ kit</div>
+  <h2 class="reveal d2">Bốn nguyên tắc làm việc kiểu team</h2>
+  <div class="cards c4 reveal d3">
+    <div class="box"><div class="num">01</div><h3>Người viết khác người duyệt</h3><p>Artifact mang trạng thái phê duyệt. Một người giữ cả hai vai vẫn phải tự duyệt; skill không bao giờ tự chuyển sang <code>APPROVED</code>.</p></div>
+    <div class="box"><div class="num">02</div><h3>Skill soạn, người quyết</h3><p>Skill soạn thảo và gom bằng chứng. Phạm vi, ưu tiên, deadline, báo giá, go hay no-go thuộc về một vai trò.</p></div>
+    <div class="box"><div class="num">03</div><h3>Viết cho người vắng mặt</h3><p>Mọi tài liệu viết sao cho người không dự họp đọc vẫn hiểu và làm theo được, không cần hỏi lại người viết.</p></div>
+    <div class="box"><div class="num">04</div><h3>Câu hỏi có tên người trả lời</h3><p>Câu hỏi còn treo luôn ghi tên người phải trả lời, không bao giờ ghi "cả team".</p></div>
+  </div>
+</div></div></section>
+
+<!-- 5. Divider Lifecycle -->
+<section class="slide divider" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="big reveal d1">02</div>
+  <h2 class="reveal d2">Vòng đời dự án qua 25 skill</h2>
+  <p class="lead reveal d3">Chín pha, từ thiết lập tới rút kinh nghiệm, cộng sáu skill chạy ngoài chu trình.</p>
+</div></div></section>
+
+<!-- 6. Lifecycle overview -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Toàn cảnh</div>
+  <h2 class="reveal d2">Skill nào thuộc pha nào</h2>
+  <div class="flow reveal d3">
+    <div class="step"><h3>0. Thiết lập</h3><div class="chips"><span class="sk">init</span><span class="sk">tailor</span></div></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>1-2. Yêu cầu, ước lượng</h3><div class="chips"><span class="sk">intake</span><span class="sk">catchup</span><span class="sk">estimate</span></div></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>3-4. Thiết kế, chia việc</h3><div class="chips"><span class="sk">design-doc</span><span class="sk">spec</span><span class="sk">breakdown</span><span class="sk">convention</span><span class="sk">plan</span></div></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>5-6. Làm, kiểm thử</h3><div class="chips"><span class="sk">implement</span><span class="sk">verify</span><span class="sk">git</span><span class="sk">review</span><span class="sk">qa</span><span class="sk">run-cases</span></div></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3>7-8. Phát hành, vận hành</h3><div class="chips"><span class="sk">release</span><span class="sk">incident</span><span class="sk">retro</span></div></div>
+  </div>
+  <div class="cards c3 reveal d4">
+    <div class="box"><h3>Khi phát sinh sự việc</h3><p><span class="sk">fix</span> khi có lỗi · <span class="sk">security</span> định kỳ hoặc quanh release · <span class="sk">onboard</span> khi có người vào · <span class="sk">handover</span> khi có người rời đi</p></div>
+    <div class="box"><h3>Hỏi đường</h3><p><span class="sk">help</span> đọc trạng thái dự án rồi gợi ý nên chạy skill nào tiếp, kèm luôn câu lệnh cần gõ.</p></div>
+    <div class="box"><h3>Điều phối</h3><p><span class="sk">orchestrate</span> đưa nhiều phần việc qua các pha cùng lúc, mỗi phần một worktree, sau khi TL duyệt đề xuất.</p></div>
+  </div>
+  <p class="small muted reveal d5">Ở mỗi bước duyệt, người quyết nhận hay trả lại luôn là con người, không phải skill. Chu kỳ sau bắt đầu lại từ intake.</p>
+</div></div></section>
+
+<!-- 7. Phase 0 -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Pha 0 · Thiết lập, một lần cho mỗi dự án</div>
+  <h2 class="reveal d2">init và tailor: để kit hiểu dự án của bạn</h2>
+  <div class="row reveal d3">
+    <div class="box">
+      <h3><span class="sk">/atk:init</span> → <code>.atk/profile.md</code></h3>
+      <ul>
+        <li>Lệnh test, build, lint thật của dự án.</li>
+        <li>Cấu trúc các tầng (layer) của code, nơi để tài liệu, tracker đang dùng.</li>
+        <li>Ai duyệt loại artifact nào, tên thật của từng người.</li>
+        <li>Tự đọc repo trước, chỉ hỏi những gì repo không trả lời được.</li>
+      </ul>
+      <div class="who">Dev hoặc TL soạn · TL duyệt · commit vào repo</div>
+    </div>
+    <div class="box">
+      <h3><span class="sk">/atk:tailor</span> → <code>.atk/overrides/&lt;skill&gt;.md</code></h3>
+      <ul>
+        <li>Team muốn một skill làm khác đi: ghi vào dự án, không sửa kit.</li>
+        <li>Chỉ có hiệu lực khi người sở hữu output đã duyệt.</li>
+        <li><code>--feedback &lt;skill&gt; --runs</code> đọc run trace để xem skill chạy thật ra sao.</li>
+      </ul>
+      <div class="who">TL hoặc vai sở hữu output soạn · vai đó duyệt</div>
+    </div>
+  </div>
+  <p class="note reveal d4"><code>implement</code>, <code>fix</code>, <code>verify</code> dừng nếu chưa có profile, thay vì đoán lệnh test. <code>plan</code> chạy tiếp nhưng ghi rõ chỗ phải đoán. Các skill còn lại không cần profile.</p>
+</div></div></section>
+
+<!-- 8. Phase 1-2 -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Pha 1-2 · Yêu cầu và ước lượng</div>
+  <h2 class="reveal d2">Từ ba câu chat tới backlog có căn cứ</h2>
+  <div class="cards c3 reveal d3">
+    <div class="box">
+      <h3><span class="sk">/atk:intake</span></h3>
+      <p>Yêu cầu thô, ticket hoặc thiết kế Figma (<code>--design</code>) thành user story, tiêu chí nghiệm thu kiểm được, những gì không làm, và các câu hỏi còn bỏ ngỏ, câu nào cũng có người phụ trách trả lời.</p>
+      <div class="who">BrSE/BA soạn · Stakeholder chấp nhận phạm vi</div>
+    </div>
+    <div class="box">
+      <h3><span class="sk">/atk:catchup</span></h3>
+      <p>Bản tóm tắt cho người vào sau: phạm vi, phần code liên quan, ai quyết, thuật ngữ lạ, và vài câu hỏi để dev tự kiểm tra mình đã hiểu đúng trước khi code.</p>
+      <div class="who">Người mới vào việc · tự chấm</div>
+    </div>
+    <div class="box">
+      <h3><span class="sk">/atk:estimate</span></h3>
+      <p>Point và giờ cho từng task, tính năng hoặc màn hình; mỗi con số có căn cứ, độ tin cậy, và buffer rủi ro tách thành dòng riêng để cả team còn bàn.</p>
+      <div class="who">Dev hoặc TL ước lượng · PM duyệt</div>
+    </div>
+  </div>
+</div></div></section>
+
+<!-- 9. Phase 3-4 -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Pha 3-4 · Thiết kế, chia việc, xếp thứ tự</div>
+  <h2 class="reveal d2">Quyết định được ghi lại trước khi viết code</h2>
+  <ul class="list reveal d3">
+    <li><span class="sk">design-doc</span><span>Thiết kế kỹ thuật kèm ADR khi đụng schema, hợp đồng công khai, module dùng chung hay nhiều service. <code>--spike</code> tìm hiểu nhanh trong khung thời gian cố định, <code>--challenge</code> cho agent đóng vai từng người duyệt để phản biện trước. <b>TL duyệt.</b></span></li>
+    <li><span class="sk">spec</span><span>Tài liệu tham chiếu luôn khớp với code: hợp đồng API, schema từng bảng, hành vi tính năng, thành phần màn hình đọc từ Figma. Cập nhật tại chỗ và phát hiện chỗ lệch giữa tài liệu và code.</span></li>
+    <li><span class="sk">breakdown</span><span>Epic thành task có chủ, đồ thị phụ thuộc, các nhánh việc làm song song, chia rõ ai sửa file nào, định nghĩa hoàn thành cho từng task.</span></li>
+    <li><span class="sk">convention</span><span>Quy ước thật rút ra từ code, chia ba loại: đã có tool bắt buộc, được kiểm khi review, hoặc mới chỉ là mong muốn. <code>review</code> trích đúng ID quy tắc này.</span></li>
+    <li><span class="sk">plan</span><span>Pha và bước; mỗi pha kết thúc bằng thứ review được, xong bước nào thì code vẫn chạy được ở bước đó. <code>--review</code> soát plan người khác viết.</span></li>
+  </ul>
+</div></div></section>
+
+<!-- 10. Phase 5 -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Pha 5 · Làm</div>
+  <h2 class="reveal d2">Code đi qua kiểm chứng và review trước khi tới người duyệt</h2>
+  <div class="flow reveal d3">
+    <div class="step"><h3><span class="sk">implement</span></h3><p class="small">Viết theo quy ước và module mẫu của dự án, kiểm theo từng tầng bằng lệnh của dự án, tự gọi review và sửa các lỗi blocking trước khi bàn giao.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3><span class="sk">verify</span></h3><p class="small">Chạy hệ thống thật, kiểm kết quả thật trong dữ liệu chứ không chỉ nhìn status code; sau ba vòng chưa xong thì báo đích danh người cần xử lý.</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3><span class="sk">git</span></h3><p class="small">Quét secret trước khi stage, chia commit sao cho revert riêng từng cái được; push, PR, merge mỗi bước cần một lời "đồng ý".</p></div>
+    <div class="arrow">→</div>
+    <div class="step"><h3><span class="sk">review</span></h3><p class="small">Đối chiếu yêu cầu, thiết kế, quy ước. Tách lỗi bắt buộc sửa khỏi góp ý theo sở thích; mỗi lỗi chỉ rõ dòng code và hậu quả.</p></div>
+  </div>
+  <div class="cards c2 reveal d4">
+    <div class="box"><h3>Vòng lặp</h3><p>Review có lỗi chặn thì quay về <code>implement</code>; verify phát hiện lỗi thì quay về sửa. Người review không bao giờ là tác giả.</p></div>
+    <div class="box"><h3>Tận dụng công cụ có sẵn của harness</h3><p>Dọn code qua <code>/simplify</code> trên Claude Code, review song song bằng nhiều agent. Harness không có thì làm tay theo cùng danh sách, và artifact ghi rõ đã chạy cách nào.</p></div>
+  </div>
+</div></div></section>
+
+<!-- 11. Phase 6 -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Pha 6 · Kiểm thử</div>
+  <h2 class="reveal d2">QA viết case, agent chạy những case tự động được</h2>
+  <div class="row reveal d3">
+    <div class="box">
+      <h3><span class="sk">/atk:qa</span></h3>
+      <p>Master test plan, test plan theo tính năng, test case truy về tiêu chí nghiệm thu, case biên và case lỗi (negative), ma trận regression kèm lý do chọn.</p>
+      <div class="chips" style="display:flex;flex-wrap:wrap;gap:.3em"><span class="sk">--master</span><span class="sk">--plan</span><span class="sk">--cases</span><span class="sk">--regression</span><span class="sk">--record</span><span class="sk">--bug</span><span class="sk">--retest</span><span class="sk">--review</span></div>
+      <div class="who">QA viết · QA Lead hoặc TL duyệt · PM quyết tiêu chí ra</div>
+    </div>
+    <div class="box">
+      <h3><span class="sk">/atk:run-cases</span></h3>
+      <ul>
+        <li>Agent chạy case đã duyệt trên DEV hoặc staging, qua trình duyệt hoặc app Android.</li>
+        <li>Không bao giờ chạy trên production hay máy local.</li>
+        <li>Phân loại từng case trước, chốt phạm vi với QA rồi mới chạy.</li>
+        <li>Kết quả chỉ ghi những gì thực sự thấy khi chạy; case thủ công chuyển cho tester qua <code>qa --record</code>.</li>
+      </ul>
+      <div class="who">QA khởi chạy · QA Lead hoặc TL duyệt</div>
+    </div>
+  </div>
+</div></div></section>
+
+<!-- 12. Phase 7-8 -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Pha 7-8 · Phát hành, vận hành, rút kinh nghiệm</div>
+  <h2 class="reveal d2">Có sẵn phương án rollback, bài học có người theo đến cùng</h2>
+  <div class="cards c3 reveal d3">
+    <div class="box">
+      <h3><span class="sk">/atk:release</span></h3>
+      <p>Ghi chú phát hành theo từng đối tượng đọc, checklist có người phụ trách từng bước, migration có rollback được không, và đường rollback viết trước khi deploy.</p>
+      <div class="who">PM cùng SRE soạn · Stakeholder hoặc PM quyết phát hành</div>
+    </div>
+    <div class="box">
+      <h3><span class="sk">/atk:incident</span></h3>
+      <p>Dòng thời gian có mốc giờ, nguyên nhân gốc có bằng chứng, postmortem không đổ lỗi cá nhân, hành động tiếp theo có chủ, và runbook.</p>
+      <div class="who">Incident Commander soạn · TL và PM duyệt</div>
+    </div>
+    <div class="box">
+      <h3><span class="sk">/atk:retro</span></h3>
+      <p>Kiểm lại hành động của retro trước, số liệu sprint lấy từ git và tracker, tối đa ba hành động mới, và báo cáo trạng thái.</p>
+      <div class="who">PM hoặc cả đội · cả đội chốt ba hành động</div>
+    </div>
+  </div>
+</div></div></section>
+
+<!-- 13. Outside the cycle -->
+<section class="slide" data-sec="2"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Ngoài chu trình · dùng lúc nào cũng được</div>
+  <h2 class="reveal d2">Sáu skill dùng khi có sự việc hoặc khi cần hỏi</h2>
+  <div class="cards c3 reveal d3">
+    <div class="box"><h3><span class="sk">fix</span> · có báo lỗi</h3><p>Ghi lỗi nguyên văn, chứng minh nguyên nhân trước khi sửa, sau ba giả thuyết sai thì dừng lại, báo đích danh người cần vào cuộc. <code>--findings</code> xử lý lần lượt từng lỗi mà review đã nêu.</p></div>
+    <div class="box"><h3><span class="sk">security</span> · định kỳ, quanh release</h3><p>Báo cáo đủ chặt để TL ký, đủ rõ để khách đọc. <code>--threat-model</code>, <code>--checklist</code>, và <code>--delivery</code> kiểm repo trước khi bàn giao toàn bộ lịch sử cho khách.</p></div>
+    <div class="box"><h3><span class="sk">help</span> · không chắc bước tiếp</h3><p>Đọc profile, artifact và trạng thái duyệt, nhánh hiện tại; nói skill nào chạy tiếp và việc gì đang chờ ai.</p></div>
+    <div class="box"><h3><span class="sk">onboard</span> · có người vào</h3><p>Hướng dẫn cài đặt đã kiểm với repo, danh sách quyền truy cập và ai cấp, sơ đồ code kèm người phụ trách từng phần, tuần đầu kết thúc bằng một đóng góp.</p></div>
+    <div class="box"><h3><span class="sk">handover</span> · có người rời đi</h3><p>Việc dở dang với trạng thái thật, những quyết định và chỗ dễ sai mà chỉ một người biết, chuyển quyền truy cập; người nhận kiểm lại rồi mới ký.</p></div>
+    <div class="box"><h3><span class="sk">orchestrate</span> · nhiều việc cùng lúc</h3><p>Đề xuất các job cho từng phần việc; TL duyệt rồi job mới chạy song song, mỗi câu hỏi được chuyển tới đúng người.</p></div>
+  </div>
+</div></div></section>
+
+<!-- 14. Divider Roles -->
+<section class="slide divider" data-sec="3"><div class="paper"><div class="slide-content">
+  <div class="big reveal d1">03</div>
+  <h2 class="reveal d2">Vai trò và cửa duyệt</h2>
+  <p class="lead reveal d3">Ai viết, ai chấp nhận, và artifact được giữ như thế nào sau khi merge.</p>
+</div></div></section>
+
+<!-- 15. Roles table -->
+<section class="slide" data-sec="3"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Mặc định theo vai, ghi tên thật trong profile</div>
+  <h2 class="reveal d2">Mỗi vai viết gì, duyệt gì</h2>
+  <div class="reveal d3">
+  <table>
+    <tr><th>Vai</th><th>Thường viết</th><th>Thường chấp nhận</th></tr>
+    <tr><td>PM</td><td>release (cùng SRE), retro</td><td>estimate, quyết định phát hành, tiêu chí ra của test plan, rủi ro bảo mật còn lại</td></tr>
+    <tr><td>BrSE/BA</td><td>intake, spec loại <code>screen</code></td><td>spec loại <code>feature</code> và <code>screen</code></td></tr>
+    <tr><td>TL</td><td>design-doc, convention, breakdown, profile</td><td>profile, design-doc, spec <code>api</code>/<code>db</code>, đề xuất của orchestrate, record security</td></tr>
+    <tr><td>Dev</td><td>estimate, plan, implement, fix, verify, git, spec</td><td>phần việc của mình trong breakdown</td></tr>
+    <tr><td>QA</td><td>qa, run-cases, bản ghi lần test</td><td>QA Lead duyệt test plan, test case, bản ghi lần chạy</td></tr>
+    <tr><td>SRE</td><td>release (cùng PM), runbook</td><td>triển khai sau khi được cho phép</td></tr>
+    <tr><td>Stakeholder</td><td>yêu cầu ban đầu</td><td>phạm vi của intake, quyết định phát hành</td></tr>
+  </table>
+  </div>
+  <p class="small muted reveal d4">Đội nhỏ thì một người kiêm nhiều vai, nhưng vai viết và vai duyệt vẫn ghi tách riêng, dù là cùng một người.</p>
+</div></div></section>
+
+<!-- 16. States and persistence -->
+<section class="slide" data-sec="3"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Trạng thái và vòng đời của artifact</div>
+  <h2 class="reveal d2">Ba nhóm, ba cách lưu giữ</h2>
+  <div class="states reveal d2"><span class="pill">DRAFT</span><span>→</span><span class="pill">IN REVIEW</span><span>→</span><span class="pill fill">APPROVED</span><span class="small muted">chỉ người duyệt mới chuyển trạng thái</span></div>
+  <div class="cards c3 reveal d3">
+    <div class="box"><h3>Tham chiếu</h3><p><code>docs/api/</code>, <code>docs/database/</code>, <code>docs/features/</code>, <code>docs/qa/</code>, <code>docs/standards/</code>, <code>.atk/</code></p><p><b>Cập nhật tại chỗ.</b> Luôn phản ánh dự án hiện tại, dòng nào cũ là dòng đó sai. Đổi hợp đồng thì sửa tài liệu trong cùng PR.</p></div>
+    <div class="box"><h3>Bản ghi</h3><p><code>docs/records/</code>: yêu cầu, ước lượng, thiết kế, fix, test run, release, incident, retro, bàn giao, cùng ADR</p><p><b>Để nguyên.</b> Ghi lại một thời điểm; sửa lại là mất dấu vết duy nhất của lúc đó.</p></div>
+    <div class="box"><h3>Dẫn xuất</h3><p><code>docs/derived/</code>: báo cáo review, brief catchup, nhật ký tiến độ, run trace</p><p><b>Xóa được.</b> Chạy lại skill là có lại, hoặc chỉ là trạng thái tạm của một lần chạy.</p></div>
+  </div>
+  <p class="note reveal d4">Mỗi lần chạy để lại run trace ở <code>docs/derived/traces/&lt;skill&gt;/</code>, không bị đưa vào git. Tắt bằng <code>Run trace: off</code> trong profile.</p>
+</div></div></section>
+
+<!-- 17. Divider atkx -->
+<section class="slide divider" data-sec="4"><div class="paper"><div class="slide-content">
+  <div class="big reveal d1">04</div>
+  <h2 class="reveal d2">atkx: hai skill tiện ích</h2>
+  <p class="lead reveal d3">Không cần profile, không thuộc pha nào, không ghi gì bắt team duyệt.</p>
+</div></div></section>
+
+<!-- 18. atkx -->
+<section class="slide" data-sec="4"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">atkx · cài thêm khi cần</div>
+  <h2 class="reveal d2">Chấm skill tự viết, soát tài liệu với nguồn</h2>
+  <div class="cards c2 reveal d3">
+    <div class="box">
+      <h3><span class="sk">/atkx:skill-eval &lt;skill-path&gt;</span></h3>
+      <ul>
+        <li>Kiểm tra tĩnh, có chốt chặn bảo mật, đối chiếu quy ước của dự án.</li>
+        <li><code>--trigger</code> đo skill có được gọi đúng lúc không (chỉ Claude Code).</li>
+        <li><code>--draft-cases</code> soạn case trigger, <code>--review</code> soát một lần chạy.</li>
+        <li>Điểm tổng và xếp hạng. Không sửa skill nó đọc.</li>
+      </ul>
+      <div class="who">Dùng khi team tự viết skill riêng cho dự án</div>
+    </div>
+    <div class="box">
+      <h3><span class="sk">/atkx:doc-audit &lt;path&gt;</span></h3>
+      <ul>
+        <li>Kiểm từng khẳng định với code, nguồn yêu cầu (<code>--source</code>) hoặc tài liệu khác.</li>
+        <li>Mỗi khẳng định một kết luận kèm bằng chứng; những chỗ bị kết luận là sai được kiểm lại lần hai.</li>
+        <li>Với thư mục: quét nhanh, xếp hạng, rồi người chọn file cần soát kỹ.</li>
+        <li><code>--red-team</code> đặt câu hỏi phản biện ở những chỗ không có nguồn nào xác nhận.</li>
+      </ul>
+      <div class="who">Dùng khi nghi tài liệu đã lệch so với code</div>
+    </div>
+  </div>
+  <div class="term reveal d4"><span class="c"># Claude Code: cài atkx sẽ tự cài atk</span><br><span class="p">/plugin install atkx@atk</span><br><span class="c"># Codex: cài riêng từng plugin</span><br><span class="p">codex plugin add atk@atk &amp;&amp; codex plugin add atkx@atk</span></div>
+</div></div></section>
+
+<!-- 19. Divider Adopt -->
+<section class="slide divider" data-sec="5"><div class="paper"><div class="slide-content">
+  <div class="big reveal d1">05</div>
+  <h2 class="reveal d2">Áp dụng vào dự án</h2>
+  <p class="lead reveal d3">Cài đặt, lộ trình từng bước, một ticket đi qua kit, và những điều cần nhớ.</p>
+</div></div></section>
+
+<!-- 20. Install -->
+<section class="slide" data-sec="5"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Cài đặt</div>
+  <h2 class="reveal d2">Một marketplace, ba harness</h2>
+  <div class="cards c3 reveal d3">
+    <div class="box"><h3>Claude Code</h3><div class="term"><span class="p">/plugin marketplace add</span><br>&nbsp;&nbsp;<a href="https://github.com/lamngockhuong/aiteamkit" target="_blank" rel="noopener">lamngockhuong/aiteamkit</a><br><span class="p">/plugin install atk@atk</span><br><span class="p">/plugin install atkx@atk</span></div></div>
+    <div class="box"><h3>Codex CLI</h3><div class="term"><span class="p">codex plugin marketplace add</span><br>&nbsp;&nbsp;<a href="https://github.com/lamngockhuong/aiteamkit" target="_blank" rel="noopener">lamngockhuong/aiteamkit</a><br><span class="p">codex plugin add atk@atk</span><br><span class="p">codex plugin add atkx@atk</span></div></div>
+    <div class="box"><h3>Cursor</h3><p>Chép <a href="https://github.com/lamngockhuong/aiteamkit/tree/main/plugins/atk" target="_blank" rel="noopener"><code>plugins/atk/</code></a> từ bản clone vào <code>~/.cursor/plugins/local/atk</code>, rồi Developer: Reload Window.</p><p class="muted">Cách này chưa được thử trên bố cục hiện tại; thử được hay không thì <a href="https://github.com/lamngockhuong/aiteamkit/issues" target="_blank" rel="noopener">mở issue</a> báo lại.</p></div>
+  </div>
+  <p class="note reveal d4">Cài xong, việc đầu tiên trong mỗi dự án là <code>/atk:init</code>. Mỗi lần mở phiên làm việc, hook sẽ nhắc nếu dự án chưa có <code>.atk/profile.md</code>.</p>
+</div></div></section>
+
+<!-- 21. Roadmap -->
+<section class="slide" data-sec="5"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Lộ trình gợi ý</div>
+  <h2 class="reveal d2">Áp dụng từng skill, không cần cả 25 cùng lúc</h2>
+  <div class="timeline reveal d3">
+    <div class="box"><div class="when">TUẦN 1</div><h3>Nền móng</h3><p><code>/atk:init</code>, TL duyệt profile. <code>/atk:convention --audit</code> hoặc <code>--init</code> để có quy ước thành văn.</p></div>
+    <div class="box"><div class="when">TUẦN 2</div><h3>Bắt đầu từ chỗ đau nhất</h3><p>Chọn một khâu: thường là <code>review</code> cho mọi PR, hoặc <code>fix</code> cho mọi bug. Dùng đều trong cả sprint.</p></div>
+    <div class="box"><div class="when">TUẦN 3-4</div><h3>Mở rộng lên đầu quy trình</h3><p><code>intake</code>, <code>estimate</code>, <code>plan</code>, <code>implement</code> cho ticket mới; <code>qa</code> cho tính năng mới.</p></div>
+    <div class="box"><div class="when">SAU ĐÓ</div><h3>Khép kín vòng lặp</h3><p><code>release</code>, <code>retro</code>, <code>incident</code>. <code>tailor</code> khi team muốn skill làm khác, <code>tailor --feedback</code> để đọc run trace.</p></div>
+  </div>
+  <p class="note reveal d4">Tiêu chí thành công: người mới đọc tài liệu do skill tạo ra là làm theo được, không phải hỏi lại người viết; câu hỏi nào còn bỏ ngỏ cũng có người chịu trách nhiệm.</p>
+</div></div></section>
+
+<!-- 22. Ticket walkthrough -->
+<section class="slide" data-sec="5"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Ví dụ</div>
+  <h2 class="reveal d2">Một ticket đi qua kit</h2>
+  <div class="row reveal d3">
+    <div class="term" style="flex:1.4">
+      <span class="c"># BA: yêu cầu thô thành story và tiêu chí nghiệm thu</span><br><span class="p">/atk:intake</span> "Cho phép người dùng xuất hóa đơn PDF"<br>
+      <span class="c"># Dev/TL: ước lượng, PM duyệt</span><br><span class="p">/atk:estimate</span> PROJ-123<br>
+      <span class="c"># Dev: chia pha và bước, rồi viết code</span><br><span class="p">/atk:plan</span> PROJ-123 &nbsp;→&nbsp; <span class="p">/atk:implement</span> plans/&lt;plan&gt;/<br>
+      <span class="c"># Dev: chạy hệ thống thật, rồi mở PR</span><br><span class="p">/atk:verify</span> PROJ-123 &nbsp;→&nbsp; <span class="p">/atk:git --pr</span><br>
+      <span class="c"># Một người khác review</span><br><span class="p">/atk:review</span> #45 --comment<br>
+      <span class="c"># QA: case, chạy trên staging, ghi kết quả</span><br><span class="p">/atk:qa --cases</span> &nbsp;→&nbsp; <span class="p">/atk:run-cases</span> docs/qa/test-cases-xuat-hoa-don.md
+    </div>
+    <div class="box">
+      <h3>Không biết làm gì tiếp thì hỏi</h3>
+      <p><span class="sk">/atk:help</span> đọc dự án rồi trả lời: skill nào chạy tiếp, dòng lệnh để gõ, cần chuẩn bị gì trước, ai duyệt kết quả, và việc gì đang chờ ai.</p>
+      <p class="muted">Hỏi bằng tiếng Việt, Nhật hay Anh đều được, kit vẫn gọi đúng skill.</p>
+    </div>
+  </div>
+</div></div></section>
+
+<!-- 23. Notes -->
+<section class="slide" data-sec="5"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Cần nhớ khi dùng</div>
+  <h2 class="reveal d2">Sáu điều kit sẽ làm, và không làm</h2>
+  <div class="cards c3 reveal d3">
+    <div class="box"><h3>Hỏi trước khi tác động ra ngoài repo</h3><p>Không tạo ticket, push, mở PR hay merge nếu chưa có lời "đồng ý" cho đúng thao tác đó.</p></div>
+    <div class="box"><h3>Không tự duyệt</h3><p>Skill không bao giờ tự chuyển artifact của mình sang <code>APPROVED</code>, kể cả với dự án một người.</p></div>
+    <div class="box"><h3>Không đánh giá người</h3><p>Không skill nào nhận xét về một cá nhân; retro và incident cấm điều này.</p></div>
+    <div class="box"><h3>Đổi hành vi ở dự án</h3><p>Muốn skill làm khác thì dùng <code>tailor</code> ghi override trong dự án, không sửa kit.</p></div>
+    <div class="box"><h3>Không phụ thuộc tracker</h3><p>Làm việc với GitHub Issues, Jira, Backlog, Redmine; Markdown vẫn là nguồn sự thật.</p></div>
+    <div class="box"><h3>Không ép phương pháp</h3><p>Dùng thuật ngữ Scrum là chính, nhưng vẫn làm việc được với man-day, milestone và phase.</p></div>
+  </div>
+</div></div></section>
+
+<!-- 24. Closing -->
+<section class="slide divider" data-sec="5"><div class="paper"><div class="slide-content">
+  <div class="eyebrow reveal d1">Bắt đầu ngay hôm nay</div>
+  <h1 class="reveal d2">Hai lệnh đầu tiên</h1>
+  <div class="term reveal d3" style="max-width:min(80vw,640px)"><span class="c"># 1. Cho kit hiểu dự án, rồi để TL duyệt profile</span><br><span class="p">/atk:init</span><br><span class="c"># 2. Hỏi xem nên chạy gì tiếp</span><br><span class="p">/atk:help</span></div>
+  <p class="lead reveal d4">Đọc thêm: <a href="https://github.com/lamngockhuong/aiteamkit/blob/main/docs/vi/skills-overview.md" target="_blank" rel="noopener"><code>docs/vi/skills-overview.md</code></a> (ý nghĩa từng skill, khi nào dùng và không dùng), <a href="https://github.com/lamngockhuong/aiteamkit/blob/main/docs/vi/flow/project-flow.md" target="_blank" rel="noopener"><code>docs/vi/flow/project-flow.md</code></a> (pha, vai và cửa duyệt).</p>
+  <p class="reveal d4">Trang chủ: <a href="../"><code>atk.khuong.dev</code></a></p>
+  <p class="reveal d4">Repo: <a href="https://github.com/lamngockhuong/aiteamkit" target="_blank" rel="noopener"><code>github.com/lamngockhuong/aiteamkit</code></a></p>
+  <h2 class="reveal d5" style="margin-top:.3em">Hỏi đáp</h2>
+</div></div></section>
+
+<script>
+class SlidePresentation {
+  constructor() {
+    this.slides = document.querySelectorAll('.slide');
+    this.currentSlide = 0;
+    this.navDotsContainer = document.querySelector('.nav-dots');
+    this.progressBar = document.querySelector('.progress-bar');
+    this.decoratePapers();
+    this.setupIntersectionObserver();
+    this.setupKeyboardNav();
+    this.setupTouchNav();
+    this.setupProgressBar();
+    this.setupNavDots();
+  }
+  /* Notebook decorations: binder holes, section tabs, page number */
+  decoratePapers() {
+    const names = ['TỔNG QUAN', 'VÒNG ĐỜI', 'VAI TRÒ', 'ATKX', 'ÁP DỤNG'];
+    const total = this.slides.length;
+    this.slides.forEach((slide, i) => {
+      const paper = slide.querySelector('.paper');
+      if (!paper || paper.querySelector('.tabs')) return;
+      const sec = Number(slide.dataset.sec || 1);
+      const holes = document.createElement('div');
+      holes.className = 'holes decorative';
+      holes.innerHTML = '<i></i><i></i><i></i>';
+      const tabs = document.createElement('div');
+      tabs.className = 'tabs';
+      tabs.innerHTML = names.map((n, k) =>
+        `<span class="${k + 1 === sec ? 'on' : ''}" style="background:var(--tab-${k + 1})">${n}</span>`).join('');
+      tabs.querySelectorAll('span').forEach((t, k) => {
+        t.style.cursor = 'pointer';
+        t.addEventListener('click', () => {
+          const target = Array.from(this.slides).findIndex(s => Number(s.dataset.sec) === k + 1);
+          if (target >= 0) this.navigateTo(target);
+        });
+      });
+      const pageno = document.createElement('div');
+      pageno.className = 'pageno';
+      pageno.textContent = `${String(i + 1).padStart(2, '0')} / ${total}`;
+      paper.append(holes, tabs, pageno);
+    });
+  }
+  setupIntersectionObserver() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          this.currentSlide = Array.from(this.slides).indexOf(entry.target);
+          this.updateNavDots();
+          this.updateProgressBar();
+        }
+      });
+    }, { threshold: 0.5 });
+    this.slides.forEach((s) => observer.observe(s));
+  }
+  setupKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+      if (['ArrowDown', 'ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); this.navigateTo(this.currentSlide + 1); }
+      else if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); this.navigateTo(this.currentSlide - 1); }
+      else if (e.key === 'Home') { e.preventDefault(); this.navigateTo(0); }
+      else if (e.key === 'End') { e.preventDefault(); this.navigateTo(this.slides.length - 1); }
+    });
+  }
+  setupTouchNav() {
+    let touchStartY = 0;
+    document.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      const delta = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(delta) > 50) this.navigateTo(this.currentSlide + (delta > 0 ? 1 : -1));
+    }, { passive: true });
+  }
+  setupProgressBar() { if (this.progressBar) this.updateProgressBar(); }
+  setupNavDots() {
+    if (!this.navDotsContainer) return;
+    this.navDotsContainer.innerHTML = '';
+    this.slides.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.setAttribute('aria-label', `Slide ${i + 1}`);
+      dot.style.cssText = 'width:7px;height:7px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,0.35);transition:all 0.3s;padding:0;';
+      dot.addEventListener('click', () => this.navigateTo(i));
+      this.navDotsContainer.appendChild(dot);
+    });
+    this.updateNavDots();
+  }
+  navigateTo(index) {
+    const clamped = Math.max(0, Math.min(index, this.slides.length - 1));
+    this.slides[clamped].scrollIntoView({ behavior: 'smooth' });
+  }
+  updateNavDots() {
+    if (!this.navDotsContainer) return;
+    this.navDotsContainer.querySelectorAll('button').forEach((dot, i) => {
+      dot.style.background = i === this.currentSlide ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.35)';
+      dot.style.transform = i === this.currentSlide ? 'scale(1.4)' : 'scale(1)';
+    });
+  }
+  updateProgressBar() {
+    if (!this.progressBar) return;
+    const sec = this.slides[this.currentSlide]?.dataset.sec || 1;
+    this.progressBar.style.background = `var(--tab-${sec})`;
+    this.progressBar.style.width = ((this.currentSlide + 1) / this.slides.length) * 100 + '%';
+  }
+}
+new SlidePresentation();
+</script>
+</body>
+</html>

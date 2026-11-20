@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Team Kit (atk and atkx)</title>
+<meta name="description" content="atk is an AI skill kit for company project teams: every artifact has an author, a separate reviewer and an approval state. atkx adds utility skills beside it." />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="AI Team Kit (atk and atkx)" />
+<meta property="og:description" content="AI skills for a project team, from the first request to the retrospective, on Claude Code, Cursor and Codex CLI." />
+<meta property="og:url" content="https://atk.khuong.dev/" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" />
+<style>
+:root {
+  --bg-outer: #2d2d2d; --bg-page: #f8f6f1; --text: #1a1a1a; --muted: #5b5853; --rule: #e4dfd4;
+  --tab-1: #98d4bb; --tab-2: #c7b8ea; --tab-3: #f4b8c5; --tab-4: #a8d8ea; --tab-5: #ffe6a7;
+  --font-display: "Playfair Display", Georgia, serif; --font-body: "Be Vietnam Pro", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { overflow-x: hidden; }
+body { background: var(--bg-outer); color: var(--text); font-family: var(--font-body); line-height: 1.55; padding: clamp(16px, 3vw, 40px) 16px; }
+.paper { position: relative; max-width: 1080px; margin: 0 auto; background: var(--bg-page); border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,.45); padding: clamp(24px, 5vw, 64px) clamp(20px, 6vw, 80px); }
+.paper::before { content: ""; position: absolute; left: clamp(6px, 1.6vw, 22px); top: 40px; bottom: 40px; width: 12px; background: radial-gradient(circle, var(--bg-outer) 5px, transparent 6px) 0 0 / 12px 120px repeat-y; opacity: .85; }
+header.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: clamp(24px, 4vw, 48px); }
+.brand { font-family: var(--font-mono); font-weight: 600; font-size: .9rem; color: var(--muted); }
+.langs { display: flex; border: 2px solid var(--text); border-radius: 999px; overflow: hidden; }
+.langs button { font: 600 .8rem var(--font-mono); padding: .35em .9em; border: 0; background: #fff; color: var(--text); cursor: pointer; }
+.langs button[aria-pressed="true"] { background: var(--tab-1); }
+.langs button:focus-visible, .filters button:focus-visible, a:focus-visible { outline: 3px solid #1a1a1a; outline-offset: 2px; }
+.eyebrow { font-size: .78rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: .6em; }
+.eyebrow::before { content: ""; width: 24px; height: 4px; background: var(--accent, var(--tab-1)); border-radius: 2px; }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(2rem, 6vw, 3.6rem); line-height: 1.05; margin: .3em 0 .4em; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3.4vw, 2.1rem); line-height: 1.15; margin: .3em 0 .6em; }
+h3 { font-size: 1.05rem; line-height: 1.3; }
+.lead { font-size: clamp(1rem, 1.8vw, 1.2rem); max-width: 62ch; color: #2e2c29; }
+section { margin-top: clamp(32px, 6vw, 64px); }
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.box { background: #fff; border: 1px solid var(--rule); border-top: 5px solid var(--accent, var(--tab-1)); border-radius: 6px; padding: 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.box p { font-size: .95rem; color: #2e2c29; }
+.term { background: #1f1e1c; color: #ece8df; border-radius: 6px; padding: 14px 16px; font: .85rem/1.8 var(--font-mono); overflow-x: auto; }
+.term .c { color: #9a958b; } .term .p { color: var(--tab-1); }
+code { font-family: var(--font-mono); font-size: .88em; overflow-wrap: anywhere; }
+a { color: inherit; text-decoration: underline; text-decoration-color: #7a9d8e; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { background: var(--tab-1); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.filters[hidden] { display: none; }
+.filters button { font: 600 .8rem var(--font-body); padding: .35em .9em; border-radius: 999px; border: 2px solid var(--text); background: #fff; cursor: pointer; }
+.filters button[aria-pressed="true"] { background: var(--tab-5); }
+.deck .meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 600 .72rem var(--font-mono); padding: .15em .55em; border-radius: 4px; background: var(--bg-page); border: 1px solid var(--rule); }
+.tag.lang { background: var(--tab-4); border-color: transparent; }
+.deck .open { margin-top: auto; font-weight: 600; }
+.empty { color: var(--muted); }
+footer { margin-top: clamp(32px, 6vw, 64px); padding-top: 16px; border-top: 1px dashed var(--rule); font-size: .88rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px 20px; }
+@media (max-width: 480px) { .paper::before { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<main class="paper">
+  <header class="top">
+    <span class="brand">atk.khuong.dev</span>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      <button type="button" data-lang="vi" aria-pressed="false">VI</button>
+    </div>
+  </header>
+
+  <div class="eyebrow" data-i18n="eyebrow">AI Team Kit</div>
+  <h1 data-i18n="title">AI skills for a whole project team</h1>
+  <p class="lead" data-i18n="lead">atk covers the software delivery lifecycle of a company project team. Every skill assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read by someone who was not in the conversation that produced them. Compatible with Claude Code, Cursor, and OpenAI Codex CLI.</p>
+
+  <section>
+    <div class="grid">
+      <div class="box"><h3>atk</h3><p data-i18n="atk">The delivery kit: from turning a request into requirements, through estimates, designs, plans, code, review and QA, to release, incidents and the retrospective. Each skill is its own slash command, and its artifact is Markdown in the project's docs.</p></div>
+      <div class="box" style="--accent: var(--tab-4)"><h3>atkx</h3><p data-i18n="atkx">Utility skills beside atk that need no project profile: skill-eval evaluates a skill a project has written, and doc-audit checks a written document claim by claim against its sources. atkx may call atk; atk never needs atkx.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-i18n="installTitle">Install</h2>
+    <div class="term"><span class="c" data-i18n="installNote"># Claude Code</span><br><span class="p">/plugin marketplace add lamngockhuong/aiteamkit</span><br><span class="p">/plugin install atk@atk</span><br><span class="p">/plugin install atkx@atk</span></div>
+    <p style="margin-top:12px"><span data-i18n="installMore">Codex CLI and Cursor have their own steps, in the</span> <a href="https://github.com/lamngockhuong/aiteamkit#installation" target="_blank" rel="noopener">README</a>.</p>
+  </section>
+
+  <section style="--accent: var(--tab-5)">
+    <div class="eyebrow" data-i18n="decksEyebrow">Slides</div>
+    <h2 data-i18n="decksTitle">Slide decks</h2>
+    <div class="filters" role="group" aria-label="Audience" hidden></div>
+    <div class="grid" id="deck-grid"></div>
+    <noscript><p><a href="slides/gioi-thieu-atk-atkx.html" hreflang="vi">Giới thiệu atk và atkx</a> (Vietnamese, 24 slides)</p></noscript>
+  </section>
+
+  <footer>
+    <a href="https://github.com/lamngockhuong/aiteamkit" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://github.com/lamngockhuong/aiteamkit/blob/main/docs/skills-overview.md" target="_blank" rel="noopener" data-i18n="docsEn">Skills overview (English)</a>
+    <a href="https://github.com/lamngockhuong/aiteamkit/blob/main/docs/vi/skills-overview.md" target="_blank" rel="noopener" data-i18n="docsVi">Skills overview (Vietnamese)</a>
+    <span data-i18n="license">MIT License</span>
+  </footer>
+</main>
+
+<script type="application/json" id="decks">
+[
+  {
+    "file": "slides/gioi-thieu-atk-atkx.html",
+    "lang": "vi",
+    "audience": ["all"],
+    "atk": "0.1.26",
+    "date": "2026-11-20",
+    "slides": 24,
+    "title": { "en": "Introducing atk and atkx", "vi": "Giới thiệu atk và atkx" },
+    "summary": {
+      "en": "A walkthrough for a project team: the problems the kit answers, its team principles, the skills along the delivery lifecycle, who writes and who approves each artifact, the two atkx skills, and the first two commands to run.",
+      "vi": "Buổi giới thiệu cho team dự án: kit giải quyết vấn đề gì, các nguyên tắc làm việc kiểu team, các skill theo vòng đời giao hàng, ai viết và ai duyệt từng artifact, hai skill của atkx, và hai lệnh đầu tiên nên chạy."
+    }
+  }
+]
+</script>
+<script>
+(function () {
+  var TEXT = {
+    en: {
+      eyebrow: "AI Team Kit",
+      title: "AI skills for a whole project team",
+      lead: "atk covers the software delivery lifecycle of a company project team. Every skill assumes work has an author and a separate reviewer, decisions have an owner, and artifacts are read by someone who was not in the conversation that produced them. Compatible with Claude Code, Cursor, and OpenAI Codex CLI.",
+      atk: "The delivery kit: from turning a request into requirements, through estimates, designs, plans, code, review and QA, to release, incidents and the retrospective. Each skill is its own slash command, and its artifact is Markdown in the project's docs.",
+      atkx: "Utility skills beside atk that need no project profile: skill-eval evaluates a skill a project has written, and doc-audit checks a written document claim by claim against its sources. atkx may call atk; atk never needs atkx.",
+      installTitle: "Install",
+      installNote: "# Claude Code",
+      installMore: "Codex CLI and Cursor have their own steps, in the",
+      decksEyebrow: "Slides",
+      decksTitle: "Slide decks",
+      empty: "No deck for this audience yet.",
+      open: "Open the deck",
+      slides: "slides",
+      deckLang: { en: "English", vi: "Vietnamese" },
+      audience: { all: "Everyone", dev: "Dev", qa: "QA", pm: "PM", brse: "BrSE/BA", tl: "Tech Lead" },
+      docsEn: "Skills overview (English)",
+      docsVi: "Skills overview (Vietnamese)",
+      license: "MIT License",
+      metaDescription: "atk is an AI skill kit for company project teams: every artifact has an author, a separate reviewer and an approval state. atkx adds utility skills beside it."
+    },
+    vi: {
+      eyebrow: "AI Team Kit",
+      title: "Bộ skill AI cho cả team dự án",
+      lead: "atk phủ vòng đời phát triển phần mềm của một team dự án trong công ty. Mỗi skill coi công việc là có người viết và người review riêng, quyết định có người nắm quyền, và artifact được đọc bởi người không có mặt trong cuộc hội thoại tạo ra nó. Chạy trên Claude Code, Cursor và OpenAI Codex CLI.",
+      atk: "Bộ kit giao hàng: từ biến một yêu cầu thành tài liệu yêu cầu, qua ước lượng, thiết kế, kế hoạch, code, review và QA, tới release, sự cố và retro. Mỗi skill là một lệnh riêng, và artifact của nó là Markdown trong docs của dự án.",
+      atkx: "Skill tiện ích nằm cạnh atk, không cần profile dự án: skill-eval chấm một skill do dự án tự viết, doc-audit kiểm từng khẳng định của một tài liệu với nguồn của nó. atkx gọi được atk; atk không bao giờ cần atkx.",
+      installTitle: "Cài đặt",
+      installNote: "# Claude Code",
+      installMore: "Codex CLI và Cursor có các bước riêng, xem trong",
+      decksEyebrow: "Slide",
+      decksTitle: "Các bộ slide",
+      empty: "Chưa có bộ slide nào cho đối tượng này.",
+      open: "Mở bộ slide",
+      slides: "slide",
+      deckLang: { en: "Tiếng Anh", vi: "Tiếng Việt" },
+      audience: { all: "Mọi người", dev: "Dev", qa: "QA", pm: "PM", brse: "BrSE/BA", tl: "Tech Lead" },
+      docsEn: "Tổng quan skill (tiếng Anh)",
+      docsVi: "Tổng quan skill (tiếng Việt)",
+      license: "Giấy phép MIT",
+      metaDescription: "atk là bộ skill AI cho team dự án trong công ty: mỗi artifact có người viết, người review riêng và trạng thái phê duyệt. atkx thêm các skill tiện ích bên cạnh."
+    }
+  };
+  var AUDIENCES = ["all", "dev", "qa", "pm", "brse", "tl"];
+  var decks = [];
+  try { decks = JSON.parse(document.getElementById("decks").textContent); } catch (e) { decks = []; }
+  var state = { lang: pickLang(), audience: "all" };
+
+  function pickLang() {
+    try { var saved = localStorage.getItem("atk-site-lang"); if (saved === "en" || saved === "vi") return saved; } catch (e) {}
+    return (navigator.language || "").toLowerCase().indexOf("vi") === 0 ? "vi" : "en";
+  }
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  function formatDate(iso, lang) {
+    var p = iso.split("-").map(Number);
+    var d = new Date(Date.UTC(p[0], p[1] - 1, p[2]));
+    try { return new Intl.DateTimeFormat(lang === "vi" ? "vi-VN" : "en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(d); } catch (e) { return iso; }
+  }
+
+  function renderFilters(t) {
+    var box = document.querySelector(".filters");
+    var present = AUDIENCES.filter(function (a) { return decks.some(function (d) { return d.audience.indexOf(a) >= 0; }); });
+    box.hidden = present.length < 2;
+    box.textContent = "";
+    if (box.hidden) { state.audience = "all"; return; }
+    ["all"].concat(present.filter(function (a) { return a !== "all"; })).forEach(function (a) {
+      var b = el("button", null, t.audience[a]);
+      b.type = "button";
+      b.setAttribute("aria-pressed", String(state.audience === a));
+      b.addEventListener("click", function () { state.audience = a; render(); });
+      box.appendChild(b);
+    });
+  }
+
+  function renderDecks(t) {
+    var grid = document.getElementById("deck-grid");
+    grid.textContent = "";
+    var shown = decks.filter(function (d) { return state.audience === "all" || d.audience.indexOf(state.audience) >= 0 || d.audience.indexOf("all") >= 0; });
+    if (!shown.length) { grid.appendChild(el("p", "empty", t.empty)); return; }
+    shown.forEach(function (d) {
+      var card = el("article", "box deck");
+      card.appendChild(el("h3", null, d.title[state.lang]));
+      var meta = el("div", "meta");
+      meta.appendChild(el("span", "tag lang", t.deckLang[d.lang] || d.lang));
+      d.audience.forEach(function (a) { meta.appendChild(el("span", "tag", t.audience[a] || a)); });
+      meta.appendChild(el("span", "tag", "atk " + d.atk));
+      meta.appendChild(el("span", "tag", formatDate(d.date, state.lang)));
+      meta.appendChild(el("span", "tag", d.slides + " " + t.slides));
+      card.appendChild(meta);
+      card.appendChild(el("p", null, d.summary[state.lang]));
+      var link = el("a", "open", t.open);
+      link.href = d.file;
+      link.hreflang = d.lang;
+      card.appendChild(link);
+      grid.appendChild(card);
+    });
+  }
+
+  function render() {
+    var t = TEXT[state.lang];
+    document.documentElement.lang = state.lang;
+    document.querySelector('meta[name="description"]').setAttribute("content", t.metaDescription);
+    document.querySelectorAll("[data-i18n]").forEach(function (n) { var v = t[n.getAttribute("data-i18n")]; if (typeof v === "string") n.textContent = v; });
+    document.querySelectorAll(".langs button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-lang") === state.lang)); });
+    renderFilters(t);
+    renderDecks(t);
+  }
+
+  document.querySelectorAll(".langs button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      state.lang = b.getAttribute("data-lang");
+      try { localStorage.setItem("atk-site-lang", state.lang); } catch (e) {}
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

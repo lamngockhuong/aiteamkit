@@ -8,6 +8,8 @@ themselves.
 
 Compatible with Claude Code, Cursor, and OpenAI Codex CLI.
 
+Home page and slide decks: [atk.khuong.dev](https://atk.khuong.dev).
+
 Walkthrough of what each skill means and when to use it:
 [docs/skills-overview.md](docs/skills-overview.md) (English) /
 [docs/vi/skills-overview.md](docs/vi/skills-overview.md) (Tiếng Việt).
