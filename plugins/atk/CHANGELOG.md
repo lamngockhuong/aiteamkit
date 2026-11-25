@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.27](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.26...atk-v0.1.27) (2026-11-25)
+
+
+### Bug Fixes
+
+* accept a bold id in atk:review inline comments and read posted comments back from the pull request ([#223](https://github.com/lamngockhuong/aiteamkit/issues/223)) ([484d7b6](https://github.com/lamngockhuong/aiteamkit/commit/484d7b614520ba7de1aee694c3f9ffca22203435))
+
 ## [0.1.26](https://github.com/lamngockhuong/aiteamkit/compare/atk-v0.1.25...atk-v0.1.26) (2026-11-19)
 
 
