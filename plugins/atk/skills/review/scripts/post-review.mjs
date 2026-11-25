@@ -19,7 +19,8 @@
 //   `base` is the base the mask diffed against, `<remote>/<baseRefName>` or its sha, never FETCH_HEAD,
 //   which names another commit from another worktree, and the lines are checked against
 //   `<base>...<commit>`, the diff GitHub shows. Each comment's body opens
-//   with its id. APPROVE is refused: approving is a person's act, never a review's.
+//   with its id, bare or after a leading `**` as in `**S1 · SHOULD FIX**`, and never with a longer
+//   id, so B1 is not B10. APPROVE is refused: approving is a person's act, never a review's.
 //
 // Output, one JSON object on standard output:
 //   { "tool": "post-review", "version": 1, "mode": "check" | "post",
@@ -32,6 +33,10 @@
 // is therefore diffed as added, and a line GitHub would not show there is refused by GitHub, which
 // sends the whole review back and posts nothing. Nothing of a file is printed but its path and line
 // numbers.
+//
+// The read-back takes every page of the pull request's inline comments and keeps those whose
+// `pull_request_review_id` is the posted review's: the review's own comments endpoint answers
+// `line` and `original_line` null for every comment, which would report each one off its line.
 //
 // It starts only `git`, and `gh` under --post, with argument arrays and no shell. Exit 0 when every
 // line is anchored and, under --post, the review was created and every comment landed on its line;
@@ -55,7 +60,7 @@ if (rest.length !== 1 || rest[0].startsWith('-')) refuse('usage: node post-revie
 let spec;
 try { spec = JSON.parse(readFileSync(rest[0], 'utf8')); } catch (e) { refuse('cannot read the spec as JSON: ' + e.message); }
 const isInt = (n) => Number.isInteger(n) && n > 0;
-const opens = (body, id) => typeof body === 'string' && new RegExp('^' + id + '(?!\\d)').test(body); // B1 is not B10
+const opens = (body, id) => typeof body === 'string' && new RegExp('^(?:\\*\\*)?' + id + '(?!\\d)').test(body); // B1 is not B10
 if (typeof spec?.repo !== 'string' || !/^[\w.-]+\/[\w.-]+$/.test(spec.repo)) refuse('repo must be <owner>/<name>');
 if (!isInt(spec.pr)) refuse('pr must be a positive integer');
 if (typeof spec.base !== 'string' || !spec.base || spec.base.startsWith('-')) refuse('base must be a ref or a sha');
@@ -138,12 +143,14 @@ try {
 } finally { rmSync(dir, { recursive: true, force: true }); }
 
 if (!spec.comments.length) done(0);
-const r = gh(['api', `repos/${spec.repo}/pulls/${spec.pr}/reviews/${result.review_id}/comments?per_page=100`]);
-let got = [];
-try { if (r.status === 0) got = JSON.parse(r.stdout); } catch { got = []; }
-if (r.status !== 0) result.error = 'posted, but the comments could not be read back';
+// gh joins the pages of --paginate into one JSON array.
+const r = gh(['api', '--paginate', `repos/${spec.repo}/pulls/${spec.pr}/comments?per_page=100`]);
+let got = null;
+try { if (r.status === 0) got = JSON.parse(r.stdout); } catch { got = null; }
+if (!Array.isArray(got)) { result.error = 'posted, but the comments could not be read back'; got = []; }
+got = got.filter((x) => x?.pull_request_review_id === result.review_id);
 for (const c of spec.comments) {
-  const g = Array.isArray(got) ? got.find((x) => x.path === c.path && opens(x.body, c.id)) : null;
+  const g = got.find((x) => x.path === c.path && opens(x.body, c.id));
   result.landed.push({ id: c.id, path: c.path, line: c.line, landed: !!g && (g.line ?? g.original_line) === c.line });
 }
 done(result.error || result.landed.some((l) => !l.landed) ? 3 : 0);

@@ -1184,9 +1184,11 @@ print('OK security supply-chain scan, %d candidates, reads the index whatever th
 # records what it was sent and sends nothing: a context line and a changed line anchored, a line
 # outside every hunk and a file the diff does not touch refused with the nearest added line and
 # nothing sent; one review created with the commit, the event, side RIGHT and a body whose backticks,
-# quotes and details block arrive intact; a comment read back on another line, and GitHub refusing
-# the review, each exit 3; and a spec that does not hold, B1 against a body opening B10 among them,
-# exit 2
+# quotes and details block arrive intact; the read back taken from every page of the pull
+# request's comments, keeping only the posted review's, since the review's own endpoint answers line
+# null; a body opening with its id in bold landed; a comment read back on another line, and GitHub
+# refusing the review, each exit 3; and a spec that does not hold, B1 against a body opening B10 or
+# **B10 among them, exit 2
 python3 -c "
 import json, os, shutil, stat, subprocess, sys, tempfile
 script = os.path.abspath('plugins/atk/skills/review/scripts/post-review.mjs')
@@ -1202,10 +1204,14 @@ gh = ['#!' + sys.executable, 'import json, os, sys', 'd = os.environ[' + repr('F
       '    p = json.load(open(a[a.index(' + repr('--input') + ') + 1]))',
       '    if os.environ.get(' + repr('FAKE_GH_REFUSE') + '): print(json.dumps({' + repr('message') + ': ' + repr('Unprocessable Entity') + ', ' + repr('errors') + ': [' + repr('Can not request changes on your own pull request') + ']})); sys.stderr.write(' + repr('gh: Unprocessable Entity (HTTP 422)') + ' + chr(10)); sys.exit(1)',
       '    json.dump(p, open(os.path.join(d, ' + repr('payload.json') + '), ' + repr('w') + ')); print(json.dumps({' + repr('id') + ': 7, ' + repr('html_url') + ': ' + repr('https://github.example/r/7') + '}))',
+      'elif ' + repr('/reviews/') + ' in a[-1]:',
+      '    p = json.load(open(os.path.join(d, ' + repr('payload.json') + ')))',
+      '    print(json.dumps([{' + repr('path') + ': c[' + repr('path') + '], ' + repr('line') + ': None, ' + repr('original_line') + ': None, ' + repr('body') + ': c[' + repr('body') + ']} for c in p[' + repr('comments') + ']]))',
       'else:',
       '    p = json.load(open(os.path.join(d, ' + repr('payload.json') + ')))',
       '    s = int(os.environ.get(' + repr('FAKE_GH_SHIFT') + ', ' + repr('0') + '))',
-      '    print(json.dumps([{' + repr('path') + ': c[' + repr('path') + '], ' + repr('line') + ': c[' + repr('line') + '] + s, ' + repr('body') + ': c[' + repr('body') + ']} for c in p[' + repr('comments') + ']]))']
+      '    old = [{' + repr('pull_request_review_id') + ': 6, ' + repr('path') + ': c[' + repr('path') + '], ' + repr('line') + ': c[' + repr('line') + '], ' + repr('body') + ': c[' + repr('body') + ']} for c in p[' + repr('comments') + ']]',
+      '    print(json.dumps(old + [{' + repr('pull_request_review_id') + ': 7, ' + repr('path') + ': c[' + repr('path') + '], ' + repr('line') + ': c[' + repr('line') + '] + s, ' + repr('body') + ': c[' + repr('body') + ']} for c in p[' + repr('comments') + ']]))']
 open(os.path.join(bin_, 'gh'), 'w').write(chr(10).join(gh) + chr(10)); os.chmod(os.path.join(bin_, 'gh'), 0o755)
 def run(spec, *extra, **envx):
     sp = os.path.join(t, 'spec.json'); json.dump(spec, open(sp, 'w'))
@@ -1233,15 +1239,21 @@ try:
     p, out, called = run(spec, '--post')
     sent = json.load(open(os.path.join(fake, 'payload.json')))
     check(p.returncode == 0 and out['posted'] and out['review_id'] == 7 and all(l['landed'] for l in out['landed']), 'post: %s %s %s' % (p.returncode, out, p.stderr))
+    calls = [json.loads(l) for l in open(os.path.join(fake, 'calls'))]
+    check(calls[-1] == ['api', '--paginate', 'repos/o/n/pulls/5/comments?per_page=100'], 'read back not from every page of the pull request comments: %s' % calls[-1])
     check(sent['commit_id'] == head and sent['event'] == 'REQUEST_CHANGES' and sent['comments'][0] == {'path': 'a.txt', 'line': 15, 'side': 'RIGHT', 'body': body}, 'payload: %s' % sent)
     p, out, _ = run(spec, '--post', FAKE_GH_SHIFT='1')
     check(p.returncode == 3 and out['posted'] and not any(l['landed'] for l in out['landed']), 'a comment on another line read as landed: %s' % out)
+    bold = dict(spec, comments=[spec['comments'][0], dict(spec['comments'][1], body='**S1 ' + chr(183) + ' SHOULD FIX** ' + chr(0x2014) + ' title')])
+    p, out, _ = run(bold, '--post')
+    check(p.returncode == 0 and all(l['landed'] for l in out['landed']), 'a body opening **S1 refused or not read back: %s %s %s' % (p.returncode, out, p.stderr))
     p, out, _ = run(spec, '--post', FAKE_GH_REFUSE='1')
     check(p.returncode == 3 and not out['posted'] and 'own pull request' in out['error'], 'a refused review read as posted: %s' % out)
     one = lambda **kw: dict(spec, **kw)
     c0 = spec['comments'][0]
     for name, s, extra in (('no spec', None, []), ('APPROVE', one(event='APPROVE'), []), ('unknown commit', one(commit='0' * 40), []),
                            ('bad id', one(comments=[dict(c0, id='X1')]), []), ('B1 body opening B10', one(comments=[dict(c0, body='B10 other')]), []),
+                           ('B1 body opening **B10', one(comments=[dict(c0, body='**B10** other')]), []), ('B1 body opening *B1', one(comments=[dict(c0, body='*B1 other')]), []),
                            ('path leaves', one(comments=[dict(c0, path='../a.txt')]), []), ('extra argument', spec, ['--bogus'])):
         if s is None:
             p = subprocess.run(['node', script], cwd=r, capture_output=True, text=True, env=env0)
